@@ -208,19 +208,15 @@ class Mails extends Main {
       if (SMTP_ENABLE === true) {
         $oMail->IsSMTP();
 
-        if (WEBSITE_MODE == 'development') {
-          $oMail->SMTPDebug = 1;
-          $oMail->SMTPAuth = false;
-        }
-        else {
-          $oMail->SMTPDebug = 0;
-          $oMail->SMTPAuth = true;
-        }
+        $oMail->SMTPAuth  = defined('SMTP_USE_AUTH') ? SMTP_USE_AUTH === true : true;
+        
+        $oMail->SMTPAuth  = WEBSITE_MODE === 'development' ? false : $oMail->SMTPAuth;
+        $oMail->SMTPDebug = WEBSITE_MODE === 'development' ? 1 : 0;
 
-        $oMail->Host = SMTP_HOST;
-        $oMail->Port = SMTP_PORT;
-        $oMail->Username = SMTP_USER;
-        $oMail->Password = SMTP_PASSWORD;
+        $oMail->Host      = SMTP_HOST;
+        $oMail->Port      = SMTP_PORT;
+        $oMail->Username  = SMTP_USER;
+        $oMail->Password  = SMTP_PASSWORD;
       }
       else $oMail->IsMail();
 
