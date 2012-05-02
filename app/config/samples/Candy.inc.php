@@ -26,6 +26,7 @@ define('SMTP_HOST', '');
 define('SMTP_USER', '');
 define('SMTP_PASSWORD', '');
 define('SMTP_PORT', '');
+define('SMTP_USE_AUTH', true);
 
 # ------------------------------------------------------------------------------
 
