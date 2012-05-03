@@ -126,10 +126,10 @@ class Calendars extends Main {
 
     if (empty($iId) || isset($this->_aRequest['action'])) {
       try {
-        if ($this->_aRequest['action'] == 'archive') {
+        if (isset($this->_aRequest['action']) && $this->_aRequest['action'] == 'archive') {
           $oQuery = $this->_getPreparedArchiveStatement();
         }
-        else if ($this->_aRequest['action'] == 'icalfeed') {
+        else if (isset($this->_aRequest['action']) && $this->_aRequest['action'] == 'icalfeed') {
           $oQuery = $this->_getPreparedIcalFeedStatement();
         }
         else {

@@ -40,7 +40,37 @@ class UnitTestOfCalendarModel extends CandyUnitTest {
   function testGetData() {
     $this->assertIsA($this->oObject->getData(0), 'array');
     $this->assertIsA($this->oObject->getData(), 'array');
-  }
+
+    // no action or id...
+    $aData = $this->oObject->getData();
+    $this->assertIsA($aData, 'array');
+    $this->assertEqual(count($aData), 1);
+
+    // with id
+    $aData = $this->oObject->getData(0);
+    $this->assertIsA($aData, 'array');
+    $this->assertEqual(count($aData), 1);
+
+    // archive ...
+    $this->aRequest = array(
+      'controller'  => 'calendars',
+      'action'    => 'archive');
+    $this->oObject = new Calendars($this->aRequest, $this->aSession);
+    $aData = $this->oObject->getData();
+    $this->assertIsA($aData, 'array');
+    // no entries for current year
+    $this->assertEqual(count($aData), 0);
+
+    // ical feed ...
+    $this->aRequest = array(
+      'controller'  => 'calendars',
+      'action'    => 'icalfeed');
+    $this->oObject = new Calendars($this->aRequest, $this->aSession);
+    $aData = $this->oObject->getData();
+    $this->assertIsA($aData, 'array');
+    $this->assertNotNull($aData['January2020']);
+    $this->assertNotNull($aData['January2000']);
+ }
 
   function testUpdate() {
     $this->assertTrue($this->oObject->update($this->iLastInsertId), 'Calendar #' . $this->iLastInsertId . ' updated.');

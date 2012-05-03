@@ -45,6 +45,22 @@ class WebTestOfCalendarsController extends CandyWebTest {
     $this->assertResponse(200);
   }
 
+  function testShowIcalFeed() {
+    #does the button exist?
+    $this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller']));
+    $this->assertLinkById('test-icalfeedlink');
+
+    #does it have the entries?
+    $this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/icalfeed'));
+    $this->assertHeader('Content-Type', 'text/calendar; charset=utf-8');
+    $this->assertHeader('Content-Disposition', 'inline; filename=' . WEBSITE_NAME . '.ics');
+    $this->assertText('SUMMARY:8f9e4a9962');
+    $this->assertText('SUMMARY:7c015444a5');
+    $this->assertText('DTSTAMP:19700101T010002Z');
+    $this->assertText('DTEND;VALUE=DATE:20000102');
+    $this->assertText('DTSTART;VALUE=DATE:20000101');
+  }
+
   function testShowWithId() {
     //get an entry
     $this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/2'));

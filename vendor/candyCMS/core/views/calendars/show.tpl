@@ -18,7 +18,7 @@
         {$lang.global.archive}
       {else}
         &nbsp;
-        <a href='/{$_REQUEST.controller}/icalfeed'>
+        <a id='test-icalfeedlink' href='/{$_REQUEST.controller}/icalfeed'>
           <img src='{$_PATH.images}/candy.global/spacer.png'
               class='icon-calendar_add js-tooltip'
               alt='{$lang.calendars.info.icsfeed}'
