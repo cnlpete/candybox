@@ -19,6 +19,14 @@ define('PLUGIN_HEADLINES_LIMIT', 10);
 # DEFAULT: 1000
 define('PLUGIN_ARCHIVE_LIMIT', 1000);
 
+# How many Tags will be displayed at most
+# DEFAULT: 10
+define('PLUGIN_TAGCLOUD_LIMIT', 10);
+
+# How Many Articles have to be found for a Tag to appear
+# DEFAULT: 1
+define('PLUGIN_TAGCLOUD_FILTER', 1);
+
 # Enter your Google tracking code here to track visits.
 # DEFAULT: ''
 define('PLUGIN_ANALYTICS_TRACKING_CODE', '');
