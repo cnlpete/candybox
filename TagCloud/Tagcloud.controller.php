@@ -73,7 +73,16 @@ final class Tagcloud {
 
       $aData = array();
       $iIndex = 0;
+      if (!defined('PLUGIN_TAGCLOUD_LIMIT'))
+        define('PLUGIN_TAGCLOUD_LIMIT', 10);
+      if (!defined('PLUGIN_TAGCLOUD_FILTER'))
+        define('PLUGIN_TAGCLOUD_FILTER', 1);
       foreach ($aSortableTags as $sTag => $iAmount) {
+        if ($iIndex >= PLUGIN_TAGCLOUD_LIMIT)
+          break;
+        if ($iAmount < PLUGIN_TAGCLOUD_FILTER)
+          break;
+
         $aData[$iIndex] = array(
             'title'       => $sTag,
             'amount'      => $iAmount,
