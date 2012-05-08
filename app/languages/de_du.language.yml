@@ -325,7 +325,7 @@ mails:
     signature: <p>Viel Spaß wünscht das Team von<br /><a href="%%WEBSITE_URL">%%WEBSITE_NAME</a></p>
   description:
     show: Schreibe eine E-Mail an %s.
-  info:
+  success_page:
     title: "Vielen Dank für Deine Kontaktaufnahme!"
     redirect: Du wirst in 15 Sekunden auf die Startseite weitergeleitet.
   subject:
