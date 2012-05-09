@@ -38,10 +38,12 @@ class Calendars extends Main {
   }
 
   /**
-   * show single event as ics file
-   * this needs to be specified as ajax, since there should be no surrounding templates
+   * Show single event as ics file.
+   * This needs to be specified as ajax, since there should be no surrounding templates.
    *
+   * @access private
    * @return string ICS-File
+   *
    */
   private function _showEntry() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'ics');
@@ -63,22 +65,20 @@ class Calendars extends Main {
   }
 
   /**
-   * show the overview
+   * Show the overview
    *
+   * @access private
    * @return string HTML content
+   *
    */
   private function _showOverview() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
       $this->oSmarty->assign('calendar', $this->_oModel->getData());
 
-    # Add the current year when in archive mode
-    #if (isset($this->_aRequest['action']) && $this->_aRequest['action'] == 'archive')
-    #  $this->_aRequest['id'] = $this->_aRequest['id'] ? $this->_aRequest['id'] : date('Y');
-
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
