@@ -69,20 +69,20 @@ class Contents extends Main {
     $sTemplateDir  = Helper::getTemplateDir($this->_aRequest['controller'], '_form');
     $sTemplateFile = Helper::getTemplateType($sTemplateDir, '_form');
 
+    # Update
     if ($this->_iId) {
       $aData = $this->_oModel->getData($this->_iId, true);
       $this->setTitle($aData['title']);
-    }
-    else {
-      $aData['title']     = isset($this->_aRequest['title']) ? $this->_aRequest['title'] : '';
-      $aData['teaser']    = isset($this->_aRequest['teaser']) ? $this->_aRequest['teaser'] : '';
-      $aData['keywords']  = isset($this->_aRequest['keywords']) ? $this->_aRequest['keywords'] : '';
-      $aData['content']   = isset($this->_aRequest['content']) ? $this->_aRequest['content'] : '';
-      $aData['published'] = isset($this->_aRequest['published']) ? $this->_aRequest['published'] : '';
+
+      foreach ($aData as $sColumn => $sData)
+        $this->oSmarty->assign($sColumn, $sData);
     }
 
-    foreach($aData as $sColumn => $sData)
-      $this->oSmarty->assign($sColumn, $sData);
+    # Create
+    else {
+      foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
+        $this->oSmarty->assign($sInput, $sData);
+    }
 
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);

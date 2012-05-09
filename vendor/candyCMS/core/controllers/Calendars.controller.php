@@ -116,6 +116,7 @@ class Calendars extends Main {
 
     # Update
     if ($this->_iId) {
+      die(print_r($this->_oModel->getData($this->_iId, true)));
       foreach ($this->_oModel->getData($this->_iId, true) as $sColumn => $sData)
         $this->oSmarty->assign($sColumn, $sData);
     }

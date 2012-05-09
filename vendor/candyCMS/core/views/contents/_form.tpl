@@ -15,7 +15,7 @@
         {$lang.global.title} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <input type='text' name='title' class='span4 required focused'
+        <input type='text' name='{$_REQUEST.controller}[title]' class='span4 required focused'
               value="{$title}" id='input-title' autofocus required />
         <span class='help-inline'>
           {if isset($error.title)}
@@ -29,7 +29,7 @@
         {$lang.global.teaser}
       </label>
       <div class='controls'>
-        <input name='teaser' value="{$teaser}" type='text' class='span4'
+        <input name='{$_REQUEST.controller}[teaser]' value="{$teaser}" type='text' class='span4'
               id='input-teaser' />
         <span class='help-inline'></span>
         <p class='help-block'>
@@ -42,7 +42,7 @@
         {$lang.global.keywords}
       </label>
       <div class='controls'>
-        <input name='keywords' value="{$keywords}" type='text'
+        <input name='{$_REQUEST.controller}[keywords]' value="{$keywords}" type='text'
               class='span4' id='input-keywords' />
         <p class='help-block'>
           {$lang.contents.info.keywords}
@@ -54,7 +54,7 @@
         {$lang.global.content} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <textarea name='content' class='js-tinymce required span4' id='input-content'>
+        <textarea name='{$_REQUEST.controller}[content]' class='js-tinymce required span4' id='input-content'>
           {$content}
         </textarea>
         {if isset($error.content)}
@@ -69,7 +69,7 @@
         {$lang.global.published}
       </label>
       <div class='controls'>
-        <input name='published' value='1' type='checkbox' class='checkbox'
+        <input name='{$_REQUEST.controller}[published]' value='1' type='checkbox' class='checkbox'
               id='input-published' {if $published == true}checked{/if} />
       </div>
     </div>
@@ -81,7 +81,7 @@
         <input type='button' class='btn btn-danger' value='{$lang.contents.title.destroy}'
               onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroy')" />
         <input type='reset' class='btn' value='{$lang.global.reset}' />
-        <input type='hidden' value='{$_REQUEST.id}' name='id' />
+        <input type='hidden' value='{$_REQUEST.id}' name='{$_REQUEST.controller}[id]' />
       {/if}
     </div>
   </form>

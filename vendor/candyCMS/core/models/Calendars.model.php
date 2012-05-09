@@ -132,15 +132,14 @@ class Calendars extends Main {
 
     if (empty($iId) || isset($this->_aRequest['action'])) {
       try {
-        if (isset($this->_aRequest['action']) && $this->_aRequest['action'] == 'archive') {
+        if (isset($this->_aRequest['action']) && $this->_aRequest['action'] == 'archive')
           $oQuery = $this->_getPreparedArchiveStatement();
-        }
-        else if (isset($this->_aRequest['action']) && $this->_aRequest['action'] == 'icalfeed') {
+
+        elseif (isset($this->_aRequest['action']) && $this->_aRequest['action'] == 'icalfeed')
           $oQuery = $this->_getPreparedIcalFeedStatement();
-        }
-        else {
+
+        else
           $oQuery = $this->_getPreparedOverviewStatement();
-        }
 
         $oQuery->execute();
         $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
