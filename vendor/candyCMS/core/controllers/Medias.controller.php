@@ -54,11 +54,11 @@ class Medias extends Main {
   /**
    * Build form template to create an upload.
    *
-   * @access private
+   * @access protected
    * @return string HTML content
    *
    */
-  private function _showFormTemplate() {
+  protected function _showFormTemplate() {
     $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'create');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'create');
 
@@ -184,4 +184,15 @@ class Medias extends Main {
     else
       return Helper::errorMessage(I18n::get('error.missing.file'), '/' . $this->_aRequest['controller']);
   }
+
+  /**
+   * There is no update Action for the medias Controller
+   *
+   * @access public
+   *
+   */
+  public function update() {
+    return Helper::redirectTo('/errors/404');
+  }
+
 }
