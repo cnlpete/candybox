@@ -51,11 +51,11 @@ class Downloads extends Main {
     else {
       $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'show');
       $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+      $this->oSmarty->setTemplateDir($sTemplateDir);
 
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
         $this->oSmarty->assign('downloads', $this->_oModel->getData($this->_iId));
 
-      $this->oSmarty->setTemplateDir($sTemplateDir);
       return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
   }
@@ -70,6 +70,7 @@ class Downloads extends Main {
   protected function _showFormTemplate() {
     $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], '_form');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     # Update
     if ($this->_iId)
@@ -90,7 +91,6 @@ class Downloads extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 

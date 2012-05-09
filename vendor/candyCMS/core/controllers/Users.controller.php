@@ -81,6 +81,7 @@ class Users extends Main {
     if ($this->_iId) {
       $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'show');
       $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+      $this->oSmarty->setTemplateDir($sTemplateDir);
 
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
         $aData = $this->_oModel->getData($this->_iId);
@@ -94,7 +95,6 @@ class Users extends Main {
         $this->setDescription(I18n::get('users.description.show', $aData[1]['full_name']));
       }
 
-      $this->oSmarty->setTemplateDir($sTemplateDir);
       return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
     else {
@@ -104,11 +104,11 @@ class Users extends Main {
       else {
         $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'overview');
         $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
+        $this->oSmarty->setTemplateDir($sTemplateDir);
 
         $this->oSmarty->assign('user', $this->_oModel->getData());
 
         $this->setTitle(I18n::get('users.title.overview'));
-        $this->oSmarty->setTemplateDir($sTemplateDir);
         return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
       }
     }
@@ -125,6 +125,7 @@ class Users extends Main {
   protected function _showFormTemplate($bUseRequest = false) {
     $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], '_form');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     # Set user id of person to update
     $iId =  $this->_iId !== $this->_aSession['user']['id'] && $this->_aSession['user']['role'] == 4 ?
@@ -152,7 +153,6 @@ class Users extends Main {
 
     $this->oSmarty->assign('uid', $iId);
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -358,6 +358,7 @@ class Users extends Main {
   protected function _showCreateUserTemplate($bShowCaptcha) {
     $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'create');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'create');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if ($this->_aSession['user']['role'] == 4) {
       $this->setTitle(I18n::get('users.title.create'));
@@ -397,7 +398,6 @@ class Users extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 

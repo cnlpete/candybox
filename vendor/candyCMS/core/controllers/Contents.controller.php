@@ -28,6 +28,7 @@ class Contents extends Main {
     if ($this->_iId) {
       $sTemplateDir  = Helper::getTemplateDir($this->_aRequest['controller'], 'show');
       $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'show');
+      $this->oSmarty->setTemplateDir($sTemplateDir);
 
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
         $aData = $this->_oModel->getData($this->_iId);
@@ -42,18 +43,17 @@ class Contents extends Main {
         $this->oSmarty->assign('contents', $aData);
       }
 
-      $this->oSmarty->setTemplateDir($sTemplateDir);
       return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
     else {
       $sTemplateDir  = Helper::getTemplateDir($this->_aRequest['controller'], 'overview');
       $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'overview');
+      $this->oSmarty->setTemplateDir($sTemplateDir);
 
       $this->setTitle(I18n::get('global.manager.content'));
 
       $this->oSmarty->assign('contents', $this->_oModel->getData($this->_iId));
 
-      $this->oSmarty->setTemplateDir($sTemplateDir);
       return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
   }
@@ -68,6 +68,7 @@ class Contents extends Main {
   protected function _showFormTemplate() {
     $sTemplateDir  = Helper::getTemplateDir($this->_aRequest['controller'], '_form');
     $sTemplateFile = Helper::getTemplateType($sTemplateDir, '_form');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if ($this->_iId) {
       $aData = $this->_oModel->getData($this->_iId, true);
@@ -87,7 +88,6 @@ class Contents extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 

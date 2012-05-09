@@ -94,13 +94,13 @@ class Galleries extends Main {
   protected function _showOverview() {
     $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'albums');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'albums');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
       $this->oSmarty->assign('albums', $this->_oModel->getData());
       $this->oSmarty->assign('_pages_', $this->_oModel->oPagination->showPages('/' . $this->_aRequest['controller']));
     }
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -114,6 +114,7 @@ class Galleries extends Main {
   protected function _showAlbum() {
     $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'files');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'files');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     # Collect data array
     $sAlbumData = $this->_oModel->getAlbumNameAndContent($this->_iId, $this->_aRequest);
@@ -130,7 +131,6 @@ class Galleries extends Main {
       $this->oSmarty->assign('gallery_content', $sAlbumData['content']);
     }
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -144,6 +144,7 @@ class Galleries extends Main {
   protected function _showImage() {
     $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'image');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'image');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     $aData = $this->_oModel->getFileData($this->_iId);
 
@@ -164,7 +165,6 @@ class Galleries extends Main {
       $this->setTitle(I18n::get('global.image.image') . ': ' . $aData['file']);
       $this->setDescription($aData['content']);
 
-      $this->oSmarty->setTemplateDir($sTemplateDir);
       return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
     else
@@ -181,6 +181,7 @@ class Galleries extends Main {
   protected function _showFormTemplate() {
     $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], '_form_album');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form_album');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if ($this->_iId) {
       $aData = $this->_oModel->getData($this->_iId, true);
@@ -200,7 +201,6 @@ class Galleries extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -256,6 +256,7 @@ class Galleries extends Main {
   protected function _showFormFileTemplate() {
     $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], '_form_file');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form_file');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     # Update
     if ($this->_aRequest['action'] == 'updatefile') {
@@ -278,7 +279,6 @@ class Galleries extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 

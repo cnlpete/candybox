@@ -113,6 +113,7 @@ class Medias extends Main {
   protected function _show() {
     $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'show');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     $this->setTitle(I18n::get('global.manager.media'));
 
@@ -160,7 +161,6 @@ class Medias extends Main {
 
     $this->oSmarty->assign('files', $aFiles);
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
