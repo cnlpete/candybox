@@ -41,7 +41,7 @@ class Rss extends Main {
   }
 
   /**
-   * Show default RSS template. Save in cache for one minute.
+   * Show default RSS template.
    *
    * @access private
    * @return string HTML content
@@ -58,7 +58,7 @@ class Rss extends Main {
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
       $this->oSmarty->assign('data', $oModel->getData());
 
-    $this->oSmarty->setCacheLifetime(60);
+//    $this->oSmarty->setCacheLifetime(60);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -74,24 +74,27 @@ class Rss extends Main {
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'media');
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
-    $sModel = $this->__autoload('Galleries', true);
-    $oModel = new $sModel($this->_aRequest, $this->_aSession);
-    $aData  = $oModel->getData($this->_iId, false, true);
-
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-      $aData = & $aData[$this->_iId]['files'];
-      rsort($aData);
+      $sModel = $this->__autoload('Galleries', true);
+      $oModel = new $sModel($this->_aRequest, $this->_aSession);
 
-      $this->oSmarty->assign('_copyright_', $aData[$this->_iId]['full_name']);
+      $aData  = $oModel->getData($this->_iId, false, true);
+
+      $this->oSmarty->assign('_copyright_', $aData[$this->_iId]['author']['full_name']);
+      $this->oSmarty->assign('_title_', $aData[$this->_iId]['title']);
       $this->oSmarty->assign('_content_', $aData[$this->_iId]['content']);
       $this->oSmarty->assign('_locale_', WEBSITE_LOCALE);
       $this->oSmarty->assign('_link_', Helper::removeSlash($aData[$this->_iId]['url']));
-      $this->oSmarty->assign('_pubdate_', $aData[$this->_iId]['datetime_rss']);
+      $sGalleryDate = $aData[$this->_iId]['date_raw'];
 
+      $aData = & $aData[$this->_iId]['files'];
+      rsort($aData);
+
+      $this->oSmarty->assign('_pubdate_', count($aData) > 0 ? $aData[0]['date_raw'] : $sGalleryDate);
       $this->oSmarty->assign('data', $aData);
     }
 
-    $this->oSmarty->setCacheLifetime(60);
+//    $this->oSmarty->setCacheLifetime(60);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
