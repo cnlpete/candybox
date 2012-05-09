@@ -39,7 +39,7 @@
       {* Fallback if CDN is not available. Also include language parts. *}
       <script type='text/javascript'>
         if (typeof jQuery == 'undefined')
-          document.write(unescape('%3Cscript src='{$_PATH.js}/core/jquery.1.7.1{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'%3E%3C/script%3E'));
+          document.write(unescape("%3Cscript src='{$_PATH.js}/core/jquery.1.7.1{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'%3E%3C/script%3E"));
 
         var lang = {$_SYSTEM.json_language};
       </script>
