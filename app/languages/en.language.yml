@@ -188,7 +188,7 @@ error:
     loading: Captcha could not be loaded, please activate Javascript!
   file:
     destroy: This file could not be deleted!
-    size: Your file is bigger than 400KB!
+    size: Your file is bigger than %dKB!
     type: You uploaded an illegal filetype. Only *.jpg is allowed!
     upload: An error occured during upload.
   form:

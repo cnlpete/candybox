@@ -120,8 +120,14 @@ class Downloads extends Main {
                                 $this->_aSession, $this->_aFile,
                                 Helper::formatInput($this->_aRequest['title']));
 
-      # File is up so insert data into database
-      $aReturnValues = $oUploadFile->uploadFiles('downloads');
+      try {
+        // try to upload the file(s)
+        $aReturnValues = $oUploadFile->uploadFiles('downloads');
+      }
+      catch (\Exception $e) {
+        return Helper::errorMessage($e->getMessage(), '/' . $this->_aRequest['controller'] . '/create');
+      }
+      // fileupload was successfull, so we can clear cache and insert into db
       if ($aReturnValues[0] === true) {
         $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
         $this->oSmarty->clearCacheForController('searches');
@@ -129,6 +135,7 @@ class Downloads extends Main {
         $aIds   = $oUploadFile->getIds(false);
         $aExts  = $oUploadFile->getExtensions();
 
+        # File is up so insert data into database
         if ($this->_oModel->create($aIds[0] . '.' . $aExts[0], $aExts[0]) === true) {
           Logs::insert($this->_aRequest['controller'],
                       $this->_aRequest['action'],
