@@ -325,7 +325,7 @@ mails:
     show: Write a mail to %s.
   success_page:
     title: "Thank you for your contact!"
-    redirect: You will be redirect to the front page in 15 seconds.
+    redirect: You will be redirected to the front page in 15 seconds.
   subject:
     by: New message from %s
 

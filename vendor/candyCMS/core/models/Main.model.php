@@ -171,8 +171,13 @@ abstract class Main {
   protected static function _formatForUpdate($aRow) {
     $aData = array();
 
-    foreach ($aRow as $sColumn => $sData)
+    foreach ($aRow as $sColumn => $sData) {
+
+			# Quickfix. Test this on other machines too.
+			$sData = str_replace('\"', '', $sData);
+			$sData = str_replace('\&quot;', '', $sData);
       $aData[$sColumn] = $sData;
+		}
 
     return $aData;
   }

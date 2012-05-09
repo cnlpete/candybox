@@ -40,9 +40,9 @@
     </article>
     <script src='{$_PATH.js}/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
     <script src='{$_PATH.js}/core/jquery.capty{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
-    <script type="text/javascript">
+    <script type='text/javascript'>
       $(document).ready(function(){
-        $(".js-fancybox").fancybox();
+        $('.js-fancybox').fancybox();
         $('.js-image').capty({ height: 35 });
 
         if($('#socialshareprivacy').length > 0){
