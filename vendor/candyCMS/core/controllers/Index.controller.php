@@ -222,8 +222,10 @@ class Index {
 
     # Show files from public folder (robots.txt, human.txt and favicon.ico)
     if (preg_match('/\./', $this->_aRequest['controller'])) {
-			if (PATH_TEMPLATE && file_exists(Helper::removeSlash(WEBSITE_CDN) . '/templates/' . PATH_TEMPLATE . '/' . $this->_aRequest['controller']))
-				exit(file_get_contents(Helper::removeSlash(WEBSITE_CDN) . '/templates/' . PATH_TEMPLATE . '/' . $this->_aRequest['controller']));
+      $sFile = Helper::removeSlash(WEBSITE_CDN) . '/templates/' . PATH_TEMPLATE . '/' . $this->_aRequest['controller'];
+
+			if (PATH_TEMPLATE && file_exists($sFile))
+				exit(file_get_contents($sFile));
 
 			else
 				exit(file_get_contents(Helper::removeSlash(WEBSITE_CDN) . '/' . $this->_aRequest['controller']));
