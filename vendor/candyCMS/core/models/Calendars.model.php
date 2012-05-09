@@ -20,9 +20,11 @@ use PDO;
 class Calendars extends Main {
 
   /**
-   * build the PDO-Statement for getting entries for the specified year
+   * Build the PDO-Statement for getting entries for the specified year
    *
+   * @access private
    * @return PDOStatement the PDOStatement to execute
+   *
    */
   private function _getPreparedArchiveStatement() {
     $iYear = isset($this->_aRequest['id']) && !empty($this->_aRequest['id']) ?
@@ -55,9 +57,11 @@ class Calendars extends Main {
   }
 
   /**
-   * build the PDO-Statement for getting all future entries
+   * Build the PDO-Statement for getting all future entries
    *
+   * @access private
    * @return PDOStatement the PDOStatement to execute
+   *
    */
   private function _getPreparedOverviewStatement() {
     return $this->_oDb->prepare("SELECT
@@ -86,9 +90,11 @@ class Calendars extends Main {
   }
 
   /**
-   * build the PDO-Statement for getting all entries
+   * Build the PDO-Statement for getting all entries
    *
+   * @access private
    * @return PDOStatement the PDOStatement to execute
+   *
    */
   private function _getPreparedIcalFeedStatement() {
     return $this->_oDb->prepare("SELECT
@@ -229,11 +235,13 @@ class Calendars extends Main {
                                           :end_date)");
 
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
-      $oQuery->bindParam('title', Helper::formatInput($this->_aRequest['title']), PDO::PARAM_STR);
-      $oQuery->bindParam('content', Helper::formatInput($this->_aRequest['content']), PDO::PARAM_STR);
       $oQuery->bindParam('date', time(), PDO::PARAM_INT);
-      $oQuery->bindParam('start_date', Helper::formatInput($this->_aRequest['start_date']), PDO::PARAM_STR, PDO::PARAM_INT);
-      $oQuery->bindParam('end_date', Helper::formatInput($this->_aRequest['end_date']), PDO::PARAM_STR, PDO::PARAM_INT);
+
+      foreach (array('title', 'content') as $sInput)
+        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false), PDO::PARAM_STR);
+
+      foreach (array('start_date', 'end_date') as $sInput)
+        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput]), PDO::PARAM_INT);
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = Helper::getLastEntry('calendars');
@@ -276,10 +284,12 @@ class Calendars extends Main {
 
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
-      $oQuery->bindParam('title', Helper::formatInput($this->_aRequest['title']), PDO::PARAM_STR);
-      $oQuery->bindParam('content', Helper::formatInput($this->_aRequest['content']), PDO::PARAM_STR);
-      $oQuery->bindParam('start_date', Helper::formatInput($this->_aRequest['start_date']), PDO::PARAM_STR, PDO::PARAM_INT);
-      $oQuery->bindParam('end_date', Helper::formatInput($this->_aRequest['end_date']), PDO::PARAM_STR, PDO::PARAM_INT);
+
+      foreach (array('title', 'content') as $sInput)
+        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false), PDO::PARAM_STR);
+
+      foreach (array('start_date', 'end_date') as $sInput)
+        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput]), PDO::PARAM_INT);
 
       return $oQuery->execute();
     }

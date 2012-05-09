@@ -115,19 +115,16 @@ class Calendars extends Main {
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
 
     # Update
-    if ($this->_iId)
-      $aData = $this->_oModel->getData($this->_iId, true);
+    if ($this->_iId) {
+      foreach ($this->_oModel->getData($this->_iId, true) as $sColumn => $sData)
+        $this->oSmarty->assign($sColumn, $sData);
+    }
 
     # Create
     else {
-      $aData['content']    = isset($this->_aRequest['content']) ? $this->_aRequest['content'] : '';
-      $aData['end_date']   = isset($this->_aRequest['end_date']) ? $this->_aRequest['end_date'] : '';
-      $aData['start_date'] = isset($this->_aRequest['start_date']) ? $this->_aRequest['start_date'] : '';
-      $aData['title']      = isset($this->_aRequest['title']) ? $this->_aRequest['title'] : '';
+      foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
+        $this->oSmarty->assign($sInput, $sData);
     }
-
-    foreach ($aData as $sColumn => $sData)
-      $this->oSmarty->assign($sColumn, $sData);
 
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
