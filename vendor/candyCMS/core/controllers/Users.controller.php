@@ -322,24 +322,22 @@ class Users extends Main {
       $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
 
       # Send email if user has registered and creator is not an admin.
-      if ($this->_aSession['user']['role'] == 4)
-        $sMailMessage = '';
-
-      else
+      if ($this->_aSession['user']['role'] != 4) {
         $sMailMessage = I18n::get('users.mail.body',
                 Helper::formatInput($this->_aRequest['name']),
                 Helper::createLinkTo('users/' . $iVerificationCode . '/verification'));
+
+        $sMails = $this->__autoload('Mails');
+        $sMails::send( Helper::formatInput($this->_aRequest['email']),
+                    I18n::get('users.mail.subject'),
+                    $sMailMessage,
+                    WEBSITE_MAIL_NOREPLY);
+      }
 
       Logs::insert(  $this->_aRequest['controller'],
                     $this->_aRequest['action'],
                     $this->_oModel->getLastInsertId('users'),
                     $this->_aSession['user']['id']);
-
-      $sMails = $this->__autoload('Mails');
-      $sMails::send( Helper::formatInput($this->_aRequest['email']),
-                  I18n::get('users.mail.subject'),
-                  $sMailMessage,
-                  WEBSITE_MAIL_NOREPLY);
 
       return $this->_aSession['user']['role'] == 4 ?
               Helper::successMessage(I18n::get('success.create'), '/' . $this->_aRequest['controller']) :
