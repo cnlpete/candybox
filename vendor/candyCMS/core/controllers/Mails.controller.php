@@ -186,6 +186,7 @@ class Mails extends Main {
    * @param string $sAttachment path to the attachment
    * @return boolean mail status
    * @see vendor/phpmailer/class.phpmailer.php
+   * @todo refactoring
    *
    */
   public static function send($sTo, $sSubject, $sMessage, $sReplyTo = WEBSITE_MAIL, $sAttachment = '') {
@@ -209,16 +210,15 @@ class Mails extends Main {
         $oMail->IsSMTP();
 
         $oMail->SMTPAuth  = defined('SMTP_USE_AUTH') ? SMTP_USE_AUTH === true : true;
-        
-        $oMail->SMTPAuth  = WEBSITE_MODE === 'development' ? false : $oMail->SMTPAuth;
-        $oMail->SMTPDebug = WEBSITE_MODE === 'development' ? 1 : 0;
+        $oMail->SMTPDebug = WEBSITE_MODE == 'development' ? 1 : 0;
 
         $oMail->Host      = SMTP_HOST;
         $oMail->Port      = SMTP_PORT;
         $oMail->Username  = SMTP_USER;
         $oMail->Password  = SMTP_PASSWORD;
       }
-      else $oMail->IsMail();
+      else
+        $oMail->IsMail();
 
       $oMail->CharSet = 'utf-8';
       $oMail->AddReplyTo($sReplyTo);

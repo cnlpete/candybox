@@ -59,7 +59,7 @@ class Rss extends Main {
 
     $this->oSmarty->setCacheLifetime(60);
     $this->oSmarty->setTemplateDir($sTemplateDir);
-    return $this->oSmarty->display($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
   /**
@@ -92,7 +92,7 @@ class Rss extends Main {
 
     $this->oSmarty->setCacheLifetime(60);
     $this->oSmarty->setTemplateDir($sTemplateDir);
-    return $this->oSmarty->display($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
   /**
