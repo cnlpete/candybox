@@ -10,8 +10,9 @@
           {$lang.downloads.label.choose} <span title="{$lang.global.required}">*</span>
         </label>
         <div class='controls'>
-          <input class='input-file span4 required' type='file' name='file[]'
-                id="input-file" required />
+          <input class='input-file span4 required js-tooltip' type='file' name='file[]'
+                required id="input-file"
+                title='{$_SYSTEM.maximumUploadSize.mb|string_format: $lang.global.upload.maxsize}' />
         </div>
       </div>
     {/if}

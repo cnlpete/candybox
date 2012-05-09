@@ -111,10 +111,16 @@ class SmartySingleton extends Smarty {
 
     # Define system variables
     $this->assign('_PATH', $this->getPaths());
+    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
+    $iMaximumUploadSize = \CandyCMS\Core\Helpers\Upload::getUploadLimit();
     $this->assign('_SYSTEM', array(
         'date'                  => date('Y-m-d'),
         'compress_files_suffix' => WEBSITE_COMPRESS_FILES === true ? '.min' : '',
         'facebook_plugin'       => $bUseFacebook,
+        'maximumUploadSize'     => array(
+            'b'             => $iMaximumUploadSize . 'B',
+            'kb'            => ($iMaximumUploadSize / 1024) . 'KB',
+            'mb'            => ($iMaximumUploadSize / 1048576) . 'MB'),
         'json_language'         => I18n::getJson()));
 
     $this->assign('lang', I18n::getArray());

@@ -139,6 +139,7 @@ global:
   upload:
     at: Datum des Hochladens
     upload: Upload
+    maxsize: Die maximale Dateigröße %s ist.
   user:
     role: Userrecht
     roles:
