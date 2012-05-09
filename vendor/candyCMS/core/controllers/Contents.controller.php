@@ -26,7 +26,7 @@ class Contents extends Main {
    */
   protected function _show() {
     if ($this->_iId) {
-      $sTemplateDir  = Helper::getTemplateDir($this->_aRequest['controller'], 'show');
+      $sTemplateDir  = Helper::getTemplateDir($this->_sController, 'show');
       $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'show');
 
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
@@ -46,7 +46,7 @@ class Contents extends Main {
       return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
     else {
-      $sTemplateDir  = Helper::getTemplateDir($this->_aRequest['controller'], 'overview');
+      $sTemplateDir  = Helper::getTemplateDir($this->_sController, 'overview');
       $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'overview');
 
       $this->setTitle(I18n::get('global.manager.content'));
@@ -56,39 +56,6 @@ class Contents extends Main {
       $this->oSmarty->setTemplateDir($sTemplateDir);
       return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
-  }
-
-  /**
-   * Build form template to create or update a content entry.
-   *
-   * @access protected
-   * @return string HTML content
-   *
-   */
-  protected function _showFormTemplate() {
-    $sTemplateDir  = Helper::getTemplateDir($this->_aRequest['controller'], '_form');
-    $sTemplateFile = Helper::getTemplateType($sTemplateDir, '_form');
-
-    # Update
-    if ($this->_iId) {
-      $aData = $this->_oModel->getData($this->_iId, true);
-      $this->setTitle($aData['title']);
-
-      foreach ($aData as $sColumn => $sData)
-        $this->oSmarty->assign($sColumn, $sData);
-    }
-
-    # Create
-    else {
-      foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
-        $this->oSmarty->assign($sInput, $sData);
-    }
-
-    if ($this->_aError)
-      $this->oSmarty->assign('error', $this->_aError);
-
-    $this->oSmarty->setTemplateDir($sTemplateDir);
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
   /**

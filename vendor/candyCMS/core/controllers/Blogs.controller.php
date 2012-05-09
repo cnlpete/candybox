@@ -129,34 +129,11 @@ class Blogs extends Main {
    *
    */
   protected function _showFormTemplate() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], '_form');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
-
     # Get available languages.
     $this->oSmarty->assign('languages', self::getLanguages());
-
-    # Update
-    if ($this->_iId) {
-      $aData = $this->_oModel->getData($this->_iId, true);
-      $this->setTitle($aData['title']);
-
-      foreach ($aData as $sColumn => $sData)
-        $this->oSmarty->assign($sColumn, $sData);
-    }
-
-    # Create
-    else {
-      foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
-        $this->oSmarty->assign($sInput, $sData);
-    }
-
     $this->oSmarty->assign('_tags_', $this->_oModel->getTypeaheadData('blogs', 'tags', true));
 
-		if ($this->_aError)
-			$this->oSmarty->assign('error', $this->_aError);
-
-    $this->oSmarty->setTemplateDir($sTemplateDir);
-		return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return parent::_showFormTemplate();
   }
 
   /**

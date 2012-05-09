@@ -495,6 +495,37 @@ abstract class Main {
             $this->_destroy();
   }
 
+  /**
+   * Build form template to create or update an entry.
+   *
+   * @access protected
+   * @return string HTML content
+   *
+   */
+  protected function _showFormTemplate() {
+    $sTemplateDir  = Helper::getTemplateDir($this->_sController, '_form');
+    $sTemplateFile = Helper::getTemplateType($sTemplateDir, '_form');
+
+    if ($this->_iId) {
+      $aData = $this->_oModel->getData($this->_iId, true);
+
+      if (isset($aData['title']))
+        $this->setTitle($aData['title']);
+
+      foreach ($aData as $sColumn => $sData)
+        $this->oSmarty->assign($sColumn, $sData);
+    }
+    else {
+      foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
+        $this->oSmarty->assign($sInput, $sData);
+    }
+
+    if ($this->_aError)
+      $this->oSmarty->assign('error', $this->_aError);
+
+    $this->oSmarty->setTemplateDir($sTemplateDir);
+    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+  }
 
   /**
    * Clear all Caches for given Controllers

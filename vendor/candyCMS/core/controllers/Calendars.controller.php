@@ -44,7 +44,7 @@ class Calendars extends Main {
    * @return string ICS-File
    */
   private function _showEntry() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'ics');
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'ics');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'ics');
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
@@ -68,15 +68,15 @@ class Calendars extends Main {
    * @return string HTML content
    */
   private function _showOverview() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'show');
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
       $this->oSmarty->assign('calendar', $this->_oModel->getData());
 
-    // add the current year when in archive mode
-    if ($this->_aRequest['action'] === 'archive')
-      $this->_aRequest['id'] = $this->_aRequest['id'] ? $this->_aRequest['id'] : date('Y');
+    # Add the current year when in archive mode
+    #if (isset($this->_aRequest['action']) && $this->_aRequest['action'] == 'archive')
+    #  $this->_aRequest['id'] = $this->_aRequest['id'] ? $this->_aRequest['id'] : date('Y');
 
     $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
@@ -90,7 +90,7 @@ class Calendars extends Main {
    *
    */
   private function _showIcalFeed() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'icalfeed');
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'icalfeed');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'icalfeed');
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
@@ -98,37 +98,6 @@ class Calendars extends Main {
 
     header('Content-type: text/calendar; charset=utf-8');
     header('Content-Disposition: inline; filename=' . WEBSITE_NAME . '.ics');
-
-    $this->oSmarty->setTemplateDir($sTemplateDir);
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
-  }
-
-  /**
-   * Build form template to create or update a calendar entry.
-   *
-   * @access protected
-   * @return string HTML content
-   *
-   */
-  protected function _showFormTemplate() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], '_form');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
-
-    # Update
-    if ($this->_iId) {
-      die(print_r($this->_oModel->getData($this->_iId, true)));
-      foreach ($this->_oModel->getData($this->_iId, true) as $sColumn => $sData)
-        $this->oSmarty->assign($sColumn, $sData);
-    }
-
-    # Create
-    else {
-      foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
-        $this->oSmarty->assign($sInput, $sData);
-    }
-
-    if ($this->_aError)
-      $this->oSmarty->assign('error', $this->_aError);
 
     $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
