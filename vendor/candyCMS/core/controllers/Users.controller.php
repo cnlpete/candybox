@@ -134,9 +134,9 @@ class Users extends Main {
     # Fetch data from database
     $aData = $this->_oModel->getData($iId, false, true);
 
-    # Add the gravatar_urls, so the user can preview those
-    Helper::createAvatarURLs($aData, $aData['id'], $aData['email'], true, 'gravatar_');
-    Helper::createAvatarURLs($aData, $aData['id'], $aData['email'], false, 'normal_');
+    # Add the gravatar_urls, so the user can preview those.
+    Helper::createAvatarURLs($aData, $aData['id'], $aData['email'], true,   'gravatar_');
+    Helper::createAvatarURLs($aData, $aData['id'], $aData['email'], false,  'standard_');
 
     # Override if we want to use request
     if ($bUseRequest === true) {

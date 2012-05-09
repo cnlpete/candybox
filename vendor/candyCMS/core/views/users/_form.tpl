@@ -26,6 +26,7 @@
     </ul>
   </div>
   <div class='tab-content'>
+
     {* Account data *}
     <div class="tab-pane{if $_REQUEST['action'] == 'update'} active{/if}" id='user-personal'>
       <form method='post' action='/{$_REQUEST.controller}/{$uid}/update' class='form-horizontal'>
@@ -126,60 +127,60 @@
       </form>
     </div>
 
-  {* Password *}
-  {if $_SESSION.user.id == $uid}
-    <div class="tab-pane{if $_REQUEST['action'] == 'password'} active{/if}" id='user-password'>
-      <form method='post' action='/{$_REQUEST.controller}/{$uid}/password' class='form-horizontal'>
-        <div class='control-group{if isset($error.password_old)} alert alert-error{/if}'>
-          <label for='input-password_old' class='control-label'>
-            {$lang.users.label.password.old} <span title='{$lang.global.required}'>*</span>
-          </label>
-          <div class='controls'>
-            <input name='password_old' id='input-password_old' type='password'
-                  class='span4 required' required />
-            {if isset($error.password_old)}<span class='help-inline'>{$error.password_old}</span>{/if}
-          </div>
-        </div>
-        <div class='control-group{if isset($error.password_new)} alert alert-error{/if}'>
-          <label for='input-password_new' class='control-label'>
-            {$lang.users.label.password.new} <span title='{$lang.global.required}'>*</span>
-          </label>
-          <div class='controls'>
-            <input name='password_new' id='input-password_new' type='password'
+    {* Password *}
+    {if $_SESSION.user.id == $uid}
+      <div class="tab-pane{if $_REQUEST['action'] == 'password'} active{/if}" id='user-password'>
+        <form method='post' action='/{$_REQUEST.controller}/{$uid}/password' class='form-horizontal'>
+          <div class='control-group{if isset($error.password_old)} alert alert-error{/if}'>
+            <label for='input-password_old' class='control-label'>
+              {$lang.users.label.password.old} <span title='{$lang.global.required}'>*</span>
+            </label>
+            <div class='controls'>
+              <input name='password_old' id='input-password_old' type='password'
                     class='span4 required' required />
-            {if isset($error.password_new)}<span class='help-inline'>{$error.password_new}</span>{/if}
+              {if isset($error.password_old)}<span class='help-inline'>{$error.password_old}</span>{/if}
+            </div>
           </div>
-        </div>
-        <div class='control-group'>
-          <label for='input-password_new2' class='control-label'>
-            {$lang.global.password.repeat} <span title='{$lang.global.required}'>*</span>
-          </label>
-          <div class='controls'>
-            <input name='password_new2' id='input-password_new2' type='password'
-                  class='span4 required' required />
-            {if isset($error.password_new2)}<span class='help-inline'>{$error.password_new2}</span>{/if}
+          <div class='control-group{if isset($error.password_new)} alert alert-error{/if}'>
+            <label for='input-password_new' class='control-label'>
+              {$lang.users.label.password.new} <span title='{$lang.global.required}'>*</span>
+            </label>
+            <div class='controls'>
+              <input name='password_new' id='input-password_new' type='password'
+                      class='span4 required' required />
+              {if isset($error.password_new)}<span class='help-inline'>{$error.password_new}</span>{/if}
+            </div>
           </div>
-        </div>
-        <div class='form-actions'>
-          <input type='submit' class='btn btn-primary' value='{$lang.users.label.password.create}' />
-          <input type='hidden' value='formdata' name='update_password' />
-          <input type='reset' class='btn' value='{$lang.global.reset}' />
-        </div>
-      </form>
-    </div>
-  {/if}
+          <div class='control-group'>
+            <label for='input-password_new2' class='control-label'>
+              {$lang.global.password.repeat} <span title='{$lang.global.required}'>*</span>
+            </label>
+            <div class='controls'>
+              <input name='password_new2' id='input-password_new2' type='password'
+                    class='span4 required' required />
+              {if isset($error.password_new2)}<span class='help-inline'>{$error.password_new2}</span>{/if}
+            </div>
+          </div>
+          <div class='form-actions'>
+            <input type='submit' class='btn btn-primary' value='{$lang.users.label.password.create}' />
+            <input type='hidden' value='formdata' name='update_password' />
+            <input type='reset' class='btn' value='{$lang.global.reset}' />
+          </div>
+        </form>
+      </div>
+    {/if}
 
-  {* Avatar *}
+    {* Avatar *}
     <div class="tab-pane{if $_REQUEST['action'] == 'avatar'} active{/if}" id='user-image'>
       <form enctype='multipart/form-data' method='post' action='/{$_REQUEST.controller}/{$uid}/avatar'
             class='form-horizontal'>
         <div class='control-group{if isset($error.image)} alert alert-error{/if}'>
-          {if $normal_avatar_popup !== $gravatar_avatar_popup}
+          {if $standard_avatar_popup !== $gravatar_avatar_popup}
             <div class='pull-right'>
-              <a href='{$normal_avatar_popup}'
+              <a href='{$standard_avatar_popup}'
                 class='thumbnail js-fancybox'
                 title='{$full_name}'>
-                <img alt='{$name} {$surname}' src='{$normal_avatar_64}' width='64' height='64' />
+                <img alt='{$name} {$surname}' src='{$standard_avatar_64}' width='64' height='64' />
               </a>
             </div>
           {/if}
