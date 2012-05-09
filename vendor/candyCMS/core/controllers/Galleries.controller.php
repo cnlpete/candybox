@@ -146,29 +146,32 @@ class Galleries extends Main {
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'image');
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
-    $aData = $this->_oModel->getFileData($this->_iId);
+    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+      $aData = $this->_oModel->getFileData($this->_iId);
 
-    # Absolute URL for image information
-    $sUrl = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_aRequest['controller'] . '/' . $this->_aRequest['album_id'] .
-                    '/popup/' . $aData['file']);
+      # Absolute URL for image information
+      $sUrl = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_aRequest['controller'] . '/' . $this->_aRequest['album_id'] .
+                      '/popup/' . $aData['file']);
 
-    if (file_exists($sUrl) || WEBSITE_MODE == 'test') {
-      # Get image information
-      $aImageInfo       = getimagesize($sUrl);
+      if (file_exists($sUrl) || WEBSITE_MODE == 'test') {
+        
+        # Get image information
+        $aImageInfo       = getimagesize($sUrl);
 
-      $aData['url']     = Helper::addSlash($sUrl);
-      $aData['width']   = $aImageInfo[0];
-      $aData['height']  = $aImageInfo[1];
+        $aData['url']     = Helper::addSlash($sUrl);
+        $aData['width']   = $aImageInfo[0];
+        $aData['height']  = $aImageInfo[1];
 
-      $this->oSmarty->assign('i', $aData);
+        $this->oSmarty->assign('i', $aData);
 
-      $this->setTitle(I18n::get('global.image.image') . ': ' . $aData['file']);
-      $this->setDescription($aData['content']);
-
-      return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+      }
+      else
+        return Helper::redirectTo('/errors/404');
     }
-    else
-      return Helper::redirectTo('/errors/404');
+    $this->setTitle(I18n::get('global.image.image') . ': ' . $aData['file']);
+    $this->setDescription($aData['content']);
+
+    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
   /**
