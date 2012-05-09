@@ -124,7 +124,7 @@ class Calendars extends Main {
   public function getData($iId = '', $bUpdate = false) {
     $aInts = array('id', 'author_id');
 
-    if (empty($iId) || isset($this->_aRequest['action'])) {
+    if (empty($iId) || (isset($this->_aRequest['action']) && $this->_aRequest['action'] != 'update')) {
       try {
         if (isset($this->_aRequest['action']) && $this->_aRequest['action'] == 'archive') {
           $oQuery = $this->_getPreparedArchiveStatement();
@@ -143,7 +143,6 @@ class Calendars extends Main {
         AdvancedException::reportBoth('0011 - ' . $p->getMessage());
         exit('SQL error.');
       }
-
       foreach ($aResult as $aRow) {
         $iId = $aRow['id'];
         $sMonth = I18n::get('global.months.' . $aRow['start_month']);
@@ -182,7 +181,6 @@ class Calendars extends Main {
         AdvancedException::reportBoth('0012 - ' . $p->getMessage());
         exit('SQL error.');
       }
-
       if($bUpdate === true)
         $this->_aData = $this->_formatForUpdate($aRow);
 

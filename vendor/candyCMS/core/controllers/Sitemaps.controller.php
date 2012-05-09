@@ -48,11 +48,11 @@ class Sitemaps extends Main {
   protected function _show() {
     $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'show');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
       $this->_getSitemap();
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -63,6 +63,7 @@ class Sitemaps extends Main {
    *
    */
   private function _getSitemap() {
+
     $sModel     = $this->__autoload('Blogs', true);
     $oBlogs     = new $sModel($this->_aRequest, $this->_aSession);
 

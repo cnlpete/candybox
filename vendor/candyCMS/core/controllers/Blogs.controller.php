@@ -27,6 +27,7 @@ class Blogs extends Main {
   protected function _show() {
     $sTemplateDir  = Helper::getTemplateDir($this->_aRequest['controller'], 'show');
     $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'show');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if ($this->_iId) {
       $this->_aData = $this->_oModel->getData($this->_iId);
@@ -40,6 +41,8 @@ class Blogs extends Main {
 
       $this->oSmarty->assign('blogs', $this->_aData);
       $this->oSmarty->assign('_blog_footer_', $oComments->show());
+      // this is necessary, because comments does a setDir on the singleton object aswell
+      $this->oSmarty->setTemplateDir($sTemplateDir);
     }
 
     else {
@@ -55,7 +58,6 @@ class Blogs extends Main {
     $this->setKeywords($this->_setBlogsKeywords());
     $this->setTitle($this->_setBlogsTitle());
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 

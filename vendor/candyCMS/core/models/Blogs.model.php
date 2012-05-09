@@ -47,7 +47,15 @@ class Blogs extends Main {
       # Search blog for tags
       if (isset($this->_aRequest['search']) && !empty($this->_aRequest['search'])) {
         $sWhere .= isset($sWhere) && !empty($sWhere) ? ' AND ' : ' WHERE ';
-        $sWhere .= "tags LIKE '%" . Helper::formatInput($this->_aRequest['search']) . "%'";
+        $sSearchString = Helper::formatInput($this->_aRequest['search'], false);
+        $sSearchString = str_replace('%20', ' ', $sSearchString);
+        $sWhere .= "tags LIKE '%," . $sSearchString . ",%'
+                OR tags LIKE '%," . $sSearchString . "'
+                OR tags LIKE '" . $sSearchString . ",%'
+                OR tags = '" . $sSearchString . "'
+                OR tags LIKE '%, " . $sSearchString . "'
+                OR tags LIKE '%, " . $sSearchString . ",%'";
+        // these last two lines are only for compatibility, since we don't know if the tags are seperated by ', ' instead of ','
       }
 
       try {
@@ -159,7 +167,7 @@ class Blogs extends Main {
 
       else {
         $this->_aData[1] = $this->_formatForOutput($aRow, $aInts, $aBools);
-        $this->_aData[1]['tags'] = explode(', ', $aRow['tags']);
+        $this->_aData[1]['tags'] = array_filter( array_map("trim", explode(',', $aRow['tags'])) );
         $this->_aData[1]['tags_raw'] = $aRow['tags'];
         $this->_aData[1]['date_modified'] = !empty($aRow['date_modified']) ?
                 Helper::formatTimestamp($aRow['date_modified']) :
@@ -207,7 +215,8 @@ class Blogs extends Main {
 
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
       $oQuery->bindParam('title', Helper::formatInput($this->_aRequest['title'], false), PDO::PARAM_STR);
-      $oQuery->bindParam('tags', Helper::formatInput($this->_aRequest['tags']), PDO::PARAM_STR);
+      $sTags = implode(',', array_filter( array_map("trim", explode(',', $this->_aRequest['tags'])) ));
+      $oQuery->bindParam('tags', Helper::formatInput($sTags), PDO::PARAM_STR);
       $oQuery->bindParam('teaser', Helper::formatInput($this->_aRequest['teaser'], false), PDO::PARAM_STR);
       $oQuery->bindParam('keywords', Helper::formatInput($this->_aRequest['keywords']), PDO::PARAM_STR);
       $oQuery->bindParam('content', Helper::formatInput($this->_aRequest['content'], false), PDO::PARAM_STR);
@@ -277,7 +286,8 @@ class Blogs extends Main {
 
       $oQuery->bindParam('author_id', $iUpdateAuthor, PDO::PARAM_INT);
       $oQuery->bindParam('title', Helper::formatInput($this->_aRequest['title'], false), PDO::PARAM_STR);
-      $oQuery->bindParam('tags', Helper::formatInput($this->_aRequest['tags']), PDO::PARAM_STR);
+      $sTags = implode(',', array_filter( array_map("trim", explode(',', $this->_aRequest['tags'])) ));
+      $oQuery->bindParam('tags', Helper::formatInput($sTags), PDO::PARAM_STR);
       $oQuery->bindParam('teaser', Helper::formatInput($this->_aRequest['teaser'], false), PDO::PARAM_STR);
       $oQuery->bindParam('keywords', Helper::formatInput($this->_aRequest['keywords']), PDO::PARAM_STR);
       $oQuery->bindParam('content', Helper::formatInput($this->_aRequest['content'], false), PDO::PARAM_STR);

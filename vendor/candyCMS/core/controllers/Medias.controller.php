@@ -54,11 +54,11 @@ class Medias extends Main {
   /**
    * Build form template to create an upload.
    *
-   * @access private
+   * @access protected
    * @return string HTML content
    *
    */
-  private function _showFormTemplate() {
+  protected function _showFormTemplate() {
     $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'create');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'create');
 
@@ -113,54 +113,56 @@ class Medias extends Main {
   protected function _show() {
     $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'show');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     $this->setTitle(I18n::get('global.manager.media'));
 
-    require PATH_STANDARD . '/vendor/candyCMS/core/helpers/Image.helper.php';
+    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+      require PATH_STANDARD . '/vendor/candyCMS/core/helpers/Image.helper.php';
 
-    $sOriginalPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_aRequest['controller']);
-    $oDir = opendir($sOriginalPath);
+      $sOriginalPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_aRequest['controller']);
+      $oDir = opendir($sOriginalPath);
 
-    $aFiles = array();
-    while ($sFile = readdir($oDir)) {
-      $sPath = $sOriginalPath . '/' . $sFile;
+      $aFiles = array();
+      while ($sFile = readdir($oDir)) {
+        $sPath = $sOriginalPath . '/' . $sFile;
 
-      if (substr($sFile, 0, 1) == '.' || is_dir($sPath))
-        continue;
+        if (substr($sFile, 0, 1) == '.' || is_dir($sPath))
+          continue;
 
-      $sFileType  = strtolower(substr(strrchr($sPath, '.'), 1));
-      $iNameLen   = strlen($sFile) - 4;
+        $sFileType  = strtolower(substr(strrchr($sPath, '.'), 1));
+        $iNameLen   = strlen($sFile) - 4;
 
-      if ($sFileType == 'jpeg')
-        $iNameLen--;
+        if ($sFileType == 'jpeg')
+          $iNameLen--;
 
-      $sFileName = substr($sFile, 0, $iNameLen);
+        $sFileName = substr($sFile, 0, $iNameLen);
 
-      if ($sFileType == 'jpg' || $sFileType == 'jpeg' || $sFileType == 'png' || $sFileType == 'gif') {
-        $aImgDim = getImageSize($sPath);
+        if ($sFileType == 'jpg' || $sFileType == 'jpeg' || $sFileType == 'png' || $sFileType == 'gif') {
+          $aImgDim = getImageSize($sPath);
 
-        if (!file_exists(Helper::removeSlash(PATH_UPLOAD . '/temp/' . $this->_aRequest['controller'] . '/' . $sFile))) {
-          $oImage = new Image($sFileName, 'temp', $sPath, $sFileType);
-          $oImage->resizeAndCut('32', $this->_aRequest['controller']);
+          if (!file_exists(Helper::removeSlash(PATH_UPLOAD . '/temp/' . $this->_aRequest['controller'] . '/' . $sFile))) {
+            $oImage = new Image($sFileName, 'temp', $sPath, $sFileType);
+            $oImage->resizeAndCut('32', $this->_aRequest['controller']);
+          }
         }
+        else
+          $aImgDim = '';
+
+        $aFiles[] = array(
+            'name'  => $sFile,
+            'cdate' => Helper::formatTimestamp(filectime($sPath), 1),
+            'size'  => Helper::getFileSize($sPath),
+            'type'  => $sFileType,
+            'dim'   => $aImgDim
+        );
       }
-      else
-        $aImgDim = '';
 
-      $aFiles[] = array(
-          'name'  => $sFile,
-          'cdate' => Helper::formatTimestamp(filectime($sPath), 1),
-          'size'  => Helper::getFileSize($sPath),
-          'type'  => $sFileType,
-          'dim'   => $aImgDim
-      );
+      closedir($oDir);
+
+      $this->oSmarty->assign('files', $aFiles);
     }
-
-    closedir($oDir);
-
-    $this->oSmarty->assign('files', $aFiles);
-
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -184,4 +186,15 @@ class Medias extends Main {
     else
       return Helper::errorMessage(I18n::get('error.missing.file'), '/' . $this->_aRequest['controller']);
   }
+
+  /**
+   * There is no update Action for the medias Controller
+   *
+   * @access public
+   *
+   */
+  public function update() {
+    return Helper::redirectTo('/errors/404');
+  }
+
 }

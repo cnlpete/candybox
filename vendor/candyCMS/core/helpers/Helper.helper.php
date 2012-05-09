@@ -358,11 +358,9 @@ class Helper {
 
     # remove multiple spaces and newlines (3+)
     $sStr = preg_replace('/\s(\s)\s+/', '$1$1', trim($sStr));
-    # replace all newlines
- //   $sStr = str_replace("\n", "<br />", trim($sStr));
 
     # Fix quotes to avoid problems with inputs
-    return str_replace('"', "&quot;", $sStr);
+		return $bDisableHTML === true ? str_replace('"', "&quot;", $sStr) : $sStr;
   }
 
   /**

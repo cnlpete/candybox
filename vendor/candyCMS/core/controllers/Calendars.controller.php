@@ -46,6 +46,7 @@ class Calendars extends Main {
   private function _showEntry() {
     $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'ics');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'ics');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
       $aData = $this->_oModel->getData($this->_iId);
@@ -58,7 +59,6 @@ class Calendars extends Main {
     header('Content-type: text/calendar; charset=utf-8');
     header('Content-Disposition: inline; filename=' . $aData['title_encoded'] . '.ics');
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return ($this->oSmarty->fetch($sTemplateFile, UNIQUE_ID));
   }
 
@@ -70,6 +70,7 @@ class Calendars extends Main {
   private function _showOverview() {
     $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'show');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
       $this->oSmarty->assign('calendar', $this->_oModel->getData());
@@ -78,7 +79,6 @@ class Calendars extends Main {
     if ($this->_aRequest['action'] === 'archive')
       $this->_aRequest['id'] = $this->_aRequest['id'] ? $this->_aRequest['id'] : date('Y');
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -92,6 +92,7 @@ class Calendars extends Main {
   private function _showIcalFeed() {
     $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'icalfeed');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'icalfeed');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
       $this->oSmarty->assign('calendar', $this->_oModel->getData());
@@ -99,7 +100,6 @@ class Calendars extends Main {
     header('Content-type: text/calendar; charset=utf-8');
     header('Content-Disposition: inline; filename=' . WEBSITE_NAME . '.ics');
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -113,6 +113,7 @@ class Calendars extends Main {
   protected function _showFormTemplate() {
     $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], '_form');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     # Update
     if ($this->_iId)
@@ -132,7 +133,6 @@ class Calendars extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -159,6 +159,6 @@ class Calendars extends Main {
   protected function _update() {
     $this->_setError('start_date');
 
-    return parent::_update();
+    return parent::_update(null, '/' . $this->_aRequest['controller']);
   }
 }

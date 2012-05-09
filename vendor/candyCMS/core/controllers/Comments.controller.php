@@ -42,24 +42,24 @@ class Comments extends Main {
   protected function _show() {
     $sTemplateDir   = Helper::getTemplateDir('comments', 'show');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
+    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
       $this->oSmarty->assign('comments',
               $this->_oModel->getData($this->_iId, (int) $this->_aParentData[1]['comment_sum'], LIMIT_COMMENTS));
 
-    # Set author of blog entry
-    $this->oSmarty->assign('author_id', (int) $this->_aParentData[1]['author_id']);
+      # Set author of blog entry
+      $this->oSmarty->assign('author_id', (int) $this->_aParentData[1]['author_id']);
 
-    # For correct information, do some math to display entries.
-    # NOTE: If you're admin, you can see all entries. That might bring pagination to your view, even
-    # when other people don't see it
-    $this->oSmarty->assign('comment_number',
-            ($this->_oModel->oPagination->getCurrentPage() * LIMIT_COMMENTS) - LIMIT_COMMENTS);
+      # For correct information, do some math to display entries.
+      # NOTE: If you're admin, you can see all entries. That might bring pagination to your view, even
+      # when other people don't see it
+      $this->oSmarty->assign('comment_number',
+              ($this->_oModel->oPagination->getCurrentPage() * LIMIT_COMMENTS) - LIMIT_COMMENTS);
 
-    # Do we need pages?
-    $this->oSmarty->assign('_pages_', $this->_oModel->oPagination->showPages('/blogs/' . $this->_iId));
-
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+      # Do we need pages?
+      $this->oSmarty->assign('_pages_', $this->_oModel->oPagination->showPages('/blogs/' . $this->_iId));
+    }
 
     # we can leave caching on, the form itself will turn caching off, but that is a different template
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID) . $this->create('create_comments');
@@ -76,6 +76,7 @@ class Comments extends Main {
   protected function _showFormTemplate($bShowCaptcha) {
     $sTemplateDir   = Helper::getTemplateDir('comments', '_form');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     $this->oSmarty->assign('content', isset($this->_aRequest['content']) ? (string) $this->_aRequest['content'] : '');
     $this->oSmarty->assign('email', isset($this->_aRequest['email']) ? (string) $this->_aRequest['email'] : '');
@@ -87,7 +88,6 @@ class Comments extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 

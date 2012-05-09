@@ -545,13 +545,16 @@ abstract class Main {
    *
    * @access protected
    * @param string|array $mAdditionalCaches specify aditional caches to clear on success
+   * @param string $sRedirectURL specify the URL to redirect to after execution
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _update($mAdditionalCaches = null) {
+  protected function _update($mAdditionalCaches = null, $sRedirectURL = '') {
     $this->_setError('title');
 
-    $sRedirectURL = '/' . $this->_aRequest['controller'] . '/' . (int) $this->_aRequest['id'];
+    $sRedirectURL = empty($sRedirectURL) ?
+            '/' . $this->_aRequest['controller'] . '/' . (int) $this->_aRequest['id'] :
+            $sRedirectURL;
 
     if ($this->_aError)
       return $this->_showFormTemplate();

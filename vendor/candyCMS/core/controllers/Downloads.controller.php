@@ -51,11 +51,11 @@ class Downloads extends Main {
     else {
       $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'show');
       $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+      $this->oSmarty->setTemplateDir($sTemplateDir);
 
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
         $this->oSmarty->assign('downloads', $this->_oModel->getData($this->_iId));
 
-      $this->oSmarty->setTemplateDir($sTemplateDir);
       return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
   }
@@ -70,6 +70,7 @@ class Downloads extends Main {
   protected function _showFormTemplate() {
     $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], '_form');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     # Update
     if ($this->_iId)
@@ -90,7 +91,6 @@ class Downloads extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -120,8 +120,14 @@ class Downloads extends Main {
                                 $this->_aSession, $this->_aFile,
                                 Helper::formatInput($this->_aRequest['title']));
 
-      # File is up so insert data into database
-      $aReturnValues = $oUploadFile->uploadFiles('downloads');
+      try {
+        // try to upload the file(s)
+        $aReturnValues = $oUploadFile->uploadFiles('downloads');
+      }
+      catch (\Exception $e) {
+        return Helper::errorMessage($e->getMessage(), '/' . $this->_aRequest['controller'] . '/create');
+      }
+      // fileupload was successfull, so we can clear cache and insert into db
       if ($aReturnValues[0] === true) {
         $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
         $this->oSmarty->clearCacheForController('searches');
@@ -129,6 +135,7 @@ class Downloads extends Main {
         $aIds   = $oUploadFile->getIds(false);
         $aExts  = $oUploadFile->getExtensions();
 
+        # File is up so insert data into database
         if ($this->_oModel->create($aIds[0] . '.' . $aExts[0], $aExts[0]) === true) {
           Logs::insert($this->_aRequest['controller'],
                       $this->_aRequest['action'],

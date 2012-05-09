@@ -60,6 +60,12 @@ class Upload {
   public $sFilePaths = array();
 
   /**
+   * max upload size in bytes
+   *
+   */
+  private $_iMaxUploadSize;
+
+  /**
    * Fetch the required information.
    *
    * @access public
@@ -72,6 +78,12 @@ class Upload {
     $this->_aRequest  = & $aRequest;
     $this->_aSession  = & $aSession;
     $this->_aFile     = & $aFile;
+
+    $iMaxUpload = (int)(ini_get('upload_max_filesize'));
+    $iMaxPost = (int)(ini_get('post_max_size'));
+    $iMemoryLimit = (int)(ini_get('memory_limit'));
+    // 1024 * 1024 = 1048576
+    $this->_iMaxUploadSize = min($iMaxUpload, $iMaxPost, $iMemoryLimit) * 1048576;
 
     require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Image.helper.php';
   }
@@ -92,6 +104,15 @@ class Upload {
     if (isset($this->_aFile[$sType]) && !empty($this->_aFile[$sType]['name'][0])) {
       $bIsArray = is_array($this->_aFile[$sType]['name']);
       $iFileCount = $bIsArray ? count($this->_aFile[$sType]['name']) : 1;
+
+      // stores the total size of files to upload in bytes
+      $iFileSize = 0;
+      foreach ($this->_aFile[$sType]['size'] as $iSize) {
+        $iFileSize += $iSize;
+      }
+      if ($this->_iMaxUploadSize < $iFileSize || $iFileSize == 0) {
+        throw new \Exception(I18n::get('error.file.size', $this->_iMaxUploadSize / 1024));
+      }
 
       $bReturn = array();
       for ($iI = 0; $iI < $iFileCount; $iI++) {
