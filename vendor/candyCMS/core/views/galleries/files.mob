@@ -28,40 +28,40 @@
   </p>
   <script type="text/javascript">
     /*
-		 * IMPORTANT!!!
-		 * REMEMBER TO ADD  rel="external"  to your anchor tags.
-		 * If you don't this will mess with how jQuery Mobile works
-		 */
+     * IMPORTANT!!!
+     * REMEMBER TO ADD  rel="external"  to your anchor tags.
+     * If you don't this will mess with how jQuery Mobile works
+     */
 
-		(function(window, $, PhotoSwipe){
+    (function(window, $, PhotoSwipe){
 
-			$(document).ready(function(){
+      $(document).ready(function(){
 
-				$('div.js-page-galleries')
-					.live('pageshow', function(e){
-            if ($("#galleries a.js-photoswipe", e.target).length > 0) {
-              var
-                currentPage = $(e.target),
-                options = {},
-                photoSwipeInstance = $("#galleries a.js-photoswipe", e.target).photoSwipe(options,  currentPage.attr('id'));
-            }
-						return true;
+        $('div.js-page-galleries')
+        .live('pageshow', function(e){
+          if ($("#galleries a.js-photoswipe", e.target).length > 0) {
+            var
+            currentPage = $(e.target),
+            options = {},
+            photoSwipeInstance = $("#galleries a.js-photoswipe", e.target).photoSwipe(options,  currentPage.attr('id'));
+          }
+          return true;
 
-					})
+        })
 
-					.live('pagehide', function(e){
-						var
-							currentPage = $(e.target),
-							photoSwipeInstance = PhotoSwipe.getInstance(currentPage.attr('id'));
+        .live('pagehide', function(e){
+          var
+          currentPage = $(e.target),
+          photoSwipeInstance = PhotoSwipe.getInstance(currentPage.attr('id'));
 
-						if (typeof photoSwipeInstance != "undefined" && photoSwipeInstance != null) {
-							PhotoSwipe.detatch(photoSwipeInstance);
-						}
+          if (typeof photoSwipeInstance != "undefined" && photoSwipeInstance != null) {
+            PhotoSwipe.detatch(photoSwipeInstance);
+          }
 
-						return true;
+          return true;
 
-					});
-			});
-		}(window, window.jQuery, window.Code.PhotoSwipe));
+        });
+      });
+    }(window, window.jQuery, window.Code.PhotoSwipe));
   </script>
 {/strip}

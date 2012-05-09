@@ -56,6 +56,14 @@ abstract class Main {
   protected $_iId;
 
   /**
+   * Name of the current controller.
+   *
+   * @var string
+   * @access protected
+   */
+  protected $_sController;
+
+  /**
    * PDO object.
    *
    * @var object
@@ -107,6 +115,7 @@ abstract class Main {
 
     $this->_iId = isset($this->_aRequest['id']) && !isset($this->_iId) ? (int) $this->_aRequest['id'] : '';
     $this->_oDb = $this->connectToDatabase();
+    $this->_sController = $this->_aRequest['controller'];
   }
 
   /**

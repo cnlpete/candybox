@@ -140,6 +140,7 @@ class Blogs extends Main {
 
     # Create
     else {
+      # Todo: foreach statement
       $aData['content']   = isset($this->_aRequest['content']) ? $this->_aRequest['content'] : '';
       $aData['keywords']  = isset($this->_aRequest['keywords']) ? $this->_aRequest['keywords'] : '';
       $aData['language']  = isset($this->_aRequest['language']) ? $this->_aRequest['language'] : '';

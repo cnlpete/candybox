@@ -15,7 +15,7 @@
         {$lang.global.title} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <input name='title' value="{$title}" type='text' id='input-title'
+        <input name='{$_REQUEST.controller}[title]' value="{$title}" type='text' id='input-title'
               class='span4 required' required />
         <span class='help-inline'>
           {if isset($error.title)}
@@ -29,7 +29,7 @@
         {$lang.global.teaser}
       </label>
       <div class='controls'>
-        <input name='teaser' value="{$teaser}" type='text' class='span4'
+        <input name='{$_REQUEST.controller}[teaser]' value="{$teaser}" type='text' class='span4'
               id='input-teaser' />
         <span class='help-inline'></span>
         <p class='help-block'>
@@ -42,7 +42,7 @@
         {$lang.global.tags.tags}
       </label>
       <div class='controls'>
-        <input type='text' name='tags' id='input-tags'
+        <input type='text' name='{$_REQUEST.controller}[tags]' id='input-tags'
               data-provide='typeahead' value="{$tags}"
               data-source="{$_tags_}" data-items='8'
               class='span4' autocomplete='off' />
@@ -56,7 +56,7 @@
         {$lang.global.keywords}
       </label>
       <div class='controls'>
-        <input name='keywords' value="{$keywords}" type='text' id='input-keywords'
+        <input name='{$_REQUEST.controller}[keywords]' value="{$keywords}" type='text' id='input-keywords'
               title='{$lang.blogs.info.keywords}' class='span4' />
         <p class='help-block'>
           {$lang.blogs.info.keywords}
@@ -69,7 +69,7 @@
         {$lang.global.content} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <textarea name='content' class='js-tinymce required'
+        <textarea name='{$_REQUEST.controller}[content]' class='js-tinymce required'
                   id='input-content'>{$content}</textarea>
         {if isset($error.content)}
           <span class='help-inline'>{$error.content}</span>
@@ -81,7 +81,7 @@
         {$lang.global.language}
       </label>
       <div class='controls'>
-        <select name='language' class='span4' id='input-language'>
+        <select name='{$_REQUEST.controller}[language]' class='span4' id='input-language'>
           {foreach $languages as $l}
             <option value='{$l}' {if $l == $WEBSITE_LANGUAGE}selected='selected'{/if}>{$l}</option>
           {/foreach}
@@ -93,7 +93,7 @@
         {$lang.global.published}
       </label>
       <div class='controls'>
-        <input name='published' value='1' type='checkbox' class='checkbox'
+        <input name='{$_REQUEST.controller}[published]' value='1' type='checkbox' class='checkbox'
               id='input-published' {if $published == true}checked{/if} />
       </div>
     </div>
@@ -103,7 +103,7 @@
           {$lang.blogs.label.date}
         </label>
         <div class='controls'>
-            <input name='update_date' value='1' type='checkbox'
+            <input name='{$_REQUEST.controller}[update_date]' value='1' type='checkbox'
                   id='input-update_date' class='checkbox' />
         </div>
       </div>
@@ -112,7 +112,7 @@
           {$lang.global.update.show}
         </label>
         <div class='controls'>
-            <input type='checkbox' class='checkbox' name='show_update' value='1'
+            <input type='checkbox' class='checkbox' name='{$_REQUEST.controller}[show_update]' value='1'
                   id='input-show_update' {if $date_modified > 0}checked{/if} />
         </div>
       </div>
@@ -120,7 +120,7 @@
     <div data-role='fieldcontain'>
       <div class='form-actions' data-role='controlgroup'>
         {if isset($author_id)}
-          <input type='hidden' value='{$author_id}' name='author_id' />
+          <input type='hidden' value='{$author_id}' name='{$_REQUEST.controller}[author_id]' />
         {/if}
         <input type='hidden' value='formdata' name='{$_REQUEST.action}_{$_REQUEST.controller}' />
         {if $_REQUEST.action == 'create'}
@@ -130,8 +130,8 @@
           <input type='button' class='btn btn-danger' value='{$lang.blogs.title.destroy}'
                 onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroy')" />
           <input type='reset' class='btn' value='{$lang.global.reset}' />
-          <input type='hidden' value='{$_REQUEST.id}' name='id' />
-          <input type='hidden' value='{$date}' name='date' />
+          <input type='hidden' value='{$_REQUEST.id}' name='{$_REQUEST.controller}[id]' />
+          <input type='hidden' value='{$date}' name='{$_REQUEST.controller}[date]' />
         {/if}
       </div>
     </div>

@@ -39,7 +39,7 @@ class Medias extends Main {
           $bAllTrue = false;
       }
 
-      //clear the cache
+      # Clear the cache
       $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
 
       return $bAllTrue === true ?

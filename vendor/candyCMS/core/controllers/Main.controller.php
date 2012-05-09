@@ -98,6 +98,14 @@ abstract class Main {
   private $_sContent;
 
   /**
+   * Name of the current controller.
+   *
+   * @var string
+   * @access protected
+   */
+  protected $_sController;
+
+  /**
    * Meta description.
    *
    * @var string
@@ -162,6 +170,7 @@ abstract class Main {
       define('WEBSITE_LOCALE', 'en_US');
 
     $this->_iId = isset($this->_aRequest['id']) ? (int) $this->_aRequest['id'] : '';
+    $this->_sController = $this->_aRequest['controller'];
 
     $this->_setSmarty();
   }
@@ -382,6 +391,7 @@ abstract class Main {
    *
    */
   protected function _setError($sField, $sMessage = '') {
+    # @todo we might need to modify file upload names too.
     if ($sField == 'file' || $sField == 'image') {
       if (!isset($this->_aFile[$sField]) || empty($this->_aFile[$sField]['name']))
           $this->_aError[$sField] = $sMessage ?
@@ -390,12 +400,12 @@ abstract class Main {
     }
 
     else {
-      if (!isset($this->_aRequest[$sField]) || empty($this->_aRequest[$sField]))
+      if (!isset($this->_aRequest[$this->_sController][$sField]) || empty($this->_aRequest[$this->_sController][$sField]))
           $sError = I18n::get('error.form.missing.' . strtolower($sField)) ?
                 I18n::get('error.form.missing.' . strtolower($sField)) :
                 I18n::get('error.form.missing.standard');
 
-      if ('email' == $sField && !Helper::checkEmailAddress($this->_aRequest['email']))
+      if ('email' == $sField && !Helper::checkEmailAddress($this->_aRequest[$this->_sController]['email']))
           $sError = $sError ? $sError : I18n::get('error.mail.format');
 
       if ($sError)
@@ -552,6 +562,7 @@ abstract class Main {
     $this->_setError('title');
 
     $sRedirectURL = '/' . $this->_aRequest['controller'] . '/' . (int) $this->_aRequest['id'];
+
 
     if ($this->_aError)
       return $this->_showFormTemplate();
