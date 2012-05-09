@@ -159,6 +159,6 @@ class Calendars extends Main {
   protected function _update() {
     $this->_setError('start_date');
 
-    return parent::_update();
+    return parent::_update(null, '/' . $this->_aRequest['controller']);
   }
 }
