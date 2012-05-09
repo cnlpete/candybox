@@ -26,16 +26,15 @@ class Calendars extends Main {
    */
   protected function _show() {
      # Show single .ics file
-    if ($this->_iId && !isset($this->_aRequest['action'])) {
+    if ($this->_iId && !isset($this->_aRequest['action']))
       exit($this->_showEntry());
-    }
+
     # Show overview
-    else  if ($this->_aRequest['action'] == 'icalfeed') {
+    elseif (isset($this->_aRequest['action']) && $this->_aRequest['action'] == 'icalfeed')
       exit($this->_showIcalFeed());
-    }
-    else {
+
+    else
       return $this->_showOverview();
-    }
   }
 
   /**
@@ -60,7 +59,7 @@ class Calendars extends Main {
     header('Content-type: text/calendar; charset=utf-8');
     header('Content-Disposition: inline; filename=' . $aData['title_encoded'] . '.ics');
 
-    return ($this->oSmarty->display($sTemplateFile, UNIQUE_ID));
+    return ($this->oSmarty->fetch($sTemplateFile, UNIQUE_ID));
   }
 
   /**
@@ -86,7 +85,9 @@ class Calendars extends Main {
   /**
    * show the overview
    *
+   * @access private
    * @return string HTML content
+   *
    */
   private function _showIcalFeed() {
     $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'icalfeed');

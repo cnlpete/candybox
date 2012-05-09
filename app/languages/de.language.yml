@@ -259,8 +259,8 @@ calendars:
     show: Kalender
   info:
     date_format: 'Datumsformat: "YYYY-MM-DD"'
-    ics: 'Speichern Sie diesen Termin und fügen Sie ihn Ihrer Kalendar-Anwendung hinzu'
-    icsfeed: Fügen Sie den Kalendar zu Ihrer Kalendar-Anwendung hinzu
+    ics: 'Speichern Sie diesen Termin und fügen Sie ihn Ihrer Kalender-Anwendung hinzu.'
+    icsfeed: Fügen Sie den Kalender zu Ihrer Kalender-Anwendung hinzu.
   title:
     create: Termin hinzufügen
     update: Termin bearbeiten
