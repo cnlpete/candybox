@@ -106,7 +106,8 @@ class Users extends Main {
         $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
         $this->oSmarty->setTemplateDir($sTemplateDir);
 
-        $this->oSmarty->assign('user', $this->_oModel->getData());
+        if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
+          $this->oSmarty->assign('user', $this->_oModel->getData());
 
         $this->setTitle(I18n::get('users.title.overview'));
         return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
