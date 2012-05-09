@@ -132,46 +132,57 @@ class Blogs extends Main {
     $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], '_form');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
 
+    # Get available languages.
+    $this->oSmarty->assign('languages', self::getLanguages());
+
     # Update
     if ($this->_iId) {
       $aData = $this->_oModel->getData($this->_iId, true);
       $this->setTitle($aData['title']);
+
+      foreach ($aData as $sColumn => $sData)
+        $this->oSmarty->assign($sColumn, $sData);
     }
 
     # Create
     else {
-      # Todo: foreach statement
-      $aData['content']   = isset($this->_aRequest['content']) ? $this->_aRequest['content'] : '';
-      $aData['keywords']  = isset($this->_aRequest['keywords']) ? $this->_aRequest['keywords'] : '';
-      $aData['language']  = isset($this->_aRequest['language']) ? $this->_aRequest['language'] : '';
-      $aData['published'] = isset($this->_aRequest['published']) ? $this->_aRequest['published'] : '';
-      $aData['tags']      = isset($this->_aRequest['tags']) ? $this->_aRequest['tags'] : '';
-      $aData['teaser']    = isset($this->_aRequest['teaser']) ? $this->_aRequest['teaser'] : '';
-      $aData['title']     = isset($this->_aRequest['title']) ? $this->_aRequest['title'] : '';
+      foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
+        $this->oSmarty->assign($sInput, $sData);
     }
 
     $this->oSmarty->assign('_tags_', $this->_oModel->getTypeaheadData('blogs', 'tags', true));
 
-    # Get available languages
-    $aData['languages'] = array();
+		if ($this->_aError)
+			$this->oSmarty->assign('error', $this->_aError);
+
+    $this->oSmarty->setTemplateDir($sTemplateDir);
+		return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+  }
+
+  /**
+   * Get languages from app/languages folder.
+   *
+   * @static
+   * @access public
+   * @return array $aLanguages array with our languages
+   * @todo test cases
+   *
+   */
+  public static function getLanguages() {
+    $aLanguages = array();
     $oPathDir = opendir(PATH_STANDARD . '/app/languages');
+
     while ($sFile = readdir($oPathDir)) {
       # Skip extra german languages.
       if (substr($sFile, 0, 1) == '.' || substr($sFile, 0, 3) == 'de_')
         continue;
 
-      array_push($aData['languages'], substr($sFile, 0, 2));
+      array_push($aLanguages, substr($sFile, 0, 2));
     }
+
     closedir($oPathDir);
 
-    foreach ($aData as $sColumn => $sData)
-			$this->oSmarty->assign($sColumn, $sData);
-
-		if ($this->_aError)
-			$this->oSmarty->assign('error', $this->_aError);
-
-		$this->oSmarty->setTemplateDir($sTemplateDir);
-		return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $aLanguages;
   }
 
   /**

@@ -178,8 +178,9 @@ class Blogs extends Main {
    *
    */
   public function create() {
-    $this->_aRequest['published'] = isset($this->_aRequest['published']) ?
-            (int) $this->_aRequest['published'] :
+    $iPublished = isset($this->_aRequest[$this->_sController]['published']) &&
+            $this->_aRequest[$this->_sController]['published'] == true ?
+            1 :
             0;
 
     try {
@@ -206,14 +207,14 @@ class Blogs extends Main {
                                           :published )");
 
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
-      $oQuery->bindParam('title', Helper::formatInput($this->_aRequest['title'], false), PDO::PARAM_STR);
-      $oQuery->bindParam('tags', Helper::formatInput($this->_aRequest['tags']), PDO::PARAM_STR);
-      $oQuery->bindParam('teaser', Helper::formatInput($this->_aRequest['teaser'], false), PDO::PARAM_STR);
-      $oQuery->bindParam('keywords', Helper::formatInput($this->_aRequest['keywords']), PDO::PARAM_STR);
-      $oQuery->bindParam('content', Helper::formatInput($this->_aRequest['content'], false), PDO::PARAM_STR);
-      $oQuery->bindParam('language', Helper::formatInput($this->_aRequest['language']), PDO::PARAM_STR);
       $oQuery->bindParam('date', time(), PDO::PARAM_INT);
-      $oQuery->bindParam('published', $this->_aRequest['published'], PDO::PARAM_INT);
+      $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
+
+      foreach (array('title', 'teaser', 'content') as $sInput)
+        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false), PDO::PARAM_STR);
+
+      foreach (array('tags', 'keywords', 'language') as $sInput)
+        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput]), PDO::PARAM_STR);
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = Helper::getLastEntry($this->_sController);
@@ -249,8 +250,8 @@ class Blogs extends Main {
 
     $iPublished = isset($this->_aRequest[$this->_sController]['published']) &&
             $this->_aRequest[$this->_sController]['published'] == true ?
-            '1' :
-            '0';
+            1 :
+            0;
 
     $iUpdateAuthor = isset($this->_aRequest[$this->_sController]['show_update']) &&
             $this->_aRequest[$this->_sController]['show_update'] == true ?
@@ -280,16 +281,16 @@ class Blogs extends Main {
                                         id = :id");
 
       $oQuery->bindParam('author_id', $iUpdateAuthor, PDO::PARAM_INT);
-      $oQuery->bindParam('title', Helper::formatInput($this->_aRequest[$this->_sController]['title'], false), PDO::PARAM_STR);
-      $oQuery->bindParam('tags', Helper::formatInput($this->_aRequest[$this->_sController]['tags']), PDO::PARAM_STR);
-      $oQuery->bindParam('teaser', Helper::formatInput($this->_aRequest[$this->_sController]['teaser'], false), PDO::PARAM_STR);
-      $oQuery->bindParam('keywords', Helper::formatInput($this->_aRequest[$this->_sController]['keywords']), PDO::PARAM_STR);
-      $oQuery->bindParam('content', Helper::formatInput($this->_aRequest[$this->_sController]['content'], false), PDO::PARAM_STR);
-      $oQuery->bindParam('language', Helper::formatInput($this->_aRequest[$this->_sController]['language']), PDO::PARAM_STR);
       $oQuery->bindParam('date', $iDate, PDO::PARAM_INT);
       $oQuery->bindParam('date_modified', $iDateModified, PDO::PARAM_INT);
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
+
+      foreach (array('title', 'teaser', 'content') as $sInput)
+        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false), PDO::PARAM_STR);
+
+      foreach (array('tags', 'keywords', 'language') as $sInput)
+        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput]), PDO::PARAM_STR);
 
       return $oQuery->execute();
     }
