@@ -139,7 +139,7 @@ global:
   upload:
     at: Uploaded at
     upload: Upload
-    maxsize: The maximal filesize is %s.
+    maxsize: 'Maximum filesize: %s'
   user:
     role: Userright
     roles:
@@ -394,7 +394,7 @@ users:
   info:
     destroy_account: Please enter your current password. After you click on "Delete Account", all your data will be permanently destroyed.
     gravatar:  "If you don't want to upload a profile image, you can use <a href='http://gravatar.com' target='_blank'>Gravatar.com</a> instead. The displayed image is shown above."
-    image: You are only allowed to upload images less than 400KB.
+    image: You are only allowed to upload images less than %s.
   label:
     account:
       destroy: Delete account

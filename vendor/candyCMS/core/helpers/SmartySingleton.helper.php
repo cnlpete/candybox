@@ -118,9 +118,10 @@ class SmartySingleton extends Smarty {
         'compress_files_suffix' => WEBSITE_COMPRESS_FILES === true ? '.min' : '',
         'facebook_plugin'       => $bUseFacebook,
         'maximumUploadSize'     => array(
-            'b'             => $iMaximumUploadSize . 'B',
-            'kb'            => ($iMaximumUploadSize / 1024) . 'KB',
-            'mb'            => ($iMaximumUploadSize / 1048576) . 'MB'),
+            'raw'               => $iMaximumUploadSize,
+            'b'                 => $iMaximumUploadSize . 'B',
+            'kb'                => ($iMaximumUploadSize / 1024) . 'KB',
+            'mb'                => ($iMaximumUploadSize / 1048576) . 'MB'),
         'json_language'         => I18n::getJson()));
 
     $this->assign('lang', I18n::getArray());

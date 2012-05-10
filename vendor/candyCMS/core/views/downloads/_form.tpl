@@ -7,12 +7,20 @@
     {if $_REQUEST.action == 'create'}
       <div class='control-group{if isset($error.file)} alert alert-error{/if}'>
         <label for='input-file' class='control-label'>
-          {$lang.downloads.label.choose} <span title="{$lang.global.required}">*</span>
+          {$lang.downloads.label.choose} <span title="{$lang.global.required}">*</span><br />
+          <small>
+            {if $_SYSTEM.maximumUploadSize.raw <= 1536}
+              {$_SYSTEM.maximumUploadSize.b|string_format: $lang.global.upload.maxsize}
+            {elseif $_SYSTEM.maximumUploadSize.raw <= 1572864}
+              {$_SYSTEM.maximumUploadSize.kb|string_format: $lang.global.upload.maxsize}
+            {else}
+              {$_SYSTEM.maximumUploadSize.mb|string_format: $lang.global.upload.maxsize}
+            {/if}
+          </small>
         </label>
         <div class='controls'>
-          <input class='input-file span4 required js-tooltip' type='file' name='file[]'
-                required id="input-file"
-                title='{$_SYSTEM.maximumUploadSize.mb|string_format: $lang.global.upload.maxsize}' />
+          <input class='input-file span4 required' type='file' name='file[]'
+                required id="input-file" />
         </div>
       </div>
     {/if}

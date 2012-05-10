@@ -139,7 +139,7 @@ global:
   upload:
     at: Datum des Hochladens
     upload: Upload
-    maxsize: Die maximale Dateigröße ist %s.
+    maxsize: 'Maximale Dateigröße: %s'
   user:
     role: Userrecht
     roles:
@@ -394,7 +394,7 @@ users:
   info:
     destroy_account: Bitte geben Sie zur eigenen Sicherheit Ihr aktuelles Passwort ein. Sobald Sie auf "Account löschen" klicken wird Ihr Zugang gelöscht und ist nicht wiederherstellbar!
     gravatar: Aktivieren Sie dieses Kästchen, wird automatisch nach einem von Ihnen auf <a href="http://gravatar.com" target="_blank">Gravatar.com</a> hinterlegten Profilbild (s.o.) gesucht. Alternativ können Sie aber auch direkt ein Bild hochladen.
-    image: Bitte nur Bilder mit einer Größe von bis zu 400KB hochladen!
+    image: Bitte nur Bilder mit einer Größe von bis zu %s hochladen!
   label:
     account:
       destroy: Account löschen

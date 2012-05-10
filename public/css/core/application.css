@@ -2546,3 +2546,4 @@ p img, footer img { vertical-align:bottom; }
 #medias .thumbnail { display:inline; }
 #users table.table.unstyled th, #users table.table.unstyled td { border:none; }
 #users table td:first-child { font-weight:bold; }
+form label small { font-size:80%; }
