@@ -189,7 +189,7 @@ error:
     loading: Captcha nicht geladen werden konnte, aktivieren Javascript du musst!
   file:
     destroy: Die Datei nicht gelöscht werden konnte!
-    size: Maximale Dateigröße von %dKB erreicht!
+    size: Maximale Dateigröße von %s erreicht!
     type: Ein falscher Dateityp hochgeladen wurde!
     upload: Einen Fehler beim Upload es gab!
   form:

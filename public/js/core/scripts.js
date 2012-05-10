@@ -58,6 +58,34 @@ function countCharLength(sDiv, iLen) {
   $(sDiv).next().html(iLength);
 }
 
+/* calculate the totalUploadSize */
+function getSizeOfFiles(fileInput) {
+  if (typeof window.FileReader !== 'function' || !fileInput.files || !fileInput.files[0]) {
+    return 0;
+  }
+  var iFileSize = 0;
+  var iLength = fileInput.files.length;
+  for (var index = 0; index < iLength; index++) {
+    iFileSize = iFileSize + fileInput.files[index].size;
+  }
+  return iFileSize;
+}
+
+function checkFileSize(fileInput, iMaxFileSize) {
+  var iFileSize     = getSizeOfFiles(fileInput[0]);
+  var jControlGroup = fileInput.closest('.control-group');
+  var jHelp         = fileInput.next();
+
+  if (iFileSize > iMaxFileSize) {
+    jControlGroup.addClass('alert alert-error');
+    jHelp.removeClass('invisible');
+  }
+  else {
+    jControlGroup.removeClass('alert alert-error');
+    jHelp.addClass('invisible');
+  }
+}
+
 /* Show success and error messages */
 if($('#js-flash_success') || $('#js-flash_error')) {
   show('#js-flash_message');
