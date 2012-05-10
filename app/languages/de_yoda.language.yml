@@ -139,6 +139,7 @@ global:
   upload:
     at: Datum des Hochladens
     upload: Upload
+    maxsize: 'Maximale Dateigröße: %s'
   user:
     role: Userrecht
     roles:
@@ -188,7 +189,7 @@ error:
     loading: Captcha nicht geladen werden konnte, aktivieren Javascript du musst!
   file:
     destroy: Die Datei nicht gelöscht werden konnte!
-    size: Maximale Dateigröße von %dKB erreicht!
+    size: Maximale Dateigröße von %s erreicht!
     type: Ein falscher Dateityp hochgeladen wurde!
     upload: Einen Fehler beim Upload es gab!
   form:
@@ -393,7 +394,7 @@ users:
   info:
     destroy_account: Zur eigenen Sicherheit dein aktuelles Passwort noch einmal eingeben, du musst. Sobald du auf "Account löschen" klicken du tust, dein Zugang gelöscht und nicht wiederherstellbar, er ist!
     gravatar: Wenn du aktivierst dieses Kästchen, automatisch nach einem von dir auf <a href="http://gravatar.com" target="_blank">Gravatar.com</a> hinterlegten Profilbild (s.o.) gesucht, es wird. Alternativ aber auch direkt ein Bild hochladen, du kannst.
-    image: Nur Bilder mit einer Größe von bis zu 400KB hochladen, du darfst!
+    image: Nur Bilder mit einer Größe von bis zu %s hochladen, du darfst!
   label:
     account:
       destroy: Account löschen

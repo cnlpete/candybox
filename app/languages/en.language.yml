@@ -139,6 +139,7 @@ global:
   upload:
     at: Uploaded at
     upload: Upload
+    maxsize: 'Maximum filesize: %s'
   user:
     role: Userright
     roles:
@@ -188,7 +189,7 @@ error:
     loading: Captcha could not be loaded, please activate Javascript!
   file:
     destroy: This file could not be deleted!
-    size: Your file is bigger than %dKB!
+    size: Your file is bigger than %s!
     type: You uploaded an illegal filetype. Only *.jpg is allowed!
     upload: An error occured during upload.
   form:
@@ -393,7 +394,7 @@ users:
   info:
     destroy_account: Please enter your current password. After you click on "Delete Account", all your data will be permanently destroyed.
     gravatar:  "If you don't want to upload a profile image, you can use <a href='http://gravatar.com' target='_blank'>Gravatar.com</a> instead. The displayed image is shown above."
-    image: You are only allowed to upload images less than 400KB.
+    image: You are only allowed to upload images less than %s.
   label:
     account:
       destroy: Delete account

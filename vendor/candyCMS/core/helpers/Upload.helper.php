@@ -60,12 +60,6 @@ class Upload {
   public $sFilePaths = array();
 
   /**
-   * max upload size in bytes
-   *
-   */
-  private $_iMaxUploadSize;
-
-  /**
    * Fetch the required information.
    *
    * @access public
@@ -79,13 +73,21 @@ class Upload {
     $this->_aSession  = & $aSession;
     $this->_aFile     = & $aFile;
 
+    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Image.helper.php';
+  }
+
+  /**
+   * get the maximum upload Limit allowed by php.ini
+   *
+   * @return integer the upload limit in bytes
+   *
+   */
+  public static function getUploadLimit($bToBytes = true) {
     $iMaxUpload = (int)(ini_get('upload_max_filesize'));
     $iMaxPost = (int)(ini_get('post_max_size'));
     $iMemoryLimit = (int)(ini_get('memory_limit'));
     // 1024 * 1024 = 1048576
-    $this->_iMaxUploadSize = min($iMaxUpload, $iMaxPost, $iMemoryLimit) * 1048576;
-
-    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Image.helper.php';
+    return min($iMaxUpload, $iMaxPost, $iMemoryLimit) * ($bToBytes ? 1048576 : 1);
   }
 
   /**
@@ -107,11 +109,12 @@ class Upload {
 
       // stores the total size of files to upload in bytes
       $iFileSize = 0;
-      foreach ($this->_aFile[$sType]['size'] as $iSize) {
+      foreach ($this->_aFile[$sType]['size'] as $iSize)
         $iFileSize += $iSize;
-      }
-      if ($this->_iMaxUploadSize < $iFileSize || $iFileSize == 0) {
-        throw new \Exception(I18n::get('error.file.size', $this->_iMaxUploadSize / 1024));
+
+      $iMaxUploadSize = self::getUploadLimit();
+      if ($iMaxUploadSize < $iFileSize || $iFileSize == 0) {
+        throw new \Exception(I18n::get('error.file.size', $iMaxUploadSize / 1024));
       }
 
       $bReturn = array();
