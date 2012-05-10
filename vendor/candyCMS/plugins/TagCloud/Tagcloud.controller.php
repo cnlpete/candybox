@@ -1,12 +1,12 @@
 <?php
 
 /**
- * The archive plugin lists all blog entries by month and date.
+ * TagCloud Plugin.
  *
  * @link http://github.com/marcoraddatz/candyCMS
  * @author Marco Raddatz <http://marcoraddatz.com>
  * @license MIT
- * @since 1.5
+ * @since 2.1
  *
  */
 
@@ -15,7 +15,7 @@ namespace CandyCMS\Plugins;
 use CandyCMS\Core\Helpers\Helper;
 use CandyCMS\Core\Helpers\SmartySingleton;
 
-final class Tagcloud {
+final class TagCloud {
 
   /**
    * Identifier for Template Replacements
@@ -47,13 +47,13 @@ final class Tagcloud {
     if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
 
       $sBlogsModel = \CandyCMS\Core\Models\Main::__autoload('Blogs');
-      $oModel = & new $sBlogsModel($aRequest, $aSession);
+      $oModel = new $sBlogsModel($aRequest, $aSession);
 
       // get all tags + how often they are used
       $aTags = array();
       $aSortableTags = array();
-      $aData = $oModel->getData('', false, 0);
-      foreach ($aData as $aRow) {
+
+      foreach ($oModel->getData('', false, 0) as $aRow) {
         foreach ($aRow['tags'] as $sTag) {
           // initialize, if tag did not appear before
           if (!$aTags[$sTag]) {
@@ -73,13 +73,17 @@ final class Tagcloud {
 
       $aData = array();
       $iIndex = 0;
+
       if (!defined('PLUGIN_TAGCLOUD_LIMIT'))
         define('PLUGIN_TAGCLOUD_LIMIT', 10);
+
       if (!defined('PLUGIN_TAGCLOUD_FILTER'))
         define('PLUGIN_TAGCLOUD_FILTER', 1);
+
       foreach ($aSortableTags as $sTag => $iAmount) {
         if ($iIndex >= PLUGIN_TAGCLOUD_LIMIT)
           break;
+
         if ($iAmount < PLUGIN_TAGCLOUD_FILTER)
           break;
 
@@ -88,7 +92,8 @@ final class Tagcloud {
             'amount'      => $iAmount,
             'blogentries' => $aTags[$sTag],
             'url'         => WEBSITE_URL . '/blogs/' . $sTag);
-        $iIndex++;
+
+        ++$iIndex;
       }
 
       $oSmarty->assign('data', $aData);

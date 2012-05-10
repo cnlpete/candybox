@@ -50,7 +50,7 @@ final class Archive {
     if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
 
       $sBlogsModel = \CandyCMS\Core\Models\Main::__autoload('Blogs');
-      $oModel = & new $sBlogsModel($aRequest, $aSession);
+      $oModel = new $sBlogsModel($aRequest, $aSession);
 
       foreach ($oModel->getData('', false, PLUGIN_ARCHIVE_LIMIT) as $aRow) {
         # Date format the month
