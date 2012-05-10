@@ -20,9 +20,6 @@
       <div class='controls'>
         <input type='file' name='file[]' id='input-file'
               class='span4 required' multiple required />
-        <span class='help-inline invisible'>
-          {$_SYSTEM.maximumUploadSize.mb|string_format: $lang.error.file.size}
-        </span>
         <span class='help-block'>
           {$lang.medias.info.upload}
         </span>
@@ -49,7 +46,9 @@
       $('#js-loading').html("<img src='{$_PATH.images}/candy.global/loading.gif' alt='' + lang.loading + '' widht='32' height='32 />");
     });
     $('#input-file').change(function() {
-      checkFileSize($(this), {$_SYSTEM.maximumUploadSize.raw});
+      checkFileSize($(this),
+        {$_SYSTEM.maximumUploadSize.raw},
+        '{$_SYSTEM.maximumUploadSize.mb|string_format: $lang.error.file.size}');
     });
   </script>
 {/strip}

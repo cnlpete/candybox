@@ -71,18 +71,32 @@ function getSizeOfFiles(fileInput) {
   return iFileSize;
 }
 
-function checkFileSize(fileInput, iMaxFileSize) {
+function checkFileSize(fileInput, iMaxFileSize, sMessage) {
   var iFileSize     = getSizeOfFiles(fileInput[0]);
   var jControlGroup = fileInput.closest('.control-group');
-  var jHelp         = fileInput.next();
+  var jHelpId       = 'file-input-help';
 
   if (iFileSize > iMaxFileSize) {
     jControlGroup.addClass('alert alert-error');
-    jHelp.removeClass('invisible');
+    if ($('#' + jHelpId).length) {
+      $('#' + jHelpId).removeClass('invisible');
+    }
+    else {
+      var jHelp = $('<span class="help-inline" id="' + jHelpId + '">' + sMessage + '</span>');
+      fileInput.after(jHelp);
+    }
   }
   else {
-    jControlGroup.removeClass('alert alert-error');
-    jHelp.addClass('invisible');
+    $('#' + jHelpId).fadeOut(function() {
+      $(this).remove();
+      if (jControlGroup.find('.help-inline').length) {
+        // there is another error
+        ;
+      }
+      else {
+        jControlGroup.removeClass('alert alert-error');
+      }
+    });
   }
 }
 

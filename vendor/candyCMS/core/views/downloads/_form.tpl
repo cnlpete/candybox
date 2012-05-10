@@ -21,9 +21,6 @@
         <div class='controls'>
           <input class='input-file span4 required' type='file' name='file[]'
                 required id="input-file"/>
-          <span class='help-inline invisible'>
-            {$_SYSTEM.maximumUploadSize.mb|string_format: $lang.error.file.size}
-          </span>
         </div>
       </div>
     {/if}
@@ -93,7 +90,9 @@
       countCharLength(this, 128);
     });
     $('#input-file').change(function() {
-      checkFileSize($(this), {$_SYSTEM.maximumUploadSize.raw});
+      checkFileSize($(this),
+        {$_SYSTEM.maximumUploadSize.raw},
+        '{$_SYSTEM.maximumUploadSize.mb|string_format: $lang.error.file.size}');
     });
   </script>
 {/strip}

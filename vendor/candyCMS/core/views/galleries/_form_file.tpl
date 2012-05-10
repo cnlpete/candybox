@@ -67,5 +67,10 @@
     $('#input-content').bind('keyup', function() {
       countCharLength(this, 160);
     });
+    $('#input-file').change(function() {
+      checkFileSize($(this),
+        {$_SYSTEM.maximumUploadSize.raw},
+        '{$_SYSTEM.maximumUploadSize.mb|string_format: $lang.error.file.size}');
+    });
   </script>
 {/strip}

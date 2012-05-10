@@ -262,6 +262,11 @@
     $('#input-content').bind('keyup', function() {
       countCharLength(this, 1000);
     });
+    $('#input-image').change(function() {
+      checkFileSize($(this),
+        {$_SYSTEM.maximumUploadSize.raw},
+        '{$_SYSTEM.maximumUploadSize.mb|string_format: $lang.error.file.size}');
+    });
 
     $('.js-fancybox').fancybox();
   </script>
