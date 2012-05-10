@@ -154,7 +154,7 @@ class Galleries extends Main {
                       '/popup/' . $aData['file']);
 
       if (file_exists($sUrl) || WEBSITE_MODE == 'test') {
-        
+
         # Get image information
         $aImageInfo       = getimagesize($sUrl);
 
@@ -314,7 +314,7 @@ class Galleries extends Main {
    *
    */
   private function _createFile() {
-    require PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
+    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
 
     $this->_setError('file');
 
@@ -324,35 +324,41 @@ class Galleries extends Main {
     else {
       $oUploadFile = new Upload($this->_aRequest, $this->_aSession, $this->_aFile);
 
-      $aReturnValues = $oUploadFile->uploadGalleryFiles();
+      try {
+        $aReturnValues = $oUploadFile->uploadGalleryFiles();
 
-      $aIds   = $oUploadFile->getIds(false);
-      $aExts  = $oUploadFile->getExtensions();
+        $aIds   = $oUploadFile->getIds(false);
+        $aExts  = $oUploadFile->getExtensions();
 
-      $iFileCount = count($aReturnValues);
-      $bReturnValue = true;
+        $iFileCount = count($aReturnValues);
+        $bReturnValue = true;
 
-      for ($iI = 0; $iI < $iFileCount; $iI++)
-        $bReturnValue = $aReturnValues[$iI] === true ?
-                $bReturnValue && $this->_oModel->createFile($aIds[$iI] . '.' . $aExts[$iI], $aExts[$iI]) :
-                false;
+        for ($iI = 0; $iI < $iFileCount; $iI++)
+          $bReturnValue = $aReturnValues[$iI] === true ?
+                  $bReturnValue && $this->_oModel->createFile($aIds[$iI] . '.' . $aExts[$iI], $aExts[$iI]) :
+                  false;
 
-      if ($bReturnValue) {
-        $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
-        $this->oSmarty->clearCacheForController('rss');
+        if ($bReturnValue) {
+          $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
+          $this->oSmarty->clearCacheForController('rss');
 
-        # Log uploaded image. Request ID = album id
-        Logs::insert( $this->_aRequest['controller'],
-                      'createfile',
-                      (int) $this->_aRequest['id'],
-                      $this->_aSession['user']['id']);
+          # Log uploaded image. Request ID = album id
+          Logs::insert( $this->_aRequest['controller'],
+                        'createfile',
+                        (int) $this->_aRequest['id'],
+                        $this->_aSession['user']['id']);
 
-        return Helper::successMessage(I18n::get('success.file.upload'), '/' . $this->_aRequest['controller'] .
-                        '/' . $this->_iId);
+          return Helper::successMessage(I18n::get('success.file.upload'), '/' . $this->_aRequest['controller'] .
+                          '/' . $this->_iId);
+        }
+        else
+          return Helper::errorMessage(I18n::get('error.file.upload'), '/' . $this->_aRequest['controller'] .
+                        '/' . $this->_iId . '/createfile');
       }
-      else
-        return Helper::errorMessage(I18n::get('error.file.upload'), '/' . $this->_aRequest['controller'] .
+      catch (\Exception $e) {
+        return Helper::errorMessage($e->getMessage(), '/' . $this->_aRequest['controller'] .
                       '/' . $this->_iId . '/createfile');
+      }
     }
   }
 
