@@ -89,12 +89,8 @@ function checkFileSize(fileInput, iMaxFileSize, sMessage) {
   else {
     $('#' + jHelpId).fadeOut(function() {
       $(this).remove();
-      if (jControlGroup.find('.help-inline').length) {
-        // there is another error
-        ;
-      }
-      else {
-        jControlGroup.removeClass('alert alert-error');
+      if (!jControlGroup.find('.help-inline').length) {
+         jControlGroup.removeClass('alert alert-error');
       }
     });
   }

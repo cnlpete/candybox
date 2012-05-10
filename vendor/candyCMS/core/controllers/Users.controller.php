@@ -184,22 +184,28 @@ class Users extends Main {
     $this->_setError('terms', I18n::get('error.file.upload'));
     $this->_setError('image');
 
-    require PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
+    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
     $oUpload = new Upload($this->_aRequest, $this->_aSession, $this->_aFile);
 
-    if (isset($this->_aError))
-      return $this->_showFormTemplate();
+    try {
+      if (isset($this->_aError))
+        return $this->_showFormTemplate();
 
-    elseif ($oUpload->uploadAvatarFile(false) === true) {
-      $this->_oModel->updateGravatar($this->_iId);
+      elseif ($oUpload->uploadAvatarFile(false) === true) {
+        $this->_oModel->updateGravatar($this->_iId);
 
-      return Helper::successMessage(I18n::get('success.upload'), '/' .
-              $this->_aRequest['controller'] . '/' . $this->_iId);
+        return Helper::successMessage(I18n::get('success.upload'), '/' .
+                $this->_aRequest['controller'] . '/' . $this->_iId);
+      }
+
+      else
+        return Helper::errorMessage(I18n::get('error.file.upload'), '/' .
+                $this->_aRequest['controller'] . '/' . $this->_iId . '/update');
     }
-
-    else
-      return Helper::errorMessage(I18n::get('error.file.upload'), '/' .
-              $this->_aRequest['controller'] . '/' . $this->_iId . '/update');
+    catch (\Exception $e) {
+      return Helper::errorMessage($e->getMessage(), '/' .
+                $this->_aRequest['controller'] . '/' . $this->_iId . '/update');
+    }
   }
 
   /**

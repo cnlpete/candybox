@@ -109,8 +109,11 @@ class Upload {
 
       // stores the total size of files to upload in bytes
       $iFileSize = 0;
-      foreach ($this->_aFile[$sType]['size'] as $iSize)
-        $iFileSize += $iSize;
+      if ($bIsArray)
+        foreach ($this->_aFile[$sType]['size'] as $iSize)
+          $iFileSize += $iSize;
+      else
+        $iFileSize = $this->_aFile[$sType]['size'];
 
       $iMaxUploadSize = self::getUploadLimit();
       if ($iMaxUploadSize < $iFileSize || $iFileSize == 0) {
