@@ -21,7 +21,55 @@ use PDO;
 class Downloads extends Main {
 
   /**
-   * Get download data.
+   * Get all download data.
+   *
+   * @access public
+   * @return array data
+   *
+   */
+  public function getOverview() {
+    $aInts = array('id', 'author_id', 'downloads', 'uid');
+
+    try {
+      $oQuery = $this->_oDb->prepare("SELECT
+                                        d.*,
+                                        u.id AS user_id,
+                                        u.name AS user_name,
+                                        u.surname AS user_surname,
+                                        u.email AS user_email
+                                      FROM
+                                        " . SQL_PREFIX . "downloads d
+                                      LEFT JOIN
+                                        " . SQL_PREFIX . "users u
+                                      ON
+                                        d.author_id=u.id
+                                      ORDER BY
+                                        d.category ASC,
+                                        d.title ASC");
+
+      $oQuery->execute();
+      $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0032 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+
+    foreach ($aResult as $aRow) {
+      $iId = $aRow['id'];
+      $sCategory = $aRow['category'];
+
+      $this->_aData[$sCategory]['category'] = $sCategory; # Name category for overview
+      $this->_aData[$sCategory]['files'][$iId] = $this->_formatForOutput($aRow, $aInts);
+      $this->_aData[$sCategory]['files'][$iId]['size'] = Helper::getFileSize(PATH_UPLOAD . '/' .
+              $this->_aRequest['controller'] . '/' . $aRow['file']);
+    }
+
+    return $this->_aData;
+  }
+
+  /**
+   * Get download data by id.
    *
    * @access public
    * @param integer $iId ID to get data from.
@@ -29,76 +77,35 @@ class Downloads extends Main {
    * @return array data
    *
    */
-  public function getData($iId = '', $bUpdate = false) {
-    $aInts = array('id', 'author_id', 'downloads', 'uid');
+  public function getId($iId = '', $bUpdate = false) {
+    try {
+      $oQuery = $this->_oDb->prepare("SELECT
+                                        d.*,
+                                        u.id AS user_id,
+                                        u.name AS user_name,
+                                        u.surname AS user_surname,
+                                        u.email AS user_email
+                                      FROM
+                                        " . SQL_PREFIX . "downloads d
+                                      LEFT JOIN
+                                        " . SQL_PREFIX . "users u
+                                      ON
+                                        d.author_id=u.id
+                                      WHERE
+                                        d.id = :id
+                                      LIMIT
+                                        1");
 
-    if (empty($iId)) {
-      try {
-        $oQuery = $this->_oDb->prepare("SELECT
-                                          d.*,
-                                          u.id AS user_id,
-                                          u.name AS user_name,
-                                          u.surname AS user_surname,
-                                          u.email AS user_email
-                                        FROM
-                                          " . SQL_PREFIX . "downloads d
-                                        LEFT JOIN
-                                          " . SQL_PREFIX . "users u
-                                        ON
-                                          d.author_id=u.id
-                                        ORDER BY
-                                          d.category ASC,
-                                          d.title ASC");
-
-        $oQuery->execute();
-        $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
-      }
-      catch (\PDOException $p) {
-        AdvancedException::reportBoth('0032 - ' . $p->getMessage());
-        exit('SQL error.');
-      }
-
-      foreach ($aResult as $aRow) {
-        $iId = $aRow['id'];
-        $sCategory = $aRow['category'];
-
-        $this->_aData[$sCategory]['category'] = $sCategory; # Name category for overview
-        $this->_aData[$sCategory]['files'][$iId] = $this->_formatForOutput($aRow, $aInts);
-        $this->_aData[$sCategory]['files'][$iId]['size'] = Helper::getFileSize(PATH_UPLOAD . '/' .
-                $this->_aRequest['controller'] . '/' . $aRow['file']);
-      }
+      $oQuery->bindParam('id', $iId);
+      $oQuery->execute();
+      $aRow = & $oQuery->fetch(PDO::FETCH_ASSOC);
     }
-    else {
-      try {
-        $oQuery = $this->_oDb->prepare("SELECT
-                                          d.*,
-                                          u.id AS user_id,
-                                          u.name AS user_name,
-                                          u.surname AS user_surname,
-                                          u.email AS user_email
-                                        FROM
-                                          " . SQL_PREFIX . "downloads d
-                                        LEFT JOIN
-                                          " . SQL_PREFIX . "users u
-                                        ON
-                                          d.author_id=u.id
-                                        WHERE
-                                          d.id = :id
-                                        LIMIT
-                                          1");
-
-        $oQuery->bindParam('id', $iId);
-        $oQuery->execute();
-        $aRow = & $oQuery->fetch(PDO::FETCH_ASSOC);
-      }
-      catch (\PDOException $p) {
-        AdvancedException::reportBoth('0033 - ' . $p->getMessage());
-        exit('SQL error.');
-      }
-
-      $this->_aData = $bUpdate === true ? $this->_formatForUpdate($aRow) : $aRow;
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0033 - ' . $p->getMessage());
+      exit('SQL error.');
     }
 
+    $this->_aData = $bUpdate === true ? $this->_formatForUpdate($aRow) : $aRow;
     return $this->_aData;
   }
 
@@ -244,8 +251,7 @@ class Downloads extends Main {
    */
   public function destroy($iId) {
     # Get file name
-    $aFile = $this->getData($iId);
-    $sFile = $aFile['file'];
+    $sFile = $this->getFileName($iId);
 
     $bReturn = parent::destroy($iId);
 

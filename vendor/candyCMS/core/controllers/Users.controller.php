@@ -84,7 +84,7 @@ class Users extends Main {
       $this->oSmarty->setTemplateDir($sTemplateDir);
 
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-        $aData = $this->_oModel->getData($this->_iId);
+        $aData = $this->_oModel->getId($this->_iId);
 
        if (!isset($aData) || !$aData[1]['id'])
           return Helper::redirectTo('/errors/404');
@@ -107,7 +107,7 @@ class Users extends Main {
         $this->oSmarty->setTemplateDir($sTemplateDir);
 
         if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
-          $this->oSmarty->assign('user', $this->_oModel->getData());
+          $this->oSmarty->assign('user', $this->_oModel->getOverview());
 
         $this->setTitle(I18n::get('users.title.overview'));
         return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
@@ -134,7 +134,7 @@ class Users extends Main {
             $this->_aSession['user']['id'];
 
     # Fetch data from database
-    $aData = $this->_oModel->getData($iId, false, true);
+    $aData = $this->_oModel->getId($iId, true);
 
     # Add the gravatar_urls, so the user can preview those.
     Helper::createAvatarURLs($aData, $aData['id'], $aData['email'], true,   'gravatar_');

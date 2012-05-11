@@ -113,6 +113,57 @@ class Calendars extends Main {
   }
 
   /**
+   * Get calendar overview data.
+   *
+   * @access private
+   * @param integer $iId Id to work with
+   * @return array data
+   *
+   */
+  public function getOverview($iId = '') {
+    $aInts = array('id', 'author_id');
+    $this->_aData = array();
+
+    try {
+      if (isset($this->_aRequest['action']) && $this->_aRequest['action'] == 'archive') {
+        $oQuery = $this->_getPreparedArchiveStatement();
+      }
+      else if (isset($this->_aRequest['action']) && $this->_aRequest['action'] == 'icalfeed') {
+        $oQuery = $this->_getPreparedIcalFeedStatement();
+      }
+      else {
+        $oQuery = $this->_getPreparedOverviewStatement();
+      }
+
+      $oQuery->execute();
+      $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0011 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+    foreach ($aResult as $aRow) {
+      $iId = $aRow['id'];
+      $sMonth = I18n::get('global.months.' . $aRow['start_month']);
+      $sYear = $aRow['start_year'];
+      $sDate = $sMonth . $sYear;
+
+      $this->_aData[$sDate]['month']  = $sMonth;
+      $this->_aData[$sDate]['year']   = $sYear;
+
+      $this->_aData[$sDate]['dates'][$iId] = $this->_formatForOutput($aRow, $aInts);
+      $this->_aData[$sDate]['dates'][$iId]['start_date_raw']  = $aRow['start_date'];
+      $this->_aData[$sDate]['dates'][$iId]['start_date']      = Helper::formatTimestamp($aRow['start_date'], 1);
+
+      $this->_aData[$sDate]['dates'][$iId]['end_date_raw']    = $aRow['end_date'];
+      if ($aRow['end_date'] > 0)
+        $this->_aData[$sDate]['dates'][$iId]['end_date']      = Helper::formatTimestamp($aRow['end_date'], 1);
+    }
+
+    return $this->_aData;
+  }
+
+  /**
    * Get calendar data.
    *
    * @access private
@@ -121,81 +172,52 @@ class Calendars extends Main {
    * @return array data
    *
    */
-  public function getData($iId = '', $bUpdate = false) {
+  public function getId($iId = '', $bUpdate = false) {
     $aInts = array('id', 'author_id');
+    $this->_aData = array();
 
-    if (empty($iId) || (isset($this->_aRequest['action']) && $this->_aRequest['action'] != 'update')) {
-      try {
-        if (isset($this->_aRequest['action']) && $this->_aRequest['action'] == 'archive') {
-          $oQuery = $this->_getPreparedArchiveStatement();
-        }
-        else if (isset($this->_aRequest['action']) && $this->_aRequest['action'] == 'icalfeed') {
-          $oQuery = $this->_getPreparedIcalFeedStatement();
-        }
-        else {
-          $oQuery = $this->_getPreparedOverviewStatement();
-        }
+    try {
+      $oQuery = $this->_oDb->prepare("SELECT
+                                        c.*,
+                                        UNIX_TIMESTAMP(c.date) as date,
+                                        u.id AS user_id,
+                                        u.name AS user_name,
+                                        u.surname AS user_surname,
+                                        u.email AS user_email,
+                                        UNIX_TIMESTAMP(c.start_date),
+                                        UNIX_TIMESTAMP(c.end_date),
+                                        DATE_ADD(c.end_date, INTERVAL 1 DAY) as ics_end_date
+                                      FROM
+                                        " . SQL_PREFIX . "calendars c
+                                      LEFT JOIN
+                                        " . SQL_PREFIX . "users u
+                                      ON
+                                        c.author_id=u.id
+                                      WHERE
+                                        c.id = :id");
 
-        $oQuery->execute();
-        $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
-      }
-      catch (\PDOException $p) {
-        AdvancedException::reportBoth('0011 - ' . $p->getMessage());
-        exit('SQL error.');
-      }
-      foreach ($aResult as $aRow) {
-        $iId = $aRow['id'];
-        $sMonth = I18n::get('global.months.' . $aRow['start_month']);
-        $sYear = $aRow['start_year'];
-        $sDate = $sMonth . $sYear;
-
-        $this->_aData[$sDate]['month']  = $sMonth;
-        $this->_aData[$sDate]['year']   = $sYear;
-
-        $this->_aData[$sDate]['dates'][$iId] = $this->_formatForOutput($aRow, $aInts);
-        $this->_aData[$sDate]['dates'][$iId]['start_date_raw']  = $aRow['start_date'];
-        $this->_aData[$sDate]['dates'][$iId]['start_date']      = Helper::formatTimestamp($aRow['start_date'], 1);
-
-        $this->_aData[$sDate]['dates'][$iId]['end_date_raw']    = $aRow['end_date'];
-        if ($aRow['end_date'] > 0)
-          $this->_aData[$sDate]['dates'][$iId]['end_date']      = Helper::formatTimestamp($aRow['end_date'], 1);
-      }
+      $oQuery->bindParam('id', $iId);
+      $oQuery->execute();
+      $aRow = $oQuery->fetch(PDO::FETCH_ASSOC);
     }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0012 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+    if ($bUpdate === true)
+      $this->_aData = $this->_formatForUpdate($aRow);
+
     else {
-      try {
-        $oQuery = $this->_oDb->prepare("SELECT
-                                          *,
-                                          UNIX_TIMESTAMP(start_date),
-                                          UNIX_TIMESTAMP(end_date),
-                                          DATE_ADD(end_date, INTERVAL 1 DAY) as ics_end_date
-                                        FROM
-                                          " . SQL_PREFIX . "calendars
-                                        WHERE
-                                          id = :id");
+      $this->_aData = $this->_formatForOutput($aRow, $aInts);
 
-        $oQuery->bindParam('id', $iId);
-        $oQuery->execute();
-        $aRow = $oQuery->fetch(PDO::FETCH_ASSOC);
-      }
-      catch (\PDOException $p) {
-        AdvancedException::reportBoth('0012 - ' . $p->getMessage());
-        exit('SQL error.');
-      }
-      if($bUpdate === true)
-        $this->_aData = $this->_formatForUpdate($aRow);
-
-      else {
-        $this->_aData = $this->_formatForOutput($aRow, $aInts);
-
-        # Overide for iCalendar specs
-        $this->_aData['date']           = date('Ymd', $aRow['date']) . 'T' . date('His', $aRow['date']) . 'Z';
-        $this->_aData['start_date_raw'] = $aRow['start_date'];
-        $this->_aData['start_date']     = str_replace('-', '', $aRow['start_date']);
-        $this->_aData['end_date_raw']   = $aRow['end_date'];
-        $this->_aData['end_date']       = $aRow['end_date'] == '0000-00-00' ?
-                str_replace('-', '', $this->_aData['start_date']) :
-                str_replace('-', '', $aRow['ics_end_date']);
-      }
+      # Overide for iCalendar specs
+      $this->_aData['date']           = date('Ymd', $aRow['date_raw']) . 'T' . date('His', $aRow['date']) . 'Z';
+      $this->_aData['start_date_raw'] = $aRow['start_date'];
+      $this->_aData['start_date']     = str_replace('-', '', $aRow['start_date']);
+      $this->_aData['end_date_raw']   = $aRow['end_date'];
+      $this->_aData['end_date']       = $aRow['end_date'] == '0000-00-00' ?
+              str_replace('-', '', $this->_aData['start_date']) :
+              str_replace('-', '', $aRow['ics_end_date']);
     }
 
     return $this->_aData;

@@ -22,159 +22,172 @@ require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Pagination.helper.ph
 class Blogs extends Main {
 
   /**
-   * Get blog entry or blog overview data. Depends on available ID.
+   * Get blog overview data.
    *
    * @access public
-   * @param integer $iId ID to load data from. If empty, show overview.
-   * @param boolean $bUpdate prepare data for update
    * @param integer $iLimit blog post limit, 0 for infinite
    * @return array data from _setData
    * @todo
    *
    */
-  public function getData($iId = '', $bUpdate = false, $iLimit = LIMIT_BLOG) {
+  public function getOverview($iLimit = LIMIT_BLOG) {
     $aInts  = array('id', 'uid', 'author_id', 'comment_sum');
     $aBools = array('published', 'use_gravatar');
 
     if(WEBSITE_MODE == 'test' && $iLimit != 0)
       $iLimit = 2;
 
-    if (empty($iId)) {
-      # Show unpublished items and entries with diffent languages to moderators or administrators only
-      $sWhere = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ?
-              '' :
-              "WHERE published = '1' AND language = '" . WEBSITE_LANGUAGE . "'";
+    # Show unpublished items and entries with diffent languages to moderators or administrators only
+    $sWhere = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ?
+            '' :
+            "WHERE published = '1' AND language = '" . WEBSITE_LANGUAGE . "'";
 
-      # Search blog for tags
-      if (isset($this->_aRequest['search']) && !empty($this->_aRequest['search'])) {
-        $sWhere .= isset($sWhere) && !empty($sWhere) ? ' AND ' : ' WHERE ';
-        $sSearchString = str_replace('%20', ' ', Helper::formatInput($this->_aRequest['search'], false));
-        $sWhere .= "tags LIKE '%," . $sSearchString . ",%'
-                OR tags LIKE '%," . $sSearchString . "'
-                OR tags LIKE '" . $sSearchString . ",%'
-                OR tags = '" . $sSearchString . "'
-                OR tags LIKE '%, " . $sSearchString . "'
-                OR tags LIKE '%, " . $sSearchString . ",%'";
-        // these last two lines are only for compatibility, since we don't know if the tags are seperated by ', ' instead of ','
-      }
-
-      try {
-        $oQuery  = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "blogs " . $sWhere);
-        $iResult = $oQuery->fetchColumn();
-
-        if ($iLimit != 0)
-          $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit);
-
-        else
-          $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iResult);
-      }
-      catch (\PDOException $p) {
-        AdvancedException::reportBoth('0043 - ' . $p->getMessage());
-        exit('SQL error.');
-      }
-
-      try {
-        $sLimit = $iLimit != 0 ? ' LIMIT '.$this->oPagination->getOffset().', '.$this->oPagination->getLimit() : '';
-
-        $oQuery = $this->_oDb->prepare("SELECT
-                                          b.*,
-                                          u.id AS user_id,
-                                          u.name AS user_name,
-                                          u.surname AS user_surname,
-                                          u.email AS user_email,
-                                          u.use_gravatar,
-                                          COUNT(c.id) AS comment_sum
-                                        FROM
-                                          " . SQL_PREFIX . "blogs b
-                                        LEFT JOIN
-                                          " . SQL_PREFIX . "users u
-                                        ON
-                                          b.author_id=u.id
-                                        LEFT JOIN
-                                          " . SQL_PREFIX . "comments c
-                                        ON
-                                          c.parent_id=b.id
-                                        " . $sWhere . "
-                                        GROUP BY
-                                          b.id
-                                        ORDER BY
-                                          b.date DESC"
-                                        . $sLimit);
-
-        $oQuery->execute();
-        $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
-      }
-      catch (\PDOException $p) {
-        AdvancedException::reportBoth('0001 - ' . $p->getMessage());
-        exit('SQL error.');
-      }
-
-      foreach ($aResult as $aRow) {
-        # We use the date as identifier to give plugins the possibility to patch into the system.
-        $iDate = $aRow['date'];
-
-        # We need to specify 'blogs' because this might also be called for rss
-        $this->_aData[$iDate] = $this->_formatForOutput($aRow, $aInts, $aBools, 'blogs');
-        $this->_aData[$iDate]['tags_raw']       = $aRow['tags'];
-        //FIXME trim spaces, redundant, if those get removed at blog creation/editing
-        //explode using ',' and filter empty items (since explode always gives at least one item)
-        $this->_aData[$iDate]['tags']           = array_filter( array_map("trim", explode(',', $aRow['tags'])) );
-        $this->_aData[$iDate]['date_modified']  = !empty($aRow['date_modified']) ?
-                Helper::formatTimestamp($aRow['date_modified']) :
-                '';
-      }
+    # Search blog for tags
+    if (isset($this->_aRequest['search']) && !empty($this->_aRequest['search'])) {
+      $sWhere .= isset($sWhere) && !empty($sWhere) ? ' AND ' : ' WHERE ';
+      $sSearchString = str_replace('%20', ' ', Helper::formatInput($this->_aRequest['search'], false));
+      $sWhere .= "tags LIKE '%," . $sSearchString . ",%'
+              OR tags LIKE '%," . $sSearchString . "'
+              OR tags LIKE '" . $sSearchString . ",%'
+              OR tags = '" . $sSearchString . "'
+              OR tags LIKE '%, " . $sSearchString . "'
+              OR tags LIKE '%, " . $sSearchString . ",%'";
+      // these last two lines are only for compatibility, since we don't know if the tags are seperated by ', ' instead of ','
     }
+
+    try {
+      $oQuery  = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "blogs " . $sWhere);
+      $iResult = $oQuery->fetchColumn();
+
+      if ($iLimit != 0)
+        $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit);
+
+      else
+        $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iResult);
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0043 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+
+    try {
+      $sLimit = $iLimit != 0 ? ' LIMIT '.$this->oPagination->getOffset().', '.$this->oPagination->getLimit() : '';
+
+      $oQuery = $this->_oDb->prepare("SELECT
+                                        b.*,
+                                        u.id AS user_id,
+                                        u.name AS user_name,
+                                        u.surname AS user_surname,
+                                        u.email AS user_email,
+                                        u.use_gravatar,
+                                        COUNT(c.id) AS comment_sum
+                                      FROM
+                                        " . SQL_PREFIX . "blogs b
+                                      LEFT JOIN
+                                        " . SQL_PREFIX . "users u
+                                      ON
+                                        b.author_id=u.id
+                                      LEFT JOIN
+                                        " . SQL_PREFIX . "comments c
+                                      ON
+                                        c.parent_id=b.id
+                                      " . $sWhere . "
+                                      GROUP BY
+                                        b.id
+                                      ORDER BY
+                                        b.date DESC"
+                                      . $sLimit);
+
+      $oQuery->execute();
+      $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0001 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+
+    foreach ($aResult as $aRow) {
+      # We use the date as identifier to give plugins the possibility to patch into the system.
+      $iDate = $aRow['date'];
+
+      # We need to specify 'blogs' because this might also be called for rss
+      $this->_aData[$iDate] = $this->_formatForOutput($aRow, $aInts, $aBools, 'blogs');
+      $this->_aData[$iDate]['tags_raw']       = $aRow['tags'];
+      //FIXME trim spaces, redundant, if those get removed at blog creation/editing
+      //explode using ',' and filter empty items (since explode always gives at least one item)
+      $this->_aData[$iDate]['tags']           = array_filter( array_map("trim", explode(',', $aRow['tags'])) );
+      $this->_aData[$iDate]['date_modified']  = !empty($aRow['date_modified']) ?
+              Helper::formatTimestamp($aRow['date_modified']) :
+              '';
+    }
+
+    return $this->_aData;
+ }
+
+
+  /**
+   * Get blog entry data.
+   *
+   * @access public
+   * @param integer $iId ID to load data from. If empty, show overview.
+   * @param boolean $bUpdate prepare data for update
+   * @return array data from _setData
+   * @todo
+   *
+   */
+  public function getId($iId = '', $bUpdate = false) {
+    # Show unpublished items to moderators or administrators only
+    $iPublished = $this->_aSession['user']['role'] >= 3 ? 0 : 1;
+
+    $aInts  = array('id', 'uid', 'author_id', 'comment_sum');
+    $aBools = array('published', 'use_gravatar');
+
+    try {
+      $oQuery = $this->_oDb->prepare("SELECT
+                                        b.*,
+                                        u.id AS user_id,
+                                        u.name AS user_name,
+                                        u.surname AS user_surname,
+                                        u.email AS user_email,
+                                        u.use_gravatar,
+                                        COUNT(c.id) AS comment_sum
+                                      FROM
+                                        " . SQL_PREFIX . "blogs b
+                                      LEFT JOIN
+                                        " . SQL_PREFIX . "users u
+                                      ON
+                                        b.author_id=u.id
+                                      LEFT JOIN
+                                        " . SQL_PREFIX . "comments c
+                                      ON
+                                        c.parent_id=b.id
+                                      WHERE
+                                        b.id = :id
+                                      AND
+                                        b.published >= :published
+                                      LIMIT 1");
+
+      $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
+      $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
+      $oQuery->execute();
+
+      $aRow = $oQuery->fetch(PDO::FETCH_ASSOC);
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0002 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+
+    if ($bUpdate === true)
+      $this->_aData = $this->_formatForUpdate($aRow);
+
     else {
-      # Show unpublished items to moderators or administrators only
-      $iPublished = $this->_aSession['user']['role'] >= 3 ? 0 : 1;
-
-      try {
-        $oQuery = $this->_oDb->prepare("SELECT
-                                          b.*,
-                                          u.id AS user_id,
-                                          u.name AS user_name,
-                                          u.surname AS user_surname,
-                                          u.email AS user_email,
-                                          u.use_gravatar,
-                                          COUNT(c.id) AS comment_sum
-                                        FROM
-                                          " . SQL_PREFIX . "blogs b
-                                        LEFT JOIN
-                                          " . SQL_PREFIX . "users u
-                                        ON
-                                          b.author_id=u.id
-                                        LEFT JOIN
-                                          " . SQL_PREFIX . "comments c
-                                        ON
-                                          c.parent_id=b.id
-                                        WHERE
-                                          b.id = :id
-                                        AND
-                                          b.published >= :published
-                                        LIMIT 1");
-
-        $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
-        $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
-        $oQuery->execute();
-
-        $aRow = $oQuery->fetch(PDO::FETCH_ASSOC);
-      }
-      catch (\PDOException $p) {
-        AdvancedException::reportBoth('0002 - ' . $p->getMessage());
-        exit('SQL error.');
-      }
-
-      if ($bUpdate === true)
-        $this->_aData = $this->_formatForUpdate($aRow);
-
-      else {
-        $this->_aData[1] = $this->_formatForOutput($aRow, $aInts, $aBools);
-        $this->_aData[1]['tags'] = array_filter( array_map("trim", explode(',', $aRow['tags'])) );
-        $this->_aData[1]['tags_raw'] = $aRow['tags'];
-        $this->_aData[1]['date_modified'] = !empty($aRow['date_modified']) ?
-                Helper::formatTimestamp($aRow['date_modified']) :
-                '';
-      }
+      $this->_aData[1] = $this->_formatForOutput($aRow, $aInts, $aBools);
+      $this->_aData[1]['tags'] = array_filter( array_map("trim", explode(',', $aRow['tags'])) );
+      $this->_aData[1]['tags_raw'] = $aRow['tags'];
+      $this->_aData[1]['date_modified'] = !empty($aRow['date_modified']) ?
+              Helper::formatTimestamp($aRow['date_modified']) :
+              '';
     }
 
     return $this->_aData;

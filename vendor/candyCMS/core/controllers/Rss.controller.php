@@ -56,7 +56,7 @@ class Rss extends Main {
     $oModel = new $sModel($this->_aRequest, $this->_aSession);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
-      $this->oSmarty->assign('data', $oModel->getData());
+      $this->oSmarty->assign('data', $oModel->getOverview());
 
 //    $this->oSmarty->setCacheLifetime(60);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);

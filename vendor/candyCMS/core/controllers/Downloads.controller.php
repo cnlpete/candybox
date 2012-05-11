@@ -54,7 +54,7 @@ class Downloads extends Main {
       $this->oSmarty->setTemplateDir($sTemplateDir);
 
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
-        $this->oSmarty->assign('downloads', $this->_oModel->getData($this->_iId));
+        $this->oSmarty->assign('downloads', $this->_oModel->getOverview());
 
       return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
@@ -74,7 +74,7 @@ class Downloads extends Main {
 
     # Update
     if ($this->_iId)
-      $aData = $this->_oModel->getData($this->_iId, true);
+      $aData = $this->_oModel->getId($this->_iId, true);
 
     # Create
     else {

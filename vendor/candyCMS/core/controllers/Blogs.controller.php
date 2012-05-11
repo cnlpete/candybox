@@ -30,7 +30,7 @@ class Blogs extends Main {
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if ($this->_iId) {
-      $this->_aData = $this->_oModel->getData($this->_iId);
+      $this->_aData = $this->_oModel->getId($this->_iId);
 
       if (!$this->_aData[1]['id'])
         return Helper::redirectTo('/errors/404');
@@ -48,7 +48,7 @@ class Blogs extends Main {
 
     else {
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-        $this->_aData = $this->_oModel->getData();
+        $this->_aData = $this->_oModel->getOverview();
 
         $this->oSmarty->assign('blogs', $this->_aData);
         $this->oSmarty->assign('_blog_footer_', $this->_oModel->oPagination->showSurrounding());
@@ -137,7 +137,7 @@ class Blogs extends Main {
 
     # Update
     if ($this->_iId) {
-      $aData = $this->_oModel->getData($this->_iId, true);
+      $aData = $this->_oModel->getId($this->_iId, true);
       $this->setTitle($aData['title']);
     }
 

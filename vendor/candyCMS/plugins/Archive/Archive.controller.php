@@ -52,7 +52,7 @@ final class Archive {
       $sBlogsModel = \CandyCMS\Core\Models\Main::__autoload('Blogs');
       $oModel = new $sBlogsModel($aRequest, $aSession);
 
-      foreach ($oModel->getData('', false, PLUGIN_ARCHIVE_LIMIT) as $aRow) {
+      foreach ($oModel->getOverview(PLUGIN_ARCHIVE_LIMIT) as $aRow) {
         # Date format the month
         $sMonth = strftime('%m', $aRow['date_raw']);
         $sMonth = substr($sMonth, 0, 1) == 0 ? substr($sMonth, 1, 2) : $sMonth;

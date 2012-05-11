@@ -38,7 +38,7 @@ class UnitTestOfCommentModel extends CandyUnitTest {
   }
 
   function testGetData() {
-    $this->assertIsA($this->oObject->getData(0, 1, 1), 'array');
+    $this->assertIsA($this->oObject->getOverview(0, 1, 1), 'array');
   }
 
   function testGetParentId() {

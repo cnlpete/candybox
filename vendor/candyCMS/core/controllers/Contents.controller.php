@@ -31,7 +31,7 @@ class Contents extends Main {
       $this->oSmarty->setTemplateDir($sTemplateDir);
 
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-        $aData = $this->_oModel->getData($this->_iId);
+        $aData = $this->_oModel->getId($this->_iId);
 
         if (!isset($aData) || !$aData[$this->_iId]['id'])
           return Helper::redirectTo('/errors/404');
@@ -52,7 +52,7 @@ class Contents extends Main {
 
       $this->setTitle(I18n::get('global.manager.content'));
 
-      $this->oSmarty->assign('contents', $this->_oModel->getData($this->_iId));
+      $this->oSmarty->assign('contents', $this->_oModel->getOverview());
 
       return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
@@ -71,7 +71,7 @@ class Contents extends Main {
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if ($this->_iId) {
-      $aData = $this->_oModel->getData($this->_iId, true);
+      $aData = $this->_oModel->getId($this->_iId, true);
       $this->setTitle($aData['title']);
     }
     else {

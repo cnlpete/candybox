@@ -43,14 +43,19 @@ class UnitTestOfUserModel extends CandyUnitTest {
     $this->assertFalse($this->oObject->getExistingUser('adsfadsfsda@fghfghfgfg.com'));
   }
 
-  function testGetData() {
+  function testGetOverview() {
     # get test Data
-    $aData = $this->oObject->getData(2);
+   $this->assertIsA($this->oObject->getOverview(), 'array');
+  }
+
+  function testGetId() {
+    # get test Data
+    $aData = $this->oObject->getId(2);
     $this->assertIsA($aData, 'array');
     $this->assertEqual(count($aData), 1);
     $this->assertTrue(isset($aData[1]['name']));
     $this->assertTrue(isset($aData[1]['email']));
-    $this->assertIsA($this->oObject->getData(), 'array');
+    $this->assertIsA($this->oObject->getOverview(), 'array');
   }
 
   function testSetPassword() {

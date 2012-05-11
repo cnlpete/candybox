@@ -49,7 +49,7 @@ class Calendars extends Main {
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-      $aData = $this->_oModel->getData($this->_iId);
+      $aData = $this->_oModel->getId($this->_iId);
       $this->oSmarty->assign('calendar', $aData);
 
       if (!$aData['id'])
@@ -73,7 +73,7 @@ class Calendars extends Main {
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
-      $this->oSmarty->assign('calendar', $this->_oModel->getData());
+      $this->oSmarty->assign('calendar', $this->_oModel->getOverview());
 
     // add the current year when in archive mode
     if ($this->_aRequest['action'] === 'archive')
@@ -95,7 +95,7 @@ class Calendars extends Main {
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
-      $this->oSmarty->assign('calendar', $this->_oModel->getData());
+      $this->oSmarty->assign('calendar', $this->_oModel->getOverview());
 
     header('Content-type: text/calendar; charset=utf-8');
     header('Content-Disposition: inline; filename=' . WEBSITE_NAME . '.ics');
@@ -117,7 +117,7 @@ class Calendars extends Main {
 
     # Update
     if ($this->_iId)
-      $aData = $this->_oModel->getData($this->_iId, true);
+      $aData = $this->_oModel->getId($this->_iId, true);
 
     # Create
     else {

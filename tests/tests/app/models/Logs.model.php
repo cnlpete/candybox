@@ -30,14 +30,14 @@ class UnitTestOfLogModel extends CandyUnitTest {
     $this->assertIsA($this->iLastInsertId, 'integer');
   }
 
-  function testGetData() {
-    $this->assertIsA($this->oObject->getData(), 'array');
+  function testGetOverview() {
+    $this->assertIsA($this->oObject->getOverview(), 'array');
   }
 
   function testSetEndTime() {
     $iTime = time() + 100;
     $this->assertTrue($this->oObject->setEndTime($this->iLastInsertId, $iTime));
-    $aLogs = $this->oObject->getData(1);
+    $aLogs = $this->oObject->getOverview(1);
     foreach ($aLogs as $aLog)
       $this->assertEqual($aLog['time_end'], Helper::formatTimestamp($iTime));
   }
