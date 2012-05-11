@@ -130,7 +130,7 @@ class Comments extends Main {
     if ($this->_aSession['user']['role'] == 0)
       $this->_setError('name');
 
-    if (isset($this->_aRequest['email']) && $this->_aRequest['email'])
+    if (isset($this->_aRequest[$this->_sController]['email']) && $this->_aRequest[$this->_sController]['email'])
       $this->_setError('email');
 
     if ($bShowCaptcha === true && Recaptcha::getInstance()->checkCaptcha($this->_aRequest) === false)
@@ -141,11 +141,11 @@ class Comments extends Main {
 
     else {
       # Bugfix for jquery mobile not handling this redirect with hash very vell
-      $sRedirect = '/blogs/' . (int) $this->_aRequest['parent_id'] . (MOBILE ? '' : '#create');
+      $sRedirect = '/blogs/' . (int) $this->_aRequest[$this->_sController]['parent_id'] . (MOBILE ? '' : '#create');
 
       if ($this->_oModel->create() === true) {
         # This also clears cache for our comments, since they are stored in the blogs namespace.
-        $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
+        $this->oSmarty->clearCacheForController($this->_sController);
 
         Logs::insert( 'comments',
                       'create',

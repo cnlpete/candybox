@@ -131,16 +131,16 @@ class Comments extends Main {
    *
    */
   public function create() {
-    $sAuthorName = isset($this->_aRequest['name']) ?
-            Helper::formatInput($this->_aRequest['name']) :
+    $sAuthorName = isset($this->_aRequest[$this->_sController]['name']) ?
+            Helper::formatInput($this->_aRequest[$this->_sController]['name']) :
             $this->_aSession['user']['full_name'];
 
-    $sAuthorEmail = isset($this->_aRequest['email']) ?
-            Helper::formatInput($this->_aRequest['email']) :
+    $sAuthorEmail = isset($this->_aRequest[$this->_sController]['email']) ?
+            Helper::formatInput($this->_aRequest[$this->_sController]['email']) :
             $this->_aSession['user']['email'];
 
-    $iFacebookId = isset($this->_aRequest['facebook_id']) ?
-            Helper::formatInput($this->_aRequest['facebook_id']) :
+    $iFacebookId = isset($this->_aRequest[$this->_sController]['facebook_id']) ?
+            Helper::formatInput($this->_aRequest[$this->_sController]['facebook_id']) :
             $this->_aSession['user']['facebook_id'];
 
     try {
@@ -169,9 +169,9 @@ class Comments extends Main {
       $oQuery->bindParam('author_name', $sAuthorName, PDO::PARAM_STR);
       $oQuery->bindParam('author_email', $sAuthorEmail, PDO::PARAM_STR);
       $oQuery->bindParam('author_ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
-      $oQuery->bindParam('content', Helper::formatInput($this->_aRequest['content']), PDO::PARAM_STR);
+      $oQuery->bindParam('content', Helper::formatInput($this->_aRequest[$this->_sController]['content']), PDO::PARAM_STR);
       $oQuery->bindParam('date', time(), PDO::PARAM_INT);
-      $oQuery->bindParam('parent_id', $this->_aRequest['parent_id'], PDO::PARAM_INT);
+      $oQuery->bindParam('parent_id', $this->_aRequest[$this->_sController]['parent_id'], PDO::PARAM_INT);
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = Helper::getLastEntry('comments');
