@@ -29,6 +29,7 @@ class Blogs extends Main {
    * @param boolean $bUpdate prepare data for update
    * @param integer $iLimit blog post limit, 0 for infinite
    * @return array data from _setData
+   * @todo
    *
    */
   public function getData($iId = '', $bUpdate = false, $iLimit = LIMIT_BLOG) {
@@ -47,8 +48,7 @@ class Blogs extends Main {
       # Search blog for tags
       if (isset($this->_aRequest['search']) && !empty($this->_aRequest['search'])) {
         $sWhere .= isset($sWhere) && !empty($sWhere) ? ' AND ' : ' WHERE ';
-        $sSearchString = Helper::formatInput($this->_aRequest['search'], false);
-        $sSearchString = str_replace('%20', ' ', $sSearchString);
+        $sSearchString = str_replace('%20', ' ', Helper::formatInput($this->_aRequest['search'], false));
         $sWhere .= "tags LIKE '%," . $sSearchString . ",%'
                 OR tags LIKE '%," . $sSearchString . "'
                 OR tags LIKE '" . $sSearchString . ",%'
@@ -61,8 +61,10 @@ class Blogs extends Main {
       try {
         $oQuery  = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "blogs " . $sWhere);
         $iResult = $oQuery->fetchColumn();
+
         if ($iLimit != 0)
           $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit);
+
         else
           $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iResult);
       }
@@ -73,6 +75,7 @@ class Blogs extends Main {
 
       try {
         $sLimit = $iLimit != 0 ? ' LIMIT '.$this->oPagination->getOffset().', '.$this->oPagination->getLimit() : '';
+
         $oQuery = $this->_oDb->prepare("SELECT
                                           b.*,
                                           u.id AS user_id,
@@ -99,7 +102,6 @@ class Blogs extends Main {
                                         . $sLimit);
 
         $oQuery->execute();
-
         $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
       }
       catch (\PDOException $p) {
