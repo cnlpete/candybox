@@ -31,12 +31,13 @@ class Logs extends Main {
     else {
       $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'show');
       $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+      $this->oSmarty->setTemplateDir($sTemplateDir);
 
       $this->oSmarty->assign('logs', $this->_oModel->getData());
-      $this->oSmarty->assign('_pages_', $this->_oModel->oPagination->showPages('/' . $this->_aRequest['controller']));
+      $this->oSmarty->assign('_pages_',
+              $this->_oModel->oPagination->showPages('/' . $this->_aRequest['controller']));
 
       $this->setTitle(I18n::get('global.logs'));
-      $this->oSmarty->setTemplateDir($sTemplateDir);
       return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
   }
@@ -56,10 +57,14 @@ class Logs extends Main {
    *
    */
   public static function insert($sControllerName, $sActionName, $iActionId = 0, $iUserId = 0, $iTimeStart = '', $iTimeEnd = '') {
-    require_once PATH_STANDARD . '/vendor/candyCMS/core/models/Logs.model.php';
-
     $sModel  = Main::__autoload('Logs', true);
-    $bReturn = $sModel::insert($sControllerName, $sActionName, $iActionId, $iUserId, $iTimeStart, $iTimeEnd);
+    $bReturn = $sModel::insert(
+            (string) $sControllerName,
+            (string) $sActionName,
+            (int) $iActionId,
+            (int) $iUserId,
+            (int) $iTimeStart,
+            (int) $iTimeEnd);
 
     if ($bReturn)
       \CandyCMS\Core\Helpers\SmartySingleton::getInstance()->clearCacheForController('logs');
@@ -92,13 +97,11 @@ class Logs extends Main {
    *
    * @static
    * @param integer $iLogsId id of log entry to update
-   * @param integer $iEndTime the new Timestamp
+   * @param integer $iEndTime the new timestamp
    * @return boolean status of query
    *
    */
   public static function updateEndTime($iLogsId, $iEndTime = null) {
-    require_once PATH_STANDARD . '/vendor/candyCMS/core/models/Logs.model.php';
-
     if ($iEndTime == null)
       $iEndTime = time();
 

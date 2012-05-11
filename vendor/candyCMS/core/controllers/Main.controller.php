@@ -607,7 +607,7 @@ abstract class Main {
     elseif ($this->_oModel->update((int) $this->_aRequest['id']) === true) {
       $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
 
-      # clear additional caches if given
+      # Clear additional caches if given
       if ($mAdditionalCaches)
         $this->_clearCaches($mAdditionalCaches);
 
@@ -637,13 +637,13 @@ abstract class Main {
     if ($this->_oModel->destroy($this->_iId) === true) {
       $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
 
-      # clear additional caches if given
+      # Clear additional caches if given
       if ($mAdditionalCaches)
         $this->_clearCaches($mAdditionalCaches);
 
       Logs::insert( $this->_aRequest['controller'],
                     $this->_aRequest['action'],
-                    $this->_iId,
+                    (int) $this->_iId,
                     $this->_aSession['user']['id']);
 
       return Helper::successMessage(I18n::get('success.destroy'), '/' . $this->_aRequest['controller']);
