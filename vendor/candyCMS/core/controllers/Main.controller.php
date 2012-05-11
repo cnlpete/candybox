@@ -391,12 +391,16 @@ abstract class Main {
    *
    */
   protected function _setError($sField, $sMessage = '') {
-    # @todo we might need to modify file upload names too.
     if ($sField == 'file' || $sField == 'image') {
       if (!isset($this->_aFile[$sField]) || empty($this->_aFile[$sField]['name']))
-          $this->_aError[$sField] = $sMessage ?
+        $this->_aError[$sField] = $sMessage ?
                 $sMessage :
                 I18n::get('error.form.missing.file');
+
+//      if (!isset($this->_aFile[$this->_sController]['name'][$sField]))
+//        $this->_aError[$sField] = $sMessage ?
+//                $sMessage :
+//                I18n::get('error.form.missing.file');
     }
 
     else {
@@ -592,8 +596,10 @@ abstract class Main {
   protected function _update($mAdditionalCaches = null) {
     $this->_setError('title');
 
-    $sRedirectURL = '/' . $this->_aRequest['controller'] . '/' . (int) $this->_aRequest['id'];
-
+    # Bugfix: Don't download download file on update.
+    $sRedirectURL = $this->_aRequest['controller'] == 'downloads' ?
+            '/' . $this->_aRequest['controller'] :
+            '/' . $this->_aRequest['controller'] . '/' . (int) $this->_aRequest['id'];
 
     if ($this->_aError)
       return $this->_showFormTemplate();

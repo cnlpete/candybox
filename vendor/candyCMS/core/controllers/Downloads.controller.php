@@ -88,6 +88,7 @@ class Downloads extends Main {
     $this->_setError('category');
     $this->_setError('file');
 
+
     if (isset($this->_aError))
       return $this->_showFormTemplate();
 
@@ -96,22 +97,23 @@ class Downloads extends Main {
 
       # Set up upload helper and rename file to title
       $oUploadFile = new Upload($this->_aRequest,
-                                $this->_aSession, $this->_aFile,
-                                Helper::formatInput($this->_aRequest['title']));
+                                $this->_aSession,
+                                $this->_aFile,
+                                Helper::formatInput($this->_aRequest[$this->_sController]['title']));
 
       # File is up so insert data into database
-      $aReturnValues = $oUploadFile->uploadFiles('downloads');
+      $aReturnValues = $oUploadFile->uploadFiles($this->_sController);
       if ($aReturnValues[0] === true) {
-        $this->oSmarty->clearCacheForController($this->_sController);
-        $this->oSmarty->clearCacheForController('searches');
+        $this->oSmarty->clearCacheForController($this->_sController, 'searches');
 
         $aIds   = $oUploadFile->getIds(false);
         $aExts  = $oUploadFile->getExtensions();
 
+        # Create file(s)
         if ($this->_oModel->create($aIds[0] . '.' . $aExts[0], $aExts[0]) === true) {
           Logs::insert( $this->_sController,
                         $this->_aRequest['action'],
-                        $this->_oModel->getLastInsertId('downloads'),
+                        $this->_oModel->getLastInsertId($this->_sController),
                         $this->_aSession['user']['id']);
 
           return Helper::successMessage(I18n::get('success.create'), '/' . $this->_sController);
