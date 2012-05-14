@@ -46,6 +46,9 @@ class Blogs extends Main {
     if (isset($this->_aRequest['search']) && !empty($this->_aRequest['search'])) {
       $sWhere .= isset($sWhere) && !empty($sWhere) ? ' AND ' : ' WHERE ';
       $sSearchString = str_replace('%20', ' ', Helper::formatInput($this->_aRequest['search'], false));
+      # remove all characters that might harm us, only allow digits, normal letters and whitespaces
+      $sSearchString = preg_replace('/[^\d\s\w]/', '', $sSearchString);
+
       $sWhere .= "tags LIKE '%," . $sSearchString . ",%'
               OR tags LIKE '%," . $sSearchString . "'
               OR tags LIKE '" . $sSearchString . ",%'
