@@ -207,4 +207,8 @@ define('MAILCHIMP_API_KEY', '');
 # Click the "settings" link for the list - the Unique Id is at the bottom of that page.
 define('MAILCHIMP_LIST_ID', '');
 
+# should the user be redirected, if he tries to access old links ('/blog, /gallery, ...)
+# DEFAULT: false
+define('CHECK_OLD_LINKS', false);
+
 ?>

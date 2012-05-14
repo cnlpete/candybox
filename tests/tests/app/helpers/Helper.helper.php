@@ -28,6 +28,10 @@ class UnitTestOfHelperHelper extends CandyUnitTest {
     $this->assertTrue(Helper::successMessage('Message'));
   }
 
+  function testWarningMessage() {
+    $this->assertFalse(Helper::warningMessage('Message'));
+  }
+
   function testErrorMessage() {
     $this->assertFalse(Helper::errorMessage('Message'));
   }

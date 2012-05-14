@@ -41,6 +41,26 @@ class Helper {
   }
 
   /**
+   * Display a warning message after an action is done.
+   *
+   * @static
+   * @access public
+   * @param string $sMessage message to provide
+   * @param string $sRedirectTo site to redirect to
+   * @return boolean false
+   * @todo store in main session object
+   *
+   */
+  public static function warningMessage($sMessage, $sRedirectTo = '') {
+    $_SESSION['flash_message'] = array(
+        'type'    => 'warning',
+        'message' => $sMessage,
+        'headline'=> I18n::get('error.standard'));
+
+    return $sRedirectTo ? Helper::redirectTo ($sRedirectTo) : false;
+  }
+
+  /**
    * Display an error message after an action is done.
    *
    * @static
@@ -503,7 +523,7 @@ class Helper {
   /**
    * Pluralize a string.
    *
-   * Note that this is just a rudimentary funtion. F.e. "death", "boy" and "kiss" will not be pluralized corrctly.
+   * Note that this is just a rudimentary funtion. F.e. "death", "boy" and "kiss" will not be pluralized correctly.
    *
    * @static
    * @access public
@@ -518,7 +538,7 @@ class Helper {
     elseif (substr($sStr, -1) == 's')
       return $sStr;
 
-    elseif (substr($sStr, -1) == 'e')
+    elseif (substr($sStr, -1) == 'e' || substr($sStr, -1) == 'g')
       return $sStr . 's';
 
     elseif (substr($sStr, -1) == 'y')

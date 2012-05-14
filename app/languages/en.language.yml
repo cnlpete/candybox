@@ -181,6 +181,8 @@ success:
     verification: Thank you. Your email has been verified!
 
 error:
+  302:
+    info: The requested URL has moved to %s.
   404:
     info: The requested URL was not found. Either you clicked on a faulty link, the page has been deleted or the URL has been entered incorrectly.
     title: Error 404
