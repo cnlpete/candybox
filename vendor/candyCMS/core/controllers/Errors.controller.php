@@ -28,6 +28,11 @@ class Errors extends Main {
     $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], $sError);
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, $sError);
 
+    if ($sError == '404') {
+      header('Status: 404 Not Found');
+      header('HTTP/1.0 404 Not Found');
+    }
+
     $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
