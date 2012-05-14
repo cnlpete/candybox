@@ -523,7 +523,8 @@ class Helper {
   /**
    * Pluralize a string.
    *
-   * Note that this is just a rudimentary funtion. F.e. "death", "boy" and "kiss" will not be pluralized correctly.
+   * Note that this is just a rudimentary funtion. F.e. "boy" will not be pluralized correctly.
+   * Simple stuff will however work. F.e. 'log' becomes 'logs', 'kiss' will become 'kisses', ...
    *
    * @static
    * @access public
@@ -532,20 +533,21 @@ class Helper {
    *
    */
   public static function pluralize($sStr) {
-    if (substr($sStr, -1) == 'h' || substr($sStr, -2) == 'ss')
+    if ($sStr == 'rss')
+      return $sStr;
+
+    elseif (substr($sStr, -1) == 'h' || substr($sStr, -2) == 'ss' || substr($sStr, -1) == 'o')
       return $sStr . 'es';
 
     elseif (substr($sStr, -1) == 's')
       return $sStr;
 
-    elseif (substr($sStr, -1) == 'e' || substr($sStr, -1) == 'g')
-      return $sStr . 's';
-
     elseif (substr($sStr, -1) == 'y')
       return substr($sStr, 0, -1) . 'ies';
 
     else
-      return $sStr;
+      return $sStr . 's';
+
   }
 
   /**
