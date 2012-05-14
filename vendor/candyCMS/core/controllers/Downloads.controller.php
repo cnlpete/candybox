@@ -88,7 +88,6 @@ class Downloads extends Main {
     $this->_setError('category');
     $this->_setError('file');
 
-
     if (isset($this->_aError))
       return $this->_showFormTemplate();
 
