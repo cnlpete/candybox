@@ -36,10 +36,14 @@
           {$l.action_id}
         </td>
         <td>
-          {$l.time_start}
-          {if $l.time_start !== $l.time_end}
-            -
-            {$l.time_end}
+          <time datetime='{$l.time_start.w3c}'>
+            {$l.time_start.raw|date_format:$lang.global.time.format.datetime}
+          </time>
+          {if $l.time_start.raw < $l.time_end.raw - 60}
+            &nbsp;-&nbsp;
+            <time datetime='{$l.time_end.w3c}'>
+              {$l.time_end.raw|date_format:$lang.global.time.format.time}
+            </time>
           {/if}
         </td>
         <td class='center'>
