@@ -2,22 +2,36 @@
   <div class='page-header'>
     <h1>{$lang.global.contact} {$contact.name} {$contact.surname}</h1>
   </div>
-  <form method='post' action='/{$_REQUEST.controller}/{if isset($_REQUEST.id)}{$_REQUEST.id}/{/if}create'
-        id='create_mail' class='form-horizontal'>
+  <form method='post'
+        action='/{$_REQUEST.controller}/{if isset($_REQUEST.id)}{$_REQUEST.id}/{/if}create'
+        id='create_mail'
+        class='form-horizontal'>
     <div class='control-group{if isset($error.email)} alert alert-error{/if}'>
       <label for='input-email' class='control-label'>
         {$lang.global.email.email} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <input id='input-email' class='required span4' name='email'
-              value="{$email}" type='email' required />
-        {if isset($error.email)}<span class='help-inline'>{$error.email}</span>{/if}
+        <input id='input-email'
+               class='required span4'
+               name='{$_REQUEST.controller}[email]'
+               value="{$email}" type='email' required />
+        {if isset($error.email)}
+          <span class='help-inline'>
+            {$error.email}
+          </span>
+        {/if}
       </div>
     </div>
     <div class='control-group'>
-      <label for='input-subject' class='control-label'>{$lang.global.subject}</label>
+      <label for='input-subject' class='control-label'>
+        {$lang.global.subject}
+      </label>
       <div class='controls'>
-        <input id='input-subject' class='span4' name='subject' value="{$subject}" type='text' />
+        <input id='input-subject'
+               class='span4'
+               name='{$_REQUEST.controller}[subject]'
+               value="{$subject}"
+               type='text' />
       </div>
     </div>
     <div class='control-group{if isset($error.content)} alert alert-error{/if}'>
@@ -25,9 +39,13 @@
         {$lang.global.content} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <textarea class='required span5' id='input-content' name='content'
+        <textarea class='required span5'
+                  id='input-content'
+                  name='{$_REQUEST.controller}[content]'
                   rows='6' required>{$content}</textarea>
-        {if isset($error.content)}<span class='help-inline'>{$error.content}</span>{/if}
+        {if isset($error.content)}
+          <span class='help-inline'>{$error.content}</span>
+        {/if}
       </div>
     </div>
     {if isset($_captcha_)}{$_captcha_}{/if}

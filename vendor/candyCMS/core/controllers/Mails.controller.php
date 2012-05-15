@@ -26,7 +26,7 @@ class Mails extends Main {
    *
    */
   public function show() {
-    return Helper::redirectTo('/' . $this->_aRequest['controller'] . '/' . $this->_iId . '/create');
+    return Helper::redirectTo('/' . $this->_sController . '/' . $this->_iId . '/create');
   }
 
   /**
@@ -63,7 +63,7 @@ class Mails extends Main {
    *
    */
   protected function _showCreateMailTemplate($bShowCaptcha) {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'create');
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'create');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'create');
 
     $sUser = $this->__autoload('Users', true);
@@ -78,19 +78,16 @@ class Mails extends Main {
     }
 
     $this->oSmarty->assign('contact', $aUser);
-    $this->oSmarty->assign('content',
-            isset($this->_aRequest['content']) ?
-                    (string) $this->_aRequest['content'] :
+    $this->oSmarty->assign('content', isset($this->_aRequest[$this->_sController]['content']) ?
+                    (string) $this->_aRequest[$this->_sController]['content'] :
                     '');
 
-    $this->oSmarty->assign('email',
-            isset($this->_aRequest['email']) ?
-                    (string) $this->_aRequest['email'] :
+    $this->oSmarty->assign('email', isset($this->_aRequest[$this->_sController]['email']) ?
+                    (string) $this->_aRequest[$this->_sController]['email'] :
                     $this->_aSession['user']['email']);
 
-    $this->oSmarty->assign('subject',
-            isset($this->_aRequest['subject']) ?
-                    (string) $this->_aRequest['subject'] :
+    $this->oSmarty->assign('subject', isset($this->_aRequest[$this->_sController]['subject']) ?
+                    (string) $this->_aRequest[$this->_sController]['subject'] :
                     '');
 
     if ($bShowCaptcha === true)
@@ -139,18 +136,17 @@ class Mails extends Main {
               $this->_aSession['user']['name'] :
               I18n::get('global.system');
 
-      $sSubject = isset($this->_aRequest['subject']) && $this->_aRequest['subject'] ?
-              Helper::formatInput($this->_aRequest['subject']) :
+      $sSubject = isset($this->_aRequest[$this->_sController]['subject']) && $this->_aRequest[$this->_sController]['subject'] ?
+              Helper::formatInput($this->_aRequest[$this->_sController]['subject']) :
               I18n::get('mails.subject.by', $sSendersName);
 
-      $bStatus = Mails::send(
-              isset($aRow['email']) ? $aRow['email'] : WEBSITE_MAIL,
-              $sSubject,
-              Helper::formatInput($this->_aRequest['content']),
-              Helper::formatInput($this->_aRequest['email']));
+      $bStatus = Mails::send( isset($aRow['email']) ? $aRow['email'] : WEBSITE_MAIL,
+                              $sSubject,
+                              Helper::formatInput($this->_aRequest[$this->_sController]['content']),
+                              Helper::formatInput($this->_aRequest[$this->_sController]['email']));
 
       if ($bStatus == true) {
-        Logs::insert($this->_aRequest['controller'], 'create', (int) $this->_iId);
+        Logs::insert($this->_sController, 'create', (int) $this->_iId);
         return $this->_showSuccessPage();
       }
       else
@@ -166,7 +162,7 @@ class Mails extends Main {
    *
    */
   private function _showSuccessPage() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'success');
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'success');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'success');
 
     $this->setTitle(I18n::get('mails.success_page.title'));
@@ -197,6 +193,7 @@ class Mails extends Main {
     $sMessage = str_replace('%%WEBSITE_URL', WEBSITE_URL, $sMessage);
     $sMessage = str_replace('%WEBSITE_NAME', WEBSITE_NAME, $sMessage);
     $sMessage = str_replace('%WEBSITE_URL', WEBSITE_URL, $sMessage);
+
     $sSubject = str_replace('%%WEBSITE_NAME', WEBSITE_NAME, $sSubject);
     $sSubject = str_replace('%%WEBSITE_URL', WEBSITE_URL, $sSubject);
     $sSubject = str_replace('%WEBSITE_NAME', WEBSITE_NAME, $sSubject);
