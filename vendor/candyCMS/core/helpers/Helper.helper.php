@@ -400,20 +400,14 @@ class Helper {
    */
   public static function formatTimestamp($iTime, $iOptions = 0) {
     if ($iTime) {
-      if (class_exists('\CandyCMS\Plugins\FormatTimestamp') == true) {
-        $oDate = new FormatTimestamp();
-        return $oDate->getDate($iTime, $iOptions);
-      }
-      else {
-        if ($iOptions == 1)
-          return strftime(I18n::get('global.time.format.date'), $iTime);
+      if ($iOptions == 1)
+        return strftime(I18n::get('global.time.format.date'), $iTime);
 
-        elseif($iOptions == 2)
-          return strftime(I18n::get('global.time.format.time'), $iTime);
+      elseif($iOptions == 2)
+        return strftime(I18n::get('global.time.format.time'), $iTime);
 
-        else
-          return strftime(I18n::get('global.time.format.datetime'), $iTime);
-      }
+      else
+        return strftime(I18n::get('global.time.format.datetime'), $iTime);
     }
   }
 

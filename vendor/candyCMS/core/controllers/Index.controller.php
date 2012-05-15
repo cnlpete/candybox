@@ -568,7 +568,7 @@ class Index {
     unset($this->_aRequest['id'], $this->_aRequest['search'], $this->_aRequest['page']);
 
     foreach ($this->_aPlugins as $sPlugin) {
-      if($sPlugin == 'Bbcode' || $sPlugin == 'FormatTimestamp' || $sPlugin == 'Cronjob' ||  $sPlugin == 'Recaptcha')
+      if($sPlugin == 'Bbcode' || $sPlugin == 'Cronjob' ||  $sPlugin == 'Recaptcha')
         continue;
 
       if($sPlugin == 'Facebook')
