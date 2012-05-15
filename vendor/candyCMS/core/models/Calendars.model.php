@@ -152,12 +152,8 @@ class Calendars extends Main {
       $this->_aData[$sDate]['year']   = $sYear;
 
       $this->_aData[$sDate]['dates'][$iId] = $this->_formatForOutput($aRow, $aInts);
-      $this->_aData[$sDate]['dates'][$iId]['start_date_raw']  = $aRow['start_date'];
-      $this->_aData[$sDate]['dates'][$iId]['start_date']      = Helper::formatTimestamp($aRow['start_date'], 1);
-
-      $this->_aData[$sDate]['dates'][$iId]['end_date_raw']    = $aRow['end_date'];
-      if ($aRow['end_date'] > 0)
-        $this->_aData[$sDate]['dates'][$iId]['end_date']      = Helper::formatTimestamp($aRow['end_date'], 1);
+      $this->_formatDates($this->_aData[$sDate]['dates'][$iId], 'start_date');
+      $this->_formatDates($this->_aData[$sDate]['dates'][$iId], 'end_date');
     }
 
     return $this->_aData;
@@ -179,14 +175,12 @@ class Calendars extends Main {
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         c.*,
-                                        UNIX_TIMESTAMP(c.date) as date,
                                         u.id AS user_id,
                                         u.name AS user_name,
                                         u.surname AS user_surname,
                                         u.email AS user_email,
-                                        UNIX_TIMESTAMP(c.start_date),
-                                        UNIX_TIMESTAMP(c.end_date),
-                                        DATE_ADD(c.end_date, INTERVAL 1 DAY) as ics_end_date
+                                        UNIX_TIMESTAMP(c.start_date) as start_date,
+                                        UNIX_TIMESTAMP(c.end_date) as end_date
                                       FROM
                                         " . SQL_PREFIX . "calendars c
                                       LEFT JOIN
@@ -209,15 +203,8 @@ class Calendars extends Main {
 
     else {
       $this->_aData = $this->_formatForOutput($aRow, $aInts);
-
-      # Overide for iCalendar specs
-      $this->_aData['date']           = date('Ymd', $aRow['date_raw']) . 'T' . date('His', $aRow['date']) . 'Z';
-      $this->_aData['start_date_raw'] = $aRow['start_date'];
-      $this->_aData['start_date']     = str_replace('-', '', $aRow['start_date']);
-      $this->_aData['end_date_raw']   = $aRow['end_date'];
-      $this->_aData['end_date']       = $aRow['end_date'] == '0000-00-00' ?
-              str_replace('-', '', $this->_aData['start_date']) :
-              str_replace('-', '', $aRow['ics_end_date']);
+      $this->_formatDates($this->_aData, 'start_date');
+      $this->_formatDates($this->_aData, 'end_date');
     }
 
     return $this->_aData;

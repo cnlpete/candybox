@@ -60,12 +60,14 @@
           {foreach $c.dates as $d}
             <tr>
               <td>
-                {$d.start_date}
-                {if $d.end_date > 1}
-                  &nbsp;
-                  -
-                  &nbsp;
-                  {$d.end_date}
+                <time datetime='{$d.start_date.w3c_date}'>
+                  {$d.start_date.raw|date_format:$lang.global.time.format.date}
+                </time>
+                {if $d.end_date.raw}
+                  &nbsp;-&nbsp;
+                  <time datetime='{$d.end_date.w3c_date}'>
+                    {$d.end_date.raw|date_format:$lang.global.time.format.date}
+                  </time>
                 {/if}
               </td>
               <td>
