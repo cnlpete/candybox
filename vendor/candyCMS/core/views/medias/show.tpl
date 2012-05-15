@@ -61,7 +61,7 @@
               {$f.size}
             </td>
             <td class='center'>
-              <time datetime='{$f.date.w3c}'>
+              <time datetime='{$f.date.w3c}' class='js-timeago'>
                 {$f.date.raw|date_format:$lang.global.time.format.date}
               </time>
             </td>

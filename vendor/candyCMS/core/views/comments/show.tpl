@@ -18,7 +18,9 @@
               <em style='text-decoration:line-through'>{$lang.global.deleted_user}</em>
             {/if}
             <br />
-            <time datetime='{$c.date.w3c}'>{$c.date.raw|date_format:$lang.global.time.format.datetime}</time>
+            <time datetime='{$c.date.w3c}' class='js-timeago'>
+              {$c.date.raw|date_format:$lang.global.time.format.datetime}
+            </time>
           </header>
           <div id='js-comment_{$c.id}'>
             {$c.content}
