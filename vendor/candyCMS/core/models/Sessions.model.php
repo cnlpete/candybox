@@ -75,7 +75,7 @@ class Sessions extends Main {
   public function create($aUser = '') {
     if (empty($aUser)) {
       $sModel = $this->__autoload('Users', true);
-      $oModel = & new $sModel($this->_aRequest, $this->_aSession);
+      $oModel = new $sModel($this->_aRequest, $this->_aSession);
       $aUser  = $oModel->getLoginData();
     }
 

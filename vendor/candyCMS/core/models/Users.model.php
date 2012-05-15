@@ -554,9 +554,12 @@ class Users extends Main {
                                       LIMIT
                                         1");
 
-      $sPassword = md5(RANDOM_HASH . Helper::formatInput($this->_aRequest['password']));
-      $oQuery->bindParam('email', Helper::formatInput($this->_aRequest['email']), PDO::PARAM_STR);
-      $oQuery->bindParam('password', $sPassword, PDO::PARAM_STR);
+      $oQuery->bindParam('email',
+              Helper::formatInput($this->_aRequest[$this->_sController]['email']),
+              PDO::PARAM_STR);
+      $oQuery->bindParam('password',
+              md5(RANDOM_HASH . Helper::formatInput($this->_aRequest[$this->_sController]['password'])),
+              PDO::PARAM_STR);
       $oQuery->execute();
 
       return $oQuery->fetch(PDO::FETCH_ASSOC);
