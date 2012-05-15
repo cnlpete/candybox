@@ -51,9 +51,14 @@
         </td>
         <td class='center'>
           {if $u.verification_code}
-            <span style='text-decoration:line-through'>{$u.date}</span>
+            <span style='text-decoration:line-through'>
+              <time datetime='{$u.date.w3c}'>
+                {$u.date.raw|date_format:$lang.global.time.format.date}
+              </time></span>
           {else}
-            {$u.date}
+            <time datetime='{$u.date.w3c}'>
+              {$u.date.raw|date_format:$lang.global.time.format.date}
+            </time>
           {/if}
         </td>
         <td class='center'>

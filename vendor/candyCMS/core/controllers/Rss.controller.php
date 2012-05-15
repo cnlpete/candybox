@@ -85,12 +85,12 @@ class Rss extends Main {
       $this->oSmarty->assign('_content_', $aData[$this->_iId]['content']);
       $this->oSmarty->assign('_locale_', WEBSITE_LOCALE);
       $this->oSmarty->assign('_link_', Helper::removeSlash($aData[$this->_iId]['url']));
-      $sGalleryDate = $aData[$this->_iId]['date_raw'];
+      $sGalleryDate = $aData[$this->_iId]['date']['raw'];
 
       $aData = & $aData[$this->_iId]['files'];
       rsort($aData);
 
-      $this->oSmarty->assign('_pubdate_', count($aData) > 0 ? $aData[0]['date_raw'] : $sGalleryDate);
+      $this->oSmarty->assign('_pubdate_', count($aData) > 0 ? $aData[0]['date']['raw'] : $sGalleryDate);
       $this->oSmarty->assign('data', $aData);
     }
 

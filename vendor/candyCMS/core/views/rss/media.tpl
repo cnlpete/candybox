@@ -13,7 +13,7 @@
     {foreach $data as $d}
     <item>
       <title>{$d.file}</title>
-      <pubDate>{$d.datetime_rss}</pubDate>
+      <pubDate>{$d.date.rss}</pubDate>
       <guid isPermaLink="false">{$d.url_popup}</guid>
       <link>{$d.url_popup}</link>
       <description>

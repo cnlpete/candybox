@@ -34,8 +34,8 @@
             {/if}
           </h2>
           <p>
-            <time datetime='{$b.datetime_w3c}'>
-              {$b.datetime}
+            <time datetime='{$b.date.w3c}'>
+              {$b.date.raw|date_format:$lang.global.time.format.datetime}
             </time>
             &nbsp;
             {$lang.global.by}

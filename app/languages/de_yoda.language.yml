@@ -126,9 +126,11 @@ global:
     terms: Bedingungen
     read: Nutzungsbedingungen gelesen, du hast?
   time:
-    am: Uhr
-    pm: Uhr
     time: Zeit
+    format: #set the standard date format (http://php.net/strftime)
+      date: %d.%m.%Y
+      time: %H:%M Uhr
+      datetime: %d.%m.%Y, %H:%M Uhr
   title: Titel
   today: Heute
   update:

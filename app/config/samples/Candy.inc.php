@@ -100,19 +100,6 @@ define('DEFAULT_LANGUAGE', 'en');
 
 # ------------------------------------------------------------------------------
 
-# Set the standard date format (http://php.net/strftime)
-# DEFAULT: '%d.%m.%Y'
-define('DEFAULT_DATE_FORMAT', '%d.%m.%Y');
-
-# ------------------------------------------------------------------------------
-
-# Set the standard time format (with seperator - if wanted)
-# (http://php.net/strftime)
-# DEFAULT: ', %H:%M %p'
-define('DEFAULT_TIME_FORMAT', '%H:%M %p');
-
-# ------------------------------------------------------------------------------
-
 # Enter a random hash to higher the security of md5 hashs
 # DEFAULT: None. Create one before you install this software
 # NOTE: AVOID THE CHANGE OF THIS HASH AFTER USERS HAVE REGISTERED OR YOU WILL

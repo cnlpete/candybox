@@ -13,7 +13,7 @@
     {foreach $data as $d}
       <item>
         <title>{$d.title}</title>
-        <pubDate>{$d.datetime_rss}</pubDate>
+        <pubDate>{$d.date.rss}</pubDate>
         <description>
           <![CDATA[
             {if $d.teaser}

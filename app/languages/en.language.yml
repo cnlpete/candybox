@@ -126,9 +126,11 @@ global:
     terms: Terms
     read: Read the terms?
   time:
-    am: am
-    pm: pm
     time: Time
+    format: #set the standard date format (http://php.net/strftime)
+      date: %m/%d/%Y
+      time: %I:%M %p
+      datetime: %m/%d/%Y, %I:%M %p
   title: Title
   today: Today
   update:

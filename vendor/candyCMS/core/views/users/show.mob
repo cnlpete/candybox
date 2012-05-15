@@ -8,7 +8,11 @@
     </p>
     <ul data-role='listview' data-inset='true'>
       <li>
-        {$lang.users.label.registered_since}: <span class='ui-li-aside'>{$u.date}</span>
+        {$lang.users.label.registered_since}:
+        <span class='ui-li-aside'>
+          <time datetime='{$u.date.w3c}'>
+            {$u.date.raw|date_format:$lang.global.time.format.date}
+          </time></span>
       </li>
       <li>
         {$lang.users.label.last_login}: <span class='ui-li-aside'>{$u.last_login}</span>

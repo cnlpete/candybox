@@ -14,7 +14,7 @@
                   <h2>
                     {$data.title}
                   </h2>
-                  <p>{$data.datetime}</p>
+                  <p>{$data.date.raw|date_format:$lang.global.time.format.datetime}</p>
                 </a>
               </li>
             {/if}

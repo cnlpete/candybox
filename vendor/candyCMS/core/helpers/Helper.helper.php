@@ -406,13 +406,13 @@ class Helper {
       }
       else {
         if ($iOptions == 1)
-          return strftime(DEFAULT_DATE_FORMAT, $iTime);
+          return strftime(I18n::get('global.time.format.date'), $iTime);
 
         elseif($iOptions == 2)
-          return strftime(DEFAULT_TIME_FORMAT, $iTime);
+          return strftime(I18n::get('global.time.format.time'), $iTime);
 
         else
-          return strftime(DEFAULT_DATE_FORMAT . ', ' . DEFAULT_TIME_FORMAT, $iTime);
+          return strftime(I18n::get('global.time.format.datetime'), $iTime);
       }
     }
   }

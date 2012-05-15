@@ -20,7 +20,9 @@
           {$lang.users.label.registered_since}
         </td>
         <td>
-          {$u.date}
+          <time datetime='{$u.date.w3c}'>
+            {$u.date.raw|date_format:$lang.global.time.format.date}
+          </time>
         </td>
         <td rowspan='4'>
 

@@ -151,7 +151,9 @@ class Medias extends Main {
 
         $aFiles[] = array(
             'name'  => $sFile,
-            'cdate' => Helper::formatTimestamp(filectime($sPath), 1),
+            'date'  => Array(
+                'raw' => filectime($sPath),
+                'w3c' => date('Y-m-d\TH:i:sP', filectime($sPath))),
             'size'  => Helper::getFileSize($sPath),
             'type'  => $sFileType,
             'dim'   => $aImgDim
@@ -162,7 +164,7 @@ class Medias extends Main {
 
       $this->oSmarty->assign('files', $aFiles);
     }
-    
+
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
