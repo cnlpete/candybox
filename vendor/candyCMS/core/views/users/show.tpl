@@ -45,7 +45,9 @@
           {$lang.users.label.last_login}
         </td>
         <td>
-          {$u.last_login}
+          <time datetime='{$u.last_login.w3c}'>
+            {$u.last_login.raw|date_format:$lang.global.time.format.date}
+          </time>
         </td>
       </tr>
       <tr>

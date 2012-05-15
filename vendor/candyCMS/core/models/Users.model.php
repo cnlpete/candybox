@@ -217,7 +217,7 @@ class Users extends Main {
       $iId = $aRow['id'];
 
       $this->_aData[$iId] = $this->_formatForUserOutput($aRow, $aInts, $aBools);
-      $this->_aData[$iId]['last_login'] = Helper::formatTimestamp($aRow['last_login']);
+      $this->_formatDates($this->_aData[$iId], 'last_login');
     }
 
     return $this->_aData;
@@ -267,7 +267,7 @@ class Users extends Main {
 
     else {
       $this->_aData[1] = $this->_formatForUserOutput($aRow, $aInts, $aBools);
-      $this->_aData[1]['last_login'] = Helper::formatTimestamp($aRow['last_login']);
+      $this->_formatDates($this->_aData[1], 'last_login');
     }
 
     return $this->_aData;

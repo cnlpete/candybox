@@ -15,7 +15,11 @@
           </time></span>
       </li>
       <li>
-        {$lang.users.label.last_login}: <span class='ui-li-aside'>{$u.last_login}</span>
+        {$lang.users.label.last_login}: <span class='ui-li-aside'>
+          <time datetime='{$u.last_login.w3c}'>
+            {$u.last_login.raw|date_format:$lang.global.time.format.date}
+          </time>
+        </span>
       </li>
       {if !empty($u.content)}
         <li>{$u.content}</li>

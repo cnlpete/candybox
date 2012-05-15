@@ -63,7 +63,9 @@
         </td>
         <td class='center'>
           {if $u.last_login}
-            {$u.last_login}
+            <time datetime='{$u.last_login.w3c}'>
+              {$u.last_login.raw|date_format:$lang.global.time.format.date}
+            </time>
           {else}
             -
           {/if}
