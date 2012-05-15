@@ -119,9 +119,7 @@ class Blogs extends Main {
       //FIXME trim spaces, redundant, if those get removed at blog creation/editing
       //explode using ',' and filter empty items (since explode always gives at least one item)
       $this->_aData[$iDate]['tags']           = array_filter( array_map("trim", explode(',', $aRow['tags'])) );
-      $this->_aData[$iDate]['date_modified']  = !empty($aRow['date_modified']) ?
-              Helper::formatTimestamp($aRow['date_modified']) :
-              '';
+      $this->_formatDates($this->_aData[$iDate], 'date_modified');
     }
 
     return $this->_aData;

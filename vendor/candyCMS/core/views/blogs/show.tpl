@@ -41,9 +41,11 @@
             {$lang.global.by}
             &nbsp;
             <a href='{$b.author.url}' rel='author'>{$b.author.full_name}</a>
-            {if $b.date_modified != ''}
+            {if $b.date_modified.raw}
               &nbsp;
-              - {$lang.global.last_update}: {$b.date_modified}
+              - {$lang.global.last_update}: <time datetime='{$b.date_modified.w3c}'>
+                {$b.date_modified.raw|date_format:$lang.global.time.format.datetime}
+              </time>
             {/if}
           </p>
         </header>
