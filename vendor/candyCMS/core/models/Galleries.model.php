@@ -481,12 +481,14 @@ class Galleries extends Main {
                                           :content,
                                           :date )");
 
-      $oQuery->bindParam('album_id', $this->_aRequest['id'], PDO::PARAM_INT);
+      $oQuery->bindParam('album_id', $this->_aRequest[$this->_sController]['id'], PDO::PARAM_INT);
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
       $oQuery->bindParam('file', $sFile, PDO::PARAM_STR);
       $oQuery->bindParam('extension', $sExtension, PDO::PARAM_STR);
-      $oQuery->bindParam('content', Helper::formatInput($this->_aRequest['content']), PDO::PARAM_STR);
       $oQuery->bindParam('date', time(), PDO::PARAM_INT);
+
+      foreach (array('content') as $sInput)
+        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false), PDO::PARAM_STR);
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = Helper::getLastEntry('gallery_files');
@@ -523,8 +525,10 @@ class Galleries extends Main {
                                       WHERE
                                         id = :id");
 
-      $oQuery->bindParam('content', Helper::formatInput($this->_aRequest['content']), PDO::PARAM_STR);
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
+
+      foreach (array('content') as $sInput)
+        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false), PDO::PARAM_STR);
 
       return $oQuery->execute();
     }

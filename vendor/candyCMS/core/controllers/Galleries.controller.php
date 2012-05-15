@@ -231,26 +231,24 @@ class Galleries extends Main {
    * @see vendor/candyCMS/core/helper/Image.helper.php
    *
    */
-  protected function _showFormFileTemplates() {
+    protected function _showFormFileTemplate() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, '_form_file');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form_file');
 
-    # Update
-    if ($this->_aRequest['action'] == 'updatefile') {
-      $aDetails = $this->_oModel->getFileData($this->_iId);
+    if ($this->_iId) {
+      $aData = $this->_oModel->getFileData($this->_iId);
 
-      $this->oSmarty->assign('content', Helper::formatOutput($aDetails['content']));
-      $this->oSmarty->assign('album_id', Helper::formatOutput($aDetails['album_id']));
+      foreach ($aData as $sColumn => $sData)
+        $this->oSmarty->assign($sColumn, $sData);
+
+      $this->setTitle(vsprintf(I18n::get($this->_sController . '.files.title.update'), $aData['title']));
     }
 
-    # Create
     else {
-      # r = resize, c = cut
-      $this->oSmarty->assign('default', isset($this->_aRequest['cut']) ?
-                      Helper::formatInput($this->_aRequest['cut']) :
-                      'c');
+      foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
+        $this->oSmarty->assign($sInput, $sData);
 
-      $this->oSmarty->assign('content', isset($this->_aRequest['content']) ? $this->_aRequest['content'] : '');
+      $this->setTitle(I18n::get($this->_sController . '.title.create'));
     }
 
     if ($this->_aError)
@@ -258,10 +256,6 @@ class Galleries extends Main {
 
     $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
-  }
-
-  protected function _showFormFileTemplate() {
-    return parent::_showFormTemplate('_form_file', I18n::get('galleries.files.title'));
   }
 
   /**
@@ -295,6 +289,7 @@ class Galleries extends Main {
   private function _createFile() {
     require PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
 
+    $this->_setError('cut');
     $this->_setError('file');
 
     if ($this->_aError)
@@ -323,7 +318,7 @@ class Galleries extends Main {
         # Log uploaded image. Request ID = album id
         Logs::insert( $this->_sController,
                       'createfile',
-                      (int) $this->_aRequest['id'],
+                      (int) $this->_aRequest[$this->_sController]['id'],
                       $this->_aSession['user']['id']);
 
         return Helper::successMessage(I18n::get('success.file.upload'), '/' . $this->_sController .

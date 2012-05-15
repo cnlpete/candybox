@@ -42,22 +42,21 @@ class Upload {
   private $_sFileNames = array();
 
   /**
-   * name of the upload folder
-   *
-   * @var array
-   * @access private
-   *
-   */
-  private $_sUploadFolder;
-
-  /**
-   * file path for each file
+   * File path for each file.
    *
    * @var array
    * @access public
    *
    */
-  public $sFilePaths = array();
+  public $aFilePaths = array();
+
+  /**
+   * Name of the current controller.
+   *
+   * @var string
+   * @access protected
+   */
+  protected $_sController;
 
   /**
    * Fetch the required information.
@@ -72,6 +71,8 @@ class Upload {
     $this->_aRequest  = & $aRequest;
     $this->_aSession  = & $aSession;
     $this->_aFile     = & $aFile;
+
+    $this->_sController = $this->_aRequest['controller'];
 
     require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Image.helper.php';
   }
@@ -95,33 +96,32 @@ class Upload {
 
       $bReturn = array();
       for ($iI = 0; $iI < $iFileCount; $iI++) {
-
         $sFileName = $bIsArray ? $this->_aFile[$sType]['name'][$iI] : $this->_aFile[$sType]['name'];
         $sFileName = strtolower($sFileName);
 
         $this->_sFileNames[$iI] = Helper::replaceNonAlphachars($sFileName);
         $this->_sFileExtensions[$iI] = substr(strrchr($sFileName, '.'), 1);
 
-        # remove extension, if there is one
+        # Remove extension, if there is one
         $iPos = strrpos($this->_sFileNames[$iI], '.');
         if ($iPos) $this->_sFileNames[$iI] = substr($this->_sFileNames[$iI], 0, $iPos);
 
-        # rename the file, if a new name is specified
-        if (!empty($this->_aRequest['rename']))
-          $this->_sFileNames[$iI] = Helper::replaceNonAlphachars($this->_aRequest['rename']) .
+        # Rename the file, if a new name is specified
+        if (isset($this->_aRequest[$this->_sController]['rename']) && !empty($this->_aRequest[$this->_sController]['rename']))
+          $this->_sFileNames[$iI] = Helper::replaceNonAlphachars($this->_aRequest[$this->_sController]['rename']) .
                   ($iFileCount == 1 ? '' : '_' . $iI);
 
-        # generate hash, if wanted
+        # Generate hash, if wanted
         if ($bFilenameHashes)
           $this->_sFileNames[$iI] = md5($this->_sFileNames[$iI] . rand(000, 999));
 
-        # generate the new filename with its full path
-        $this->sFilePaths[$iI] = Helper::removeSlash(PATH_UPLOAD . '/' .  $sFolder . '/' .
+        # Generate the new filename with its full path
+        $this->aFilePaths[$iI] = Helper::removeSlash(PATH_UPLOAD . '/' .  $sFolder . '/' .
                                                     $this->_sFileNames[$iI] . '.' . $this->_sFileExtensions[$iI]);
 
-        # upload the file
+        # Upload the file
         $sTempFileName = $bIsArray ? $this->_aFile[$sType]['tmp_name'][$iI] : $this->_aFile[$sType]['tmp_name'];
-        $bReturn[$iI] = (move_uploaded_file($sTempFileName, $this->sFilePaths[$iI])) ? true : false;
+        $bReturn[$iI] = move_uploaded_file($sTempFileName, $this->aFilePaths[$iI]) ? true : false;
       }
 
       return $bReturn;
@@ -138,21 +138,26 @@ class Upload {
    *
    */
   public function uploadGalleryFiles($sResize = '') {
-    $this->_aRequest['cut'] = !empty($sResize) ? $sResize : $this->_aRequest['cut'];
-    $this->_sUploadFolder = 'galleries/' . (int) $this->_aRequest['id'];
+    $this->_aRequest[$this->_sController]['cut'] = !empty($sResize) ?
+            $sResize :
+            $this->_aRequest[$this->_sController]['cut'];
 
-    $aUploads = $this->uploadFiles($this->_sUploadFolder . '/original', true);
+
+    $sUploadFolder = 'galleries/' . (int) $this->_aRequest[$this->_sController]['id'];
+    $aUploads = $this->uploadFiles($sUploadFolder . '/original', true);
 
     # Do cuts and or resizes
-    $iFileCount = count($aUploads);
-    for ($iI = 0; $iI < $iFileCount; $iI++) {
+    for ($iI = 0; $iI < count($aUploads); $iI++) {
       if ($aUploads[$iI] === true) {
-        $oImage = new Image($this->_sFileNames[$iI], $this->_sUploadFolder, $this->sFilePaths[$iI], $this->_sFileExtensions[$iI]);
+        $oImage = new Image($this->_sFileNames[$iI],
+                            $sUploadFolder,
+                            $this->aFilePaths[$iI],
+                            $this->_sFileExtensions[$iI]);
 
-        if (isset($this->_aRequest['cut']) && 'c' == $this->_aRequest['cut'])
+        if (isset($this->_aRequest[$this->_sController]['cut']) && 'c' == $this->_aRequest[$this->_sController]['cut'])
           $oImage->resizeAndCut(THUMB_DEFAULT_X, 'thumbnail');
 
-        elseif (isset($this->_aRequest['cut']) && 'r' == $this->_aRequest['cut'])
+        elseif (isset($this->_aRequest[$this->_sController]['cut']) && 'r' == $this->_aRequest[$this->_sController]['cut'])
           $oImage->resizeDefault(THUMB_DEFAULT_X, THUMB_DEFAULT_Y, 'thumbnail');
 
         else
@@ -186,15 +191,15 @@ class Upload {
     else {
       $this->destroyAvatarFiles($this->_aRequest['rename']);
 
-      $this->_sUploadFolder = 'users';
-      $aUploads = $this->uploadFiles($this->_sUploadFolder . '/original');
+      $sUploadFolder = 'users';
+      $aUploads = $this->uploadFiles($sUploadFolder . '/original');
 
       # upload might have failed
       if ($aUploads[0] === false)
         return false;
 
       # upload was successfull
-      $oImage = & new Image($this->_sFileNames[0], $this->_sUploadFolder, $this->sFilePaths[0], $this->_sFileExtensions[0]);
+      $oImage = & new Image($this->_sFileNames[0], $sUploadFolder, $this->aFilePaths[0], $this->_sFileExtensions[0]);
 
       $oImage->resizeDefault(POPUP_DEFAULT_X, POPUP_DEFAULT_Y, 'popup');
       $oImage->resizeDefault(THUMB_DEFAULT_X, THUMB_DEFAULT_Y, 'thumbnail');
@@ -202,7 +207,7 @@ class Upload {
       $oImage->resizeAndCut(64);
       $oImage->resizeAndCut(32);
 
-      return $bReturnPath ? $this->_sFilePaths[0] : $aUploads[0];
+      return $bReturnPath ? $this->_aFilePaths[0] : $aUploads[0];
     }
   }
 

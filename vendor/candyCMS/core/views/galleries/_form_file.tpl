@@ -26,10 +26,24 @@
           {$lang.global.cut} <span title="{$lang.global.required}">*</span>
         </label>
         <div class='controls'>
-          <select name='cut' id="input-cut" class='span4 required'>
-            <option value='c' {if $default == 'c'}default='default'{/if}>{$lang.galleries.files.label.cut}</option>
-            <option value='r' {if $default == 'r'}default='default'{/if}>{$lang.galleries.files.label.resize}</option>
-          </select>
+          <label class='radio'>
+            <input type='radio'
+                   value='c'
+                   name='{$_REQUEST.controller}[cut]'
+                   {if !$REQUEST.cut || ($_REQUEST.cut && 'c' == $_REQUEST.cut)}
+                      checked='checked'
+                   {/if} />
+            {$lang.galleries.files.label.cut}
+          </label>
+          <label class='radio'>
+            <input type='radio'
+                   value='r'
+                   name='{$_REQUEST.controller}[cut]'
+                   {if $_REQUEST.cut && 'r' == $_REQUEST.cut}
+                      checked='checked'
+                   {/if} />
+            {$lang.galleries.files.label.resize}
+          </label>
         </div>
       </div>
     {/if}
@@ -38,7 +52,10 @@
         {$lang.global.description}
       </label>
       <div class='controls'>
-        <input class='span4' type='text' name='content' id="input-content" value="{$content}" />
+        <input class='span4' type='text'
+               name='{$_REQUEST.controller}[content]'
+               id='input-content'
+               value="{$content}" />
         <span class='help-inline'></span>
       </div>
     </div>
@@ -49,7 +66,7 @@
         <input type='button' value='{$lang.global.destroy.destroy}' class='btn btn-danger'
         onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroyfile')" />
         <input class='btn' type='reset' value='{$lang.global.reset}' />
-        <input type='hidden' value='{$_REQUEST.id}' name='id' />
+        <input type='hidden' value='{$_REQUEST.id}' name='{$_REQUEST.controller}[id]' />
       {/if}
       <input type='hidden' value='formdata' name='{$_REQUEST.action}_{$_REQUEST.controller}' />
     </div>
