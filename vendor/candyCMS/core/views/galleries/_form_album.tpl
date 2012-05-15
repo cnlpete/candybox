@@ -15,7 +15,7 @@
         {$lang.global.title} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <input name='title' value="{$title}" id='input-title'
+        <input name='{$_REQUEST.controller}[title]' value="{$title}" id='input-title'
                class='required span4 focused'
                type='text' autofocus required />
         <span class='help-inline'>
@@ -30,7 +30,7 @@
         {$lang.global.description}
       </label>
       <div class='controls'>
-        <input name='content' value="{$content}" id='input-content' type='text' class='span4' />
+        <input name='{$_REQUEST.controller}[content]' value="{$content}" id='input-content' type='text' class='span4' />
         <span class='help-inline'></span>
       </div>
     </div>
@@ -39,7 +39,7 @@
             value="{if $_REQUEST.action == 'create'}{$lang.global.create.create}{else}{$lang.global.update.update}{/if}" />
       <input type='hidden' value='formdata' name='{$_REQUEST.action}_{$_REQUEST.controller}' />
       {if $_REQUEST.action == 'update'}
-        <input type='hidden' value='{$_REQUEST.id}' name='id' />
+        <input type='hidden' value='{$_REQUEST.id}' name='{$_REQUEST.controller}[id]' />
         <input type='button' value='{$lang.galleries.albums.title.destroy}' class='btn btn-danger'
           onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroy')" />
         <input type='reset' value='{$lang.global.reset}' class='btn' />

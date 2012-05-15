@@ -95,7 +95,6 @@ class Dispatcher {
       case 'create':
 
         $this->oController->setContent($this->oController->create('create_' . strtolower($this->_aRequest['controller'])));
-        $this->oController->setTitle(I18n::get(strtolower($this->_aRequest['controller']) . '.title.create'));
 
         break;
 
@@ -113,9 +112,9 @@ class Dispatcher {
         break;
 
       case 'update':
-        $sController = strtolower($this->_aRequest['controller']);
-        $this->oController->setContent($this->oController->update('update_' . $sController));
-        $this->oController->setTitle(I18n::get($sController . '.title.update', $this->oController->getTitle()));
+
+        $this->oController->setContent($this->oController->update('update_' . strtolower($this->_aRequest['controller'])));
+
         break;
 
       case 'xml':

@@ -92,12 +92,12 @@ class Galleries extends Main {
    *
    */
   protected function _showOverview() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'albums');
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'albums');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'albums');
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
       $this->oSmarty->assign('albums', $this->_oModel->getData());
-      $this->oSmarty->assign('_pages_', $this->_oModel->oPagination->showPages('/' . $this->_aRequest['controller']));
+      $this->oSmarty->assign('_pages_', $this->_oModel->oPagination->showPages('/' . $this->_sController));
     }
 
     $this->oSmarty->setTemplateDir($sTemplateDir);
@@ -112,7 +112,7 @@ class Galleries extends Main {
    *
    */
   protected function _showAlbum() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'files');
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'files');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'files');
 
     # Collect data array
@@ -142,13 +142,13 @@ class Galleries extends Main {
    *
    */
   protected function _showImage() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'image');
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'image');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'image');
 
     $aData = $this->_oModel->getFileData($this->_iId);
 
     # Absolute URL for image information
-    $sUrl = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_aRequest['controller'] . '/' . $this->_aRequest['album_id'] .
+    $sUrl = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $this->_aRequest['album_id'] .
                     '/popup/' . $aData['file']);
 
     if (file_exists($sUrl) || WEBSITE_MODE == 'test') {
@@ -179,29 +179,7 @@ class Galleries extends Main {
    *
    */
   protected function _showFormTemplate() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], '_form_album');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form_album');
-
-    if ($this->_iId) {
-      $aData = $this->_oModel->getData($this->_iId, true);
-
-      $this->setTitle(I18n::get('galleries.albums.title.update', $aData['title']));
-    }
-    else {
-      $aData['title']    = isset($this->_aRequest['title']) ? $this->_aRequest['title'] : '';
-      $aData['content']  = isset($this->_aRequest['content']) ? $this->_aRequest['content'] : '';
-
-      $this->setTitle(I18n::get('galleries.albums.title.create'));
-    }
-
-    foreach ($aData as $sColumn => $sData)
-      $this->oSmarty->assign($sColumn, $sData);
-
-    if ($this->_aError)
-      $this->oSmarty->assign('error', $this->_aError);
-
-    $this->oSmarty->setTemplateDir($sTemplateDir);
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return parent::_showFormTemplate('_form_album', 'galleries.albums.title');
   }
 
   /**
@@ -218,13 +196,13 @@ class Galleries extends Main {
       return $this->_showFormTemplate();
 
     elseif ($this->_oModel->create() === true) {
-      $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
+      $this->oSmarty->clearCacheForController($this->_sController);
       $this->oSmarty->clearCacheForController('searches');
       $this->oSmarty->clearCacheForController('rss');
       $this->oSmarty->clearCacheForController('sitemaps');
 
       $iId    = $this->_oModel->getLastInsertId('gallery_albums');
-      $sPath  = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_aRequest['controller'] . '/' . $iId);
+      $sPath  = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $iId);
 
       # Create missing thumb folders.
       $aThumbs = array('32', 'thumbnail', 'popup', 'original');
@@ -233,15 +211,15 @@ class Galleries extends Main {
           mkdir($sPath . '/' . $sFolder, 0755, true);
       }
 
-      Logs::insert( $this->_aRequest['controller'],
+      Logs::insert( $this->_sController,
                     $this->_aRequest['action'],
                     $iId,
                     $this->_aSession['user']['id']);
 
-      return Helper::successMessage(I18n::get('success.create'), '/' . $this->_aRequest['controller'] . '/' . $iId);
+      return Helper::successMessage(I18n::get('success.create'), '/' . $this->_sController . '/' . $iId);
     }
     else
-      return Helper::errorMessage(I18n::get('error.sql'), '/' . $this->_aRequest['controller']);
+      return Helper::errorMessage(I18n::get('error.sql'), '/' . $this->_sController);
   }
 
   /**
@@ -253,8 +231,8 @@ class Galleries extends Main {
    * @see vendor/candyCMS/core/helper/Image.helper.php
    *
    */
-  protected function _showFormFileTemplate() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], '_form_file');
+  protected function _showFormFileTemplates() {
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, '_form_file');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form_file');
 
     # Update
@@ -280,6 +258,10 @@ class Galleries extends Main {
 
     $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+  }
+
+  protected function _showFormFileTemplate() {
+    return parent::_showFormTemplate('_form_file', I18n::get('galleries.files.title'));
   }
 
   /**
@@ -335,20 +317,20 @@ class Galleries extends Main {
                 false;
 
       if ($bReturnValue) {
-        $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
+        $this->oSmarty->clearCacheForController($this->_sController);
         $this->oSmarty->clearCacheForController('rss');
 
         # Log uploaded image. Request ID = album id
-        Logs::insert( $this->_aRequest['controller'],
+        Logs::insert( $this->_sController,
                       'createfile',
                       (int) $this->_aRequest['id'],
                       $this->_aSession['user']['id']);
 
-        return Helper::successMessage(I18n::get('success.file.upload'), '/' . $this->_aRequest['controller'] .
+        return Helper::successMessage(I18n::get('success.file.upload'), '/' . $this->_sController .
                         '/' . $this->_iId);
       }
       else
-        return Helper::errorMessage(I18n::get('error.file.upload'), '/' . $this->_aRequest['controller'] .
+        return Helper::errorMessage(I18n::get('error.file.upload'), '/' . $this->_sController .
                       '/' . $this->_iId . '/createfile');
     }
   }
@@ -364,7 +346,7 @@ class Galleries extends Main {
    */
   public function updateFile() {
     if ($this->_aSession['user']['role'] < 3)
-      return Helper::errorMessage(I18n::get('error.missing.permission'), '/' . $this->_aRequest['controller']);
+      return Helper::errorMessage(I18n::get('error.missing.permission'), '/' . $this->_sController);
 
     else
       return isset($this->_aRequest['updatefile_galleries']) ?
@@ -386,13 +368,13 @@ class Galleries extends Main {
       return $this->_showFormFileTemplate();
 
     $aDetails = $this->_oModel->getFileData($this->_iId);
-    $sRedirectPath = '/' . $this->_aRequest['controller'] . '/' . $aDetails['album_id'];
+    $sRedirectPath = '/' . $this->_sController . '/' . $aDetails['album_id'];
 
     if ($this->_oModel->updateFile($this->_iId) === true) {
-      $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
+      $this->oSmarty->clearCacheForController($this->_sController);
       $this->oSmarty->clearCacheForController('rss');
 
-      Logs::insert(  $this->_aRequest['controller'],
+      Logs::insert(  $this->_sController,
                     $this->_aRequest['action'],
                     (int) $this->_aRequest['id'],
                     $this->_aSession['user']['id']);
@@ -415,7 +397,7 @@ class Galleries extends Main {
 
     if ($this->_aSession['user']['role'] < 3)
       return Helper::errorMessage(I18n::get('error.missing.permission'), '/' .
-              $this->_aRequest['controller'] . '/' . $aDetails['album_id']);
+              $this->_sController . '/' . $aDetails['album_id']);
 
     else
       return $this->_destroyFile();
@@ -432,20 +414,20 @@ class Galleries extends Main {
     $aDetails = $this->_oModel->getFileData($this->_iId);
 
     if ($this->_oModel->destroyFile($this->_iId) === true) {
-      $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
+      $this->oSmarty->clearCacheForController($this->_sController);
       $this->oSmarty->clearCacheForController('rss');
 
-      Logs::insert( $this->_aRequest['controller'],
+      Logs::insert( $this->_sController,
                     $this->_aRequest['action'],
                     (int) $this->_iId,
                     $this->_aSession['user']['id']);
 
       unset($this->_iId);
-      return Helper::successMessage(I18n::get('success.destroy'), '/' . $this->_aRequest['controller'] . '/' .
+      return Helper::successMessage(I18n::get('success.destroy'), '/' . $this->_sController . '/' .
               $aDetails['album_id']);
     }
     else
-      return Helper::errorMessage(I18n::get('error.sql'), '/' . $this->_aRequest['controller'] . '/' .
+      return Helper::errorMessage(I18n::get('error.sql'), '/' . $this->_sController . '/' .
               $aDetails['album_id']);
 }
 

@@ -219,7 +219,7 @@ abstract class Main {
    *
    */
   public function __init($sController = '') {
-    $sModel = $this->__autoload($sController ? $sController : $this->_aRequest['controller'], true);
+    $sModel = $this->__autoload($sController ? $sController : $this->_sController, true);
 
     if ($sModel)
       $this->_oModel = new $sModel($this->_aRequest, $this->_aSession);
@@ -269,7 +269,7 @@ abstract class Main {
   public function getDescription() {
     if(!$this->_sDescription) {
       # Show default description if this is our landing page or we got no descrption.
-      if ($this->_aRequest['controller'] == $this->_aSession['routes']['/'])
+      if ($this->_sController == $this->_aSession['routes']['/'])
         $this->setDescription(I18n::get('website.description'));
 
       elseif (!$this->_sDescription)
@@ -323,11 +323,11 @@ abstract class Main {
    */
   public function getTitle() {
     if(!$this->_sTitle) {
-      if ($this->_aRequest['controller'] == 'errors')
+      if ($this->_sController == 'errors')
         $this->setTitle(I18n::get('error.' . $this->_aRequest['id'] . '.title'));
 
       else
-        $this->setTitle(I18n::get('global.' . strtolower(Helper::singleize($this->_aRequest['controller']))));
+        $this->setTitle(I18n::get('global.' . strtolower(Helper::singleize($this->_sController))));
     }
 
     return $this->_sTitle;
@@ -503,18 +503,23 @@ abstract class Main {
    * Build form template to create or update an entry.
    *
    * @access protected
+   * @param string $sTemplateName name of form template
+   * @param string $sTitle title to show
    * @return string HTML content
    *
    */
-  protected function _showFormTemplate() {
-    $sTemplateDir  = Helper::getTemplateDir($this->_sController, '_form');
-    $sTemplateFile = Helper::getTemplateType($sTemplateDir, '_form');
+  protected function _showFormTemplate($sTemplateName = '_form', $sTitle = '') {
+    $sTemplateDir  = Helper::getTemplateDir($this->_sController, $sTemplateName);
+    $sTemplateFile = Helper::getTemplateType($sTemplateDir, $sTemplateName);
 
     if ($this->_iId) {
       $aData = $this->_oModel->getData($this->_iId, true);
 
-      if (isset($aData['title']))
-        $this->setTitle($aData['title']);
+      if ($sTitle && isset($aData['title']))
+        $this->setTitle(vsprintf(I18n::get($sTitle . '.update'), $aData['title']));
+
+      elseif (isset($aData['title']))
+        $this->setTitle(vsprintf(I18n::get($this->_sController . '.title.update'), $aData['title']));
 
       foreach ($aData as $sColumn => $sData)
         $this->oSmarty->assign($sColumn, $sData);
@@ -522,6 +527,12 @@ abstract class Main {
     else {
       foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
         $this->oSmarty->assign($sInput, $sData);
+
+      if ($sTitle)
+        $this->setTitle(I18n::get($sTitle . '.create'));
+
+      else
+        $this->setTitle(I18n::get($this->_sController . '.title.create'));
     }
 
     if ($this->_aError)
@@ -565,22 +576,22 @@ abstract class Main {
       return $this->_showFormTemplate();
 
     elseif ($this->_oModel->create() === true) {
-      $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
+      $this->oSmarty->clearCacheForController($this->_sController);
 
       # clear additional caches if given
       if ($mAdditionalCaches)
         $this->_clearCaches($mAdditionalCaches);
 
-      Logs::insert( $this->_aRequest['controller'],
+      Logs::insert( $this->_sController,
                     $this->_aRequest['action'],
-                    $this->_oModel->getLastInsertId($this->_aRequest['controller']),
+                    $this->_oModel->getLastInsertId($this->_sController),
                     $this->_aSession['user']['id']);
 
-      return Helper::successMessage(I18n::get('success.create'), '/' . $this->_aRequest['controller']);
+      return Helper::successMessage(I18n::get('success.create'), '/' . $this->_sController);
     }
 
     else
-      return Helper::errorMessage(I18n::get('error.sql.query'), '/' . $this->_aRequest['controller']);
+      return Helper::errorMessage(I18n::get('error.sql.query'), '/' . $this->_sController);
   }
 
   /**
@@ -597,21 +608,21 @@ abstract class Main {
     $this->_setError('title');
 
     # Bugfix: Don't download download file on update.
-    $sRedirectURL = $this->_aRequest['controller'] == 'downloads' ?
-            '/' . $this->_aRequest['controller'] :
-            '/' . $this->_aRequest['controller'] . '/' . (int) $this->_aRequest['id'];
+    $sRedirectURL = $this->_sController == 'downloads' ?
+            '/' . $this->_sController :
+            '/' . $this->_sController . '/' . (int) $this->_aRequest['id'];
 
     if ($this->_aError)
       return $this->_showFormTemplate();
 
     elseif ($this->_oModel->update((int) $this->_aRequest['id']) === true) {
-      $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
+      $this->oSmarty->clearCacheForController($this->_sController);
 
       # Clear additional caches if given
       if ($mAdditionalCaches)
         $this->_clearCaches($mAdditionalCaches);
 
-      Logs::insert( $this->_aRequest['controller'],
+      Logs::insert( $this->_sController,
                     $this->_aRequest['action'],
                     (int) $this->_aRequest['id'],
                     $this->_aSession['user']['id']);
@@ -635,22 +646,22 @@ abstract class Main {
    */
   protected function _destroy($mAdditionalCaches = null) {
     if ($this->_oModel->destroy($this->_iId) === true) {
-      $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
+      $this->oSmarty->clearCacheForController($this->_sController);
 
       # Clear additional caches if given
       if ($mAdditionalCaches)
         $this->_clearCaches($mAdditionalCaches);
 
-      Logs::insert( $this->_aRequest['controller'],
+      Logs::insert( $this->_sController,
                     $this->_aRequest['action'],
                     (int) $this->_iId,
                     $this->_aSession['user']['id']);
 
-      return Helper::successMessage(I18n::get('success.destroy'), '/' . $this->_aRequest['controller']);
+      return Helper::successMessage(I18n::get('success.destroy'), '/' . $this->_sController);
     }
 
     else
-      return Helper::errorMessage(I18n::get('error.sql'), '/' . $this->_aRequest['controller']);
+      return Helper::errorMessage(I18n::get('error.sql'), '/' . $this->_sController);
   }
 
   /**
