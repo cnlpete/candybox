@@ -7,14 +7,14 @@ PRODID:{$WEBSITE_URL}
 {foreach $c.dates as $d}
 BEGIN:VEVENT
 UID:{$d.id}
-CREATED:{$d.date_raw|date_format:"%Y%m%dT%H%M%SZ"}
+CREATED:{$d.date.w3c}
 SUMMARY:{$d.title}
 DESCRIPTION:{$d.content}
 DTSTART;VALUE=DATE:{$d.start_date_raw|date_format:"%Y%m%d"}
 DTEND;VALUE=DATE:{if $d.end_date_raw > 0}{($d.end_date_raw+86400)|date_format:"%Y%m%d"}
 {else}{($d.start_date_raw+86400)|date_format:"%Y%m%d"}
 {/if}
-DTSTAMP:{$d.date_raw|date_format:"%Y%m%dT%H%M%SZ"}
+DTSTAMP:{$d.date.w3c}
 END:VEVENT
 {/foreach}
 {/foreach}

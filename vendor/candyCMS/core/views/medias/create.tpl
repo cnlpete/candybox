@@ -8,7 +8,16 @@
         action='/{$_REQUEST.controller}/{if isset($_REQUEST.id)}{$_REQUEST.id}/{/if}{$_REQUEST.action}'>
     <div class='control-group'>
       <label for='input-file' class='control-label'>
-        {$lang.medias.label.choose} <span title='{$lang.global.required}'>*</span>
+        {$lang.medias.label.choose} <span title='{$lang.global.required}'>*</span><br />
+        <small>
+          {if $_SYSTEM.maximumUploadSize.raw <= 1536}
+            {$_SYSTEM.maximumUploadSize.b|string_format: $lang.global.upload.maxsize}
+          {elseif $_SYSTEM.maximumUploadSize.raw <= 1572864}
+            {$_SYSTEM.maximumUploadSize.kb|string_format: $lang.global.upload.maxsize}
+          {else}
+            {$_SYSTEM.maximumUploadSize.mb|string_format: $lang.global.upload.maxsize}
+          {/if}
+        </small>
       </label>
       <div class='controls'>
 
@@ -48,6 +57,11 @@
     $("input[type='submit']").click(function() {
       $(this).val(lang.loading);
       $('#js-loading').html("<img src='{$_PATH.images}/candy.global/loading.gif' alt='' + lang.loading + '' widht='32' height='32 />");
+    });
+    $('#input-file').change(function() {
+      checkFileSize($(this),
+        {$_SYSTEM.maximumUploadSize.raw},
+        '{$_SYSTEM.maximumUploadSize.mb|string_format: $lang.error.file.size}');
     });
   </script>
 {/strip}

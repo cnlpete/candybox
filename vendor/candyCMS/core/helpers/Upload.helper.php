@@ -78,6 +78,38 @@ class Upload {
   }
 
   /**
+   * get the maximum upload Limit allowed by php.ini
+   *
+   * @return integer the upload limit in bytes
+   *
+   */
+  public static function getUploadLimit($bToBytes = true) {
+    $iMaxUpload = (int)(ini_get('upload_max_filesize'));
+    $iMaxPost = (int)(ini_get('post_max_size'));
+    $iMemoryLimit = (int)(ini_get('memory_limit'));
+    // 1024 * 1024 = 1048576
+    return min($iMaxUpload, $iMaxPost, $iMemoryLimit) * ($bToBytes ? 1048576 : 1);
+  }
+
+  /**
+   * get the filesize of the about to be uploaded files
+   *
+   * @return integer the total file size
+   */
+  public function getFileSize() {
+    $sType = isset($this->_aFile['image']) ? 'image' : 'file';
+
+    $iFileSize = 0;
+    if (is_array($this->_aFile[$sType]['name']))
+      foreach ($this->_aFile[$sType]['size'] as $iSize)
+        $iFileSize += $iSize;
+    else
+      $iFileSize = $this->_aFile[$sType]['size'];
+
+    return $iFileSize > 0 ? $iFileSize : (self::getUploadLimit() + 1);
+  }
+
+  /**
    * Rename files (if chosen) and upload them afterwards to predefined folder.
    *
    * @access public
@@ -93,6 +125,11 @@ class Upload {
     if (isset($this->_aFile[$sType]) && !empty($this->_aFile[$sType]['name'][0])) {
       $bIsArray = is_array($this->_aFile[$sType]['name']);
       $iFileCount = $bIsArray ? count($this->_aFile[$sType]['name']) : 1;
+
+      // stores the total size of files to upload in bytes
+      if ($this->getFileSize() > self::getUploadLimit()) {
+        throw new \Exception(I18n::get('error.file.size', self::getUploadLimit(false) . 'MB'));
+      }
 
       $bReturn = array();
       for ($iI = 0; $iI < $iFileCount; $iI++) {
@@ -142,32 +179,34 @@ class Upload {
             $sResize :
             $this->_aRequest[$this->_sController]['cut'];
 
-    $sUploadFolder = 'galleries/' . (int) $this->_aRequest['id'];
-    $aUploads = $this->uploadFiles($sUploadFolder . '/original', true);
+    if ($this->getFileSize() > self::getUploadLimit())
+      throw new \Exception(I18n::get('error.file.size', self::getUploadLimit(false) . 'MB'));
 
-    # Do cuts and or resizes
-    for ($iI = 0; $iI < count($aUploads); $iI++) {
-      if ($aUploads[$iI] === true) {
-        $oImage = new Image($this->_sFileNames[$iI],
-                            $sUploadFolder,
-                            $this->aFilePaths[$iI],
-                            $this->_sFileExtensions[$iI]);
+    else {
+      $aUploads = $this->uploadFiles($this->_sUploadFolder . '/original', true);
 
-        if (isset($this->_aRequest[$this->_sController]['cut']) && 'c' == $this->_aRequest[$this->_sController]['cut'])
-          $oImage->resizeAndCut(THUMB_DEFAULT_X, 'thumbnail');
+      # Do cuts and or resizes
+      $iFileCount = count($aUploads);
+      for ($iI = 0; $iI < $iFileCount; $iI++) {
+        if ($aUploads[$iI] === true) {
+          $oImage = new Image($this->_sFileNames[$iI], $this->_sUploadFolder, $this->sFilePaths[$iI], $this->_sFileExtensions[$iI]);
 
-        elseif (isset($this->_aRequest[$this->_sController]['cut']) && 'r' == $this->_aRequest[$this->_sController]['cut'])
-          $oImage->resizeDefault(THUMB_DEFAULT_X, THUMB_DEFAULT_Y, 'thumbnail');
+          if (isset($this->_aRequest['cut']) && 'c' == $this->_aRequest['cut'])
+            $oImage->resizeAndCut(THUMB_DEFAULT_X, 'thumbnail');
 
-        else
-          throw new Exception('No resizing information!');
+          elseif (isset($this->_aRequest['cut']) && 'r' == $this->_aRequest['cut'])
+            $oImage->resizeDefault(THUMB_DEFAULT_X, THUMB_DEFAULT_Y, 'thumbnail');
 
-        $oImage->resizeDefault(POPUP_DEFAULT_X, POPUP_DEFAULT_Y, 'popup');
-        $oImage->resizeAndCut('32');
+          else
+            throw new Exception('No resizing information!');
+
+          $oImage->resizeDefault(POPUP_DEFAULT_X, POPUP_DEFAULT_Y, 'popup');
+          $oImage->resizeAndCut('32');
+        }
       }
-    }
 
-    return $aUploads;
+      return $aUploads;
+    }
   }
 
   /**
@@ -184,8 +223,8 @@ class Upload {
             (int) $this->_aRequest['id'] :
             $this->_aSession['user']['id'];
 
-    if ($this->_aFile['image']['size'] > 409600)
-      return Helper::errorMessage(LANG_ERROR_MEDIA_MAX_FILESIZE_REACHED);
+    if ($this->getFileSize() > self::getUploadLimit())
+      throw new \Exception(I18n::get('error.file.size', self::getUploadLimit(false) . 'MB'));
 
     else {
       $this->destroyAvatarFiles($this->_aRequest['rename']);

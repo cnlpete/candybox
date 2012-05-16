@@ -58,8 +58,7 @@ class WebTestOfBlogController extends CandyWebTest {
 
 	function testShowEntryUnpublished() {
 		$this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/2'));
-		$this->assertResponse(200);
-    $this->assertText(I18n::get('error.404.title'));
+		$this->assert404();
 	}
 
   function testShowEntryUnpublishedWithAPIToken() {
@@ -78,8 +77,7 @@ class WebTestOfBlogController extends CandyWebTest {
   function testShowEntryWithDifferentLanguage() {
     # Entry is not listed...
 		$this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/page/3'));
-		$this->assertResponse(200);
-    $this->assertText(I18n::get('error.404.title'));
+		$this->assert404();
 
     # ...but we can access it directly.
 		$this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/4'));

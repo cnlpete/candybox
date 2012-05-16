@@ -63,15 +63,15 @@ class Image {
    *
    * @access public
    * @param string $sId name of the file
-   * @param string $sFolder folder to upload image to. Normally the controller name.
-   * @param string $sOriginalPath path of the image to clone from
+   * @param string $sUploadDir folder to upload image to. Normally the controller name. For gallery use "gallery/id_of_gallery".
+   * @param string $sOriginalPath path of the image to clone from incl. file name
    * @param string $sImgType type of image
    *
    */
   public function __construct($sId, $sUploadDir, $sOriginalPath, $sImgType = 'jpg') {
     $this->_sId           = & $sId;
-    $this->_sOriginalPath = & $sOriginalPath;
     $this->_sUploadDir    = & $sUploadDir;
+    $this->_sOriginalPath = & $sOriginalPath;
     $this->_sImgType      = & $sImgType;
     $this->_aInfo         = getimagesize($this->_sOriginalPath);
 

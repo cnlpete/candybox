@@ -27,9 +27,10 @@ class Blogs extends Main {
   protected function _show() {
     $sTemplateDir  = Helper::getTemplateDir($this->_aRequest['controller'], 'show');
     $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'show');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if ($this->_iId) {
-      $this->_aData = $this->_oModel->getData($this->_iId);
+      $this->_aData = $this->_oModel->getId($this->_iId);
 
       if (!$this->_aData[1]['id'])
         return Helper::redirectTo('/errors/404');
@@ -40,11 +41,14 @@ class Blogs extends Main {
 
       $this->oSmarty->assign('blogs', $this->_aData);
       $this->oSmarty->assign('_blog_footer_', $oComments->show());
+
+      # Bugfix: This is necessary, because comments does a setDir on the singleton object aswell.
+      $this->oSmarty->setTemplateDir($sTemplateDir);
     }
 
     else {
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-        $this->_aData = $this->_oModel->getData();
+        $this->_aData = $this->_oModel->getOverview();
 
         $this->oSmarty->assign('blogs', $this->_aData);
         $this->oSmarty->assign('_blog_footer_', $this->_oModel->oPagination->showSurrounding());
@@ -55,7 +59,6 @@ class Blogs extends Main {
     $this->setKeywords($this->_setBlogsKeywords());
     $this->setTitle($this->_setBlogsTitle());
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -131,7 +134,7 @@ class Blogs extends Main {
   protected function _showFormTemplate() {
     # Get available languages.
     $this->oSmarty->assign('languages', self::getLanguages());
-    $this->oSmarty->assign('_tags_', $this->_oModel->getTypeaheadData('blogs', 'tags', true));
+    $this->oSmarty->assign('_tags_', $this->_oModel->getTypeaheadData($this->_sController, 'tags', true));
 
     return parent::_showFormTemplate();
   }

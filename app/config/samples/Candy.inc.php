@@ -100,19 +100,6 @@ define('DEFAULT_LANGUAGE', 'en');
 
 # ------------------------------------------------------------------------------
 
-# Set the standard date format (http://php.net/strftime)
-# DEFAULT: '%d.%m.%Y'
-define('DEFAULT_DATE_FORMAT', '%d.%m.%Y');
-
-# ------------------------------------------------------------------------------
-
-# Set the standard time format (with seperator - if wanted)
-# (http://php.net/strftime)
-# DEFAULT: ', %H:%M %p'
-define('DEFAULT_TIME_FORMAT', '%H:%M %p');
-
-# ------------------------------------------------------------------------------
-
 # Enter a random hash to higher the security of md5 hashs
 # DEFAULT: None. Create one before you install this software
 # NOTE: AVOID THE CHANGE OF THIS HASH AFTER USERS HAVE REGISTERED OR YOU WILL
@@ -206,5 +193,9 @@ define('MAILCHIMP_API_KEY', '');
 # grab your List's Unique Id by going to http://admin.mailchimp.com/lists/
 # Click the "settings" link for the list - the Unique Id is at the bottom of that page.
 define('MAILCHIMP_LIST_ID', '');
+
+# should the user be redirected, if he tries to access old links ('/blog, /gallery, ...)
+# DEFAULT: false
+define('CHECK_OLD_LINKS', false);
 
 ?>

@@ -74,8 +74,17 @@ class Dispatcher {
       }
     }
     catch (AdvancedException $e) {
-      AdvancedException::reportBoth($e->getMessage());
-      Helper::redirectTo('/errors/404');
+      if (defined('CHECK_OLD_LINKS') && CHECK_OLD_LINKS === true &&
+              Helper::pluralize($sController) !== $sControllerSingular) {
+        $sPluralizedController = Helper::pluralize($sController);
+
+        $sUrl = $_SERVER['REQUEST_URI'];
+        $sUrl = str_replace(strtolower($sController), strtolower($sPluralizedController), $sUrl);
+        Helper::warningMessage(I18n::get('error.302.info', $sUrl), $sUrl);
+      } else {
+        AdvancedException::reportBoth($e->getMessage());
+        Helper::redirectTo('/errors/404');
+      }
     }
 
     $this->oController->__init();

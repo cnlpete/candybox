@@ -20,86 +20,105 @@ use PDO;
 class Contents extends Main {
 
   /**
-   * Get content entry or content overview data. Depends on available ID.
+   * Get content overview data.
    *
    * @access public
-   * @param integer $iId ID to load data from. If empty, show overview.
-   * @param boolean $bUpdate prepare data for update
    * @param integer $iLimit blog post limit
    * @return array $this->_aData
    * @todo pagination
    *
    */
-  public function getData($iId = '', $bUpdate = false, $iLimit = 100) {
+  public function getOverview($iLimit = 100) {
     $aInts  = array('id', 'uid', 'author_id');
     $aBools = array('published');
 
     $iPublished = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ? 0 : 1;
 
-    if (empty($iId)) {
-      try {
-        $oQuery = $this->_oDb->prepare("SELECT
-                                          c.*,
-                                          u.id AS user_id,
-                                          u.name AS user_name,
-                                          u.surname AS user_surname,
-                                          u.email AS user_email
-                                        FROM
-                                          " . SQL_PREFIX . "contents c
-                                        LEFT JOIN
-                                          " . SQL_PREFIX . "users u
-                                        ON
-                                          c.author_id=u.id
-                                        WHERE
-                                          published >= :published
-                                        ORDER BY
-                                          c.title ASC
-                                        LIMIT
-                                          :limit");
+    try {
+      $oQuery = $this->_oDb->prepare("SELECT
+                                        c.*,
+                                        u.id AS user_id,
+                                        u.name AS user_name,
+                                        u.surname AS user_surname,
+                                        u.email AS user_email
+                                      FROM
+                                        " . SQL_PREFIX . "contents c
+                                      LEFT JOIN
+                                        " . SQL_PREFIX . "users u
+                                      ON
+                                        c.author_id=u.id
+                                      WHERE
+                                        published >= :published
+                                      ORDER BY
+                                        c.title ASC
+                                      LIMIT
+                                        :limit");
 
-        $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
-        $oQuery->bindParam('limit', $iLimit, PDO::PARAM_INT);
-        $oQuery->execute();
+      $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
+      $oQuery->bindParam('limit', $iLimit, PDO::PARAM_INT);
+      $oQuery->execute();
 
-        $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
-      }
-      catch (\PDOException $p) {
-        AdvancedException::reportBoth('0024 - ' . $p->getMessage());
-        exit('SQL error.');
-      }
+      $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     }
-    else {
-      try {
-        $oQuery = $this->_oDb->prepare("SELECT
-                                          c.*,
-                                          u.id AS user_id,
-                                          u.name AS user_name,
-                                          u.surname AS user_surname,
-                                          u.email AS user_email
-                                        FROM
-                                          " . SQL_PREFIX . "contents c
-                                        LEFT JOIN
-                                          " . SQL_PREFIX . "users u
-                                        ON
-                                          c.author_id=u.id
-                                        WHERE
-                                          c.id = :id
-                                        AND
-                                          published >= :published
-                                        LIMIT
-                                          1");
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0024 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
 
-        $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
-        $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
-        $oQuery->execute();
+    foreach ($aResult as $aRow) {
+      $iId = $aRow['id'];
 
-        # Bugfix: Give array to template to enable a loop.
-        $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
-      }
-      catch (\PDOException $p) {
-        AdvancedException::reportBoth('0025 - ' . $p->getMessage());
-        exit('SQL error.');
-      }
+      $this->_aData[$iId] = $this->_formatForOutput($aRow, $aInts, $aBools, 'contents');
+    }
+
+    return $this->_aData;
+  }
+
+  /**
+   * Get content entry data.
+   *
+   * @access public
+   * @param integer $iId ID to load data from. If empty, show overview.
+   * @param boolean $bUpdate prepare data for update
+   * @return array $this->_aData
+   *
+   */
+  public function getId($iId = '', $bUpdate = false) {
+    $aInts  = array('id', 'uid', 'author_id');
+    $aBools = array('published');
+
+    $iPublished = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ? 0 : 1;
+
+    try {
+      $oQuery = $this->_oDb->prepare("SELECT
+                                        c.*,
+                                        u.id AS user_id,
+                                        u.name AS user_name,
+                                        u.surname AS user_surname,
+                                        u.email AS user_email
+                                      FROM
+                                        " . SQL_PREFIX . "contents c
+                                      LEFT JOIN
+                                        " . SQL_PREFIX . "users u
+                                      ON
+                                        c.author_id=u.id
+                                      WHERE
+                                        c.id = :id
+                                      AND
+                                        published >= :published
+                                      LIMIT
+                                        1");
+
+      $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
+      $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
+      $oQuery->execute();
+
+      # Bugfix: Give array to template to enable a loop.
+      $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0025 - ' . $p->getMessage());
+      exit('SQL error.');
     }
 
     foreach ($aResult as $aRow) {

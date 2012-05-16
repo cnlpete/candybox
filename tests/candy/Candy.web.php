@@ -61,7 +61,7 @@ abstract class CandyWebTest extends WebTestCase {
 
   function assert404() {
     $this->assertText(I18n::get('error.404.title'));
-    # $this->assertResponse(404);
+    $this->assertResponse(404);
   }
 
   function loginAsUserWithRole($role = 4) {

@@ -32,7 +32,7 @@ define('UNIQUE_ID', 'tests');
 define('VERSION', '0');
 define('TESTFILE', '/private/var/tmp/test'.md5(time()));
 define('WEBSITE_LOCALE', 'en_US');
-define('WEBSITE_LANGUAGE', 'en');
+define('WEBSITE_LANGUAGE', DEFAULT_LANGUAGE);
 define('EXTENSION_CHECK', ALLOW_EXTENSIONS === true || WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test');
 
 setlocale(LC_ALL, WEBSITE_LOCALE);
@@ -45,6 +45,9 @@ class AllFileTests extends TestSuite {
 
     if (WEBSITE_MODE !== 'test')
       die('not in testing mode');
+
+    else if (DEFAULT_LANGUAGE !== 'en')
+      die('language not set to "en"');
 
     else {
       new \CandyCMS\Core\Helpers\I18n(WEBSITE_LANGUAGE, $_SESSION);

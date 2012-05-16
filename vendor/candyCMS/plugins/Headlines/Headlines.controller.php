@@ -48,7 +48,7 @@ final class Headlines {
       $sBlogsModel = \CandyCMS\Core\Models\Main::__autoload('Blogs');
       $oModel = new $sBlogsModel($aRequest, $aSession);
 
-      $oSmarty->assign('data', $oModel->getData('', false, PLUGIN_HEADLINES_LIMIT));
+      $oSmarty->assign('data', $oModel->getOverview(PLUGIN_HEADLINES_LIMIT));
     }
 
     return $oSmarty->fetch($sTemplateFile, $sCacheId);

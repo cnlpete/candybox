@@ -58,6 +58,44 @@ function countCharLength(sDiv, iLen) {
   $(sDiv).next().html(iLength);
 }
 
+/* calculate the totalUploadSize */
+function getSizeOfFiles(fileInput) {
+  if (typeof window.FileReader !== 'function' || !fileInput.files || !fileInput.files[0]) {
+    return 0;
+  }
+  var iFileSize = 0;
+  var iLength = fileInput.files.length;
+  for (var index = 0; index < iLength; index++) {
+    iFileSize = iFileSize + fileInput.files[index].size;
+  }
+  return iFileSize;
+}
+
+function checkFileSize(fileInput, iMaxFileSize, sMessage) {
+  var iFileSize     = getSizeOfFiles(fileInput[0]);
+  var jControlGroup = fileInput.closest('.control-group');
+  var jHelpId       = 'file-input-help';
+
+  if (iFileSize > iMaxFileSize) {
+    jControlGroup.addClass('alert alert-error');
+    if ($('#' + jHelpId).length) {
+      $('#' + jHelpId).removeClass('invisible');
+    }
+    else {
+      var jHelp = $('<span class="help-inline" id="' + jHelpId + '">' + sMessage + '</span>');
+      fileInput.after(jHelp);
+    }
+  }
+  else {
+    $('#' + jHelpId).fadeOut(function() {
+      $(this).remove();
+      if (!jControlGroup.find('.help-inline').length) {
+         jControlGroup.removeClass('alert alert-error');
+      }
+    });
+  }
+}
+
 /* Show success and error messages */
 if($('#js-flash_success') || $('#js-flash_error')) {
   show('#js-flash_message');

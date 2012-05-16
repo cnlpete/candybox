@@ -42,7 +42,7 @@ class Galleries extends Main {
    *
    */
   public function getData($iId = '', $bUpdate = false, $bAdvancedImageInformation = false, $iLimit = LIMIT_ALBUMS) {
-    $aInts = array('id', 'author_id', 'uid', 'files_sum');
+    $aInts = array('id', 'user_id', 'files_sum');
 
     $sWhere   = '';
     $iResult  = 0;

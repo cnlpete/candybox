@@ -599,16 +599,16 @@ abstract class Main {
    *
    * @access protected
    * @param string|array $mAdditionalCaches specify aditional caches to clear on success
+   * @param string $sRedirectURL specify the URL to redirect to after execution
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _update($mAdditionalCaches = null) {
+  protected function _update($mAdditionalCaches = null, $sRedirectURL = '') {
     $this->_setError('title');
 
-    # Bugfix: Don't download download file on update. Note: this is already fixed in 2.1-branch
-    $sRedirectURL = $this->_sController == 'downloads' ?
-            '/' . $this->_sController :
-            '/' . $this->_sController . '/' . (int) $this->_aRequest['id'];
+    $sRedirectURL = empty($sRedirectURL) ?
+            '/' . $this->_aRequest['controller'] . '/' . (int) $this->_aRequest['id'] :
+            $sRedirectURL;
 
     if ($this->_aError)
       return $this->_showFormTemplate();

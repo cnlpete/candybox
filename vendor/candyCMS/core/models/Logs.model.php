@@ -29,7 +29,7 @@ class Logs extends Main {
    * @return array $this->_aData
    *
    */
-  public function getData($iLimit = 100) {
+  public function getOverview($iLimit = 100) {
     try {
       $oQuery = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "logs");
       $iResult = $oQuery->fetchColumn();
@@ -74,8 +74,8 @@ class Logs extends Main {
       $iId = $aRow['id'];
 
       $this->_aData[$iId] = $this->_formatForOutput($aRow, array('id', 'uid', 'user_id', 'action_id'));
-      $this->_aData[$iId]['time_start'] = & Helper::formatTimestamp($aRow['time_start']);
-      $this->_aData[$iId]['time_end']   = & Helper::formatTimestamp($aRow['time_end']);
+      $this->_formatDates($this->_aData[$iId], 'time_start');
+      $this->_formatDates($this->_aData[$iId], 'time_end');
     }
 
     return $this->_aData;

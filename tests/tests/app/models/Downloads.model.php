@@ -49,8 +49,8 @@ class UnitTestOfDownloadModel extends CandyUnitTest {
   }
 
   function testGetData() {
-    $this->assertIsA($this->oObject->getData(1), 'array');
-    $this->assertIsA($this->oObject->getData(), 'array');
+    $this->assertIsA($this->oObject->getId(1), 'array');
+    $this->assertIsA($this->oObject->getOverview(), 'array');
   }
 
   function testUpdate() {

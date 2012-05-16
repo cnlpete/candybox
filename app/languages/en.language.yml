@@ -126,9 +126,11 @@ global:
     terms: Terms
     read: Read the terms?
   time:
-    am: am
-    pm: pm
     time: Time
+    format: #set the standard date format (http://php.net/strftime)
+      date: %m/%d/%Y
+      time: %I:%M %p
+      datetime: %m/%d/%Y, %I:%M %p
   title: Title
   today: Today
   update:
@@ -139,6 +141,7 @@ global:
   upload:
     at: Uploaded at
     upload: Upload
+    maxsize: 'Maximum filesize: %s'
   user:
     role: Userright
     roles:
@@ -180,6 +183,8 @@ success:
     verification: Thank you. Your email has been verified!
 
 error:
+  302:
+    info: The requested URL has moved to %s.
   404:
     info: The requested URL was not found. Either you clicked on a faulty link, the page has been deleted or the URL has been entered incorrectly.
     title: Error 404
@@ -188,7 +193,7 @@ error:
     loading: Captcha could not be loaded, please activate Javascript!
   file:
     destroy: This file could not be deleted!
-    size: Your file is bigger than 400KB!
+    size: Your file is bigger than %s!
     type: You uploaded an illegal filetype. Only *.jpg is allowed!
     upload: An error occured during upload.
   form:
@@ -327,7 +332,7 @@ mails:
     show: Write a mail to %s.
   success_page:
     title: "Thank you for your contact!"
-    redirect: You will be redirect to the front page in 15 seconds.
+    redirect: You will be redirected to the front page in 15 seconds.
   subject:
     by: New message from %s
 
@@ -393,7 +398,7 @@ users:
   info:
     destroy_account: Please enter your current password. After you click on "Delete Account", all your data will be permanently destroyed.
     gravatar:  "If you don't want to upload a profile image, you can use <a href='http://gravatar.com' target='_blank'>Gravatar.com</a> instead. The displayed image is shown above."
-    image: You are only allowed to upload images less than 400KB.
+    image: You are only allowed to upload images less than %s.
   label:
     account:
       destroy: Delete account

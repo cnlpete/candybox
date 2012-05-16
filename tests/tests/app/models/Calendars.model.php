@@ -38,25 +38,25 @@ class UnitTestOfCalendarModel extends CandyUnitTest {
   }
 
   function testGetData() {
-    $this->assertIsA($this->oObject->getData(0), 'array');
-    $this->assertIsA($this->oObject->getData(), 'array');
+    $this->assertIsA($this->oObject->getId(2), 'array');
+    $this->assertIsA($this->oObject->getOverview(), 'array');
 
     // no action or id...
-    $aData = $this->oObject->getData();
+    $aData = $this->oObject->getOverview();
     $this->assertIsA($aData, 'array');
-    $this->assertEqual(count($aData), 1);
+    $this->assertEqual(sizeof($aData), 1);
 
     // with id
-    $aData = $this->oObject->getData(0);
+    $aData = $this->oObject->getId(2);
     $this->assertIsA($aData, 'array');
-    $this->assertEqual(count($aData), 1);
+    $this->assertEqual(sizeof($aData), 31);
 
     // archive ...
     $this->aRequest = array(
       'controller'  => 'calendars',
       'action'    => 'archive');
     $this->oObject = new Calendars($this->aRequest, $this->aSession);
-    $aData = $this->oObject->getData();
+    $aData = $this->oObject->getOverview();
     $this->assertIsA($aData, 'array');
     // no entries for current year
     $this->assertEqual(count($aData), 0);
@@ -66,7 +66,7 @@ class UnitTestOfCalendarModel extends CandyUnitTest {
       'controller'  => 'calendars',
       'action'    => 'icalfeed');
     $this->oObject = new Calendars($this->aRequest, $this->aSession);
-    $aData = $this->oObject->getData();
+    $aData = $this->oObject->getOverview();
     $this->assertIsA($aData, 'array');
     $this->assertNotNull($aData['January2020']);
     $this->assertNotNull($aData['January2000']);

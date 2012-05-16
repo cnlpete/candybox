@@ -61,7 +61,9 @@
               {$f.size}
             </td>
             <td class='center'>
-              {$f.cdate}
+              <time datetime='{$f.date.w3c}'>
+                {$f.date.raw|date_format:$lang.global.time.format.date}
+              </time>
             </td>
             <td>
               <a href="#" onclick="confirmDestroy('{$f.url_destroy}')">

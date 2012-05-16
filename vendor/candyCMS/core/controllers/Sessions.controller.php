@@ -104,6 +104,7 @@ class Sessions extends Main {
   public function _showFormTemplate() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, '_form');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
@@ -113,7 +114,6 @@ class Sessions extends Main {
                     '');
 
     $this->setTitle(I18n::get('global.login'));
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -249,6 +249,7 @@ class Sessions extends Main {
   private function _showCreateResendActionsTemplate($bShowCaptcha) {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'resend');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'resend');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if ($bShowCaptcha)
       $this->oSmarty->assign('_captcha_', Recaptcha::getInstance()->show());
@@ -256,7 +257,6 @@ class Sessions extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 

@@ -196,7 +196,13 @@
               <span class='help-inline'>{$error.image}</span>
             {/if}
             <span class='help-block'>
-              {$lang.users.info.image}
+              {if $_SYSTEM.maximumUploadSize.raw <= 1536}
+                {$_SYSTEM.maximumUploadSize.b|string_format: $lang.users.info.image}
+              {elseif $_SYSTEM.maximumUploadSize.raw <= 1572864}
+                {$_SYSTEM.maximumUploadSize.kb|string_format: $lang.users.info.image}
+              {else}
+                {$_SYSTEM.maximumUploadSize.mb|string_format: $lang.users.info.image}
+              {/if}
             </span>
           </div>
         </div>
@@ -262,6 +268,11 @@
 
     $('#input-content').bind('keyup', function() {
       countCharLength(this, 1000);
+    });
+    $('#input-image').change(function() {
+      checkFileSize($(this),
+        {$_SYSTEM.maximumUploadSize.raw},
+        '{$_SYSTEM.maximumUploadSize.mb|string_format: $lang.error.file.size}');
     });
 
     $('.js-fancybox').fancybox();

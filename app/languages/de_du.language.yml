@@ -126,9 +126,11 @@ global:
     terms: Bedingungen
     read: Nutzungsbedingungen gelesen?
   time:
-    am: Uhr
-    pm: Uhr
     time: Zeit
+    format: #set the standard date format (http://php.net/strftime)
+      date: %d.%m.%Y
+      time: %H:%M Uhr
+      datetime: %d.%m.%Y, %H:%M Uhr
   title: Titel
   today: Heute
   update:
@@ -139,6 +141,7 @@ global:
   upload:
     at: Datum des Hochladens
     upload: Upload
+    maxsize: 'Maximale Dateigröße: %s'
   user:
     role: Userrecht
     roles:
@@ -180,6 +183,8 @@ success:
     verification: Vielen Dank für die Bestätigung deiner E-Mail-Adresse.
 
 error:
+  302:
+    info: Die angeforderte URL ist neuerdings unter %s erreichbar.
   404:
     info: Die angeforderte URL wurde nicht gefunden. Entweder haben Sie auf einen fehlerhaften Link geklickt, die Seite wurde gelöscht oder die URL ist falsch eingegeben worden.
     title: Error 404 - URL nicht gefunden
@@ -188,7 +193,7 @@ error:
     loading: Captcha konnte nicht geladen werden, bitte aktiviere Javascript!
   file:
     destroy: Die Datei konnte nicht gelöscht werden!
-    size: Maximale Dateigröße von 400KB erreicht!
+    size: Maximale Dateigröße von %s erreicht!
     type: Es wurde ein falscher Dateityp hochgeladen!
     upload: Es gab einen Fehler beim Upload!
   form:
@@ -393,7 +398,7 @@ users:
   info:
     destroy_account: Bitte gib zur eigenen Sicherheit dein aktuelles Passwort ein. Sobald du auf "Account löschen" klickst wird dein Zugang gelöscht und ist nicht wiederherstellbar!
     gravatar: Aktivierst du dieses Kästchen, wird automatisch nach einem von dir auf <a href="http://gravatar.com" target="_blank">Gravatar.com</a> hinterlegten Profilbild (s.o.) gesucht. Alternativ kannst du aber auch direkt ein Bild hochladen.
-    image: Bitte nur Bilder mit einer Größe von bis zu 400KB hochladen!
+    image: Bitte nur Bilder mit einer Größe von bis zu %s hochladen!
   label:
     account:
       destroy: Account löschen

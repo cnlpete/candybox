@@ -94,13 +94,13 @@ class Galleries extends Main {
   protected function _showOverview() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'albums');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'albums');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
       $this->oSmarty->assign('albums', $this->_oModel->getData());
       $this->oSmarty->assign('_pages_', $this->_oModel->oPagination->showPages('/' . $this->_sController));
     }
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -114,6 +114,7 @@ class Galleries extends Main {
   protected function _showAlbum() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'files');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'files');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     # Collect data array
     $sAlbumData = $this->_oModel->getAlbumNameAndContent($this->_iId, $this->_aRequest);
@@ -130,7 +131,6 @@ class Galleries extends Main {
       $this->oSmarty->assign('gallery_content', $sAlbumData['content']);
     }
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -144,31 +144,35 @@ class Galleries extends Main {
   protected function _showImage() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'image');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'image');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
-    $aData = $this->_oModel->getFileData($this->_iId);
+    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+      $aData = $this->_oModel->getFileData($this->_iId);
 
     # Absolute URL for image information
+    # @todo does this URL work?
     $sUrl = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $this->_aRequest['album_id'] .
                     '/popup/' . $aData['file']);
 
-    if (file_exists($sUrl) || WEBSITE_MODE == 'test') {
-      # Get image information
-      $aImageInfo       = getimagesize($sUrl);
+      if (file_exists($sUrl) || WEBSITE_MODE == 'test') {
 
-      $aData['url']     = Helper::addSlash($sUrl);
-      $aData['width']   = $aImageInfo[0];
-      $aData['height']  = $aImageInfo[1];
+        # Get image information
+        $aImageInfo       = getimagesize($sUrl);
 
-      $this->oSmarty->assign('i', $aData);
+        $aData['url']     = Helper::addSlash($sUrl);
+        $aData['width']   = $aImageInfo[0];
+        $aData['height']  = $aImageInfo[1];
 
-      $this->setTitle(I18n::get('global.image.image') . ': ' . $aData['file']);
-      $this->setDescription($aData['content']);
+        $this->oSmarty->assign('i', $aData);
 
-      $this->oSmarty->setTemplateDir($sTemplateDir);
-      return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+      }
+      else
+        return Helper::redirectTo('/errors/404');
     }
-    else
-      return Helper::redirectTo('/errors/404');
+    $this->setTitle(I18n::get('global.image.image') . ': ' . $aData['file']);
+    $this->setDescription($aData['content']);
+
+    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
   /**
@@ -196,17 +200,13 @@ class Galleries extends Main {
       return $this->_showFormTemplate();
 
     elseif ($this->_oModel->create() === true) {
-      $this->oSmarty->clearCacheForController($this->_sController);
-      $this->oSmarty->clearCacheForController('searches');
-      $this->oSmarty->clearCacheForController('rss');
-      $this->oSmarty->clearCacheForController('sitemaps');
+      $this->oSmarty->clearCacheForController(array($this->_sController, 'searches', 'rss', 'sitemaps'));
 
       $iId    = $this->_oModel->getLastInsertId('gallery_albums');
       $sPath  = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $iId);
 
       # Create missing thumb folders.
-      $aThumbs = array('32', 'thumbnail', 'popup', 'original');
-      foreach($aThumbs as $sFolder) {
+      foreach(array('32', 'thumbnail', 'popup', 'original') as $sFolder) {
         if (!is_dir($sPath . '/' . $sFolder))
           mkdir($sPath . '/' . $sFolder, 0755, true);
       }
@@ -234,6 +234,7 @@ class Galleries extends Main {
     protected function _showFormFileTemplate() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, '_form_file');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form_file');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if ($this->_iId) {
       $aData = $this->_oModel->getFileData($this->_iId);
@@ -254,7 +255,6 @@ class Galleries extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -287,7 +287,7 @@ class Galleries extends Main {
    *
    */
   private function _createFile() {
-    require PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
+    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
 
     $this->_setError('cut');
     $this->_setError('file');
@@ -298,35 +298,42 @@ class Galleries extends Main {
     else {
       $oUploadFile = new Upload($this->_aRequest, $this->_aSession, $this->_aFile);
 
-      $aReturnValues = $oUploadFile->uploadGalleryFiles();
+      try {
+        $aReturnValues = $oUploadFile->uploadGalleryFiles();
 
-      $aIds   = $oUploadFile->getIds(false);
-      $aExts  = $oUploadFile->getExtensions();
+        $aIds   = $oUploadFile->getIds(false);
+        $aExts  = $oUploadFile->getExtensions();
 
-      $iFileCount = count($aReturnValues);
-      $bReturnValue = true;
+        $iFileCount = count($aReturnValues);
+        $bReturnValue = true;
 
-      for ($iI = 0; $iI < $iFileCount; $iI++)
-        $bReturnValue = $aReturnValues[$iI] === true ?
-                $bReturnValue && $this->_oModel->createFile($aIds[$iI] . '.' . $aExts[$iI], $aExts[$iI]) :
-                false;
+        for ($iI = 0; $iI < $iFileCount; $iI++)
+          $bReturnValue = $aReturnValues[$iI] === true ?
+                  $bReturnValue && $this->_oModel->createFile($aIds[$iI] . '.' . $aExts[$iI], $aExts[$iI]) :
+                  false;
 
-      if ($bReturnValue) {
-        $this->oSmarty->clearCacheForController($this->_sController);
-        $this->oSmarty->clearCacheForController('rss');
+        if ($bReturnValue) {
+          $this->oSmarty->clearCacheForController($this->_sController);
+          $this->oSmarty->clearCacheForController('rss');
 
-        # Log uploaded image. Request ID = album id
-        Logs::insert( $this->_sController,
-                      'createfile',
-                      (int) $this->_aRequest[$this->_sController]['id'],
-                      $this->_aSession['user']['id']);
+          # Log uploaded image. Request ID = album id
+          Logs::insert( $this->_sController,
+                        'createfile',
+                        (int) $this->_aRequest[$this->_sController]['id'],
+                        $this->_aSession['user']['id']);
 
-        return Helper::successMessage(I18n::get('success.file.upload'), '/' . $this->_sController .
-                        '/' . $this->_iId);
+          return Helper::successMessage(I18n::get('success.file.upload'), '/' . $this->_sController .
+                          '/' . $this->_iId);
+        }
+        else
+          return Helper::errorMessage(I18n::get('error.file.upload'), '/' . $this->_sController .
+                        '/' . $this->_iId . '/createfile');
       }
-      else
-        return Helper::errorMessage(I18n::get('error.file.upload'), '/' . $this->_sController .
+      # @todo check whether this is a correct way to handle exceptions
+      catch (\Exception $e) {
+        return Helper::errorMessage($e->getMessage(), '/' . $this->_sController .
                       '/' . $this->_iId . '/createfile');
+      }
     }
   }
 

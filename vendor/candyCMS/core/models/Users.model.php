@@ -167,99 +167,107 @@ class Users extends Main {
   }
 
   /**
-   * Get user entry or user overview data. Depends on available ID.
+   * Get user overview data.
    *
    * @access public
-   * @param integer $iId ID to load data from. If empty, show overview.
-   * @param boolean $bForceNoId Override ID to show user overview
-   * @param boolean $bUpdate prepare data for update
    * @param integer $iLimit user overview limit
    * @return array data from _setData
    * @todo pagination
    *
    */
-  public function getData($iId = '', $bForceNoId = false, $bUpdate = false, $iLimit = 1000) {
+  public function getOverview($iLimit = 1000) {
     $aInts  = array('id', 'role');
     $aBools = array('use_gravatar', 'receive_newsletter');
 
-    if ($bForceNoId === true)
-      $iId = '';
 
-    if (empty($iId)) {
-      try {
-        $oQuery = $this->_oDb->prepare("SELECT
-                                          u.id,
-                                          u.name,
-                                          u.email,
-                                          u.surname,
-                                          u.date,
-                                          u.use_gravatar,
-                                          u.receive_newsletter,
-                                          u.verification_code,
-                                          u.role,
-                                          s.date as last_login
-                                        FROM
-                                          " . SQL_PREFIX . "users as u
-                                        LEFT JOIN
-                                          " . SQL_PREFIX . "sessions as s
-                                        ON
-                                          s.user_id = u.id
-                                        ORDER BY
-                                          u.id ASC
-                                        LIMIT
-                                          :limit");
+    try {
+      $oQuery = $this->_oDb->prepare("SELECT
+                                        u.id,
+                                        u.name,
+                                        u.email,
+                                        u.surname,
+                                        u.date,
+                                        u.use_gravatar,
+                                        u.receive_newsletter,
+                                        u.verification_code,
+                                        u.role,
+                                        s.date as last_login
+                                      FROM
+                                        " . SQL_PREFIX . "users as u
+                                      LEFT JOIN
+                                        " . SQL_PREFIX . "sessions as s
+                                      ON
+                                        s.user_id = u.id
+                                      ORDER BY
+                                        u.id ASC
+                                      LIMIT
+                                        :limit");
 
-        $oQuery->bindParam('limit', $iLimit, PDO::PARAM_INT);
-        $oQuery->execute();
+      $oQuery->bindParam('limit', $iLimit, PDO::PARAM_INT);
+      $oQuery->execute();
 
-        $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
-      }
-      catch (\PDOException $p) {
-        AdvancedException::reportBoth('0082 - ' . $p->getMessage());
-        exit('SQL error.');
-      }
-
-      foreach ($aResult as $aRow) {
-        $iId = $aRow['id'];
-
-        $this->_aData[$iId] = $this->_formatForUserOutput($aRow, $aInts, $aBools);
-        $this->_aData[$iId]['last_login'] = Helper::formatTimestamp($aRow['last_login']);
-      }
+      $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0082 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+
+    foreach ($aResult as $aRow) {
+      $iId = $aRow['id'];
+
+      $this->_aData[$iId] = $this->_formatForUserOutput($aRow, $aInts, $aBools);
+      $this->_formatDates($this->_aData[$iId], 'last_login');
+    }
+
+    return $this->_aData;
+ }
+
+  /**
+   * Get user entry data.
+   *
+   * @access public
+   * @param integer $iId ID to load data from. If empty, show overview.
+   * @param boolean $bUpdate prepare data for update
+   * @return array data from _setData
+   *
+   */
+  public function getId($iId, $bUpdate = false) {
+    $aInts  = array('id', 'role');
+    $aBools = array('use_gravatar', 'receive_newsletter');
+
+    try {
+      $oQuery = $this->_oDb->prepare("SELECT
+                                        u.*,
+                                        s.date as last_login
+                                      FROM
+                                        " . SQL_PREFIX . "users as u
+                                      LEFT JOIN
+                                        " . SQL_PREFIX . "sessions as s
+                                      ON
+                                        s.user_id = u.id
+                                      WHERE
+                                        u.id = :id
+                                      ORDER BY
+                                        s.date DESC
+                                      LIMIT 1");
+
+      $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
+      $oQuery->execute();
+
+      $aRow = $oQuery->fetch(PDO::FETCH_ASSOC);
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0083 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+
+    if ($bUpdate === true)
+      $this->_aData = $this->_formatForUpdate($aRow);
+
     else {
-      try {
-        $oQuery = $this->_oDb->prepare("SELECT
-                                          u.*,
-                                          s.date as last_login
-                                        FROM
-                                          " . SQL_PREFIX . "users as u
-                                        LEFT JOIN
-                                          " . SQL_PREFIX . "sessions as s
-                                        ON
-                                          s.user_id = u.id
-                                        WHERE
-                                          u.id = :id
-                                        ORDER BY
-                                          s.date DESC
-                                        LIMIT 1");
-
-        $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
-        $oQuery->execute();
-
-        $aRow = $oQuery->fetch(PDO::FETCH_ASSOC);
-      }
-      catch (\PDOException $p) {
-        AdvancedException::reportBoth('0083 - ' . $p->getMessage());
-        exit('SQL error.');
-      }
-
-      if ($bUpdate === true)
-        $this->_aData = $this->_formatForUpdate($aRow);
-
-      else {
-        $this->_aData[1] = $this->_formatForUserOutput($aRow, $aInts, $aBools);
-        $this->_aData[1]['last_login'] = Helper::formatTimestamp($aRow['last_login']);
-      }
+      $this->_aData[1] = $this->_formatForUserOutput($aRow, $aInts, $aBools);
+      $this->_formatDates($this->_aData[1], 'last_login');
     }
 
     return $this->_aData;

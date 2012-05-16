@@ -26,7 +26,7 @@ class Mails extends Main {
    *
    */
   public function show() {
-    return Helper::redirectTo('/' . $this->_sController . '/' . $this->_iId . '/create');
+    return Helper::redirectTo('/' . $this->_sController . '/create');
   }
 
   /**
@@ -65,6 +65,7 @@ class Mails extends Main {
   protected function _showCreateMailTemplate($bShowCaptcha) {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'create');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'create');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     $sUser = $this->__autoload('Users', true);
     $aUser = $sUser::getUserNamesAndEmail($this->_iId);
@@ -100,7 +101,6 @@ class Mails extends Main {
     $this->setTitle(I18n::get('global.contact') . ' ' . $sFullname);
     $this->setDescription(I18n::get('mails.description.show', $sFullname));
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -164,10 +164,10 @@ class Mails extends Main {
   private function _showSuccessPage() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'success');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'success');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     $this->setTitle(I18n::get('mails.success_page.title'));
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     $this->oSmarty->setCaching(\CandyCMS\Core\Helpers\SmartySingleton::CACHING_LIFETIME_SAVED);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
@@ -207,6 +207,7 @@ class Mails extends Main {
         $oMail->IsSMTP();
 
         $oMail->SMTPAuth  = defined('SMTP_USE_AUTH') ? SMTP_USE_AUTH === true : true;
+
         $oMail->SMTPDebug = WEBSITE_MODE == 'development' ? 1 : 0;
 
         $oMail->Host      = SMTP_HOST;

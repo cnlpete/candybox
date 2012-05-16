@@ -7,12 +7,21 @@
     {if $_REQUEST.action == 'create'}
       <div class='control-group{if isset($error.file)} alert alert-error{/if}'>
         <label for='input-file' class='control-label'>
-          {$lang.downloads.label.choose} <span title='{$lang.global.required}'>*</span>
+          {$lang.downloads.label.choose} <span title="{$lang.global.required}">*</span><br />
+          <small>
+            {if $_SYSTEM.maximumUploadSize.raw <= 1536}
+              {$_SYSTEM.maximumUploadSize.b|string_format: $lang.global.upload.maxsize}
+            {elseif $_SYSTEM.maximumUploadSize.raw <= 1572864}
+              {$_SYSTEM.maximumUploadSize.kb|string_format: $lang.global.upload.maxsize}
+            {else}
+              {$_SYSTEM.maximumUploadSize.mb|string_format: $lang.global.upload.maxsize}
+            {/if}
+          </small>
         </label>
         <div class='controls'>
           {* @todo: This must also be put into controller array. *}
           <input class='input-file span4 required' type='file' name='file[]'
-                id='input-file' required />
+                required id="input-file"/>
         </div>
       </div>
     {/if}
@@ -35,10 +44,17 @@
         {$lang.global.category} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <input type='text' name='{$_REQUEST.controller}[category]' id='input-category' placeholder=''
-              data-provide='typeahead' value="{$category}"
-              data-source='{$_categories_}' data-items='8'
-              class='span4 required' autocomplete='off' required />
+        <input type='text'
+               name='{$_REQUEST.controller}[category]'
+               id='input-category'
+               placeholder=''
+               data-provide='typeahead'
+               value="{$category}"
+               data-source='{$_categories_}'
+               data-items='8'
+               class='span4 required'
+               autocomplete='off'
+               required />
         {if isset($error.category)}<span class='help-inline'>{$error.category}</span>{/if}
       </div>
     </div>
@@ -47,7 +63,10 @@
         {$lang.global.description}
       </label>
       <div class='controls'>
-        <input class='span4' type='text' name='{$_REQUEST.controller}[content]' id="input-content"
+        <input class='span4'
+               type='text'
+               name='{$_REQUEST.controller}[content]'
+               id='input-content'
               value="{$content}" />
         {if isset($error.content)}<span class='help-inline'>{$error.content}</span>{/if}
       </div>
@@ -64,6 +83,7 @@
       </div>
     {/if}
     <div class='form-actions'>
+      {* @todo *}
       <input type='submit' class='btn btn-primary'
             value='{if $_REQUEST.action == 'create'}{$lang.global.create.create}{else}{$lang.global.update.update}{/if}' />
       {if $_REQUEST.action == 'update'}
@@ -79,6 +99,12 @@
   <script type='text/javascript'>
     $('#input-title').bind('keyup', function() {
       countCharLength(this, 128);
+    });
+
+    $('#input-file').change(function() {
+      checkFileSize($(this),
+        {$_SYSTEM.maximumUploadSize.raw},
+        '{$_SYSTEM.maximumUploadSize.mb|string_format: $lang.error.file.size}');
     });
   </script>
 {/strip}

@@ -28,6 +28,10 @@ class UnitTestOfHelperHelper extends CandyUnitTest {
     $this->assertTrue(Helper::successMessage('Message'));
   }
 
+  function testWarningMessage() {
+    $this->assertFalse(Helper::warningMessage('Message'));
+  }
+
   function testErrorMessage() {
     $this->assertFalse(Helper::errorMessage('Message'));
   }
@@ -158,6 +162,23 @@ class UnitTestOfHelperHelper extends CandyUnitTest {
     $this->assertEqual(Helper::pluralize('dish'), 'dishes');
     $this->assertEqual(Helper::pluralize('judge'), 'judges');
     $this->assertEqual(Helper::pluralize('baby'), 'babies');
+
+
+    $this->assertEqual(Helper::pluralize('blog'), 'blogs');
+    $this->assertEqual(Helper::pluralize('calendar'), 'calendars');
+    $this->assertEqual(Helper::pluralize('content'), 'contents');
+    $this->assertEqual(Helper::pluralize('download'), 'downloads');
+    $this->assertEqual(Helper::pluralize('gallery'), 'galleries');
+    $this->assertEqual(Helper::pluralize('log'), 'logs');
+    $this->assertEqual(Helper::pluralize('mail'), 'mails');
+    $this->assertEqual(Helper::pluralize('media'), 'medias');
+    $this->assertEqual(Helper::pluralize('newsletter'), 'newsletters');
+    $this->assertEqual(Helper::pluralize('rss'), 'rss');
+    $this->assertEqual(Helper::pluralize('search'), 'searches');
+    $this->assertEqual(Helper::pluralize('session'), 'sessions');
+    $this->assertEqual(Helper::pluralize('sitemap'), 'sitemaps');
+    $this->assertEqual(Helper::pluralize('site'), 'sites');
+    $this->assertEqual(Helper::pluralize('user'), 'users');
   }
 
   function testSingleize() {

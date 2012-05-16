@@ -81,9 +81,10 @@ class Users extends Main {
     if ($this->_iId) {
       $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
       $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+      $this->oSmarty->setTemplateDir($sTemplateDir);
 
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-        $aData = $this->_oModel->getData($this->_iId);
+        $aData = $this->_oModel->getId($this->_iId);
 
        if (!isset($aData) || !$aData[1]['id'])
           return Helper::redirectTo('/errors/404');
@@ -94,7 +95,6 @@ class Users extends Main {
         $this->setDescription(I18n::get('users.description.show', $aData[1]['full_name']));
       }
 
-      $this->oSmarty->setTemplateDir($sTemplateDir);
       return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
     else {
@@ -104,11 +104,12 @@ class Users extends Main {
       else {
         $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
         $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
+        $this->oSmarty->setTemplateDir($sTemplateDir);
 
-        $this->oSmarty->assign('user', $this->_oModel->getData());
+        if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
+          $this->oSmarty->assign('user', $this->_oModel->getOverview());
 
         $this->setTitle(I18n::get('users.title.overview'));
-        $this->oSmarty->setTemplateDir($sTemplateDir);
         return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
       }
     }
@@ -125,6 +126,7 @@ class Users extends Main {
   protected function _showFormTemplate($bUseRequest = false) {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, '_form');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     # Set user id of person to update
     $iId =  $this->_iId !== $this->_aSession['user']['id'] && $this->_aSession['user']['role'] == 4 ?
@@ -132,7 +134,7 @@ class Users extends Main {
             $this->_aSession['user']['id'];
 
     # Fetch data from database
-    $aData = $this->_oModel->getData($iId, false, true);
+    $aData = $this->_oModel->getId($iId, true);
 
     # Add the gravatar_urls, so the user can preview those.
     Helper::createAvatarURLs($aData, $aData['id'], $aData['email'], true,  'gravatar_');
@@ -154,7 +156,6 @@ class Users extends Main {
 
     $this->oSmarty->assign('uid', $iId);
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -185,22 +186,28 @@ class Users extends Main {
     $this->_setError('terms', I18n::get('error.file.upload'));
     $this->_setError('image');
 
-    require PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
+    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
     $oUpload = new Upload($this->_aRequest, $this->_aSession, $this->_aFile);
 
-    if (isset($this->_aError))
-      return $this->_showFormTemplate();
+    try {
+      if (isset($this->_aError))
+        return $this->_showFormTemplate();
 
-    elseif ($oUpload->uploadAvatarFile(false) === true) {
-      $this->_oModel->updateGravatar($this->_iId);
+      elseif ($oUpload->uploadAvatarFile(false) === true) {
+        $this->_oModel->updateGravatar($this->_iId);
 
-      return Helper::successMessage(I18n::get('success.upload'), '/' .
-              $this->_sController . '/' . $this->_iId);
+        return Helper::successMessage(I18n::get('success.upload'), '/' .
+                $this->_sController . '/' . $this->_iId);
+      }
+
+      else
+        return Helper::errorMessage(I18n::get('error.file.upload'), '/' .
+                $this->_sController . '/' . $this->_iId . '/update');
     }
-
-    else
-      return Helper::errorMessage(I18n::get('error.file.upload'), '/' .
-              $this->_sController . '/' . $this->_iId . '/update');
+    catch (\Exception $e) {
+      return Helper::errorMessage($e->getMessage(), '/' .
+                $this->_sController . '/' . $this->_iId . '/update');
+    }
   }
 
   /**
@@ -319,24 +326,22 @@ class Users extends Main {
       $this->oSmarty->clearCacheForController($this->_sController);
 
       # Send email if user has registered and creator is not an admin.
-      if ($this->_aSession['user']['role'] == 4)
-        $sMailMessage = '';
-
-      else
+      if ($this->_aSession['user']['role'] != 4) {
         $sMailMessage = I18n::get('users.mail.body',
                 Helper::formatInput($this->_aRequest[$this->_sController]['name']),
                 Helper::createLinkTo('users/' . $iVerificationCode . '/verification'));
+
+        $sMails = $this->__autoload('Mails');
+        $sMails::send( Helper::formatInput($this->_aRequest['email']),
+                    I18n::get('users.mail.subject'),
+                    $sMailMessage,
+                    WEBSITE_MAIL_NOREPLY);
+      }
 
       Logs::insert(  $this->_sController,
                     $this->_aRequest['action'],
                     $this->_oModel->getLastInsertId('users'),
                     $this->_aSession['user']['id']);
-
-      $sMails = $this->__autoload('Mails');
-      $sMails::send( Helper::formatInput($this->_aRequest[$this->_sController]['email']),
-                  I18n::get('users.mail.subject'),
-                  $sMailMessage,
-                  WEBSITE_MAIL_NOREPLY);
 
       return $this->_aSession['user']['role'] == 4 ?
               Helper::successMessage(I18n::get('success.create'), '/' . $this->_sController) :
@@ -356,6 +361,7 @@ class Users extends Main {
   protected function _showCreateUserTemplate($bShowCaptcha) {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'create');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'create');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if ($this->_aSession['user']['role'] == 4) {
       $this->setTitle(I18n::get('users.title.create'));
@@ -387,7 +393,6 @@ class Users extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 

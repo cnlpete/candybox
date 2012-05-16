@@ -180,8 +180,13 @@ abstract class Main {
   protected static function _formatForUpdate($aRow) {
     $aData = array();
 
-    foreach ($aRow as $sColumn => $sData)
+    foreach ($aRow as $sColumn => $sData) {
+
+			# Quickfix. Test this on other machines too.
+			$sData = str_replace('\"', '', $sData);
+			$sData = str_replace('\&quot;', '', $sData);
       $aData[$sColumn] = $sData;
+		}
 
     return $aData;
   }
@@ -191,19 +196,21 @@ abstract class Main {
    *
    * @static
    * @access protected
-   * @param array $aData array with the timestamp stored in 'date'
+   * @param array $aData array with the timestamp stored in '$sKey'
+   * @param string $sKey the key, where the date is stored in $aData
    * @return array reference to $aData
    *
    */
-  protected static function _formatDates(&$aData) {
-    if (isset($aData['date'])) {
-      $aData['date_raw']      = (int) $aData['date'];
-      $aData['time']          = Helper::formatTimestamp($aData['date_raw'], 2);
-      $aData['date']          = Helper::formatTimestamp($aData['date_raw'], 1);
-      $aData['datetime']      = Helper::formatTimestamp($aData['date_raw']);
-      $aData['datetime_rss']  = date('D, d M Y H:i:s O', $aData['date_raw']);
-      $aData['datetime_w3c']  = date('Y-m-d\TH:i:sP', $aData['date_raw']);
-      $aData['date_w3c']      = date('Y-m-d', $aData['date_raw']);
+  protected static function _formatDates(&$aData, $sKey = 'date') {
+    if (isset($aData[$sKey])) {
+      $iTimeStamp = (int) $aData[$sKey];
+      $aDateData = Array(
+        'raw'       => $iTimeStamp,
+        'rss'       => date('D, d M Y H:i:s O', $iTimeStamp),
+        'w3c'       => date('Y-m-d\TH:i:sP', $iTimeStamp),
+        'w3c_date'  => date('Y-m-d', $iTimeStamp),
+      );
+      $aData[$sKey] = $aDateData;
     }
 
     return $aData;

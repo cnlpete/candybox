@@ -41,6 +41,26 @@ class Helper {
   }
 
   /**
+   * Display a warning message after an action is done.
+   *
+   * @static
+   * @access public
+   * @param string $sMessage message to provide
+   * @param string $sRedirectTo site to redirect to
+   * @return boolean false
+   * @todo store in main session object
+   *
+   */
+  public static function warningMessage($sMessage, $sRedirectTo = '') {
+    $_SESSION['flash_message'] = array(
+        'type'    => 'warning',
+        'message' => $sMessage,
+        'headline'=> I18n::get('error.standard'));
+
+    return $sRedirectTo ? Helper::redirectTo ($sRedirectTo) : false;
+  }
+
+  /**
    * Display an error message after an action is done.
    *
    * @static
@@ -69,12 +89,9 @@ class Helper {
    *
    */
   public static function redirectTo($sUrl) {
-    if ($sUrl == '/errors/404') {
+    if (CRAWLER && $sUrl == '/errors/404') {
       header('Status: 404 Not Found');
       header('HTTP/1.0 404 Not Found');
-
-      if (CRAWLER == false)
-        exit(header('Location:' . $sUrl));
     }
     else
       exit(header('Location:' . $sUrl));
@@ -360,7 +377,7 @@ class Helper {
     $sStr = preg_replace('/\s(\s)\s+/', '$1$1', trim($sStr));
 
     # Fix quotes to avoid problems with inputs
-    return str_replace('"', "&quot;", $sStr);
+		return $bDisableHTML === true ? str_replace('"', "&quot;", $sStr) : $sStr;
   }
 
   /**
@@ -389,13 +406,13 @@ class Helper {
       }
       else {
         if ($iOptions == 1)
-          return strftime(DEFAULT_DATE_FORMAT, $iTime);
+          return strftime(I18n::get('global.time.format.date'), $iTime);
 
         elseif($iOptions == 2)
-          return strftime(DEFAULT_TIME_FORMAT, $iTime);
+          return strftime(I18n::get('global.time.format.time'), $iTime);
 
         else
-          return strftime(DEFAULT_DATE_FORMAT . ', ' . DEFAULT_TIME_FORMAT, $iTime);
+          return strftime(I18n::get('global.time.format.datetime'), $iTime);
       }
     }
   }
@@ -506,7 +523,8 @@ class Helper {
   /**
    * Pluralize a string.
    *
-   * Note that this is just a rudimentary funtion. F.e. "death", "boy" and "kiss" will not be pluralized corrctly.
+   * Note that this is just a rudimentary funtion. F.e. "boy" will not be pluralized correctly.
+   * Simple stuff will however work. F.e. 'log' becomes 'logs', 'kiss' will become 'kisses', ...
    *
    * @static
    * @access public
@@ -515,20 +533,21 @@ class Helper {
    *
    */
   public static function pluralize($sStr) {
-    if (substr($sStr, -1) == 'h' || substr($sStr, -2) == 'ss')
+    if ($sStr == 'rss')
+      return $sStr;
+
+    elseif (substr($sStr, -1) == 'h' || substr($sStr, -2) == 'ss' || substr($sStr, -1) == 'o')
       return $sStr . 'es';
 
     elseif (substr($sStr, -1) == 's')
       return $sStr;
 
-    elseif (substr($sStr, -1) == 'e')
-      return $sStr . 's';
-
     elseif (substr($sStr, -1) == 'y')
       return substr($sStr, 0, -1) . 'ies';
 
     else
-      return $sStr;
+      return $sStr . 's';
+
   }
 
   /**

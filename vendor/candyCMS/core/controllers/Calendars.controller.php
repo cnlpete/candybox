@@ -48,9 +48,10 @@ class Calendars extends Main {
   private function _showEntry() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'ics');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'ics');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-      $aData = $this->_oModel->getData($this->_iId);
+      $aData = $this->_oModel->getId($this->_iId);
       $this->oSmarty->assign('calendar', $aData);
 
       if (!$aData['id'])
@@ -60,7 +61,6 @@ class Calendars extends Main {
     header('Content-type: text/calendar; charset=utf-8');
     header('Content-Disposition: inline; filename=' . $aData['title_encoded'] . '.ics');
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return ($this->oSmarty->fetch($sTemplateFile, UNIQUE_ID));
   }
 
@@ -77,7 +77,7 @@ class Calendars extends Main {
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
-      $this->oSmarty->assign('calendar', $this->_oModel->getData());
+      $this->oSmarty->assign('calendar', $this->_oModel->getOverview());
 
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
@@ -92,14 +92,14 @@ class Calendars extends Main {
   private function _showIcalFeed() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'icalfeed');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'icalfeed');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
-      $this->oSmarty->assign('calendar', $this->_oModel->getData());
+      $this->oSmarty->assign('calendar', $this->_oModel->getOverview());
 
     header('Content-type: text/calendar; charset=utf-8');
     header('Content-Disposition: inline; filename=' . WEBSITE_NAME . '.ics');
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -126,6 +126,6 @@ class Calendars extends Main {
   protected function _update() {
     $this->_setError('start_date');
 
-    return parent::_update();
+    return parent::_update(null, '/' . $this->_sController);
   }
 }

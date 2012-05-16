@@ -34,7 +34,10 @@
             {$c.title}
           </a>
         </td>
-        <td>{$c.datetime}</td>
+        <td>
+          <time datetime='{$c.date.w3c}'>
+            {$c.date.raw|date_format:$lang.global.time.format.datetime}
+          </time></td>
         <td>
           <a href='{$c.author.url}'>
             {$c.author.full_name}

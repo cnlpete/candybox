@@ -30,7 +30,7 @@ class Comments extends Main {
    * @return array data from _setData
    *
    */
-  public function getData($iId, $iEntries, $iLimit) {
+  public function getOverview($iId, $iEntries, $iLimit) {
     $aInts  = array('id', 'parent_id', 'author_id', 'author_facebook_id', 'user_id');
     $aBools = array('use_gravatar');
 

@@ -17,8 +17,8 @@
         <p>
           {$lang.global.last_update}:
           &nbsp;
-          <time datetime='{$c.datetime_w3c}'>
-            {$c.datetime}
+          <time datetime='{$c.date.w3c}'>
+            {$c.date.raw|date_format:$lang.global.time.format.datetime}
           </time>
           &nbsp;
           {$lang.global.by}
@@ -40,9 +40,9 @@
     </article>
     <script src='{$_PATH.js}/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
     <script src='{$_PATH.js}/core/jquery.capty{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
-    <script type="text/javascript">
+    <script type='text/javascript'>
       $(document).ready(function(){
-        $(".js-fancybox").fancybox();
+        $('.js-fancybox').fancybox();
         $('.js-image').capty({ height: 35 });
 
         if($('#socialshareprivacy').length > 0){
