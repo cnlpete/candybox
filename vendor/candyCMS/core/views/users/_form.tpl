@@ -122,7 +122,6 @@
           <input type='submit' class='btn btn-primary' value='{$lang.users.label.update}' />
           <input type='reset' class='btn' value='{$lang.global.reset}' />
           <input type='hidden' value="{$email}" name='email' />
-          <input type='hidden' value='formdata' name='update_users' />
         </div>
       </form>
     </div>
@@ -163,7 +162,6 @@
           </div>
           <div class='form-actions'>
             <input type='submit' class='btn btn-primary' value='{$lang.users.label.password.create}' />
-            <input type='hidden' value='formdata' name='update_password' />
             <input type='reset' class='btn' value='{$lang.global.reset}' />
           </div>
         </form>
@@ -216,7 +214,6 @@
         <div class='form-actions'>
           <input type='submit' class='btn btn-primary' value='{$lang.users.title.image}' />
           <input type='reset' class='btn' value='{$lang.global.reset}' />
-          <input type='hidden' value='formdata' name='create_avatar' />
           <input type='hidden' name='MAX_FILE_SIZE' value='409600' />
         </div>
       </form>
@@ -239,7 +236,6 @@
         </div>
         <div class='form-actions'>
           <input type='submit' class='btn btn-danger' value='{$lang.users.label.account.destroy}' />
-          <input type='hidden' value='formdata' name='destroy_users' />
         </div>
       </form>
     </div>

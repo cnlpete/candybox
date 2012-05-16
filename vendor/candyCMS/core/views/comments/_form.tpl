@@ -61,7 +61,6 @@
       <div class='form-actions' data-role='controlgroup' data-type='horizontal'>
         <input type='submit' value='{$lang.comments.title.create}' data-theme='b' class='btn btn-primary' />
         <input type='reset' value='{$lang.global.reset}' class='btn' />
-        <input type='hidden' value='formdata' name='create_comments' />
         <input type='hidden' value='{$_REQUEST.id}' name='{$_REQUEST.controller}[parent_id]' />
       </div>
     {if $MOBILE}</div>{/if}

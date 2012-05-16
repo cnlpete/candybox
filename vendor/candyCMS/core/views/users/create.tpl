@@ -78,9 +78,11 @@
     {/if}
     {if isset($_captcha_)}{$_captcha_}{/if}
     <div class='form-actions'>
-      <input type='submit' class='btn btn-primary' value='{$lang.global.register}' />
-      <input type='reset' class='btn' />
-      <input type='hidden' value='formdata' name='create_users' />
+      <input type='submit'
+             class='btn btn-primary'
+             value='{$lang.global.register}' />
+      <input type='reset'
+             class='btn' />
     </div>
   </form>
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.bootstrap.modal{$_SYSTEM.compress_files_suffix}.js'></script>
