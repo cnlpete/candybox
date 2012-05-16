@@ -113,7 +113,7 @@ class Dispatcher {
 
       case 'update':
 
-        $this->oController->setContent($this->oController->update('update_' . strtolower($this->_aRequest['controller'])));
+        $this->oController->setContent($this->oController->update());
 
         break;
 

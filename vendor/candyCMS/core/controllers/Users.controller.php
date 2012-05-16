@@ -418,7 +418,7 @@ class Users extends Main {
       return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
 
     else
-      return isset($this->_aRequest['update_users']) ? $this->_update() : $this->_showFormTemplate();
+      return isset($this->_aRequest[$this->_sController]) ? $this->_update() : $this->_showFormTemplate();
   }
 
   /**
