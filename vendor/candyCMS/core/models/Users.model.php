@@ -296,15 +296,15 @@ class Users extends Main {
                                           :verification_code,
                                           :api_token)");
 
-      $sApiToken = md5(RANDOM_HASH . $this->_aRequest['email']);
-      $oQuery->bindParam('name', Helper::formatInput($this->_aRequest['name']), PDO::PARAM_STR);
-      $oQuery->bindParam('surname', Helper::formatInput($this->_aRequest['surname']), PDO::PARAM_STR);
-      $oQuery->bindParam('password', md5(RANDOM_HASH . $this->_aRequest['password']), PDO::PARAM_STR);
-      $oQuery->bindParam('email', Helper::formatInput($this->_aRequest['email']), PDO::PARAM_STR);
+      $sApiToken = md5(RANDOM_HASH . $this->_aRequest[$this->_sController]['email']);
+      $oQuery->bindParam('api_token', $sApiToken, PDO::PARAM_STR);
+      $oQuery->bindParam('password', md5(RANDOM_HASH . $this->_aRequest[$this->_sController]['password']), PDO::PARAM_STR);
       $oQuery->bindParam('date', time(), PDO::PARAM_INT);
       $oQuery->bindParam('role', $iRole, PDO::PARAM_INT);
       $oQuery->bindParam('verification_code', $iVerificationCode, PDO::PARAM_STR);
-      $oQuery->bindParam('api_token', $sApiToken, PDO::PARAM_STR);
+
+      foreach (array('name', 'surname', 'email') as $sInput)
+        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput]), PDO::PARAM_STR);
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = Helper::getLastEntry('users');
@@ -333,13 +333,13 @@ class Users extends Main {
    *
    */
   public function update($iId) {
-    $iReceiveNewsletter = isset($this->_aRequest['receive_newsletter']) ? 1 : 0;
-    $iUseGravatar = isset($this->_aRequest['use_gravatar']) ? 1 : 0;
+    $iReceiveNewsletter = isset($this->_aRequest[$this->_sController]['receive_newsletter']) ? 1 : 0;
+    $iUseGravatar       = isset($this->_aRequest[$this->_sController]['use_gravatar']) ? 1 : 0;
 
     # Set other peoples user roles
     if ($iId!== $this->_aSession['user']['id'] && $this->_aSession['user']['role'] == 4)
-      $iUserRole = isset($this->_aRequest['role']) && !empty($this->_aRequest['role']) ?
-              (int) $this->_aRequest['role'] :
+      $iUserRole = isset($this->_aRequest[$this->_sController]['role']) && !empty($this->_aRequest[$this->_sController]['role']) ?
+              (int) $this->_aRequest[$this->_sController]['role'] :
               1;
     else
       $iUserRole = & $this->_aSession['user']['role'];
@@ -357,13 +357,13 @@ class Users extends Main {
                                       WHERE
                                         id = :id");
 
-      $oQuery->bindParam('name', Helper::formatInput($this->_aRequest['name']), PDO::PARAM_STR);
-      $oQuery->bindParam('surname', Helper::formatInput($this->_aRequest['surname']), PDO::PARAM_STR);
-      $oQuery->bindParam('content', Helper::formatInput($this->_aRequest['content']), PDO::PARAM_STR);
       $oQuery->bindParam('receive_newsletter', $iReceiveNewsletter, PDO::PARAM_INT);
       $oQuery->bindParam('use_gravatar', $iUseGravatar, PDO::PARAM_INT);
       $oQuery->bindParam('role', $iUserRole, PDO::PARAM_INT);
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
+
+      foreach (array('name', 'surname', 'content') as $sInput)
+        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput]), PDO::PARAM_STR);
 
       return $oQuery->execute();
     }
@@ -397,7 +397,7 @@ class Users extends Main {
                                       WHERE
                                         id = :id");
 
-      $sPassword = md5(RANDOM_HASH . $this->_aRequest['password_new']);
+      $sPassword = md5(RANDOM_HASH . $this->_aRequest[$this->_sController]['password_new']);
       $oQuery->bindParam('password', $sPassword, PDO::PARAM_STR);
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
 
@@ -590,8 +590,8 @@ class Users extends Main {
                                       LIMIT
                                         1");
 
-      $sPassword = md5(RANDOM_HASH . Helper::formatInput($this->_aRequest['password']));
-      $oQuery->bindParam('email', Helper::formatInput($this->_aRequest['email']), PDO::PARAM_STR);
+      $sPassword = md5(RANDOM_HASH . Helper::formatInput($this->_aRequest[$this->_sController]['password']));
+      $oQuery->bindParam('email', Helper::formatInput($this->_aRequest[$this->_sController]['email']), PDO::PARAM_STR);
       $oQuery->bindParam('password', $sPassword, PDO::PARAM_STR);
       $oQuery->execute();
       $aData = $oQuery->fetch(PDO::FETCH_ASSOC);

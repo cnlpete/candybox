@@ -75,7 +75,7 @@ class Comments extends Main {
     foreach ($aResult as $aRow) {
       $this->_aData[$aRow['id']] = $aRow;
       $this->_formatForOutput($this->_aData[$aRow['id']], $aInts, $aBools, 'comments');
-      $this->_aData[$aRow['id']]['url'] = '/' . $this->_aRequest['controller'] . '/' . $iId . '#' . $aRow['id'];
+      $this->_aData[$aRow['id']]['url'] = '/' . $this->_sController . '/' . $iId . '#' . $aRow['id'];
       $this->_aData[$aRow['id']]['content'] = nl2br($this->_aData[$aRow['id']]['content']);
     }
     # We crawl the facebook avatars

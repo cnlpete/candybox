@@ -372,7 +372,7 @@ class Galleries extends Main {
    *
    */
   public function destroy($iId) {
-    $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_aRequest['controller'] . '/' . (int) $iId);
+    $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . (int) $iId);
 
     # Fetch all images
     try {
@@ -586,10 +586,10 @@ class Galleries extends Main {
         $bReturn = $oQuery->execute();
 
         if ($bReturn) {
-          $aSizes = array ('32', 'popup', 'original', 'thumbnail');
           foreach ($aResult as $aRow) {
-            $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_aRequest['controller'] . '/' . $aRow['album_id']);
-            foreach ($aSizes as $sSize)
+            $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $aRow['album_id']);
+
+            foreach (array('32', 'popup', 'original', 'thumbnail') as $sSize)
               @unlink($sPath . '/' . $sSize . '/' . $aRow['file']);
           }
         }

@@ -127,7 +127,7 @@ class Sessions extends Main {
    */
   public function resendPassword($sPassword = '') {
     $sModel = $this->__autoload('Users');
-    return $sModel::setPassword($this->_aRequest['email'], $sPassword);
+    return $sModel::setPassword($this->_aRequest[$this->_sController]['email'], $sPassword);
   }
 
   /**
@@ -139,7 +139,7 @@ class Sessions extends Main {
    */
   public function resendVerification() {
     $sModel = $this->__autoload('Users');
-    $aData  = $sModel::getVerificationData($this->_aRequest['email']);
+    $aData  = $sModel::getVerificationData($this->_aRequest[$this->_sController]['email']);
 
     return empty($aData['verification_code']) ? false : $aData;
   }

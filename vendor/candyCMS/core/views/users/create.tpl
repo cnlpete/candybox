@@ -10,9 +10,17 @@
         {$lang.global.name} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <input class='focused span4' name='name'
-               value='{$name}' type='text' id='input-name' autofocus required />
-        {if isset($error.name)}<span class='help-inline'>{$error.name}</span>{/if}
+        <input class='focused span4'
+               name='{$_REQUEST.controller}[name]'
+               value='{if isset($name)}{$name}{/if}'
+               type='text'
+               id='input-name'
+               autofocus required />
+        {if isset($error.name)}
+          <span class='help-inline'>
+            {$error.name}
+          </span>
+        {/if}
       </div>
     </div>
     <div class='control-group{if isset($error.surname)} alert alert-error{/if}'>
@@ -20,9 +28,16 @@
         {$lang.global.surname} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <input class='span4' name='surname'
-               value='{$surname}' id='input-surname' type='text'  />
-        {if isset($error.surname)}<span class='help-inline'>{$error.surname}</span>{/if}
+        <input class='span4'
+               name='{$_REQUEST.controller}[surname]'
+               value='{if isset($surname)}{$surname}{/if}'
+               id='input-surname'
+               type='text'  />
+        {if isset($error.surname)}
+          <span class='help-inline'>
+            {$error.surname}
+          </span>
+        {/if}
       </div>
     </div>
     <div class='control-group{if isset($error.email)} alert alert-error{/if}'>
@@ -30,8 +45,17 @@
         {$lang.global.email.email} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <input class='span4' name='email' value='{$email}' type='email' id='input-email' required />
-        {if isset($error.email)}<span class='help-inline'>{$error.email}</span>{/if}
+        <input class='span4'
+               name='{$_REQUEST.controller}[email]'
+               value='{if isset($email)}{$email}{/if}'
+               type='email'
+               id='input-email'
+               required />
+        {if isset($error.email)}
+          <span class='help-inline'>
+            {$error.email}
+          </span>
+        {/if}
       </div>
     </div>
     <div class='control-group{if isset($error.password)} alert alert-error{/if}'>
@@ -39,8 +63,16 @@
         {$lang.global.password.password} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <input class='span4' name='password' type='password' id='input-password' required />
-        {if isset($error.password)}<span class='help-inline'>{$error.password}</span>{/if}
+        <input class='span4'
+               name='{$_REQUEST.controller}[password]'
+               type='password'
+               id='input-password'
+               required />
+        {if isset($error.password)}
+          <span class='help-inline'>
+            {$error.password}
+          </span>
+        {/if}
       </div>
     </div>
     <div class='control-group' id='js-password'>
@@ -48,7 +80,11 @@
         {$lang.global.password.repeat} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <input class='span4' name='password2' type='password' id='input-password2' required />
+        <input class='span4'
+               name='{$_REQUEST.controller}[password2]'
+               type='password'
+               id='input-password2'
+               required />
       </div>
     </div>
     {if $_SESSION.user.role < 4}
@@ -67,16 +103,26 @@
         </label>
         <div class='controls'>
           <label class='checkbox'>
-            <input name='disclaimer' value='disclaimer' type='checkbox' id='input-terms' required />
+            <input name='{$_REQUEST.controller}[disclaimer]'
+                   value='disclaimer'
+                   type='checkbox'
+                   id='input-terms'
+                   required />
             <a href='#js-modal' data-toggle='modal'>
               {$lang.global.terms.read}
             </a>
           </label>
-          {if isset($error.disclaimer)}<span class='help-inline'>{$error.disclaimer}</span>{/if}
+          {if isset($error.disclaimer)}
+            <span class='help-inline'>
+              {$error.disclaimer}
+            </span>
+          {/if}
         </div>
       </div>
     {/if}
-    {if isset($_captcha_)}{$_captcha_}{/if}
+    {if isset($_captcha_)}
+      {$_captcha_}
+    {/if}
     <div class='form-actions'>
       <input type='submit'
              class='btn btn-primary'
@@ -87,9 +133,11 @@
   </form>
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.bootstrap.modal{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js'></script>
+
+  {* @todo Fix form *}
   <script type="text/javascript">
     $(document).ready(function(){
-      $("input[name='password2']").keyup(function(){
+      $("input[name='[password2']").keyup(function(){
         if ($("input[name='password']").val() == $("input[name='password2']").val()) {
           $('#js-password').removeClass('error');
         } else {

@@ -35,7 +35,7 @@
             {$lang.global.name} <span title='{$lang.global.required}'>*</span>
           </label>
           <div class='controls'>
-            <input class='span4 required' name='name' value="{$name}" type='name'
+            <input class='span4 required' name='{$_REQUEST.controller}[name]' value="{$name}" type='name'
                   id='input-name' required />
             {if isset($error.name)}<span class='help-inline'>{$error.name}</span>{/if}
           </div>
@@ -45,7 +45,7 @@
             {$lang.global.surname}
           </label>
           <div class='controls'>
-            <input class='span4' name='surname' value="{$surname}" type='text'
+            <input class='span4' name='{$_REQUEST.controller}[surname]' value="{$surname}" type='text'
                   id='input-surname' />
           </div>
         </div>
@@ -66,7 +66,7 @@
           <div class='controls'>
             <input type='checkbox'
                    class='checkbox'
-                   name='use_gravatar'
+                   name='{$_REQUEST.controller}[use_gravatar]'
                    id='input-use_gravatar'
                    {if $use_gravatar == 1}checked{/if} />
             <div class='help-inline'>
@@ -88,7 +88,7 @@
             {$lang.users.label.content.update}
           </label>
           <div class='controls'>
-            <textarea name='content' rows='6' class='span4' id='input-content'>
+            <textarea name='{$_REQUEST.controller}[content]' rows='6' class='span4' id='input-content'>
               {$content}
             </textarea>
             <span class='help-inline'></span>
@@ -99,7 +99,7 @@
             {$lang.users.label.newsletter}
           </label>
           <div class='controls'>
-            <input name='receive_newsletter' id='input-receive_newsletter' value='1'
+            <input name='{$_REQUEST.controller}[receive_newsletter]' id='input-receive_newsletter' value='1'
                     type='checkbox' class='checkbox' {if $receive_newsletter == 1}checked{/if} />
           </div>
         </div>
@@ -109,7 +109,7 @@
               {$lang.global.user.role}
             </label>
             <div class='controls'>
-              <select name='role' id='input-role' class='span4'>
+              <select name='{$_REQUEST.controller}[role]' id='input-role' class='span4'>
                 <option value='1'{if $role == 1} selected{/if}>{$lang.global.user.roles.1}</option>
                 <option value='2'{if $role == 2} selected{/if}>{$lang.global.user.roles.2}</option>
                 <option value='3'{if $role == 3} selected{/if}>{$lang.global.user.roles.3}</option>
@@ -121,7 +121,7 @@
         <div class='form-actions'>
           <input type='submit' class='btn btn-primary' value='{$lang.users.label.update}' />
           <input type='reset' class='btn' value='{$lang.global.reset}' />
-          <input type='hidden' value="{$email}" name='email' />
+          <input type='hidden' value="{$email}" name='{$_REQUEST.controller}[email]' />
         </div>
       </form>
     </div>
@@ -135,7 +135,7 @@
               {$lang.users.label.password.old} <span title='{$lang.global.required}'>*</span>
             </label>
             <div class='controls'>
-              <input name='password_old' id='input-password_old' type='password'
+              <input name='{$_REQUEST.controller}[password_old]' id='input-password_old' type='password'
                     class='span4 required' required />
               {if isset($error.password_old)}<span class='help-inline'>{$error.password_old}</span>{/if}
             </div>
@@ -145,7 +145,7 @@
               {$lang.users.label.password.new} <span title='{$lang.global.required}'>*</span>
             </label>
             <div class='controls'>
-              <input name='password_new' id='input-password_new' type='password'
+              <input name='{$_REQUEST.controller}[password_new]' id='input-password_new' type='password'
                       class='span4 required' required />
               {if isset($error.password_new)}<span class='help-inline'>{$error.password_new}</span>{/if}
             </div>
@@ -155,7 +155,7 @@
               {$lang.global.password.repeat} <span title='{$lang.global.required}'>*</span>
             </label>
             <div class='controls'>
-              <input name='password_new2' id='input-password_new2' type='password'
+              <input name='{$_REQUEST.controller}[password_new2]' id='input-password_new2' type='password'
                     class='span4 required' required />
               {if isset($error.password_new2)}<span class='help-inline'>{$error.password_new2}</span>{/if}
             </div>
@@ -178,7 +178,10 @@
               <a href='{$standard_avatar_popup}'
                 class='thumbnail js-fancybox'
                 title='{$full_name}'>
-                <img alt='{$name} {$surname}' src='{$standard_avatar_64}' width='64' height='64' />
+                <img alt='{$name} {$surname}'
+                     src='{$standard_avatar_64}'
+                     width='64'
+                     height='64' />
               </a>
             </div>
           {/if}
@@ -186,6 +189,7 @@
             {$lang.users.label.image.choose}
           </label>
           <div class='controls'>
+            {* @todo: Rename file *}
             <input type='file' name='image' id='input-image' class='span4'
                   accept='image/jpg,image/gif,image/png' />
             {if isset($error.image)}
@@ -202,8 +206,11 @@
           </label>
           <div class='controls'>
             <label class='checkbox'>
-              <input type='checkbox' class='checkbox' name='terms'
-                    id='input-terms' value='1' />
+              <input type='checkbox'
+                     class='checkbox'
+                     name='{$_REQUEST.controller}[terms]'
+                     id='input-terms'
+                     value='1' />
                 {$lang.users.label.image.terms}
             </label>
             {if isset($error.terms)}
@@ -231,7 +238,10 @@
             {$lang.global.password.password}
           </label>
           <div class='controls'>
-            <input name='password' type='password' id='input-password' class='span4' />
+            <input name='{$_REQUEST.controller}[password]'
+                   type='password'
+                   id='input-password'
+                   class='span4' />
           </div>
         </div>
         <div class='form-actions'>

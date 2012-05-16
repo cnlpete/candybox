@@ -11,6 +11,8 @@
         {$lang.medias.label.choose} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
+
+        {* @todo Fix name *}
         <input type='file'
                name='file[]'
                id='input-file'
@@ -27,7 +29,7 @@
       </label>
       <div class='controls'>
         <input type='text'
-               name='rename'
+               name='{$_REQUEST.controller}[rename]'
                id='input-rename'
                class='span4'
                onkeyup='this.value = stripNoAlphaChars(this.value)' />
@@ -40,6 +42,8 @@
              value='{$lang.medias.title.create}' />
     </div>
   </form>
+
+  {* @todo fix this *}
   <script type='text/javascript'>
     $("input[type='submit']").click(function() {
       $(this).val(lang.loading);

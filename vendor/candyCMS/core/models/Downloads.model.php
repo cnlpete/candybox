@@ -65,7 +65,7 @@ class Downloads extends Main {
         $this->_aData[$sCategory]['category'] = $sCategory; # Name category for overview
         $this->_aData[$sCategory]['files'][$iId] = $this->_formatForOutput($aRow, $aInts);
         $this->_aData[$sCategory]['files'][$iId]['size'] = Helper::getFileSize(PATH_UPLOAD . '/' .
-                $this->_aRequest['controller'] . '/' . $aRow['file']);
+                $this->_sController . '/' . $aRow['file']);
       }
     }
     else {
@@ -256,8 +256,8 @@ class Downloads extends Main {
 
     $bReturn = parent::destroy($iId);
 
-    if (is_file(Helper::removeSlash(PATH_UPLOAD . '/' . $this->_aRequest['controller'] . '/' . $sFile)))
-      unlink(Helper::removeSlash(PATH_UPLOAD . '/' . $this->_aRequest['controller'] . '/' . $sFile));
+    if (is_file(Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sFile)))
+      unlink(Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sFile));
 
     return $bReturn;
   }

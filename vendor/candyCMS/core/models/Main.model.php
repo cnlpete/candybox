@@ -221,7 +221,7 @@ abstract class Main {
    *
    */
   protected function _formatForOutput(&$aData, $aInts = array('id'), $aBools = null, $sController = '') {
-    $sController = !$sController ? $this->_aRequest['controller'] : $sController;
+    $sController = !$sController ? $this->_sController : $sController;
 
     foreach ($aData as $sColumn => $mData)
       $aData[$sColumn] = Helper::formatOutput($mData);
@@ -464,7 +464,7 @@ abstract class Main {
    *
    */
   public function destroy($iId, $sController = '') {
-    $sController = $sController ? (string) $sController : (string) $this->_aRequest['controller'];
+    $sController = $sController ? (string) $sController : (string) $this->_sController;
 
     try {
       $oQuery = $this->_oDb->prepare("DELETE FROM
