@@ -186,9 +186,7 @@ class Blogs extends Main {
       $this->_aData[1] = $this->_formatForOutput($aRow, $aInts, $aBools);
       $this->_aData[1]['tags'] = array_filter( array_map("trim", explode(',', $aRow['tags'])) );
       $this->_aData[1]['tags_raw'] = $aRow['tags'];
-      $this->_aData[1]['date_modified'] = !empty($aRow['date_modified']) ?
-              Helper::formatTimestamp($aRow['date_modified']) :
-              '';
+      $this->_formatDates($this->_aData[1], 'date_modified');
     }
 
     return $this->_aData;
