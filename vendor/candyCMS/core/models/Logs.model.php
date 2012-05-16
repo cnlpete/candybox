@@ -209,7 +209,7 @@ class Logs extends Main {
       $oQuery = parent::$_oDbStatic->prepare("UPDATE
                                                 " . SQL_PREFIX . "logs
                                               SET
-                                                result_flag = :result_flag
+                                                result = :result_flag
                                               WHERE
                                                 id = :id
                                               LIMIT

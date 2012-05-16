@@ -42,6 +42,10 @@ class UnitTestOfLogModel extends CandyUnitTest {
       $this->assertEqual($aLog['time_end']['raw'], $iTime);
   }
 
+  function testSetResultFlag() {
+    $this->assertTrue($this->oObject->setResultFlag($this->iLastInsertId, false));
+  }
+
   function testDestroy() {
     $this->assertTrue($this->oObject->destroy($this->iLastInsertId));
   }
