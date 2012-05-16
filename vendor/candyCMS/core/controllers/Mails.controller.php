@@ -26,7 +26,10 @@ class Mails extends Main {
    *
    */
   public function show() {
-    return Helper::redirectTo('/' . $this->_aRequest['controller'] . '/create');
+    if (!empty($this->_iId))
+      return Helper::redirectTo('/' . $this->_aRequest['controller'] . '/' . $this->_iId . '/create');
+    else
+      return Helper::redirectTo('/' . $this->_aRequest['controller'] . '/create');
   }
 
   /**
