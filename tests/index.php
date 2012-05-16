@@ -12,7 +12,7 @@
 
 define('PATH_STANDARD', dirname(__FILE__) . '/..');
 
-require_once PATH_STANDARD . '/vendor/.composer/autoload.php';
+require_once PATH_STANDARD . '/vendor/autoload.php';
 require_once PATH_STANDARD . '/tests/simpletest/autorun.php';
 require_once PATH_STANDARD . '/tests/simpletest/web_tester.php';
 

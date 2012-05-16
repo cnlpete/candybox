@@ -39,7 +39,7 @@ class UnitTestOfLogModel extends CandyUnitTest {
     $this->assertTrue($this->oObject->setEndTime($this->iLastInsertId, $iTime));
     $aLogs = $this->oObject->getOverview(1);
     foreach ($aLogs as $aLog)
-      $this->assertEqual($aLog['time_end'], Helper::formatTimestamp($iTime));
+      $this->assertEqual($aLog['time_end']['raw'], $iTime);
   }
 
   function testDestroy() {
