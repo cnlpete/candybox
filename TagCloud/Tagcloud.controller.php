@@ -53,7 +53,7 @@ final class TagCloud {
       $aTags = array();
       $aSortableTags = array();
 
-      foreach ($oModel->getData('', false, 0) as $aRow) {
+      foreach ($oModel->getOverview(0) as $aRow) {
         foreach ($aRow['tags'] as $sTag) {
           // initialize, if tag did not appear before
           if (!$aTags[$sTag]) {
