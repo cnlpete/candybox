@@ -481,7 +481,7 @@ class Galleries extends Main {
                                           :content,
                                           :date )");
 
-      $oQuery->bindParam('album_id', $this->_aRequest[$this->_sController]['id'], PDO::PARAM_INT);
+      $oQuery->bindParam('album_id', $this->_aRequest['id'], PDO::PARAM_INT);
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
       $oQuery->bindParam('file', $sFile, PDO::PARAM_STR);
       $oQuery->bindParam('extension', $sExtension, PDO::PARAM_STR);
