@@ -29,6 +29,7 @@
     settings: {
       refreshMillis: 60000,
       allowFuture: false,
+      range: 0, // forever
       strings: {
         prefixAgo: null,
         prefixFromNow: null,
@@ -116,10 +117,19 @@
     return self;
   };
 
+  // inRange check
+  function inRange(date) {
+    return $t.settings.range == 0 || Math.abs(distance(date)) < $t.settings.range;
+  }
+
   function refresh() {
     var data = prepareData(this);
     if (!isNaN(data.datetime)) {
-      $(this).text(inWords(data.datetime));
+      if (inRange(data.datetime)) {
+        $(this).text(inWords(data.datetime));
+      } else {
+        $(this).text($(this).attr("title"));
+      }
     }
     return this;
   }
@@ -148,4 +158,3 @@
   document.createElement("abbr");
   document.createElement("time");
 }(jQuery));
-

@@ -27,6 +27,11 @@ define('PLUGIN_TAGCLOUD_LIMIT', 10);
 # DEFAULT: 1
 define('PLUGIN_TAGCLOUD_FILTER', 1);
 
+# The range in which fancy timestamps will be generated in minutes
+# takes only numeric values, 0 means infinite range
+# DEFAULT: 4320 (= 60 * 24 * 3 = 3 days)
+define('PLUGIN_FORMATTIMESTAMP_RANGE', 4320);
+
 # Enter your Google tracking code here to track visits.
 # DEFAULT: ''
 define('PLUGIN_ANALYTICS_TRACKING_CODE', '');
