@@ -64,7 +64,6 @@
               onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroy')" />
         <input class='btn' type='reset' value='{$lang.global.reset}' />
       {/if}
-      <input type='hidden' value='formdata' name='{$_REQUEST.action}_{$_REQUEST.controller}' />
     </div>
   </form>
   <script type='text/javascript'>

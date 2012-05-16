@@ -62,7 +62,7 @@ class Comments extends Main {
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
     # we can leave caching on, the form itself will turn caching off, but that is a different template
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID) . $this->create('create_comments');
+    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID) . $this->create();
   }
 
   /**
@@ -77,9 +77,8 @@ class Comments extends Main {
     $sTemplateDir   = Helper::getTemplateDir('comments', '_form');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
 
-    $this->oSmarty->assign('content', isset($this->_aRequest['content']) ? (string) $this->_aRequest['content'] : '');
-    $this->oSmarty->assign('email', isset($this->_aRequest['email']) ? (string) $this->_aRequest['email'] : '');
-    $this->oSmarty->assign('name', isset($this->_aRequest['name']) ? (string) $this->_aRequest['name'] : '');
+    foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
+      $this->oSmarty->assign($sInput, $sData);
 
     if ($bShowCaptcha === true)
       $this->oSmarty->assign('_captcha_', Recaptcha::getInstance()->show());
@@ -96,11 +95,10 @@ class Comments extends Main {
    * We must override the main method due to a diffent required user role.
    *
    * @access public
-   * @param string $sInputName sent input name to verify action
    * @return string HTML content
    *
    */
-  public function create($sInputName) {
+  public function create() {
     $bShowCaptcha = class_exists('CandyCMS\Plugins\Recaptcha') ?
                       $this->_aSession['user']['role'] == 0 && SHOW_CAPTCHA :
                       false;
@@ -108,7 +106,7 @@ class Comments extends Main {
     # No caching for comments
     $this->oSmarty->setCaching(false);
 
-    return isset($this->_aRequest[$sInputName]) ?
+    return isset($this->_aRequest[$this->_sController]) ?
             $this->_create($bShowCaptcha) :
             $this->_showFormTemplate($bShowCaptcha);
   }

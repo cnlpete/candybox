@@ -25,7 +25,7 @@ class Newsletters extends Main {
    *
    */
   public function show() {
-    return Helper::redirectTo('/' . $this->_aRequest['controller'] . '/create');
+    return Helper::redirectTo('/' . $this->_sController . '/create');
   }
 
   /**
@@ -36,7 +36,7 @@ class Newsletters extends Main {
    *
    */
   public function create() {
-    return parent::create('create_' . strtolower($this->_aRequest['controller']), 0);
+    return parent::create(0);
   }
 
   /**
@@ -56,7 +56,7 @@ class Newsletters extends Main {
     else
       return $this->_subscribeToNewsletter($this->_aRequest, true) === true ?
               Helper::successMessage(I18n::get('success.newsletter.create'), '/') :
-              Helper::errorMessage(I18n::get('error.standard'), '/' . $this->_aRequest['controller']);
+              Helper::errorMessage(I18n::get('error.standard'), '/' . $this->_sController);
   }
 
   /**
@@ -67,7 +67,7 @@ class Newsletters extends Main {
    *
    */
   protected function _showFormTemplate() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], '_form');
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, '_form');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
 
     $this->oSmarty->assign('name', isset($this->_aRequest['name']) ? (string) $this->_aRequest['name'] : '');

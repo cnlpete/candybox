@@ -1,5 +1,8 @@
 {strip}
-  <form action='/{$_REQUEST.controller}/create' method='post' data-ajax='false' class='form-horizontal'>
+  <form action='/{$_REQUEST.controller}/create'
+        method='post'
+        data-ajax='false'
+        class='form-horizontal'>
     {if !$MOBILE}
       <div class='page-header'>
         <h1>{$lang.global.login}</h1>
@@ -27,10 +30,9 @@
     </div>
     <div data-role='fieldcontain' class='form-actions'>
       <input type='submit' value='{$lang.global.login}' data-theme='b' class='btn btn-primary'/>
-      <input type='hidden' value='formdata' name='create_sessions' />
     </div>
   </form>
-  <div class='center' data-role="controlgroup">
+  <div class='center' data-role='controlgroup'>
     <a href='/{$_REQUEST.controller}/password' class='btn' data-role='button'>{$lang.sessions.password.title}</a>
     <a href='/{$_REQUEST.controller}/verification' class='btn' data-role='button'>{$lang.sessions.verification.title}</a>
   </div>

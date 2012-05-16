@@ -94,7 +94,7 @@ class Dispatcher {
     switch ($sAction) {
       case 'create':
 
-        $this->oController->setContent($this->oController->create('create_' . strtolower($this->_aRequest['controller'])));
+        $this->oController->setContent($this->oController->create());
 
         break;
 
@@ -113,7 +113,7 @@ class Dispatcher {
 
       case 'update':
 
-        $this->oController->setContent($this->oController->update('update_' . strtolower($this->_aRequest['controller'])));
+        $this->oController->setContent($this->oController->update());
 
         break;
 

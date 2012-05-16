@@ -1,6 +1,8 @@
 {strip}
-  <form action='/{$_REQUEST.controller}/{$_REQUEST.id}/{$_REQUEST.action}' method='post'
-        enctype='multipart/form-data' class='form-horizontal'>
+  <form action='/{$_REQUEST.controller}/{$_REQUEST.id}/{$_REQUEST.action}'
+        method='post'
+        enctype='multipart/form-data'
+        class='form-horizontal'>
     <div class='page-header'>
       <h1>
         {if $_REQUEST.action == 'createfile'}
@@ -16,8 +18,11 @@
           {$lang.galleries.files.label.choose} <span title="{$lang.global.required}">*</span>
         </label>
         <div class='controls'>
-          <input class='span4 required' type='file' name='file[]'
-                id="input-file" multiple required />
+          <input class='span4 required'
+                 type='file'
+                 name='file[]'
+                 id="input-file"
+                 multiple required />
           {if isset($error.file)}<span class="help-inline">{$error.file}</span>{/if}
         </div>
       </div>
@@ -52,7 +57,8 @@
         {$lang.global.description}
       </label>
       <div class='controls'>
-        <input class='span4' type='text'
+        <input class='span4'
+               type='text'
                name='{$_REQUEST.controller}[content]'
                id='input-content'
                value="{$content}" />
@@ -60,14 +66,22 @@
       </div>
     </div>
     <div class='form-actions'>
-      <input type='submit' class='btn btn-primary'
-            value="{if $_REQUEST.action == 'createfile'}{$lang.galleries.files.title.create}{else}{$lang.galleries.files.title.update}{/if}" />
-      {if $_REQUEST.action == 'updatefile'}
-        <input type='button' value='{$lang.global.destroy.destroy}' class='btn btn-danger'
-        onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroyfile')" />
-        <input class='btn' type='reset' value='{$lang.global.reset}' />
+      {if $_REQUEST.action == 'createfile'}
+        <input type='submit'
+               class='btn btn-primary'
+               value='{$lang.galleries.files.title.create}' />
+      {elseif $_REQUEST.action == 'updatefile'}
+        <input type='submit'
+               class='btn btn-primary'
+               value='{$lang.galleries.files.title.update}' />
+        <input type='button'
+               value='{$lang.global.destroy.destroy}'
+               class='btn btn-danger'
+               onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroyfile')" />
+        <input class='btn'
+               type='reset'
+               value='{$lang.global.reset}' />
       {/if}
-      <input type='hidden' value='formdata' name='{$_REQUEST.action}_{$_REQUEST.controller}' />
     </div>
   </form>
   <script type='text/javascript'>

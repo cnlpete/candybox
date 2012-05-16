@@ -15,9 +15,12 @@
         {$lang.global.title} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <input name='{$_REQUEST.controller}[title]' value="{$title}" id='input-title'
+        <input name='{$_REQUEST.controller}[title]'
+               value="{$title}"
+               id='input-title'
                class='required span4 focused'
-               type='text' autofocus required />
+               type='text'
+               autofocus required />
         <span class='help-inline'>
           {if isset($error.title)}
             {$error.title}
@@ -30,18 +33,29 @@
         {$lang.global.description}
       </label>
       <div class='controls'>
-        <input name='{$_REQUEST.controller}[content]' value="{$content}" id='input-content' type='text' class='span4' />
-        <span class='help-inline'></span>
+        <input name='{$_REQUEST.controller}[content]'
+               value="{$content}"
+               id='input-content'
+               type='text'
+               class='span4' />
       </div>
     </div>
     <div class='form-actions'>
-      <input type='submit' class='btn btn-primary'
-            value="{if $_REQUEST.action == 'create'}{$lang.global.create.create}{else}{$lang.global.update.update}{/if}" />
-      <input type='hidden' value='formdata' name='{$_REQUEST.action}_{$_REQUEST.controller}' />
-      {if $_REQUEST.action == 'update'}
-        <input type='button' value='{$lang.galleries.albums.title.destroy}' class='btn btn-danger'
-          onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroy')" />
-        <input type='reset' value='{$lang.global.reset}' class='btn' />
+      {if $_REQUEST.action == 'create'}
+        <input type='submit'
+               class='btn btn-primary'
+               value='{$lang.global.create.create}' />
+      {elseif $_REQUEST.action == 'update'}
+        <input type='submit'
+               class='btn btn-primary'
+               value='{$lang.global.update.update' />
+        <input type='button'
+               value='{$lang.galleries.albums.title.destroy}'
+               class='btn btn-danger'
+               onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroy')" />
+        <input type='reset'
+               value='{$lang.global.reset}'
+               class='btn' />
       {/if}
     </div>
   </form>

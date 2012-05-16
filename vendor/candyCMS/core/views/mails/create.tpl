@@ -50,8 +50,9 @@
     </div>
     {if isset($_captcha_)}{$_captcha_}{/if}
     <div class='form-actions'>
-      <input type='submit' class='btn btn-primary' value='{$lang.global.submit}' />
-      <input type='hidden' value='formdata' name='create_mails' />
+      <input type='submit'
+             class='btn btn-primary'
+             value='{$lang.global.submit}' />
     </div>
   </form>
 {/strip}

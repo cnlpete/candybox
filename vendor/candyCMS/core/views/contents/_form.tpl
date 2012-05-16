@@ -76,7 +76,6 @@
     <div class='form-actions'>
       <input type='submit' class='btn btn-primary'
             value="{if $_REQUEST.action == 'create'}{$lang.global.create.create}{else}{$lang.global.update.update}{/if}" />
-      <input type='hidden' value='formdata' name='{$_REQUEST.action}_{$_REQUEST.controller}' />
       {if $_REQUEST.action == 'update'}
         <input type='button' class='btn btn-danger' value='{$lang.contents.title.destroy}'
               onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroy')" />

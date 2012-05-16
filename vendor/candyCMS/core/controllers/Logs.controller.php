@@ -29,13 +29,13 @@ class Logs extends Main {
       return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
 
     else {
-      $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'show');
+      $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
       $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
       $this->oSmarty->setTemplateDir($sTemplateDir);
 
       $this->oSmarty->assign('logs', $this->_oModel->getData());
       $this->oSmarty->assign('_pages_',
-              $this->_oModel->oPagination->showPages('/' . $this->_aRequest['controller']));
+              $this->_oModel->oPagination->showPages('/' . $this->_sController));
 
       $this->setTitle(I18n::get('global.logs'));
       return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);

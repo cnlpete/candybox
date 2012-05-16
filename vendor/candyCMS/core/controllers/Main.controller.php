@@ -449,38 +449,36 @@ abstract class Main {
    * Create entry or show form template if we have enough rights.
    *
    * @access public
-   * @param string $sInputName sent input name to verify action
    * @param integer $iUserRole required user right
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  public function create($sInputName, $iUserRole = 3) {
+  public function create($iUserRole = 3) {
     $this->oSmarty->setCaching(false);
 
     if ($this->_aSession['user']['role'] < $iUserRole)
       return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
 
     else
-      return isset($this->_aRequest[$sInputName]) ? $this->_create() : $this->_showFormTemplate();
+      return isset($this->_aRequest[$this->_sController]) ? $this->_create() : $this->_showFormTemplate();
   }
 
   /**
    * Update entry or show form template if we have enough rights.
    *
    * @access public
-   * @param string $sInputName sent input name to verify action
    * @param integer $iUserRole required user right
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  public function update($sInputName, $iUserRole = 3) {
+  public function update($iUserRole = 3) {
     $this->oSmarty->setCaching(false);
 
     if ($this->_aSession['user']['role'] < $iUserRole)
       return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
 
     else
-      return isset($this->_aRequest[$sInputName]) ? $this->_update() : $this->_showFormTemplate();
+      return isset($this->_aRequest[$this->_sController]) ? $this->_update() : $this->_showFormTemplate();
   }
 
   /**
