@@ -40,11 +40,11 @@ class Medias extends Main {
       }
 
       # Clear the cache
-      $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
+      $this->oSmarty->clearCacheForController($this->_sController);
 
       return $bAllTrue === true ?
-              Helper::successMessage(I18n::get('success.file.upload'), '/' . $this->_aRequest['controller']) :
-              Helper::errorMessage(I18n::get('error.file.upload'), '/' . $this->_aRequest['controller']);
+              Helper::successMessage(I18n::get('success.file.upload'), '/' . $this->_sController) :
+              Helper::errorMessage(I18n::get('error.file.upload'), '/' . $this->_sController);
 
     }
     else
@@ -59,7 +59,7 @@ class Medias extends Main {
    *
    */
   private function _showFormTemplate() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'create');
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'create');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'create');
 
     $this->oSmarty->setTemplateDir($sTemplateDir);
@@ -79,7 +79,7 @@ class Medias extends Main {
     $oUpload = new Upload($this->_aRequest, $this->_aSession, $this->_aFile);
     $sFolder = isset($this->_aRequest['folder']) ?
             Helper::formatInput($this->_aRequest['folder']) :
-            $this->_aRequest['controller'];
+            $this->_sController;
 
     if (!is_dir($sFolder))
       mkdir(Helper::removeSlash(PATH_UPLOAD . '/' . $sFolder, 0777));
@@ -111,14 +111,14 @@ class Medias extends Main {
    *
    */
   protected function _show() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'show');
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
 
     $this->setTitle(I18n::get('global.manager.media'));
 
     require PATH_STANDARD . '/vendor/candyCMS/core/helpers/Image.helper.php';
 
-    $sOriginalPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_aRequest['controller']);
+    $sOriginalPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController);
     $oDir = opendir($sOriginalPath);
 
     $aFiles = array();
@@ -139,9 +139,9 @@ class Medias extends Main {
       if ($sFileType == 'jpg' || $sFileType == 'jpeg' || $sFileType == 'png' || $sFileType == 'gif') {
         $aImgDim = getImageSize($sPath);
 
-        if (!file_exists(Helper::removeSlash(PATH_UPLOAD . '/temp/' . $this->_aRequest['controller'] . '/' . $sFile))) {
+        if (!file_exists(Helper::removeSlash(PATH_UPLOAD . '/temp/' . $this->_sController . '/' . $sFile))) {
           $oImage = new Image($sFileName, 'temp', $sPath, $sFileType);
-          $oImage->resizeAndCut('32', $this->_aRequest['controller']);
+          $oImage->resizeAndCut('32', $this->_sController);
         }
       }
       else
@@ -172,16 +172,14 @@ class Medias extends Main {
    *
    */
   protected function _destroy() {
-    $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_aRequest['controller'] . '/' . $this->_aRequest['file']);
+    $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $this->_aRequest['file']);
 
     if (is_file($sPath)) {
-      //clear cache
-      $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
-
       unlink($sPath);
-      return Helper::successMessage(I18n::get('success.file.destroy'), '/' . $this->_aRequest['controller']);
+      $this->oSmarty->clearCacheForController($this->_sController);
+      return Helper::successMessage(I18n::get('success.file.destroy'), '/' . $this->_sController);
     }
     else
-      return Helper::errorMessage(I18n::get('error.missing.file'), '/' . $this->_aRequest['controller']);
+      return Helper::errorMessage(I18n::get('error.missing.file'), '/' . $this->_sController);
   }
 }

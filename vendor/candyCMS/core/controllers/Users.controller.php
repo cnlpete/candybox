@@ -79,7 +79,7 @@ class Users extends Main {
    */
   protected function _show() {
     if ($this->_iId) {
-      $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'show');
+      $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
       $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
 
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
@@ -102,7 +102,7 @@ class Users extends Main {
         return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
 
       else {
-        $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'overview');
+        $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
         $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
 
         $this->oSmarty->assign('user', $this->_oModel->getData());
@@ -123,7 +123,7 @@ class Users extends Main {
    *
    */
   protected function _showFormTemplate($bUseRequest = false) {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], '_form');
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, '_form');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
 
     # Set user id of person to update
@@ -193,12 +193,12 @@ class Users extends Main {
       $this->_oModel->updateGravatar($this->_iId);
 
       return Helper::successMessage(I18n::get('success.upload'), '/' .
-              $this->_aRequest['controller'] . '/' . $this->_iId);
+              $this->_sController . '/' . $this->_iId);
     }
 
     else
       return Helper::errorMessage(I18n::get('error.file.upload'), '/' .
-              $this->_aRequest['controller'] . '/' . $this->_iId . '/update');
+              $this->_sController . '/' . $this->_iId . '/update');
   }
 
   /**
@@ -240,7 +240,7 @@ class Users extends Main {
     if ($this->_aRequest['password_new'] !== $this->_aRequest['password_new2'])
       $this->_aError['password_new'] = I18n::get('error.user.update.password.new.match');
 
-    $sRedirectURL = '/' . $this->_aRequest['controller'] . '/';
+    $sRedirectURL = '/' . $this->_sController . '/';
 
     if (isset($this->_aError))
       return $this->_showFormTemplate();
@@ -250,7 +250,7 @@ class Users extends Main {
               (int) $this->_aRequest['id'] :
               $this->_aSession['user']['id'];
 
-      Logs::insert(  $this->_aRequest['controller'],
+      Logs::insert(  $this->_sController,
                     $this->_aRequest['action'],
                     (int) $this->_iId,
                     $this->_aSession['user']['id']);
@@ -318,7 +318,7 @@ class Users extends Main {
       return $this->_showCreateUserTemplate();
 
     elseif ($this->_oModel->create($iVerificationCode) === true) {
-      $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
+      $this->oSmarty->clearCacheForController($this->_sController);
 
       # Send email if user has registered and creator is not an admin.
       if ($this->_aSession['user']['role'] == 4)
@@ -329,7 +329,7 @@ class Users extends Main {
                 Helper::formatInput($this->_aRequest['name']),
                 Helper::createLinkTo('users/' . $iVerificationCode . '/verification'));
 
-      Logs::insert(  $this->_aRequest['controller'],
+      Logs::insert(  $this->_sController,
                     $this->_aRequest['action'],
                     $this->_oModel->getLastInsertId('users'),
                     $this->_aSession['user']['id']);
@@ -341,7 +341,7 @@ class Users extends Main {
                   WEBSITE_MAIL_NOREPLY);
 
       return $this->_aSession['user']['role'] == 4 ?
-              Helper::successMessage(I18n::get('success.create'), '/' . $this->_aRequest['controller']) :
+              Helper::successMessage(I18n::get('success.create'), '/' . $this->_sController) :
               Helper::successMessage(I18n::get('success.user.create'), '/');
     }
     else
@@ -356,7 +356,7 @@ class Users extends Main {
    *
    */
   protected function _showCreateUserTemplate($bShowCaptcha) {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'create');
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'create');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'create');
 
     if ($this->_aSession['user']['role'] == 4) {
@@ -437,7 +437,7 @@ class Users extends Main {
       return $this->_showFormTemplate();
 
     elseif ($this->_oModel->update((int) $this->_iId) === true) {
-      $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
+      $this->oSmarty->clearCacheForController($this->_sController);
 
       # Check if user wants to unsubscribe from mailchimp
       if (!isset($this->_aRequest['receive_newsletter']))
@@ -450,15 +450,15 @@ class Users extends Main {
               (int) $this->_aRequest['id'] :
               $this->_aSession['user']['id'];
 
-      Logs::insert($this->_aRequest['controller'],
+      Logs::insert($this->_sController,
                   $this->_aRequest['action'],
                   (int) $this->_iId,
                   $this->_aSession['user']['id']);
 
-      return Helper::successMessage(I18n::get('success.update'), '/' . $this->_aRequest['controller'] . '/' . $this->_iId);
+      return Helper::successMessage(I18n::get('success.update'), '/' . $this->_sController . '/' . $this->_iId);
     }
     else
-      return Helper::errorMessage(I18n::get('error.sql'), '/' . $this->_aRequest['controller'] . '/' . $this->_iId);
+      return Helper::errorMessage(I18n::get('error.sql'), '/' . $this->_sController . '/' . $this->_iId);
   }
 
   /**
@@ -493,12 +493,12 @@ class Users extends Main {
     if (isset($this->_aRequest['destroy_users']) && $this->_aSession['user']['id'] == $this->_iId) {
       $bCorrectPassword = md5(RANDOM_HASH . $this->_aRequest['password']) === $this->_aSession['user']['password'];
       $sSuccessRedirectUrl = '/';
-      $sFailureRedirectUrl = '/' . $this->_aRequest['controller'] . '/' . $this->_aSession['user']['id'] . '/update#user-destroy';
+      $sFailureRedirectUrl = '/' . $this->_sController . '/' . $this->_aSession['user']['id'] . '/update#user-destroy';
     }
     # admin can delete everybody
     else if ($this->_aSession['user']['role'] == 4) {
       $bCorrectPassword = true;
-      $sSuccessRedirectUrl = '/' . $this->_aRequest['controller'];
+      $sSuccessRedirectUrl = '/' . $this->_sController;
       $sFailureRedirectUrl = $sSuccessRedirectUrl;
     }
     # No admin and not the active user
@@ -507,7 +507,7 @@ class Users extends Main {
 
     if ($bCorrectPassword === true) {
       if ($this->_oModel->destroy($this->_iId) === true) {
-        $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
+        $this->oSmarty->clearCacheForController($this->_sController);
 
         # Unsubscribe from newsletter
         $this->_unsubscribeFromNewsletter($aUser['email']);

@@ -147,7 +147,7 @@ final class Recaptcha {
    * @return boolean status of recpatcha check
    *
    */
-  public function checkCaptcha($aRequest) {
+  public final function checkCaptcha($aRequest) {
     if (isset($aRequest['recaptcha_response_field'])) {
       $this->_oRecaptchaResponse = recaptcha_check_answer (
               $this->_sPrivateKey,
