@@ -152,8 +152,9 @@ class Mails extends Main {
               Helper::formatInput($this->_aRequest['content']),
               Helper::formatInput($this->_aRequest['email']));
 
+      Logs::insert($this->_aRequest['controller'], 'create', (int) $this->_iId, 0, '', '', $bStatus);
+
       if ($bStatus == true) {
-        Logs::insert($this->_aRequest['controller'], 'create', (int) $this->_iId);
         return $this->_showSuccessPage();
       }
       else
