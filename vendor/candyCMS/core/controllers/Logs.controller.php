@@ -54,14 +54,15 @@ class Logs extends Main {
    * @param integer $iUserId ID of the acting user
    * @param integer $iTimeStart starting timestamp of the entry
    * @param integer $iTimeEnd ending timestamp of the entry
+   * @param boolean $bResultFlag whether the execution was successfull
    * @return boolean status of query
    *
    */
-  public static function insert($sControllerName, $sActionName, $iActionId = 0, $iUserId = 0, $iTimeStart = '', $iTimeEnd = '') {
+  public static function insert($sControllerName, $sActionName, $iActionId = 0, $iUserId = 0, $iTimeStart = '', $iTimeEnd = '', $bResultFlag = true) {
     require_once PATH_STANDARD . '/vendor/candyCMS/core/models/Logs.model.php';
 
     $sModel  = Main::__autoload('Logs', true);
-    $bReturn = $sModel::insert($sControllerName, $sActionName, $iActionId, $iUserId, $iTimeStart, $iTimeEnd);
+    $bReturn = $sModel::insert($sControllerName, $sActionName, $iActionId, $iUserId, $iTimeStart, $iTimeEnd, $bResultFlag);
 
     if ($bReturn)
       \CandyCMS\Core\Helpers\SmartySingleton::getInstance()->clearCacheForController('logs');
@@ -112,4 +113,26 @@ class Logs extends Main {
 
     return $bReturn;
   }
+
+  /**
+   * Update the Result of some LogEntry
+   *
+   * @static
+   * @param integer $iLogsId id of log entry to update
+   * @param boolean $bResultFlag the new Timestamp
+   * @return boolean status of query
+   *
+   */
+  public static function updateResultFlag($iLogsId, $bResultFlag) {
+    require_once PATH_STANDARD . '/vendor/candyCMS/core/models/Logs.model.php';
+
+    $sModel  = Main::__autoload('Logs', true);
+    $bReturn = $sModel::setResultFlag($iLogsId, $bResultFlag);
+
+    if ($bReturn)
+      \CandyCMS\Core\Helpers\SmartySingleton::getInstance()->clearCacheForController('logs');
+
+    return $bReturn;
+  }
+
 }
