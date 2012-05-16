@@ -605,7 +605,7 @@ abstract class Main {
   protected function _update($mAdditionalCaches = null) {
     $this->_setError('title');
 
-    # Bugfix: Don't download download file on update.
+    # Bugfix: Don't download download file on update. Note: this is already fixed in 2.1-branch
     $sRedirectURL = $this->_sController == 'downloads' ?
             '/' . $this->_sController :
             '/' . $this->_sController . '/' . (int) $this->_aRequest['id'];

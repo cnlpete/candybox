@@ -19,7 +19,7 @@
                value="{$title}"
                id='input-title'
                class='required span4 focused'
-               type='text' 
+               type='text'
                autofocus required />
         <span class='help-inline'>
           {if isset($error.title)}

@@ -142,8 +142,7 @@ class Upload {
             $sResize :
             $this->_aRequest[$this->_sController]['cut'];
 
-
-    $sUploadFolder = 'galleries/' . (int) $this->_aRequest[$this->_sController]['id'];
+    $sUploadFolder = 'galleries/' . (int) $this->_aRequest['id'];
     $aUploads = $this->uploadFiles($sUploadFolder . '/original', true);
 
     # Do cuts and or resizes

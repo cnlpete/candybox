@@ -63,7 +63,6 @@
         <input class='btn btn-danger' type='button' value='{$lang.global.destroy.destroy}'
               onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroy')" />
         <input class='btn' type='reset' value='{$lang.global.reset}' />
-        <input type='hidden' value="{$_REQUEST.id}" name='{$_REQUEST.controller}[id]' />
       {/if}
     </div>
   </form>

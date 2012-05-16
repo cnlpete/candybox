@@ -120,7 +120,7 @@
     <div data-role='fieldcontain'>
       <div class='form-actions' data-role='controlgroup'>
         {if isset($author_id)}
-          <input type='hidden' 
+          <input type='hidden'
                  value='{$author_id}'
                  name='{$_REQUEST.controller}[author_id]' />
         {/if}
