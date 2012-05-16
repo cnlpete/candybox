@@ -15,7 +15,6 @@ namespace CandyCMS\Core\Helpers;
 use CandyCMS\Core\Controllers\Main;
 use CandyCMS\Core\Helpers\AdvancedException;
 use CandyCMS\Plugins\Bbcode;
-use CandyCMS\Plugins\FormatTimestamp;
 use PDO;
 
 class Helper {
@@ -378,37 +377,6 @@ class Helper {
 
     # Fix quotes to avoid problems with inputs
 		return $bDisableHTML === true ? str_replace('"', "&quot;", $sStr) : $sStr;
-  }
-
-  /**
-   * Format the linux timestamp into a user friendly format.
-   *
-   * If the "FormatTimestamp" plugin is enabled, load plugin and do some advanced work.
-   *
-   * Options:
-   * 0 = default dates
-   * 1 = date only
-   * 2 = time only
-   *
-   * @static
-   * @access public
-   * @param integer $iTime timestamp
-   * @param integer $iOptions options see above
-   * @see vendor/candyCMS/plugins/FormatTimestamp/FormatTimestamp.controller.php
-   * @return string formatted timestamp
-   *
-   */
-  public static function formatTimestamp($iTime, $iOptions = 0) {
-    if ($iTime) {
-      if ($iOptions == 1)
-        return strftime(I18n::get('global.time.format.date'), $iTime);
-
-      elseif($iOptions == 2)
-        return strftime(I18n::get('global.time.format.time'), $iTime);
-
-      else
-        return strftime(I18n::get('global.time.format.datetime'), $iTime);
-    }
   }
 
   /**
