@@ -64,7 +64,7 @@ class Sessions extends Main {
       return Helper::redirectTo('/');
 
     else
-      return isset($this->_aRequest['create_sessions']) ? $this->_create() : $this->_showFormTemplate();
+      return isset($this->_aRequest[$this->_sController]) ? $this->_create() : $this->_showFormTemplate();
   }
 
   /**

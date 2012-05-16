@@ -280,7 +280,7 @@ class Users extends Main {
       return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
 
     else
-      return isset($this->_aRequest['create_users']) ?
+      return isset($this->_aRequest[$this->_sController]) ?
               $this->_create($bShowCaptcha) :
               $this->_showCreateUserTemplate($bShowCaptcha);
   }

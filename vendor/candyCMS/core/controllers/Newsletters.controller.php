@@ -36,7 +36,7 @@ class Newsletters extends Main {
    *
    */
   public function create() {
-    return parent::create('create_' . strtolower($this->_sController), 0);
+    return parent::create(0);
   }
 
   /**
