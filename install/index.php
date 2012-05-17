@@ -408,7 +408,7 @@ class Install extends Index {
       fclose($oFo);
     }
     catch (\AdvancedException $e) {
-      Core\Helpers\AdvancedException::reportBoth($e->getMessage());
+      \Core\Helpers\AdvancedException::reportBoth($e->getMessage());
     }
 
     return $bResult ? true : false;
@@ -423,11 +423,10 @@ class Install extends Index {
     require $sFileName;
 
     try {
-      $oDb = \CandyCMS\Core\Models\Main::connectToDatabase();
-      $bResult = MigrationScript::run($oDB);
+      $bResult = MigrationScript::run(\CandyCMS\Core\Models\Main::connectToDatabase());
     }
     catch (\AdvancedException $e) {
-      Core\Helpers\AdvancedException::reportBoth($e->getMessage());
+      \Core\Helpers\AdvancedException::reportBoth($e->getMessage());
     }
 
     return $bResult ? true : false;
@@ -443,12 +442,12 @@ class Install extends Index {
     $sPath = PATH_STANDARD . '/install/migrations/';
 
     $sExt = pathinfo($sFile, PATHINFO_EXTENSION);
-
     $bResult = false;
+
     if ($sExt == 'sql') {
       $bResult = $this->_doSQLMigration($sPath . $sFile);
     }
-    else if ($sExt == 'php') {
+    elseif ($sExt == 'php') {
       $bResult = $this->_doPHPMigration($sPath . $sFile);
     }
 
@@ -463,12 +462,14 @@ class Install extends Index {
 
         $oQuery->bindParam('file', $_REQUEST['file']);
         $oQuery->bindParam('date', time());
-        $bResultInner = $oQuery->execute();
+        $oQuery->execute();
       }
       catch (\AdvancedException $e) {
-        $oDb->rollBack();
+        die($e->getMessage());
+        #$oDb->rollBack();
       }
     }
+
     exit(json_encode($bResult));
   }
 

@@ -4,12 +4,9 @@ namespace CandyCMS;
 
 class MigrationScript {
 
-  public static function run($oDB) {
+  public static function run($oDb) {
 
-    // TODO
-    return false;
   }
-
 }
 
 ?>
