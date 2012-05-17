@@ -31,8 +31,6 @@ class Searches extends Main {
    *
    */
   public function getData($sSearch, $aTables = '', $sOrderBy = 't.date DESC') {
-    $aInts = array('id', 'author_id');
-
     if (empty($aTables))
       $aTables = array('blogs', 'contents');
 
@@ -75,7 +73,12 @@ class Searches extends Main {
             continue;
 
           $iDate = $aRow['date'];
-          $this->_aData[$sTable][$iDate] = $this->_formatForOutput($aRow, $aInts, null, $this->_aData[$sTable]['controller']);
+          $this->_aData[$sTable][$iDate] = $this->_formatForOutput(
+                  $aRow,
+                  array('id', 'author_id'),
+                  null,
+                  $this->_aData[$sTable]['controller']);
+
           ++$iEntries;
         }
 

@@ -73,7 +73,10 @@ class Logs extends Main {
     foreach ($aResult as $aRow) {
       $iId = $aRow['id'];
 
-      $this->_aData[$iId] = $this->_formatForOutput($aRow, array('id', 'uid', 'user_id', 'action_id'));
+      $this->_aData[$iId] = $this->_formatForOutput(
+              $aRow,
+              array('id', 'uid', 'user_id', 'action_id'));
+
       $this->_formatDates($this->_aData[$iId], 'time_start');
       $this->_formatDates($this->_aData[$iId], 'time_end');
     }
@@ -170,6 +173,7 @@ class Logs extends Main {
 
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
       $oQuery->bindParam('time_end', $iEndTime, PDO::PARAM_INT);
+
       return $oQuery->execute();
     }
     catch (\PDOException $p) {

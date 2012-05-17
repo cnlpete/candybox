@@ -52,6 +52,7 @@ class Calendars extends Main {
                                     ORDER BY
                                       c.start_date ASC,
                                       c.title ASC");
+
     $oQuery->bindParam('year', $iYear, PDO::PARAM_INT);
     return $oQuery;
   }
@@ -127,19 +128,15 @@ class Calendars extends Main {
    *
    */
   public function getOverview($iId = '') {
-    $aInts = array('id', 'author_id');
-    $this->_aData = array();
-
     try {
-      if (isset($this->_aRequest['action']) && $this->_aRequest['action'] == 'archive') {
+      if (isset($this->_aRequest['action']) && $this->_aRequest['action'] == 'archive')
         $oQuery = $this->_getPreparedArchiveStatement();
-      }
-      else if (isset($this->_aRequest['action']) && $this->_aRequest['action'] == 'icalfeed') {
+
+      elseif (isset($this->_aRequest['action']) && $this->_aRequest['action'] == 'icalfeed')
         $oQuery = $this->_getPreparedIcalFeedStatement();
-      }
-      else {
+
+      else
         $oQuery = $this->_getPreparedOverviewStatement();
-      }
 
       $oQuery->execute();
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
@@ -148,6 +145,7 @@ class Calendars extends Main {
       AdvancedException::reportBoth('0011 - ' . $p->getMessage());
       exit('SQL error.');
     }
+
     foreach ($aResult as $aRow) {
       $iId = $aRow['id'];
       $sMonth = I18n::get('global.months.' . $aRow['start_month']);
@@ -157,11 +155,12 @@ class Calendars extends Main {
       $this->_aData[$sDate]['month']  = $sMonth;
       $this->_aData[$sDate]['year']   = $sYear;
 
-      $this->_aData[$sDate]['dates'][$iId] = $this->_formatForOutput($aRow, $aInts);
+      $this->_aData[$sDate]['dates'][$iId] = $this->_formatForOutput($aRow, array('id', 'author_id'));
       $this->_aData[$sDate]['dates'][$iId]['start_date_raw']  = $aRow['start_date'];
       $this->_aData[$sDate]['dates'][$iId]['start_date']      = Helper::formatTimestamp($aRow['start_date'], 1);
 
       $this->_aData[$sDate]['dates'][$iId]['end_date_raw']    = $aRow['end_date'];
+
       if ($aRow['end_date'] > 0)
         $this->_aData[$sDate]['dates'][$iId]['end_date']      = Helper::formatTimestamp($aRow['end_date'], 1);
     }
@@ -179,9 +178,6 @@ class Calendars extends Main {
    *
    */
   public function getId($iId = '', $bUpdate = false) {
-    $aInts = array('id', 'author_id');
-    $this->_aData = array();
-
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         c.*,
@@ -204,17 +200,19 @@ class Calendars extends Main {
 
       $oQuery->bindParam('id', $iId);
       $oQuery->execute();
+
       $aRow = $oQuery->fetch(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth('0012 - ' . $p->getMessage());
       exit('SQL error.');
     }
+
     if ($bUpdate === true)
       $this->_aData = $this->_formatForUpdate($aRow);
 
     else {
-      $this->_aData = $this->_formatForOutput($aRow, $aInts);
+      $this->_aData = $this->_formatForOutput($aRow, array('id', 'author_id'));
 
       # Overide for iCalendar specs
       $this->_aData['date']           = date('Ymd', $aRow['date_raw']) . 'T' . date('His', $aRow['date']) . 'Z';
@@ -258,10 +256,16 @@ class Calendars extends Main {
       $oQuery->bindParam('date', time(), PDO::PARAM_INT);
 
       foreach (array('title', 'content') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false), PDO::PARAM_STR);
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                PDO::PARAM_STR);
 
       foreach (array('start_date', 'end_date') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput]), PDO::PARAM_INT);
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                PDO::PARAM_INT);
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = Helper::getLastEntry('calendars');
@@ -306,10 +310,16 @@ class Calendars extends Main {
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
 
       foreach (array('title', 'content') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false), PDO::PARAM_STR);
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                PDO::PARAM_STR);
 
       foreach (array('start_date', 'end_date') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput]), PDO::PARAM_INT);
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                PDO::PARAM_INT);
 
       return $oQuery->execute();
     }

@@ -136,17 +136,18 @@ class Users extends Main {
    *
    */
   public static function setPassword($sEmail, $sPassword, $bEncrypt = false) {
-    $oDB = parent::connectToDatabase();
+    if (empty(parent::$_oDbStatic))
+      parent::connectToDatabase();
 
     $sPassword = $bEncrypt == true ? md5(RANDOM_HASH . $sPassword) : $sPassword;
 
     try {
-      $oQuery = $oDB->prepare("UPDATE
-                                " . SQL_PREFIX . "users
-                              SET
-                                `password` = :password
-                              WHERE
-                                `email` = :email");
+      $oQuery = parent::$_oDbStatic->prepare("UPDATE
+                                                " . SQL_PREFIX . "users
+                                              SET
+                                                `password` = :password
+                                              WHERE
+                                                `email` = :email");
 
       $oQuery->bindParam(':password', $sPassword, PDO::PARAM_STR);
       $oQuery->bindParam(':email', Helper::formatInput($sEmail), PDO::PARAM_STR);
@@ -176,10 +177,6 @@ class Users extends Main {
    *
    */
   public function getOverview($iLimit = 1000) {
-    $aInts  = array('id', 'role');
-    $aBools = array('use_gravatar', 'receive_newsletter');
-
-
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         u.id,
@@ -216,7 +213,11 @@ class Users extends Main {
     foreach ($aResult as $aRow) {
       $iId = $aRow['id'];
 
-      $this->_aData[$iId] = $this->_formatForUserOutput($aRow, $aInts, $aBools);
+      $this->_aData[$iId] = $this->_formatForUserOutput(
+              $aRow,
+              array('id', 'role'),
+              array('use_gravatar', 'receive_newsletter'));
+
       $this->_formatDates($this->_aData[$iId], 'last_login');
     }
 
@@ -233,9 +234,6 @@ class Users extends Main {
    *
    */
   public function getId($iId, $bUpdate = false) {
-    $aInts  = array('id', 'role');
-    $aBools = array('use_gravatar', 'receive_newsletter');
-
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         u.*,
@@ -266,7 +264,11 @@ class Users extends Main {
       $this->_aData = $this->_formatForUpdate($aRow);
 
     else {
-      $this->_aData[1] = $this->_formatForUserOutput($aRow, $aInts, $aBools);
+      $this->_aData[1] = $this->_formatForUserOutput(
+              $aRow,
+              array('id', 'role'),
+              array('use_gravatar', 'receive_newsletter'));
+
       $this->_formatDates($this->_aData[1], 'last_login');
     }
 
@@ -312,7 +314,10 @@ class Users extends Main {
       $oQuery->bindParam('verification_code', $iVerificationCode, PDO::PARAM_STR);
 
       foreach (array('name', 'surname', 'email') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput]), PDO::PARAM_STR);
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                PDO::PARAM_STR);
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = Helper::getLastEntry('users');
@@ -371,7 +376,10 @@ class Users extends Main {
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
 
       foreach (array('name', 'surname', 'content') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput]), PDO::PARAM_STR);
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                PDO::PARAM_STR);
 
       return $oQuery->execute();
     }

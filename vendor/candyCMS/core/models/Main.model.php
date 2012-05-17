@@ -182,7 +182,7 @@ abstract class Main {
 
     foreach ($aRow as $sColumn => $sData) {
 
-			# Quickfix. Test this on other machines too.
+			# Bugfix: Avoid TinyMCE problems.
 			$sData = str_replace('\"', '', $sData);
 			$sData = str_replace('\&quot;', '', $sData);
       $aData[$sColumn] = $sData;
@@ -210,6 +210,7 @@ abstract class Main {
         'w3c'       => date('Y-m-d\TH:i:sP', $iTimeStamp),
         'w3c_date'  => date('Y-m-d', $iTimeStamp),
       );
+
       $aData[$sKey] = $aDateData;
     }
 
@@ -287,6 +288,7 @@ abstract class Main {
       }
     }
 
+    # Normal user
     if ($aData['user_id'] != 0) {
       $aUserData = array(
           'email'         => $aData['user_email'],
@@ -298,7 +300,8 @@ abstract class Main {
           'ip'            => isset($aData['author_ip']) ? $aData['author_ip'] : '',
       );
     }
-    # We dont have a user (comments) and format the user given data instead.
+
+    # We don't have a user (comments) and format the user given data instead.
     else {
       $aUserData = array(
           'email'         => isset($aData['author_email']) ? $aData['author_email'] : WEBSITE_MAIL,

@@ -42,8 +42,6 @@ class Galleries extends Main {
    *
    */
   public function getData($iId = '', $bUpdate = false, $bAdvancedImageInformation = false, $iLimit = LIMIT_ALBUMS) {
-    $aInts = array('id', 'user_id', 'files_sum');
-
     $sWhere   = '';
     $iResult  = 0;
 
@@ -113,8 +111,16 @@ class Galleries extends Main {
         $iId = $aRow['id'];
 
         # need to specify 'galleries' because this might be called for rss feed generation
-        $this->_aData[$iId] = $this->_formatForOutput($aRow, $aInts, null, 'galleries');
-        $this->_aData[$iId]['files'] = ($aRow['files_sum'] > 0) ? $this->getThumbs($aRow['id'], $bAdvancedImageInformation) : '';
+        $this->_aData[$iId] = $this->_formatForOutput(
+                $aRow,
+                array('id', 'user_id', 'files_sum'),
+                null,
+                'galleries');
+
+        $this->_aData[$iId]['files'] = $aRow['files_sum'] > 0 ?
+                $this->getThumbs($aRow['id'], $bAdvancedImageInformation) :
+                '';
+
         $this->_aData[$iId]['url_createfile'] = $this->_aData[$iId]['url_clean'] . '/createfile';
       }
     }
@@ -132,8 +138,6 @@ class Galleries extends Main {
    *
    */
   public function getThumbs($iId, $bAdvancedImageInformation = false) {
-    $aInts = array('id', 'album_id', 'author_id');
-
     # Clear existing array (fix, when we got no images at a gallery
     if (!empty($this->_aThumbs))
       unset($this->_aThumbs);
@@ -166,31 +170,32 @@ class Galleries extends Main {
       exit('SQL error.');
     }
 
-    $aSizes = array('32', 'popup', 'original', 'thumb');
     $iLoop = 0;
     foreach ($aResult as $aRow) {
       $iId           = $aRow['id'];
 
       $sUrlUpload    = Helper::addSlash(PATH_UPLOAD . '/galleries/' . $aRow['album_id']);
 
-      $this->_aThumbs[$iId]                 = $this->_formatForOutput($aRow, $aInts);
+      $this->_aThumbs[$iId]                 = $this->_formatForOutput($aRow, array('id', 'album_id', 'author_id'));
       $this->_aThumbs[$iId]['url']          = '/galleries/' . $aRow['album_id'] . '/image/' . $iId;
 
-      foreach ($aSizes as $sSize)
+      foreach (array('32', 'popup', 'original', 'thumb') as $sSize)
         $this->_aThumbs[$iId]['url_' . $sSize] = $sUrlUpload . '/' . $sSize . '/' . $aRow['file'];
 
       $this->_aThumbs[$iId]['url_upload']   = $sUrlUpload;
       $this->_aThumbs[$iId]['url_thumb']    = $sUrlUpload . '/thumbnail/' . $aRow['file'];
+
       # /{$_REQUEST.controller}/{$f.id}/updatefile
       $this->_aThumbs[$iId]['url_update']   = $this->_aThumbs[$iId]['url_update'] . 'file';
+
       # /{$_REQUEST.controller}/{$f.id}/destroyfile?album_id={$_REQUEST.id}
       $this->_aThumbs[$iId]['url_destroy']  = $this->_aThumbs[$iId]['url_destroy'] . 'file?album_id=' . $aRow['album_id'];
       $this->_aThumbs[$iId]['thumb_width']  = THUMB_DEFAULT_X;
       $this->_aThumbs[$iId]['loop']         = $iLoop;
 
-      # We want to get the image dimension of the original image
-      # This function is not set to default due its long processing time
-      if ($bAdvancedImageInformation == true) {
+      # We want to get the image dimension of the original image.
+      # This function is not set to default due its long processing time.
+      if ($bAdvancedImageInformation === true) {
         $aPopupSize = getimagesize(Helper::removeSlash($this->_aThumbs[$iId]['url_popup']));
         $aThumbSize = getimagesize(Helper::removeSlash($this->_aThumbs[$iId]['url_thumb']));
         $iImageSize = filesize(Helper::removeSlash($this->_aThumbs[$iId]['url_popup']));
@@ -224,7 +229,13 @@ class Galleries extends Main {
       parent::connectToDatabase();
 
     try {
-      $oQuery = parent::$_oDbStatic->prepare("SELECT title, content FROM " . SQL_PREFIX . "gallery_albums WHERE id = :album_id");
+      $oQuery = parent::$_oDbStatic->prepare("SELECT
+                                                title, content
+                                              FROM
+                                                " . SQL_PREFIX . "gallery_albums
+                                              WHERE
+                                                id = :album_id");
+
       $oQuery->bindParam('album_id', $iId, PDO::PARAM_INT);
 
       $bReturn = $oQuery->execute();
@@ -235,14 +246,10 @@ class Galleries extends Main {
       exit('SQL error.');
     }
 
-    # Do we need to highlight text?
-    $sHighlight = isset($aRequest['highlight']) ?
-            $aRequest['highlight'] :
-            '';
-
     if ($bReturn === true) {
       foreach ($aResult as $sKey => $sValue)
-        $aResult[$sKey] = Helper::formatOutput($sValue, $sHighlight);
+        $aResult[$sKey] = Helper::formatOutput(
+                        $sValue, isset($aRequest['highlight']) ? $aRequest['highlight'] : '');
 
       return $aResult;
     }
@@ -262,14 +269,19 @@ class Galleries extends Main {
       parent::connectToDatabase();
 
     try {
-      $oQuery = parent::$_oDbStatic->prepare("SELECT * FROM " . SQL_PREFIX . "gallery_files WHERE id = :id");
+      $oQuery = parent::$_oDbStatic->prepare("SELECT
+                                                *
+                                              FROM
+                                                " . SQL_PREFIX . "gallery_files
+                                              WHERE
+                                                id = :id");
+
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
       $oQuery->execute();
 
       $aData = $oQuery->fetch(PDO::FETCH_ASSOC);
 
-      $aInts = array('id', 'album_id', 'author_id');
-      foreach ($aInts as $sInt)
+      foreach (array('id', 'album_id', 'author_id') as $sInt)
         $aData[$sInt] = (int) $aData[$sInt];
 
       return $aData;
@@ -305,7 +317,10 @@ class Galleries extends Main {
       $oQuery->bindParam('date', time(), PDO::PARAM_INT);
 
       foreach (array('title', 'content') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false), PDO::PARAM_STR);
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                PDO::PARAM_STR);
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = Helper::getLastEntry('gallery_albums');
@@ -346,7 +361,10 @@ class Galleries extends Main {
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
 
       foreach (array('title', 'content') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false), PDO::PARAM_STR);
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                PDO::PARAM_STR);
 
       return $oQuery->execute();
     }
@@ -404,13 +422,12 @@ class Galleries extends Main {
         $oQuery->bindParam('album_id', $iId);
         $oQuery->execute();
 
-        $aSizes = array ('32', 'popup', 'original', 'thumbnail');
-        foreach ($aSizes as $sSize) {
-          # destroy files from disk
+        foreach (array ('32', 'popup', 'original', 'thumbnail') as $sSize) {
+          # Destroy files from disk
           foreach ($aResult as $aRow)
             @unlink($sPath . '/' . $sSize . '/' . $aRow['file']);
 
-          # Destroy Folders
+          # Destroy folders
           @rmdir($sPath . '/' . $sSize);
         }
       }
@@ -437,6 +454,8 @@ class Galleries extends Main {
 
         $oQuery->bindParam('album_id', $iId);
         $bReturn = $oQuery->execute();
+
+        # Remove album folder
         @rmdir($sPath);
         return $bReturn;
       }
@@ -488,7 +507,10 @@ class Galleries extends Main {
       $oQuery->bindParam('date', time(), PDO::PARAM_INT);
 
       foreach (array('content') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false), PDO::PARAM_STR);
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                PDO::PARAM_STR);
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = Helper::getLastEntry('gallery_files');
@@ -528,7 +550,10 @@ class Galleries extends Main {
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
 
       foreach (array('content') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false), PDO::PARAM_STR);
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                PDO::PARAM_STR);
 
       return $oQuery->execute();
     }

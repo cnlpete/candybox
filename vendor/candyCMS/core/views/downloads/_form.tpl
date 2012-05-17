@@ -83,15 +83,21 @@
       </div>
     {/if}
     <div class='form-actions'>
-      {* @todo *}
-      <input type='submit' class='btn btn-primary'
-            value='{if $_REQUEST.action == 'create'}{$lang.global.create.create}{else}{$lang.global.update.update}{/if}' />
-      {if $_REQUEST.action == 'update'}
-        <input  type='button'
-                class='btn btn-danger'
-                value='{$lang.global.destroy.destroy}'
-                onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroy')" />
-        <input type='reset' class='btn' value='{$lang.global.reset}' />
+      {if $_REQUEST.action == 'create'}
+        <input type='submit'
+               class='btn btn-primary'
+               value='{$lang.global.create.create}' />
+      {elseif $_REQUEST.action == 'update'}
+        <input type='submit'
+               class='btn btn-primary'
+               value='{$lang.global.update.update' />
+        <input type='button'
+               class='btn btn-danger'
+               value='{$lang.global.destroy.destroy}'
+               onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroy')" />
+        <input type='reset'
+               class='btn'
+               value='{$lang.global.reset}' />
       {/if}
     </p>
   </form>

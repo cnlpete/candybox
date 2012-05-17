@@ -27,14 +27,10 @@ class Blogs extends Main {
    * @access public
    * @param integer $iLimit blog post limit, 0 for infinite
    * @return array data from _setData
-   * @todo
    *
    */
   public function getOverview($iLimit = LIMIT_BLOG) {
-    $aInts  = array('id', 'uid', 'author_id', 'comment_sum');
-    $aBools = array('published', 'use_gravatar');
-
-    if(WEBSITE_MODE == 'test' && $iLimit != 0)
+    if (WEBSITE_MODE == 'test' && $iLimit != 0)
       $iLimit = 2;
 
     # Show unpublished items and entries with diffent languages to moderators or administrators only
@@ -46,16 +42,18 @@ class Blogs extends Main {
     if (isset($this->_aRequest['search']) && !empty($this->_aRequest['search'])) {
       $sWhere .= isset($sWhere) && !empty($sWhere) ? ' AND ' : ' WHERE ';
       $sSearchString = str_replace('%20', ' ', Helper::formatInput($this->_aRequest['search'], false));
-      # remove all characters that might harm us, only allow digits, normal letters and whitespaces
+
+      # Remove all characters that might harm us, only allow digits, normal letters and whitespaces
       $sSearchString = preg_replace('/[^\d\s\w]/', '', $sSearchString);
 
+      # The last two lines are only for compatibility,
+      # since we don't know if the tags are seperated by ', ' instead of ','
       $sWhere .= "tags LIKE '%," . $sSearchString . ",%'
               OR tags LIKE '%," . $sSearchString . "'
               OR tags LIKE '" . $sSearchString . ",%'
               OR tags = '" . $sSearchString . "'
               OR tags LIKE '%, " . $sSearchString . "'
               OR tags LIKE '%, " . $sSearchString . ",%'";
-      // these last two lines are only for compatibility, since we don't know if the tags are seperated by ', ' instead of ','
     }
 
     try {
@@ -74,7 +72,9 @@ class Blogs extends Main {
     }
 
     try {
-      $sLimit = $iLimit != 0 ? ' LIMIT '.$this->oPagination->getOffset().', '.$this->oPagination->getLimit() : '';
+      $sLimit = $iLimit != 0 ?
+              ' LIMIT ' . $this->oPagination->getOffset() . ', ' . $this->oPagination->getLimit() :
+              '';
 
       $oQuery = $this->_oDb->prepare("SELECT
                                         b.*,
@@ -114,12 +114,16 @@ class Blogs extends Main {
       $iDate = $aRow['date'];
 
       # We need to specify 'blogs' because this might also be called for rss
-      $this->_aData[$iDate] = $this->_formatForOutput($aRow, $aInts, $aBools, 'blogs');
-      $this->_aData[$iDate]['tags_raw']       = $aRow['tags'];
-      //FIXME trim spaces, redundant, if those get removed at blog creation/editing
-      //explode using ',' and filter empty items (since explode always gives at least one item)
-      $this->_aData[$iDate]['tags']           = array_filter( array_map("trim", explode(',', $aRow['tags'])) );
-      $this->_aData[$iDate]['date_modified']  = !empty($aRow['date_modified']) ?
+      $this->_aData[$iDate] = $this->_formatForOutput($aRow,
+              array('id', 'uid', 'author_id', 'comment_sum'),
+              array('published', 'use_gravatar'),
+              'blogs');
+
+      # @todo trim spaces, redundant, if those get removed at blog creation/editing
+      # Explode using ',' and filter empty items (since explode always gives at least one item)
+      $this->_aData[$iDate]['tags'] = array_filter(array_map('trim', explode(',', $aRow['tags'])));
+      $this->_aData[$iDate]['tags_raw'] = $aRow['tags'];
+      $this->_aData[$iDate]['date_modified'] = !empty($aRow['date_modified']) ?
               Helper::formatTimestamp($aRow['date_modified']) :
               '';
     }
@@ -135,15 +139,11 @@ class Blogs extends Main {
    * @param integer $iId ID to load data from. If empty, show overview.
    * @param boolean $bUpdate prepare data for update
    * @return array data from _setData
-   * @todo
    *
    */
   public function getId($iId = '', $bUpdate = false) {
     # Show unpublished items to moderators or administrators only
     $iPublished = $this->_aSession['user']['role'] >= 3 ? 0 : 1;
-
-    $aInts  = array('id', 'uid', 'author_id', 'comment_sum');
-    $aBools = array('published', 'use_gravatar');
 
     try {
       $oQuery = $this->_oDb->prepare("SELECT
@@ -185,9 +185,11 @@ class Blogs extends Main {
       $this->_aData = $this->_formatForUpdate($aRow);
 
     else {
-      $this->_aData[1] = $this->_formatForOutput($aRow, $aInts, $aBools);
-      $this->_aData[1]['tags'] = array_filter( array_map("trim", explode(',', $aRow['tags'])) );
-      $this->_aData[1]['tags_raw'] = $aRow['tags'];
+      $this->_aData[1] = $this->_formatForOutput($aRow,
+              array('id', 'uid', 'author_id', 'comment_sum'),
+              array('published', 'use_gravatar'));
+      $this->_aData[1]['tags']          = array_filter( array_map('trim', explode(',', $aRow['tags'])) );
+      $this->_aData[1]['tags_raw']      = $aRow['tags'];
       $this->_aData[1]['date_modified'] = !empty($aRow['date_modified']) ?
               Helper::formatTimestamp($aRow['date_modified']) :
               '';
@@ -232,22 +234,23 @@ class Blogs extends Main {
                                           :date,
                                           :published )");
 
+      $sTags = Helper::formatInput(implode(',', array_filter(array_map('trim', explode(',', $this->_aRequest['tags'])))));
+      $oQuery->bindParam('tags', $sTags, PDO::PARAM_STR);
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
-      $oQuery->bindParam('title', Helper::formatInput($this->_aRequest['title'], false), PDO::PARAM_STR);
-      $sTags = implode(',', array_filter( array_map("trim", explode(',', $this->_aRequest['tags'])) ));
-      $oQuery->bindParam('tags', Helper::formatInput($sTags), PDO::PARAM_STR);
-      $oQuery->bindParam('teaser', Helper::formatInput($this->_aRequest['teaser'], false), PDO::PARAM_STR);
-      $oQuery->bindParam('keywords', Helper::formatInput($this->_aRequest['keywords']), PDO::PARAM_STR);
-      $oQuery->bindParam('content', Helper::formatInput($this->_aRequest['content'], false), PDO::PARAM_STR);
-      $oQuery->bindParam('language', Helper::formatInput($this->_aRequest['language']), PDO::PARAM_STR);
       $oQuery->bindParam('date', time(), PDO::PARAM_INT);
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
 
       foreach (array('title', 'teaser', 'content') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false), PDO::PARAM_STR);
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                PDO::PARAM_STR);
 
-      foreach (array('tags', 'keywords', 'language') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput]), PDO::PARAM_STR);
+      foreach (array('keywords', 'language') as $sInput)
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                PDO::PARAM_STR);
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = Helper::getLastEntry($this->_sController);
@@ -313,24 +316,25 @@ class Blogs extends Main {
                                       WHERE
                                         id = :id");
 
+      $sTags = Helper::formatInput(implode(',', array_filter( array_map('trim', explode(',', $this->_aRequest['tags'])))));
+      $oQuery->bindParam('tags', $sTags, PDO::PARAM_STR);
       $oQuery->bindParam('author_id', $iUpdateAuthor, PDO::PARAM_INT);
-      $oQuery->bindParam('title', Helper::formatInput($this->_aRequest['title'], false), PDO::PARAM_STR);
-      $sTags = implode(',', array_filter( array_map("trim", explode(',', $this->_aRequest['tags'])) ));
-      $oQuery->bindParam('tags', Helper::formatInput($sTags), PDO::PARAM_STR);
-      $oQuery->bindParam('teaser', Helper::formatInput($this->_aRequest['teaser'], false), PDO::PARAM_STR);
-      $oQuery->bindParam('keywords', Helper::formatInput($this->_aRequest['keywords']), PDO::PARAM_STR);
-      $oQuery->bindParam('content', Helper::formatInput($this->_aRequest['content'], false), PDO::PARAM_STR);
-      $oQuery->bindParam('language', Helper::formatInput($this->_aRequest['language']), PDO::PARAM_STR);
       $oQuery->bindParam('date', $iDate, PDO::PARAM_INT);
       $oQuery->bindParam('date_modified', $iDateModified, PDO::PARAM_INT);
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
 
       foreach (array('title', 'teaser', 'content') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false), PDO::PARAM_STR);
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                PDO::PARAM_STR);
 
-      foreach (array('tags', 'keywords', 'language') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput]), PDO::PARAM_STR);
+      foreach (array('keywords', 'language') as $sInput)
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                PDO::PARAM_STR);
 
       return $oQuery->execute();
     }

@@ -28,8 +28,6 @@ class Downloads extends Main {
    *
    */
   public function getOverview() {
-    $aInts = array('id', 'author_id', 'downloads', 'uid');
-
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         d.*,
@@ -59,10 +57,13 @@ class Downloads extends Main {
       $iId = $aRow['id'];
       $sCategory = $aRow['category'];
 
-      $this->_aData[$sCategory]['category'] = $sCategory; # Name category for overview
-      $this->_aData[$sCategory]['files'][$iId] = $this->_formatForOutput($aRow, $aInts);
+      # Name category for overview
+      $this->_aData[$sCategory]['category'] = $sCategory;
+
+      # Files
+      $this->_aData[$sCategory]['files'][$iId] = $this->_formatForOutput($aRow, array('id', 'author_id', 'downloads', 'uid'));
       $this->_aData[$sCategory]['files'][$iId]['size'] = Helper::getFileSize(PATH_UPLOAD . '/' .
-              $this->_aRequest['controller'] . '/' . $aRow['file']);
+              $this->_sController . '/' . $aRow['file']);
     }
 
     return $this->_aData;
@@ -98,7 +99,7 @@ class Downloads extends Main {
 
       $oQuery->bindParam('id', $iId);
       $oQuery->execute();
-      $aRow = & $oQuery->fetch(PDO::FETCH_ASSOC);
+      $aRow = $oQuery->fetch(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth('0033 - ' . $p->getMessage());
@@ -180,10 +181,16 @@ class Downloads extends Main {
       $oQuery->bindParam('extension', $sExtension, PDO::PARAM_STR);
 
       foreach (array('title', 'content') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false), PDO::PARAM_STR);
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                PDO::PARAM_STR);
 
       foreach (array('category') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput]), PDO::PARAM_STR);
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                PDO::PARAM_STR);
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = Helper::getLastEntry('downloads');
@@ -228,10 +235,16 @@ class Downloads extends Main {
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
 
       foreach (array('title', 'content') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false), PDO::PARAM_STR);
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                PDO::PARAM_STR);
 
       foreach (array('category', 'downloads') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput]), PDO::PARAM_STR);
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                PDO::PARAM_STR);
 
       return $oQuery->execute();
     }

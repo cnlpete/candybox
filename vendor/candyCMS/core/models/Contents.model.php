@@ -29,9 +29,6 @@ class Contents extends Main {
    *
    */
   public function getOverview($iLimit = 100) {
-    $aInts  = array('id', 'uid', 'author_id');
-    $aBools = array('published');
-
     $iPublished = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ? 0 : 1;
 
     try {
@@ -68,7 +65,11 @@ class Contents extends Main {
     foreach ($aResult as $aRow) {
       $iId = $aRow['id'];
 
-      $this->_aData[$iId] = $this->_formatForOutput($aRow, $aInts, $aBools, 'contents');
+      $this->_aData[$iId] = $this->_formatForOutput(
+              $aRow,
+              array('id', 'uid', 'author_id'),
+              array('published'),
+              'contents');
     }
 
     return $this->_aData;
@@ -84,9 +85,6 @@ class Contents extends Main {
    *
    */
   public function getId($iId = '', $bUpdate = false) {
-    $aInts  = array('id', 'uid', 'author_id');
-    $aBools = array('published');
-
     $iPublished = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ? 0 : 1;
 
     try {
@@ -128,7 +126,11 @@ class Contents extends Main {
       else {
         $iId = $aRow['id'];
 
-        $this->_aData[$iId] = $this->_formatForOutput($aRow, $aInts, $aBools, 'contents');
+        $this->_aData[$iId] = $this->_formatForOutput(
+                $aRow,
+                array('id', 'uid', 'author_id'),
+                array('published'),
+                'contents');
       }
     }
 
@@ -172,10 +174,16 @@ class Contents extends Main {
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
 
       foreach (array('title', 'teaser', 'content') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false), PDO::PARAM_STR);
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                PDO::PARAM_STR);
 
       foreach (array('keywords') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput]), PDO::PARAM_STR);
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                PDO::PARAM_STR);
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = Helper::getLastEntry('contents');
@@ -229,10 +237,16 @@ class Contents extends Main {
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
 
       foreach (array('title', 'teaser', 'content') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false), PDO::PARAM_STR);
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                PDO::PARAM_STR);
 
       foreach (array('keywords') as $sInput)
-        $oQuery->bindParam($sInput, Helper::formatInput($this->_aRequest[$this->_sController][$sInput]), PDO::PARAM_STR);
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                PDO::PARAM_STR);
 
       return $oQuery->execute();
     }

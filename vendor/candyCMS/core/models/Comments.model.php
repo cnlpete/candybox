@@ -31,9 +31,6 @@ class Comments extends Main {
    *
    */
   public function getOverview($iId, $iEntries, $iLimit) {
-    $aInts  = array('id', 'parent_id', 'author_id', 'author_facebook_id', 'user_id');
-    $aBools = array('use_gravatar');
-
     $this->oPagination = new Pagination($this->_aRequest, $iEntries, $iLimit);
 
     try {
@@ -73,11 +70,18 @@ class Comments extends Main {
     }
 
     foreach ($aResult as $aRow) {
-      $this->_aData[$aRow['id']] = $aRow;
-      $this->_formatForOutput($this->_aData[$aRow['id']], $aInts, $aBools, 'comments');
-      $this->_aData[$aRow['id']]['url'] = '/' . $this->_sController . '/' . $iId . '#' . $aRow['id'];
-      $this->_aData[$aRow['id']]['content'] = nl2br($this->_aData[$aRow['id']]['content']);
+      $iId = $aRow['id'];
+
+      $this->_aData[$iId] = $aRow;
+
+      $this->_formatForOutput($this->_aData[$iId],
+              array('id', 'parent_id', 'author_id', 'author_facebook_id', 'user_id'),
+              array('use_gravatar'), 'comments');
+
+      $this->_aData[$iId]['url']     = '/' . $this->_sController . '/' . $iId . '#' . $aRow['id'];
+      $this->_aData[$iId]['content'] = nl2br($this->_aData[$aRow['id']]['content']);
     }
+
     # We crawl the facebook avatars
     if (PLUGIN_FACEBOOK_APP_ID && class_exists('\CandyCMS\Plugins\FacebookCMS'))
       $this->_getFacebookAvatars($aResult);
@@ -128,6 +132,7 @@ class Comments extends Main {
    *
    * @access public
    * @return boolean status of query
+   * @todo we might can shrink this INTs into an foreach
    *
    */
   public function create() {
