@@ -181,4 +181,14 @@ class Comments extends Main {
     else
       return Helper::errorMessage(I18n::get('error.sql'), $sRedirect);
   }
+
+  /**
+   * There is no update action for the sitemaps controller
+   *
+   * @access public
+   *
+   */
+  public function update() {
+    return Helper::redirectTo('/errors/404');
+  }
 }
