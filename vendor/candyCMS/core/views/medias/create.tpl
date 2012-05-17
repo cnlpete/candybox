@@ -51,8 +51,6 @@
              value='{$lang.medias.title.create}' />
     </div>
   </form>
-
-  {* @todo fix this *}
   <script type='text/javascript'>
     $("input[type='submit']").click(function() {
       $(this).val(lang.loading);

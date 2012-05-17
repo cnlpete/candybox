@@ -29,7 +29,7 @@ class Medias extends Main {
    *
    */
   protected function _create() {
-    if (isset($this->_aRequest['create_file'])) {
+    if (isset($this->_aRequest[$this->_sController])) {
       $aReturn  = $this->_proceedUpload();
       $iCount   = count($aReturn);
       $bAllTrue = true;
@@ -74,7 +74,7 @@ class Medias extends Main {
    *
    */
   private function _proceedUpload() {
-    require PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
+    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
 
     $oUpload = new Upload($this->_aRequest, $this->_aSession, $this->_aFile);
     $sFolder = isset($this->_aRequest['folder']) ?
@@ -120,8 +120,8 @@ class Medias extends Main {
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
       require PATH_STANDARD . '/vendor/candyCMS/core/helpers/Image.helper.php';
 
-    $sOriginalPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController);
-    $oDir = opendir($sOriginalPath);
+      $sOriginalPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController);
+      $oDir = opendir($sOriginalPath);
 
       $aFiles = array();
       while ($sFile = readdir($oDir)) {
@@ -141,10 +141,12 @@ class Medias extends Main {
         if ($sFileType == 'jpg' || $sFileType == 'jpeg' || $sFileType == 'png' || $sFileType == 'gif') {
           $aImgDim = getImageSize($sPath);
 
-        if (!file_exists(Helper::removeSlash(PATH_UPLOAD . '/temp/' . $this->_sController . '/' . $sFile))) {
-          $oImage = new Image($sFileName, 'temp', $sPath, $sFileType);
-          $oImage->resizeAndCut('32', $this->_sController);
+          if (!file_exists(Helper::removeSlash(PATH_UPLOAD . '/temp/' . $this->_sController . '/' . $sFile))) {
+            $oImage = new Image($sFileName, 'temp', $sPath, $sFileType);
+            $oImage->resizeAndCut('32', $this->_sController);
+          }
         }
+
         else
           $aImgDim = '';
 
@@ -179,6 +181,7 @@ class Medias extends Main {
 
     if (is_file($sPath)) {
       unlink($sPath);
+
       $this->oSmarty->clearCacheForController($this->_sController);
       return Helper::successMessage(I18n::get('success.file.destroy'), '/' . $this->_sController);
     }
@@ -195,5 +198,4 @@ class Medias extends Main {
   public function update() {
     return Helper::redirectTo('/errors/404');
   }
-
 }
