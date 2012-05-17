@@ -133,12 +133,10 @@
   </form>
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.bootstrap.modal{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js'></script>
-
-  {* @todo Fix form *}
   <script type="text/javascript">
     $(document).ready(function(){
-      $("input[name='[password2']").keyup(function(){
-        if ($("input[name='password']").val() == $("input[name='password2']").val()) {
+      $('#input-password2').keyup(function(){
+        if ($('#input-password').val() == $('#input-password2').val()) {
           $('#js-password').removeClass('error');
         } else {
           $('#js-password').addClass('error');
