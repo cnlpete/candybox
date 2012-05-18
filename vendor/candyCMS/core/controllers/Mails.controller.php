@@ -59,7 +59,6 @@ class Mails extends Main {
    * @param boolean $bShowCaptcha show captcha or not.
    * @return string HTML content
    * @todo rename to _show?
-   * @todo split functions
    *
    */
   protected function _showCreateMailTemplate($bShowCaptcha) {
@@ -78,18 +77,10 @@ class Mails extends Main {
         $aUser['name'] = I18n::get('global.system');
     }
 
-    $this->oSmarty->assign('contact', $aUser);
-    $this->oSmarty->assign('content', isset($this->_aRequest[$this->_sController]['content']) ?
-                    (string) $this->_aRequest[$this->_sController]['content'] :
-                    '');
+    $this->oSmarty->assign('user', $aUser);
 
-    $this->oSmarty->assign('email', isset($this->_aRequest[$this->_sController]['email']) ?
-                    (string) $this->_aRequest[$this->_sController]['email'] :
-                    $this->_aSession['user']['email']);
-
-    $this->oSmarty->assign('subject', isset($this->_aRequest[$this->_sController]['subject']) ?
-                    (string) $this->_aRequest[$this->_sController]['subject'] :
-                    '');
+    foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
+      $this->oSmarty->assign($sInput, $sData);
 
     if ($bShowCaptcha === true)
       $this->oSmarty->assign('_captcha_', Recaptcha::getInstance()->show());

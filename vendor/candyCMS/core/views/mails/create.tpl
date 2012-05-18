@@ -1,6 +1,6 @@
 {strip}
   <div class='page-header'>
-    <h1>{$lang.global.contact} {$contact.name} {$contact.surname}</h1>
+    <h1>{$lang.global.contact} {$user.name} {$user.surname}</h1>
   </div>
   <form method='post'
         action='/{$_REQUEST.controller}/{if isset($_REQUEST.id)}{$_REQUEST.id}/{/if}create'
@@ -14,7 +14,9 @@
         <input id='input-email'
                class='required span4'
                name='{$_REQUEST.controller}[email]'
-               value="{$email}" type='email' required />
+               value="{if isset($email)}{$email}{/if}"
+               type='email'
+               required />
         {if isset($error.email)}
           <span class='help-inline'>
             {$error.email}
@@ -30,7 +32,7 @@
         <input id='input-subject'
                class='span4'
                name='{$_REQUEST.controller}[subject]'
-               value="{$subject}"
+               value="{if isset($subject)}{$subject}{/if}"
                type='text' />
       </div>
     </div>
@@ -42,7 +44,10 @@
         <textarea class='required span5'
                   id='input-content'
                   name='{$_REQUEST.controller}[content]'
-                  rows='6' required>{$content}</textarea>
+                  rows='6'
+                  required>
+          {if isset($content)}{$content}{/if}
+        </textarea>
         {if isset($error.content)}
           <span class='help-inline'>{$error.content}</span>
         {/if}

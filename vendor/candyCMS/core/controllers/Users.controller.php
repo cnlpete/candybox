@@ -376,18 +376,10 @@ class Users extends Main {
       if ($bShowCaptcha)
         $this->oSmarty->assign('_captcha_', Recaptcha::getInstance()->show());
 
-      # @todo as foreach
-      $this->oSmarty->assign('name', isset($this->_aRequest[$this->_sController]['name']) ?
-                      Helper::formatInput($this->_aRequest[$this->_sController]['name']) :
-                      $this->_aSession['user']['name']);
-
-      $this->oSmarty->assign('surname', isset($this->_aRequest[$this->_sController]['surname']) ?
-                      Helper::formatInput($this->_aRequest[$this->_sController]['surname']) :
-                      $this->_aSession['user']['surname']);
-
-      $this->oSmarty->assign('email', isset($this->_aRequest[$this->_sController]['email']) ?
-                      Helper::formatInput($this->_aRequest[$this->_sController]['email']) :
-                      $this->_aSession['user']['email']);
+      foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
+        $this->oSmarty->assign($sInput, isset($sData) ?
+                        Helper::formatInput($sData) :
+                        $this->_aSession['user'][$sInput]);
     }
 
     if ($this->_aError)
@@ -413,7 +405,9 @@ class Users extends Main {
       return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
 
     else
-      return isset($this->_aRequest[$this->_sController]) ? $this->_update() : $this->_showFormTemplate();
+      return isset($this->_aRequest[$this->_sController]) ?
+              $this->_update() :
+              $this->_showFormTemplate();
   }
 
   /**

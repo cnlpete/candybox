@@ -12,6 +12,7 @@
 
 namespace CandyCMS\Core\Controllers;
 
+use CandyCMS\Core\Helpers\AdvancedException;
 use CandyCMS\Core\Helpers\Helper;
 use CandyCMS\Core\Helpers\I18n;
 use CandyCMS\Core\Helpers\Upload;
@@ -150,12 +151,10 @@ class Galleries extends Main {
       $aData = $this->_oModel->getFileData($this->_iId);
 
     # Absolute URL for image information
-    # @todo does this URL work?
     $sUrl = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $this->_aRequest['album_id'] .
                     '/popup/' . $aData['file']);
 
       if (file_exists($sUrl) || WEBSITE_MODE == 'test') {
-
         # Get image information
         $aImageInfo       = getimagesize($sUrl);
 
@@ -329,8 +328,9 @@ class Galleries extends Main {
           return Helper::errorMessage(I18n::get('error.file.upload'), '/' . $this->_sController .
                         '/' . $this->_iId . '/createfile');
       }
-      # @todo check whether this is a correct way to handle exceptions
-      catch (\Exception $e) {
+      catch (AdvancedException $e) {
+        AdvancedException::reportBoth($e->getMessage());
+
         return Helper::errorMessage($e->getMessage(), '/' . $this->_sController .
                       '/' . $this->_iId . '/createfile');
       }
