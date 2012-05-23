@@ -90,7 +90,7 @@
       {elseif $_REQUEST.action == 'update'}
         <input type='submit'
                class='btn btn-primary'
-               value='{$lang.global.update.update' />
+               value='{$lang.global.update.update}' />
         <input type='button'
                class='btn btn-danger'
                value='{$lang.global.destroy.destroy}'
@@ -99,7 +99,7 @@
                class='btn'
                value='{$lang.global.reset}' />
       {/if}
-    </p>
+    </div>
   </form>
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.typeahead{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript'>

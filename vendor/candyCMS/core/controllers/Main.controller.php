@@ -511,7 +511,7 @@ abstract class Main {
     $sTemplateFile = Helper::getTemplateType($sTemplateDir, $sTemplateName);
 
     if ($this->_iId) {
-      $aData = $this->_oModel->getData($this->_iId, true);
+      $aData = $this->_oModel->getId($this->_iId, true);
 
       if ($sTitle && isset($aData['title']))
         $this->setTitle(vsprintf(I18n::get($sTitle . '.update'), $aData['title']));

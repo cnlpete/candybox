@@ -536,7 +536,6 @@ class Index {
       $oSmarty->assign('meta_description', $oDispatcher->oController->getDescription());
       $oSmarty->assign('meta_expires', gmdate('D, d M Y H:i:s', time() + 60) . ' GMT');
       $oSmarty->assign('meta_keywords', $oDispatcher->oController->getKeywords());
-
       # System required variables
       $oSmarty->assign('_content_', $oDispatcher->oController->getContent());
       $oSmarty->assign('_title_', $oDispatcher->oController->getTitle());

@@ -313,7 +313,8 @@ class Blogs extends Main {
                                       WHERE
                                         id = :id");
 
-      $sTags = Helper::formatInput(implode(',', array_filter( array_map('trim', explode(',', $this->_aRequest['tags'])))));
+      $sTags = $this->_aRequest[$this->_sController]['tags'];
+      $sTags = Helper::formatInput(implode(',', array_filter( array_map('trim', explode(',', $sTags)))));
       $oQuery->bindParam('tags', $sTags, PDO::PARAM_STR);
       $oQuery->bindParam('author_id', $iUpdateAuthor, PDO::PARAM_INT);
       $oQuery->bindParam('date', $iDate, PDO::PARAM_INT);

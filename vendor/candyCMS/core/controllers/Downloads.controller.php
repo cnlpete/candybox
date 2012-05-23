@@ -139,7 +139,7 @@ class Downloads extends Main {
    *
    */
   protected function _update() {
-    return parent::_update('searches');
+    return parent::_update('searches', '/' . $this->_sController);
   }
 
   /**

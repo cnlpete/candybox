@@ -183,18 +183,22 @@ class Upload {
       throw new \Exception(I18n::get('error.file.size', self::getUploadLimit(false) . 'MB'));
 
     else {
-      $aUploads = $this->uploadFiles($this->_sUploadFolder . '/original', true);
+      $sUploadFolder = 'galleries/' . (int) $this->_aRequest['id'];
+      $aUploads = $this->uploadFiles($sUploadFolder . '/original', true);
 
       # Do cuts and or resizes
       $iFileCount = count($aUploads);
       for ($iI = 0; $iI < $iFileCount; $iI++) {
         if ($aUploads[$iI] === true) {
-          $oImage = new Image($this->_sFileNames[$iI], $this->_sUploadFolder, $this->sFilePaths[$iI], $this->_sFileExtensions[$iI]);
+          $oImage = new Image($this->_sFileNames[$iI],
+                  $sUploadFolder,
+                  $this->aFilePaths[$iI],
+                  $this->_sFileExtensions[$iI]);
 
-          if (isset($this->_aRequest['cut']) && 'c' == $this->_aRequest['cut'])
+          if (isset($this->_aRequest[$this->_sController]['cut']) && 'c' == $this->_aRequest[$this->_sController]['cut'])
             $oImage->resizeAndCut(THUMB_DEFAULT_X, 'thumbnail');
 
-          elseif (isset($this->_aRequest['cut']) && 'r' == $this->_aRequest['cut'])
+          elseif (isset($this->_aRequest[$this->_sController]['cut']) && 'r' == $this->_aRequest[$this->_sController]['cut'])
             $oImage->resizeDefault(THUMB_DEFAULT_X, THUMB_DEFAULT_Y, 'thumbnail');
 
           else

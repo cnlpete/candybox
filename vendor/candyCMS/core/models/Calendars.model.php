@@ -201,9 +201,12 @@ class Calendars extends Main {
       exit('SQL error.');
     }
 
-    if ($bUpdate === true)
+    if ($bUpdate === true) {
       $this->_aData = $this->_formatForUpdate($aRow);
-
+      $this->_aData['start_date'] = date('Y-m-d', $this->_aData['start_date']);
+      if ($this->_aData['end_date'])
+        $this->_aData['end_date'] = date('Y-m-d', $this->_aData['end_date']);
+    }
     else {
       $this->_aData = $this->_formatForOutput($aRow, array('id', 'author_id'));
       $this->_formatDates($this->_aData, 'start_date');
@@ -305,7 +308,7 @@ class Calendars extends Main {
         $oQuery->bindParam(
                 $sInput,
                 Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
-                PDO::PARAM_INT);
+                PDO::PARAM_STR);
 
       return $oQuery->execute();
     }

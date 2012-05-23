@@ -33,12 +33,12 @@ class Searches extends Main {
    *
    */
   protected function _show() {
-    if (!isset($this->_aRequest['search']) || !$this->_aRequest['search'])
+    if (!isset($this->_aRequest[$this->_sController]) || !$this->_aRequest[$this->_sController])
       return $this->_create();
 
     else {
       if (substr(CURRENT_URL, -strlen($this->_sController)) == $this->_sController)
-        return Helper::redirectTo ('/' . $this->_sController . '/' . $this->_aRequest['search']);
+        return Helper::redirectTo ('/' . $this->_sController . '/' . $this->_aRequest[$this->_sController]['search']);
 
       $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
       $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');

@@ -270,7 +270,7 @@ class Galleries extends Main {
     if ($this->_aSession['user']['role'] < 3)
       return Helper::errorMessage(I18n::get('error.missing.permission'));
 
-    return isset($this->_aRequest['createfile_galleries']) ?
+    return isset($this->_aRequest[$this->_sController]) ?
             $this->_createFile() :
             $this->_showFormFileTemplate();
   }
@@ -311,15 +311,16 @@ class Galleries extends Main {
                   $bReturnValue && $this->_oModel->createFile($aIds[$iI] . '.' . $aExts[$iI], $aExts[$iI]) :
                   false;
 
+        # Log uploaded image. Request ID = album id
+        Logs::insert( $this->_sController,
+                      'createfile',
+                      (int) $this->_aRequest[$this->_sController]['id'],
+                      $this->_aSession['user']['id'],
+                      '', '', $bReturnValue);
+
         if ($bReturnValue) {
           $this->oSmarty->clearCacheForController($this->_sController);
           $this->oSmarty->clearCacheForController('rss');
-
-          # Log uploaded image. Request ID = album id
-          Logs::insert( $this->_sController,
-                        'createfile',
-                        (int) $this->_aRequest[$this->_sController]['id'],
-                        $this->_aSession['user']['id']);
 
           return Helper::successMessage(I18n::get('success.file.upload'), '/' . $this->_sController .
                           '/' . $this->_iId);
@@ -351,7 +352,7 @@ class Galleries extends Main {
       return Helper::errorMessage(I18n::get('error.missing.permission'), '/' . $this->_sController);
 
     else
-      return isset($this->_aRequest['updatefile_galleries']) ?
+      return isset($this->_aRequest[$this->_sController]) ?
               $this->_updateFile() :
               $this->_showFormFileTemplate();
   }
