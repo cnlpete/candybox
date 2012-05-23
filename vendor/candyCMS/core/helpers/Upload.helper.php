@@ -249,7 +249,7 @@ class Upload {
       $oImage->resizeAndCut(64);
       $oImage->resizeAndCut(32);
 
-      return $bReturnPath ? $this->_aFilePaths[0] : $aUploads[0];
+      return $bReturnPath ? $this->aFilePaths[0] : $aUploads[0];
     }
   }
 
