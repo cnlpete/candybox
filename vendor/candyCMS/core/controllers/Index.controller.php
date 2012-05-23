@@ -21,7 +21,7 @@ use CandyCMS\Plugins\Cronjob;
 use CandyCMS\Plugins\FacebookCMS;
 use Routes;
 
-require_once PATH_STANDARD . '/vendor/.composer/autoload.php';
+require_once PATH_STANDARD . '/vendor/autoload.php';
 require_once PATH_STANDARD . '/vendor/candyCMS/core/models/Main.model.php';
 require_once PATH_STANDARD . '/vendor/candyCMS/core/controllers/Main.controller.php';
 require_once PATH_STANDARD . '/vendor/candyCMS/core/controllers/Sessions.controller.php';
@@ -568,7 +568,7 @@ class Index {
     unset($this->_aRequest['id'], $this->_aRequest['search'], $this->_aRequest['page']);
 
     foreach ($this->_aPlugins as $sPlugin) {
-      if($sPlugin == 'Bbcode' || $sPlugin == 'FormatTimestamp' || $sPlugin == 'Cronjob' ||  $sPlugin == 'Recaptcha')
+      if($sPlugin == 'Bbcode' || $sPlugin == 'Cronjob' ||  $sPlugin == 'Recaptcha')
         continue;
 
       if($sPlugin == 'Facebook')

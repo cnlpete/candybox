@@ -16,5 +16,7 @@ composer.lock
 composer.phar
 /vendor/vendor/.composer/
 /vendor/.composer/
+/vendor/autoload.php
+/vendor/composer/
 /vendor/symfony/
 /vendor/facebook/

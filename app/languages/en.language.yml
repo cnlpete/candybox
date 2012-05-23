@@ -131,6 +131,23 @@ global:
       date: %m/%d/%Y
       time: %I:%M %p
       datetime: %m/%d/%Y, %I:%M %p
+    formattimestamp: #translations used by FormatTimestamp Plugin
+      prefixAgo: ''
+      prefixFromNow: ''
+      suffixAgo: ago
+      suffixFromNow: from now
+      seconds: less than a minute
+      minute: about a minute
+      minutes: %d minutes
+      hour: about an hour
+      hours: about %d hours
+      day: a day
+      days: %d days
+      month: about a month
+      months: %d months
+      year: about a year
+      years: %d years
+      wordSeparator: ' '
   title: Title
   today: Today
   update:

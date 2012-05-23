@@ -31,10 +31,14 @@
               {$d.title}
             </h2>
             <p>
-              {$d.start_date}
-              {if $d.end_date > 1}
-              -
-              {$d.end_date}
+              <time datetime='{$d.start_date.w3c_date}'>
+                {$d.start_date.raw|date_format:$lang.global.time.format.date}
+              </time>
+              {if $d.end_date.raw}
+                -
+                <time datetime='{$d.end_date.w3c_date}'>
+                  {$d.end_date.raw|date_format:$lang.global.time.format.date}
+                </time>
               {/if}
             </p>
             {if $d.content}

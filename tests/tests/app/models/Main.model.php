@@ -20,8 +20,11 @@ class MyMain extends Main {
   // since the Main class is abstract
 
   // wrapper for _formatDates
-  public function formatDates(&$aData) {
-    return $this->_formatDates($aData);
+  public function formatDates(&$aData, $sKey = '') {
+    if ($sKey)
+      return $this->_formatDates($aData, $sKey);
+    else
+      return $this->_formatDates($aData);
   }
 
   // wrapper for _formatForUpdate
@@ -86,27 +89,28 @@ class UnitTestOfMainModel extends CandyUnitTest {
     $this->assertEqual(WEBSITE_URL . '/maincontroller/42', $aData['url_clean']);
     $this->assertEqual('/update', substr($aData['url_update'], -7));
     $this->assertEqual('/destroy', substr($aData['url_destroy'], -8));
-    $this->assertTrue(isset($aData['datetime']));
+    $this->assertTrue(isset($aData['date']));
   }
 
   function testFormatDates() {
     $aData = array( 'no_date' => 'hello' );
     $this->oObject->formatDates($aData);
     $this->assertFalse(isset($aData['date']));
-    $this->assertFalse(isset($aData['time']));
 
     $iTimeStamp = time();
     $aData = array( 'date' => $iTimeStamp );
     $aXData = $this->oObject->formatDates($aData);
     $this->assertSame($aXData, $aData, 'formatDates should return reference only');
 
-    $this->assertEqual($iTimeStamp, $aData['date_raw']);
-    $this->assertEqual(date('Y-m-d', $iTimeStamp), $aData['date_w3c']);
-    $this->assertEqual(Helper::formatTimestamp($iTimeStamp, 2), $aData['time']);
-    $this->assertEqual(Helper::formatTimestamp($iTimeStamp, 1), $aData['date']);
-    $this->assertEqual(Helper::formatTimestamp($iTimeStamp), $aData['datetime']);
-    $this->assertEqual(date('D, d M Y H:i:s O', $iTimeStamp), $aData['datetime_rss']);
-    $this->assertEqual(date('Y-m-d\TH:i:sP', $iTimeStamp), $aData['datetime_w3c']);
+    $this->assertEqual($iTimeStamp, $aData['date']['raw']);
+    $this->assertEqual(date('Y-m-d', $iTimeStamp), $aData['date']['w3c_date']);
+    $this->assertEqual(date('Y-m-d\TH:i:sP', $iTimeStamp), $aData['date']['w3c']);
+    $this->assertEqual(date('D, d M Y H:i:s O', $iTimeStamp), $aData['date']['rss']);
+
+    $aData = array( 'mycustomdate' => $iTimeStamp );
+    $aXData = $this->oObject->formatDates($aData, 'mycustomdate');
+    $this->assertSame($aXData, $aData, 'formatDates should return reference only');
+    $this->assertIsA($aXData['mycustomdate'], 'Array');
   }
 
   function testFormatForUserOutput() {
@@ -144,9 +148,9 @@ class UnitTestOfMainModel extends CandyUnitTest {
 
     $aUpdateData = $this->oObject->formatForUserOutput($aUserData);
     $this->assertTrue(isset($aUserData['date']));
-    $this->assertTrue(isset($aUserData['datetime']));
-    $this->assertTrue(isset($aUserData['time']));
-    $this->assertTrue(isset($aUserData['datetime_rss']));
+    $this->assertTrue(isset($aUserData['date']['raw']));
+    $this->assertTrue(isset($aUserData['date']['w3c']));
+    $this->assertTrue(isset($aUserData['date']['rss']));
   }
 
   function testGetLastInsertId() {

@@ -124,12 +124,6 @@ class UnitTestOfHelperHelper extends CandyUnitTest {
     $this->assertPattern('/&lt;/i', Helper::formatInput('<', true));
   }
 
-  function testFormatTimestamp() {
-    $this->assertEqual(Helper::formatTimestamp(1), strftime(DEFAULT_DATE_FORMAT . ', ' . DEFAULT_TIME_FORMAT, 1));
-    $this->assertEqual(Helper::formatTimestamp(1, 1), strftime(DEFAULT_DATE_FORMAT, 1));
-    $this->assertEqual(Helper::formatTimestamp(1, 2), strftime(DEFAULT_TIME_FORMAT, 1));
-  }
-
   function testFormatOutput() {
     $this->assertPattern('/<mark>/i', Helper::formatOutput('test', 'test'));
     $this->assertNoPattern('/<mark>/i', Helper::formatOutput('test'));

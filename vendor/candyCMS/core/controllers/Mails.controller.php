@@ -26,7 +26,10 @@ class Mails extends Main {
    *
    */
   public function show() {
-    return Helper::redirectTo('/' . $this->_sController . '/create');
+    if (!empty($this->_iId))
+      return Helper::redirectTo('/' . $this->_aRequest['controller'] . '/' . $this->_iId . '/create');
+    else
+      return Helper::redirectTo('/' . $this->_aRequest['controller'] . '/create');
   }
 
   /**
@@ -136,8 +139,9 @@ class Mails extends Main {
                               Helper::formatInput($this->_aRequest[$this->_sController]['content']),
                               Helper::formatInput($this->_aRequest[$this->_sController]['email']));
 
+      Logs::insert($this->_aRequest['controller'], 'create', (int) $this->_iId, 0, '', '', $bStatus);
+
       if ($bStatus == true) {
-        Logs::insert($this->_sController, 'create', (int) $this->_iId);
         return $this->_showSuccessPage();
       }
       else

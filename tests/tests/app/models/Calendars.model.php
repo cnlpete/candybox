@@ -49,7 +49,7 @@ class UnitTestOfCalendarModel extends CandyUnitTest {
     // with id
     $aData = $this->oObject->getId(2);
     $this->assertIsA($aData, 'array');
-    $this->assertEqual(sizeof($aData), 31);
+    $this->assertEqual(sizeof($aData), 18);
 
     // archive ...
     $this->aRequest = array(

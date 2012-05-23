@@ -131,6 +131,23 @@ global:
       date: %d.%m.%Y
       time: %H:%M Uhr
       datetime: %d.%m.%Y, %H:%M Uhr
+    formattimestamp: #translations used by FormatTimestamp Plugin
+      prefixAgo: vor
+      prefixFromNow: in
+      suffixAgo: ''
+      suffixFromNow: ''
+      seconds: wenigen Sekunden
+      minute: etwa einer Minute
+      minutes: %d Minuten
+      hour: etwa einer Stunde
+      hours: %d Stunden
+      day: etwa einem Tag
+      days: %d Tagen
+      month: etwa einem Monat
+      months: %d Monaten
+      year: etwa einem Jahr
+      years: %d Jahren
+      wordSeparator: ' '
   title: Titel
   today: Heute
   update:

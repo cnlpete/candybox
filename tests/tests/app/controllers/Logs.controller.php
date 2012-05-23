@@ -63,7 +63,7 @@ class UnitTestOfLogController extends CandyUnitTest {
 
   function testInsert() {
     $iTime = time() - 100;
-    $this->assertTrue(Logs::insert('test', 'create', 1, 0, $iTime, $iTime));
+    $this->assertTrue(Logs::insert('test', 'create', 1, 0, $iTime, $iTime, true));
 
     $this->iLastInsertId = (int) \CandyCMS\Core\Models\Logs::getLastInsertId();
     $this->assertIsA($this->iLastInsertId, 'integer');
@@ -71,7 +71,15 @@ class UnitTestOfLogController extends CandyUnitTest {
 
   function testUpdateEndTime() {
     $iTime = time() + 100;
-    $this->assertTrue($this->oObject->updateEndTime($iTime));
+    $this->assertTrue($this->oObject->updateEndTime($this->iLastInsertId, $iTime));
+
+  }
+
+  function testUpdateResultFlag() {
+    $this->assertTrue(Logs::insert('test', 'resultflag', 1, 0, '', '', true));
+
+    $this->iLastInsertId = (int) \CandyCMS\Core\Models\Logs::getLastInsertId();
+    $this->assertTrue($this->oObject->updateResultFlag($this->iLastInsertId, false));
 
   }
 

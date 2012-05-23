@@ -13,54 +13,45 @@
 
 namespace CandyCMS\Plugins;
 
-use CandyCMS\Core\Helpers\I18n;
+use CandyCMS\Core\Helpers\Helper;
+use CandyCMS\Core\Helpers\SmartySingleton;
 
 final class FormatTimestamp {
 
   /**
-   * Format timestamp
+   * Identifier for Template Replacements
    *
-   * @final
-   * @access private
-   * @param integer $iTime
-   * @param integer $iOptions
-   * @return string
+   * @var constant
    *
    */
-  private final function _setDate($iTime, $iOptions) {
-    if(!$iTime)
-      return;
-
-    $sTime = strftime(I18n::get('global.time.format.time'), $iTime);
-
-    if(date('Ymd', $iTime) == date('Ymd', time()))
-      $sDay = I18n::get('global.today');
-
-    elseif(date('Ymd', $iTime) == date('Ymd', (time()-60*60*24)))
-      $sDay = I18n::get('global.yesterday');
-
-    else
-      $sDay = strftime(I18n::get('global.time.format.date'), $iTime);
-
-    if($iOptions == 1)
-      return $sDay;
-
-    elseif($iOptions == 2)
-      return $sTime;
-
-    else
-      return $sDay . ', ' . $sTime;
-  }
+  const IDENTIFIER = 'formattimestamp';
 
   /**
+   * Show the (cached) tagcloud.
+   *
    * @final
    * @access public
-   * @param integer $iTime
-   * @param integer $iOptions
-   * @return string
+   * @param array $aRequest
+   * @param array $aSession
+   * @return string HTML
    *
    */
-  public final function getDate($iTime, $iOptions) {
-    return $this->_setDate($iTime, $iOptions);
+  public final function show(&$aRequest, &$aSession) {
+    $sTemplateDir   = Helper::getPluginTemplateDir('FormatTimestamp', 'show');
+    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+
+    $oSmarty = SmartySingleton::getInstance();
+    $oSmarty->setTemplateDir($sTemplateDir);
+    $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
+
+    $sCacheId = WEBSITE_MODE . '|layout|' . WEBSITE_LOCALE . '|formattimestamp|';
+    if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
+      # the jQuery.timeago plugin takes it range in milliseconds,
+      # PLUGIN_FORMATTIMESTAMP_RANGE is in minutes and defaults to 3 days
+      $iRange = 1000 * 60 * (defined('PLUGIN_FORMATTIMESTAMP_RANGE') ? PLUGIN_FORMATTIMESTAMP_RANGE : 4320);
+      $oSmarty->assign('range', $iRange);
+    }
+
+    return $oSmarty->fetch($sTemplateFile, $sCacheId);
   }
 }

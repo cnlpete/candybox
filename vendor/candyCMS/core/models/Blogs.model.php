@@ -120,12 +120,10 @@ class Blogs extends Main {
               'blogs');
 
       # @todo trim spaces, redundant, if those get removed at blog creation/editing
+      $this->_aData[$iDate]['tags_raw'] = $aRow['tags'];
       # Explode using ',' and filter empty items (since explode always gives at least one item)
       $this->_aData[$iDate]['tags'] = array_filter(array_map('trim', explode(',', $aRow['tags'])));
-      $this->_aData[$iDate]['tags_raw'] = $aRow['tags'];
-      $this->_aData[$iDate]['date_modified'] = !empty($aRow['date_modified']) ?
-              Helper::formatTimestamp($aRow['date_modified']) :
-              '';
+      $this->_formatDates($this->_aData[$iDate], 'date_modified');
     }
 
     return $this->_aData;
@@ -188,11 +186,9 @@ class Blogs extends Main {
       $this->_aData[1] = $this->_formatForOutput($aRow,
               array('id', 'uid', 'author_id', 'comment_sum'),
               array('published', 'use_gravatar'));
-      $this->_aData[1]['tags']          = array_filter( array_map('trim', explode(',', $aRow['tags'])) );
       $this->_aData[1]['tags_raw']      = $aRow['tags'];
-      $this->_aData[1]['date_modified'] = !empty($aRow['date_modified']) ?
-              Helper::formatTimestamp($aRow['date_modified']) :
-              '';
+      $this->_aData[1]['tags']          = array_filter( array_map('trim', explode(',', $aRow['tags'])) );
+      $this->_formatDates($this->_aData[1], 'date_modified');
     }
 
     return $this->_aData;
@@ -234,7 +230,8 @@ class Blogs extends Main {
                                           :date,
                                           :published )");
 
-      $sTags = Helper::formatInput(implode(',', array_filter(array_map('trim', explode(',', $this->_aRequest['tags'])))));
+      $sTags = $this->_aRequest[$this->_sController]['tags'];
+      $sTags = Helper::formatInput(implode(',', array_filter(array_map('trim', explode(',', $sTags)))));
       $oQuery->bindParam('tags', $sTags, PDO::PARAM_STR);
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
       $oQuery->bindParam('date', time(), PDO::PARAM_INT);

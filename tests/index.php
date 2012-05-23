@@ -12,7 +12,7 @@
 
 define('PATH_STANDARD', dirname(__FILE__) . '/..');
 
-require_once PATH_STANDARD . '/vendor/.composer/autoload.php';
+require_once PATH_STANDARD . '/vendor/autoload.php';
 require_once PATH_STANDARD . '/tests/simpletest/autorun.php';
 require_once PATH_STANDARD . '/tests/simpletest/web_tester.php';
 
@@ -21,6 +21,7 @@ require_once PATH_STANDARD . '/tests/candy/Candy.web.php';
 
 require_once PATH_STANDARD . '/app/config/Candy.inc.php';
 require_once PATH_STANDARD . '/app/config/Plugins.inc.php';
+require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/AdvancedException.helper.php';
 require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/SmartySingleton.helper.php';
 require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/I18n.helper.php';
 

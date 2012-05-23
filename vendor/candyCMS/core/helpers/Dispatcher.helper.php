@@ -75,7 +75,7 @@ class Dispatcher {
     }
     catch (AdvancedException $e) {
       if (defined('CHECK_OLD_LINKS') && CHECK_OLD_LINKS === true &&
-              Helper::pluralize($sController) !== $sControllerSingular) {
+              Helper::pluralize($sController) !== $sController) {
         $sPluralizedController = Helper::pluralize($sController);
 
         $sUrl = $_SERVER['REQUEST_URI'];

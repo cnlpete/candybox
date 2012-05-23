@@ -16,7 +16,7 @@
       </li>
       <li>
         {$lang.users.label.last_login}: <span class='ui-li-aside'>
-          <time datetime='{$u.last_login.w3c}'>
+          <time datetime='{$u.last_login.w3c}' class='js-timeago'>
             {$u.last_login.raw|date_format:$lang.global.time.format.date}
           </time>
         </span>

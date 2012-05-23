@@ -45,7 +45,7 @@
           {$lang.users.label.last_login}
         </td>
         <td>
-          <time datetime='{$u.last_login.w3c}'>
+          <time datetime='{$u.last_login.w3c}' class='js-timeago'>
             {$u.last_login.raw|date_format:$lang.global.time.format.date}
           </time>
         </td>

@@ -182,6 +182,8 @@
       <!-- plugin:analytics -->
       <!-- plugin:piwik -->
       <!-- plugin:facebook -->
+      
+      <!-- plugin:formattimestamp -->
     </body>
   </html>
 {/strip}
