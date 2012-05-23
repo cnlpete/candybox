@@ -33,7 +33,8 @@ class Searches extends Main {
    *
    */
   protected function _show() {
-    if (!isset($this->_aRequest[$this->_sController]) || !$this->_aRequest[$this->_sController])
+    if (! ( (isset($this->_aRequest['search']) && $this->_aRequest['search']) ||
+            (isset($this->_aRequest[$this->_sController]) && $this->_aRequest[$this->_sController]['search']) ) )
       return $this->_create();
 
     else {
