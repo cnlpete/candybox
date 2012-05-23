@@ -36,7 +36,7 @@ final class TagCloud {
    *
    */
   public final function show(&$aRequest, &$aSession) {
-    $sTemplateDir   = Helper::getPluginTemplateDir('tagcloud', 'show');
+    $sTemplateDir   = Helper::getPluginTemplateDir('TagCloud', 'show');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
 
     $oSmarty = SmartySingleton::getInstance();
