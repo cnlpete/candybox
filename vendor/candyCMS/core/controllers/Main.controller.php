@@ -222,7 +222,7 @@ abstract class Main {
     $sModel = $this->__autoload($sController ? $sController : $this->_sController, true);
 
     if ($sModel)
-      $this->_oModel = new $sModel($this->_aRequest, $this->_aSession);
+      $this->_oModel = new $sModel($this->_aRequest, $this->_aSession, $this->_aFile);
 
     return $this->_oModel;
   }

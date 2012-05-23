@@ -14,8 +14,6 @@ namespace CandyCMS\Core\Controllers;
 
 use CandyCMS\Core\Helpers\Helper;
 use CandyCMS\Core\Helpers\I18n;
-use CandyCMS\Core\Helpers\Image;
-use CandyCMS\Core\Helpers\Upload;
 use CandyCMS\Core\Helpers\SmartySingleton;
 
 class Medias extends Main {
@@ -30,21 +28,22 @@ class Medias extends Main {
    */
   protected function _create() {
     if (isset($this->_aRequest[$this->_sController])) {
-      $aReturn  = $this->_proceedUpload();
-      $iCount   = count($aReturn);
-      $bAllTrue = true;
+      $bReturn  = $this->_oModel->create();
 
-      for ($iI = 0; $iI < $iCount; $iI++) {
-        if ($aReturn[$iI] === false)
-          $bAllTrue = false;
+      Logs::insert( $this->_sController,
+                    $this->_aRequest['action'],
+                    $this->_oModel->getLastInsertId($this->_sController),
+                    $this->_aSession['user']['id'],
+                    '', '', $bReturn);
+
+      if ($bReturn) {
+        # Clear the cache
+        $this->oSmarty->clearCacheForController($this->_sController);
+
+        Helper::successMessage(I18n::get('success.file.upload'), '/' . $this->_sController);
       }
-
-      # Clear the cache
-      $this->oSmarty->clearCacheForController($this->_sController);
-
-      return $bAllTrue === true ?
-              Helper::successMessage(I18n::get('success.file.upload'), '/' . $this->_sController) :
-              Helper::errorMessage(I18n::get('error.file.upload'), '/' . $this->_sController);
+      else
+        Helper::errorMessage(I18n::get('error.file.upload'), '/' . $this->_sController);
 
     }
     else
@@ -64,27 +63,6 @@ class Medias extends Main {
 
     $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
-  }
-
-  /**
-   * Upload file.
-   *
-   * @access private
-   * @return boolean status of upload.
-   *
-   */
-  private function _proceedUpload() {
-    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
-
-    $oUpload = new Upload($this->_aRequest, $this->_aSession, $this->_aFile);
-    $sFolder = isset($this->_aRequest['folder']) ?
-            Helper::formatInput($this->_aRequest['folder']) :
-            $this->_sController;
-
-    if (!is_dir($sFolder))
-      mkdir(Helper::removeSlash(PATH_UPLOAD . '/' . $sFolder, 0777));
-
-    return $oUpload->uploadFiles($sFolder);
   }
 
   /**
@@ -118,76 +96,10 @@ class Medias extends Main {
     $this->setTitle(I18n::get('global.manager.media'));
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-      require PATH_STANDARD . '/vendor/candyCMS/core/helpers/Image.helper.php';
-
-      $sOriginalPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController);
-      $oDir = opendir($sOriginalPath);
-
-      $aFiles = array();
-      while ($sFile = readdir($oDir)) {
-        $sPath = $sOriginalPath . '/' . $sFile;
-
-        if (substr($sFile, 0, 1) == '.' || is_dir($sPath))
-          continue;
-
-        $sFileType  = strtolower(substr(strrchr($sPath, '.'), 1));
-        $iNameLen   = strlen($sFile) - 4;
-
-        if ($sFileType == 'jpeg')
-          $iNameLen--;
-
-        $sFileName = substr($sFile, 0, $iNameLen);
-
-        if ($sFileType == 'jpg' || $sFileType == 'jpeg' || $sFileType == 'png' || $sFileType == 'gif') {
-          $aImgDim = getImageSize($sPath);
-
-          if (!file_exists(Helper::removeSlash(PATH_UPLOAD . '/temp/' . $this->_sController . '/' . $sFile))) {
-            $oImage = new Image($sFileName, 'temp', $sPath, $sFileType);
-            $oImage->resizeAndCut('32', $this->_sController);
-          }
-        }
-
-        else
-          $aImgDim = '';
-
-        $aFiles[] = array(
-            'name'  => $sFile,
-            'date'  => Array(
-                'raw' => filectime($sPath),
-                'w3c' => date('Y-m-d\TH:i:sP', filectime($sPath))),
-            'size'  => Helper::getFileSize($sPath),
-            'type'  => $sFileType,
-            'dim'   => $aImgDim,
-            'url_destroy' => '/' . $this->_sController . '/' . $sFile . '/destroy'
-        );
-      }
-
-      closedir($oDir);
-
-      $this->oSmarty->assign('files', $aFiles);
+      $this->oSmarty->assign('files', $this->_oModel->getOverview());
     }
 
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
-  }
-
-  /**
-   * Delete a file.
-   *
-   * @access protected
-   * @return boolean status of model action
-   *
-   */
-  protected function _destroy() {
-    $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $this->_aRequest['file']);
-
-    if (is_file($sPath)) {
-      unlink($sPath);
-
-      $this->oSmarty->clearCacheForController($this->_sController);
-      return Helper::successMessage(I18n::get('success.file.destroy'), '/' . $this->_sController);
-    }
-    else
-      return Helper::errorMessage(I18n::get('error.missing.file'), '/' . $this->_sController);
   }
 
   /**
