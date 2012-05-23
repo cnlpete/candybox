@@ -34,7 +34,7 @@ class Logs extends Main {
       $this->oSmarty->setTemplateDir($sTemplateDir);
 
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-        $this->oSmarty->assign('logs', $this->_oModel->getData());
+        $this->oSmarty->assign('logs', $this->_oModel->getOverview());
         $this->oSmarty->assign('_pages_',
                 $this->_oModel->oPagination->showPages('/' . $this->_sController));
       }

@@ -207,3 +207,13 @@ footer img {
 form label small {
   font-size: 80%;
 }
+
+// generate red background for log-entries that have result set to false
+#logs {
+  tr {
+    &.result-error {
+      #gradient > .striped(#ee5f5b);
+      .background-size(40px 40px);
+    }
+  }
+}

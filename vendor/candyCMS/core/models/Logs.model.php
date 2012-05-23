@@ -75,7 +75,8 @@ class Logs extends Main {
 
       $this->_aData[$iId] = $this->_formatForOutput(
               $aRow,
-              array('id', 'uid', 'user_id', 'action_id'));
+              array('id', 'uid', 'user_id', 'action_id'),
+              array('result'));
 
       $this->_formatDates($this->_aData[$iId], 'time_start');
       $this->_formatDates($this->_aData[$iId], 'time_end');

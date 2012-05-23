@@ -14,14 +14,14 @@
       </tr>
     </thead>
     {foreach $logs as $l}
-      {if $l.action_name == 'create'}
-        <tr style='color:green'>
-      {elseif $l.action_name == 'update'}
-        <tr style='color:blue'>
-      {elseif $l.action_name == 'destroy'}
-        <tr style='color:red'>
+      {if $l.action_name == 'create' || $l.action_name == 'createfile'}
+        <tr class='result-{if $l.result}success{else}error{/if}' style='color:green;'>
+      {elseif $l.action_name == 'update' || $l.action_name == 'updatefile'}
+        <tr class='result-{if $l.result}success{else}error{/if}' style='color:blue;'>
+      {elseif $l.action_name == 'destroy' || $l.action_name == 'destroyfile'}
+        <tr class='result-{if $l.result}success{else}error{/if}' style='color:red;'>
       {else}
-        <tr>
+        <tr class='result-{if $l.result}success{else}error{/if}'>
       {/if}
         <td class='left'>
           <a href='{$l.author.url}'>{$l.author.full_name}</a>
