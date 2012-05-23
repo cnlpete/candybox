@@ -322,33 +322,38 @@ class Users extends Main {
     if (isset($this->_aError))
       return $this->_showCreateUserTemplate();
 
-    elseif ($this->_oModel->create($iVerificationCode) === true) {
-      $this->oSmarty->clearCacheForController($this->_sController);
-
-      # Send email if user has registered and creator is not an admin.
-      if ($this->_aSession['user']['role'] != 4) {
-        $sMailMessage = I18n::get('users.mail.body',
-                Helper::formatInput($this->_aRequest[$this->_sController]['name']),
-                Helper::createLinkTo('users/' . $iVerificationCode . '/verification'));
-
-        $sMails = $this->__autoload('Mails');
-        $sMails::send( Helper::formatInput($this->_aRequest['email']),
-                    I18n::get('users.mail.subject'),
-                    $sMailMessage,
-                    WEBSITE_MAIL_NOREPLY);
-      }
+    else {
+      $bReturn = $this->_oModel->create($iVerificationCode) === true;
 
       Logs::insert(  $this->_sController,
                     $this->_aRequest['action'],
                     $this->_oModel->getLastInsertId('users'),
-                    $this->_aSession['user']['id']);
+                    $this->_aSession['user']['id'],
+                    '', '', $bReturn);
 
-      return $this->_aSession['user']['role'] == 4 ?
-              Helper::successMessage(I18n::get('success.create'), '/' . $this->_sController) :
-              Helper::successMessage(I18n::get('success.user.create'), '/');
+      if ($bReturn) {
+        $this->oSmarty->clearCacheForController($this->_sController);
+
+        # Send email if user has registered and creator is not an admin.
+        if ($this->_aSession['user']['role'] != 4) {
+          $sMailMessage = I18n::get('users.mail.body',
+                  Helper::formatInput($this->_aRequest[$this->_sController]['name']),
+                  Helper::createLinkTo('users/' . $iVerificationCode . '/verification'));
+
+          $sMails = $this->__autoload('Mails');
+          $sMails::send( Helper::formatInput($this->_aRequest['email']),
+                      I18n::get('users.mail.subject'),
+                      $sMailMessage,
+                      WEBSITE_MAIL_NOREPLY);
+        }
+
+        return $this->_aSession['user']['role'] == 4 ?
+                Helper::successMessage(I18n::get('success.create'), '/' . $this->_sController) :
+                Helper::successMessage(I18n::get('success.user.create'), '/');
+      }
+      else
+        return Helper::errorMessage(I18n::get('error.sql'), '/');
     }
-    else
-      return Helper::errorMessage(I18n::get('error.sql'), '/');
   }
 
   /**
@@ -425,25 +430,30 @@ class Users extends Main {
     if (isset($this->_aError))
       return $this->_showFormTemplate();
 
-    elseif ($this->_oModel->update((int) $this->_iId) === true) {
-      $this->oSmarty->clearCacheForController($this->_sController);
-
-      # Check if user wants to unsubscribe from mailchimp
-      if (!isset($this->_aRequest[$this->_sController]['receive_newsletter']))
-        $this->_unsubscribeFromNewsletter(Helper::formatInput(($this->_aRequest[$this->_sController]['email'])));
-
-      else
-        $this->_subscribeToNewsletter($this->_aRequest);
+    else {
+      $bReturn = $this->_oModel->update((int) $this->_iId) === true;
 
       Logs::insert( $this->_sController,
                     $this->_aRequest['action'],
                     (int) $this->_iId,
-                    $this->_aSession['user']['id']);
+                    $this->_aSession['user']['id'],
+                    '', '', $bReturn);
 
-      return Helper::successMessage(I18n::get('success.update'), '/' . $this->_sController . '/' . $this->_iId);
+      if ($bReturn) {
+        $this->oSmarty->clearCacheForController($this->_sController);
+
+        # Check if user wants to unsubscribe from mailchimp
+        if (!isset($this->_aRequest[$this->_sController]['receive_newsletter']))
+          $this->_unsubscribeFromNewsletter(Helper::formatInput(($this->_aRequest[$this->_sController]['email'])));
+
+        else
+          $this->_subscribeToNewsletter($this->_aRequest);
+
+        return Helper::successMessage(I18n::get('success.update'), '/' . $this->_sController . '/' . $this->_iId);
+      }
+      else
+        return Helper::errorMessage(I18n::get('error.sql'), '/' . $this->_sController . '/' . $this->_iId);
     }
-    else
-      return Helper::errorMessage(I18n::get('error.sql'), '/' . $this->_sController . '/' . $this->_iId);
   }
 
   /**
@@ -493,7 +503,15 @@ class Users extends Main {
       return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
 
     if ($bCorrectPassword === true) {
-      if ($this->_oModel->destroy($this->_iId) === true) {
+      $bReturn = $this->_oModel->destroy($this->_iId) === true;
+
+      Logs::insert( $this->_sController,
+                    $this->_aRequest['action'],
+                    (int) $this->_iId,
+                    $this->_aSession['user']['id'],
+                    '', '', $bReturn);
+
+      if ($bReturn) {
         $this->oSmarty->clearCacheForController($this->_sController);
 
         # Unsubscribe from newsletter

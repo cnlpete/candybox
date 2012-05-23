@@ -198,27 +198,32 @@ class Galleries extends Main {
     if ($this->_aError)
       return $this->_showFormTemplate();
 
-    elseif ($this->_oModel->create() === true) {
-      $this->oSmarty->clearCacheForController(array($this->_sController, 'searches', 'rss', 'sitemaps'));
-
-      $iId    = $this->_oModel->getLastInsertId('gallery_albums');
-      $sPath  = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $iId);
-
-      # Create missing thumb folders.
-      foreach(array('32', 'thumbnail', 'popup', 'original') as $sFolder) {
-        if (!is_dir($sPath . '/' . $sFolder))
-          mkdir($sPath . '/' . $sFolder, 0755, true);
-      }
+    else {
+      $bReturn = $this->_oModel->create() === true;
 
       Logs::insert( $this->_sController,
                     $this->_aRequest['action'],
                     $iId,
-                    $this->_aSession['user']['id']);
+                    $this->_aSession['user']['id'],
+                    '', '', $bReturn);
 
-      return Helper::successMessage(I18n::get('success.create'), '/' . $this->_sController . '/' . $iId);
+      if ($bReturn) {
+        $this->oSmarty->clearCacheForController(array($this->_sController, 'searches', 'rss', 'sitemaps'));
+
+        $iId    = $this->_oModel->getLastInsertId('gallery_albums');
+        $sPath  = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $iId);
+
+        # Create missing thumb folders.
+        foreach(array('32', 'thumbnail', 'popup', 'original') as $sFolder) {
+          if (!is_dir($sPath . '/' . $sFolder))
+            mkdir($sPath . '/' . $sFolder, 0755, true);
+        }
+
+        return Helper::successMessage(I18n::get('success.create'), '/' . $this->_sController . '/' . $iId);
+      }
+      else
+        return Helper::errorMessage(I18n::get('error.sql'), '/' . $this->_sController);
     }
-    else
-      return Helper::errorMessage(I18n::get('error.sql'), '/' . $this->_sController);
   }
 
   /**
@@ -373,14 +378,17 @@ class Galleries extends Main {
     $aDetails = $this->_oModel->getFileData($this->_iId);
     $sRedirectPath = '/' . $this->_sController . '/' . $aDetails['album_id'];
 
-    if ($this->_oModel->updateFile($this->_iId) === true) {
+    $bReturn = $this->_oModel->updateFile($this->_iId) === true;
+
+    Logs::insert(  $this->_sController,
+                  $this->_aRequest['action'],
+                  (int) $this->_aRequest['id'],
+                  $this->_aSession['user']['id'],
+                  '', '', $bReturn);
+
+    if ($bReturn) {
       $this->oSmarty->clearCacheForController($this->_sController);
       $this->oSmarty->clearCacheForController('rss');
-
-      Logs::insert(  $this->_sController,
-                    $this->_aRequest['action'],
-                    (int) $this->_aRequest['id'],
-                    $this->_aSession['user']['id']);
 
       return Helper::successMessage(I18n::get('success.update'), $sRedirectPath);
     }
@@ -416,14 +424,17 @@ class Galleries extends Main {
   private function _destroyFile() {
     $aDetails = $this->_oModel->getFileData($this->_iId);
 
-    if ($this->_oModel->destroyFile($this->_iId) === true) {
+    $bReturn = $this->_oModel->destroyFile($this->_iId) === true;
+
+    Logs::insert( $this->_sController,
+                  $this->_aRequest['action'],
+                  (int) $this->_iId,
+                  $this->_aSession['user']['id'],
+                  '', '', $bReturn);
+
+    if ($bReturn) {
       $this->oSmarty->clearCacheForController($this->_sController);
       $this->oSmarty->clearCacheForController('rss');
-
-      Logs::insert( $this->_sController,
-                    $this->_aRequest['action'],
-                    (int) $this->_iId,
-                    $this->_aSession['user']['id']);
 
       unset($this->_iId);
       return Helper::successMessage(I18n::get('success.destroy'), '/' . $this->_sController . '/' .

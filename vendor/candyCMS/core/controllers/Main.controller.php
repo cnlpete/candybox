@@ -573,23 +573,27 @@ abstract class Main {
     if ($this->_aError)
       return $this->_showFormTemplate();
 
-    elseif ($this->_oModel->create() === true) {
-      $this->oSmarty->clearCacheForController($this->_sController);
-
-      # clear additional caches if given
-      if ($mAdditionalCaches)
-        $this->_clearCaches($mAdditionalCaches);
+    else {
+      $bResult = $this->_oModel->create() === true;
 
       Logs::insert( $this->_sController,
                     $this->_aRequest['action'],
                     $this->_oModel->getLastInsertId($this->_sController),
-                    $this->_aSession['user']['id']);
+                    $this->_aSession['user']['id'],
+                    '', '', $bResult);
 
-      return Helper::successMessage(I18n::get('success.create'), '/' . $this->_sController);
+      if ($bResult) {
+        $this->oSmarty->clearCacheForController($this->_sController);
+
+        # clear additional caches if given
+        if ($mAdditionalCaches)
+          $this->_clearCaches($mAdditionalCaches);
+
+        return Helper::successMessage(I18n::get('success.create'), '/' . $this->_sController);
+      }
+      else
+        return Helper::errorMessage(I18n::get('error.sql.query'), '/' . $this->_sController);
     }
-
-    else
-      return Helper::errorMessage(I18n::get('error.sql.query'), '/' . $this->_sController);
   }
 
   /**
@@ -613,23 +617,27 @@ abstract class Main {
     if ($this->_aError)
       return $this->_showFormTemplate();
 
-    elseif ($this->_oModel->update((int) $this->_aRequest['id']) === true) {
-      $this->oSmarty->clearCacheForController($this->_sController);
-
-      # Clear additional caches if given
-      if ($mAdditionalCaches)
-        $this->_clearCaches($mAdditionalCaches);
+    else {
+      $bReturn = $this->_oModel->update((int) $this->_aRequest['id']) === true;
 
       Logs::insert( $this->_sController,
                     $this->_aRequest['action'],
                     (int) $this->_aRequest['id'],
-                    $this->_aSession['user']['id']);
+                    $this->_aSession['user']['id'],
+                    '', '', $bReturn);
 
-      return Helper::successMessage(I18n::get('success.update'), $sRedirectURL);
+      if ($bReturn) {
+        $this->oSmarty->clearCacheForController($this->_sController);
+
+        # Clear additional caches if given
+        if ($mAdditionalCaches)
+          $this->_clearCaches($mAdditionalCaches);
+
+        return Helper::successMessage(I18n::get('success.update'), $sRedirectURL);
+      }
+      else
+        return Helper::errorMessage(I18n::get('error.sql'), $sRedirectURL);
     }
-
-    else
-      return Helper::errorMessage(I18n::get('error.sql'), $sRedirectURL);
   }
 
   /**
@@ -643,17 +651,20 @@ abstract class Main {
    *
    */
   protected function _destroy($mAdditionalCaches = null) {
-    if ($this->_oModel->destroy($this->_iId) === true) {
+    $bReturn = $this->_oModel->destroy($this->_iId) === true;
+
+    Logs::insert( $this->_sController,
+                  $this->_aRequest['action'],
+                  (int) $this->_iId,
+                  $this->_aSession['user']['id'],
+                  '', '', $bReturn);
+
+    if ($bReturn) {
       $this->oSmarty->clearCacheForController($this->_sController);
 
       # Clear additional caches if given
       if ($mAdditionalCaches)
         $this->_clearCaches($mAdditionalCaches);
-
-      Logs::insert( $this->_sController,
-                    $this->_aRequest['action'],
-                    (int) $this->_iId,
-                    $this->_aSession['user']['id']);
 
       return Helper::successMessage(I18n::get('success.destroy'), '/' . $this->_sController);
     }
