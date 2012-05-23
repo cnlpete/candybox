@@ -36,25 +36,27 @@ class Searches extends Main {
 
     foreach ($aTables as $sTable) {
       try {
-        $this->oQuery = $this->_oDb->query("SELECT
-                                              t.*,
-                                              u.id as user_id,
-                                              u.name as user_name,
-                                              u.surname as user_surname,
-                                              u.email as user_email
-                                            FROM
-                                              " . SQL_PREFIX . $sTable . " t
-                                            JOIN
-                                              " . SQL_PREFIX . "users u
-                                            ON
-                                              u.id = t.author_id
-                                            WHERE
-                                              t.title LIKE '%" . $sSearch . "%'
-                                            OR
-                                              t.content LIKE '%" . $sSearch . "%'
-                                            ORDER BY
-                                              " . (string) $sOrderBy);
+        $this->oQuery = $this->_oDb->prepare("SELECT
+                                                t.*,
+                                                u.id as user_id,
+                                                u.name as user_name,
+                                                u.surname as user_surname,
+                                                u.email as user_email
+                                              FROM
+                                                " . SQL_PREFIX . $sTable . " t
+                                              JOIN
+                                                " . SQL_PREFIX . "users u
+                                              ON
+                                                u.id = t.author_id
+                                              WHERE
+                                                t.title LIKE :searchString
+                                              OR
+                                                t.content LIKE :searchString
+                                              ORDER BY
+                                                " . (string) $sOrderBy);
 
+        $this->oQuery->bindValue('searchString', '%' . $sTagname . '%', PDO::PARAM_STR);
+        $this->oQuery->execute();
         $aResult = $this->oQuery->fetchAll(PDO::FETCH_ASSOC);
 
         # Build table names and order them

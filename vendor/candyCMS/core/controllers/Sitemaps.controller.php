@@ -75,7 +75,7 @@ class Sitemaps extends Main {
 
     $this->oSmarty->assign('blogs', $oBlogs->getOverview(1000));
     $this->oSmarty->assign('contents', $oContents->getOverview(1000));
-    $this->oSmarty->assign('galleries', $oGalleries->getData('', false, false, 1000));
+    $this->oSmarty->assign('galleries', $oGalleries->getOverview(false, 1000));
   }
 
   /**

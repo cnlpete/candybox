@@ -78,7 +78,7 @@ class Rss extends Main {
       $sModel = $this->__autoload('Galleries', true);
       $oModel = new $sModel($this->_aRequest, $this->_aSession);
 
-      $aData  = $oModel->getData($this->_iId, false, true);
+      $aData  = $oModel->getId($this->_iId, false, true);
 
       $this->oSmarty->assign('_copyright_', $aData[$this->_iId]['author']['full_name']);
       $this->oSmarty->assign('_title_', $aData[$this->_iId]['title']);

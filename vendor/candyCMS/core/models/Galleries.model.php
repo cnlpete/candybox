@@ -31,40 +31,16 @@ class Galleries extends Main {
   private $_aThumbs;
 
   /**
-   * Get blog entry or blog overview data. Depends on available ID.
+   * Get gallery album files.
    *
    * @access public
    * @param integer $iId Album-ID to load data from. If empty, show overview.
    * @param boolean $bUpdate prepare data for update
    * @param boolean $bAdvancedImageInformation provide image with advanced information (MIME_TYPE etc.)
-   * @param integer $iLimit blog post limit
    * @return array data from _setData
    *
    */
-  public function getData($iId = '', $bUpdate = false, $bAdvancedImageInformation = false, $iLimit = LIMIT_ALBUMS) {
-    $sWhere   = '';
-    $iResult  = 0;
-
-    if (empty($iId)) {
-      try {
-        $oQuery = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "gallery_albums");
-        $iResult = $oQuery->fetchColumn();
-      }
-      catch (\PDOException $p) {
-        AdvancedException::reportBoth('0042 - ' . $p->getMessage());
-        exit('SQL error.');
-      }
-
-      # Bugfix: Set update to false when creating an entry to avoid offset warnings.
-      $bUpdate = false;
-    }
-
-    # Single entry
-    else
-      $sWhere = "WHERE a.id = '" . $iId . "'";
-
-    $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit);
-
+  public function getId($iId, $bUpdate = false, $bAdvancedImageInformation = false) {
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                       a.*,
@@ -83,16 +59,14 @@ class Galleries extends Main {
                                       " . SQL_PREFIX . "gallery_files f
                                     ON
                                       f.album_id=a.id
-                                    "  .$sWhere.  "
+                                    WHERE
+                                      a.id = :id
                                     GROUP BY
                                       a.id
                                     ORDER BY
-                                      a.id DESC
-                                    LIMIT
-                                      :offset, :limit");
+                                      a.id DESC");
 
-      $oQuery->bindParam('limit', $this->oPagination->getLimit(), PDO::PARAM_INT);
-      $oQuery->bindParam('offset', $this->oPagination->getOffset(), PDO::PARAM_INT);
+      $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
       $oQuery->execute();
 
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
@@ -123,6 +97,84 @@ class Galleries extends Main {
 
         $this->_aData[$iId]['url_createfile'] = $this->_aData[$iId]['url_clean'] . '/createfile';
       }
+    }
+
+    return $this->_aData;
+  }
+
+  /**
+   * Get album overview
+   *
+   * @access public
+   * @param boolean $bAdvancedImageInformation provide image with advanced information (MIME_TYPE etc.)
+   * @param integer $iLimit blog post limit
+   * @return array data from _setData
+   *
+   */
+  public function getOverview($bAdvancedImageInformation = false, $iLimit = LIMIT_ALBUMS) {
+    $iResult  = 0;
+    try {
+      $oQuery = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "gallery_albums");
+      $iResult = $oQuery->fetchColumn();
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0042 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+
+    $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit);
+
+    try {
+      $oQuery = $this->_oDb->prepare("SELECT
+                                      a.*,
+                                      u.id AS user_id,
+                                      u.name AS user_name,
+                                      u.surname AS user_surname,
+                                      u.email AS user_email,
+                                      COUNT(f.id) AS files_sum
+                                    FROM
+                                      " . SQL_PREFIX . "gallery_albums a
+                                    LEFT JOIN
+                                      " . SQL_PREFIX . "users u
+                                    ON
+                                      a.author_id=u.id
+                                    LEFT JOIN
+                                      " . SQL_PREFIX . "gallery_files f
+                                    ON
+                                      f.album_id=a.id
+                                    GROUP BY
+                                      a.id
+                                    ORDER BY
+                                      a.id DESC
+                                    LIMIT
+                                      :offset, :limit");
+
+      $oQuery->bindParam('limit', $this->oPagination->getLimit(), PDO::PARAM_INT);
+      $oQuery->bindParam('offset', $this->oPagination->getOffset(), PDO::PARAM_INT);
+      $oQuery->execute();
+
+      $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0044 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+
+    foreach ($aResult as $aRow) {
+      $iId = $aRow['id'];
+
+      # need to specify 'galleries' because this might be called for rss feed generation
+      $this->_aData[$iId] = $this->_formatForOutput(
+              $aRow,
+              array('id', 'user_id', 'files_sum'),
+              null,
+              'galleries');
+
+      $this->_aData[$iId]['files'] = $aRow['files_sum'] > 0 ?
+              $this->getThumbs($aRow['id'], $bAdvancedImageInformation) :
+              '';
+
+      $this->_aData[$iId]['url_createfile'] = $this->_aData[$iId]['url_clean'] . '/createfile';
     }
 
     return $this->_aData;
