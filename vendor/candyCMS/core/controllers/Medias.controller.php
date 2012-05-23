@@ -157,7 +157,8 @@ class Medias extends Main {
                 'w3c' => date('Y-m-d\TH:i:sP', filectime($sPath))),
             'size'  => Helper::getFileSize($sPath),
             'type'  => $sFileType,
-            'dim'   => $aImgDim
+            'dim'   => $aImgDim,
+            'url_destroy' => '/' . $this->_sController . '/' . $sFile . '/destroy'
         );
       }
 
