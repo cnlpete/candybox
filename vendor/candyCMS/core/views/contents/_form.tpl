@@ -97,7 +97,7 @@
         theme_advanced_resizing : true,
         language : "{$WEBSITE_LANGUAGE}",
         remove_script_host : false,
-        document_base_url : "{$WEBSITE_URL}",
+        convert_urls : false,
         entity_encoding : "raw",
         height : "300px",
         content_css : "{$_PATH.css}/core/tinymce{$_SYSTEM.compress_files_suffix}.css"

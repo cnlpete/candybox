@@ -152,9 +152,11 @@
   <script type='text/javascript' src='/vendor/tiny_mce/jquery.tinymce.js'></script>
   <script type='text/javascript'>
     {if !$MOBILE}
+      {/strip}
       $(document).ready(function(){
         $('textarea.js-tinymce').tinymce({
           script_url : '/vendor/tiny_mce/tiny_mce.js',
+          mode : "exact",
           theme : 'advanced',
           plugins : 'autosave,safari,style,advimage,advlink,inlinepopups,insertdatetime,media,searchreplace,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras',
           theme_advanced_buttons1 : 'bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,cut,copy,paste,pastetext,|,search,replace,|,fullscreen',
@@ -164,13 +166,13 @@
           theme_advanced_resizing : true,
           language : '{$WEBSITE_LANGUAGE}',
           remove_script_host : false,
-          document_base_url : '{$WEBSITE_URL}',
+          convert_urls : false,
           entity_encoding : 'raw',
           height : '300px',
-          content_css : '{$_PATH.css}/core/tinymce{$_SYSTEM.compress_files_suffix}.css',
-          document_base_url : '/'
+          content_css : '{$_PATH.css}/core/tinymce{$_SYSTEM.compress_files_suffix}.css'
         });
       });
+      {strip}
     {/if}
 
     $('#input-title').bind('keyup', function() {
