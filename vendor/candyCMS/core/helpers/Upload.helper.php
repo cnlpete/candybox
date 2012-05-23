@@ -223,7 +223,7 @@ class Upload {
    *
    */
   public function uploadAvatarFile($bReturnPath = true) {
-    $this->_aRequest['rename'] = isset($this->_aRequest['id']) && $this->_aSession['user']['role'] == 4 ?
+    $this->_aRequest[$this->_sController]['rename'] = isset($this->_aRequest['id']) && $this->_aSession['user']['role'] == 4 ?
             (int) $this->_aRequest['id'] :
             $this->_aSession['user']['id'];
 
@@ -231,7 +231,7 @@ class Upload {
       throw new \Exception(I18n::get('error.file.size', self::getUploadLimit(false) . 'MB'));
 
     else {
-      $this->destroyAvatarFiles($this->_aRequest['rename']);
+      $this->destroyAvatarFiles($this->_aRequest[$this->_sController]['rename']);
 
       $sUploadFolder = 'users';
       $aUploads = $this->uploadFiles($sUploadFolder . '/original');
