@@ -22,6 +22,128 @@ require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Pagination.helper.ph
 class Blogs extends Main {
 
   /**
+   * Get count of visible blog entries
+   *
+   * @access public
+   * @return integer the total count
+   *
+   */
+  public function getCount() {
+    # Show unpublished items and entries with diffent languages to moderators or administrators only
+    $sWhere = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ?
+            'WHERE 1' :
+            "WHERE published = '1' AND language = '" . WEBSITE_LANGUAGE . "'";
+
+    try {
+      $oQuery  = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "blogs " . $sWhere);
+      return $oQuery->fetchColumn();
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0043 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+  }
+
+  /**
+   * Get blog overview data by tagname.
+   *
+   * @access public
+   * @param integer $iLimit blog post limit, 0 for infinite
+   * @param string $sTagname the tagname to query for.
+   * @return array data from _setData
+   *
+   */
+  public function getOverviewByTag($iLimit = LIMIT_BLOG, $sTagname = '') {
+    $iResult = $this->getCount();
+
+    if ($iLimit != 0)
+      $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit);
+
+    else
+      $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iResult);
+
+    try {
+      # Show unpublished items and entries with diffent languages to moderators or administrators only
+      $sWhere = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ?
+              'WHERE 1' :
+              "WHERE published = '1' AND language = '" . WEBSITE_LANGUAGE . "'";
+
+      $sLimit = $iLimit != 0 ?
+              ' LIMIT ' . $this->oPagination->getOffset() . ', ' . $this->oPagination->getLimit() :
+              '';
+
+      if (empty($sTagname)) {
+        $sTagname = str_replace('%20', ' ', Helper::formatInput($this->_aRequest['search'], false));
+        # Remove all characters that might harm us, only allow digits, normal letters and whitespaces
+        $sTagname = trim( preg_replace('/[^\d\s\w]/', '', $sTagname) );
+      }
+
+      $oQuery = $this->_oDb->prepare("SELECT
+                                        b.*,
+                                        u.id AS user_id,
+                                        u.name AS user_name,
+                                        u.surname AS user_surname,
+                                        u.email AS user_email,
+                                        u.use_gravatar,
+                                        COUNT(c.id) AS comment_sum
+                                      FROM
+                                        " . SQL_PREFIX . "blogs b
+                                      LEFT JOIN
+                                        " . SQL_PREFIX . "users u
+                                      ON
+                                        b.author_id=u.id
+                                      LEFT JOIN
+                                        " . SQL_PREFIX . "comments c
+                                      ON
+                                        c.parent_id=b.id
+                                      " . $sWhere . "
+                                        AND (tags LIKE :CommaTagnameComma
+                                          OR tags LIKE :CommaTagname
+                                          OR tags LIKE :tagnameComma
+                                          OR tags   =  :tagname
+                                          OR tags LIKE :CommaSpaceTagname
+                                          OR tags LIKE :CommaSpaceTagnameComma)
+                                      GROUP BY
+                                        b.id
+                                      ORDER BY
+                                        b.date DESC"
+                                      . $sLimit);
+      $oQuery->bindValue(':CommaTagnameComma', '%,' . $sTagname . ',%', PDO::PARAM_STR);
+      $oQuery->bindValue(':CommaTagname', '%,' . $sTagname, PDO::PARAM_STR);
+      $oQuery->bindValue(':tagnameComma', $sTagname . ',%', PDO::PARAM_STR);
+      $oQuery->bindValue(':tagname', $sTagname, PDO::PARAM_STR);
+      # These last two lines are for compatibility, since there might be blog-entries done before 2.1 with a space
+      $oQuery->bindValue(':CommaSpaceTagname', '%, ' . $sTagname, PDO::PARAM_STR);
+      $oQuery->bindValue(':CommaSpaceTagnameComma', '%, ' . $sTagname . ',%', PDO::PARAM_STR);
+      $oQuery->execute();
+      $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0001 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+
+    foreach ($aResult as $aRow) {
+      # We use the date as identifier to give plugins the possibility to patch into the system.
+      $iDate = $aRow['date'];
+
+      # We need to specify 'blogs' because this might also be called for rss
+      $this->_aData[$iDate] = $this->_formatForOutput($aRow,
+              array('id', 'uid', 'author_id', 'comment_sum'),
+              array('published', 'use_gravatar'),
+              'blogs');
+
+      # @todo trim spaces, redundant, if those get removed at blog creation/editing
+      $this->_aData[$iDate]['tags_raw'] = $aRow['tags'];
+      # Explode using ',' and filter empty items (since explode always gives at least one item)
+      $this->_aData[$iDate]['tags'] = array_filter(array_map('trim', explode(',', $aRow['tags'])));
+      $this->_formatDates($this->_aData[$iDate], 'date_modified');
+    }
+
+    return $this->_aData;
+  }
+
+  /**
    * Get blog overview data.
    *
    * @access public
@@ -33,45 +155,20 @@ class Blogs extends Main {
     if (WEBSITE_MODE == 'test' && $iLimit != 0)
       $iLimit = 2;
 
-    # Show unpublished items and entries with diffent languages to moderators or administrators only
-    $sWhere = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ?
-            '' :
-            "WHERE published = '1' AND language = '" . WEBSITE_LANGUAGE . "'";
+    $iResult = $this->getCount();
 
-    # Search blog for tags
-    if (isset($this->_aRequest['search']) && !empty($this->_aRequest['search'])) {
-      $sWhere .= isset($sWhere) && !empty($sWhere) ? ' AND ' : ' WHERE ';
-      $sSearchString = str_replace('%20', ' ', Helper::formatInput($this->_aRequest['search'], false));
+    if ($iLimit != 0)
+      $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit);
 
-      # Remove all characters that might harm us, only allow digits, normal letters and whitespaces
-      $sSearchString = preg_replace('/[^\d\s\w]/', '', $sSearchString);
-
-      # The last two lines are only for compatibility,
-      # since we don't know if the tags are seperated by ', ' instead of ','
-      $sWhere .= "tags LIKE '%," . $sSearchString . ",%'
-              OR tags LIKE '%," . $sSearchString . "'
-              OR tags LIKE '" . $sSearchString . ",%'
-              OR tags = '" . $sSearchString . "'
-              OR tags LIKE '%, " . $sSearchString . "'
-              OR tags LIKE '%, " . $sSearchString . ",%'";
-    }
+    else
+      $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iResult);
 
     try {
-      $oQuery  = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "blogs " . $sWhere);
-      $iResult = $oQuery->fetchColumn();
+      # Show unpublished items and entries with diffent languages to moderators or administrators only
+      $sWhere = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ?
+              '' :
+              "WHERE published = '1' AND language = '" . WEBSITE_LANGUAGE . "'";
 
-      if ($iLimit != 0)
-        $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit);
-
-      else
-        $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iResult);
-    }
-    catch (\PDOException $p) {
-      AdvancedException::reportBoth('0043 - ' . $p->getMessage());
-      exit('SQL error.');
-    }
-
-    try {
       $sLimit = $iLimit != 0 ?
               ' LIMIT ' . $this->oPagination->getOffset() . ', ' . $this->oPagination->getLimit() :
               '';

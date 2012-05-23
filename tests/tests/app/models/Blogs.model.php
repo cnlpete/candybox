@@ -46,6 +46,7 @@ class UnitTestOfBlogModel extends CandyUnitTest {
   function testGetData() {
     $this->assertIsA($this->oObject->getId(1), 'array');
     $this->assertIsA($this->oObject->getOverview(), 'array');
+    $this->assertIsA($this->oObject->getOverviewByTag(0,'tag1'), 'array');
   }
 
   function testUpdate() {

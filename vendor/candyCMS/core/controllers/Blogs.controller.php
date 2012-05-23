@@ -48,7 +48,10 @@ class Blogs extends Main {
 
     else {
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-        $this->_aData = $this->_oModel->getOverview();
+        if (isset($this->_aRequest['search']) && $this->_aRequest['search'])
+          $this->_aData = $this->_oModel->getOverviewByTag();
+        else
+          $this->_aData = $this->_oModel->getOverview();
 
         $this->oSmarty->assign('blogs', $this->_aData);
         $this->oSmarty->assign('_blog_footer_', $this->_oModel->oPagination->showSurrounding());
