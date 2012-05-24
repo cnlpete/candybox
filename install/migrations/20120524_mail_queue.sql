@@ -2,7 +2,7 @@ CREATE TABLE `%SQL_PREFIX%mails` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `date` datetime NOT NULL,
-  `ip` varbinary(16) DEFAULT NULL,
+  `ip` varchar(39) DEFAULT NULL,
   `from_address` varchar(32) DEFAULT NULL,
   `from_name` varchar(32) DEFAULT NULL,
   `to_address` varchar(32) DEFAULT NULL,
