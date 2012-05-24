@@ -62,10 +62,10 @@ class WebTestOfUserController extends CandyWebTest {
     $this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/create'));
     $this->assertNoText(I18n::get('error.missing.permission'));
     $this->assertResponse('200');
-    $this->assertField('name', '');
-    $this->assertField('surname', '');
-    $this->assertField('password', '');
-    $this->assertField('password2', '');
+    $this->assertField('users[name]', '');
+    $this->assertField('users[surname]', '');
+    $this->assertField('users[password]', '');
+    $this->assertField('users[password2]', '');
 
     # try without filling out anything
     $this->click(I18n::get('global.register'));
@@ -75,29 +75,29 @@ class WebTestOfUserController extends CandyWebTest {
     $this->assertText(I18n::get('error.form.missing.email'));
     $this->assertText(I18n::get('error.form.missing.password'));
 
-    $this->setField('name', 'Max');
-    $this->setField('surname', 'Mustermann');
-    $this->setField('email', WEBSITE_MAIL);
-    $this->setField('password', 'abc');
-    $this->setField('password2', 'def');
+    $this->setField('users[name]', 'Max');
+    $this->setField('users[surname]', 'Mustermann');
+    $this->setField('users[email]', WEBSITE_MAIL);
+    $this->setField('users[password]', 'abc');
+    $this->setField('users[password2]', 'def');
 
     # Passwords not identical
     $this->click(I18n::get('global.register'));
     $this->assertText(I18n::get('error.passwords'));
 
-    $this->setField('password', 'abc');
-    $this->setField('password2', 'def');
+    $this->setField('users[password]', 'abc');
+    $this->setField('users[password2]', 'def');
 
     # Disclaimer not set
     $this->click(I18n::get('global.register'));
     $this->assertText(I18n::get('error.form.missing.terms'));
 
-    $this->setField('name', 'Max');
-    $this->setField('surname', 'Mustermann');
-    $this->setField('email', time() . WEBSITE_MAIL);
-    $this->setField('password', 'test');
-    $this->setField('password2', 'test');
-    $this->setField('disclaimer', 'disclaimer');
+    $this->setField('users[name]', 'Max');
+    $this->setField('users[surname]', 'Mustermann');
+    $this->setField('users[email]', time() . WEBSITE_MAIL);
+    $this->setField('users[password]', 'test');
+    $this->setField('users[password2]', 'test');
+    $this->setField('users[disclaimer]', 'disclaimer');
 
     # register should work
     $this->click(I18n::get('global.register'));
@@ -129,9 +129,10 @@ class WebTestOfUserController extends CandyWebTest {
 
   function testGetToken() {
     $this->assertTrue($this->post(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/2/token', array(
-				'email' => 'admin@example.com',
-				'password' => 'test'
-		)));
+				'users' => array(
+            'email' => 'admin@example.com',
+            'password' => 'test'
+		))));
 
     $this->assertResponse(200);
 		$this->assertText('c2f9619961');
@@ -140,18 +141,20 @@ class WebTestOfUserController extends CandyWebTest {
 
     //test with a wrong password
     $this->assertTrue($this->post(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/2/token', array(
-				'email' => 'admin@example.com',
-				'password' => 'abc'
-		)));
+				'users' => array(
+            'email' => 'admin@example.com',
+            'password' => 'abc'
+		))));
     $this->assertResponse(200);
 		$this->assertNoText('c2f9619961');
 		$this->assertText('"success":false');
 
     //test with a not existing
     $this->assertTrue($this->post(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/1/token', array(
-				'email' => 'nouser@example.com',
-				'password' => 'abc'
-		)));
+				'users' => array(
+            'email' => 'nouser@example.com',
+            'password' => 'abc'
+		))));
     $this->assertResponse(200);
 		$this->assertNoText('c2f9619961');
 		$this->assertText('"success":false');

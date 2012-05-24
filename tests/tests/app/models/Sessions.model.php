@@ -20,8 +20,9 @@ class TestOfSessionsModel extends UnitTestCase {
     parent::setUp();
 
     $this->aRequest = array(
-        'email'       => 'unknownemailaddress@example.com',
-        'password'    => 'test',
+        'sessions'  => array(
+          'email'       => 'unknownemailaddress@example.com',
+          'password'    => 'test'),
         'controller'  => 'sessions');
 
     $this->oObject = new Sessions($this->aRequest, $this->aSession);
@@ -30,11 +31,11 @@ class TestOfSessionsModel extends UnitTestCase {
   # Create a new session.
   function testCreate() {
     # fails due to not verified...
-    $this->aRequest['email'] = 'unverified@example.com';
+    $this->aRequest['sessions']['email'] = 'unverified@example.com';
     $this->assertFalse($this->oObject->create());
 
     # but verified users works
-    $this->aRequest['email'] = 'moderator@example.com';
+    $this->aRequest['sessions']['email'] = 'moderator@example.com';
     $this->assertTrue($this->oObject->create());
     $this->oObject->destroy(session_id());
    }

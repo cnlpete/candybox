@@ -19,13 +19,13 @@ class UnitTestOfCalendarModel extends CandyUnitTest {
   function setUp() {
 
     $this->aRequest = array(
-        'title' => 'Title',
-        'content' => 'Content',
-        'start_date' => '0000-00-00',
-        'end_date' => '0000-00-00',
+        'calendars' => array(
+          'title' => 'Title',
+          'content' => 'Content',
+          'start_date' => '0000-00-00',
+          'end_date' => '0000-00-00'),
         'section' => 'calendar',
-        'controller'  => 'calendars',
-        'language'    => 'en');
+        'controller'  => 'calendars');
 
     $this->oObject = new Calendars($this->aRequest, $this->aSession);
   }

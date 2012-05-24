@@ -21,10 +21,11 @@ class UnitTestOfCommentModel extends CandyUnitTest {
 
     $this->aRequest = array(
 				'section'		=> 'blog',
-        'name'			=> 'Name',
-        'email'			=> 'email@example.com',
-        'content'		=> 'Content',
-        'parent_id' => '666',
+        'blogs'  => array(
+            'name'			=> 'Name',
+            'email'			=> 'email@example.com',
+            'content'		=> 'Content',
+            'parent_id' => '666'),
         'controller' => 'blogs');
 
     $this->oObject = new Comments($this->aRequest, $this->aSession);

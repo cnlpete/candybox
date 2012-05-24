@@ -18,10 +18,11 @@ class UnitTestOfContentModel extends CandyUnitTest {
 
   function setUp() {
     $this->aRequest = array(
-        'title'     => 'Title',
-        'teaser'    => 'Teaser',
-        'content'   => 'Content',
-        'keywords'  => 'Keywords',
+        'contents' => array(
+          'title'     => 'Title',
+          'teaser'    => 'Teaser',
+          'content'   => 'Content',
+          'keywords'  => 'Keywords'),
         'controller'=> 'contents');
 
     $this->oObject = new Contents($this->aRequest, $this->aSession);

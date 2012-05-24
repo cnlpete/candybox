@@ -19,8 +19,9 @@ class UnitTestOfGalleryModel extends CandyUnitTest {
   function setUp() {
 
     $this->aRequest = array(
-        'title'     => 'Title',
-        'content'   => 'Content',
+        'galleries' => array(
+          'title'     => 'Title',
+          'content'   => 'Content'),
         'id'        => 0,
         'controller'=> 'galleries');
 

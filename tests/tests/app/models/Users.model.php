@@ -23,14 +23,15 @@ class UnitTestOfUserModel extends CandyUnitTest {
   function setUp() {
 
     $this->aRequest = array(
-        'email'         => 'email@example.com',
-        'password'      => 'Password',
-        'name'          => 'Name',
-        'content'       => 'Content',
-        'surname'       => 'Surname',
-        'receive_newsletter' => 0,
-        'role'          => 0,
-        'use_gravatar'  => 0,
+        'users'         => array(
+          'email'         => 'email@example.com',
+          'password'      => 'Password',
+          'name'          => 'Name',
+          'content'       => 'Content',
+          'surname'       => 'Surname',
+          'receive_newsletter' => 0,
+          'role'          => 0,
+          'use_gravatar'  => 0),
         'controller'    => 'users');
 
     $this->oObject = new Users($this->aRequest, $this->aSession);

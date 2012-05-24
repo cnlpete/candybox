@@ -80,9 +80,10 @@ abstract class CandyWebTest extends WebTestCase {
     # we need redirects for this
     $this->setMaximumRedirects(3);
     $this->post(WEBSITE_URL . '/sessions/create',
-            array('email' => $email,
-                  'password' => 'test',
-                  'create_sessions' => 'formadata'));
+            array(
+                'sessions' => array(
+                    'email' => $email,
+                    'password' => 'test')));
     $this->assertText(I18n::get('success.session.create'));
   }
 

@@ -32,9 +32,9 @@ class WebTestOfMailController extends CandyWebTest {
 		$this->assertText('c2f9619961');
 		$this->assertResponse('200');
 
-    $this->assertField('email');
-    $this->assertField('subject');
-    $this->assertField('content');
+    $this->assertField('mails[email]');
+    $this->assertField('mails[subject]');
+    $this->assertField('mails[content]');
 
     #submit empty form
     $this->click(I18n::get('global.submit'));
@@ -49,8 +49,8 @@ class WebTestOfMailController extends CandyWebTest {
 		$this->assertResponse(200);
 		$this->assertText(I18n::get('error.mail.format'));
 
-    $this->assertTrue($this->setField('email', WEBSITE_MAIL_NOREPLY));
-    $this->assertTrue($this->setField('content', 'some content'));
+    $this->assertTrue($this->setField('mails[email]', WEBSITE_MAIL_NOREPLY));
+    $this->assertTrue($this->setField('mails[content]', 'some content'));
     #submit form with wrongly formated email
     $this->click(I18n::get('global.submit'));
 		$this->assertResponse(200);

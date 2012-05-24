@@ -104,9 +104,9 @@ class WebTestOfBlogController extends CandyWebTest {
 
     $this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/create?api_token=c2f9619961'));
     $this->assertResponse(200);
-    $this->assertField('title', '');
-    $this->assertField('teaser', '');
-    $this->assertField('tags', '');
+    $this->assertField('blogs[title]', '');
+    $this->assertField('blogs[teaser]', '');
+    $this->assertField('blogs[tags]', '');
     // ...
     # still have to manually send api token, so normal submit has to fail
     $this->click(I18n::get('global.create.create'));
@@ -129,9 +129,9 @@ class WebTestOfBlogController extends CandyWebTest {
 
     $this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/1/update?api_token=c2f9619961'));
     $this->assertResponse(200);
-    $this->assertField('title', 'b3cf6b2dd0');
-    $this->assertField('teaser', '');
-    $this->assertField('tags', 'tag1');
+    $this->assertField('blogs[title]', 'b3cf6b2dd0');
+    $this->assertField('blogs[teaser]', '');
+    $this->assertField('blogs[tags]', 'tag1');
     // ...
     # still have to manually send api token, so normal submit should fail
     $this->click(I18n::get('global.update.update'));
@@ -141,16 +141,16 @@ class WebTestOfBlogController extends CandyWebTest {
     # really update, by sending api_token
     $sContent = 'Content change at : ' . time();
     $this->assertTrue($this->post(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/1/update?api_token=c2f9619961',
-                                  array('author_id' => '2',
-                                        'content' => $sContent,
-                                        'date' => '1',
-                                        'id' => '1',
-                                        'keywords' => 'APITesting',
-                                        'language' => 'en',
-                                        'published' => '1',
-                                        'tags' => 'tag1',
-                                        'title' => 'b3cf6b2dd0',
-                                        'update_blogs' => 'formdata')));
+                                  array('blogs' =>
+                                      array('author_id' => '2',
+                                            'content' => $sContent,
+                                            'date' => '1',
+                                            'id' => '1',
+                                            'keywords' => 'APITesting',
+                                            'language' => 'en',
+                                            'published' => '1',
+                                            'tags' => 'tag1',
+                                            'title' => 'b3cf6b2dd0'))));
     $this->assertResponse(200);
     $this->assertText(I18n::get('success.update'));
     $this->assertText($sContent);
@@ -167,25 +167,25 @@ class WebTestOfBlogController extends CandyWebTest {
     $sContent = 'Funky API Content';
     #try to create without valid api_token
     $this->assertTrue($this->post(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/create?api_token=notatoken',
-                                  array('content' => $sContent,
-                                      'keywords' => '',
-                                      'language' => 'en',
-                                      'tags' => 'api',
-                                      'title' => $sTimestamp,
-                                      'teaser' => 'API stuff',
-                                      'create_blogs' => 'formdata')));
+                                  array('blogs' =>
+                                    array('content' => $sContent,
+                                          'keywords' => '',
+                                          'language' => 'en',
+                                          'tags' => 'api',
+                                          'title' => $sTimestamp,
+                                          'teaser' => 'API stuff'))));
 		$this->assertText(I18n::get('error.missing.permission'));
 
     # create with valid api token
     $this->assertTrue($this->post(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/create?api_token=c2f9619961',
-                                  array('content' => $sContent,
-                                      'keywords' => '',
-                                      'language' => 'en',
-                                      'tags' => 'api',
-                                      'title' => $sTimestamp,
-                                      'teaser' => 'API stuff',
-                                      'published' => '1',
-                                      'create_blogs' => 'formdata')));
+                                  array('blogs' =>
+                                    array('content' => $sContent,
+                                          'keywords' => '',
+                                          'language' => 'en',
+                                          'tags' => 'api',
+                                          'title' => $sTimestamp,
+                                          'teaser' => 'API stuff',
+                                          'published' => '1'))));
     $this->assertResponse(200);
     $this->assertText(I18n::get('success.create'));
     $this->assertText($sTimestamp);
