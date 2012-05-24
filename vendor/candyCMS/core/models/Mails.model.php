@@ -15,6 +15,7 @@ namespace CandyCMS\Core\Models;
 use CandyCMS\Core\Helpers\AdvancedException;
 use CandyCMS\Core\Helpers\Helper;
 use CandyCMS\Core\Helpers\I18n;
+use PDO;
 
 class Mails extends Main {
 
@@ -26,7 +27,43 @@ class Mails extends Main {
    *
    */
   public function getOverview() {
-    //TODO
+    try {
+      $oQuery = $this->_oDb->prepare("SELECT
+                                        m.*,
+                                        UNIX_TIMESTAMP(m.date) as date,
+                                        u.id AS user_id,
+                                        u.name AS user_name,
+                                        u.surname AS user_surname,
+                                        u.email AS user_email
+                                      FROM
+                                        " . SQL_PREFIX . "mails m
+                                      LEFT JOIN
+                                        " . SQL_PREFIX . "users u
+                                      ON
+                                        m.user_id=u.id
+                                      ORDER BY
+                                        m.date ASC");
+
+      $oQuery->execute();
+
+      $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0118 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+
+    foreach ($aResult as $aRow) {
+      $iId = $aRow['id'];
+
+      $this->_aData[$iId] = $this->_formatForOutput(
+              $aRow,
+              array('id', 'user_id'),
+              array('result'));
+      $this->_aData[$iId]['ip'] = inet_ntop($this->_aData[$iId]['ip']);
+    }
+
+    return $this->_aData;
   }
 
   /**

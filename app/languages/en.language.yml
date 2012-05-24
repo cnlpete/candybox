@@ -67,6 +67,7 @@ global:
   login: Login
   logs: Logs
   logout: Logout
+  mails: Mails
   manager:
     content: Contents
     media: Files
@@ -97,6 +98,7 @@ global:
   quote:
     by: Quote by
     quote: Quote
+  receiver: Receiver
   register: Register
   registration: Registration
   report:

@@ -67,6 +67,7 @@ global:
   login: Login
   logs: Logs
   logout: Logout
+  mails: Emails
   manager:
     content: Seitenmanagement
     media: Dateimanager
@@ -97,6 +98,7 @@ global:
   quote:
     by: Zitat von
     quote: Zitat
+  receiver: Empfänger
   register: Registrieren
   registration: Registrierung
   report:

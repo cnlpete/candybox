@@ -26,10 +26,34 @@ class Mails extends Main {
    *
    */
   public function show() {
-    if (!empty($this->_iId))
-      return Helper::redirectTo('/' . $this->_aRequest['controller'] . '/' . $this->_iId . '/create');
+    if ($this->_aSession['user']['role'] < 4) {
+      if (!empty($this->_iId))
+        return Helper::redirectTo('/' . $this->_aRequest['controller'] . '/' . $this->_iId . '/create');
+      else
+        return Helper::redirectTo('/' . $this->_aRequest['controller'] . '/create');
+    }
     else
-      return Helper::redirectTo('/' . $this->_aRequest['controller'] . '/create');
+      return $this->_show();
+  }
+
+  /**
+   * Show log overview if we have admin rights.
+   *
+   * @access protected
+   * @return string HTML content
+   *
+   */
+  protected function _show() {
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
+    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
+
+    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+      $this->oSmarty->assign('mails', $this->_oModel->getOverview());
+    }
+
+    $this->setTitle(I18n::get('global.mails'));
+    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
   /**
