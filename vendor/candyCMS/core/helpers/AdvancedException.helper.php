@@ -42,15 +42,17 @@ class AdvancedException extends \Exception {
   public static function sendAdminMail($sMessage) {
     $sMessage = date('Y-m-d Hi', time()) . ' - ' . $sMessage;
 
-    $sClass = $this->__autoload('Mails', true);
-    $oMails = new $sClass($this->_aRequest, $this->_aSession);
+    $sClass = \CandyCMS\Core\Controllers\Main::__autoload('Mails', true);
+    $oMails = new $sClass(null, null);
 
     return $oMails->create('Exception',
             $sMessage,
             '',
             WEBSITE_MAIL,
             '',
-            WEBSITE_MAIL_NOREPLY);
+            WEBSITE_MAIL_NOREPLY,
+            '',
+            false);
   }
 
   /**

@@ -199,10 +199,11 @@ class Mails extends Main {
    * @param string $sReplyToName the name of the sender, can be empty
    * @param string $sReplyToMail email address the user can reply to
    * @param string $sAttachement path to the attachment
+   * @param bool $bSaveMail whehter the mail queue should be used on failure
    * @return boolean the status of the action
    * @see vendor/phpmailer/class.phpmailer.php
    */
-  public function create($sSubject, $sMessage, $sToName, $sToMail, $sReplyToName, $sReplyToMail, $sAttachement = '') {
+  public function create($sSubject, $sMessage, $sToName, $sToMail, $sReplyToName, $sReplyToMail, $sAttachement = '', $bSaveMail = true) {
     $sMessage = str_replace('%NOREPLY', I18n::get('mails.body.no_reply'), $sMessage);
     $sMessage = str_replace('%SIGNATURE', I18n::get('mails.body.signature'), $sMessage);
 
@@ -223,7 +224,7 @@ class Mails extends Main {
       exit('Mail error, the Administrator has been notified.');
     }
 
-    if (!$bReturn && defined('USE_MAIL_QUEUE') && USE_MAIL_QUEUE == true) {
+    if (!$bReturn && $bSaveMail && defined('USE_MAIL_QUEUE') && USE_MAIL_QUEUE == true) {
       //save to db
       try {
         $oQuery = $this->_oDb->prepare("INSERT INTO
