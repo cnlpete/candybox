@@ -81,6 +81,115 @@ class Mails extends Main {
   }
 
   /**
+   * send the mail and return phpmailers exit-status,
+   * will also throw phpmailers exceptions
+   *
+   * @param string $sSubject mail subject
+   * @param string $sMessage mail message
+   * @param string $sToName name of the user to send the mail to
+   * @param string $sToMail email address to send mail to
+   * @param string $sReplyToName the name of the sender, can be empty
+   * @param string $sReplyToMail email address the user can reply to
+   * @param string $sAttachement path to the attachment
+   * @return boolean whether phpmailers returned true or false
+   * @see vendor/phpmailer/class.phpmailer.php
+   */
+  private function _send($sSubject, $sMessage, $sToName, $sToMail, $sReplyToName, $sReplyToMail, $sAttachement = '') {
+    require_once 'vendor/phpmailer/class.phpmailer.php';
+    $oMail = new \PHPMailer(true);
+
+    if (SMTP_ENABLE === true) {
+      $oMail->IsSMTP();
+
+      $oMail->SMTPAuth  = defined('SMTP_USE_AUTH') ? SMTP_USE_AUTH === true : true;
+
+      $oMail->SMTPDebug = WEBSITE_MODE == 'development' ? 1 : 0;
+
+      $oMail->Host      = SMTP_HOST;
+      $oMail->Port      = SMTP_PORT;
+      $oMail->Username  = SMTP_USER;
+      $oMail->Password  = SMTP_PASSWORD;
+    }
+    else
+      $oMail->IsMail();
+
+    $oMail->CharSet = 'utf-8';
+    $oMail->SetFrom(WEBSITE_MAIL, WEBSITE_NAME);
+
+    if ($sReplyToName)
+      $oMail->AddReplyTo($sReplyToMail, $sReplyToName);
+    else
+      $oMail->AddReplyTo($sReplyToMail);
+
+    if ($sToName)
+      $oMail->AddAddress($sToMail, $sToName);
+    else
+      $oMail->AddAddress($sToMail);
+
+    $oMail->Subject = $sSubject;
+    $oMail->MsgHTML(nl2br($sMessage));
+
+    if ($sAttachement)
+      $oMail->AddAttachment($sAttachement);
+
+    return $oMail->Send();
+  }
+
+  /**
+   * try to resend the mail, given by iId
+   *
+   * @param int $iId the id of the mail, we are trying to send
+   */
+  public function resend($iId) {
+    try {
+      $oQuery = $this->_oDb->prepare("SELECT
+                                        m.*
+                                      FROM
+                                        " . SQL_PREFIX . "mails m
+                                      WHERE
+                                        m.id = :id
+                                      LIMIT 1");
+
+      $oQuery->bindValue(':id', $iId, PDO::PARAM_INT);
+      $oQuery->execute();
+
+      $aResult = $oQuery->fetch(PDO::FETCH_ASSOC);
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0119 - ' . $p->getMessage());
+      return false;
+    }
+
+    // not found
+    if (!isset($aResult['id']))
+      return false;
+
+    // try to resend
+    try {
+      $bReturn = $this->_send($aResult['subject'],
+                              $aResult['content'],
+                              $aResult['to_name'],
+                              $aResult['to_address'],
+                              $aResult['from_name'],
+                              $aResult['from_address']);
+
+      if ($bReturn)
+        $this->destroy($iId);
+
+      return $bReturn;
+    }
+    catch (\phpmailerException $e) {
+      //Pretty error messages from PHPMailer
+      AdvancedException::writeLog($e->errorMessage());
+      return false;
+    }
+    catch (AdvancedException $e) {
+      AdvancedException::writeLog($e->errorMessage());
+      return false;
+    }
+  }
+
+  /**
    * Create a new mail, store it to database on failure
    *
    * @param string $sSubject mail subject
@@ -100,48 +209,8 @@ class Mails extends Main {
     $sMessage = $this->_replaceNameAndUrl($sMessage);
     $sSubject = $this->_replaceNameAndUrl($sSubject);
 
-    require_once 'vendor/phpmailer/class.phpmailer.php';
-    $oMail = new \PHPMailer(true);
-
-    $sErrorMessage = '';
-    $bReturn = false;
-
     try {
-      if (SMTP_ENABLE === true) {
-        $oMail->IsSMTP();
-
-        $oMail->SMTPAuth  = defined('SMTP_USE_AUTH') ? SMTP_USE_AUTH === true : true;
-
-        $oMail->SMTPDebug = WEBSITE_MODE == 'development' ? 1 : 0;
-
-        $oMail->Host      = SMTP_HOST;
-        $oMail->Port      = SMTP_PORT;
-        $oMail->Username  = SMTP_USER;
-        $oMail->Password  = SMTP_PASSWORD;
-      }
-      else
-        $oMail->IsMail();
-
-      $oMail->CharSet = 'utf-8';
-      $oMail->SetFrom(WEBSITE_MAIL, WEBSITE_NAME);
-
-      if ($sReplyToName)
-        $oMail->AddReplyTo($sReplyToMail, $sReplyToName);
-      else
-        $oMail->AddReplyTo($sReplyToMail);
-
-      if ($sToName)
-        $oMail->AddAddress($sToMail, $sToName);
-      else
-        $oMail->AddAddress($sToMail);
-
-      $oMail->Subject = $sSubject;
-      $oMail->MsgHTML(nl2br($sMessage));
-
-      if ($sAttachment)
-        $oMail->AddAttachment($sAttachment);
-
-      $bReturn = $oMail->Send();
+      $this->_send($sSubject, $sMessage, $sToName, $sToMail, $sReplyToName, $sReplyToMail, $sAttachement);
     }
     catch (\phpmailerException $e) {
       //Pretty error messages from PHPMailer
@@ -183,7 +252,7 @@ class Mails extends Main {
 
         $iUserId = (int) (isset($this->_aSession['user']['id']) ? $this->_aSession['user']['id'] : 0);
         $oQuery->bindParam('user_id', $iUserId, PDO::PARAM_INT);
-        $oQuery->bindParam('ip', inet_pton($_SERVER['REMOTE_ADDR']), PDO::PARAM_INT);
+        $oQuery->bindParam('ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
         $oQuery->bindParam('from_address', $sReplyToMail, PDO::PARAM_STR);
         $oQuery->bindParam('from_name', $sReplyToName, PDO::PARAM_STR);
         $oQuery->bindParam('to_address', $sToMail, PDO::PARAM_STR);

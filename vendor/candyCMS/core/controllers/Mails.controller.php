@@ -32,8 +32,12 @@ class Mails extends Main {
       else
         return Helper::redirectTo('/' . $this->_aRequest['controller'] . '/create');
     }
-    else
-      return $this->_show();
+    else {
+      if ($this->_aRequest['action'] == 'resend')
+        exit($this->_resend());
+      else
+        return $this->_show();
+    }
   }
 
   /**
@@ -54,6 +58,17 @@ class Mails extends Main {
 
     $this->setTitle(I18n::get('global.mails'));
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+  }
+
+  /**
+   * Show log overview if we have admin rights.
+   *
+   * @access protected
+   * @return string HTML content
+   *
+   */
+  protected function _resend() {
+    return json_encode($this->_oModel->resend($this->_iId) == true);
   }
 
   /**
@@ -166,7 +181,7 @@ class Mails extends Main {
               Helper::formatInput($this->_aRequest[$this->_sController]['email']));
 
 
-      Logs::insert($this->_aRequest['controller'], 'create', (int) $this->_iId, 0, '', '', $bStatus);
+      Logs::insert($this->_aRequest['controller'], 'create', (int) $this->_iId, $this->_aSession['user']['id'], '', '', $bStatus);
 
       if ($bStatus == true)
         return $this->_showSuccessPage();
