@@ -161,13 +161,14 @@ class Sessions extends Main {
     $sRedirect = '/' . $this->_sController . '/create';
 
     if ($bReturn == true) {
-      $sMails = $this->__autoload('Mails');
-
-      $bStatus = $sMails::send(
-              Helper::formatInput($this->_aRequest[$this->_sController]['email']),
-              I18n::get('sessions.password.mail.subject'),
+      $sClass = $this->__autoload('Mails', true);
+      $oMails = new $sClass($this->_aRequest, $this->_aSession);
+      $bStatus = $oMails->create(I18n::get('sessions.password.mail.subject'),
               I18n::get('sessions.password.mail.body', $sNewPasswordClean),
-              WEBSITE_MAIL_NOREPLY);
+              '',
+              Helper::formatInput($this->_aRequest[$this->_sController]['email']),
+              '',
+              WEBSITE_MAIL_NOREPLY );
 
       return $bStatus === true ?
               Helper::successMessage(I18n::get('success.mail.create'), $sRedirect) :
@@ -221,14 +222,16 @@ class Sessions extends Main {
     $sRedirect = '/' . $this->_sController . '/create';
 
     if (is_array($aData) && !empty($aData)) {
-      $sMails   = $this->__autoload('Mails');
-      $bStatus  = $sMails::send(
-              Helper::formatInput($this->_aRequest[$this->_sController]['email']),
-              I18n::get('sessions.verification.mail.subject'),
+      $sClass = $this->__autoload('Mails', true);
+      $oMails = new $sClass($this->_aRequest, $this->_aSession);
+      $bStatus = $oMails->create(I18n::get('sessions.verification.mail.subject'),
               I18n::get('sessions.verification.mail.body',
                       $aData['name'],
                       Helper::createLinkTo('users/' . $aData['verification_code'] . '/verification')),
-              WEBSITE_MAIL_NOREPLY);
+              '',
+              Helper::formatInput($this->_aRequest[$this->_sController]['email']),
+              '',
+              WEBSITE_MAIL_NOREPLY );
 
       return $bStatus === true ?
               Helper::successMessage(I18n::get('success.mail.create'), $sRedirect) :

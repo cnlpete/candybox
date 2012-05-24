@@ -198,4 +198,9 @@ define('MAILCHIMP_LIST_ID', '');
 # DEFAULT: false
 define('CHECK_OLD_LINKS', false);
 
+# should mails, that failed to get send, be stored in a mail queue
+# Note that those mails can be seen by Administrators until they are send
+# DEFAULT: true
+define('USE_MAIL_QUEUE', true);
+
 ?>

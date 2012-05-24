@@ -340,11 +340,14 @@ class Users extends Main {
                   Helper::formatInput($this->_aRequest[$this->_sController]['name']),
                   Helper::createLinkTo('users/' . $iVerificationCode . '/verification'));
 
-          $sMails = $this->__autoload('Mails');
-          $sMails::send( Helper::formatInput($this->_aRequest['email']),
-                      I18n::get('users.mail.subject'),
-                      $sMailMessage,
-                      WEBSITE_MAIL_NOREPLY);
+          $sClass = $this->__autoload('Mails', true);
+          $oMails = new $sClass($this->_aRequest, $this->_aSession);
+          $oMails->create(I18n::get('users.mail.subject'),
+                  $sMailMessage,
+                  Helper::formatInput($this->_aRequest[$this->_sController]['name']),
+                  Helper::formatInput($this->_aRequest[$this->_sController]['email']),
+                  '',
+                  WEBSITE_MAIL_NOREPLY );
         }
 
         return $this->_aSession['user']['role'] == 4 ?
