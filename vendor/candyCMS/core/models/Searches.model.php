@@ -55,7 +55,7 @@ class Searches extends Main {
                                               ORDER BY
                                                 " . (string) $sOrderBy);
 
-        $this->oQuery->bindValue('searchString', '%' . $sTagname . '%', PDO::PARAM_STR);
+        $this->oQuery->bindValue('searchString', '%' . $sSearch . '%', PDO::PARAM_STR);
         $this->oQuery->execute();
         $aResult = $this->oQuery->fetchAll(PDO::FETCH_ASSOC);
 
