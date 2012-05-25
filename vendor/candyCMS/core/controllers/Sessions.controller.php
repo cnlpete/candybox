@@ -260,6 +260,10 @@ class Sessions extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
+    $this->oSmarty->assign('email', isset($this->_aRequest[$this->_sController]['email']) ?
+                    (string) $this->_aRequest[$this->_sController]['email'] :
+                    '');
+
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 

@@ -30,6 +30,7 @@
                type='email'
                title=''
                id='input-email'
+               value='{$email}'
                autofocus required />
         {if isset($error.email)}
           <span class='help-inline'>
