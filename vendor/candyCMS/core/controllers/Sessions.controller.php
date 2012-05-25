@@ -15,8 +15,8 @@ namespace CandyCMS\Core\Controllers;
 use CandyCMS\Core\Controllers\Main;
 use CandyCMS\Core\Helpers\Helper;
 use CandyCMS\Core\Helpers\I18n;
-use CandyCMS\Plugins\Controller\FacebookCMS;
-use CandyCMS\Plugins\Controller\Recaptcha;
+use CandyCMS\Plugins\FacebookCMS;
+use CandyCMS\Plugins\Recaptcha;
 
 class Sessions extends Main {
 
