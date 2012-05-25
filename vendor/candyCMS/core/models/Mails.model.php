@@ -210,8 +210,10 @@ class Mails extends Main {
     $sMessage = $this->_replaceNameAndUrl($sMessage);
     $sSubject = $this->_replaceNameAndUrl($sSubject);
 
+    $sErrorMessage = '';
+    $bReturn = false;
     try {
-      $this->_send($sSubject, $sMessage, $sToName, $sToMail, $sReplyToName, $sReplyToMail, $sAttachement);
+      $bReturn = $this->_send($sSubject, $sMessage, $sToName, $sToMail, $sReplyToName, $sReplyToMail, $sAttachement);
     }
     catch (\phpmailerException $e) {
       //Pretty error messages from PHPMailer
