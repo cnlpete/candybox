@@ -43,8 +43,8 @@
       </label>
       <div class='controls'>
         <input type='text' name='{$_REQUEST.controller}[tags]' id='input-tags'
-              data-provide='typeahead' value="{$tags}"
-              data-source="{$_tags_}" data-items='8'
+              data-provide='typeahead' value='{$tags}'
+              data-source='{$_tags_}' data-items='8'
               class='span4' autocomplete='off' />
         <p class='help-block'>
           {$lang.blogs.info.tag}
