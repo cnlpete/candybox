@@ -179,9 +179,8 @@ class SmartySingleton extends Smarty {
     }
 
     # Compile CSS when in development mode and clearing the cache
-    if (WEBSITE_MODE == 'development' && 
+    if (WEBSITE_MODE == 'development' &&
             file_exists(Helper::removeSlash($aPaths['less'] . '/core/application.less'))) {
-      require_once PATH_STANDARD . '/vendor/lessphp/lessc.inc.php';
 
       try {
         @unlink(Helper::removeSlash($aPaths['css'] . '/core/application.css'));

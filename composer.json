@@ -1,6 +1,7 @@
 {
   "require": {
     "symfony/yaml": "master",
-    "facebook/php-sdk": "dev-master"
+    "facebook/php-sdk": "dev-master",
+    "leafo/lessphp": "dev-master "
   }
 }
