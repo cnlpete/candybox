@@ -85,7 +85,7 @@ class WebTestOfSessionController extends CandyWebTest {
     $this->click(I18n::get('global.submit'));
     $this->assertText(I18n::get('error.mail.format'));
 
-    $this->assertTrue($this->setField('email', WEBSITE_MAIL));
+    $this->assertTrue($this->setField('sessions[email]', WEBSITE_MAIL));
     # try to resend with proper email that is not in the system (hopefully)
     $this->click(I18n::get('global.submit'));
     $this->assertText(I18n::get('error.session.account'));
