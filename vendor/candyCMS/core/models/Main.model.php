@@ -414,20 +414,19 @@ abstract class Main {
 
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
 
-      $sString = '';
+      $aEntries = array();
       foreach ($aResult as $aRow) {
         if ($bSplit === true) {
-          $aItems = explode(',', $aRow[$sColumn]);
+          $aItems = array_filter(array_map('trim', explode(',', $aRow[$sColumn])));
 
           foreach ($aItems as $sItem)
-            $sString .= '"' . $sItem . '",';
+            $aEntries[] = $sItem;
         }
 
         else
-          $sString .= '"' . $aRow[$sColumn] . '",';
+          $aEntries[] = $aRow[$sColumn];
       }
-
-      return '[' . substr($sString, 0, -1) . ']';
+      return json_encode($aEntries);
     }
     catch (\PDOException $p) {
       try {
