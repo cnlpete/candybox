@@ -60,7 +60,6 @@ class Mails extends Main {
               $aRow,
               array('id', 'user_id'),
               array('result'));
-      $this->_aData[$iId]['ip'] = inet_ntop($this->_aData[$iId]['ip']);
     }
 
     return $this->_aData;

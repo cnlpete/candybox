@@ -98,7 +98,9 @@ class AllFileTests extends TestSuite {
                           PATH_STANDARD . '/tests/tests/app/models/Logs.model.php',
                           PATH_STANDARD . '/tests/tests/app/controllers/Logs.controller.php'),
 
-          'mails'     => PATH_STANDARD . '/tests/tests/app/controllers/Mails.controller.php',
+          'mails'     => array(
+                          PATH_STANDARD . '/tests/tests/app/controllers/Mails.controller.php',
+                          PATH_STANDARD . '/tests/tests/app/models/Mails.model.php'),
 
           'main'      => array(
                           PATH_STANDARD . '/tests/tests/app/models/Main.model.php'),
