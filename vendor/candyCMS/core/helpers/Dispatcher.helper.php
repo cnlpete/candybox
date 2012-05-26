@@ -62,7 +62,7 @@ class Dispatcher {
       elseif (file_exists(PATH_STANDARD . '/vendor/candyCMS/core/controllers/' . $sController . '.controller.php')) {
         require_once PATH_STANDARD . '/vendor/candyCMS/core/controllers/' . $sController . '.controller.php';
 
-        $sClassName = '\CandyCMS\Core\controllers\\' . $sController;
+        $sClassName = '\CandyCMS\Core\Controllers\\' . $sController;
         $this->oController = new $sClassName($this->_aRequest, $this->_aSession, $this->_aFile, $this->_aCookie);
       }
 

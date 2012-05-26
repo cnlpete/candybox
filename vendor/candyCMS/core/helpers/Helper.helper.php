@@ -70,8 +70,8 @@ class Helper {
    */
   public static function redirectTo($sUrl) {
     if ($sUrl == '/errors/404') {
-      header('Status: 404 Not Found');
-      header('HTTP/1.0 404 Not Found');
+      #header('Status: 404 Not Found');
+      #header('HTTP/1.0 404 Not Found');
 
       if (CRAWLER == false)
         exit(header('Location:' . $sUrl));
