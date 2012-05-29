@@ -307,14 +307,15 @@ class Index {
    * Get the cronjob working. Check for last execution and plan next cleanup, optimization and backup.
    *
    * @access public
-   * @param boolean $bForceAction force the cronjob to be executed.
+   * @param boolean $bForceAction force the cronjob to be executed, but it will still only execute once per minute.
    * @see app/config/Candy.inc.php
    *
    */
   public function getCronjob($bForceAction = false) {
     if (class_exists('\CandyCMS\Plugins\Cronjob')) {
-      if (Cronjob::getNextUpdate() == true || $bForceAction === true) {
-        $oCronjob = new Cronjob(isset($this->_aSession['user']['id']) ? (int) $this->_aSession['user']['id'] : 0);
+      if (Cronjob::getNextUpdate() == true ||
+              ($bForceAction === true && Cronjob::getNextUpdate(60*1) == true)) {
+        $oCronjob = new Cronjob();
         $oCronjob->cleanup(array('medias', 'bbcode'));
         $oCronjob->optimize();
         $oCronjob->backup();
