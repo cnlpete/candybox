@@ -24,34 +24,14 @@ use PDO;
 final class Cronjob {
 
   /**
-   * The Id of the Cronjobs log entry, that is created for the execution
-   *
-   * @access private
-   * @var int
-   *
-   */
-  private $_iLogId = -1;
-
-  /**
-   * The user id of the user, that is running the Cronjob.
-   *
-   * @access private
-   * @var int
-   *
-   */
-  private $_iUserId;
-
-  /**
    * Create a new Cronjob Object
    *
    * @access public
-   * @param integer $iUserId user ID who updates the database.
    *
    */
-  public function __construct($iUserId) {
-    $this->_iUserId = $iUserId;
-
-    $this->_startCronjob();
+  public function __construct() {
+    // write to the file, so there will be no duplicate execution
+    $this->_writeTimestamp();
   }
 
   /**
@@ -61,29 +41,27 @@ final class Cronjob {
    *
    */
   public function __destruct() {
-    Logs::updateEndTime($this->_iLogId);
+    // update the timestamp
+    $this->_writeTimestamp();
   }
 
   /**
-   * start the execution of the Cronjob, so there wont be other simultanious executions
+   * write a timestamp to the backup file that indicates the last execution time,
+   * when no timestamp is given, write the current time to the file
    *
-   * @final
-   * @access private
-   *
+   * @param int $iTimestamp the timestamp to write
    */
-  private final function _startCronjob() {
-    $oPDO = Main::$_oDbStatic;
-    $oPDO->beginTransaction();
+  private function _writeTimestamp($iTimestamp = 0) {
+    // check for the file and read its timestamp
+    $sBackupFile = PATH_STANDARD . '/app/backup/lastrun.timestamp';
 
-    # Create log entry, so other calls won't start aswell.
-    $iTime = time();
-    Logs::insert('cronjob', 'execute', 0, $this->_iUserId, $iTime, $iTime);
-
-    # save the id, so we can update at end
-    $this->_iLogId = Main::getLastInsertId();
-
-    $oPDO->commit();
+    $oFile = @fopen($sBackupFile, 'w');
+    if ($oFile) {
+      @fwrite($oFile, $iTimestamp ? $iTimestamp : time());
+      @fclose($oFile);
+    }
   }
+
 
   /**
    * Cleanup our temp folders.
@@ -408,28 +386,16 @@ EOD;
   public static function getNextUpdate($iInterval = '') {
     $iInterval = !empty($iInterval) ? $iInterval : PLUGIN_CRONJOB_UPDATE_INTERVAL;
 
-    if (empty(Main::$_oDbStatic))
-      Main::connectToDatabase();
+    // check for the file and read its timestamp
+    $sBackupFile = PATH_STANDARD . '/app/backup/lastrun.timestamp';
+    if (file_exists($sBackupFile)) {
+      $oFile = @fopen($sBackupFile, 'r');
+      $sContent = @fgets($oFile);
+      @fclose($oFile);
 
-    try {
-      $oQuery = Main::$_oDbStatic->prepare("SELECT
-                                              time_end
-                                            FROM
-                                              " . SQL_PREFIX . "logs
-                                            WHERE
-                                              controller_name = 'cronjob'
-                                            ORDER BY
-                                              time_end DESC
-                                            LIMIT
-                                              1");
-      $oQuery->execute();
-      $aResult = $oQuery->fetch(PDO::FETCH_ASSOC);
+      $iLastRun = (int)$sContent;
+    }
 
-      return !$aResult ? true : (int)$aResult['time_end'] + $iInterval < time();
-    }
-    catch (AdvancedException $e) {
-      AdvancedException::reportBoth('0108 - ' . $e->getMessage());
-      exit('SQL error.');
-    }
+    return !$iLastRun ? true : $iLastRun + $iInterval < time();
   }
 }
