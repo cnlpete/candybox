@@ -24,6 +24,13 @@ use PDO;
 final class Cronjob {
 
   /**
+   * holds the database connection
+   *
+   * @access private
+   */
+  private $_oDB;
+
+  /**
    * Create a new Cronjob Object
    *
    * @access public
@@ -32,6 +39,8 @@ final class Cronjob {
   public function __construct() {
     // write to the file, so there will be no duplicate execution
     $this->_writeTimestamp();
+
+    $this->_oDB = Main::connectToDatabase();
   }
 
   /**
@@ -95,27 +104,27 @@ final class Cronjob {
    */
   public final function optimize() {
     try {
-      Main::$_oDbStatic->query("OPTIMIZE TABLE
-                                  " . SQL_PREFIX . "blogs,
-                                  " . SQL_PREFIX . "comments,
-                                  " . SQL_PREFIX . "calendars,
-                                  " . SQL_PREFIX . "contents,
-                                  " . SQL_PREFIX . "downloads,
-                                  " . SQL_PREFIX . "gallery_albums,
-                                  " . SQL_PREFIX . "gallery_files,
-                                  " . SQL_PREFIX . "migrations,
-                                  " . SQL_PREFIX . "logs,
-                                  " . SQL_PREFIX . "sessions,
-                                  " . SQL_PREFIX . "users");
+      $this->_oDB->query("OPTIMIZE TABLE
+                          " . SQL_PREFIX . "blogs,
+                          " . SQL_PREFIX . "comments,
+                          " . SQL_PREFIX . "calendars,
+                          " . SQL_PREFIX . "contents,
+                          " . SQL_PREFIX . "downloads,
+                          " . SQL_PREFIX . "gallery_albums,
+                          " . SQL_PREFIX . "gallery_files,
+                          " . SQL_PREFIX . "migrations,
+                          " . SQL_PREFIX . "logs,
+                          " . SQL_PREFIX . "sessions,
+                          " . SQL_PREFIX . "users");
     }
     catch (AdvancedException $e) {
-      Main::$_oDbStatic->rollBack();
+      $this->_oDB->rollBack();
       AdvancedException::reportBoth('0109 - ' . $e->getMessage());
       exit('SQL error.');
     }
 
     try {
-      $oQuery = Main::$_oDbStatic->prepare("DELETE FROM
+      $oQuery = $this->_oDB->prepare("DELETE FROM
                                               " . SQL_PREFIX . "sessions
                                             WHERE
                                               date < :date");
@@ -126,7 +135,7 @@ final class Cronjob {
       return $oQuery->execute();
     }
     catch (AdvancedException $e) {
-      Main::$_oDbStatic->rollBack();
+      $this->_oDB->rollBack();
       AdvancedException::reportBoth('0109 - ' . $e->getMessage());
       exit('SQL error.');
     }
@@ -144,7 +153,7 @@ final class Cronjob {
    *
    */
   private final function _backupTableInfo($sTable, &$sFileText) {
-    $oQuery = Main::$_oDbStatic->query('SHOW COLUMNS FROM ' . $sTable);
+    $oQuery = $this->_oDB->query('SHOW COLUMNS FROM ' . $sTable);
     $aColumns = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     $iColumns = count($aColumns);
 
@@ -177,7 +186,7 @@ EOD;
 
     # Show extras like auto_increment etc
     try {
-      $oQuery = Main::$_oDbStatic->query('SHOW KEYS FROM ' . $sTable);
+      $oQuery = $this->_oDB->query('SHOW KEYS FROM ' . $sTable);
       $aKeys = $oQuery->fetchAll(PDO::FETCH_ASSOC);
 
       $iKey = 1;
@@ -212,7 +221,7 @@ EOD;
 
     try {
       # select last id
-      $oQuery = Main::$_oDbStatic->query('SELECT
+      $oQuery = $this->_oDB->query('SELECT
                                             id
                                           FROM
                                             ' . $sTable . '
@@ -251,7 +260,7 @@ EOD;
    */
   private final function _backupTableData($sTable, &$sFileText, $iColumns) {
     # fetch content
-    $oQuery = Main::$_oDbStatic->query('SELECT * FROM ' . $sTable);
+    $oQuery = $this->_oDB->query('SELECT * FROM ' . $sTable);
     $aRows = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     $iRows = count($aRows);
 
@@ -294,7 +303,7 @@ EOD;
     $sBackupFolder    = PATH_STANDARD . '/app/backup';
     $sBackupPath      = $sBackupFolder . '/' . $sBackupName . '.sql';
 
-    Main::$_oDbStatic->beginTransaction();
+    $this->_oDB->beginTransaction();
 
     $sFileText = "#---------------------------------------------------------------#\r\n";
     $sFileText .= '# Server OS: '.@php_uname()."\r\n";
@@ -314,7 +323,7 @@ EOD;
 
     # Get all tables and name them
     try {
-      $oQuery = Main::$_oDbStatic->query("SHOW TABLES FROM " . SQL_DB . '_' . WEBSITE_MODE);
+      $oQuery = $this->_oDB->query("SHOW TABLES FROM " . SQL_DB . '_' . WEBSITE_MODE);
       $aResult = $oQuery->fetchAll();
 
       # Show all tables
@@ -371,7 +380,7 @@ EOD;
     }
 
     # Rollback, since we did only read statements
-    Main::$_oDbStatic->rollBack();
+    $this->_oDB->rollBack();
   }
 
   /**
