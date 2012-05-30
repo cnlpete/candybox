@@ -215,6 +215,15 @@ class Pagination {
         'previous'    => isset($iPrevious) ? $iPrevious : '',
         'controller'  => $sController);
 
+    $aPage['url_next'] = '/' . $sController . '/' .
+            (isset($this->_aRequest['search']) ? $this->_aRequest['search'] . '/' : '') .
+            'page/' . $aPage['next'];
+
+    $aPage['url_previous'] = '/' . $sController . '/' .
+            (isset($this->_aRequest['search']) ? $this->_aRequest['search'] . '/' : '') .
+            'page/' . $aPage['previous'];
+
+
     $this->_oSmarty->assign('_PAGE', $aPage);
 
     $this->_oSmarty->addTemplateDir($sTemplateDir);

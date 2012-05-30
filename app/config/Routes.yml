@@ -32,4 +32,5 @@
 "(:alpha).xml": controller=$1&action=xml&ajax=1
 
 # Fixes
+"blogs/(:any)/page/(:num)": controller=blogs&search=$1&page=$2
 "blogs/(:any)": controller=blogs&search=$1
