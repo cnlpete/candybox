@@ -2,7 +2,6 @@
 "/": blogs
 
 # Special behaviour
-"blogs/(:num)/(update|destroy)": controller=blogs&id=$1&action=$2&page=1
 "calendars/(:num)/archive": controller=calendars&action=archive&id=$1
 "calendars/(icalfeed|archive)": controller=calendars&action=$1
 "galleries/(:num)/(createfile|updatefile|destroyfile|updatefilepositions)": controller=galleries&action=$2&id=$1
