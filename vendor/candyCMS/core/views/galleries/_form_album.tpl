@@ -48,7 +48,7 @@
       {elseif $_REQUEST.action == 'update'}
         <input type='submit'
                class='btn btn-primary'
-               value='{$lang.global.update.update' />
+               value='{$lang.global.update.update}' />
         <input type='button'
                value='{$lang.galleries.albums.title.destroy}'
                class='btn btn-danger'
