@@ -127,6 +127,11 @@
                             {$lang.global.manager.user}
                           </a>
                         </li>
+                        <li>
+                          <a href='/mails' title='{$lang.global.mails}'>
+                            {$lang.global.mails}
+                          </a>
+                        </li>
                       {/if}
                     {/if}
                   </ul>
@@ -182,7 +187,7 @@
       <!-- plugin:analytics -->
       <!-- plugin:piwik -->
       <!-- plugin:facebook -->
-      
+
       <!-- plugin:formattimestamp -->
     </body>
   </html>

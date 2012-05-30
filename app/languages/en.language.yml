@@ -67,7 +67,7 @@ global:
   login: Login
   logs: Logs
   logout: Logout
-  mails: Mails
+  mails: Unsent Mails
   manager:
     content: Contents
     media: Files
