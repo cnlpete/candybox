@@ -90,4 +90,10 @@ class WebTestOfGalleryController extends CandyWebTest {
     $this->assertText(I18n::get('error.missing.permission'));
     $this->assertResponse(200);
   }
+
+  function testUpdateFilePositions() {
+    $this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/1/updatefilepositions'));
+    $this->assertText('false');
+    $this->assertResponse(200);
+  }
 }

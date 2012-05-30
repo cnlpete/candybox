@@ -90,4 +90,16 @@ class UnitTestOfGalleryModel extends CandyUnitTest {
   function testDestroyFile() {
     $this->assertTrue($this->oObject->destroyFile($this->iLastInsertId));
   }
+
+  function testUpdateFilePositions() {
+    $this->aRequest = array(
+        'galleryfiles' => array(
+          '1'),
+        'id'        => 1,
+        'action'    => 'updatefilepositions',
+        'controller'=> 'galleries');
+
+    $this->assertTrue($this->oObject->updateFilePositions('1'));
+  }
+
 }
