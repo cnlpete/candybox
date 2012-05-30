@@ -342,6 +342,8 @@ galleries:
       create: Add file
       destroy: Delete file
       update: Edit file
+    update:
+      order: Save order
 
 mails:
   body:

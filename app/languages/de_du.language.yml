@@ -342,6 +342,8 @@ galleries:
       create: Bild(er) hochladen
       destroy: Bild löschen
       update: Bild bearbeiten
+    update:
+      order: Reihenfolge speichern
 
 mails:
   body:

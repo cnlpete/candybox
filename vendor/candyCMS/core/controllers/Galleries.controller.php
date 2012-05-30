@@ -47,6 +47,12 @@ class Galleries extends Main {
 
         break;
 
+      case 'updatefilepositions':
+
+        exit(json_encode($this->updateFilePositions()));
+
+        break;
+
       case 'destroyfile':
 
         $this->setTitle(I18n::get('gallery.files.title.destroy'));
@@ -363,6 +369,23 @@ class Galleries extends Main {
   }
 
   /**
+   * Update the positions of all files of a gallery.
+   *
+   * Calls _updateFilePositions if data is given, otherwise returns false
+   *
+   * @access public
+   * @return boolean returned status of model action (boolean).
+   *
+   */
+  public function updateFilePositions() {
+    if ($this->_aSession['user']['role'] < 3)
+      return false;
+
+    else
+      return $this->_updateFilePositions();
+  }
+
+  /**
    * Update a gallery entry.
    *
    * Activate model, Update data in the database and redirect afterwards.
@@ -394,6 +417,36 @@ class Galleries extends Main {
     }
     else
       return Helper::errorMessage(I18n::get('error.sql'), $sRedirectPath);
+  }
+
+  /**
+   * Update a gallery entry.
+   *
+   * Activate model, Update data in the database and redirect afterwards.
+   *
+   * @access private
+   * @return string|boolean HTML content (string) or returned status of model action (boolean).
+   *
+   */
+  private function _updateFilePositions() {
+    if (!$this->_aRequest['galleryfiles'])
+      return false;
+
+    $bReturn = $this->_oModel->updateFilePositions($this->_iId) == true;
+
+    Logs::insert(  $this->_sController,
+                  $this->_aRequest['action'],
+                  (int) $this->_aRequest['id'],
+                  $this->_aSession['user']['id'],
+                  '', '', $bReturn);
+
+    if ($bReturn) {
+      $this->oSmarty->clearCacheForController($this->_sController);
+
+      return true;
+    }
+    else
+      return false;
   }
 
   /**
