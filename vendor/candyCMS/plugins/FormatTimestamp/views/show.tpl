@@ -1,5 +1,5 @@
 {* Add and run jQuery.timeago() *}
-<script type='text/javascript' src='{$_PATH.js}/plugin/jquery.timeago{$_SYSTEM.compress_files_suffix}.js'></script>
+<script type='text/javascript' src='{$_PATH.js}/plugins/jquery.timeago{$_SYSTEM.compress_files_suffix}.js'></script>
 <script type='text/javascript'>
   jQuery.timeago.settings.range = {$range};
   jQuery.timeago.settings.strings = {
