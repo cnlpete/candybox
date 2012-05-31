@@ -52,7 +52,7 @@
   </form>
   <script type='text/javascript'>
     $("input[type='submit']").click(function() {
-      $(this).val(lang.loading).attr('disabled', 'disabled');
+      $(this).val(lang.loading);
     });
 
     $('#input-file').change(function() {
