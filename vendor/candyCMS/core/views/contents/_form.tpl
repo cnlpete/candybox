@@ -98,8 +98,8 @@
         language : "{$WEBSITE_LANGUAGE}",
         remove_script_host : false,
         convert_urls : false,
-        entity_encoding : "raw",
-        height : "300px",
+        entity_encoding : 'raw',
+        height : '300px',
         content_css : "{$_PATH.css}/core/tinymce{$_SYSTEM.compress_files_suffix}.css"
       });
     });

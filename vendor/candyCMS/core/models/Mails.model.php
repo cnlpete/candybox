@@ -4,9 +4,9 @@
  * Handle all medias model requests.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Hauke Schade
  * @license MIT
- * @since 1.0
+ * @since 2.1
  *
  */
 
@@ -24,6 +24,7 @@ class Mails extends Main {
    *
    * @access public
    * @return array $this->_aData
+   * @todo Exception exception
    *
    */
   public function getOverview() {
@@ -66,10 +67,12 @@ class Mails extends Main {
   }
 
   /**
-   * replace the WEBSITE_NAME and WEBSITE_URL placeholders with its according constants
+   * Replace the WEBSITE_NAME and WEBSITE_URL placeholders with its according constants
    *
+   * @access private
    * @param string $sText the text in which to replace the placeholders
    * @return string the text with all placeholders replaced
+   *
    */
   private function _replaceNameAndUrl($sText) {
     $sText = str_replace('%%WEBSITE_NAME',  WEBSITE_NAME, $sText);
@@ -80,9 +83,10 @@ class Mails extends Main {
   }
 
   /**
-   * send the mail and return phpmailers exit-status,
-   * will also throw phpmailers exceptions
+   * Send the mail and return phpmailers exit-status,
+   * will also throw phpmailers exceptions.
    *
+   * @access private
    * @param string $sSubject mail subject
    * @param string $sMessage mail message
    * @param string $sToName name of the user to send the mail to
@@ -92,6 +96,7 @@ class Mails extends Main {
    * @param string $sAttachement path to the attachment
    * @return boolean whether phpmailers returned true or false
    * @see vendor/phpmailer/class.phpmailer.php
+   *
    */
   private function _send($sSubject, $sMessage, $sToName, $sToMail, $sReplyToName, $sReplyToMail, $sAttachement = '') {
     require_once 'vendor/phpmailer/class.phpmailer.php';
@@ -101,7 +106,6 @@ class Mails extends Main {
       $oMail->IsSMTP();
 
       $oMail->SMTPAuth  = defined('SMTP_USE_AUTH') ? SMTP_USE_AUTH === true : true;
-
       $oMail->SMTPDebug = WEBSITE_MODE == 'development' ? 1 : 0;
 
       $oMail->Host      = SMTP_HOST;
@@ -114,17 +118,8 @@ class Mails extends Main {
 
     $oMail->CharSet = 'utf-8';
     $oMail->SetFrom(WEBSITE_MAIL, WEBSITE_NAME);
-
-    if ($sReplyToName)
-      $oMail->AddReplyTo($sReplyToMail, $sReplyToName);
-    else
-      $oMail->AddReplyTo($sReplyToMail);
-
-    if ($sToName)
-      $oMail->AddAddress($sToMail, $sToName);
-    else
-      $oMail->AddAddress($sToMail);
-
+    $oMail->AddReplyTo($sReplyToMail, $sReplyToName ? $sReplyToName : '');
+    $oMail->AddAddress($sToMail, $sToName ? $sToName : '');
     $oMail->Subject = $sSubject;
     $oMail->MsgHTML(nl2br($sMessage));
 
@@ -135,19 +130,24 @@ class Mails extends Main {
   }
 
   /**
-   * try to resend the mail, given by iId
+   * Try to resend the mail, given by iId.
    *
+   * @access public
    * @param int $iId the id of the mail, we are trying to send
+   * @return $bReturn boolean status
+   * @todo better exception
+   *
    */
   public function resend($iId) {
     try {
       $oQuery = $this->_oDb->prepare("SELECT
-                                        m.*
+                                        *
                                       FROM
-                                        " . SQL_PREFIX . "mails m
+                                        " . SQL_PREFIX . "mails
                                       WHERE
-                                        m.id = :id
-                                      LIMIT 1");
+                                        id = :id
+                                      LIMIT
+                                        1");
 
       $oQuery->bindValue(':id', $iId, PDO::PARAM_INT);
       $oQuery->execute();
@@ -159,11 +159,11 @@ class Mails extends Main {
       return false;
     }
 
-    // not found
+    # Not found
     if (!isset($aResult['id']))
       return false;
 
-    // try to resend
+    # Try to resend
     try {
       $bReturn = $this->_send($aResult['subject'],
                               $aResult['content'],
@@ -177,6 +177,8 @@ class Mails extends Main {
 
       return $bReturn;
     }
+
+    # @todo why both?
     catch (\phpmailerException $e) {
       //Pretty error messages from PHPMailer
       AdvancedException::writeLog($e->errorMessage());
@@ -191,6 +193,7 @@ class Mails extends Main {
   /**
    * Create a new mail, store it to database on failure
    *
+   * @access private
    * @param string $sSubject mail subject
    * @param string $sMessage mail message
    * @param string $sToName name of the user to send the mail to
@@ -201,6 +204,9 @@ class Mails extends Main {
    * @param bool $bSaveMail whehter the mail queue should be used on failure
    * @return boolean the status of the action
    * @see vendor/phpmailer/class.phpmailer.php
+   * @todo exception handling
+   * @todo log entry
+   *
    */
   public function create($sSubject, $sMessage, $sToName, $sToMail, $sReplyToName, $sReplyToMail, $sAttachement = '', $bSaveMail = true) {
     $sMessage = str_replace('%NOREPLY', I18n::get('mails.body.no_reply'), $sMessage);
@@ -211,6 +217,7 @@ class Mails extends Main {
 
     $sErrorMessage = '';
     $bReturn = false;
+
     try {
       $bReturn = $this->_send($sSubject, $sMessage, $sToName, $sToMail, $sReplyToName, $sReplyToMail, $sAttachement);
     }
@@ -263,7 +270,7 @@ class Mails extends Main {
         $oQuery->bindParam('content', $sMessage, PDO::PARAM_STR);
         $oQuery->bindParam('error_message', $sErrorMessage, PDO::PARAM_STR);
 
-        $bDbReturn = $oQuery->execute();
+        $oQuery->execute();
         parent::$iLastInsertId = Helper::getLastEntry('mails');
 
         //TODO Log-entry

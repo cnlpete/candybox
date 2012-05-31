@@ -63,14 +63,7 @@
           {$lang.global.contact}
         </td>
         <td>
-          {* Absolute URL due to fancybox bug *}
-          <a href='{$WEBSITE_URL}/mails/{$_REQUEST.id}/create'>
-            <img src='{$_PATH.images}/candy.global/spacer.png'
-                    class='icon-mail js-tooltip'
-                    alt='{$lang.users.contact_via_email|replace:'%s':$u.name}'
-                    title='{$lang.users.contact_via_email|replace:'%s':$u.name}'
-                    width='16' height='16' />
-            &nbsp;
+          <a href='/mails/{$_REQUEST.id}/create'>
             {$lang.users.contact_via_email|replace:'%s':$u.name}
           </a>
         </td>

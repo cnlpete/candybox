@@ -74,14 +74,12 @@ class Dispatcher {
       }
     }
     catch (AdvancedException $e) {
-      if (defined('CHECK_OLD_LINKS') && CHECK_OLD_LINKS === true &&
-              Helper::pluralize($sController) !== $sController) {
-        $sPluralizedController = Helper::pluralize($sController);
-
-        $sUrl = $_SERVER['REQUEST_URI'];
-        $sUrl = str_replace(strtolower($sController), strtolower($sPluralizedController), $sUrl);
+      # Check if site should be compatible to candyCMS version 1.x and send headers to browser.
+      if (defined('CHECK_OLD_LINKS') && CHECK_OLD_LINKS === true && Helper::pluralize($sController) !== $sController) {
+        $sUrl = str_replace(strtolower($sController), strtolower(Helper::pluralize($sController)), $_SERVER['REQUEST_URI']);
         Helper::warningMessage(I18n::get('error.302.info', $sUrl), $sUrl);
-      } else {
+      }
+      else {
         AdvancedException::reportBoth($e->getMessage());
         Helper::redirectTo('/errors/404');
       }

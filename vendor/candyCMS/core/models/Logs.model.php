@@ -29,7 +29,7 @@ class Logs extends Main {
    * @return array $this->_aData
    *
    */
-  public function getOverview($iLimit = 100) {
+  public function getOverview($iLimit = 50) {
     try {
       $oQuery = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "logs");
       $iResult = $oQuery->fetchColumn();

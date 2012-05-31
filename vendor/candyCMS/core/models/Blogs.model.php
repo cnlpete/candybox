@@ -22,7 +22,7 @@ require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Pagination.helper.ph
 class Blogs extends Main {
 
   /**
-   * Get count of visible blog entries
+   * Get count of visible blog entries.
    *
    * @access public
    * @return integer the total count
@@ -45,7 +45,7 @@ class Blogs extends Main {
   }
 
   /**
-   * Get count of visible blog entries
+   * Get count of visible blog tag entries.
    *
    * @access public
    * @param string $sTagname the tagname
@@ -64,21 +64,23 @@ class Blogs extends Main {
                                       FROM
                                         " . SQL_PREFIX . "blogs
                                       " . $sWhere . "
-                                       AND (tags LIKE :CommaTagnameComma
-                                          OR tags LIKE :CommaTagname
-                                          OR tags LIKE :tagnameComma
-                                          OR tags   =  :tagname
-                                          OR tags LIKE :CommaSpaceTagname
-                                          OR tags LIKE :CommaSpaceTagnameComma)");
+                                      AND (tags LIKE :commaTagnameComma
+                                        OR tags LIKE :commaTagname
+                                        OR tags LIKE :tagnameComma
+                                        OR tags   =  :tagname
+                                        OR tags LIKE :commaSpaceTagname
+                                        OR tags LIKE :commaSpaceTagnameComma)");
 
-      $oQuery->bindValue(':CommaTagnameComma', '%,' . $sTagname . ',%', PDO::PARAM_STR);
-      $oQuery->bindValue(':CommaTagname', '%,' . $sTagname, PDO::PARAM_STR);
+      $oQuery->bindValue(':commaTagnameComma', '%,' . $sTagname . ',%', PDO::PARAM_STR);
+      $oQuery->bindValue(':commaTagname', '%,' . $sTagname, PDO::PARAM_STR);
       $oQuery->bindValue(':tagnameComma', $sTagname . ',%', PDO::PARAM_STR);
       $oQuery->bindValue(':tagname', $sTagname, PDO::PARAM_STR);
+
       # These last two lines are for compatibility, since there might be blog-entries done before 2.1 with a space
-      $oQuery->bindValue(':CommaSpaceTagname', '%, ' . $sTagname, PDO::PARAM_STR);
-      $oQuery->bindValue(':CommaSpaceTagnameComma', '%, ' . $sTagname . ',%', PDO::PARAM_STR);
+      $oQuery->bindValue(':commaSpaceTagname', '%, ' . $sTagname, PDO::PARAM_STR);
+      $oQuery->bindValue(':commaSpaceTagnameComma', '%, ' . $sTagname . ',%', PDO::PARAM_STR);
       $oQuery->execute();
+
       return $oQuery->fetchColumn();
     }
     catch (\PDOException $p) {
@@ -94,22 +96,19 @@ class Blogs extends Main {
    * @param integer $iLimit blog post limit, 0 for infinite
    * @param string $sTagname the tagname to query for.
    * @return array data from _setData
+   * @todo
    *
    */
   public function getOverviewByTag($iLimit = LIMIT_BLOG, $sTagname = '') {
     if (empty($sTagname)) {
       $sTagname = str_replace('%20', ' ', Helper::formatInput($this->_aRequest['search'], false));
+
       # Remove all characters that might harm us, only allow digits, normal letters and whitespaces
       $sTagname = trim( preg_replace('/[^\d\s\w]/', '', $sTagname) );
     }
 
     $iResult = $this->getCountForTag($sTagname);
-
-    if ($iLimit != 0)
-      $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit);
-
-    else
-      $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iResult);
+    $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit != 0 ? $iLimit : $iResult);
 
     try {
       # Show unpublished items and entries with diffent languages to moderators or administrators only
@@ -140,24 +139,26 @@ class Blogs extends Main {
                                       ON
                                         c.parent_id=b.id
                                       " . $sWhere . "
-                                        AND (tags LIKE :CommaTagnameComma
-                                          OR tags LIKE :CommaTagname
-                                          OR tags LIKE :tagnameComma
-                                          OR tags   =  :tagname
-                                          OR tags LIKE :CommaSpaceTagname
-                                          OR tags LIKE :CommaSpaceTagnameComma)
+                                      AND (tags LIKE :commaTagnameComma
+                                        OR tags LIKE :commaTagname
+                                        OR tags LIKE :tagnameComma
+                                        OR tags   =  :tagname
+                                        OR tags LIKE :commaSpaceTagname
+                                        OR tags LIKE :commaSpaceTagnameComma)
                                       GROUP BY
                                         b.id
                                       ORDER BY
                                         b.date DESC"
                                       . $sLimit);
-      $oQuery->bindValue(':CommaTagnameComma', '%,' . $sTagname . ',%', PDO::PARAM_STR);
-      $oQuery->bindValue(':CommaTagname', '%,' . $sTagname, PDO::PARAM_STR);
+
+      $oQuery->bindValue(':commaTagnameComma', '%,' . $sTagname . ',%', PDO::PARAM_STR);
+      $oQuery->bindValue(':commaTagname', '%,' . $sTagname, PDO::PARAM_STR);
       $oQuery->bindValue(':tagnameComma', $sTagname . ',%', PDO::PARAM_STR);
       $oQuery->bindValue(':tagname', $sTagname, PDO::PARAM_STR);
+
       # These last two lines are for compatibility, since there might be blog-entries done before 2.1 with a space
-      $oQuery->bindValue(':CommaSpaceTagname', '%, ' . $sTagname, PDO::PARAM_STR);
-      $oQuery->bindValue(':CommaSpaceTagnameComma', '%, ' . $sTagname . ',%', PDO::PARAM_STR);
+      $oQuery->bindValue(':commaSpaceTagname', '%, ' . $sTagname, PDO::PARAM_STR);
+      $oQuery->bindValue(':commaSpaceTagnameComma', '%, ' . $sTagname . ',%', PDO::PARAM_STR);
       $oQuery->execute();
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -178,6 +179,7 @@ class Blogs extends Main {
 
       # @todo trim spaces, redundant, if those get removed at blog creation/editing
       $this->_aData[$iDate]['tags_raw'] = $aRow['tags'];
+
       # Explode using ',' and filter empty items (since explode always gives at least one item)
       $this->_aData[$iDate]['tags'] = array_filter(array_map('trim', explode(',', $aRow['tags'])));
       $this->_formatDates($this->_aData[$iDate], 'date_modified');
@@ -192,6 +194,7 @@ class Blogs extends Main {
    * @access public
    * @param integer $iLimit blog post limit, 0 for infinite
    * @return array data from _setData
+   * @todo
    *
    */
   public function getOverview($iLimit = LIMIT_BLOG) {
@@ -199,12 +202,7 @@ class Blogs extends Main {
       $iLimit = 2;
 
     $iResult = $this->getCount();
-
-    if ($iLimit != 0)
-      $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit);
-
-    else
-      $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iResult);
+    $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit != 0 ? $iLimit : $iResult);
 
     try {
       # Show unpublished items and entries with diffent languages to moderators or administrators only
@@ -261,6 +259,7 @@ class Blogs extends Main {
 
       # @todo trim spaces, redundant, if those get removed at blog creation/editing
       $this->_aData[$iDate]['tags_raw'] = $aRow['tags'];
+
       # Explode using ',' and filter empty items (since explode always gives at least one item)
       $this->_aData[$iDate]['tags'] = array_filter(array_map('trim', explode(',', $aRow['tags'])));
       $this->_formatDates($this->_aData[$iDate], 'date_modified');

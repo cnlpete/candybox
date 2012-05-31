@@ -95,9 +95,8 @@ class Medias extends Main {
 
     $this->setTitle(I18n::get('global.manager.media'));
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
       $this->oSmarty->assign('files', $this->_oModel->getOverview());
-    }
 
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }

@@ -54,8 +54,9 @@
   <script type='text/javascript'>
     $("input[type='submit']").click(function() {
       $(this).val(lang.loading);
-      $('#js-loading').html("<img src='{$_PATH.images}/candy.global/loading.gif' alt='' + lang.loading + '' widht='32' height='32 />");
+      $('#js-loading').html("<img src='{$_PATH.images}/candy.global/loading.gif' alt=' + lang.loading + ' widht='32' height='32 />");
     });
+
     $('#input-file').change(function() {
       checkFileSize($(this),
         {$_SYSTEM.maximumUploadSize.raw},

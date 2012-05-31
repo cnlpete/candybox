@@ -180,7 +180,6 @@ class Mails extends Main {
               isset($this->_aSession['user']['name']) ? $this->_aSession['user']['name'] : '',
               Helper::formatInput($this->_aRequest[$this->_sController]['email']));
 
-
       Logs::insert($this->_aRequest['controller'], 'create', (int) $this->_iId, $this->_aSession['user']['id'], '', '', $bStatus);
 
       if ($bStatus == true)

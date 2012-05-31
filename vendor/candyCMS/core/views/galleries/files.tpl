@@ -68,42 +68,43 @@
           </li>
         {/foreach}
       </ul>
-    {if $_SESSION.user.role >= 3}
-      <div class='form-actions' style="display: none;">
-        <input id='js-update-order' type='button'
-               class='btn btn-primary'
-               value='{$lang.galleries.files.update.order}' />
-      </div>
-      <script src='{$_PATH.js}/core/jquery.ui.1.8.20.custom{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
-      <script type='text/javascript'>
-        $(document).ready(function(){
-          $('.thumbnails').sortable({
-            update : function () {
-              $('#js-update-order').parent().fadeIn();
-            }
-          });
-          $('#js-update-order').click(function() {
-            $(this).val(lang.loading).attr("disabled", "disabled");
-            var order = $('.thumbnails').sortable('serialize');
-            $.post('/{$_REQUEST.controller}/{$_REQUEST.id}/updatefilepositions', order, function(data) {
-              if(data == true) {
-                $('#js-update-order').parent().fadeOut(function() {
-                  $('#js-update-order').val('{$lang.galleries.files.update.order}').removeAttr("disabled");
-                });
+      {if $_SESSION.user.role >= 3}
+        <div class='form-actions' style='display:none'>
+          <input id='js-update-order' type='button'
+                class='btn btn-primary'
+                value='{$lang.galleries.files.update.order}' />
+        </div>
+        <script src='{$_PATH.js}/core/jquery.ui.1.8.20.custom{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
+        <script type='text/javascript'>
+          $(document).ready(function(){
+            $('.thumbnails').sortable({
+              update : function () {
+                $('#js-update-order').parent().fadeIn();
               }
-              else {
-                $('#js-update-order').val('{$lang.galleries.files.update.order}').removeAttr("disabled");
-              }
-            }, 'json');
+            });
+
+            $('#js-update-order').click(function() {
+              $(this).val(lang.loading).attr('disabled', 'disabled');
+              var order = $('.thumbnails').sortable('serialize');
+              $.post('/{$_REQUEST.controller}/{$_REQUEST.id}/updatefilepositions', order, function(data) {
+                if(data == true) {
+                  $('#js-update-order').parent().fadeOut(function() {
+                    $('#js-update-order').val('{$lang.galleries.files.update.order}').removeAttr('disabled');
+                  });
+                }
+                else {
+                  $('#js-update-order').val('{$lang.galleries.files.update.order}').removeAttr('disabled');
+                }
+              }, 'json');
+            });
           });
-        });
-      </script>
-    {/if}
-    <p class='center'>
-      <a href='/rss/{$_REQUEST.controller}/{$_REQUEST.id}' class='js-tooltip' title='{$lang.global.rss}'>
-        <img src='{$_PATH.images}/candy.global/spacer.png' class='icon-rss' alt='{$lang.global.rss}' width='16' height='16' />
-      </a>
-    </p>
+        </script>
+      {/if}
+      <p class='center'>
+        <a href='/rss/{$_REQUEST.controller}/{$_REQUEST.id}' class='js-tooltip' title='{$lang.global.rss}'>
+          <img src='{$_PATH.images}/candy.global/spacer.png' class='icon-rss' alt='{$lang.global.rss}' width='16' height='16' />
+        </a>
+      </p>
     {/if}
   {/if}
   <script src='{$_PATH.js}/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>

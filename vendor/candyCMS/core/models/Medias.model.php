@@ -4,9 +4,9 @@
  * Handle all medias model requests.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Hauke Schade
  * @license MIT
- * @since 1.0
+ * @since 2.1
  *
  */
 
@@ -23,7 +23,7 @@ class Medias extends Main {
    * Return ID of last inserted file.
    *
    * @var string
-   * @access public
+   * @access static
    *
    */
   static $sLastInsertId;
@@ -36,7 +36,7 @@ class Medias extends Main {
    *
    */
   public function getOverview() {
-    require PATH_STANDARD . '/vendor/candyCMS/core/helpers/Image.helper.php';
+    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Image.helper.php';
 
     $sOriginalPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController);
     $oDir = opendir($sOriginalPath);
