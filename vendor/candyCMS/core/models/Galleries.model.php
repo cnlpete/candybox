@@ -327,8 +327,7 @@ class Galleries extends Main {
 
     try {
       $oQuery = parent::$_oDbStatic->prepare("SELECT
-                                                *,
-                                                UNIX_TIMESTAMP(date) as date,
+                                                *
                                               FROM
                                                 " . SQL_PREFIX . "gallery_files
                                               WHERE
