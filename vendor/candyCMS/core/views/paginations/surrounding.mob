@@ -1,9 +1,9 @@
 {strip}
   <div class='pagination center'>
     <div data-role='controlgroup' data-type='horizontal'>
-      <a href='/{$_REQUEST.controller}/page/{$_PAGE.previous}' rel='prev' data-role='button'
+      <a href='{$_PAGE.url_previous}' rel='prev' data-role='button'
         {if !$_PAGE.previous} class='ui-disabled'{/if}>&larr;</a>
-      <a href='/{$_REQUEST.controller}/page/{$_PAGE.next}' rel='next' data-role='button'
+      <a href='{$_PAGE.url_next}' rel='next' data-role='button'
         {if !$_PAGE.next || !$_PAGE.entries > $_PAGE.limit} class='ui-disabled'{/if}>&rarr;</a>
     </div>
   </div>
