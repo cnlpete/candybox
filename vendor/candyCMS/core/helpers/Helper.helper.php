@@ -372,6 +372,9 @@ class Helper {
       exit($e->getMessage());
     }
 
+		# Bugfix: Remove TinyMCE crap at URLs
+    $sStr = str_replace('\"', "'", $sStr);
+
     # Remove multiple spaces and newlines (3+)
     $sStr = preg_replace('/\s(\s)\s+/', '$1$1', trim($sStr));
 
