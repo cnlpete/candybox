@@ -54,7 +54,7 @@ class Helper {
     $_SESSION['flash_message'] = array(
         'type'    => 'warning',
         'message' => $sMessage,
-        'headline'=> I18n::get('error.standard'));
+        'headline'=> I18n::get('error.warning'));
 
     return $sRedirectTo ? Helper::redirectTo ($sRedirectTo) : false;
   }

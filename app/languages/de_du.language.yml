@@ -263,6 +263,7 @@ error:
           empty: Bitte trage dein altes Passwort ein!
           wrong: Dein altes Passwort stimmt leider nicht!
     verification: Du konntest nicht freigeschaltet werden, da kein Account mit einem solchen Code vorhanden ist!
+  warning: Achtung!
 
 blogs:
   description:
