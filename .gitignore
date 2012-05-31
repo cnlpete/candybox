@@ -8,7 +8,6 @@ app/config/*inc.php
 upload/*
 app/logs/*
 app/backup/*
-version.txt
 public/templates/*
 .project
 !/app/config/samples/

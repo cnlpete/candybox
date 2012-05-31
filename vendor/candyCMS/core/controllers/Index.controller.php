@@ -313,8 +313,7 @@ class Index {
    */
   public function getCronjob($bForceAction = false) {
     if (class_exists('\CandyCMS\Plugins\Cronjob')) {
-      if (Cronjob::getNextUpdate() == true ||
-              ($bForceAction === true && Cronjob::getNextUpdate(60*1) == true)) {
+      if (Cronjob::getNextUpdate() == true || ($bForceAction === true && Cronjob::getNextUpdate(60*1) == true)) {
         $oCronjob = new Cronjob();
         $oCronjob->cleanup(array('medias', 'bbcode'));
         $oCronjob->optimize();
@@ -373,7 +372,7 @@ class Index {
   private function _checkForNewVersion() {
     if ($this->_aSession['user']['role'] == 4 && ALLOW_VERSION_CHECK === true &&
             (WEBSITE_MODE == 'staging' || WEBSITE_MODE == 'production')) {
-      $oFile = @fopen('http://www.candycms.com/version.txt', 'rb');
+      $oFile = @fopen('https://github.com/marcoraddatz/candyCMS/blob/master/version.txt', 'rb');
       $sVersionContent = @stream_get_contents($oFile);
       @fclose($oFile);
 
