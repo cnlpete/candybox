@@ -188,7 +188,7 @@ class Users extends Main {
                                         u.receive_newsletter,
                                         u.verification_code,
                                         u.role,
-                                        s.date as last_login
+                                        UNIX_TIMESTAMP(s.date) as last_login
                                       FROM
                                         " . SQL_PREFIX . "users as u
                                       LEFT JOIN
