@@ -168,7 +168,7 @@ class Logs extends Main {
     if (empty(parent::$_oDbStatic))
       parent::connectToDatabase();
 
-    $iEndTime   = empty($iTimeEnd) ? time() : $iEndTime;
+    $iEndTime   = empty($iEndTime) ? time() : $iEndTime;
 
     try {
       $oQuery = parent::$_oDbStatic->prepare("UPDATE
