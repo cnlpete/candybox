@@ -15,18 +15,8 @@ namespace CandyCMS\Core\Models;
 use CandyCMS\Core\Helpers\AdvancedException;
 use CandyCMS\Core\Helpers\Helper;
 use CandyCMS\Core\Helpers\Image;
-use CandyCMS\Core\Helpers\Upload;
 
 class Medias extends Main {
-
-  /**
-   * Return ID of last inserted file.
-   *
-   * @var string
-   * @access static
-   *
-   */
-  static $sLastInsertId;
 
   /**
    * Get log overview data.
@@ -86,40 +76,6 @@ class Medias extends Main {
   }
 
   /**
-   * Create a new medias entry.
-   *
-   * @access public
-   * @return array status of action
-   *
-   */
-  public function create() {
-    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
-
-    $oUpload = new Upload($this->_aRequest, $this->_aSession, $this->_aFile);
-    $sFolder = isset($this->_aRequest['folder']) ?
-            Helper::formatInput($this->_aRequest['folder']) :
-            $this->_sController;
-
-    if (!is_dir($sFolder))
-      mkdir(Helper::removeSlash(PATH_UPLOAD . '/' . $sFolder, 0777));
-
-    $aReturn = $oUpload->uploadFiles($sFolder);
-    $iCount   = count($aReturn);
-    $bAllTrue = true;
-
-    for ($iI = 0; $iI < $iCount; $iI++) {
-      if ($aReturn[$iI] === false)
-        $bAllTrue = false;
-    }
-
-    if ($bAllTrue) {
-      self::$sLastInsertId = $oUpload->getIds();
-      self::$sLastInsertId = self::$sLastInsertId[0];
-    }
-    return $bAllTrue;
-  }
-
-  /**
    * Destroy a file and delete from HDD.
    *
    * @access public
@@ -131,17 +87,5 @@ class Medias extends Main {
 
     if (is_file($sPath))
       return unlink($sPath);
-  }
-
-  /**
-   * Return last inserted ID.
-   *
-   * @static
-   * @access public
-   * @return string self::$sLastInsertId last inserted ID.
-   *
-   */
-  public static function getLastInsertId() {
-    return self::$sLastInsertId;
   }
 }
