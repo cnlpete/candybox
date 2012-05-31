@@ -53,10 +53,10 @@ Setup
 - Execute the "/install/index.php" file.
 - Follow the instructions and make sure, you delete the install dir after installation.
 - Download and install Composer (http://getcomposer.org/):
-    curl -s http://getcomposer.org/installer | php
+    `curl -s http://getcomposer.org/installer | php`
 
 - Update your packages afterwards:
-    php composer.phar update
+    `php composer.phar update`
 
 To upgrade CandyCMS, upload the install folder, run "/install/index.php" and click on "migrate". Make sure you override
 the existing "vendor/*", folders before. Please also take a look at the release notes.
