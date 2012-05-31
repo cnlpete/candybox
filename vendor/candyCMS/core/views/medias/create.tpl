@@ -44,7 +44,6 @@
                onkeyup='this.value = stripNoAlphaChars(this.value)' />
       </div>
     </div>
-    <div id='js-loading' class='center'></div>
     <div class='form-actions'>
       <input type='submit'
              class='btn btn-primary'
@@ -53,8 +52,7 @@
   </form>
   <script type='text/javascript'>
     $("input[type='submit']").click(function() {
-      $(this).val(lang.loading);
-      $('#js-loading').html("<img src='{$_PATH.images}/candy.global/loading.gif' alt=' + lang.loading + ' widht='32' height='32 />");
+      $(this).val(lang.loading).attr('disabled', 'disabled');
     });
 
     $('#input-file').change(function() {

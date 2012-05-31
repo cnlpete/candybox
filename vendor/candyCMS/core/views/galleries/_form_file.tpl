@@ -74,7 +74,6 @@
         <span class='help-inline'></span>
       </div>
     </div>
-    <div id='js-loading' class='center'></div>
     <div class='form-actions'>
       {if $_REQUEST.action == 'createfile'}
         <input type='submit'
@@ -93,6 +92,7 @@
                value='{$lang.global.reset}' />
       {/if}
     </div>
+    <input type='button' id='test' value='Test' />
   </form>
   <script type='text/javascript'>
     $('#input-content').bind('keyup', function() {
@@ -100,8 +100,7 @@
     });
 
     $("input[type='submit']").click(function() {
-      $(this).val(lang.loading);
-      $('#js-loading').html("<img src='{$_PATH.images}/candy.global/loading.gif' alt=' + lang.loading + ' widht='32' height='32 />");
+      $(this).val(lang.loading).attr('disabled', 'disabled');
     });
 
     $('#input-file').change(function() {
