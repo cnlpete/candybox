@@ -703,12 +703,11 @@ class Galleries extends Main {
    *
    */
   public function updateFilePositions($iAlbumId) {
-    $aNewOrder = $this->_aRequest['galleryfiles'];
-
     $iAlbumId = (int)$iAlbumId;
     $sSQL = '';
+
     foreach ($this->_aRequest['galleryfiles'] as $iKey => $iValue) {
-      $iKey = (int)$iKey;
+      $iKey   = (int)$iKey;
       $iValue = (int)$iValue;
 
       $sSQL .= "UPDATE
@@ -724,14 +723,11 @@ class Galleries extends Main {
 
     try {
       $oQuery = $this->_oDb->prepare($sSQL);
-
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth('0063 - ' . $p->getMessage());
       exit('SQL error.');
     }
-
   }
-
 }

@@ -28,11 +28,7 @@ class Galleries extends Main {
    *
    */
   public function show() {
-    if (!isset($this->_aRequest['action']))
-      $this->_aRequest['action'] = 'image';
-
     switch ($this->_aRequest['action']) {
-
       case 'createfile':
 
         $this->setTitle(I18n::get('gallery.files.title.create'));
@@ -61,7 +57,7 @@ class Galleries extends Main {
         break;
 
       default:
-      case 'image':
+      case '':
 
         $this->oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
         return $this->_show();
@@ -81,10 +77,6 @@ class Galleries extends Main {
     # Album images
     if ($this->_iId && !isset($this->_aRequest['album_id']))
       return $this->_showAlbum();
-
-    # Specific image
-    elseif ($this->_iId && isset($this->_aRequest['album_id']))
-      return $this->_showImage();
 
     # Album overview
     else
@@ -137,48 +129,6 @@ class Galleries extends Main {
       $this->oSmarty->assign('gallery_name', $sAlbumData['title']);
       $this->oSmarty->assign('gallery_content', $sAlbumData['content']);
     }
-
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
-  }
-
-  /**
-   * Show one specific Image.
-   *
-   * @access protected
-   * @return string HTML content
-   * @todo caching won't work
-   *
-   */
-  protected function _showImage() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'image');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'image');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
-
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-      $aData = $this->_oModel->getFileData($this->_iId);
-
-      # Absolute URL for image information
-      $sUrl = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $this->_aRequest['album_id'] .
-                      '/popup/' . $aData['file']);
-
-      if (file_exists($sUrl) || WEBSITE_MODE == 'test') {
-        # Get image information
-        $aImageInfo       = getimagesize($sUrl);
-
-        $aData['url']     = Helper::addSlash($sUrl);
-        $aData['width']   = $aImageInfo[0];
-        $aData['height']  = $aImageInfo[1];
-
-        $this->oSmarty->assign('i', $aData);
-
-      }
-      else
-        return Helper::redirectTo('/errors/404');
-    }
-
-    # Here is the bug
-    #$this->setTitle(I18n::get('global.image.image') . ': ' . $aData['file']);
-    $this->setDescription($aData['content']);
 
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
