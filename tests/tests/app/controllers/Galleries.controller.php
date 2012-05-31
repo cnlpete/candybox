@@ -38,11 +38,6 @@ class WebTestOfGalleryController extends CandyWebTest {
     $this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/1/6dffc4c552'));
     $this->assertResponse(200);
     $this->assertText('982e960e18');
-
-    # Show image
-    $this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/1/image/1'));
-    $this->assertResponse(200);
-    $this->assertText('782c660e17');
   }
 
   function testDirIsWritable() {
