@@ -29,7 +29,6 @@ class Galleries extends Main {
    */
   public function show() {
     switch ($this->_aRequest['action']) {
-
       case 'createfile':
 
         $this->setTitle(I18n::get('gallery.files.title.create'));
@@ -54,6 +53,14 @@ class Galleries extends Main {
 
         $this->setTitle(I18n::get('gallery.files.title.destroy'));
         return $this->destroyFile();
+
+        break;
+
+      default:
+      case '':
+
+        $this->oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
+        return $this->_show();
 
         break;
     }
