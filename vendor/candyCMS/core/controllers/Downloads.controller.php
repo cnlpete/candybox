@@ -38,11 +38,10 @@ class Downloads extends Main {
       $this->_oModel->updateDownloadCount($this->_iId);
 
       # Get mime type
-      if(function_exists('finfo_open')) {
-        $sMimeType = finfo_file(finfo_open(FILEINFO_MIME_TYPE),
-                Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sFile));
-        header('Content-type: ' . $sMimeType);
-      }
+      if (function_exists('finfo_open'))
+        header('Content-type: ' . finfo_file(
+                finfo_open(FILEINFO_MIME_TYPE),
+                Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sFile)));
 
       # Send file directly
       header('Content-Disposition: attachment; filename="' . $sFile . '"');
@@ -101,13 +100,13 @@ class Downloads extends Main {
                                 Helper::formatInput($this->_aRequest[$this->_sController]['title']));
 
       try {
-        // try to upload the file(s)
         $aReturnValues = $oUploadFile->uploadFiles('downloads');
       }
       catch (\Exception $e) {
         return Helper::errorMessage($e->getMessage(), '/' . $this->_sController . '/create');
       }
-      // fileupload was successfull, so we can clear cache and insert into db
+
+      # Fileupload was successfull, so we can clear cache and insert into db.
       if ($aReturnValues[0] === true) {
         $this->oSmarty->clearCacheForController($this->_sController, 'searches');
 

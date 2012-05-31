@@ -208,15 +208,7 @@ class Galleries extends Main {
       return $this->_showFormTemplate();
 
     else {
-      $bReturn = $this->_oModel->create() === true;
-
-      Logs::insert( $this->_sController,
-                    $this->_aRequest['action'],
-                    $iId,
-                    $this->_aSession['user']['id'],
-                    '', '', $bReturn);
-
-      if ($bReturn) {
+      if ($this->_oModel->create() === true) {
         $this->oSmarty->clearCacheForController(array($this->_sController, 'searches', 'rss', 'sitemaps'));
 
         $iId    = $this->_oModel->getLastInsertId('gallery_albums');
@@ -227,6 +219,15 @@ class Galleries extends Main {
           if (!is_dir($sPath . '/' . $sFolder))
             mkdir($sPath . '/' . $sFolder, 0755, true);
         }
+
+        # Bugfix: Logs must be down here, because $iId isn't set otherwise.
+        Logs::insert( $this->_sController,
+                      $this->_aRequest['action'],
+                      $iId,
+                      $this->_aSession['user']['id'],
+                      '',
+                      '',
+                      1);
 
         return Helper::successMessage(I18n::get('success.create'), '/' . $this->_sController . '/' . $iId);
       }
@@ -345,7 +346,6 @@ class Galleries extends Main {
       }
       catch (AdvancedException $e) {
         AdvancedException::reportBoth($e->getMessage());
-
         return Helper::errorMessage($e->getMessage(), '/' . $this->_sController .
                       '/' . $this->_iId . '/createfile');
       }
@@ -406,7 +406,7 @@ class Galleries extends Main {
 
     $bReturn = $this->_oModel->updateFile($this->_iId) === true;
 
-    Logs::insert(  $this->_sController,
+    Logs::insert( $this->_sController,
                   $this->_aRequest['action'],
                   (int) $this->_aRequest['id'],
                   $this->_aSession['user']['id'],
@@ -437,7 +437,7 @@ class Galleries extends Main {
 
     $bReturn = $this->_oModel->updateFilePositions($this->_iId) == true;
 
-    Logs::insert(  $this->_sController,
+    Logs::insert( $this->_sController,
                   $this->_aRequest['action'],
                   (int) $this->_aRequest['id'],
                   $this->_aSession['user']['id'],
@@ -445,7 +445,6 @@ class Galleries extends Main {
 
     if ($bReturn) {
       $this->oSmarty->clearCacheForController($this->_sController);
-
       return true;
     }
     else
@@ -479,8 +478,7 @@ class Galleries extends Main {
    */
   private function _destroyFile() {
     $aDetails = $this->_oModel->getFileData($this->_iId);
-
-    $bReturn = $this->_oModel->destroyFile($this->_iId) === true;
+    $bReturn  = $this->_oModel->destroyFile($this->_iId) === true;
 
     Logs::insert( $this->_sController,
                   $this->_aRequest['action'],
