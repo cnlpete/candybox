@@ -38,6 +38,7 @@ class Searches extends Main {
       try {
         $this->oQuery = $this->_oDb->prepare("SELECT
                                                 t.*,
+                                                UNIX_TIMESTAMP(t.date) as date,
                                                 u.id as user_id,
                                                 u.name as user_name,
                                                 u.surname as user_surname,

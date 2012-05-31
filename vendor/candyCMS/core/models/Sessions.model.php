@@ -34,7 +34,8 @@ class Sessions extends Main {
 
     try {
       $oQuery = parent::$_oDbStatic->prepare("SELECT
-                                                u.*
+                                                u.*,
+                                                UNIX_TIMESTAMP(u.date) as date
                                               FROM
                                                 " . SQL_PREFIX . "users AS u
                                               LEFT JOIN
@@ -92,12 +93,11 @@ class Sessions extends Main {
                                           ( :user_id,
                                             :session,
                                             :ip,
-                                            :date)");
+                                            NOW())");
 
         $oQuery->bindParam('user_id', $aUser['id'], PDO::PARAM_INT);
         $oQuery->bindParam('session', session_id(), PDO::PARAM_STR);
         $oQuery->bindParam('ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
-        $oQuery->bindParam('date', time(), PDO::PARAM_INT);
 
         return $oQuery->execute();
       }

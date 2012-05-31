@@ -34,6 +34,7 @@ class Contents extends Main {
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         c.*,
+                                        UNIX_TIMESTAMP(d.date) as date,
                                         u.id AS user_id,
                                         u.name AS user_name,
                                         u.surname AS user_surname,
@@ -90,6 +91,7 @@ class Contents extends Main {
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         c.*,
+                                        UNIX_TIMESTAMP(c.date) as date,
                                         u.id AS user_id,
                                         u.name AS user_name,
                                         u.surname AS user_surname,
@@ -166,11 +168,10 @@ class Contents extends Main {
                                           :teaser,
                                           :keywords,
                                           :content,
-                                          :date,
+                                          NOW(),
                                           :published)");
 
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
-      $oQuery->bindParam('date', time(), PDO::PARAM_INT);
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
 
       foreach (array('title', 'teaser', 'content') as $sInput)
@@ -225,14 +226,13 @@ class Contents extends Main {
                                         teaser = :teaser,
                                         keywords = :keywords,
                                         content = :content,
-                                        date = :date,
+                                        date = NOW(),
                                         author_id = :author_id,
                                         published = :published
                                       WHERE
                                         id = :id");
 
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
-      $oQuery->bindParam('date', time(), PDO::PARAM_INT);
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
 

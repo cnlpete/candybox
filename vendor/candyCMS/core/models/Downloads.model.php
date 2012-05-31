@@ -31,6 +31,7 @@ class Downloads extends Main {
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         d.*,
+                                        UNIX_TIMESTAMP(d.date) as date,
                                         u.id AS user_id,
                                         u.name AS user_name,
                                         u.surname AS user_surname,
@@ -82,6 +83,7 @@ class Downloads extends Main {
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         d.*,
+                                        UNIX_TIMESTAMP(d.date) as date,
                                         u.id AS user_id,
                                         u.name AS user_name,
                                         u.surname AS user_surname,
@@ -171,10 +173,9 @@ class Downloads extends Main {
                                           :category,
                                           :file,
                                           :extension,
-                                          :date )");
+                                          NOW() )");
 
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
-      $oQuery->bindParam('date', time(), PDO::PARAM_INT);
 
       # Preset
       $oQuery->bindParam('file', $sFile, PDO::PARAM_STR);

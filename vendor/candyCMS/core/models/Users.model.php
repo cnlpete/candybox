@@ -183,7 +183,7 @@ class Users extends Main {
                                         u.name,
                                         u.email,
                                         u.surname,
-                                        u.date,
+                                        UNIX_TIMESTAMP(u.date) as date,
                                         u.use_gravatar,
                                         u.receive_newsletter,
                                         u.verification_code,
@@ -237,7 +237,8 @@ class Users extends Main {
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         u.*,
-                                        s.date as last_login
+                                        UNIX_TIMESTAMP(u.date) as date,
+                                        UNIX_TIMESTAMP(s.date) as last_login
                                       FROM
                                         " . SQL_PREFIX . "users as u
                                       LEFT JOIN
@@ -301,7 +302,7 @@ class Users extends Main {
                                           :surname,
                                           :password,
                                           :email,
-                                          :date,
+                                          NOW(),
                                           :role,
                                           :verification_code,
                                           :api_token)");
@@ -309,7 +310,6 @@ class Users extends Main {
       $sApiToken = md5(RANDOM_HASH . $this->_aRequest[$this->_sController]['email']);
       $oQuery->bindParam('api_token', $sApiToken, PDO::PARAM_STR);
       $oQuery->bindParam('password', md5(RANDOM_HASH . $this->_aRequest[$this->_sController]['password']), PDO::PARAM_STR);
-      $oQuery->bindParam('date', time(), PDO::PARAM_INT);
       $oQuery->bindParam('role', $iRole, PDO::PARAM_INT);
       $oQuery->bindParam('verification_code', $iVerificationCode, PDO::PARAM_STR);
 
@@ -511,12 +511,11 @@ class Users extends Main {
                                         SET
                                           verification_code = '',
                                           receive_newsletter = '1',
-                                          date = :date
+                                          date = NOW()
                                         WHERE
                                           id = :id");
 
         $oQuery->bindParam('id', $this->_aData['id'], PDO::PARAM_INT);
-        $oQuery->bindParam('date', time(), PDO::PARAM_INT);
 
         # Prepare for first login
         $this->_aData['verification_code'] = '';
@@ -636,7 +635,8 @@ class Users extends Main {
 
     try {
       $oQuery = parent::$_oDbStatic->prepare("SELECT
-                                                *
+                                                *,
+                                                UNIX_TIMESTAMP(date) as date
                                               FROM
                                                 " . SQL_PREFIX . "users
                                               WHERE

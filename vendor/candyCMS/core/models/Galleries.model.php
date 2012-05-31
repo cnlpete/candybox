@@ -44,6 +44,7 @@ class Galleries extends Main {
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                       a.*,
+                                      UNIX_TIMESTAMP(a.date) as date,
                                       u.id AS user_id,
                                       u.name AS user_name,
                                       u.surname AS user_surname,
@@ -128,6 +129,7 @@ class Galleries extends Main {
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                       a.*,
+                                      UNIX_TIMESTAMP(a.date) as date,
                                       u.id AS user_id,
                                       u.name AS user_name,
                                       u.surname AS user_surname,
@@ -198,6 +200,7 @@ class Galleries extends Main {
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         f.*,
+                                        UNIX_TIMESTAMP(f.date) as date,
                                         u.id AS user_id,
                                         u.name AS user_name,
                                         u.surname AS user_surname,
@@ -324,7 +327,8 @@ class Galleries extends Main {
 
     try {
       $oQuery = parent::$_oDbStatic->prepare("SELECT
-                                                *
+                                                *,
+                                                UNIX_TIMESTAMP(date) as date,
                                               FROM
                                                 " . SQL_PREFIX . "gallery_files
                                               WHERE
@@ -365,10 +369,9 @@ class Galleries extends Main {
                                         ( :author_id,
                                           :title,
                                           :content,
-                                          :date )");
+                                          NOW() )");
 
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
-      $oQuery->bindParam('date', time(), PDO::PARAM_INT);
 
       foreach (array('title', 'content') as $sInput)
         $oQuery->bindParam(
@@ -553,7 +556,7 @@ class Galleries extends Main {
                                           :file,
                                           :extension,
                                           :content,
-                                          :date,
+                                          NOW(),
                                           :position)");
 
       $iPosition = Helper::getLastEntry('gallery_files');
@@ -561,7 +564,6 @@ class Galleries extends Main {
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
       $oQuery->bindParam('file', $sFile, PDO::PARAM_STR);
       $oQuery->bindParam('extension', $sExtension, PDO::PARAM_STR);
-      $oQuery->bindParam('date', time(), PDO::PARAM_INT);
       $oQuery->bindParam('position', $iPosition, PDO::PARAM_INT);
 
       foreach (array('content') as $sInput)
