@@ -34,7 +34,7 @@ class Contents extends Main {
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         c.*,
-                                        UNIX_TIMESTAMP(d.date) as date,
+                                        UNIX_TIMESTAMP(c.date) as date,
                                         u.id AS user_id,
                                         u.name AS user_name,
                                         u.surname AS user_surname,
