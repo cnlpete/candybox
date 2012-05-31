@@ -20,7 +20,7 @@
   <script type='text/javascript'>
     if($('.js-archive_month')) {
       $('.js-archive_month').click(function(){
-        $(this).next().toggle();
+        $(this).next().slideToggle();
       });
     };
   </script>
