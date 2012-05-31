@@ -35,7 +35,7 @@ class UnitTestOfLogModel extends CandyUnitTest {
   }
 
   function testSetEndTime() {
-    $iTime = time();
+    $iTime = time() + 100;
     $this->assertTrue($this->oObject->setEndTime($this->iLastInsertId, $iTime));
     $aLogs = $this->oObject->getOverview(1);
     foreach ($aLogs as $aLog)
