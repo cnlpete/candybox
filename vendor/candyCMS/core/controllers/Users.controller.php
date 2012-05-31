@@ -298,7 +298,6 @@ class Users extends Main {
    *
    * @access protected
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
-   * @todo
    *
    */
   protected function _create($bShowCaptcha) {
@@ -351,7 +350,6 @@ class Users extends Main {
                   WEBSITE_MAIL_NOREPLY );
         }
 
-        # @todo: Should we display a better success message if we are admin?
         return $this->_aSession['user']['role'] == 4 ?
                 Helper::successMessage(I18n::get('success.create'), '/' . $this->_sController) :
                 Helper::successMessage(I18n::get('success.user.create'), '/');

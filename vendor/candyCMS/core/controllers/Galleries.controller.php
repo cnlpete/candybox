@@ -146,6 +146,7 @@ class Galleries extends Main {
    *
    * @access protected
    * @return string HTML content
+   * @todo caching won't work
    *
    */
   protected function _showImage() {
@@ -175,7 +176,8 @@ class Galleries extends Main {
         return Helper::redirectTo('/errors/404');
     }
 
-    $this->setTitle(I18n::get('global.image.image') . ': ' . $aData['file']);
+    # Here is the bug
+    #$this->setTitle(I18n::get('global.image.image') . ': ' . $aData['file']);
     $this->setDescription($aData['content']);
 
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);

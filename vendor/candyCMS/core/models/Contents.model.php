@@ -25,7 +25,7 @@ class Contents extends Main {
    * @access public
    * @param integer $iLimit blog post limit
    * @return array $this->_aData
-   * @todo pagination
+   * @todo Pagination (2.2)
    *
    */
   public function getOverview($iLimit = 100) {

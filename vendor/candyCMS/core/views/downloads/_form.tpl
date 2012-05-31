@@ -7,7 +7,7 @@
     {if $_REQUEST.action == 'create'}
       <div class='control-group{if isset($error.file)} alert alert-error{/if}'>
         <label for='input-file' class='control-label'>
-          {$lang.downloads.label.choose} <span title="{$lang.global.required}">*</span><br />
+          {$lang.downloads.label.choose} <span title='{$lang.global.required}'>*</span><br />
           <small>
             {if $_SYSTEM.maximumUploadSize.raw <= 1536}
               {$_SYSTEM.maximumUploadSize.b|string_format: $lang.global.upload.maxsize}
@@ -19,18 +19,18 @@
           </small>
         </label>
         <div class='controls'>
-          {* @todo: This must also be put into controller array. *}
+          {* @todo: Rename file *}
           <input class='input-file span4 required' type='file' name='file[]'
-                required id="input-file"/>
+                required id='input-file'/>
         </div>
       </div>
     {/if}
     <div class='control-group{if isset($error.title)} alert alert-error{/if}'>
       <label for='input-title' class='control-label'>
-        {$lang.global.title} <span title="{$lang.global.required}">*</span>
+        {$lang.global.title} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <input class='span4 required' type='text' name='{$_REQUEST.controller}[title]' id="input-title"
+        <input class='span4 required' type='text' name='{$_REQUEST.controller}[title]' id='input-title'
               value="{$title}" required />
         <span class='help-inline'>
           {if isset($error.title)}

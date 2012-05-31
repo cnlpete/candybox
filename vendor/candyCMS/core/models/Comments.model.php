@@ -132,7 +132,6 @@ class Comments extends Main {
    *
    * @access public
    * @return boolean status of query
-   * @todo we might can shrink this INTs into an foreach
    *
    */
   public function create() {

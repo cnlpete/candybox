@@ -21,7 +21,7 @@
       </label>
       <div class='controls'>
 
-        {* @todo Fix name *}
+        {* @todo Rename file *}
         <input type='file'
                name='file[]'
                id='input-file'

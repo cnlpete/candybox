@@ -24,7 +24,6 @@ class Mails extends Main {
    *
    * @access public
    * @return array $this->_aData
-   * @todo Exception exception
    *
    */
   public function getOverview() {
@@ -46,7 +45,6 @@ class Mails extends Main {
                                         m.date ASC");
 
       $oQuery->execute();
-
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
@@ -79,6 +77,7 @@ class Mails extends Main {
     $sText = str_replace('%%WEBSITE_URL',   WEBSITE_URL,  $sText);
     $sText = str_replace('%WEBSITE_NAME',   WEBSITE_NAME, $sText);
     $sText = str_replace('%WEBSITE_URL',    WEBSITE_URL,  $sText);
+
     return $sText;
   }
 
@@ -135,7 +134,6 @@ class Mails extends Main {
    * @access public
    * @param int $iId the id of the mail, we are trying to send
    * @return $bReturn boolean status
-   * @todo better exception
    *
    */
   public function resend($iId) {
@@ -156,7 +154,7 @@ class Mails extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth('0119 - ' . $p->getMessage());
-      return false;
+      exit('SQL error.');
     }
 
     # Not found
@@ -177,14 +175,7 @@ class Mails extends Main {
 
       return $bReturn;
     }
-
-    # @todo why both?
     catch (\phpmailerException $e) {
-      //Pretty error messages from PHPMailer
-      AdvancedException::writeLog($e->errorMessage());
-      return false;
-    }
-    catch (AdvancedException $e) {
       AdvancedException::writeLog($e->errorMessage());
       return false;
     }
@@ -215,25 +206,18 @@ class Mails extends Main {
     $sMessage = $this->_replaceNameAndUrl($sMessage);
     $sSubject = $this->_replaceNameAndUrl($sSubject);
 
-    $sErrorMessage = '';
-    $bReturn = false;
+    $sErrorMessage  = '';
+    $bReturn        = false;
 
     try {
       $bReturn = $this->_send($sSubject, $sMessage, $sToName, $sToMail, $sReplyToName, $sReplyToMail, $sAttachement);
     }
     catch (\phpmailerException $e) {
-      //Pretty error messages from PHPMailer
       AdvancedException::writeLog($e->errorMessage());
       $sErrorMessage = $e->errorMessage();
-    }
-    catch (AdvancedException $e) {
-      AdvancedException::writeLog($e->errorMessage());
-      $sErrorMessage = $e->errorMessage();
-      exit('Mail error, the Administrator has been notified.');
     }
 
     if (!$bReturn && $bSaveMail && defined('USE_MAIL_QUEUE') && USE_MAIL_QUEUE == true) {
-      //save to db
       try {
         $oQuery = $this->_oDb->prepare("INSERT INTO
                                           " . SQL_PREFIX . "mails
@@ -272,22 +256,18 @@ class Mails extends Main {
 
         $oQuery->execute();
         parent::$iLastInsertId = Helper::getLastEntry('mails');
-
-        //TODO Log-entry
-
       }
       catch (\PDOException $p) {
         try {
           $this->_oDb->rollBack();
         }
         catch (\Exception $e) {
-          AdvancedException::reportBoth('0117 - ' . $e->getMessage());
+          AdvancedException::reportBoth('0116 - ' . $e->getMessage());
         }
 
-        AdvancedException::reportBoth('0116 - ' . $p->getMessage());
+        AdvancedException::reportBoth('0117 - ' . $p->getMessage());
         exit('SQL error.');
       }
-
     }
 
     return $bReturn;

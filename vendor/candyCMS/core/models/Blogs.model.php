@@ -96,7 +96,6 @@ class Blogs extends Main {
    * @param integer $iLimit blog post limit, 0 for infinite
    * @param string $sTagname the tagname to query for.
    * @return array data from _setData
-   * @todo
    *
    */
   public function getOverviewByTag($iLimit = LIMIT_BLOG, $sTagname = '') {
@@ -177,7 +176,7 @@ class Blogs extends Main {
               array('published', 'use_gravatar'),
               'blogs');
 
-      # @todo trim spaces, redundant, if those get removed at blog creation/editing
+      # Bugfix: Make tags compatible to candyCMS Version 1.x
       $this->_aData[$iDate]['tags_raw'] = $aRow['tags'];
 
       # Explode using ',' and filter empty items (since explode always gives at least one item)
@@ -194,7 +193,6 @@ class Blogs extends Main {
    * @access public
    * @param integer $iLimit blog post limit, 0 for infinite
    * @return array data from _setData
-   * @todo
    *
    */
   public function getOverview($iLimit = LIMIT_BLOG) {
@@ -257,7 +255,7 @@ class Blogs extends Main {
               array('published', 'use_gravatar'),
               'blogs');
 
-      # @todo trim spaces, redundant, if those get removed at blog creation/editing
+      # Bugfix: Make tags compatible to candyCMS Version 1.x
       $this->_aData[$iDate]['tags_raw'] = $aRow['tags'];
 
       # Explode using ',' and filter empty items (since explode always gives at least one item)
