@@ -210,6 +210,7 @@ class Galleries extends Main {
                                       WHERE
                                         f.album_id= :album_id
                                       ORDER BY
+                                        f.position ASC,
                                         f.date ASC");
 
       $oQuery->bindParam('album_id', $iId, PDO::PARAM_INT);
@@ -685,4 +686,45 @@ class Galleries extends Main {
       }
     }
   }
+
+  /**
+   * Update filepositions.
+   *
+   * @access public
+   * @param integer $iAlbumId album ID
+   * @return boolean status of query
+   *
+   */
+  public function updateFilePositions($iAlbumId) {
+    $aNewOrder = $this->_aRequest['galleryfiles'];
+
+    $iAlbumId = (int)$iAlbumId;
+    $sSQL = '';
+    foreach ($this->_aRequest['galleryfiles'] as $iKey => $iValue) {
+      $iKey = (int)$iKey;
+      $iValue = (int)$iValue;
+
+      $sSQL .= "UPDATE
+                  " . SQL_PREFIX . "gallery_files
+                SET
+                  position = '".$iKey."'
+                WHERE
+                  id = '".$iValue."'
+                AND
+                  album_id = '".$iAlbumId."'
+                LIMIT 1;";
+    }
+
+    try {
+      $oQuery = $this->_oDb->prepare($sSQL);
+
+      return $oQuery->execute();
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0063 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+
+  }
+
 }

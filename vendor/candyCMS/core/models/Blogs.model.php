@@ -45,6 +45,49 @@ class Blogs extends Main {
   }
 
   /**
+   * Get count of visible blog entries
+   *
+   * @access public
+   * @param string $sTagname the tagname
+   * @return integer the total count
+   *
+   */
+  public function getCountForTag($sTagname) {
+    # Show unpublished items and entries with diffent languages to moderators or administrators only
+    $sWhere = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ?
+            'WHERE 1' :
+            "WHERE published = '1' AND language = '" . WEBSITE_LANGUAGE . "'";
+
+    try {
+      $oQuery  = $this->_oDb->prepare("SELECT
+                                        COUNT(*)
+                                      FROM
+                                        " . SQL_PREFIX . "blogs
+                                      " . $sWhere . "
+                                       AND (tags LIKE :CommaTagnameComma
+                                          OR tags LIKE :CommaTagname
+                                          OR tags LIKE :tagnameComma
+                                          OR tags   =  :tagname
+                                          OR tags LIKE :CommaSpaceTagname
+                                          OR tags LIKE :CommaSpaceTagnameComma)");
+
+      $oQuery->bindValue(':CommaTagnameComma', '%,' . $sTagname . ',%', PDO::PARAM_STR);
+      $oQuery->bindValue(':CommaTagname', '%,' . $sTagname, PDO::PARAM_STR);
+      $oQuery->bindValue(':tagnameComma', $sTagname . ',%', PDO::PARAM_STR);
+      $oQuery->bindValue(':tagname', $sTagname, PDO::PARAM_STR);
+      # These last two lines are for compatibility, since there might be blog-entries done before 2.1 with a space
+      $oQuery->bindValue(':CommaSpaceTagname', '%, ' . $sTagname, PDO::PARAM_STR);
+      $oQuery->bindValue(':CommaSpaceTagnameComma', '%, ' . $sTagname . ',%', PDO::PARAM_STR);
+      $oQuery->execute();
+      return $oQuery->fetchColumn();
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0043 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+  }
+
+  /**
    * Get blog overview data by tagname.
    *
    * @access public
@@ -54,7 +97,13 @@ class Blogs extends Main {
    *
    */
   public function getOverviewByTag($iLimit = LIMIT_BLOG, $sTagname = '') {
-    $iResult = $this->getCount();
+    if (empty($sTagname)) {
+      $sTagname = str_replace('%20', ' ', Helper::formatInput($this->_aRequest['search'], false));
+      # Remove all characters that might harm us, only allow digits, normal letters and whitespaces
+      $sTagname = trim( preg_replace('/[^\d\s\w]/', '', $sTagname) );
+    }
+
+    $iResult = $this->getCountForTag($sTagname);
 
     if ($iLimit != 0)
       $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit);
@@ -71,12 +120,6 @@ class Blogs extends Main {
       $sLimit = $iLimit != 0 ?
               ' LIMIT ' . $this->oPagination->getOffset() . ', ' . $this->oPagination->getLimit() :
               '';
-
-      if (empty($sTagname)) {
-        $sTagname = str_replace('%20', ' ', Helper::formatInput($this->_aRequest['search'], false));
-        # Remove all characters that might harm us, only allow digits, normal letters and whitespaces
-        $sTagname = trim( preg_replace('/[^\d\s\w]/', '', $sTagname) );
-      }
 
       $oQuery = $this->_oDb->prepare("SELECT
                                         b.*,

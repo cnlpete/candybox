@@ -67,7 +67,7 @@ global:
   login: Login
   logs: Logs
   logout: Logout
-  mails: Emails
+  mails: Ungesendete Emails
   manager:
     content: Seitenmanagement
     media: Dateimanager
@@ -342,6 +342,8 @@ galleries:
       create: Bild(er) hochladen
       destroy: Bild löschen
       update: Bild bearbeiten
+    update:
+      order: Reihenfolge speichern
 
 mails:
   body:
