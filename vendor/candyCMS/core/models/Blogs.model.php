@@ -437,6 +437,7 @@ class Blogs extends Main {
             $this->_aRequest[$this->_sController]['update_date'] == true ?
             time() :
             (int) $this->_aRequest[$this->_sController]['date'];
+
     $sDate = date('Y-m-d H:i:s', $iDate);
 
     try {
