@@ -33,6 +33,7 @@ class Calendars extends Main {
 
     $oQuery = $this->_oDb->prepare("SELECT
                                       c.*,
+                                      UNIX_TIMESTAMP(c.date) as date,
                                       MONTH(c.start_date) AS start_month,
                                       YEAR(c.start_date) AS start_year,
                                       UNIX_TIMESTAMP(c.start_date) AS start_date,
@@ -67,6 +68,7 @@ class Calendars extends Main {
   private function _getPreparedOverviewStatement() {
     return $this->_oDb->prepare("SELECT
                                     c.*,
+                                    UNIX_TIMESTAMP(c.date) as date,
                                     MONTH(c.start_date) AS start_month,
                                     YEAR(c.start_date) AS start_year,
                                     UNIX_TIMESTAMP(c.start_date) AS start_date,
@@ -100,6 +102,7 @@ class Calendars extends Main {
   private function _getPreparedIcalFeedStatement() {
     return $this->_oDb->prepare("SELECT
                                     c.*,
+                                    UNIX_TIMESTAMP(c.date) as date,
                                     MONTH(c.start_date) AS start_month,
                                     YEAR(c.start_date) AS start_year,
                                     UNIX_TIMESTAMP(c.start_date) AS start_date,
@@ -177,6 +180,7 @@ class Calendars extends Main {
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         c.*,
+                                        UNIX_TIMESTAMP(c.date) as date,
                                         u.id AS user_id,
                                         u.name AS user_name,
                                         u.surname AS user_surname,
@@ -239,12 +243,11 @@ class Calendars extends Main {
                                         ( :author_id,
                                           :title,
                                           :content,
-                                          :date,
+                                          NOW(),
                                           :start_date,
                                           :end_date)");
 
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
-      $oQuery->bindParam('date', time(), PDO::PARAM_INT);
 
       foreach (array('title', 'content') as $sInput)
         $oQuery->bindParam(

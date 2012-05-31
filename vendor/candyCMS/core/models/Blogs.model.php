@@ -123,6 +123,8 @@ class Blogs extends Main {
 
       $oQuery = $this->_oDb->prepare("SELECT
                                         b.*,
+                                        UNIX_TIMESTAMP(b.date) as date,
+                                        UNIX_TIMESTAMP(b.date_modified) as date_modified,
                                         u.id AS user_id,
                                         u.name AS user_name,
                                         u.surname AS user_surname,
@@ -218,6 +220,8 @@ class Blogs extends Main {
 
       $oQuery = $this->_oDb->prepare("SELECT
                                         b.*,
+                                        UNIX_TIMESTAMP(b.date) as date,
+                                        UNIX_TIMESTAMP(b.date_modified) as date_modified,
                                         u.id AS user_id,
                                         u.name AS user_name,
                                         u.surname AS user_surname,
@@ -286,6 +290,8 @@ class Blogs extends Main {
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         b.*,
+                                        UNIX_TIMESTAMP(b.date) as date,
+                                        UNIX_TIMESTAMP(b.date_modified) as date_modified,
                                         u.id AS user_id,
                                         u.name AS user_name,
                                         u.surname AS user_surname,
@@ -367,14 +373,13 @@ class Blogs extends Main {
                                           :keywords,
                                           :content,
                                           :language,
-                                          :date,
+                                          NOW(),
                                           :published )");
 
       $sTags = $this->_aRequest[$this->_sController]['tags'];
       $sTags = Helper::formatInput(implode(',', array_filter(array_map('trim', explode(',', $sTags)))));
       $oQuery->bindParam('tags', $sTags, PDO::PARAM_STR);
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
-      $oQuery->bindParam('date', time(), PDO::PARAM_INT);
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
 
       foreach (array('title', 'teaser', 'content') as $sInput)
@@ -416,10 +421,10 @@ class Blogs extends Main {
    *
    */
   public function update($iId) {
-    $iDateModified = isset($this->_aRequest[$this->_sController]['show_update']) &&
+    $sDateModified = isset($this->_aRequest[$this->_sController]['show_update']) &&
             $this->_aRequest[$this->_sController]['show_update'] == true ?
-            time() :
-            0;
+            date('Y-m-d H:i:s') :
+            '0000-00-00 00:00:00';
 
     $iPublished = isset($this->_aRequest[$this->_sController]['published']) &&
             $this->_aRequest[$this->_sController]['published'] == true ?
@@ -435,6 +440,7 @@ class Blogs extends Main {
             $this->_aRequest[$this->_sController]['update_date'] == true ?
             time() :
             (int) $this->_aRequest[$this->_sController]['date'];
+    $sDate = date('Y-m-d H:i:s', $iDate);
 
     try {
       $oQuery = $this->_oDb->prepare("UPDATE
@@ -457,8 +463,8 @@ class Blogs extends Main {
       $sTags = Helper::formatInput(implode(',', array_filter( array_map('trim', explode(',', $sTags)))));
       $oQuery->bindParam('tags', $sTags, PDO::PARAM_STR);
       $oQuery->bindParam('author_id', $iUpdateAuthor, PDO::PARAM_INT);
-      $oQuery->bindParam('date', $iDate, PDO::PARAM_INT);
-      $oQuery->bindParam('date_modified', $iDateModified, PDO::PARAM_INT);
+      $oQuery->bindParam('date', $sDate, PDO::PARAM_STR);
+      $oQuery->bindParam('date_modified', $sDateModified, PDO::PARAM_STR);
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
 

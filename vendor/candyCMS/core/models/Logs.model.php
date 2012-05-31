@@ -44,6 +44,8 @@ class Logs extends Main {
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         l.*,
+                                        UNIX_TIMESTAMP(l.time_start) as time_start,
+                                        UNIX_TIMESTAMP(l.time_end) as time_end,
                                         u.id AS user_id,
                                         u.name AS user_name,
                                         u.surname AS user_surname,
@@ -129,8 +131,8 @@ class Logs extends Main {
       $oQuery->bindParam('controller_name', strtolower($sControllerName), PDO::PARAM_STR);
       $oQuery->bindParam('action_name', strtolower($sActionName), PDO::PARAM_STR);
       $oQuery->bindParam('action_id', $iActionId, PDO::PARAM_INT);
-      $oQuery->bindParam('time_start', $iTimeStart, PDO::PARAM_INT);
-      $oQuery->bindParam('time_end', $iTimeEnd, PDO::PARAM_INT);
+      $oQuery->bindParam('time_start', date('Y-m-d H:i:s', $iTimeStart), PDO::PARAM_STR);
+      $oQuery->bindParam('time_end', date('Y-m-d H:i:s', $iTimeEnd), PDO::PARAM_STR);
       $oQuery->bindParam('user_id', $iUserId, PDO::PARAM_INT);
       $oQuery->bindParam('result_flag', $bResultFlag, PDO::PARAM_BOOL);
 
@@ -166,6 +168,8 @@ class Logs extends Main {
     if (empty(parent::$_oDbStatic))
       parent::connectToDatabase();
 
+    $iEndTime   = empty($iTimeEnd) ? time() : $iEndTime;
+
     try {
       $oQuery = parent::$_oDbStatic->prepare("UPDATE
                                                 " . SQL_PREFIX . "logs
@@ -177,7 +181,7 @@ class Logs extends Main {
                                                 1");
 
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
-      $oQuery->bindParam('time_end', $iEndTime, PDO::PARAM_INT);
+      $oQuery->bindParam('time_end', date('Y-m-d H:i:s', $iEndTime), PDO::PARAM_INT);
 
       return $oQuery->execute();
     }
