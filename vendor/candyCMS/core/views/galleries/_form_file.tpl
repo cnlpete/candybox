@@ -92,7 +92,6 @@
                value='{$lang.global.reset}' />
       {/if}
     </div>
-    <input type='button' id='test' value='Test' />
   </form>
   <script type='text/javascript'>
     $('#input-content').bind('keyup', function() {
