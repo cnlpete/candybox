@@ -34,7 +34,7 @@ class Galleries extends Main {
    * Get gallery album files.
    *
    * @access public
-   * @param integer $iId Album-ID to load data from. If empty, show overview.
+   * @param integer $iId Album-ID to load data from.
    * @param boolean $bUpdate prepare data for update
    * @param boolean $bAdvancedImageInformation provide image with advanced information (MIME_TYPE etc.)
    * @return array data from _setData
@@ -327,17 +327,12 @@ class Galleries extends Main {
 
     try {
       $oQuery = parent::$_oDbStatic->prepare("SELECT
-<<<<<<< HEAD
                                                 *,
                                                 UNIX_TIMESTAMP(date) as date
-=======
-                                                f.*,
-                                                UNIX_TIMESTAMP(f.date) as date
->>>>>>> 3991d4ea56d6426d554afc7d9512214e4236ffaa
                                               FROM
-                                                " . SQL_PREFIX . "gallery_files as f
+                                                " . SQL_PREFIX . "gallery_files
                                               WHERE
-                                                f.id = :id");
+                                                id = :id");
 
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
       $oQuery->execute();
