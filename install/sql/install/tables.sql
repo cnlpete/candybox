@@ -8,9 +8,9 @@ CREATE TABLE `%SQL_PREFIX%blogs` (
   `tags` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `keywords` varchar(160) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `content` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `language` VARCHAR(2)  NULL  DEFAULT 'en',
-  `date` int(11) DEFAULT NULL,
-  `date_modified` int(11) DEFAULT NULL,
+  `language` varchar(2)  NULL  DEFAULT 'en',
+  `date` datetime NOT NULL,
+  `date_modified` datetime NOT NULL,
   `published` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `tags` (`tags`)
@@ -28,7 +28,7 @@ CREATE TABLE `%SQL_PREFIX%comments` (
   `author_email` varchar(64) DEFAULT '',
   `author_ip` varchar(15) DEFAULT '',
   `content` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `date` int(11) NOT NULL,
+  `date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `parent_id` (`parent_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -41,7 +41,7 @@ CREATE TABLE `%SQL_PREFIX%contents` (
   `title` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `teaser` varchar(256) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `keywords` varchar(160) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `date` int(11) NOT NULL,
+  `date` datetime NOT NULL,
   `content` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `published` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -54,7 +54,7 @@ CREATE TABLE `%SQL_PREFIX%calendars` (
   `author_id` int(11) NOT NULL,
   `title` varchar(128) NOT NULL DEFAULT '',
   `content` text,
-  `date` int(11) DEFAULT NULL,
+  `date` datetime NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -71,7 +71,7 @@ CREATE TABLE `%SQL_PREFIX%downloads` (
   `file` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `extension` varchar(4) NOT NULL DEFAULT '',
   `downloads` int(11) DEFAULT '0',
-  `date` int(11) NOT NULL,
+  `date` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -81,7 +81,7 @@ CREATE TABLE `%SQL_PREFIX%gallery_albums` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `author_id` int(11) NOT NULL,
   `title` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `date` int(11) NOT NULL,
+  `date` datetime NOT NULL,
   `content` varchar(160) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -95,8 +95,9 @@ CREATE TABLE `%SQL_PREFIX%gallery_files` (
   `author_id` int(115) NOT NULL,
   `file` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   `extension` varchar(4) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'jpg',
-  `date` int(11) NOT NULL,
+  `date` datetime NOT NULL,
   `content` varchar(160) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `position` int(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -107,9 +108,10 @@ CREATE TABLE `%SQL_PREFIX%logs` (
   `controller_name` varchar(32) NOT NULL DEFAULT 'NOT NULL',
   `action_name` varchar(16) NOT NULL,
   `action_id` int(11) DEFAULT NULL,
-  `time_start` int(11) DEFAULT NULL,
-  `time_end` int(11) DEFAULT NULL,
+  `time_start` datetime NOT NULL,
+  `time_end` datetime NOT NULL,
   `user_id` int(11) DEFAULT '0',
+  `result` tinyint(1)  NOT NULL  DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -129,7 +131,7 @@ CREATE TABLE `%SQL_PREFIX%sessions` (
   `user_id` int(11) NOT NULL,
   `session` varchar(32) DEFAULT NULL,
   `ip` varchar(15) DEFAULT NULL,
-  `date` int(11) NOT NULL,
+  `date` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -145,11 +147,28 @@ CREATE TABLE `%SQL_PREFIX%users` (
   `receive_newsletter` tinyint(1) NOT NULL DEFAULT '1',
   `use_gravatar` tinyint(1) DEFAULT '0',
   `role` tinyint(1) NOT NULL DEFAULT '1',
-  `date` int(11) DEFAULT NULL,
+  `date` datetime NOT NULL,
   `verification_code` varchar(12) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `api_token` VARCHAR(32)  NOT NULL  DEFAULT '',
+  `api_token` varchar(32)  NOT NULL  DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `api_token` (`api_token`),
   KEY `name` (`name`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `%SQL_PREFIX%mails`;
+
+CREATE TABLE `%SQL_PREFIX%mails` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `date` datetime NOT NULL,
+  `ip` varchar(39) DEFAULT NULL,
+  `from_address` varchar(32) DEFAULT NULL,
+  `from_name` varchar(32) DEFAULT NULL,
+  `to_address` varchar(32) DEFAULT NULL,
+  `to_name` varchar(32) DEFAULT NULL,
+  `subject` varchar(128) NOT NULL,
+  `content` text NOT NULL,
+  `error_message` text DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
