@@ -21,7 +21,6 @@ use PDO;
 define('PATH_STANDARD', dirname(__FILE__) . '/..');
 
 require PATH_STANDARD . '/vendor/candyCMS/core/controllers/Index.controller.php';
-require PATH_STANDARD . '/vendor/candyCMS/plugins/Cronjob/Cronjob.controller.php';
 
 class Install extends Index {
 
@@ -49,6 +48,8 @@ class Install extends Index {
 
     $this->_defines();
     $this->getLanguage();
+
+    $this->_aPlugins = $this->getPlugins('Cronjob');
 
     $this->oSmarty = SmartySingleton::getInstance();
     $this->oSmarty->template_dir = PATH_STANDARD . '/install/views';

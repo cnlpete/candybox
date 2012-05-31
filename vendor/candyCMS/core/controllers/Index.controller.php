@@ -73,10 +73,10 @@ class Index {
    * Saves loaded Plugins
    *
    * @var array
-   * @access private
+   * @access protected
    *
    */
-  private $_aPlugins;
+  protected $_aPlugins;
 
   /**
    * Initialize the software by adding input params.
@@ -312,7 +312,7 @@ class Index {
    *
    */
   public function getCronjob($bForceAction = false) {
-    if (class_exists('\CandyCMS\Plugins\Cronjob')) {
+    if (in_array('Cronjob', $this->_aPlugins)) {
       if (Cronjob::getNextUpdate() == true ||
               ($bForceAction === true && Cronjob::getNextUpdate(60*1) == true)) {
         $oCronjob = new Cronjob();
