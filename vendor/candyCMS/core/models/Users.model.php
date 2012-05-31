@@ -173,7 +173,7 @@ class Users extends Main {
    * @access public
    * @param integer $iLimit user overview limit
    * @return array data from _setData
-   * @todo pagination
+   * @todo pagination (2.2)
    *
    */
   public function getOverview($iLimit = 1000) {

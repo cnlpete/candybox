@@ -156,7 +156,6 @@
       $(document).ready(function(){
         $('textarea.js-tinymce').tinymce({
           script_url : '/vendor/tiny_mce/tiny_mce.js',
-          mode : "exact",
           theme : 'advanced',
           plugins : 'autosave,safari,style,advimage,advlink,inlinepopups,insertdatetime,media,searchreplace,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras',
           theme_advanced_buttons1 : 'bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,cut,copy,paste,pastetext,|,search,replace,|,fullscreen',

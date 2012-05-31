@@ -30,14 +30,14 @@
           <input class='span4 required'
                  type='file'
                  name='file[]'
-                 id="input-file"
+                 id='input-file'
                  multiple required />
-          {if isset($error.file)}<span class="help-inline">{$error.file}</span>{/if}
+          {if isset($error.file)}<span class='help-inlin'>{$error.file}</span>{/if}
         </div>
       </div>
       <div class='control-group'>
         <label for='input-cut' class='control-label'>
-          {$lang.global.cut} <span title="{$lang.global.required}">*</span>
+          {$lang.global.cut} <span title='{$lang.global.required}'>*</span>
         </label>
         <div class='controls'>
           <label class='radio'>
@@ -74,6 +74,7 @@
         <span class='help-inline'></span>
       </div>
     </div>
+    <div id='js-loading' class='center'></div>
     <div class='form-actions'>
       {if $_REQUEST.action == 'createfile'}
         <input type='submit'
@@ -97,6 +98,12 @@
     $('#input-content').bind('keyup', function() {
       countCharLength(this, 160);
     });
+
+    $("input[type='submit']").click(function() {
+      $(this).val(lang.loading);
+      $('#js-loading').html("<img src='{$_PATH.images}/candy.global/loading.gif' alt=' + lang.loading + ' widht='32' height='32 />");
+    });
+
     $('#input-file').change(function() {
       checkFileSize($(this),
         {$_SYSTEM.maximumUploadSize.raw},

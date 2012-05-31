@@ -114,6 +114,7 @@ class Galleries extends Main {
    */
   public function getOverview($bAdvancedImageInformation = false, $iLimit = LIMIT_ALBUMS) {
     $iResult  = 0;
+
     try {
       $oQuery = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "gallery_albums");
       $iResult = $oQuery->fetchColumn();
@@ -547,19 +548,23 @@ class Galleries extends Main {
                                           file,
                                           extension,
                                           content,
-                                          date)
+                                          date,
+                                          position)
                                       VALUES
                                         ( :album_id,
                                           :author_id,
                                           :file,
                                           :extension,
                                           :content,
-                                          NOW() )");
+                                          NOW(),
+                                          :position)");
 
+      $iPosition = Helper::getLastEntry('gallery_files');
       $oQuery->bindParam('album_id', $this->_aRequest['id'], PDO::PARAM_INT);
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
       $oQuery->bindParam('file', $sFile, PDO::PARAM_STR);
       $oQuery->bindParam('extension', $sExtension, PDO::PARAM_STR);
+      $oQuery->bindParam('position', $iPosition, PDO::PARAM_INT);
 
       foreach (array('content') as $sInput)
         $oQuery->bindParam(

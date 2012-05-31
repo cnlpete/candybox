@@ -146,6 +146,7 @@ class Galleries extends Main {
    *
    * @access protected
    * @return string HTML content
+   * @todo caching won't work
    *
    */
   protected function _showImage() {
@@ -156,9 +157,9 @@ class Galleries extends Main {
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
       $aData = $this->_oModel->getFileData($this->_iId);
 
-    # Absolute URL for image information
-    $sUrl = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $this->_aRequest['album_id'] .
-                    '/popup/' . $aData['file']);
+      # Absolute URL for image information
+      $sUrl = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $this->_aRequest['album_id'] .
+                      '/popup/' . $aData['file']);
 
       if (file_exists($sUrl) || WEBSITE_MODE == 'test') {
         # Get image information
@@ -174,7 +175,9 @@ class Galleries extends Main {
       else
         return Helper::redirectTo('/errors/404');
     }
-    $this->setTitle(I18n::get('global.image.image') . ': ' . $aData['file']);
+
+    # Here is the bug
+    #$this->setTitle(I18n::get('global.image.image') . ': ' . $aData['file']);
     $this->setDescription($aData['content']);
 
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);

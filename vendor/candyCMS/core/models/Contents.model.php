@@ -25,7 +25,7 @@ class Contents extends Main {
    * @access public
    * @param integer $iLimit blog post limit
    * @return array $this->_aData
-   * @todo pagination
+   * @todo Pagination (2.2)
    *
    */
   public function getOverview($iLimit = 100) {
@@ -80,12 +80,12 @@ class Contents extends Main {
    * Get content entry data.
    *
    * @access public
-   * @param integer $iId ID to load data from. If empty, show overview.
+   * @param integer $iId ID to load data from.
    * @param boolean $bUpdate prepare data for update
    * @return array $this->_aData
    *
    */
-  public function getId($iId = '', $bUpdate = false) {
+  public function getId($iId, $bUpdate = false) {
     $iPublished = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ? 0 : 1;
 
     try {
