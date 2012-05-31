@@ -15,7 +15,6 @@ namespace CandyCMS\Core\Helpers;
 use CandyCMS\Core\Controllers\Main;
 use CandyCMS\Core\Helpers\AdvancedException;
 use CandyCMS\Plugins\Bbcode;
-use CandyCMS\Plugins\FormatTimestamp;
 use PDO;
 
 class Helper {
@@ -38,6 +37,26 @@ class Helper {
         'headline'=> '');
 
     return $sRedirectTo ? Helper::redirectTo ($sRedirectTo) : true;
+  }
+
+  /**
+   * Display a warning message after an action is done.
+   *
+   * @static
+   * @access public
+   * @param string $sMessage message to provide
+   * @param string $sRedirectTo site to redirect to
+   * @return boolean false
+   * @todo store in main session object
+   *
+   */
+  public static function warningMessage($sMessage, $sRedirectTo = '') {
+    $_SESSION['flash_message'] = array(
+        'type'    => 'warning',
+        'message' => $sMessage,
+        'headline'=> I18n::get('error.standard'));
+
+    return $sRedirectTo ? Helper::redirectTo ($sRedirectTo) : false;
   }
 
   /**
@@ -201,14 +220,15 @@ class Helper {
    * @param integer $iUserId user ID
    * @param string $sEmail email address to search gravatar for
    * @param boolean $bUseGravatar do we want to use gravatar?
+   * @param string $sPrefix optional prefix to prepend to keys
    * @return array $aData with all avatarURLs added
    *
    */
-  public static function createAvatarURLs(&$aData, $iUserId, $sEmail, $bUseGravatar = false) {
-    $aData['avatar_32']     = Helper::getAvatar(32, $iUserId, $sEmail, $bUseGravatar);
-    $aData['avatar_64']     = Helper::getAvatar(64, $iUserId, $sEmail, $bUseGravatar);
-    $aData['avatar_100']    = Helper::getAvatar(100, $iUserId, $sEmail, $bUseGravatar);
-    $aData['avatar_popup']  = Helper::getAvatar('popup', $iUserId, $sEmail, $bUseGravatar);
+  public static function createAvatarURLs(&$aData, $iUserId, $sEmail, $bUseGravatar = false, $sPrefix = '') {
+    $aData[$sPrefix . 'avatar_32']    = Helper::getAvatar(32, $iUserId, $sEmail, $bUseGravatar);
+    $aData[$sPrefix . 'avatar_64']    = Helper::getAvatar(64, $iUserId, $sEmail, $bUseGravatar);
+    $aData[$sPrefix . 'avatar_100']   = Helper::getAvatar(100, $iUserId, $sEmail, $bUseGravatar);
+    $aData[$sPrefix . 'avatar_popup'] = Helper::getAvatar('popup', $iUserId, $sEmail, $bUseGravatar);
 
     return $aData;
   }
@@ -352,48 +372,11 @@ class Helper {
       exit($e->getMessage());
     }
 
-    # remove multiple spaces and newlines (3+)
+    # Remove multiple spaces and newlines (3+)
     $sStr = preg_replace('/\s(\s)\s+/', '$1$1', trim($sStr));
 
     # Fix quotes to avoid problems with inputs
 		return $bDisableHTML === true ? str_replace('"', "&quot;", $sStr) : $sStr;
-  }
-
-  /**
-   * Format the linux timestamp into a user friendly format.
-   *
-   * If the "FormatTimestamp" plugin is enabled, load plugin and do some advanced work.
-   *
-   * Options:
-   * 0 = default dates
-   * 1 = date only
-   * 2 = time only
-   *
-   * @static
-   * @access public
-   * @param integer $iTime timestamp
-   * @param integer $iOptions options see above
-   * @see vendor/candyCMS/plugins/FormatTimestamp/FormatTimestamp.controller.php
-   * @return string formatted timestamp
-   *
-   */
-  public static function formatTimestamp($iTime, $iOptions = 0) {
-    if ($iTime) {
-      if (class_exists('\CandyCMS\Plugins\FormatTimestamp') == true) {
-        $oDate = new FormatTimestamp();
-        return $oDate->getDate($iTime, $iOptions);
-      }
-      else {
-        if ($iOptions == 1)
-          return strftime(DEFAULT_DATE_FORMAT, $iTime);
-
-        elseif($iOptions == 2)
-          return strftime(DEFAULT_TIME_FORMAT, $iTime);
-
-        else
-          return strftime(DEFAULT_DATE_FORMAT . ', ' . DEFAULT_TIME_FORMAT, $iTime);
-      }
-    }
   }
 
   /**
@@ -434,6 +417,7 @@ class Helper {
     try {
       $sModel = Main::__autoload('Main', true);
       $oDb = $sModel::connectToDatabase();
+
       $oQuery = $oDb->query("SELECT id FROM " . SQL_PREFIX . $sTable . " ORDER BY id DESC LIMIT 1");
       $aRow = $oQuery->fetch();
 
@@ -502,7 +486,8 @@ class Helper {
   /**
    * Pluralize a string.
    *
-   * Note that this is just a rudimentary funtion. F.e. "death", "boy" and "kiss" will not be pluralized corrctly.
+   * Note that this is just a rudimentary funtion. F.e. "boy" will not be pluralized correctly.
+   * Simple stuff will however work. F.e. 'log' becomes 'logs', 'kiss' will become 'kisses', ...
    *
    * @static
    * @access public
@@ -511,20 +496,21 @@ class Helper {
    *
    */
   public static function pluralize($sStr) {
-    if (substr($sStr, -1) == 'h' || substr($sStr, -2) == 'ss')
+    if ($sStr == 'rss')
+      return $sStr;
+
+    elseif (substr($sStr, -1) == 'h' || substr($sStr, -2) == 'ss' || substr($sStr, -1) == 'o')
       return $sStr . 'es';
 
     elseif (substr($sStr, -1) == 's')
       return $sStr;
 
-    elseif (substr($sStr, -1) == 'e')
-      return $sStr . 's';
-
     elseif (substr($sStr, -1) == 'y')
       return substr($sStr, 0, -1) . 'ies';
 
     else
-      return $sStr;
+      return $sStr . 's';
+
   }
 
   /**

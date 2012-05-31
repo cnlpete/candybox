@@ -18,16 +18,17 @@ class UnitTestOfBlogModel extends CandyUnitTest {
 
   function setUp() {
     $this->aRequest = array(
-        'title'       => 'Title',
-        'tags'        => 'Tags',
-        'teaser'      => 'Teaser',
-        'content'     => 'Blog',
-        'date'        => '0',
-        'keywords'    => 'Keywords',
-        'published'   => 0,
-        'author_id'   => 0,
-        'controller'  => 'blogs',
-        'language'    => 'en');
+        'blogs'       => array(
+            'title'       => 'Title',
+          'tags'        => 'Tags',
+          'teaser'      => 'Teaser',
+          'content'     => 'Blog',
+          'date'        => '0',
+          'keywords'    => 'Keywords',
+          'published'   => 0,
+          'author_id'   => 0,
+          'language'    => 'en'),
+        'controller'  => 'blogs');
 
     $this->oObject = new Blogs($this->aRequest, $this->aSession);
   }
@@ -44,8 +45,9 @@ class UnitTestOfBlogModel extends CandyUnitTest {
   }
 
   function testGetData() {
-    $this->assertIsA($this->oObject->getData(1), 'array');
-    $this->assertIsA($this->oObject->getData(), 'array');
+    $this->assertIsA($this->oObject->getId(1), 'array');
+    $this->assertIsA($this->oObject->getOverview(), 'array');
+    $this->assertIsA($this->oObject->getOverviewByTag(0,'tag1'), 'array');
   }
 
   function testUpdate() {

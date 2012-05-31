@@ -24,34 +24,23 @@ use PDO;
 final class Cronjob {
 
   /**
-   * The Id of the Cronjobs log entry, that is created for the execution
+   * holds the database connection
    *
    * @access private
-   * @var int
-   *
    */
-  private $_iLogId = -1;
-
-  /**
-   * The user id of the user, that is running the Cronjob.
-   *
-   * @access private
-   * @var int
-   *
-   */
-  private $_iUserId;
+  private $_oDB;
 
   /**
    * Create a new Cronjob Object
    *
    * @access public
-   * @param integer $iUserId user ID who updates the database.
    *
    */
-  public function __construct($iUserId) {
-    $this->_iUserId = $iUserId;
+  public function __construct() {
+    // write to the file, so there will be no duplicate execution
+    $this->_writeTimestamp();
 
-    $this->_startCronjob();
+    $this->_oDB = Main::connectToDatabase();
   }
 
   /**
@@ -61,29 +50,27 @@ final class Cronjob {
    *
    */
   public function __destruct() {
-    Logs::updateEndTime($this->_iLogId);
+    // update the timestamp
+    $this->_writeTimestamp();
   }
 
   /**
-   * start the execution of the Cronjob, so there wont be other simultanious executions
+   * write a timestamp to the backup file that indicates the last execution time,
+   * when no timestamp is given, write the current time to the file
    *
-   * @final
-   * @access private
-   *
+   * @param int $iTimestamp the timestamp to write
    */
-  private final function _startCronjob() {
-    $oPDO = Main::$_oDbStatic;
-    $oPDO->beginTransaction();
+  private function _writeTimestamp($iTimestamp = 0) {
+    // check for the file and read its timestamp
+    $sBackupFile = PATH_STANDARD . '/app/backup/lastrun.timestamp';
 
-    # Create log entry, so other calls won't start aswell.
-    $iTime = time();
-    Logs::insert('cronjob', 'execute', 0, $this->_iUserId, $iTime, $iTime);
-
-    # save the id, so we can update at end
-    $this->_iLogId = Main::getLastInsertId();
-
-    $oPDO->commit();
+    $oFile = @fopen($sBackupFile, 'w');
+    if ($oFile) {
+      @fwrite($oFile, $iTimestamp ? $iTimestamp : time());
+      @fclose($oFile);
+    }
   }
+
 
   /**
    * Cleanup our temp folders.
@@ -117,27 +104,27 @@ final class Cronjob {
    */
   public final function optimize() {
     try {
-      Main::$_oDbStatic->query("OPTIMIZE TABLE
-                                  " . SQL_PREFIX . "blogs,
-                                  " . SQL_PREFIX . "comments,
-                                  " . SQL_PREFIX . "calendars,
-                                  " . SQL_PREFIX . "contents,
-                                  " . SQL_PREFIX . "downloads,
-                                  " . SQL_PREFIX . "gallery_albums,
-                                  " . SQL_PREFIX . "gallery_files,
-                                  " . SQL_PREFIX . "migrations,
-                                  " . SQL_PREFIX . "logs,
-                                  " . SQL_PREFIX . "sessions,
-                                  " . SQL_PREFIX . "users");
+      $this->_oDB->query("OPTIMIZE TABLE
+                          " . SQL_PREFIX . "blogs,
+                          " . SQL_PREFIX . "comments,
+                          " . SQL_PREFIX . "calendars,
+                          " . SQL_PREFIX . "contents,
+                          " . SQL_PREFIX . "downloads,
+                          " . SQL_PREFIX . "gallery_albums,
+                          " . SQL_PREFIX . "gallery_files,
+                          " . SQL_PREFIX . "migrations,
+                          " . SQL_PREFIX . "logs,
+                          " . SQL_PREFIX . "sessions,
+                          " . SQL_PREFIX . "users");
     }
     catch (AdvancedException $e) {
-      Main::$_oDbStatic->rollBack();
+      $this->_oDB->rollBack();
       AdvancedException::reportBoth('0109 - ' . $e->getMessage());
       exit('SQL error.');
     }
 
     try {
-      $oQuery = Main::$_oDbStatic->prepare("DELETE FROM
+      $oQuery = $this->_oDB->prepare("DELETE FROM
                                               " . SQL_PREFIX . "sessions
                                             WHERE
                                               date < :date");
@@ -148,7 +135,7 @@ final class Cronjob {
       return $oQuery->execute();
     }
     catch (AdvancedException $e) {
-      Main::$_oDbStatic->rollBack();
+      $this->_oDB->rollBack();
       AdvancedException::reportBoth('0109 - ' . $e->getMessage());
       exit('SQL error.');
     }
@@ -166,7 +153,7 @@ final class Cronjob {
    *
    */
   private final function _backupTableInfo($sTable, &$sFileText) {
-    $oQuery = Main::$_oDbStatic->query('SHOW COLUMNS FROM ' . $sTable);
+    $oQuery = $this->_oDB->query('SHOW COLUMNS FROM ' . $sTable);
     $aColumns = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     $iColumns = count($aColumns);
 
@@ -199,7 +186,7 @@ EOD;
 
     # Show extras like auto_increment etc
     try {
-      $oQuery = Main::$_oDbStatic->query('SHOW KEYS FROM ' . $sTable);
+      $oQuery = $this->_oDB->query('SHOW KEYS FROM ' . $sTable);
       $aKeys = $oQuery->fetchAll(PDO::FETCH_ASSOC);
 
       $iKey = 1;
@@ -234,7 +221,7 @@ EOD;
 
     try {
       # select last id
-      $oQuery = Main::$_oDbStatic->query('SELECT
+      $oQuery = $this->_oDB->query('SELECT
                                             id
                                           FROM
                                             ' . $sTable . '
@@ -273,7 +260,7 @@ EOD;
    */
   private final function _backupTableData($sTable, &$sFileText, $iColumns) {
     # fetch content
-    $oQuery = Main::$_oDbStatic->query('SELECT * FROM ' . $sTable);
+    $oQuery = $this->_oDB->query('SELECT * FROM ' . $sTable);
     $aRows = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     $iRows = count($aRows);
 
@@ -316,7 +303,7 @@ EOD;
     $sBackupFolder    = PATH_STANDARD . '/app/backup';
     $sBackupPath      = $sBackupFolder . '/' . $sBackupName . '.sql';
 
-    Main::$_oDbStatic->beginTransaction();
+    $this->_oDB->beginTransaction();
 
     $sFileText = "#---------------------------------------------------------------#\r\n";
     $sFileText .= '# Server OS: '.@php_uname()."\r\n";
@@ -336,7 +323,7 @@ EOD;
 
     # Get all tables and name them
     try {
-      $oQuery = Main::$_oDbStatic->query("SHOW TABLES FROM " . SQL_DB . '_' . WEBSITE_MODE);
+      $oQuery = $this->_oDB->query("SHOW TABLES FROM " . SQL_DB . '_' . WEBSITE_MODE);
       $aResult = $oQuery->fetchAll();
 
       # Show all tables
@@ -380,16 +367,20 @@ EOD;
 
     # Send the backup via mail
     if (PLUGIN_CRONJOB_SEND_PER_MAIL === true) {
-      $sMails = \CandyCMS\Core\Controllers\Main::__autoload('Mails');
-      $sMails::send(WEBSITE_MAIL,
-              I18n::get('cronjob.mail.subject', $sBackupName),
+      $sClass = \CandyCMS\Core\Controllers\Main::__autoload('Mails', true);
+      $oMails = new $sClass($this->_aRequest, $this->_aSession);
+
+      return $oMails->create(I18n::get('cronjob.mail.subject', $sBackupName),
               I18n::get('cronjob.mail.body'),
+              '',
+              WEBSITE_MAIL,
+              '',
               WEBSITE_MAIL_NOREPLY,
               $sBackupPath);
     }
 
     # Rollback, since we did only read statements
-    Main::$_oDbStatic->rollBack();
+    $this->_oDB->rollBack();
   }
 
   /**
@@ -404,28 +395,16 @@ EOD;
   public static function getNextUpdate($iInterval = '') {
     $iInterval = !empty($iInterval) ? $iInterval : PLUGIN_CRONJOB_UPDATE_INTERVAL;
 
-    if (empty(Main::$_oDbStatic))
-      Main::connectToDatabase();
+    // check for the file and read its timestamp
+    $sBackupFile = PATH_STANDARD . '/app/backup/lastrun.timestamp';
+    if (file_exists($sBackupFile)) {
+      $oFile = @fopen($sBackupFile, 'r');
+      $sContent = @fgets($oFile);
+      @fclose($oFile);
 
-    try {
-      $oQuery = Main::$_oDbStatic->prepare("SELECT
-                                              time_end
-                                            FROM
-                                              " . SQL_PREFIX . "logs
-                                            WHERE
-                                              controller_name = 'cronjob'
-                                            ORDER BY
-                                              time_end DESC
-                                            LIMIT
-                                              1");
-      $oQuery->execute();
-      $aResult = $oQuery->fetch(PDO::FETCH_ASSOC);
+      $iLastRun = (int)$sContent;
+    }
 
-      return !$aResult ? true : (int)$aResult['time_end'] + $iInterval < time();
-    }
-    catch (AdvancedException $e) {
-      AdvancedException::reportBoth('0108 - ' . $e->getMessage());
-      exit('SQL error.');
-    }
+    return !$iLastRun ? true : $iLastRun + $iInterval < time();
   }
 }

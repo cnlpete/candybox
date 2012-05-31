@@ -16,9 +16,13 @@
       {foreach $blogs as $b}
         <ul data-role='listview' data-inset='true'>
           <li role='heading' data-role='list-divider'>
-            {$b.datetime}
-            {if $b.date_modified != ''}
-              - {$lang.global.last_update}: {$b.date_modified}
+            <time datetime='{$b.date.w3c}' class='js-timeago'>
+              {$b.date.raw|date_format:$lang.global.time.format.datetime}
+            </time>
+            {if $b.date_modified.raw}
+              - {$lang.global.last_update}: <time datetime='{$b.date_modified.w3c}' class='js-timeago'>
+                {$b.date_modified.raw|date_format:$lang.global.time.format.datetime}
+              </time>
             {/if}
           </li>
           <li>
@@ -53,7 +57,7 @@
         {/if}
         {$b.content}
         <footer>
-          {if $b.tags[0]}
+          {if $b.tags|@count > 0}
             <p>
               {$lang.global.tags.tags}:
               {foreach $b.tags as $t}

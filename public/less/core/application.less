@@ -202,3 +202,18 @@ footer img {
 #users table td:first-child {
   font-weight:bold;
 }
+
+// Make small tags in forms smaller
+form label small {
+  font-size: 80%;
+}
+
+// generate red background for table-entries that have result set to false
+table {
+  tr {
+    &.result-error {
+      #gradient > .striped(#ee5f5b);
+      .background-size(40px 40px);
+    }
+  }
+}

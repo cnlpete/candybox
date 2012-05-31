@@ -15,8 +15,8 @@ namespace CandyCMS\Core\Controllers;
 use CandyCMS\Core\Controllers\Main;
 use CandyCMS\Core\Helpers\Helper;
 use CandyCMS\Core\Helpers\I18n;
-use CandyCMS\Plugins\Controller\FacebookCMS;
-use CandyCMS\Plugins\Controller\Recaptcha;
+use CandyCMS\Plugins\FacebookCMS;
+use CandyCMS\Plugins\Recaptcha;
 
 class Sessions extends Main {
 
@@ -29,7 +29,7 @@ class Sessions extends Main {
    */
   public function show() {
     if (!isset($this->_aRequest['action']))
-      return Helper::redirectTo('/' . $this->_aRequest['controller'] . '/create');
+      return Helper::redirectTo('/' . $this->_sController . '/create');
 
     switch ($this->_aRequest['action']) {
 
@@ -64,7 +64,7 @@ class Sessions extends Main {
       return Helper::redirectTo('/');
 
     else
-      return isset($this->_aRequest['create_sessions']) ? $this->_create() : $this->_showFormTemplate();
+      return isset($this->_aRequest[$this->_sController]) ? $this->_create() : $this->_showFormTemplate();
   }
 
   /**
@@ -91,7 +91,7 @@ class Sessions extends Main {
     }
 
     else
-      return Helper::errorMessage(I18n::get('error.session.create'), '/' . $this->_aRequest['controller'] . '/create');
+      return Helper::errorMessage(I18n::get('error.session.create'), '/' . $this->_sController . '/create');
   }
 
   /**
@@ -102,16 +102,18 @@ class Sessions extends Main {
    *
    */
   public function _showFormTemplate() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], '_form');
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, '_form');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
-    $this->oSmarty->assign('email', isset($this->_aRequest['email']) ? (string) $this->_aRequest['email'] : '');
+    $this->oSmarty->assign('email', isset($this->_aRequest[$this->_sController]['email']) ?
+                    (string) $this->_aRequest[$this->_sController]['email'] :
+                    '');
 
     $this->setTitle(I18n::get('global.login'));
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -129,7 +131,7 @@ class Sessions extends Main {
     else {
       $bShowCaptcha = class_exists('\CandyCMS\Plugins\Recaptcha') ? SHOW_CAPTCHA : false;
 
-      return isset($this->_aRequest['email']) ?
+      return isset($this->_aRequest[$this->_sController]['email']) ?
               $this->_resendPassword($bShowCaptcha) :
               $this->_showCreateResendActionsTemplate($bShowCaptcha);
     }
@@ -156,16 +158,17 @@ class Sessions extends Main {
 
     $sNewPasswordClean = Helper::createRandomChar(10, true);
     $bReturn = $this->_oModel->resendPassword(md5(RANDOM_HASH . $sNewPasswordClean));
-    $sRedirect = '/' . $this->_aRequest['controller'] . '/create';
+    $sRedirect = '/' . $this->_sController . '/create';
 
     if ($bReturn == true) {
-      $sMails = $this->__autoload('Mails');
-
-      $bStatus = $sMails::send(
-              Helper::formatInput($this->_aRequest['email']),
-              I18n::get('sessions.password.mail.subject'),
+      $sClass = $this->__autoload('Mails', true);
+      $oMails = new $sClass($this->_aRequest, $this->_aSession);
+      $bStatus = $oMails->create(I18n::get('sessions.password.mail.subject'),
               I18n::get('sessions.password.mail.body', $sNewPasswordClean),
-              WEBSITE_MAIL_NOREPLY);
+              '',
+              Helper::formatInput($this->_aRequest[$this->_sController]['email']),
+              '',
+              WEBSITE_MAIL_NOREPLY );
 
       return $bStatus === true ?
               Helper::successMessage(I18n::get('success.mail.create'), $sRedirect) :
@@ -189,7 +192,7 @@ class Sessions extends Main {
     else {
       $bShowCaptcha = class_exists('\CandyCMS\Plugins\Recaptcha') ? SHOW_CAPTCHA : false;
 
-      return isset($this->_aRequest['email']) ?
+      return isset($this->_aRequest[$this->_sController]['email']) ?
               $this->_resendVerification($bShowCaptcha) :
               $this->_showCreateResendActionsTemplate($bShowCaptcha);
     }
@@ -216,17 +219,19 @@ class Sessions extends Main {
       return $this->_showCreateResendActionsTemplate($bShowCaptcha);
 
     $aData = $this->_oModel->resendVerification();
-    $sRedirect = '/' . $this->_aRequest['controller'] . '/create';
+    $sRedirect = '/' . $this->_sController . '/create';
 
     if (is_array($aData) && !empty($aData)) {
-      $sMails = $this->__autoload('Mails');
-      $bStatus = $sMails::send(
-              Helper::formatInput($this->_aRequest['email']),
-              I18n::get('sessions.verification.mail.subject'),
+      $sClass = $this->__autoload('Mails', true);
+      $oMails = new $sClass($this->_aRequest, $this->_aSession);
+      $bStatus = $oMails->create(I18n::get('sessions.verification.mail.subject'),
               I18n::get('sessions.verification.mail.body',
                       $aData['name'],
                       Helper::createLinkTo('users/' . $aData['verification_code'] . '/verification')),
-              WEBSITE_MAIL_NOREPLY);
+              '',
+              Helper::formatInput($this->_aRequest[$this->_sController]['email']),
+              '',
+              WEBSITE_MAIL_NOREPLY );
 
       return $bStatus === true ?
               Helper::successMessage(I18n::get('success.mail.create'), $sRedirect) :
@@ -245,8 +250,9 @@ class Sessions extends Main {
    *
    */
   private function _showCreateResendActionsTemplate($bShowCaptcha) {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'resend');
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'resend');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'resend');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if ($bShowCaptcha)
       $this->oSmarty->assign('_captcha_', Recaptcha::getInstance()->show());
@@ -254,7 +260,10 @@ class Sessions extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $this->oSmarty->assign('email', isset($this->_aRequest[$this->_sController]['email']) ?
+                    (string) $this->_aRequest[$this->_sController]['email'] :
+                    '');
+
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 

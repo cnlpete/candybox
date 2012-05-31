@@ -43,8 +43,7 @@ class WebTestOfContentController extends CandyWebTest {
 
 	function testShowEntryUnpublished() {
 		$this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/2'));
-		$this->assertResponse(200);
-    $this->assertText(I18n::get('error.404.title'));
+		$this->assert404();
 	}
 
 	function testCreate() {

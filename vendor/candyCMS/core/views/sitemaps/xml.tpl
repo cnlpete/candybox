@@ -45,7 +45,7 @@
       <loc>{$b.url}</loc>
       <priority>{$b.priority}</priority>
       <changefreq>{$b.changefreq}</changefreq>
-      <lastmod>{$b.date_w3c}</lastmod>
+      <lastmod>{$b.date.w3c_date}</lastmod>
     </url>
   {/foreach}
   {foreach $contents as $c}
@@ -53,7 +53,7 @@
       <loc>{$c.url}</loc>
       <priority>{$c.priority}</priority>
       <changefreq>{$c.changefreq}</changefreq>
-      <lastmod>{$c.date_w3c}</lastmod>
+      <lastmod>{$c.date.w3c_date}</lastmod>
     </url>
   {/foreach}
   {foreach $galleries as $g}
@@ -61,7 +61,7 @@
       <loc>{$g.url}</loc>
       <priority>{$g.priority}</priority>
       <changefreq>{$g.changefreq}</changefreq>
-      <lastmod>{$g.date_w3c}</lastmod>
+      <lastmod>{$g.date.w3c_date}</lastmod>
     </url>
   {/foreach}
 </urlset>

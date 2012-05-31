@@ -18,10 +18,11 @@ class UnitTestOfContentModel extends CandyUnitTest {
 
   function setUp() {
     $this->aRequest = array(
-        'title'     => 'Title',
-        'teaser'    => 'Teaser',
-        'content'   => 'Content',
-        'keywords'  => 'Keywords',
+        'contents' => array(
+          'title'     => 'Title',
+          'teaser'    => 'Teaser',
+          'content'   => 'Content',
+          'keywords'  => 'Keywords'),
         'controller'=> 'contents');
 
     $this->oObject = new Contents($this->aRequest, $this->aSession);
@@ -39,8 +40,8 @@ class UnitTestOfContentModel extends CandyUnitTest {
   }
 
   function testGetData() {
-    $this->assertIsA($this->oObject->getData(1), 'array');
-    $this->assertIsA($this->oObject->getData(), 'array');
+    $this->assertIsA($this->oObject->getId(1), 'array');
+    $this->assertIsA($this->oObject->getOverview(), 'array');
   }
 
   function testUpdate() {

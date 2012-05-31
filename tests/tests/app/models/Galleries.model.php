@@ -19,8 +19,9 @@ class UnitTestOfGalleryModel extends CandyUnitTest {
   function setUp() {
 
     $this->aRequest = array(
-        'title'     => 'Title',
-        'content'   => 'Content',
+        'galleries' => array(
+          'title'     => 'Title',
+          'content'   => 'Content'),
         'id'        => 0,
         'controller'=> 'galleries');
 
@@ -45,8 +46,8 @@ class UnitTestOfGalleryModel extends CandyUnitTest {
   }
 
   function testGetData() {
-    $this->assertIsA($this->oObject->getData(1), 'array');
-    $this->assertIsA($this->oObject->getData(), 'array');
+    $this->assertIsA($this->oObject->getId(1), 'array');
+    $this->assertIsA($this->oObject->getOverview(), 'array');
   }
 
   function testGetAlbumNameAndContent() {
@@ -89,4 +90,16 @@ class UnitTestOfGalleryModel extends CandyUnitTest {
   function testDestroyFile() {
     $this->assertTrue($this->oObject->destroyFile($this->iLastInsertId));
   }
+
+  function testUpdateFilePositions() {
+    $this->aRequest = array(
+        'galleryfiles' => array(
+          '1'),
+        'id'        => 1,
+        'action'    => 'updatefilepositions',
+        'controller'=> 'galleries');
+
+    $this->assertTrue($this->oObject->updateFilePositions('1'));
+  }
+
 }

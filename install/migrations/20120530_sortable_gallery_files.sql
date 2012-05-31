@@ -1,0 +1,1 @@
+ALTER TABLE `%SQL_PREFIX%gallery_files` ADD `position` INT(4) NOT NULL DEFAULT '1';

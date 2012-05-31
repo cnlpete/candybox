@@ -31,45 +31,20 @@ class Galleries extends Main {
   private $_aThumbs;
 
   /**
-   * Get blog entry or blog overview data. Depends on available ID.
+   * Get gallery album files.
    *
    * @access public
    * @param integer $iId Album-ID to load data from. If empty, show overview.
    * @param boolean $bUpdate prepare data for update
    * @param boolean $bAdvancedImageInformation provide image with advanced information (MIME_TYPE etc.)
-   * @param integer $iLimit blog post limit
    * @return array data from _setData
    *
    */
-  public function getData($iId = '', $bUpdate = false, $bAdvancedImageInformation = false, $iLimit = LIMIT_ALBUMS) {
-    $aInts = array('id', 'author_id', 'uid', 'files_sum');
-
-    $sWhere   = '';
-    $iResult  = 0;
-
-    if (empty($iId)) {
-      try {
-        $oQuery = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "gallery_albums");
-        $iResult = $oQuery->fetchColumn();
-      }
-      catch (\PDOException $p) {
-        AdvancedException::reportBoth('0042 - ' . $p->getMessage());
-        exit('SQL error.');
-      }
-
-      # Bugfix: Set update to false when creating an entry to avoid offset warnings.
-      $bUpdate = false;
-    }
-
-    # Single entry
-    else
-      $sWhere = "WHERE a.id = '" . $iId . "'";
-
-    $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit);
-
+  public function getId($iId, $bUpdate = false, $bAdvancedImageInformation = false) {
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                       a.*,
+                                      UNIX_TIMESTAMP(a.date) as date,
                                       u.id AS user_id,
                                       u.name AS user_name,
                                       u.surname AS user_surname,
@@ -85,16 +60,14 @@ class Galleries extends Main {
                                       " . SQL_PREFIX . "gallery_files f
                                     ON
                                       f.album_id=a.id
-                                    "  .$sWhere.  "
+                                    WHERE
+                                      a.id = :id
                                     GROUP BY
                                       a.id
                                     ORDER BY
-                                      a.id DESC
-                                    LIMIT
-                                      :offset, :limit");
+                                      a.id DESC");
 
-      $oQuery->bindParam('limit', $this->oPagination->getLimit(), PDO::PARAM_INT);
-      $oQuery->bindParam('offset', $this->oPagination->getOffset(), PDO::PARAM_INT);
+      $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
       $oQuery->execute();
 
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
@@ -113,10 +86,98 @@ class Galleries extends Main {
         $iId = $aRow['id'];
 
         # need to specify 'galleries' because this might be called for rss feed generation
-        $this->_aData[$iId] = $this->_formatForOutput($aRow, $aInts, null, 'galleries');
-        $this->_aData[$iId]['files'] = ($aRow['files_sum'] > 0) ? $this->getThumbs($aRow['id'], $bAdvancedImageInformation) : '';
+        $this->_aData[$iId] = $this->_formatForOutput(
+                $aRow,
+                array('id', 'user_id', 'files_sum'),
+                null,
+                'galleries');
+
+        $this->_aData[$iId]['files'] = $aRow['files_sum'] > 0 ?
+                $this->getThumbs($aRow['id'], $bAdvancedImageInformation) :
+                '';
+
         $this->_aData[$iId]['url_createfile'] = $this->_aData[$iId]['url_clean'] . '/createfile';
       }
+    }
+
+    return $this->_aData;
+  }
+
+  /**
+   * Get album overview
+   *
+   * @access public
+   * @param boolean $bAdvancedImageInformation provide image with advanced information (MIME_TYPE etc.)
+   * @param integer $iLimit blog post limit
+   * @return array data from _setData
+   *
+   */
+  public function getOverview($bAdvancedImageInformation = false, $iLimit = LIMIT_ALBUMS) {
+    $iResult  = 0;
+
+    try {
+      $oQuery = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "gallery_albums");
+      $iResult = $oQuery->fetchColumn();
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0042 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+
+    $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit);
+
+    try {
+      $oQuery = $this->_oDb->prepare("SELECT
+                                      a.*,
+                                      UNIX_TIMESTAMP(a.date) as date,
+                                      u.id AS user_id,
+                                      u.name AS user_name,
+                                      u.surname AS user_surname,
+                                      u.email AS user_email,
+                                      COUNT(f.id) AS files_sum
+                                    FROM
+                                      " . SQL_PREFIX . "gallery_albums a
+                                    LEFT JOIN
+                                      " . SQL_PREFIX . "users u
+                                    ON
+                                      a.author_id=u.id
+                                    LEFT JOIN
+                                      " . SQL_PREFIX . "gallery_files f
+                                    ON
+                                      f.album_id=a.id
+                                    GROUP BY
+                                      a.id
+                                    ORDER BY
+                                      a.id DESC
+                                    LIMIT
+                                      :offset, :limit");
+
+      $oQuery->bindParam('limit', $this->oPagination->getLimit(), PDO::PARAM_INT);
+      $oQuery->bindParam('offset', $this->oPagination->getOffset(), PDO::PARAM_INT);
+      $oQuery->execute();
+
+      $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0044 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+
+    foreach ($aResult as $aRow) {
+      $iId = $aRow['id'];
+
+      # need to specify 'galleries' because this might be called for rss feed generation
+      $this->_aData[$iId] = $this->_formatForOutput(
+              $aRow,
+              array('id', 'user_id', 'files_sum'),
+              null,
+              'galleries');
+
+      $this->_aData[$iId]['files'] = $aRow['files_sum'] > 0 ?
+              $this->getThumbs($aRow['id'], $bAdvancedImageInformation) :
+              '';
+
+      $this->_aData[$iId]['url_createfile'] = $this->_aData[$iId]['url_clean'] . '/createfile';
     }
 
     return $this->_aData;
@@ -132,8 +193,6 @@ class Galleries extends Main {
    *
    */
   public function getThumbs($iId, $bAdvancedImageInformation = false) {
-    $aInts = array('id', 'album_id', 'author_id');
-
     # Clear existing array (fix, when we got no images at a gallery
     if (!empty($this->_aThumbs))
       unset($this->_aThumbs);
@@ -141,6 +200,7 @@ class Galleries extends Main {
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         f.*,
+                                        UNIX_TIMESTAMP(f.date) as date,
                                         u.id AS user_id,
                                         u.name AS user_name,
                                         u.surname AS user_surname,
@@ -154,6 +214,7 @@ class Galleries extends Main {
                                       WHERE
                                         f.album_id= :album_id
                                       ORDER BY
+                                        f.position ASC,
                                         f.date ASC");
 
       $oQuery->bindParam('album_id', $iId, PDO::PARAM_INT);
@@ -166,31 +227,32 @@ class Galleries extends Main {
       exit('SQL error.');
     }
 
-    $aSizes = array('32', 'popup', 'original', 'thumb');
     $iLoop = 0;
     foreach ($aResult as $aRow) {
       $iId           = $aRow['id'];
 
       $sUrlUpload    = Helper::addSlash(PATH_UPLOAD . '/galleries/' . $aRow['album_id']);
 
-      $this->_aThumbs[$iId]                 = $this->_formatForOutput($aRow, $aInts);
+      $this->_aThumbs[$iId]                 = $this->_formatForOutput($aRow, array('id', 'album_id', 'author_id'));
       $this->_aThumbs[$iId]['url']          = '/galleries/' . $aRow['album_id'] . '/image/' . $iId;
 
-      foreach ($aSizes as $sSize)
+      foreach (array('32', 'popup', 'original', 'thumb') as $sSize)
         $this->_aThumbs[$iId]['url_' . $sSize] = $sUrlUpload . '/' . $sSize . '/' . $aRow['file'];
 
       $this->_aThumbs[$iId]['url_upload']   = $sUrlUpload;
       $this->_aThumbs[$iId]['url_thumb']    = $sUrlUpload . '/thumbnail/' . $aRow['file'];
+
       # /{$_REQUEST.controller}/{$f.id}/updatefile
       $this->_aThumbs[$iId]['url_update']   = $this->_aThumbs[$iId]['url_update'] . 'file';
+
       # /{$_REQUEST.controller}/{$f.id}/destroyfile?album_id={$_REQUEST.id}
       $this->_aThumbs[$iId]['url_destroy']  = $this->_aThumbs[$iId]['url_destroy'] . 'file?album_id=' . $aRow['album_id'];
       $this->_aThumbs[$iId]['thumb_width']  = THUMB_DEFAULT_X;
       $this->_aThumbs[$iId]['loop']         = $iLoop;
 
-      # We want to get the image dimension of the original image
-      # This function is not set to default due its long processing time
-      if ($bAdvancedImageInformation == true) {
+      # We want to get the image dimension of the original image.
+      # This function is not set to default due its long processing time.
+      if ($bAdvancedImageInformation === true) {
         $aPopupSize = getimagesize(Helper::removeSlash($this->_aThumbs[$iId]['url_popup']));
         $aThumbSize = getimagesize(Helper::removeSlash($this->_aThumbs[$iId]['url_thumb']));
         $iImageSize = filesize(Helper::removeSlash($this->_aThumbs[$iId]['url_popup']));
@@ -224,7 +286,13 @@ class Galleries extends Main {
       parent::connectToDatabase();
 
     try {
-      $oQuery = parent::$_oDbStatic->prepare("SELECT title, content FROM " . SQL_PREFIX . "gallery_albums WHERE id = :album_id");
+      $oQuery = parent::$_oDbStatic->prepare("SELECT
+                                                title, content
+                                              FROM
+                                                " . SQL_PREFIX . "gallery_albums
+                                              WHERE
+                                                id = :album_id");
+
       $oQuery->bindParam('album_id', $iId, PDO::PARAM_INT);
 
       $bReturn = $oQuery->execute();
@@ -235,14 +303,10 @@ class Galleries extends Main {
       exit('SQL error.');
     }
 
-    # Do we need to highlight text?
-    $sHighlight = isset($aRequest['highlight']) ?
-            $aRequest['highlight'] :
-            '';
-
     if ($bReturn === true) {
       foreach ($aResult as $sKey => $sValue)
-        $aResult[$sKey] = Helper::formatOutput($sValue, $sHighlight);
+        $aResult[$sKey] = Helper::formatOutput(
+                        $sValue, isset($aRequest['highlight']) ? $aRequest['highlight'] : '');
 
       return $aResult;
     }
@@ -262,14 +326,25 @@ class Galleries extends Main {
       parent::connectToDatabase();
 
     try {
-      $oQuery = parent::$_oDbStatic->prepare("SELECT * FROM " . SQL_PREFIX . "gallery_files WHERE id = :id");
+      $oQuery = parent::$_oDbStatic->prepare("SELECT
+<<<<<<< HEAD
+                                                *,
+                                                UNIX_TIMESTAMP(date) as date
+=======
+                                                f.*,
+                                                UNIX_TIMESTAMP(f.date) as date
+>>>>>>> 3991d4ea56d6426d554afc7d9512214e4236ffaa
+                                              FROM
+                                                " . SQL_PREFIX . "gallery_files as f
+                                              WHERE
+                                                f.id = :id");
+
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
       $oQuery->execute();
 
       $aData = $oQuery->fetch(PDO::FETCH_ASSOC);
 
-      $aInts = array('id', 'album_id', 'author_id');
-      foreach ($aInts as $sInt)
+      foreach (array('id', 'album_id', 'author_id') as $sInt)
         $aData[$sInt] = (int) $aData[$sInt];
 
       return $aData;
@@ -299,12 +374,15 @@ class Galleries extends Main {
                                         ( :author_id,
                                           :title,
                                           :content,
-                                          :date )");
+                                          NOW() )");
 
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
-      $oQuery->bindParam('title', Helper::formatInput($this->_aRequest['title']), PDO::PARAM_STR);
-      $oQuery->bindParam('content', Helper::formatInput($this->_aRequest['content']), PDO::PARAM_STR);
-      $oQuery->bindParam('date', time(), PDO::PARAM_INT);
+
+      foreach (array('title', 'content') as $sInput)
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                PDO::PARAM_STR);
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = Helper::getLastEntry('gallery_albums');
@@ -342,9 +420,13 @@ class Galleries extends Main {
                                       WHERE
                                         id = :id");
 
-      $oQuery->bindParam('title', Helper::formatInput($this->_aRequest['title']), PDO::PARAM_STR);
-      $oQuery->bindParam('content', Helper::formatInput($this->_aRequest['content']), PDO::PARAM_STR);
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
+
+      foreach (array('title', 'content') as $sInput)
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                PDO::PARAM_STR);
 
       return $oQuery->execute();
     }
@@ -370,7 +452,7 @@ class Galleries extends Main {
    *
    */
   public function destroy($iId) {
-    $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_aRequest['controller'] . '/' . (int) $iId);
+    $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . (int) $iId);
 
     # Fetch all images
     try {
@@ -402,13 +484,12 @@ class Galleries extends Main {
         $oQuery->bindParam('album_id', $iId);
         $oQuery->execute();
 
-        $aSizes = array ('32', 'popup', 'original', 'thumbnail');
-        foreach ($aSizes as $sSize) {
-          # destroy files from disk
+        foreach (array ('32', 'popup', 'original', 'thumbnail') as $sSize) {
+          # Destroy files from disk
           foreach ($aResult as $aRow)
             @unlink($sPath . '/' . $sSize . '/' . $aRow['file']);
 
-          # Destroy Folders
+          # Destroy folders
           @rmdir($sPath . '/' . $sSize);
         }
       }
@@ -435,6 +516,8 @@ class Galleries extends Main {
 
         $oQuery->bindParam('album_id', $iId);
         $bReturn = $oQuery->execute();
+
+        # Remove album folder
         @rmdir($sPath);
         return $bReturn;
       }
@@ -470,21 +553,29 @@ class Galleries extends Main {
                                           file,
                                           extension,
                                           content,
-                                          date)
+                                          date,
+                                          position)
                                       VALUES
                                         ( :album_id,
                                           :author_id,
                                           :file,
                                           :extension,
                                           :content,
-                                          :date )");
+                                          NOW(),
+                                          :position)");
 
+      $iPosition = Helper::getLastEntry('gallery_files');
       $oQuery->bindParam('album_id', $this->_aRequest['id'], PDO::PARAM_INT);
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
       $oQuery->bindParam('file', $sFile, PDO::PARAM_STR);
       $oQuery->bindParam('extension', $sExtension, PDO::PARAM_STR);
-      $oQuery->bindParam('content', Helper::formatInput($this->_aRequest['content']), PDO::PARAM_STR);
-      $oQuery->bindParam('date', time(), PDO::PARAM_INT);
+      $oQuery->bindParam('position', $iPosition, PDO::PARAM_INT);
+
+      foreach (array('content') as $sInput)
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                PDO::PARAM_STR);
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = Helper::getLastEntry('gallery_files');
@@ -521,8 +612,13 @@ class Galleries extends Main {
                                       WHERE
                                         id = :id");
 
-      $oQuery->bindParam('content', Helper::formatInput($this->_aRequest['content']), PDO::PARAM_STR);
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
+
+      foreach (array('content') as $sInput)
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                PDO::PARAM_STR);
 
       return $oQuery->execute();
     }
@@ -580,10 +676,10 @@ class Galleries extends Main {
         $bReturn = $oQuery->execute();
 
         if ($bReturn) {
-          $aSizes = array ('32', 'popup', 'original', 'thumbnail');
           foreach ($aResult as $aRow) {
-            $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_aRequest['controller'] . '/' . $aRow['album_id']);
-            foreach ($aSizes as $sSize)
+            $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $aRow['album_id']);
+
+            foreach (array('32', 'popup', 'original', 'thumbnail') as $sSize)
               @unlink($sPath . '/' . $sSize . '/' . $aRow['file']);
           }
         }
@@ -600,6 +696,43 @@ class Galleries extends Main {
         AdvancedException::reportBoth('0065 - ' . $p->getMessage());
         exit('SQL error.');
       }
+    }
+  }
+
+  /**
+   * Update filepositions.
+   *
+   * @access public
+   * @param integer $iAlbumId album ID
+   * @return boolean status of query
+   *
+   */
+  public function updateFilePositions($iAlbumId) {
+    $iAlbumId = (int)$iAlbumId;
+    $sSQL = '';
+
+    foreach ($this->_aRequest['galleryfiles'] as $iKey => $iValue) {
+      $iKey   = (int)$iKey;
+      $iValue = (int)$iValue;
+
+      $sSQL .= "UPDATE
+                  " . SQL_PREFIX . "gallery_files
+                SET
+                  position = '".$iKey."'
+                WHERE
+                  id = '".$iValue."'
+                AND
+                  album_id = '".$iAlbumId."'
+                LIMIT 1;";
+    }
+
+    try {
+      $oQuery = $this->_oDb->prepare($sSQL);
+      return $oQuery->execute();
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0063 - ' . $p->getMessage());
+      exit('SQL error.');
     }
   }
 }

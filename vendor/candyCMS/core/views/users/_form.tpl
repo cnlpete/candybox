@@ -26,6 +26,7 @@
     </ul>
   </div>
   <div class='tab-content'>
+
     {* Account data *}
     <div class="tab-pane{if $_REQUEST['action'] == 'update'} active{/if}" id='user-personal'>
       <form method='post' action='/{$_REQUEST.controller}/{$uid}/update' class='form-horizontal'>
@@ -34,7 +35,7 @@
             {$lang.global.name} <span title='{$lang.global.required}'>*</span>
           </label>
           <div class='controls'>
-            <input class='span4 required' name='name' value="{$name}" type='name'
+            <input class='span4 required' name='{$_REQUEST.controller}[name]' value="{$name}" type='name'
                   id='input-name' required />
             {if isset($error.name)}<span class='help-inline'>{$error.name}</span>{/if}
           </div>
@@ -44,7 +45,7 @@
             {$lang.global.surname}
           </label>
           <div class='controls'>
-            <input class='span4' name='surname' value="{$surname}" type='text'
+            <input class='span4' name='{$_REQUEST.controller}[surname]' value="{$surname}" type='text'
                   id='input-surname' />
           </div>
         </div>
@@ -65,16 +66,16 @@
           <div class='controls'>
             <input type='checkbox'
                    class='checkbox'
-                   name='use_gravatar'
+                   name='{$_REQUEST.controller}[use_gravatar]'
                    id='input-use_gravatar'
                    {if $use_gravatar == 1}checked{/if} />
             <div class='help-inline'>
-              <a href='{$avatar_popup}'
+              <a href='{$gravatar_avatar_popup}'
                 class='thumbnail js-fancybox'
                 title='{$full_name}'
                 id='js-gravatar'
                 style='{if $use_gravatar == 0}opacity:0.25{/if}'>
-                <img alt='{$name} {$surname}' src='{$avatar_32}' width='32' height='32' />
+                <img alt='{$name} {$surname}' src='{$gravatar_avatar_32}' width='32' height='32' />
               </a>
             </div>
             <p id='js-gravatar_help' class='help-block{if $use_gravatar == 1} hide{/if}'>
@@ -87,7 +88,7 @@
             {$lang.users.label.content.update}
           </label>
           <div class='controls'>
-            <textarea name='content' rows='6' class='span4' id='input-content'>
+            <textarea name='{$_REQUEST.controller}[content]' rows='6' class='span4' id='input-content'>
               {$content}
             </textarea>
             <span class='help-inline'></span>
@@ -98,7 +99,7 @@
             {$lang.users.label.newsletter}
           </label>
           <div class='controls'>
-            <input name='receive_newsletter' id='input-receive_newsletter' value='1'
+            <input name='{$_REQUEST.controller}[receive_newsletter]' id='input-receive_newsletter' value='1'
                     type='checkbox' class='checkbox' {if $receive_newsletter == 1}checked{/if} />
           </div>
         </div>
@@ -108,7 +109,7 @@
               {$lang.global.user.role}
             </label>
             <div class='controls'>
-              <select name='role' id='input-role' class='span4'>
+              <select name='{$_REQUEST.controller}[role]' id='input-role' class='span4'>
                 <option value='1'{if $role == 1} selected{/if}>{$lang.global.user.roles.1}</option>
                 <option value='2'{if $role == 2} selected{/if}>{$lang.global.user.roles.2}</option>
                 <option value='3'{if $role == 3} selected{/if}>{$lang.global.user.roles.3}</option>
@@ -120,71 +121,88 @@
         <div class='form-actions'>
           <input type='submit' class='btn btn-primary' value='{$lang.users.label.update}' />
           <input type='reset' class='btn' value='{$lang.global.reset}' />
-          <input type='hidden' value="{$email}" name='email' />
-          <input type='hidden' value='formdata' name='update_users' />
+          <input type='hidden' value="{$email}" name='{$_REQUEST.controller}[email]' />
         </div>
       </form>
     </div>
 
-  {* Password *}
-  {if $_SESSION.user.id == $uid}
-    <div class="tab-pane{if $_REQUEST['action'] == 'password'} active{/if}" id='user-password'>
-      <form method='post' action='/{$_REQUEST.controller}/{$uid}/password' class='form-horizontal'>
-        <div class='control-group{if isset($error.password_old)} alert alert-error{/if}'>
-          <label for='input-password_old' class='control-label'>
-            {$lang.users.label.password.old} <span title='{$lang.global.required}'>*</span>
-          </label>
-          <div class='controls'>
-            <input name='password_old' id='input-password_old' type='password'
-                  class='span4 required' required />
-            {if isset($error.password_old)}<span class='help-inline'>{$error.password_old}</span>{/if}
-          </div>
-        </div>
-        <div class='control-group{if isset($error.password_new)} alert alert-error{/if}'>
-          <label for='input-password_new' class='control-label'>
-            {$lang.users.label.password.new} <span title='{$lang.global.required}'>*</span>
-          </label>
-          <div class='controls'>
-            <input name='password_new' id='input-password_new' type='password'
+    {* Password *}
+    {if $_SESSION.user.id == $uid}
+      <div class="tab-pane{if $_REQUEST['action'] == 'password'} active{/if}" id='user-password'>
+        <form method='post' action='/{$_REQUEST.controller}/{$uid}/password' class='form-horizontal'>
+          <div class='control-group{if isset($error.password_old)} alert alert-error{/if}'>
+            <label for='input-password_old' class='control-label'>
+              {$lang.users.label.password.old} <span title='{$lang.global.required}'>*</span>
+            </label>
+            <div class='controls'>
+              <input name='{$_REQUEST.controller}[password_old]' id='input-password_old' type='password'
                     class='span4 required' required />
-            {if isset($error.password_new)}<span class='help-inline'>{$error.password_new}</span>{/if}
+              {if isset($error.password_old)}<span class='help-inline'>{$error.password_old}</span>{/if}
+            </div>
           </div>
-        </div>
-        <div class='control-group'>
-          <label for='input-password_new2' class='control-label'>
-            {$lang.global.password.repeat} <span title='{$lang.global.required}'>*</span>
-          </label>
-          <div class='controls'>
-            <input name='password_new2' id='input-password_new2' type='password'
-                  class='span4 required' required />
-            {if isset($error.password_new2)}<span class='help-inline'>{$error.password_new2}</span>{/if}
+          <div class='control-group{if isset($error.password_new)} alert alert-error{/if}'>
+            <label for='input-password_new' class='control-label'>
+              {$lang.users.label.password.new} <span title='{$lang.global.required}'>*</span>
+            </label>
+            <div class='controls'>
+              <input name='{$_REQUEST.controller}[password_new]' id='input-password_new' type='password'
+                      class='span4 required' required />
+              {if isset($error.password_new)}<span class='help-inline'>{$error.password_new}</span>{/if}
+            </div>
           </div>
-        </div>
-        <div class='form-actions'>
-          <input type='submit' class='btn btn-primary' value='{$lang.users.label.password.create}' />
-          <input type='hidden' value='formdata' name='update_password' />
-          <input type='reset' class='btn' value='{$lang.global.reset}' />
-        </div>
-      </form>
-    </div>
-  {/if}
+          <div class='control-group'>
+            <label for='input-password_new2' class='control-label'>
+              {$lang.global.password.repeat} <span title='{$lang.global.required}'>*</span>
+            </label>
+            <div class='controls'>
+              <input name='{$_REQUEST.controller}[password_new2]' id='input-password_new2' type='password'
+                    class='span4 required' required />
+              {if isset($error.password_new2)}<span class='help-inline'>{$error.password_new2}</span>{/if}
+            </div>
+          </div>
+          <div class='form-actions'>
+            <input type='submit' class='btn btn-primary' value='{$lang.users.label.password.create}' />
+            <input type='reset' class='btn' value='{$lang.global.reset}' />
+          </div>
+        </form>
+      </div>
+    {/if}
 
-  {* Avatar *}
+    {* Avatar *}
     <div class="tab-pane{if $_REQUEST['action'] == 'avatar'} active{/if}" id='user-image'>
       <form enctype='multipart/form-data' method='post' action='/{$_REQUEST.controller}/{$uid}/avatar'
             class='form-horizontal'>
         <div class='control-group{if isset($error.image)} alert alert-error{/if}'>
+          {if $standard_avatar_popup !== $gravatar_avatar_popup}
+            <div class='pull-right'>
+              <a href='{$standard_avatar_popup}'
+                class='thumbnail js-fancybox'
+                title='{$full_name}'>
+                <img alt='{$name} {$surname}'
+                     src='{$standard_avatar_64}'
+                     width='64'
+                     height='64' />
+              </a>
+            </div>
+          {/if}
           <label for='input-image' class='control-label'>
             {$lang.users.label.image.choose}
           </label>
           <div class='controls'>
+            {* @todo: Rename file *}
             <input type='file' name='image' id='input-image' class='span4'
                   accept='image/jpg,image/gif,image/png' />
             {if isset($error.image)}
               <span class='help-inline'>{$error.image}</span>
             {/if}
             <span class='help-block'>
-              {$lang.users.info.image}
+              {if $_SYSTEM.maximumUploadSize.raw <= 1536}
+                {$_SYSTEM.maximumUploadSize.b|string_format: $lang.users.info.image}
+              {elseif $_SYSTEM.maximumUploadSize.raw <= 1572864}
+                {$_SYSTEM.maximumUploadSize.kb|string_format: $lang.users.info.image}
+              {else}
+                {$_SYSTEM.maximumUploadSize.mb|string_format: $lang.users.info.image}
+              {/if}
             </span>
           </div>
         </div>
@@ -194,8 +212,11 @@
           </label>
           <div class='controls'>
             <label class='checkbox'>
-              <input type='checkbox' class='checkbox' name='terms'
-                    id='input-terms' value='1' />
+              <input type='checkbox'
+                     class='checkbox'
+                     name='{$_REQUEST.controller}[terms]'
+                     id='input-terms'
+                     value='1' />
                 {$lang.users.label.image.terms}
             </label>
             {if isset($error.terms)}
@@ -206,7 +227,6 @@
         <div class='form-actions'>
           <input type='submit' class='btn btn-primary' value='{$lang.users.title.image}' />
           <input type='reset' class='btn' value='{$lang.global.reset}' />
-          <input type='hidden' value='formdata' name='create_avatar' />
           <input type='hidden' name='MAX_FILE_SIZE' value='409600' />
         </div>
       </form>
@@ -224,12 +244,14 @@
             {$lang.global.password.password}
           </label>
           <div class='controls'>
-            <input name='password' type='password' id='input-password' class='span4' />
+            <input name='{$_REQUEST.controller}[password]'
+                   type='password'
+                   id='input-password'
+                   class='span4' />
           </div>
         </div>
         <div class='form-actions'>
           <input type='submit' class='btn btn-danger' value='{$lang.users.label.account.destroy}' />
-          <input type='hidden' value='formdata' name='destroy_users' />
         </div>
       </form>
     </div>
@@ -246,6 +268,11 @@
 
     $('#input-content').bind('keyup', function() {
       countCharLength(this, 1000);
+    });
+    $('#input-image').change(function() {
+      checkFileSize($(this),
+        {$_SYSTEM.maximumUploadSize.raw},
+        '{$_SYSTEM.maximumUploadSize.mb|string_format: $lang.error.file.size}');
     });
 
     $('.js-fancybox').fancybox();

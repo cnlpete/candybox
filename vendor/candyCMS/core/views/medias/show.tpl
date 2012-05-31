@@ -55,13 +55,15 @@
                 </a>
               {/if}
               <input type='text' class='copybox' value='{$_PATH.upload}/{$_REQUEST.controller}/{$f.name}'
-                    onclick='this.focus();this.select();' />
+                    onclick='this.focus();this.select();' readonly='readonly' />
             </td>
             <td>
               {$f.size}
             </td>
             <td class='center'>
-              {$f.cdate}
+              <time datetime='{$f.date.w3c}' class='js-timeago'>
+                {$f.date.raw|date_format:$lang.global.time.format.date}
+              </time>
             </td>
             <td>
               <a href="#" onclick="confirmDestroy('{$f.url_destroy}')">

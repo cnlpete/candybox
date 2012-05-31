@@ -9,7 +9,7 @@
         {$lang.global.title} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <input class='span4 required focused' type='text' name='title' id='input-title'
+        <input class='span4 required focused' type='text' name='{$_REQUEST.controller}[title]' id='input-title'
               value="{$title}" required autofocus />
         <span class='help-inline'>
           {if isset($error.title)}
@@ -23,7 +23,7 @@
         {$lang.global.description}
       </label>
       <div class='controls'>
-        <input class='span4' type='text' name='content' id='input-content' value='{$content}' />
+        <input class='span4' type='text' name='{$_REQUEST.controller}[content]' id='input-content' value='{$content}' />
       </div>
     </div>
     <div class='control-group{if isset($error.start_date)} alert alert-error{/if}'>
@@ -31,7 +31,7 @@
         {$lang.global.date.start} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <input type='date' name='start_date' id='input-start_date' value="{$start_date}"
+        <input type='date' name='{$_REQUEST.controller}[start_date]' id='input-start_date' value="{$start_date}"
               min='{$_SYSTEM.date}' class='span4 required' autocomplete required />
         {if isset($error.start_date)}
           <span class='help-inline'>{$error.start_date}</span>
@@ -46,7 +46,7 @@
         {$lang.global.date.end}
       </label>
       <div class='controls'>
-        <input type='date' name='end_date' id='input-end_date' value="{$end_date}"
+        <input type='date' name='{$_REQUEST.controller}[end_date]' id='input-end_date' value="{$end_date}"
               class='span4' min='{$_SYSTEM.date}' autocomplete />
         {if isset($error.end_date)}
           <span class='help-inline'>{$error.end_date}</span>
@@ -63,9 +63,7 @@
         <input class='btn btn-danger' type='button' value='{$lang.global.destroy.destroy}'
               onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroy')" />
         <input class='btn' type='reset' value='{$lang.global.reset}' />
-        <input type='hidden' value="{$_REQUEST.id}" name='id' />
       {/if}
-      <input type='hidden' value='formdata' name='{$_REQUEST.action}_{$_REQUEST.controller}' />
     </div>
   </form>
   <script type='text/javascript'>

@@ -40,8 +40,7 @@ class WebTestOfMediaController extends CandyWebTest {
 
 	function testUpdate() {
 		$this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/1/update'));
-		$this->assertText(I18n::get('error.missing.permission'));
-		$this->assertResponse('200');
+		$this->assert404();
 	}
 
 	function testDestroy() {

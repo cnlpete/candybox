@@ -34,16 +34,18 @@
             {/if}
           </h2>
           <p>
-            <time datetime='{$b.datetime_w3c}'>
-              {$b.datetime}
+            <time datetime='{$b.date.w3c}' class='js-timeago'>
+              {$b.date.raw|date_format:$lang.global.time.format.datetime}
             </time>
             &nbsp;
             {$lang.global.by}
             &nbsp;
             <a href='{$b.author.url}' rel='author'>{$b.author.full_name}</a>
-            {if $b.date_modified != ''}
+            {if $b.date_modified.raw}
               &nbsp;
-              - {$lang.global.last_update}: {$b.date_modified}
+              - {$lang.global.last_update}: <time datetime='{$b.date_modified.w3c}' class='js-timeago'>
+                {$b.date_modified.raw|date_format:$lang.global.time.format.datetime}
+              </time>
             {/if}
           </p>
         </header>
@@ -55,7 +57,7 @@
         {$b.content}
         <footer class='row'>
           <div class='span4 tags'>
-            {if $b.tags[0]}
+            {if $b.tags|@count > 0}
               {$lang.global.tags.tags}:
               {foreach $b.tags as $t}
                 <a class='js-tooltip' title='{$lang.global.tags.info}: {$t}' href='/{$_REQUEST.controller}/{$t}'>

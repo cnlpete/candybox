@@ -18,10 +18,11 @@ class UnitTestOfDownloadModel extends CandyUnitTest {
 
   function setUp() {
     $this->aRequest = array(
-				'title'     => 'Title',
-				'content'   => 'Content',
-				'category'  => 'Category',
-				'downloads' => 0,
+        'downloads' => array(
+          'title'     => 'Title',
+          'content'   => 'Content',
+          'category'  => 'Category',
+          'downloads' => 0),
 				'controller'=> 'downloads');
 
 		$this->oObject = new Downloads($this->aRequest, $this->aSession);
@@ -49,8 +50,8 @@ class UnitTestOfDownloadModel extends CandyUnitTest {
   }
 
   function testGetData() {
-    $this->assertIsA($this->oObject->getData(1), 'array');
-    $this->assertIsA($this->oObject->getData(), 'array');
+    $this->assertIsA($this->oObject->getId(1), 'array');
+    $this->assertIsA($this->oObject->getOverview(), 'array');
   }
 
   function testUpdate() {

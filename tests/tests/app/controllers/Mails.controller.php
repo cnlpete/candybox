@@ -27,14 +27,19 @@ class WebTestOfMailController extends CandyWebTest {
 	}
 
   function testCreate() {
+    # contact the system administrator
+    $this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/create'));
+		$this->assertText(I18n::get('global.system'));
+
+    # contact a specific user
 		$this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/2/create'));
 		$this->assertText(I18n::get('global.contact'));
 		$this->assertText('c2f9619961');
 		$this->assertResponse('200');
 
-    $this->assertField('email');
-    $this->assertField('subject');
-    $this->assertField('content');
+    $this->assertField('mails[email]');
+    $this->assertField('mails[subject]');
+    $this->assertField('mails[content]');
 
     #submit empty form
     $this->click(I18n::get('global.submit'));
@@ -42,15 +47,15 @@ class WebTestOfMailController extends CandyWebTest {
  		$this->assertText(I18n::get('error.form.missing.email'));
 		$this->assertText(I18n::get('error.form.missing.content'));
 
-    $this->assertTrue($this->setField('email', 'wrongly..formated@email.com'));
-    $this->assertTrue($this->setField('content', 'some content'));
+    $this->assertTrue($this->setField('mails[email]', 'wrongly..formated@email.com'));
+    $this->assertTrue($this->setField('mails[content]', 'some content'));
     #submit form with wrongly formated email
     $this->click(I18n::get('global.submit'));
 		$this->assertResponse(200);
 		$this->assertText(I18n::get('error.mail.format'));
 
-    $this->assertTrue($this->setField('email', WEBSITE_MAIL_NOREPLY));
-    $this->assertTrue($this->setField('content', 'some content'));
+    $this->assertTrue($this->setField('mails[email]', WEBSITE_MAIL_NOREPLY));
+    $this->assertTrue($this->setField('mails[content]', 'some content'));
     #submit form with wrongly formated email
     $this->click(I18n::get('global.submit'));
 		$this->assertResponse(200);
@@ -61,6 +66,11 @@ class WebTestOfMailController extends CandyWebTest {
     # there is no show
     $this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/1/show'));
     $this->assert404();
+
+    # show action gets redirected to create action, if not logged in
+    $this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/2/show'));
+    $this->assertText(I18n::get('global.contact'));
+		$this->assertText('c2f9619961');
   }
 
   function testUpdate() {

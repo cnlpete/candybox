@@ -40,11 +40,19 @@ class AdvancedException extends \Exception {
    *
    */
   public static function sendAdminMail($sMessage) {
-    if (!class_exists('\CandyCMS\Core\Controllers\Mail'))
-      require_once PATH_STANDARD . '/vendor/candyCMS/core/controllers/Mails.controller.php';
-
     $sMessage = date('Y-m-d Hi', time()) . ' - ' . $sMessage;
-    return Mails::send(WEBSITE_MAIL, 'Exception', $sMessage, WEBSITE_MAIL_NOREPLY);
+
+    $sClass = \CandyCMS\Core\Controllers\Main::__autoload('Mails', true);
+    $oMails = new $sClass();
+
+    return $oMails->create('Exception',
+            $sMessage,
+            '',
+            WEBSITE_MAIL,
+            '',
+            WEBSITE_MAIL_NOREPLY,
+            '',
+            false);
   }
 
   /**

@@ -37,4 +37,34 @@ class Sites extends Main {
     $this->setTitle(ucfirst($sSite));
     return $this->oSmarty->fetch(PATH_STATIC_TEMPLATES . '/' . $sSite . '.tpl');
   }
+
+  /**
+   * There is no create action for the Sites controller.
+   *
+   * @access public
+   *
+   */
+  public function create() {
+    return Helper::redirectTo('/errors/404');
+  }
+
+  /**
+   * There is no update action for the Sites controller.
+   *
+   * @access public
+   *
+   */
+  public function update() {
+    return Helper::redirectTo('/errors/404');
+  }
+
+  /**
+   * There is no destroy action for the Sites controller.
+   *
+   * @access public
+   *
+   */
+  public function destroy() {
+    return Helper::redirectTo('/errors/404');
+  }
 }

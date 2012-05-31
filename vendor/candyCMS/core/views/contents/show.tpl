@@ -17,8 +17,8 @@
         <p>
           {$lang.global.last_update}:
           &nbsp;
-          <time datetime='{$c.datetime_w3c}'>
-            {$c.datetime}
+          <time datetime='{$c.date.w3c}'>
+            {$c.date.raw|date_format:$lang.global.time.format.datetime}
           </time>
           &nbsp;
           {$lang.global.by}

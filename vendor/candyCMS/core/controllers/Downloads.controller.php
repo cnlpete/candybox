@@ -38,24 +38,23 @@ class Downloads extends Main {
       $this->_oModel->updateDownloadCount($this->_iId);
 
       # Get mime type
-      if(function_exists('finfo_open')) {
-        $sMimeType = finfo_file(finfo_open(FILEINFO_MIME_TYPE),
-                Helper::removeSlash(PATH_UPLOAD . '/' . $this->_aRequest['controller'] . '/' . $sFile));
-        header('Content-type: ' . $sMimeType);
-      }
+      if (function_exists('finfo_open'))
+        header('Content-type: ' . finfo_file(
+                finfo_open(FILEINFO_MIME_TYPE),
+                Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sFile)));
 
       # Send file directly
       header('Content-Disposition: attachment; filename="' . $sFile . '"');
-      exit(readfile(Helper::removeSlash(PATH_UPLOAD . '/' . $this->_aRequest['controller'] . '/' . $sFile)));
+      exit(readfile(Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sFile)));
     }
     else {
-      $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'show');
+      $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
       $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+      $this->oSmarty->setTemplateDir($sTemplateDir);
 
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
-        $this->oSmarty->assign('downloads', $this->_oModel->getData($this->_iId));
+        $this->oSmarty->assign('downloads', $this->_oModel->getOverview());
 
-      $this->oSmarty->setTemplateDir($sTemplateDir);
       return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
   }
@@ -68,30 +67,9 @@ class Downloads extends Main {
    *
    */
   protected function _showFormTemplate() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], '_form');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
+    $this->oSmarty->assign('_categories_', $this->_oModel->getTypeaheadData($this->_sController, 'category'));
 
-    # Update
-    if ($this->_iId)
-      $aData = $this->_oModel->getData($this->_iId, true);
-
-    # Create
-    else {
-      $aData['category']  = isset($this->_aRequest['category']) ? $this->_aRequest['category'] : '';
-      $aData['content']   = isset($this->_aRequest['content']) ? $this->_aRequest['content'] : '';
-      $aData['title']     = isset($this->_aRequest['title']) ? $this->_aRequest['title'] : '';
-    }
-
-    $this->oSmarty->assign('_categories_', $this->_oModel->getTypeaheadData('downloads', 'category'));
-
-    foreach ($aData as $sColumn => $sData)
-      $this->oSmarty->assign($sColumn, $sData);
-
-    if ($this->_aError)
-      $this->oSmarty->assign('error', $this->_aError);
-
-    $this->oSmarty->setTemplateDir($sTemplateDir);
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return parent::_showFormTemplate();
   }
 
   /**
@@ -117,31 +95,38 @@ class Downloads extends Main {
 
       # Set up upload helper and rename file to title
       $oUploadFile = new Upload($this->_aRequest,
-                                $this->_aSession, $this->_aFile,
-                                Helper::formatInput($this->_aRequest['title']));
+                                $this->_aSession,
+                                $this->_aFile,
+                                Helper::formatInput($this->_aRequest[$this->_sController]['title']));
 
-      # File is up so insert data into database
-      $aReturnValues = $oUploadFile->uploadFiles('downloads');
+      try {
+        $aReturnValues = $oUploadFile->uploadFiles('downloads');
+      }
+      catch (\Exception $e) {
+        return Helper::errorMessage($e->getMessage(), '/' . $this->_sController . '/create');
+      }
+
+      # Fileupload was successfull, so we can clear cache and insert into db.
       if ($aReturnValues[0] === true) {
-        $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
-        $this->oSmarty->clearCacheForController('searches');
+        $this->oSmarty->clearCacheForController($this->_sController, 'searches');
 
         $aIds   = $oUploadFile->getIds(false);
         $aExts  = $oUploadFile->getExtensions();
 
+        # File is up so insert data into database
         if ($this->_oModel->create($aIds[0] . '.' . $aExts[0], $aExts[0]) === true) {
-          Logs::insert($this->_aRequest['controller'],
-                      $this->_aRequest['action'],
-                      $this->_oModel->getLastInsertId('downloads'),
-                      $this->_aSession['user']['id']);
+          Logs::insert( $this->_sController,
+                        $this->_aRequest['action'],
+                        $this->_oModel->getLastInsertId($this->_sController),
+                        $this->_aSession['user']['id']);
 
-          return Helper::successMessage(I18n::get('success.create'), '/' . $this->_aRequest['controller']);
+          return Helper::successMessage(I18n::get('success.create'), '/' . $this->_sController);
         }
         else
-          return Helper::errorMessage(I18n::get('error.sql'), '/' . $this->_aRequest['controller']);
+          return Helper::errorMessage(I18n::get('error.sql'), '/' . $this->_sController);
       }
       else
-        return Helper::errorMessage(I18n::get('error.missing.file'), '/' . $this->_aRequest['controller']);
+        return Helper::errorMessage(I18n::get('error.missing.file'), '/' . $this->_sController);
     }
   }
 
@@ -153,7 +138,7 @@ class Downloads extends Main {
    *
    */
   protected function _update() {
-    return parent::_update('searches');
+    return parent::_update('searches', '/' . $this->_sController);
   }
 
   /**

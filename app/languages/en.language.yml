@@ -67,6 +67,7 @@ global:
   login: Login
   logs: Logs
   logout: Logout
+  mails: Unsent Mails
   manager:
     content: Contents
     media: Files
@@ -97,6 +98,7 @@ global:
   quote:
     by: Quote by
     quote: Quote
+  receiver: Receiver
   register: Register
   registration: Registration
   report:
@@ -117,6 +119,7 @@ global:
   surname: Surname
   system: System
   tag: Tag
+  tagcloud: Tag Cloud
   tags:
     info: Search for more entries with this tag
     tags: Tags
@@ -125,9 +128,28 @@ global:
     terms: Terms
     read: Read the terms?
   time:
-    am: am
-    pm: pm
     time: Time
+    format: #set the standard date format (http://php.net/strftime)
+      date: %m/%d/%Y
+      time: %I:%M %p
+      datetime: %m/%d/%Y, %I:%M %p
+    formattimestamp: #translations used by FormatTimestamp Plugin
+      prefixAgo: ''
+      prefixFromNow: ''
+      suffixAgo: ago
+      suffixFromNow: from now
+      seconds: less than a minute
+      minute: about a minute
+      minutes: %d minutes
+      hour: about an hour
+      hours: about %d hours
+      day: a day
+      days: %d days
+      month: about a month
+      months: %d months
+      year: about a year
+      years: %d years
+      wordSeparator: ' '
   title: Title
   today: Today
   update:
@@ -138,6 +160,7 @@ global:
   upload:
     at: Uploaded at
     upload: Upload
+    maxsize: 'Maximum filesize: %s'
   user:
     role: Userright
     roles:
@@ -166,7 +189,7 @@ success:
   update: Update successful!
   upload: Upload successful!
   newsletter:
-    create: Thank you for your interest in our newsletter. You should recive an email within a few minutes containing a link to verify your account.
+    create: Thank you for your interest in our newsletter. You should receive an email within a few minutes containing a link to verify your account.
   mail:
     create: Email has been sent!
   session:
@@ -179,6 +202,8 @@ success:
     verification: Thank you. Your email has been verified!
 
 error:
+  302:
+    info: The requested URL has moved to %s.
   404:
     info: The requested URL was not found. Either you clicked on a faulty link, the page has been deleted or the URL has been entered incorrectly.
     title: Error 404
@@ -187,7 +212,7 @@ error:
     loading: Captcha could not be loaded, please activate Javascript!
   file:
     destroy: This file could not be deleted!
-    size: Your file is bigger than 400KB!
+    size: Your file is bigger than %s!
     type: You uploaded an illegal filetype. Only *.jpg is allowed!
     upload: An error occured during upload.
   form:
@@ -258,7 +283,8 @@ calendars:
     show: Calendar
   info:
     date_format: 'Date format: "YYYY-MM-DD"'
-    ics: 'Download this event and add it to your calendar application'
+    ics: 'Download this event and add it to your calendar application.'
+    icsfeed: Download this calendar to your calendar application to directly subscribe for new events.
   title:
     create: Add appointment
     update: Update appointment
@@ -316,6 +342,8 @@ galleries:
       create: Add file
       destroy: Delete file
       update: Edit file
+    update:
+      order: Save order
 
 mails:
   body:
@@ -350,6 +378,7 @@ newsletters:
 pages:
   next: Next entries
   previous: Previous entries
+  more: Show more
 
 searches:
   description:
@@ -390,7 +419,7 @@ users:
   info:
     destroy_account: Please enter your current password. After you click on "Delete Account", all your data will be permanently destroyed.
     gravatar:  "If you don't want to upload a profile image, you can use <a href='http://gravatar.com' target='_blank'>Gravatar.com</a> instead. The displayed image is shown above."
-    image: You are only allowed to upload images less than 400KB.
+    image: You are only allowed to upload images less than %s.
   label:
     account:
       destroy: Delete account

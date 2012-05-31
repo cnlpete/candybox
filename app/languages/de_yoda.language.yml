@@ -67,6 +67,7 @@ global:
   login: Login
   logs: Logs
   logout: Logout
+  mails: Ungesendete Emails
   manager:
     content: Seitenmanagement
     media: Dateimanager
@@ -97,6 +98,7 @@ global:
   quote:
     by: Zitat von
     quote: Zitat
+  receiver: Empfänger
   register: Registrieren
   registration: Registrierung
   report:
@@ -117,6 +119,7 @@ global:
   surname: Nachname
   system: System
   tag: Tag
+  tagcloud: Tag Cloud
   tags:
     info: Suchen nach ähnlichen Einträgen
     tags: Tags
@@ -125,9 +128,28 @@ global:
     terms: Bedingungen
     read: Nutzungsbedingungen gelesen, du hast?
   time:
-    am: Uhr
-    pm: Uhr
     time: Zeit
+    format: #set the standard date format (http://php.net/strftime)
+      date: %d.%m.%Y
+      time: %H:%M Uhr
+      datetime: %d.%m.%Y, %H:%M Uhr
+    formattimestamp: #translations used by FormatTimestamp Plugin
+      prefixAgo: vor
+      prefixFromNow: in
+      suffixAgo: ''
+      suffixFromNow: ''
+      seconds: wenigen Sekunden
+      minute: etwa einer Minute
+      minutes: %d Minuten
+      hour: etwa einer Stunde
+      hours: %d Stunden
+      day: etwa einem Tag
+      days: %d Tagen
+      month: etwa einem Monat
+      months: %d Monaten
+      year: etwa einem Jahr
+      years: %d Jahren
+      wordSeparator: ' '
   title: Titel
   today: Heute
   update:
@@ -138,6 +160,7 @@ global:
   upload:
     at: Datum des Hochladens
     upload: Upload
+    maxsize: 'Maximale Dateigröße: %s'
   user:
     role: Userrecht
     roles:
@@ -179,6 +202,8 @@ success:
     verification: Vielen Dank für die Bestätigung deiner E-Mail-Adresse.
 
 error:
+  302:
+    info: Die angeforderte URL ist neuerdings unter %s erreichbar.
   404:
     info: Die angeforderte URL nicht gefunden wurde. Entweder auf einen fehlerhaften Link geklickt Sie haben, die Seite gelöscht wurde oder die URL falsch eingegeben wurde.
     title: Error 404 - URL nicht gefunden
@@ -187,7 +212,7 @@ error:
     loading: Captcha nicht geladen werden konnte, aktivieren Javascript du musst!
   file:
     destroy: Die Datei nicht gelöscht werden konnte!
-    size: Maximale Dateigröße von 400KB erreicht!
+    size: Maximale Dateigröße von %s erreicht!
     type: Ein falscher Dateityp hochgeladen wurde!
     upload: Einen Fehler beim Upload es gab!
   form:
@@ -258,7 +283,8 @@ calendars:
     show: Kalender
   info:
     date_format: 'Datumsformat: "YYYY-MM-DD"'
-    ics: 'Diesen Termin herunterladen und hinzufügen zu deiner Kalendar-Anwendung du kannst'
+    ics: 'Diesen Termin herunterladen und hinzufügen zu deiner Kalender-Anwendung du kannst.'
+    icsfeed: Diesen ganzen Kalender zu deiner Kalender-Anwendung hinzufügen du kannst.
   title:
     create: Termin hinzufügen
     update: Termin bearbeiten
@@ -316,6 +342,8 @@ galleries:
       create: Bild(er) hochladen
       destroy: Bild löschen
       update: Bild bearbeiten
+    update:
+      order: Reihenfolge speichern
 
 mails:
   body:
@@ -323,7 +351,7 @@ mails:
     signature: <p>Viel Spaß wünscht das Team von<br /><a href="%%WEBSITE_URL">%%WEBSITE_NAME</a></p>
   description:
     show: E-Mail schreiben an %s du machen sollen.
-  info:
+  success_page:
     title: "Vielen Dank für Deine Kontaktaufnahme!"
     redirect: Du wirst in 15 Sekunden auf die Startseite weitergeleitet.
   subject:
@@ -350,6 +378,7 @@ newsletters:
 pages:
   next: Ältere Beiträge
   previous: Neuere Beiträge
+  more: Mehr
 
 searches:
   description:
@@ -390,7 +419,7 @@ users:
   info:
     destroy_account: Zur eigenen Sicherheit dein aktuelles Passwort noch einmal eingeben, du musst. Sobald du auf "Account löschen" klicken du tust, dein Zugang gelöscht und nicht wiederherstellbar, er ist!
     gravatar: Wenn du aktivierst dieses Kästchen, automatisch nach einem von dir auf <a href="http://gravatar.com" target="_blank">Gravatar.com</a> hinterlegten Profilbild (s.o.) gesucht, es wird. Alternativ aber auch direkt ein Bild hochladen, du kannst.
-    image: Nur Bilder mit einer Größe von bis zu 400KB hochladen, du darfst!
+    image: Nur Bilder mit einer Größe von bis zu %s hochladen, du darfst!
   label:
     account:
       destroy: Account löschen

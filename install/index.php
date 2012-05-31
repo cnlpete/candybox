@@ -341,43 +341,50 @@ class Install extends Index {
    *
    */
   private function _showMigrations() {
-    $sDir = PATH_STANDARD . '/install/sql/migrate/';
+    $sDir = PATH_STANDARD . '/install/migrations/';
     $oDir = opendir($sDir);
 
     $oDb = \CandyCMS\Core\Models\Main::connectToDatabase();
+    try {
+      $oQuery = $oDb->prepare('SELECT file, date FROM ' . SQL_PREFIX . 'migrations');
+      $bReturn = $oQuery->execute();
+
+      if ($bReturn == true)
+        $aResults = $oQuery->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch (\AdvancedException $e) {
+      $oDb->rollBack();
+      die($e->getMessage());
+    }
+
+    $aAlreadyMigrated = Array();
+    foreach ($aResults as $aResult) {
+      $aAlreadyMigrated[$aResult['file']] = $aResult['date'];
+    }
 
     $iI = 0;
     $aFiles = array();
     while ($sFile = readdir($oDir)) {
-      try {
-        $oQuery = $oDb->prepare('SELECT id FROM ' . SQL_PREFIX . 'migrations WHERE file = :file');
-        $oQuery->bindParam(':file', $sFile, PDO::PARAM_STR);
-
-        $bReturn = $oQuery->execute();
-
-        if ($bReturn == true)
-          $aResult = $oQuery->fetch(PDO::FETCH_ASSOC);
-      }
-      catch (\AdvancedException $e) {
-        $oDb->rollBack();
-        die($e->getMessage());
-      }
-
-      $bAlreadyMigrated = isset($aResult['id']) && !empty($aResult['id']) ? true : false;
+      $bAlreadyMigrated = isset($aAlreadyMigrated[$sFile]);
 
       if (substr($sFile, 0, 1) == '.' || $bAlreadyMigrated == true)
         continue;
 
       else {
-        $oFo = fopen($sDir . '/' . $sFile, 'r');
-        $sQuery = str_replace('%SQL_PREFIX%', SQL_PREFIX, fread($oFo, filesize($sDir . '/' . $sFile)));
+        if (pathinfo($sFile, PATHINFO_EXTENSION) == 'sql') {
+          $oFo = fopen($sDir . '/' . $sFile, 'r');
+          $sQuery = str_replace('%SQL_PREFIX%', SQL_PREFIX, fread($oFo, filesize($sDir . '/' . $sFile)));
+          fclose($oFo);
+        }
+        else
+          $sQuery = 'PHP Script';
 
         $aFiles[$iI]['name'] = $sFile;
         $aFiles[$iI]['query'] = $sQuery;
         $iI++;
       }
 
-      unset($bAlreadyMigrated, $aResult);
+      unset($bAlreadyMigrated);
     }
 
     sort($aFiles);
@@ -392,8 +399,8 @@ class Install extends Index {
    * @access private
    *
    */
-  private function _doMigration() {
-    $oFo = fopen(PATH_STANDARD . '/install/sql/migrate/' .$_REQUEST['file'], 'rb');
+  private function _doSQLMigration($sFileName) {
+    $oFo = fopen($sFileName, 'rb');
 
     try {
       $oDb = \CandyCMS\Core\Models\Main::connectToDatabase();
@@ -401,7 +408,47 @@ class Install extends Index {
       fclose($oFo);
     }
     catch (\AdvancedException $e) {
-      Core\Helpers\AdvancedException::reportBoth($e->getMessage());
+      \Core\Helpers\AdvancedException::reportBoth($e->getMessage());
+    }
+
+    return $bResult ? true : false;
+  }
+
+  /**
+   *
+   * @access private
+   *
+   */
+  private function _doPHPMigration($sFileName) {
+    require $sFileName;
+
+    try {
+      $bResult = MigrationScript::run(\CandyCMS\Core\Models\Main::connectToDatabase());
+    }
+    catch (\AdvancedException $e) {
+      \Core\Helpers\AdvancedException::reportBoth($e->getMessage());
+    }
+
+    return $bResult ? true : false;
+  }
+
+  /**
+   *
+   * @access private
+   *
+   */
+  private function _doMigration() {
+    $sFile = trim($_REQUEST['file']);
+    $sPath = PATH_STANDARD . '/install/migrations/';
+
+    $sExt = pathinfo($sFile, PATHINFO_EXTENSION);
+    $bResult = false;
+
+    if ($sExt == 'sql') {
+      $bResult = $this->_doSQLMigration($sPath . $sFile);
+    }
+    elseif ($sExt == 'php') {
+      $bResult = $this->_doPHPMigration($sPath . $sFile);
     }
 
     # Write migration into table
@@ -415,12 +462,15 @@ class Install extends Index {
 
         $oQuery->bindParam('file', $_REQUEST['file']);
         $oQuery->bindParam('date', time());
-        $bResult = $oQuery->execute();
+        $oQuery->execute();
       }
       catch (\AdvancedException $e) {
-        $oDb->rollBack();
+        die($e->getMessage());
+        #$oDb->rollBack();
       }
     }
+
+    exit(json_encode($bResult));
   }
 
   /**

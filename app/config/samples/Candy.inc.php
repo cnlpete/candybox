@@ -82,7 +82,7 @@ define('ALLOW_EXTENSIONS', false);
 
 # Tell the allowed plugins seperated by comma
 # DEFAULT: 'Bbcode,FormatTimestamp,Headlines,Archive'
-# OTHER OFFICIALLY SUPPORTED PLUGINS: Facebook, Cronjob, Piwik, Analytics
+# OTHER OFFICIALLY SUPPORTED PLUGINS: Facebook, Cronjob, Piwik, Analytics, TagCloud
 define('ALLOW_PLUGINS', 'Bbcode,FormatTimestamp,Headlines,Archive');
 
 # ------------------------------------------------------------------------------
@@ -97,19 +97,6 @@ define('ALLOW_VERSION_CHECK', true);
 # NOTE: lower cases required!
 # DEFAULT: 'en'
 define('DEFAULT_LANGUAGE', 'en');
-
-# ------------------------------------------------------------------------------
-
-# Set the standard date format (http://php.net/strftime)
-# DEFAULT: '%d.%m.%Y'
-define('DEFAULT_DATE_FORMAT', '%d.%m.%Y');
-
-# ------------------------------------------------------------------------------
-
-# Set the standard time format (with seperator - if wanted)
-# (http://php.net/strftime)
-# DEFAULT: ', %H:%M %p'
-define('DEFAULT_TIME_FORMAT', '%H:%M %p');
 
 # ------------------------------------------------------------------------------
 
@@ -181,10 +168,14 @@ define('LIMIT_ALBUMS', 10);
 # DEFAULT: ASC
 define('COMMENTS_SORTING', 'ASC');
 
-# Automatically load next Page of Comments when scrolling down
+# Automatically load next Page when scrolling down
 # OPTIONS: true,false
 # DEFAULT: true
-define('COMMENTS_AUTOLOAD', true);
+define('AUTOLOAD', true);
+
+# Stop Loading of next pages after x Times
+# DEFAULT: 3
+define('AUTOLOAD_TIMES', 3);
 
 # ------------------------------------------------------------------------------
 
@@ -202,5 +193,14 @@ define('MAILCHIMP_API_KEY', '');
 # grab your List's Unique Id by going to http://admin.mailchimp.com/lists/
 # Click the "settings" link for the list - the Unique Id is at the bottom of that page.
 define('MAILCHIMP_LIST_ID', '');
+
+# should the user be redirected, if he tries to access old links ('/blog, /gallery, ...)
+# DEFAULT: false
+define('CHECK_OLD_LINKS', false);
+
+# should mails, that failed to get send, be stored in a mail queue
+# Note that those mails can be seen by Administrators until they are send
+# DEFAULT: true
+define('USE_MAIL_QUEUE', true);
 
 ?>

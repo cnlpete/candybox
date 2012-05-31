@@ -67,6 +67,7 @@ global:
   login: Login
   logs: Logs
   logout: Logout
+  mails: Ungesendete Emails
   manager:
     content: Seitenmanagement
     media: Dateimanager
@@ -97,6 +98,7 @@ global:
   quote:
     by: Zitat von
     quote: Zitat
+  receiver: Empfänger
   register: Registrieren
   registration: Registrierung
   report:
@@ -117,6 +119,7 @@ global:
   surname: Nachname
   system: System
   tag: Tag
+  tagcloud: Tag Cloud
   tags:
     info: Suche nach ähnlichen Einträgen
     tags: Tags
@@ -125,9 +128,28 @@ global:
     terms: Bedingungen
     read: Haben Sie die Nutzungsbedingungen gelesen?
   time:
-    am: Uhr
-    pm: Uhr
     time: Zeit
+    format: #set the standard date format (http://php.net/strftime)
+      date: %d.%m.%Y
+      time: %H:%M Uhr
+      datetime: %d.%m.%Y, %H:%M Uhr
+    formattimestamp: #translations used by FormatTimestamp Plugin
+      prefixAgo: vor
+      prefixFromNow: in
+      suffixAgo: ''
+      suffixFromNow: ''
+      seconds: wenigen Sekunden
+      minute: etwa einer Minute
+      minutes: %d Minuten
+      hour: etwa einer Stunde
+      hours: %d Stunden
+      day: etwa einem Tag
+      days: %d Tagen
+      month: etwa einem Monat
+      months: %d Monaten
+      year: etwa einem Jahr
+      years: %d Jahren
+      wordSeparator: ' '
   title: Titel
   today: Heute
   update:
@@ -138,6 +160,7 @@ global:
   upload:
     at: Datum des Hochladens
     upload: Upload
+    maxsize: 'Maximale Dateigröße: %s'
   user:
     role: Userrecht
     roles:
@@ -179,6 +202,8 @@ success:
     verification: Vielen Dank für die Bestätigung Ihrer E-Mail-Adresse.
 
 error:
+  302:
+    info: Die angeforderte URL ist neuerdings unter %s erreichbar.
   404:
     info: Die angeforderte URL wurde nicht gefunden. Entweder haben Sie auf einen fehlerhaften Link geklickt, die Seite wurde gelöscht oder die URL ist falsch eingegeben worden.
     title: Error 404 - URL nicht gefunden
@@ -187,7 +212,7 @@ error:
     loading: Captcha konnte nicht geladen werden, bitte aktiviere Javascript!
   file:
     destroy: Die Datei konnte nicht gelöscht werden!
-    size: Maximale Dateigröße von 400KB erreicht!
+    size: Maximale Dateigröße von %s erreicht!
     type: Es wurde ein falscher Dateityp hochgeladen!
     upload: Es gab einen Fehler beim Upload!
   form:
@@ -258,7 +283,8 @@ calendars:
     show: Kalender
   info:
     date_format: 'Datumsformat: "YYYY-MM-DD"'
-    ics: 'Speichern Sie diesen Termin und fügen Sie ihn Ihrer Kalendar-Anwendung hinzu'
+    ics: 'Speichern Sie diesen Termin und fügen Sie ihn Ihrer Kalender-Anwendung hinzu.'
+    icsfeed: Fügen Sie den Kalender zu Ihrer Kalender-Anwendung hinzu.
   title:
     create: Termin hinzufügen
     update: Termin bearbeiten
@@ -316,6 +342,8 @@ galleries:
       create: Bild(er) hochladen
       destroy: Bild löschen
       update: Bild bearbeiten
+    update:
+      order: Reihenfolge speichern
 
 mails:
   body:
@@ -323,7 +351,7 @@ mails:
     signature: <p>Viel Spaß wünscht Ihnen das Team von<br /><a href="%%WEBSITE_URL">%%WEBSITE_NAME</a></p>
   description:
     show: Schreiben Sie eine E-Mail an %s.
-  info:
+  success_page:
     title: "Vielen Dank für Ihre Kontaktaufnahme!"
     redirect: Sie werden in 15 Sekunden auf die Startseite weitergeleitet.
   subject:
@@ -350,6 +378,7 @@ newsletters:
 pages:
   next: Ältere Beiträge
   previous: Neuere Beiträge
+  more: Mehr
 
 searches:
   description:
@@ -390,7 +419,7 @@ users:
   info:
     destroy_account: Bitte geben Sie zur eigenen Sicherheit Ihr aktuelles Passwort ein. Sobald Sie auf "Account löschen" klicken wird Ihr Zugang gelöscht und ist nicht wiederherstellbar!
     gravatar: Aktivieren Sie dieses Kästchen, wird automatisch nach einem von Ihnen auf <a href="http://gravatar.com" target="_blank">Gravatar.com</a> hinterlegten Profilbild (s.o.) gesucht. Alternativ können Sie aber auch direkt ein Bild hochladen.
-    image: Bitte nur Bilder mit einer Größe von bis zu 400KB hochladen!
+    image: Bitte nur Bilder mit einer Größe von bis zu %s hochladen!
   label:
     account:
       destroy: Account löschen

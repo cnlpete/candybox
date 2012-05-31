@@ -39,7 +39,7 @@
       {* Fallback if CDN is not available. Also include language parts. *}
       <script type='text/javascript'>
         if (typeof jQuery == 'undefined')
-          document.write(unescape('%3Cscript src='{$_PATH.js}/core/jquery.1.7.1{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'%3E%3C/script%3E'));
+          document.write(unescape("%3Cscript src='{$_PATH.js}/core/jquery.1.7.1{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'%3E%3C/script%3E"));
 
         var lang = {$_SYSTEM.json_language};
       </script>
@@ -127,6 +127,11 @@
                             {$lang.global.manager.user}
                           </a>
                         </li>
+                        <li>
+                          <a href='/mails' title='{$lang.global.mails}'>
+                            {$lang.global.mails}
+                          </a>
+                        </li>
                       {/if}
                     {/if}
                   </ul>
@@ -164,6 +169,8 @@
             <!-- plugin:headlines -->
             <h3>{$lang.global.archive}</h3>
             <!-- plugin:archive -->
+            <h3>{$lang.global.tagcloud}</h3>
+            <!-- plugin:tagcloud -->
             {if $MOBILE_DEVICE == true}
               <a href='/?mobile=1' ref='nofollow'>{$lang.global.view.mobile}</a>
             {/if}
@@ -180,6 +187,8 @@
       <!-- plugin:analytics -->
       <!-- plugin:piwik -->
       <!-- plugin:facebook -->
+
+      <!-- plugin:formattimestamp -->
     </body>
   </html>
 {/strip}

@@ -27,9 +27,10 @@ class Blogs extends Main {
   protected function _show() {
     $sTemplateDir  = Helper::getTemplateDir($this->_aRequest['controller'], 'show');
     $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'show');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if ($this->_iId) {
-      $this->_aData = $this->_oModel->getData($this->_iId);
+      $this->_aData = $this->_oModel->getId($this->_iId);
 
       if (!$this->_aData[1]['id'])
         return Helper::redirectTo('/errors/404');
@@ -40,11 +41,17 @@ class Blogs extends Main {
 
       $this->oSmarty->assign('blogs', $this->_aData);
       $this->oSmarty->assign('_blog_footer_', $oComments->show());
+
+      # Bugfix: This is necessary, because comments does a setDir on the singleton object aswell.
+      $this->oSmarty->setTemplateDir($sTemplateDir);
     }
 
     else {
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-        $this->_aData = $this->_oModel->getData();
+        if (isset($this->_aRequest['search']) && $this->_aRequest['search'])
+          $this->_aData = $this->_oModel->getOverviewByTag();
+        else
+          $this->_aData = $this->_oModel->getOverview();
 
         $this->oSmarty->assign('blogs', $this->_aData);
         $this->oSmarty->assign('_blog_footer_', $this->_oModel->oPagination->showSurrounding());
@@ -55,7 +62,6 @@ class Blogs extends Main {
     $this->setKeywords($this->_setBlogsKeywords());
     $this->setTitle($this->_setBlogsTitle());
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -129,48 +135,37 @@ class Blogs extends Main {
    *
    */
   protected function _showFormTemplate() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], '_form');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
+    # Get available languages.
+    $this->oSmarty->assign('languages', self::getLanguages());
+    $this->oSmarty->assign('_tags_', $this->_oModel->getTypeaheadData($this->_sController, 'tags', true));
 
-    # Update
-    if ($this->_iId) {
-      $aData = $this->_oModel->getData($this->_iId, true);
-      $this->setTitle($aData['title']);
-    }
+    return parent::_showFormTemplate();
+  }
 
-    # Create
-    else {
-      $aData['content']   = isset($this->_aRequest['content']) ? $this->_aRequest['content'] : '';
-      $aData['keywords']  = isset($this->_aRequest['keywords']) ? $this->_aRequest['keywords'] : '';
-      $aData['language']  = isset($this->_aRequest['language']) ? $this->_aRequest['language'] : '';
-      $aData['published'] = isset($this->_aRequest['published']) ? $this->_aRequest['published'] : '';
-      $aData['tags']      = isset($this->_aRequest['tags']) ? $this->_aRequest['tags'] : '';
-      $aData['teaser']    = isset($this->_aRequest['teaser']) ? $this->_aRequest['teaser'] : '';
-      $aData['title']     = isset($this->_aRequest['title']) ? $this->_aRequest['title'] : '';
-    }
-
-    $this->oSmarty->assign('_tags_', $this->_oModel->getTypeaheadData('blogs', 'tags', true));
-
-    # Get available languages
-    $aData['languages'] = array();
+  /**
+   * Get languages from app/languages folder.
+   *
+   * @static
+   * @access public
+   * @return array $aLanguages array with our languages
+   * @todo test cases
+   *
+   */
+  public static function getLanguages() {
+    $aLanguages = array();
     $oPathDir = opendir(PATH_STANDARD . '/app/languages');
+
     while ($sFile = readdir($oPathDir)) {
       # Skip extra german languages.
       if (substr($sFile, 0, 1) == '.' || substr($sFile, 0, 3) == 'de_')
         continue;
 
-      array_push($aData['languages'], substr($sFile, 0, 2));
+      array_push($aLanguages, substr($sFile, 0, 2));
     }
+
     closedir($oPathDir);
 
-    foreach ($aData as $sColumn => $sData)
-			$this->oSmarty->assign($sColumn, $sData);
-
-		if ($this->_aError)
-			$this->oSmarty->assign('error', $this->_aError);
-
-		$this->oSmarty->setTemplateDir($sTemplateDir);
-		return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $aLanguages;
   }
 
   /**

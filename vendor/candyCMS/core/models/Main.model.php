@@ -56,6 +56,14 @@ abstract class Main {
   protected $_iId;
 
   /**
+   * Name of the current controller.
+   *
+   * @var string
+   * @access protected
+   */
+  protected $_sController;
+
+  /**
    * PDO object.
    *
    * @var object
@@ -107,6 +115,7 @@ abstract class Main {
 
     $this->_iId = isset($this->_aRequest['id']) && !isset($this->_iId) ? (int) $this->_aRequest['id'] : '';
     $this->_oDb = $this->connectToDatabase();
+    $this->_sController = $this->_aRequest['controller'];
   }
 
   /**
@@ -173,7 +182,7 @@ abstract class Main {
 
     foreach ($aRow as $sColumn => $sData) {
 
-			# Quickfix. Test this on other machines too.
+			# Bugfix: Avoid TinyMCE problems.
 			$sData = str_replace('\"', '', $sData);
 			$sData = str_replace('\&quot;', '', $sData);
       $aData[$sColumn] = $sData;
@@ -187,19 +196,22 @@ abstract class Main {
    *
    * @static
    * @access protected
-   * @param array $aData array with the timestamp stored in 'date'
+   * @param array $aData array with the timestamp stored in '$sKey'
+   * @param string $sKey the key, where the date is stored in $aData
    * @return array reference to $aData
    *
    */
-  protected static function _formatDates(&$aData) {
-    if (isset($aData['date'])) {
-      $aData['date_raw']      = (int) $aData['date'];
-      $aData['time']          = Helper::formatTimestamp($aData['date_raw'], 2);
-      $aData['date']          = Helper::formatTimestamp($aData['date_raw'], 1);
-      $aData['datetime']      = Helper::formatTimestamp($aData['date_raw']);
-      $aData['datetime_rss']  = date('D, d M Y H:i:s O', $aData['date_raw']);
-      $aData['datetime_w3c']  = date('Y-m-d\TH:i:sP', $aData['date_raw']);
-      $aData['date_w3c']      = date('Y-m-d', $aData['date_raw']);
+  protected static function _formatDates(&$aData, $sKey = 'date') {
+    if (isset($aData[$sKey])) {
+      $iTimeStamp = (int) $aData[$sKey];
+      $aDateData = Array(
+        'raw'       => $iTimeStamp,
+        'rss'       => date('D, d M Y H:i:s O', $iTimeStamp),
+        'w3c'       => date('Y-m-d\TH:i:sP', $iTimeStamp),
+        'w3c_date'  => date('Y-m-d', $iTimeStamp),
+      );
+
+      $aData[$sKey] = $aDateData;
     }
 
     return $aData;
@@ -217,7 +229,7 @@ abstract class Main {
    *
    */
   protected function _formatForOutput(&$aData, $aInts = array('id'), $aBools = null, $sController = '') {
-    $sController = !$sController ? $this->_aRequest['controller'] : $sController;
+    $sController = !$sController ? $this->_sController : $sController;
 
     foreach ($aData as $sColumn => $mData)
       $aData[$sColumn] = Helper::formatOutput($mData);
@@ -276,6 +288,7 @@ abstract class Main {
       }
     }
 
+    # Normal user
     if ($aData['user_id'] != 0) {
       $aUserData = array(
           'email'         => $aData['user_email'],
@@ -287,7 +300,8 @@ abstract class Main {
           'ip'            => isset($aData['author_ip']) ? $aData['author_ip'] : '',
       );
     }
-    # We dont have a user (comments) and format the user given data instead.
+
+    # We don't have a user (comments) and format the user given data instead.
     else {
       $aUserData = array(
           'email'         => isset($aData['author_email']) ? $aData['author_email'] : WEBSITE_MAIL,
@@ -300,9 +314,7 @@ abstract class Main {
       );
     }
 
-    # There might be extensions without user information
-    if (isset($aData['author_id']) || isset($aData['user_id']))
-      $aData['author'] = self::_formatForUserOutput($aUserData);
+    $aData['author'] = self::_formatForUserOutput($aUserData);
 
     # Encode data for SEO
     $aData['title_encoded'] = isset($aData['title']) ? urlencode($aData['title']) : $aData['author']['encoded_full_name'];
@@ -402,20 +414,19 @@ abstract class Main {
 
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
 
-      $sString = '';
+      $aEntries = array();
       foreach ($aResult as $aRow) {
         if ($bSplit === true) {
-          $aItems = explode(',', $aRow[$sColumn]);
+          $aItems = array_filter(array_map('trim', explode(',', $aRow[$sColumn])));
 
           foreach ($aItems as $sItem)
-            $sString .= '"' . $sItem . '",';
+            $aEntries[] = $sItem;
         }
 
         else
-          $sString .= '"' . $aRow[$sColumn] . '",';
+          $aEntries[] = $aRow[$sColumn];
       }
-
-      return '[' . substr($sString, 0, -1) . ']';
+      return json_encode($aEntries);
     }
     catch (\PDOException $p) {
       try {
@@ -462,7 +473,7 @@ abstract class Main {
    *
    */
   public function destroy($iId, $sController = '') {
-    $sController = $sController ? (string) $sController : (string) $this->_aRequest['controller'];
+    $sController = $sController ? (string) $sController : (string) $this->_sController;
 
     try {
       $oQuery = $this->_oDb->prepare("DELETE FROM

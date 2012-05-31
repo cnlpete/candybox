@@ -111,13 +111,27 @@ class SmartySingleton extends Smarty {
 
     # Define system variables
     $this->assign('_PATH', $this->getPaths());
+    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
+    $iMaximumUploadSize = \CandyCMS\Core\Helpers\Upload::getUploadLimit();
     $this->assign('_SYSTEM', array(
         'date'                  => date('Y-m-d'),
         'compress_files_suffix' => WEBSITE_COMPRESS_FILES === true ? '.min' : '',
         'facebook_plugin'       => $bUseFacebook,
+        'maximumUploadSize'     => array(
+            'raw'               => $iMaximumUploadSize,
+            'b'                 => $iMaximumUploadSize . 'B',
+            'kb'                => ($iMaximumUploadSize / 1024) . 'KB',
+            'mb'                => ($iMaximumUploadSize / 1048576) . 'MB'),
         'json_language'         => I18n::getJson()));
 
     $this->assign('lang', I18n::getArray());
+
+    # Do we want autoloading of pages?
+    $aAutoload = array(
+        'enabled' => !defined('AUTOLOAD') || AUTOLOAD ? true : false,
+        'times'   => !defined('AUTOLOAD_TIMES') ? 3 : AUTOLOAD_TIMES
+    );
+    $this->assign('_AUTOLOAD_', $aAutoload);
   }
 
   /**
@@ -165,9 +179,8 @@ class SmartySingleton extends Smarty {
     }
 
     # Compile CSS when in development mode and clearing the cache
-    if (WEBSITE_MODE == 'development' && MOBILE == false &&
+    if (WEBSITE_MODE == 'development' &&
             file_exists(Helper::removeSlash($aPaths['less'] . '/core/application.less'))) {
-      require_once PATH_STANDARD . '/vendor/lessphp/lessc.inc.php';
 
       try {
         @unlink(Helper::removeSlash($aPaths['css'] . '/core/application.css'));

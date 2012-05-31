@@ -21,7 +21,7 @@ use CandyCMS\Plugins\Cronjob;
 use CandyCMS\Plugins\FacebookCMS;
 use Routes;
 
-require_once PATH_STANDARD . '/vendor/.composer/autoload.php';
+require_once PATH_STANDARD . '/vendor/autoload.php';
 require_once PATH_STANDARD . '/vendor/candyCMS/core/models/Main.model.php';
 require_once PATH_STANDARD . '/vendor/candyCMS/core/controllers/Main.controller.php';
 require_once PATH_STANDARD . '/vendor/candyCMS/core/controllers/Sessions.controller.php';
@@ -307,14 +307,15 @@ class Index {
    * Get the cronjob working. Check for last execution and plan next cleanup, optimization and backup.
    *
    * @access public
-   * @param boolean $bForceAction force the cronjob to be executed.
+   * @param boolean $bForceAction force the cronjob to be executed, but it will still only execute once per minute.
    * @see app/config/Candy.inc.php
    *
    */
   public function getCronjob($bForceAction = false) {
     if (class_exists('\CandyCMS\Plugins\Cronjob')) {
-      if (Cronjob::getNextUpdate() == true || $bForceAction === true) {
-        $oCronjob = new Cronjob(isset($this->_aSession['user']['id']) ? (int) $this->_aSession['user']['id'] : 0);
+      if (Cronjob::getNextUpdate() == true ||
+              ($bForceAction === true && Cronjob::getNextUpdate(60*1) == true)) {
+        $oCronjob = new Cronjob();
         $oCronjob->cleanup(array('medias', 'bbcode'));
         $oCronjob->optimize();
         $oCronjob->backup();
@@ -536,7 +537,6 @@ class Index {
       $oSmarty->assign('meta_description', $oDispatcher->oController->getDescription());
       $oSmarty->assign('meta_expires', gmdate('D, d M Y H:i:s', time() + 60) . ' GMT');
       $oSmarty->assign('meta_keywords', $oDispatcher->oController->getKeywords());
-
       # System required variables
       $oSmarty->assign('_content_', $oDispatcher->oController->getContent());
       $oSmarty->assign('_title_', $oDispatcher->oController->getTitle());
@@ -568,7 +568,7 @@ class Index {
     unset($this->_aRequest['id'], $this->_aRequest['search'], $this->_aRequest['page']);
 
     foreach ($this->_aPlugins as $sPlugin) {
-      if($sPlugin == 'Bbcode' || $sPlugin == 'FormatTimestamp' || $sPlugin == 'Cronjob' ||  $sPlugin == 'Recaptcha')
+      if($sPlugin == 'Bbcode' || $sPlugin == 'Cronjob' ||  $sPlugin == 'Recaptcha')
         continue;
 
       if($sPlugin == 'Facebook')

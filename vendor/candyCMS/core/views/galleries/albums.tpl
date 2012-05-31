@@ -40,7 +40,11 @@
               </a>
             {/if}
           </h2>
-          <p>{$a.datetime} - {$a.files_sum} {$lang.global.files}</p>
+          <p>
+            <time datetime='{$a.date.w3c}' class='js-timeago'>
+              {$a.date.raw|date_format:$lang.global.time.format.datetime}
+            </time> - {$a.files_sum} {$lang.global.files}
+          </p>
         </header>
         {if $a.files_sum > 0}
           <ul class='thumbnails'>

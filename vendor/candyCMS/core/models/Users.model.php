@@ -136,17 +136,18 @@ class Users extends Main {
    *
    */
   public static function setPassword($sEmail, $sPassword, $bEncrypt = false) {
-    $oDB = parent::connectToDatabase();
+    if (empty(parent::$_oDbStatic))
+      parent::connectToDatabase();
 
     $sPassword = $bEncrypt == true ? md5(RANDOM_HASH . $sPassword) : $sPassword;
 
     try {
-      $oQuery = $oDB->prepare("UPDATE
-                                " . SQL_PREFIX . "users
-                              SET
-                                `password` = :password
-                              WHERE
-                                `email` = :email");
+      $oQuery = parent::$_oDbStatic->prepare("UPDATE
+                                                " . SQL_PREFIX . "users
+                                              SET
+                                                `password` = :password
+                                              WHERE
+                                                `email` = :email");
 
       $oQuery->bindParam(':password', $sPassword, PDO::PARAM_STR);
       $oQuery->bindParam(':email', Helper::formatInput($sEmail), PDO::PARAM_STR);
@@ -167,99 +168,109 @@ class Users extends Main {
   }
 
   /**
-   * Get user entry or user overview data. Depends on available ID.
+   * Get user overview data.
+   *
+   * @access public
+   * @param integer $iLimit user overview limit
+   * @return array data from _setData
+   * @todo pagination (2.2)
+   *
+   */
+  public function getOverview($iLimit = 1000) {
+    try {
+      $oQuery = $this->_oDb->prepare("SELECT
+                                        u.id,
+                                        u.name,
+                                        u.email,
+                                        u.surname,
+                                        UNIX_TIMESTAMP(u.date) as date,
+                                        u.use_gravatar,
+                                        u.receive_newsletter,
+                                        u.verification_code,
+                                        u.role,
+                                        UNIX_TIMESTAMP(s.date) as last_login
+                                      FROM
+                                        " . SQL_PREFIX . "users as u
+                                      LEFT JOIN
+                                        " . SQL_PREFIX . "sessions as s
+                                      ON
+                                        s.user_id = u.id
+                                      ORDER BY
+                                        u.id ASC
+                                      LIMIT
+                                        :limit");
+
+      $oQuery->bindParam('limit', $iLimit, PDO::PARAM_INT);
+      $oQuery->execute();
+
+      $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0082 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+
+    foreach ($aResult as $aRow) {
+      $iId = $aRow['id'];
+
+      $this->_aData[$iId] = $this->_formatForUserOutput(
+              $aRow,
+              array('id', 'role'),
+              array('use_gravatar', 'receive_newsletter'));
+
+      $this->_formatDates($this->_aData[$iId], 'last_login');
+    }
+
+    return $this->_aData;
+ }
+
+  /**
+   * Get user entry data.
    *
    * @access public
    * @param integer $iId ID to load data from. If empty, show overview.
-   * @param boolean $bForceNoId Override ID to show user overview
    * @param boolean $bUpdate prepare data for update
-   * @param integer $iLimit user overview limit
    * @return array data from _setData
-   * @todo pagination
    *
    */
-  public function getData($iId = '', $bForceNoId = false, $bUpdate = false, $iLimit = 1000) {
-    $aInts  = array('id', 'role');
-    $aBools = array('use_gravatar', 'receive_newsletter');
+  public function getId($iId, $bUpdate = false) {
+    try {
+      $oQuery = $this->_oDb->prepare("SELECT
+                                        u.*,
+                                        UNIX_TIMESTAMP(u.date) as date,
+                                        UNIX_TIMESTAMP(s.date) as last_login
+                                      FROM
+                                        " . SQL_PREFIX . "users as u
+                                      LEFT JOIN
+                                        " . SQL_PREFIX . "sessions as s
+                                      ON
+                                        s.user_id = u.id
+                                      WHERE
+                                        u.id = :id
+                                      ORDER BY
+                                        s.date DESC
+                                      LIMIT 1");
 
-    if ($bForceNoId === true)
-      $iId = '';
+      $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
+      $oQuery->execute();
 
-    if (empty($iId)) {
-      try {
-        $oQuery = $this->_oDb->prepare("SELECT
-                                          u.id,
-                                          u.name,
-                                          u.email,
-                                          u.surname,
-                                          u.date,
-                                          u.use_gravatar,
-                                          u.receive_newsletter,
-                                          u.verification_code,
-                                          u.role,
-                                          s.date as last_login
-                                        FROM
-                                          " . SQL_PREFIX . "users as u
-                                        LEFT JOIN
-                                          " . SQL_PREFIX . "sessions as s
-                                        ON
-                                          s.user_id = u.id
-                                        ORDER BY
-                                          u.id ASC
-                                        LIMIT
-                                          :limit");
-
-        $oQuery->bindParam('limit', $iLimit, PDO::PARAM_INT);
-        $oQuery->execute();
-
-        $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
-      }
-      catch (\PDOException $p) {
-        AdvancedException::reportBoth('0082 - ' . $p->getMessage());
-        exit('SQL error.');
-      }
-
-      foreach ($aResult as $aRow) {
-        $iId = $aRow['id'];
-
-        $this->_aData[$iId] = $this->_formatForUserOutput($aRow, $aInts, $aBools);
-        $this->_aData[$iId]['last_login'] = Helper::formatTimestamp($aRow['last_login']);
-      }
+      $aRow = $oQuery->fetch(PDO::FETCH_ASSOC);
     }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0083 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+
+    if ($bUpdate === true)
+      $this->_aData = $this->_formatForUpdate($aRow);
+
     else {
-      try {
-        $oQuery = $this->_oDb->prepare("SELECT
-                                          u.*,
-                                          s.date as last_login
-                                        FROM
-                                          " . SQL_PREFIX . "users as u
-                                        LEFT JOIN
-                                          " . SQL_PREFIX . "sessions as s
-                                        ON
-                                          s.user_id = u.id
-                                        WHERE
-                                          u.id = :id
-                                        ORDER BY
-                                          s.date DESC
-                                        LIMIT 1");
+      $this->_aData[1] = $this->_formatForUserOutput(
+              $aRow,
+              array('id', 'role'),
+              array('use_gravatar', 'receive_newsletter'));
 
-        $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
-        $oQuery->execute();
-
-        $aRow = $oQuery->fetch(PDO::FETCH_ASSOC);
-      }
-      catch (\PDOException $p) {
-        AdvancedException::reportBoth('0083 - ' . $p->getMessage());
-        exit('SQL error.');
-      }
-
-      if ($bUpdate === true)
-        $this->_aData = $this->_formatForUpdate($aRow);
-
-      else {
-        $this->_aData[1] = $this->_formatForUserOutput($aRow, $aInts, $aBools);
-        $this->_aData[1]['last_login'] = Helper::formatTimestamp($aRow['last_login']);
-      }
+      $this->_formatDates($this->_aData[1], 'last_login');
     }
 
     return $this->_aData;
@@ -291,20 +302,22 @@ class Users extends Main {
                                           :surname,
                                           :password,
                                           :email,
-                                          :date,
+                                          NOW(),
                                           :role,
                                           :verification_code,
                                           :api_token)");
 
-      $sApiToken = md5(RANDOM_HASH . $this->_aRequest['email']);
-      $oQuery->bindParam('name', Helper::formatInput($this->_aRequest['name']), PDO::PARAM_STR);
-      $oQuery->bindParam('surname', Helper::formatInput($this->_aRequest['surname']), PDO::PARAM_STR);
-      $oQuery->bindParam('password', md5(RANDOM_HASH . $this->_aRequest['password']), PDO::PARAM_STR);
-      $oQuery->bindParam('email', Helper::formatInput($this->_aRequest['email']), PDO::PARAM_STR);
-      $oQuery->bindParam('date', time(), PDO::PARAM_INT);
+      $sApiToken = md5(RANDOM_HASH . $this->_aRequest[$this->_sController]['email']);
+      $oQuery->bindParam('api_token', $sApiToken, PDO::PARAM_STR);
+      $oQuery->bindParam('password', md5(RANDOM_HASH . $this->_aRequest[$this->_sController]['password']), PDO::PARAM_STR);
       $oQuery->bindParam('role', $iRole, PDO::PARAM_INT);
       $oQuery->bindParam('verification_code', $iVerificationCode, PDO::PARAM_STR);
-      $oQuery->bindParam('api_token', $sApiToken, PDO::PARAM_STR);
+
+      foreach (array('name', 'surname', 'email') as $sInput)
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                PDO::PARAM_STR);
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = Helper::getLastEntry('users');
@@ -333,13 +346,13 @@ class Users extends Main {
    *
    */
   public function update($iId) {
-    $iReceiveNewsletter = isset($this->_aRequest['receive_newsletter']) ? 1 : 0;
-    $iUseGravatar = isset($this->_aRequest['use_gravatar']) ? 1 : 0;
+    $iReceiveNewsletter = isset($this->_aRequest[$this->_sController]['receive_newsletter']) ? 1 : 0;
+    $iUseGravatar       = isset($this->_aRequest[$this->_sController]['use_gravatar']) ? 1 : 0;
 
     # Set other peoples user roles
     if ($iId!== $this->_aSession['user']['id'] && $this->_aSession['user']['role'] == 4)
-      $iUserRole = isset($this->_aRequest['role']) && !empty($this->_aRequest['role']) ?
-              (int) $this->_aRequest['role'] :
+      $iUserRole = isset($this->_aRequest[$this->_sController]['role']) && !empty($this->_aRequest[$this->_sController]['role']) ?
+              (int) $this->_aRequest[$this->_sController]['role'] :
               1;
     else
       $iUserRole = & $this->_aSession['user']['role'];
@@ -357,13 +370,16 @@ class Users extends Main {
                                       WHERE
                                         id = :id");
 
-      $oQuery->bindParam('name', Helper::formatInput($this->_aRequest['name']), PDO::PARAM_STR);
-      $oQuery->bindParam('surname', Helper::formatInput($this->_aRequest['surname']), PDO::PARAM_STR);
-      $oQuery->bindParam('content', Helper::formatInput($this->_aRequest['content']), PDO::PARAM_STR);
       $oQuery->bindParam('receive_newsletter', $iReceiveNewsletter, PDO::PARAM_INT);
       $oQuery->bindParam('use_gravatar', $iUseGravatar, PDO::PARAM_INT);
       $oQuery->bindParam('role', $iUserRole, PDO::PARAM_INT);
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
+
+      foreach (array('name', 'surname', 'content') as $sInput)
+        $oQuery->bindParam(
+                $sInput,
+                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                PDO::PARAM_STR);
 
       return $oQuery->execute();
     }
@@ -397,7 +413,7 @@ class Users extends Main {
                                       WHERE
                                         id = :id");
 
-      $sPassword = md5(RANDOM_HASH . $this->_aRequest['password_new']);
+      $sPassword = md5(RANDOM_HASH . $this->_aRequest[$this->_sController]['password_new']);
       $oQuery->bindParam('password', $sPassword, PDO::PARAM_STR);
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
 
@@ -495,12 +511,11 @@ class Users extends Main {
                                         SET
                                           verification_code = '',
                                           receive_newsletter = '1',
-                                          date = :date
+                                          date = NOW()
                                         WHERE
                                           id = :id");
 
         $oQuery->bindParam('id', $this->_aData['id'], PDO::PARAM_INT);
-        $oQuery->bindParam('date', time(), PDO::PARAM_INT);
 
         # Prepare for first login
         $this->_aData['verification_code'] = '';
@@ -554,9 +569,12 @@ class Users extends Main {
                                       LIMIT
                                         1");
 
-      $sPassword = md5(RANDOM_HASH . Helper::formatInput($this->_aRequest['password']));
-      $oQuery->bindParam('email', Helper::formatInput($this->_aRequest['email']), PDO::PARAM_STR);
-      $oQuery->bindParam('password', $sPassword, PDO::PARAM_STR);
+      $oQuery->bindParam('email',
+              Helper::formatInput($this->_aRequest[$this->_sController]['email']),
+              PDO::PARAM_STR);
+      $oQuery->bindParam('password',
+              md5(RANDOM_HASH . Helper::formatInput($this->_aRequest[$this->_sController]['password'])),
+              PDO::PARAM_STR);
       $oQuery->execute();
 
       return $oQuery->fetch(PDO::FETCH_ASSOC);
@@ -587,8 +605,8 @@ class Users extends Main {
                                       LIMIT
                                         1");
 
-      $sPassword = md5(RANDOM_HASH . Helper::formatInput($this->_aRequest['password']));
-      $oQuery->bindParam('email', Helper::formatInput($this->_aRequest['email']), PDO::PARAM_STR);
+      $sPassword = md5(RANDOM_HASH . Helper::formatInput($this->_aRequest[$this->_sController]['password']));
+      $oQuery->bindParam('email', Helper::formatInput($this->_aRequest[$this->_sController]['email']), PDO::PARAM_STR);
       $oQuery->bindParam('password', $sPassword, PDO::PARAM_STR);
       $oQuery->execute();
       $aData = $oQuery->fetch(PDO::FETCH_ASSOC);
@@ -617,7 +635,8 @@ class Users extends Main {
 
     try {
       $oQuery = parent::$_oDbStatic->prepare("SELECT
-                                                *
+                                                *,
+                                                UNIX_TIMESTAMP(date) as date
                                               FROM
                                                 " . SQL_PREFIX . "users
                                               WHERE

@@ -28,7 +28,9 @@
                       {$data.title}
                     </a>,
                     &nbsp;
-                    {$data.datetime}
+                    <time datetime='{$data.date.w3c}'>
+                      {$data.date.raw|date_format:$lang.global.time.format.datetime}
+                    </time>
                   </li>
                 {/if}
               {/foreach}

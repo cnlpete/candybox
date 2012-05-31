@@ -20,7 +20,9 @@
           {$lang.users.label.registered_since}
         </td>
         <td>
-          {$u.date}
+          <time datetime='{$u.date.w3c}'>
+            {$u.date.raw|date_format:$lang.global.time.format.date}
+          </time>
         </td>
         <td rowspan='4'>
 
@@ -43,7 +45,9 @@
           {$lang.users.label.last_login}
         </td>
         <td>
-          {$u.last_login}
+          <time datetime='{$u.last_login.w3c}' class='js-timeago'>
+            {$u.last_login.raw|date_format:$lang.global.time.format.date}
+          </time>
         </td>
       </tr>
       <tr>
@@ -59,8 +63,7 @@
           {$lang.global.contact}
         </td>
         <td>
-          {* Absolute URL due to fancybox bug *}
-          <a href='{$WEBSITE_URL}/mails/{$_REQUEST.id}/create'>
+          <a href='/mails/{$_REQUEST.id}/create'>
             {$lang.users.contact_via_email|replace:'%s':$u.name}
           </a>
         </td>

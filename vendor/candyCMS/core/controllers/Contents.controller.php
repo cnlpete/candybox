@@ -26,11 +26,12 @@ class Contents extends Main {
    */
   protected function _show() {
     if ($this->_iId) {
-      $sTemplateDir  = Helper::getTemplateDir($this->_aRequest['controller'], 'show');
+      $sTemplateDir  = Helper::getTemplateDir($this->_sController, 'show');
       $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'show');
+      $this->oSmarty->setTemplateDir($sTemplateDir);
 
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-        $aData = $this->_oModel->getData($this->_iId);
+        $aData = $this->_oModel->getId($this->_iId);
 
         if (!isset($aData) || !$aData[$this->_iId]['id'])
           return Helper::redirectTo('/errors/404');
@@ -42,53 +43,19 @@ class Contents extends Main {
         $this->oSmarty->assign('contents', $aData);
       }
 
-      $this->oSmarty->setTemplateDir($sTemplateDir);
       return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
     else {
-      $sTemplateDir  = Helper::getTemplateDir($this->_aRequest['controller'], 'overview');
+      $sTemplateDir  = Helper::getTemplateDir($this->_sController, 'overview');
       $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'overview');
+      $this->oSmarty->setTemplateDir($sTemplateDir);
 
       $this->setTitle(I18n::get('global.manager.content'));
 
-      $this->oSmarty->assign('contents', $this->_oModel->getData($this->_iId));
+      $this->oSmarty->assign('contents', $this->_oModel->getOverview());
 
-      $this->oSmarty->setTemplateDir($sTemplateDir);
       return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
-  }
-
-  /**
-   * Build form template to create or update a content entry.
-   *
-   * @access protected
-   * @return string HTML content
-   *
-   */
-  protected function _showFormTemplate() {
-    $sTemplateDir  = Helper::getTemplateDir($this->_aRequest['controller'], '_form');
-    $sTemplateFile = Helper::getTemplateType($sTemplateDir, '_form');
-
-    if ($this->_iId) {
-      $aData = $this->_oModel->getData($this->_iId, true);
-      $this->setTitle($aData['title']);
-    }
-    else {
-      $aData['title']     = isset($this->_aRequest['title']) ? $this->_aRequest['title'] : '';
-      $aData['teaser']    = isset($this->_aRequest['teaser']) ? $this->_aRequest['teaser'] : '';
-      $aData['keywords']  = isset($this->_aRequest['keywords']) ? $this->_aRequest['keywords'] : '';
-      $aData['content']   = isset($this->_aRequest['content']) ? $this->_aRequest['content'] : '';
-      $aData['published'] = isset($this->_aRequest['published']) ? $this->_aRequest['published'] : '';
-    }
-
-    foreach($aData as $sColumn => $sData)
-      $this->oSmarty->assign($sColumn, $sData);
-
-    if ($this->_aError)
-      $this->oSmarty->assign('error', $this->_aError);
-
-    $this->oSmarty->setTemplateDir($sTemplateDir);
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
   /**

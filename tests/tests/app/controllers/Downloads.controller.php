@@ -33,10 +33,10 @@ class WebTestOfDownloadController extends CandyWebTest {
 
   function testShowWithId() {
     //get an entry
-    $this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/2'));
+    $this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/1');
     $this->assertResponse(200);
     //get an entry with long id
-    $this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/2/098dec456d'));
+    $this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/1/098dec456d');
     $this->assertResponse(200);
 
     //get a missing entry

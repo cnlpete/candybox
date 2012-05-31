@@ -16,6 +16,15 @@
       {if isset($_REQUEST.action) && $_REQUEST.action == 'archive'}
         -
         {$lang.global.archive}
+      {else}
+        &nbsp;
+        <a id='test-icalfeedlink' href='/{$_REQUEST.controller}/icalfeed'>
+          <img src='{$_PATH.images}/candy.global/spacer.png'
+              class='icon-calendar_add js-tooltip'
+              alt='{$lang.calendars.info.icsfeed}'
+              title='{$lang.calendars.info.icsfeed}'
+              width='16' height='16' />
+        </a>
       {/if}
     </h1>
   </div>
@@ -51,12 +60,14 @@
           {foreach $c.dates as $d}
             <tr>
               <td>
-                {$d.start_date}
-                {if $d.end_date > 1}
-                  &nbsp;
-                  -
-                  &nbsp;
-                  {$d.end_date}
+                <time datetime='{$d.start_date.w3c_date}'>
+                  {$d.start_date.raw|date_format:$lang.global.time.format.date}
+                </time>
+                {if $d.end_date.raw}
+                  &nbsp;-&nbsp;
+                  <time datetime='{$d.end_date.w3c_date}'>
+                    {$d.end_date.raw|date_format:$lang.global.time.format.date}
+                  </time>
                 {/if}
               </td>
               <td>

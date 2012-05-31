@@ -12,7 +12,7 @@
 
 define('PATH_STANDARD', dirname(__FILE__) . '/..');
 
-require_once PATH_STANDARD . '/vendor/.composer/autoload.php';
+require_once PATH_STANDARD . '/vendor/autoload.php';
 require_once PATH_STANDARD . '/tests/simpletest/autorun.php';
 require_once PATH_STANDARD . '/tests/simpletest/web_tester.php';
 
@@ -21,6 +21,7 @@ require_once PATH_STANDARD . '/tests/candy/Candy.web.php';
 
 require_once PATH_STANDARD . '/app/config/Candy.inc.php';
 require_once PATH_STANDARD . '/app/config/Plugins.inc.php';
+require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/AdvancedException.helper.php';
 require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/SmartySingleton.helper.php';
 require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/I18n.helper.php';
 
@@ -32,7 +33,7 @@ define('UNIQUE_ID', 'tests');
 define('VERSION', '0');
 define('TESTFILE', '/private/var/tmp/test'.md5(time()));
 define('WEBSITE_LOCALE', 'en_US');
-define('WEBSITE_LANGUAGE', 'en');
+define('WEBSITE_LANGUAGE', DEFAULT_LANGUAGE);
 define('EXTENSION_CHECK', ALLOW_EXTENSIONS === true || WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test');
 
 setlocale(LC_ALL, WEBSITE_LOCALE);
@@ -45,6 +46,9 @@ class AllFileTests extends TestSuite {
 
     if (WEBSITE_MODE !== 'test')
       die('not in testing mode');
+
+    else if (DEFAULT_LANGUAGE !== 'en')
+      die('language not set to "en"');
 
     else {
       new \CandyCMS\Core\Helpers\I18n(WEBSITE_LANGUAGE, $_SESSION);
@@ -94,7 +98,9 @@ class AllFileTests extends TestSuite {
                           PATH_STANDARD . '/tests/tests/app/models/Logs.model.php',
                           PATH_STANDARD . '/tests/tests/app/controllers/Logs.controller.php'),
 
-          'mails'     => PATH_STANDARD . '/tests/tests/app/controllers/Mails.controller.php',
+          'mails'     => array(
+                          PATH_STANDARD . '/tests/tests/app/controllers/Mails.controller.php',
+                          PATH_STANDARD . '/tests/tests/app/models/Mails.model.php'),
 
           'main'      => array(
                           PATH_STANDARD . '/tests/tests/app/models/Main.model.php'),

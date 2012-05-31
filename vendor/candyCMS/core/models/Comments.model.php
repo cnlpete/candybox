@@ -30,20 +30,18 @@ class Comments extends Main {
    * @return array data from _setData
    *
    */
-  public function getData($iId, $iEntries, $iLimit) {
-    $aInts  = array('id', 'parent_id', 'author_id', 'author_facebook_id', 'user_id');
-    $aBools = array('use_gravatar');
-
+  public function getOverview($iId, $iEntries, $iLimit) {
     $this->oPagination = new Pagination($this->_aRequest, $iEntries, $iLimit);
 
     try {
       $sOrder = defined('COMMENTS_SORTING') && (COMMENTS_SORTING == 'ASC' || COMMENTS_SORTING == 'DESC') ?
               COMMENTS_SORTING :
               'ASC';
-      $sLimit = $iLimit === -1 ? '' : 'LIMIT :offset, :limit';
+      $sLimit = $iLimit === -1 ? '' : 'LIMIT ' . $this->oPagination->getOffset() . ', ' . $this->oPagination->getLimit();
 
       $oQuery = $this->_oDb->prepare("SELECT
                                         c.*,
+                                        UNIX_TIMESTAMP(c.date) as date,
                                         u.id AS user_id,
                                         u.name AS user_name,
                                         u.surname AS user_surname,
@@ -63,10 +61,6 @@ class Comments extends Main {
                                       " . $sLimit);
 
       $oQuery->bindParam('parent_id', $iId, PDO::PARAM_INT);
-      if ($iLimit !== -1) {
-        $oQuery->bindParam('limit', $this->oPagination->getLimit(), PDO::PARAM_INT);
-        $oQuery->bindParam('offset', $this->oPagination->getOffset(), PDO::PARAM_INT);
-      }
       $oQuery->execute();
 
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
@@ -77,11 +71,18 @@ class Comments extends Main {
     }
 
     foreach ($aResult as $aRow) {
-      $this->_aData[$aRow['id']] = $aRow;
-      $this->_formatForOutput($this->_aData[$aRow['id']], $aInts, $aBools, 'comments');
-      $this->_aData[$aRow['id']]['url'] = '/' . $this->_aRequest['controller'] . '/' . $iId . '#' . $aRow['id'];
-      $this->_aData[$aRow['id']]['content'] = nl2br($this->_aData[$aRow['id']]['content']);
+      $iId = $aRow['id'];
+
+      $this->_aData[$iId] = $aRow;
+
+      $this->_formatForOutput($this->_aData[$iId],
+              array('id', 'parent_id', 'author_id', 'author_facebook_id', 'user_id'),
+              array('use_gravatar'), 'comments');
+
+      $this->_aData[$iId]['url']     = '/' . $this->_sController . '/' . $iId . '#' . $aRow['id'];
+      $this->_aData[$iId]['content'] = nl2br($this->_aData[$aRow['id']]['content']);
     }
+
     # We crawl the facebook avatars
     if (PLUGIN_FACEBOOK_APP_ID && class_exists('\CandyCMS\Plugins\FacebookCMS'))
       $this->_getFacebookAvatars($aResult);
@@ -135,16 +136,16 @@ class Comments extends Main {
    *
    */
   public function create() {
-    $sAuthorName = isset($this->_aRequest['name']) ?
-            Helper::formatInput($this->_aRequest['name']) :
+    $sAuthorName = isset($this->_aRequest[$this->_sController]['name']) ?
+            Helper::formatInput($this->_aRequest[$this->_sController]['name']) :
             $this->_aSession['user']['full_name'];
 
-    $sAuthorEmail = isset($this->_aRequest['email']) ?
-            Helper::formatInput($this->_aRequest['email']) :
+    $sAuthorEmail = isset($this->_aRequest[$this->_sController]['email']) ?
+            Helper::formatInput($this->_aRequest[$this->_sController]['email']) :
             $this->_aSession['user']['email'];
 
-    $iFacebookId = isset($this->_aRequest['facebook_id']) ?
-            Helper::formatInput($this->_aRequest['facebook_id']) :
+    $iFacebookId = isset($this->_aRequest[$this->_sController]['facebook_id']) ?
+            Helper::formatInput($this->_aRequest[$this->_sController]['facebook_id']) :
             $this->_aSession['user']['facebook_id'];
 
     try {
@@ -165,7 +166,7 @@ class Comments extends Main {
                                           :author_email,
                                           :author_ip,
                                           :content,
-                                          :date,
+                                          NOW(),
                                           :parent_id )");
 
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
@@ -173,9 +174,8 @@ class Comments extends Main {
       $oQuery->bindParam('author_name', $sAuthorName, PDO::PARAM_STR);
       $oQuery->bindParam('author_email', $sAuthorEmail, PDO::PARAM_STR);
       $oQuery->bindParam('author_ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
-      $oQuery->bindParam('content', Helper::formatInput($this->_aRequest['content']), PDO::PARAM_STR);
-      $oQuery->bindParam('date', time(), PDO::PARAM_INT);
-      $oQuery->bindParam('parent_id', $this->_aRequest['parent_id'], PDO::PARAM_INT);
+      $oQuery->bindParam('content', Helper::formatInput($this->_aRequest[$this->_sController]['content']), PDO::PARAM_STR);
+      $oQuery->bindParam('parent_id', $this->_aRequest[$this->_sController]['parent_id'], PDO::PARAM_INT);
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = Helper::getLastEntry('comments');

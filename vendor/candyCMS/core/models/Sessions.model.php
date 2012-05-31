@@ -34,7 +34,8 @@ class Sessions extends Main {
 
     try {
       $oQuery = parent::$_oDbStatic->prepare("SELECT
-                                                u.*
+                                                u.*,
+                                                UNIX_TIMESTAMP(u.date) as date
                                               FROM
                                                 " . SQL_PREFIX . "users AS u
                                               LEFT JOIN
@@ -75,7 +76,7 @@ class Sessions extends Main {
   public function create($aUser = '') {
     if (empty($aUser)) {
       $sModel = $this->__autoload('Users', true);
-      $oModel = & new $sModel($this->_aRequest, $this->_aSession);
+      $oModel = new $sModel($this->_aRequest, $this->_aSession);
       $aUser  = $oModel->getLoginData();
     }
 
@@ -92,12 +93,11 @@ class Sessions extends Main {
                                           ( :user_id,
                                             :session,
                                             :ip,
-                                            :date)");
+                                            NOW())");
 
         $oQuery->bindParam('user_id', $aUser['id'], PDO::PARAM_INT);
         $oQuery->bindParam('session', session_id(), PDO::PARAM_STR);
         $oQuery->bindParam('ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
-        $oQuery->bindParam('date', time(), PDO::PARAM_INT);
 
         return $oQuery->execute();
       }
@@ -127,7 +127,7 @@ class Sessions extends Main {
    */
   public function resendPassword($sPassword = '') {
     $sModel = $this->__autoload('Users');
-    return $sModel::setPassword($this->_aRequest['email'], $sPassword);
+    return $sModel::setPassword($this->_aRequest[$this->_sController]['email'], $sPassword);
   }
 
   /**
@@ -139,7 +139,7 @@ class Sessions extends Main {
    */
   public function resendVerification() {
     $sModel = $this->__autoload('Users');
-    $aData  = $sModel::getVerificationData($this->_aRequest['email']);
+    $aData  = $sModel::getVerificationData($this->_aRequest[$this->_sController]['email']);
 
     return empty($aData['verification_code']) ? false : $aData;
   }

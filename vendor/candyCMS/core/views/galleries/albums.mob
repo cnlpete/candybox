@@ -9,7 +9,9 @@
       {* Show gallery albums with uploaded images *}
       <li data-role="list-divider">
         <h3>
-          {$a.title} - {$a.date}
+          {$a.title} - <time datetime='{$a.date.w3c}'>
+            {$a.date.raw|date_format:$lang.global.time.format.date}
+          </time>
         </h3>
       </li>
       <li>

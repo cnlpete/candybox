@@ -34,9 +34,9 @@ class WebTestOfCommentController extends CandyWebTest {
 
 	function testCreate() {
 		$this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/1'));
-    $this->assertField('name', '');
-    $this->assertField('email', '');
-    $this->assertField('content', '');
+    $this->assertField('blogs[name]', '');
+    $this->assertField('blogs[email]', '');
+    $this->assertField('blogs[content]', '');
 
     #empty submit
     $this->click(I18n::get('comments.title.create'));
@@ -44,16 +44,16 @@ class WebTestOfCommentController extends CandyWebTest {
 		$this->assertText(I18n::get('error.form.missing.content'));
 
     #create with wrong email
-    $this->assertTrue($this->setField('name', 'Name'));
-    $this->assertTrue($this->setField('email', 'notAnEmailAdress'));
-    $this->assertTrue($this->setField('content', 'hello'));
+    $this->assertTrue($this->setField('blogs[name]', 'Name'));
+    $this->assertTrue($this->setField('blogs[email]', 'notAnEmailAdress'));
+    $this->assertTrue($this->setField('blogs[content]', 'hello'));
     $this->click(I18n::get('comments.title.create'));
 		$this->assertText(I18n::get('error.mail.format'));
 
     #create with empty email
-    $this->assertTrue($this->setField('name', 'Name'));
-    $this->assertTrue($this->setField('email', ''));
-    $this->assertTrue($this->setField('content', 'hello without email adress'));
+    $this->assertTrue($this->setField('blogs[name]', 'Name'));
+    $this->assertTrue($this->setField('blogs[email]', ''));
+    $this->assertTrue($this->setField('blogs[content]', 'hello without email adress'));
     $this->click(I18n::get('comments.title.create'));
 		$this->assertText(I18n::get('success.create'));
 	}
@@ -66,8 +66,7 @@ class WebTestOfCommentController extends CandyWebTest {
 
   function testUpdate() {
     $this->assertTrue($this->get(WEBSITE_URL . '/comments/1/update'));
-    $this->assertText(I18n::get('error.missing.permission'));
-    $this->assertResponse(200);
+    $this->assert404();
   }
 
 }

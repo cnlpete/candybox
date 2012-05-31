@@ -38,11 +38,6 @@ class WebTestOfGalleryController extends CandyWebTest {
     $this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/1/6dffc4c552'));
     $this->assertResponse(200);
     $this->assertText('982e960e18');
-
-    # Show image
-    $this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/1/image/1'));
-    $this->assertResponse(200);
-    $this->assertText('782c660e17');
   }
 
   function testDirIsWritable() {
@@ -88,6 +83,12 @@ class WebTestOfGalleryController extends CandyWebTest {
   function testDestroyFile() {
     $this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/1/destroyfile'));
     $this->assertText(I18n::get('error.missing.permission'));
+    $this->assertResponse(200);
+  }
+
+  function testUpdateFilePositions() {
+    $this->assertTrue($this->get(WEBSITE_URL . '/' . $this->aRequest['controller'] . '/1/updatefilepositions'));
+    $this->assertText('false');
     $this->assertResponse(200);
   }
 }

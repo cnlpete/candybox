@@ -33,15 +33,17 @@ class Searches extends Main {
    *
    */
   protected function _show() {
-    if (!isset($this->_aRequest['search']) || !$this->_aRequest['search'])
+    if (! ( (isset($this->_aRequest['search']) && $this->_aRequest['search']) ||
+            (isset($this->_aRequest[$this->_sController]) && $this->_aRequest[$this->_sController]['search']) ) )
       return $this->_create();
 
     else {
-      if (substr(CURRENT_URL, -strlen($this->_aRequest['controller'])) == $this->_aRequest['controller'])
-        return Helper::redirectTo ('/' . $this->_aRequest['controller'] . '/' . $this->_aRequest['search']);
+      if (substr(CURRENT_URL, -strlen($this->_sController)) == $this->_sController)
+        return Helper::redirectTo ('/' . $this->_sController . '/' . $this->_aRequest[$this->_sController]['search']);
 
-      $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], 'show');
+      $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
       $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+      $this->oSmarty->setTemplateDir($sTemplateDir);
 
       $sString = Helper::formatInput($this->_aRequest['search']);
 
@@ -54,7 +56,6 @@ class Searches extends Main {
         $this->setDescription(I18n::get('searches.description.show', $sString));
       }
 
-      $this->oSmarty->setTemplateDir($sTemplateDir);
       return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
   }
@@ -79,11 +80,12 @@ class Searches extends Main {
    *
    */
   protected function _formTemplate() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_aRequest['controller'], '_form');
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, '_form');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     $this->setTitle(I18n::get('global.search'));
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 }

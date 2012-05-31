@@ -42,30 +42,27 @@ class Comments extends Main {
   protected function _show() {
     $sTemplateDir   = Helper::getTemplateDir('comments', 'show');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
-
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
-      $this->oSmarty->assign('comments',
-              $this->_oModel->getData($this->_iId, (int) $this->_aParentData[1]['comment_sum'], LIMIT_COMMENTS));
-
-    # Set author of blog entry
-    $this->oSmarty->assign('author_id', (int) $this->_aParentData[1]['author_id']);
-
-    # For correct information, do some math to display entries.
-    # NOTE: If you're admin, you can see all entries. That might bring pagination to your view, even
-    # when other people don't see it
-    $this->oSmarty->assign('comment_number',
-            ($this->_oModel->oPagination->getCurrentPage() * LIMIT_COMMENTS) - LIMIT_COMMENTS);
-
-    # Do we need pages?
-    $this->oSmarty->assign('_pages_', $this->_oModel->oPagination->showPages('/blogs/' . $this->_iId));
-
-    # Do we want autoloading of pages?
-    $this->oSmarty->assign('_COMMENT_AUTOLOAD_', !defined('COMMENTS_AUTOLOAD') || COMMENTS_AUTOLOAD ? true : false);
-
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
+    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+      $this->oSmarty->assign('comments',
+              $this->_oModel->getOverview($this->_iId, (int) $this->_aParentData[1]['comment_sum'], LIMIT_COMMENTS));
+
+      # Set author of blog entry
+      $this->oSmarty->assign('author_id', (int) $this->_aParentData[1]['author_id']);
+
+      # For correct information, do some math to display entries.
+      # NOTE: If you're admin, you can see all entries. That might bring pagination to your view, even
+      # when other people don't see it
+      $this->oSmarty->assign('comment_number',
+              ($this->_oModel->oPagination->getCurrentPage() * LIMIT_COMMENTS) - LIMIT_COMMENTS);
+
+      # Do we need pages?
+      $this->oSmarty->assign('_pages_', $this->_oModel->oPagination->showPages('/blogs/' . $this->_iId));
+    }
+
     # we can leave caching on, the form itself will turn caching off, but that is a different template
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID) . $this->create('create_comments');
+    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID) . $this->create();
   }
 
   /**
@@ -79,10 +76,10 @@ class Comments extends Main {
   protected function _showFormTemplate($bShowCaptcha) {
     $sTemplateDir   = Helper::getTemplateDir('comments', '_form');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
-    $this->oSmarty->assign('content', isset($this->_aRequest['content']) ? (string) $this->_aRequest['content'] : '');
-    $this->oSmarty->assign('email', isset($this->_aRequest['email']) ? (string) $this->_aRequest['email'] : '');
-    $this->oSmarty->assign('name', isset($this->_aRequest['name']) ? (string) $this->_aRequest['name'] : '');
+    foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
+      $this->oSmarty->assign($sInput, $sData);
 
     if ($bShowCaptcha === true)
       $this->oSmarty->assign('_captcha_', Recaptcha::getInstance()->show());
@@ -90,7 +87,6 @@ class Comments extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -99,11 +95,10 @@ class Comments extends Main {
    * We must override the main method due to a diffent required user role.
    *
    * @access public
-   * @param string $sInputName sent input name to verify action
    * @return string HTML content
    *
    */
-  public function create($sInputName) {
+  public function create() {
     $bShowCaptcha = class_exists('CandyCMS\Plugins\Recaptcha') ?
                       $this->_aSession['user']['role'] == 0 && SHOW_CAPTCHA :
                       false;
@@ -111,7 +106,7 @@ class Comments extends Main {
     # No caching for comments
     $this->oSmarty->setCaching(false);
 
-    return isset($this->_aRequest[$sInputName]) ?
+    return isset($this->_aRequest[$this->_sController]) ?
             $this->_create($bShowCaptcha) :
             $this->_showFormTemplate($bShowCaptcha);
   }
@@ -133,7 +128,7 @@ class Comments extends Main {
     if ($this->_aSession['user']['role'] == 0)
       $this->_setError('name');
 
-    if (isset($this->_aRequest['email']) && $this->_aRequest['email'])
+    if (isset($this->_aRequest[$this->_sController]['email']) && $this->_aRequest[$this->_sController]['email'])
       $this->_setError('email');
 
     if ($bShowCaptcha === true && Recaptcha::getInstance()->checkCaptcha($this->_aRequest) === false)
@@ -144,11 +139,11 @@ class Comments extends Main {
 
     else {
       # Bugfix for jquery mobile not handling this redirect with hash very vell
-      $sRedirect = '/blogs/' . (int) $this->_aRequest['parent_id'] . (MOBILE ? '' : '#create');
+      $sRedirect = '/blogs/' . (int) $this->_aRequest[$this->_sController]['parent_id'] . (MOBILE ? '' : '#create');
 
       if ($this->_oModel->create() === true) {
         # This also clears cache for our comments, since they are stored in the blogs namespace.
-        $this->oSmarty->clearCacheForController($this->_aRequest['controller']);
+        $this->oSmarty->clearCacheForController($this->_sController);
 
         Logs::insert( 'comments',
                       'create',
@@ -185,5 +180,15 @@ class Comments extends Main {
     }
     else
       return Helper::errorMessage(I18n::get('error.sql'), $sRedirect);
+  }
+
+  /**
+   * There is no update action for the sitemaps controller
+   *
+   * @access public
+   *
+   */
+  public function update() {
+    return Helper::redirectTo('/errors/404');
   }
 }

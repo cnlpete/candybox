@@ -21,10 +21,11 @@ class UnitTestOfCommentModel extends CandyUnitTest {
 
     $this->aRequest = array(
 				'section'		=> 'blog',
-        'name'			=> 'Name',
-        'email'			=> 'email@example.com',
-        'content'		=> 'Content',
-        'parent_id' => '666',
+        'blogs'  => array(
+            'name'			=> 'Name',
+            'email'			=> 'email@example.com',
+            'content'		=> 'Content',
+            'parent_id' => '666'),
         'controller' => 'blogs');
 
     $this->oObject = new Comments($this->aRequest, $this->aSession);
@@ -38,7 +39,7 @@ class UnitTestOfCommentModel extends CandyUnitTest {
   }
 
   function testGetData() {
-    $this->assertIsA($this->oObject->getData(0, 1, 1), 'array');
+    $this->assertIsA($this->oObject->getOverview(0, 1, 1), 'array');
   }
 
   function testGetParentId() {
