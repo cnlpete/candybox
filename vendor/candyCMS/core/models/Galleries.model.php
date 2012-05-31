@@ -327,12 +327,17 @@ class Galleries extends Main {
 
     try {
       $oQuery = parent::$_oDbStatic->prepare("SELECT
+<<<<<<< HEAD
                                                 *,
                                                 UNIX_TIMESTAMP(date) as date
+=======
+                                                f.*,
+                                                UNIX_TIMESTAMP(f.date) as date
+>>>>>>> 3991d4ea56d6426d554afc7d9512214e4236ffaa
                                               FROM
-                                                " . SQL_PREFIX . "gallery_files
+                                                " . SQL_PREFIX . "gallery_files as f
                                               WHERE
-                                                id = :id");
+                                                f.id = :id");
 
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
       $oQuery->execute();

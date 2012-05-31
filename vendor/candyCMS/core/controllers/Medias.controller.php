@@ -15,6 +15,7 @@ namespace CandyCMS\Core\Controllers;
 use CandyCMS\Core\Helpers\Helper;
 use CandyCMS\Core\Helpers\I18n;
 use CandyCMS\Core\Helpers\SmartySingleton;
+use CandyCMS\Core\Helpers\Upload;
 
 class Medias extends Main {
 
@@ -28,15 +29,38 @@ class Medias extends Main {
    */
   protected function _create() {
     if (isset($this->_aRequest[$this->_sController])) {
-      $bReturn  = $this->_oModel->create();
+      require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
+
+      $oUpload = new Upload($this->_aRequest, $this->_aSession, $this->_aFile);
+      $sFolder = isset($this->_aRequest['folder']) ?
+              Helper::formatInput($this->_aRequest['folder']) :
+              $this->_sController;
+
+      if (!is_dir($sFolder))
+        mkdir(Helper::removeSlash(PATH_UPLOAD . '/' . $sFolder, 0777));
+
+      try {
+        $aReturn = $oUpload->uploadFiles($sFolder);
+      }
+      catch (\Exception $e) {
+        return Helper::errorMessage($e->getMessage(), '/' . $this->_sController . '/create');
+      }
+
+      $iCount   = count($aReturn);
+      $bAllTrue = true;
+
+      for ($iI = 0; $iI < $iCount; $iI++) {
+        if ($aReturn[$iI] === false)
+          $bAllTrue = false;
+      }
 
       Logs::insert( $this->_sController,
                     $this->_aRequest['action'],
-                    $this->_oModel->getLastInsertId($this->_sController),
+                    0,
                     $this->_aSession['user']['id'],
-                    '', '', $bReturn);
+                    '', '', $bAllTrue);
 
-      if ($bReturn) {
+      if ($bAllTrue) {
         # Clear the cache
         $this->oSmarty->clearCacheForController($this->_sController);
 

@@ -43,7 +43,7 @@ class AdvancedException extends \Exception {
     $sMessage = date('Y-m-d Hi', time()) . ' - ' . $sMessage;
 
     $sClass = \CandyCMS\Core\Controllers\Main::__autoload('Mails', true);
-    $oMails = new $sClass(null, null);
+    $oMails = new $sClass();
 
     return $oMails->create('Exception',
             $sMessage,
