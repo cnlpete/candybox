@@ -23,7 +23,7 @@ ini_set('zlib.output_compression_level', 9);
 date_default_timezone_set('Europe/Berlin');
 
 # Current version we are working with.
-define('VERSION', '20111114');
+define('VERSION', '20120531');
 
 # Define a standard path
 define('PATH_STANDARD', dirname(__FILE__));
