@@ -231,12 +231,12 @@ class Blogs extends Main {
    * Get blog entry data.
    *
    * @access public
-   * @param integer $iId ID to load data from. If empty, show overview.
+   * @param integer $iId ID to load data from
    * @param boolean $bUpdate prepare data for update
    * @return array data from _setData
    *
    */
-  public function getId($iId = '', $bUpdate = false) {
+  public function getId($iId, $bUpdate = false) {
     # Show unpublished items to moderators or administrators only
     $iPublished = $this->_aSession['user']['role'] >= 3 ? 0 : 1;
 
