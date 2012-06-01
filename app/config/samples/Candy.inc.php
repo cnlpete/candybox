@@ -8,12 +8,36 @@
 # ------------------------------------------------------------------------------
 
 # Set up your SQL preferences. If they are incorrect, the website won't work.
+
+# SQL host
+# DEFAULT: 'locahost'
 define('SQL_HOST', 'localhost');
+
+# SQL user
+# DEFAULT: 'root'
 define('SQL_USER', 'root');
+
+# SQL password.
+# DEFAULT: ''
 define('SQL_PASSWORD', '');
+
+# SQL database.
+# DEFAULT: ''
 define('SQL_DB', '');
-define('SQL_PREFIX', 'candy_');
+
+# SQL prefixes. You can use them to avoid conflicts with non-candyCMS tables.
+# DEFAULT: ''
+define('SQL_PREFIX', '');
+
+# SQL port. You don't have to change it unless the server needs a specific port.
+# DEFAULT: '3306'
 define('SQL_PORT', '3306');
+
+# SQL single database mode. If your webserver doesn't support multiple databases
+# (like databasename_production, databasename_development etc.) set this to true.
+# OPTIONS: true / false
+# DEFAULT: false
+define('SQL_SINGLE_DB_MODE', false);
 
 # ------------------------------------------------------------------------------
 
@@ -45,7 +69,8 @@ define('WEBSITE_CDN', '/public');
 
 # Use compressed or non-compressed files. Note that compressed files must be
 # updated every time you work on a non-compressed file!
-# DEFAULT: 'true'
+# OPTIONS: true / false
+# DEFAULT: false
 define('WEBSITE_COMPRESS_FILES', false);
 # ------------------------------------------------------------------------------
 

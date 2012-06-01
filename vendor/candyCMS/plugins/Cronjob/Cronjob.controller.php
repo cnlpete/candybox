@@ -323,8 +323,12 @@ EOD;
 
     # Get all tables and name them
     try {
-      $oQuery = $this->_oDB->query("SHOW TABLES FROM " . SQL_DB . '_' . WEBSITE_MODE);
-      $aResult = $oQuery->fetchAll();
+      $oQuery = $this->_oDB->query("SHOW TABLES FROM " .
+											defined('SQL_SINGLE_DB_MODE') && SQL_SINGLE_DB_MODE === true ?
+											SQL_DB :
+											SQL_DB . '_' . WEBSITE_MODE);
+
+			$aResult = $oQuery->fetchAll();
 
       # Show all tables
       foreach ($aResult as $aTable) {
