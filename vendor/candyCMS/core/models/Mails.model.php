@@ -168,8 +168,11 @@ class Mails extends Main {
 
     # Try to resend
     try {
-      if($this->_send($aResult))
-        return $this->destroy ($iId);
+      if (isset($aResult['content']))
+        $aResult['message'] = $aResult['content'];
+
+      if ($this->_send($aResult))
+        return $this->destroy($iId);
     }
     catch (\phpmailerException $e) {
       AdvancedException::writeLog($e->errorMessage());
@@ -238,8 +241,12 @@ class Mails extends Main {
         $oQuery->bindParam('ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
         $oQuery->bindParam('error_message', $sErrorMessage, PDO::PARAM_STR);
 
-        foreach ($aData as $sKey => $sValue)
+        foreach ($aData as $sKey => $sValue) {
+          if ($sKey == 'message')
+            $sKey = 'content';
+
           $oQuery->bindParam($sKey, isset($sValue) ? $sValue : '', PDO::PARAM_STR);
+        }
 
         $oQuery->execute();
         parent::$iLastInsertId = Helper::getLastEntry('mails');
