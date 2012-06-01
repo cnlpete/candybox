@@ -339,8 +339,8 @@ class Users extends Main {
           $sModel = $this->__autoload('Mails', true);
           $oMails = new $sModel($this->_aRequest, $this->_aSession);
 
-          $aData['to_address']  = Helper::formatInput($this->_aRequest[$this->_sController]['name']);
-          $aData['to_name']     = Helper::formatInput($this->_aRequest[$this->_sController]['email']);
+          $aData['to_address']  = Helper::formatInput($this->_aRequest[$this->_sController]['email']);
+          $aData['to_name']     = Helper::formatInput($this->_aRequest[$this->_sController]['name']);
           $aData['subject']     = I18n::get('users.mail.subject');
           $aData['message']     = I18n::get('users.mail.body',
                   Helper::formatInput($this->_aRequest[$this->_sController]['name']),
