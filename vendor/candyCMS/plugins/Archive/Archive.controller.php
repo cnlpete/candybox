@@ -60,7 +60,7 @@ final class Archive {
 
         # Prepare array
         $iId = $aRow['id'];
-        $aMonth[$sMonth][$iId] = $aRow;
+        $aMonth[$sMonth][$iId] = Helper::formatOutput($aRow);
       }
 
       $oSmarty->assign('data', $aMonth);
