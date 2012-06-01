@@ -67,12 +67,13 @@ class Mails extends Main {
   /**
    * Replace the WEBSITE_NAME and WEBSITE_URL placeholders with its according constants
    *
+   * @static
    * @access private
    * @param string $sText the text in which to replace the placeholders
    * @return string the text with all placeholders replaced
    *
    */
-  private function _replaceNameAndUrl($sText) {
+  private static function _replaceNameAndUrl($sText) {
     $sText = str_replace('%%WEBSITE_NAME',  WEBSITE_NAME, $sText);
     $sText = str_replace('%%WEBSITE_URL',   WEBSITE_URL,  $sText);
     $sText = str_replace('%WEBSITE_NAME',   WEBSITE_NAME, $sText);

@@ -27,14 +27,14 @@ class Mails extends Main {
    */
   public function show() {
     if ($this->_aSession['user']['role'] < 4) {
-      if (!empty($this->_iId))
-        return Helper::redirectTo('/' . $this->_aRequest['controller'] . '/' . $this->_iId . '/create');
-      else
-        return Helper::redirectTo('/' . $this->_aRequest['controller'] . '/create');
+      return !empty($this->_iId) ?
+              Helper::redirectTo('/' . $this->_aRequest['controller'] . '/' . $this->_iId . '/create') :
+              Helper::redirectTo('/' . $this->_aRequest['controller'] . '/create');
     }
     else {
       if ($this->_aRequest['action'] == 'resend')
         exit($this->_resend());
+
       else
         return $this->_show();
     }
@@ -197,11 +197,11 @@ class Mails extends Main {
   /**
    * Show success message after mail is sent.
    *
-   * @access private
+   * @access protected
    * @return string HTML success page.
    *
    */
-  private function _showSuccessPage() {
+  protected function _showSuccessPage() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'success');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'success');
     $this->oSmarty->setTemplateDir($sTemplateDir);
