@@ -4,7 +4,7 @@
  * TagCloud Plugin.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 2.1
  *

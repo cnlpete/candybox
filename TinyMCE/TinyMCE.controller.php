@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This plugin rewrites the standard date into a nicer "today" / "yesterday" format.
+ * This plugin adds javscript code to make some textbox into a tinymce instance.
  *
  * @link http://github.com/marcoraddatz/candyCMS
  * @author Hauke Schade <http://hauke-schade.de>
@@ -15,7 +15,7 @@ namespace CandyCMS\Plugins;
 use CandyCMS\Core\Helpers\Helper;
 use CandyCMS\Core\Helpers\SmartySingleton;
 
-final class FormatTimestamp {
+final class TinyMCE {
 
   /**
    * Identifier for Template Replacements
@@ -23,10 +23,10 @@ final class FormatTimestamp {
    * @var constant
    *
    */
-  const IDENTIFIER = 'formattimestamp';
+  const IDENTIFIER = 'tinymce';
 
   /**
-   * Show the (cached) javascript code, that enables the jQuery plugin.
+   * Show the (cached) tinymce javascript code.
    *
    * @final
    * @access public
@@ -36,20 +36,17 @@ final class FormatTimestamp {
    *
    */
   public final function show(&$aRequest, &$aSession) {
-    $sTemplateDir   = Helper::getPluginTemplateDir('FormatTimestamp', 'show');
+    $sTemplateDir   = Helper::getPluginTemplateDir('TinyMCE', 'show');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
 
     $oSmarty = SmartySingleton::getInstance();
     $oSmarty->setTemplateDir($sTemplateDir);
     $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
-    $sCacheId = WEBSITE_MODE . '|layout|' . WEBSITE_LOCALE . '|formattimestamp|';
-    if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
-      # the jQuery.timeago plugin takes it range in milliseconds,
-      # PLUGIN_FORMATTIMESTAMP_RANGE is in minutes and defaults to 3 days
-      $iRange = 1000 * 60 * (defined('PLUGIN_FORMATTIMESTAMP_RANGE') ? PLUGIN_FORMATTIMESTAMP_RANGE : 4320);
-      $oSmarty->assign('range', $iRange);
-    }
+    $sCacheId = WEBSITE_MODE . '|layout|' . WEBSITE_LOCALE . '|tinymce|';
+    #if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
+      # cached actions
+    #}
 
     return $oSmarty->fetch($sTemplateFile, $sCacheId);
   }

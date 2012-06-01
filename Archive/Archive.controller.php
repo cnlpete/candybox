@@ -29,8 +29,6 @@ final class Archive {
   /**
    * Show the (cached) archive.
    *
-   * We use a new Smarty instance to avoid parsing the Main.controller due to performance reasons.
-   *
    * @final
    * @access public
    * @param array $aRequest
@@ -55,16 +53,14 @@ final class Archive {
       $aMonth = array();
       foreach ($oModel->getOverview(PLUGIN_ARCHIVE_LIMIT) as $aRow) {
         # Date format the month
-        $sMonth = strftime('%m', $aRow['date']['raw']);
-        $sMonth = substr($sMonth, 0, 1) == 0 ? substr($sMonth, 1, 2) : $sMonth;
+        $sMonth = date('n', $aRow['date']['raw']);
         $sMonth = I18n::get('global.months.' . $sMonth) . ' ' . strftime('%Y', $aRow['date']['raw']);
 
         # Prepare array
-        $iId = $aRow['id'];
-        $aMonth[$sMonth][$iId] = $aRow;
+        $aMonths[$sMonth][] = $aRow;
       }
 
-      $oSmarty->assign('data', $aMonth);
+      $oSmarty->assign('data', $aMonths);
     }
 
     return $oSmarty->fetch($sTemplateFile, $sCacheId);
