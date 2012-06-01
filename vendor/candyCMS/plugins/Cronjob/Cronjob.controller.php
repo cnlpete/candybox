@@ -372,7 +372,7 @@ EOD;
 
       $aData['subject']       = I18n::get('cronjob.mail.subject', $sBackupName);
       $aData['message']       = I18n::get('cronjob.mail.body');
-      $aData['from_address']  = WEBSITE_MAIL_NOREPLY;
+      $aData['to_address']    = WEBSITE_MAIL;
       $aData['attachement']   = $sBackupPath;
 
       return $oMails->create($aData);
