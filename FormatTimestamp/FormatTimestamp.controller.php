@@ -4,10 +4,9 @@
  * This plugin rewrites the standard date into a nicer "today" / "yesterday" format.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
- * @since 1.0
- *
+ * @since 2.1
  *
  */
 
@@ -27,7 +26,7 @@ final class FormatTimestamp {
   const IDENTIFIER = 'formattimestamp';
 
   /**
-   * Show the (cached) tagcloud.
+   * Show the (cached) javascript code, that enables the jQuery plugin.
    *
    * @final
    * @access public
