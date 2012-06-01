@@ -118,7 +118,7 @@ class Mails extends Main {
             isset($aData['from_name']) ? $aData['from_name'] : WEBSITE_NAME);
 
     $oMail->AddReplyTo(
-            isset($aData['from_address']) ? $aData['from_address'] : '',
+            isset($aData['from_address']) ? $aData['from_address'] : WEBSITE_MAIL_NOREPLY,
             isset($aData['from_name']) ? $aData['from_name'] : '');
 
     $oMail->AddAddress(

@@ -67,7 +67,7 @@ global:
   login: Login
   logs: Logs
   logout: Logout
-  mails: Ungesendete Emails
+  mails: Ungesendete E-Mails
   manager:
     content: Seitenmanagement
     media: Dateimanager

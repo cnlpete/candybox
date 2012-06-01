@@ -325,7 +325,7 @@ class Users extends Main {
     else {
       $bReturn = $this->_oModel->create($iVerificationCode) === true;
 
-      Logs::insert(  $this->_sController,
+      Logs::insert( $this->_sController,
                     $this->_aRequest['action'],
                     $this->_oModel->getLastInsertId('users'),
                     $this->_aSession['user']['id'],
@@ -336,18 +336,17 @@ class Users extends Main {
 
         # Send email if user has registered and creator is not an admin.
         if ($this->_aSession['user']['role'] != 4) {
-          $sMailMessage = I18n::get('users.mail.body',
+          $sModel = $this->__autoload('Mails', true);
+          $oMails = new $sModel($this->_aRequest, $this->_aSession);
+
+          $aData['to_address']  = Helper::formatInput($this->_aRequest[$this->_sController]['name']);
+          $aData['to_name']     = Helper::formatInput($this->_aRequest[$this->_sController]['email']);
+          $aData['subject']     = I18n::get('users.mail.subject');
+          $aData['message']     = I18n::get('users.mail.body',
                   Helper::formatInput($this->_aRequest[$this->_sController]['name']),
                   Helper::createLinkTo('users/' . $iVerificationCode . '/verification'));
 
-          $sClass = $this->__autoload('Mails', true);
-          $oMails = new $sClass($this->_aRequest, $this->_aSession);
-          $oMails->create(I18n::get('users.mail.subject'),
-                  $sMailMessage,
-                  Helper::formatInput($this->_aRequest[$this->_sController]['name']),
-                  Helper::formatInput($this->_aRequest[$this->_sController]['email']),
-                  '',
-                  WEBSITE_MAIL_NOREPLY );
+          $oMails->create($aData);
         }
 
         return $this->_aSession['user']['role'] == 4 ?

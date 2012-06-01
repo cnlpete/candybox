@@ -161,36 +161,40 @@ class Mails extends Main {
 
     else {
       # Select user name and surname
-      $oClass = $this->__autoload('Users', true);
-      $sModel = new $oClass($this->_aRequest, $this->_aSession);
-      $aRow   = $sModel::getUserNamesAndEmail($this->_iId);
+      $sModel = $this->__autoload('Users', true);
+      $oClass = new $sModel($this->_aRequest, $this->_aSession);
+      $aRow   = $oClass::getUserNamesAndEmail($this->_iId);
 
       # if id is specified, but user not found => 404
       if (!$aRow && $this->_iId)
         return Helper::redirectTo('/errors/404');
 
-      $sSendersName = isset($this->_aSession['user']['name']) ?
+      $aData['from_name']   = isset($this->_aSession['user']['name']) ?
               $this->_aSession['user']['name'] :
               I18n::get('global.system');
 
-      $sSubject = isset($this->_aRequest[$this->_sController]['subject']) && $this->_aRequest[$this->_sController]['subject'] ?
+      $aData['subject']     = isset($this->_aRequest[$this->_sController]['subject']) &&
+              $this->_aRequest[$this->_sController]['subject'] ?
               Helper::formatInput($this->_aRequest[$this->_sController]['subject']) :
-              I18n::get('mails.subject.by', $sSendersName);
+              I18n::get('mails.subject.by', $aData['from_name']);
 
-      $bStatus = $this->_oModel->create($sSubject,
-              Helper::formatInput($this->_aRequest[$this->_sController]['content']),
-              isset($aRow['name']) ? $aRow['name'] : '',
-              isset($aRow['email']) ? $aRow['email'] : WEBSITE_MAIL,
-              isset($this->_aSession['user']['name']) ? $this->_aSession['user']['name'] : '',
-              Helper::formatInput($this->_aRequest[$this->_sController]['email']));
+      $aData['message']     = Helper::formatInput($this->_aRequest[$this->_sController]['content']);
+      $aData['to_name']     = isset($aRow['name']) ? $aRow['name'] : '';
+      $aData['to_address']  = isset($aRow['email']) ? $aRow['email'] : WEBSITE_MAIL;
+      $aData['from_name']   = isset($this->_aSession['user']['name']) ? $this->_aSession['user']['name'] : '';
+      $aData['from_address']= Helper::formatInput($this->_aRequest[$this->_sController]['email']);
 
-      Logs::insert($this->_aRequest['controller'], 'create', (int) $this->_iId, $this->_aSession['user']['id'], '', '', $bStatus);
+      $bStatus = $this->_oModel->create($aData);
 
-      if ($bStatus == true)
-        return $this->_showSuccessPage();
+      Logs::insert( $this->_aRequest['controller'],
+                    'create',
+                    (int) $this->_iId,
+                    $this->_aSession['user']['id'],
+                    '', '', $bStatus);
 
-      else
-        Helper::errorMessage(I18n::get('error.mail.create'), '/users/' . $this->_iId);
+      return $bStatus === true ?
+              $this->_showSuccessPage() :
+              Helper::errorMessage(I18n::get('error.mail.create'), '/users/' . $this->_iId);
     }
   }
 
