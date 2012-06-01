@@ -559,7 +559,7 @@ class Galleries extends Main {
                                           NOW(),
                                           :position)");
 
-      $iPosition = Helper::getLastEntry('gallery_files');
+      $iPosition = (int) Helper::getLastEntry('gallery_files');
       $oQuery->bindParam('album_id', $this->_aRequest['id'], PDO::PARAM_INT);
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
       $oQuery->bindParam('file', $sFile, PDO::PARAM_STR);

@@ -121,6 +121,10 @@ class Mails extends Main {
 
     $this->oSmarty->assign('user', $aUser);
 
+		# Set own email when logged in
+		if ($this->_aSession['user']['email'] && !isset($this->_aRequest[$this->_sController]['email']))
+			$this->_aRequest[$this->_sController]['email'] = $this->_aSession['user']['email'];
+
     foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
       $this->oSmarty->assign($sInput, $sData);
 

@@ -196,7 +196,7 @@ define('MAILCHIMP_LIST_ID', '');
 
 # should the user be redirected, if he tries to access old links ('/blog, /gallery, ...)
 # DEFAULT: false
-define('CHECK_OLD_LINKS', false);
+define('CHECK_DEPRECATED_LINKS', false);
 
 # should mails, that failed to get send, be stored in a mail queue
 # Note that those mails can be seen by Administrators until they are send

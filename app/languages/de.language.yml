@@ -248,6 +248,7 @@ error:
     create_first: Bitte loggen Sie sich zuerst ein!
   standard: Es trat ein Fehler auf!
   sql: Es gab einen Fehler beim Verarbeiten des SQL-Statements.
+  warning: Achtung!
   user:
     create:
       email: Es ist bereits ein Nutzer mit dieser E-Mail-Adresse vorhanden!

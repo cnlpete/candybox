@@ -54,7 +54,7 @@ class Helper {
     $_SESSION['flash_message'] = array(
         'type'    => 'warning',
         'message' => $sMessage,
-        'headline'=> I18n::get('error.standard'));
+        'headline'=> I18n::get('error.warning'));
 
     return $sRedirectTo ? Helper::redirectTo ($sRedirectTo) : false;
   }
@@ -371,6 +371,9 @@ class Helper {
       AdvancedException::reportBoth($e->getMessage());
       exit($e->getMessage());
     }
+
+		# Bugfix: Remove TinyMCE crap at URLs
+    $sStr = str_replace('\"', "'", $sStr);
 
     # Remove multiple spaces and newlines (3+)
     $sStr = preg_replace('/\s(\s)\s+/', '$1$1', trim($sStr));
