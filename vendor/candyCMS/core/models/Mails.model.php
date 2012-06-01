@@ -86,7 +86,7 @@ class Mails extends Main {
    * Send the mail and return phpmailers exit-status,
    * will also throw phpmailers exceptions.
    *
-   * @access private
+   * @access protected
    * @param string $sSubject mail subject
    * @param string $sMessage mail message
    * @param string $sToName name of the user to send the mail to
@@ -98,7 +98,7 @@ class Mails extends Main {
    * @see vendor/phpmailer/class.phpmailer.php
    *
    */
-  private function _send($sSubject, $sMessage, $sToName, $sToMail, $sReplyToName, $sReplyToMail, $sAttachement = '') {
+  protected function _send($sSubject, $sMessage, $sToName, $sToMail, $sReplyToName, $sReplyToMail, $sAttachement = '') {
     require_once 'vendor/phpmailer/class.phpmailer.php';
     $oMail = new \PHPMailer(true);
 
