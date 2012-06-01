@@ -81,9 +81,9 @@ define('ALLOW_EXTENSIONS', false);
 # ------------------------------------------------------------------------------
 
 # Tell the allowed plugins seperated by comma
-# DEFAULT: 'Bbcode,FormatTimestamp,Headlines,Archive'
+# DEFAULT: 'Bbcode,FormatTimestamp,Headlines,Archive,TinyMCE'
 # OTHER OFFICIALLY SUPPORTED PLUGINS: Facebook, Cronjob, Piwik, Analytics, TagCloud
-define('ALLOW_PLUGINS', 'Bbcode,FormatTimestamp,Headlines,Archive');
+define('ALLOW_PLUGINS', 'Bbcode,FormatTimestamp,Headlines,Archive,TinyMCE');
 
 # ------------------------------------------------------------------------------
 
