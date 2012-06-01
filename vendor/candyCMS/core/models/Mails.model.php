@@ -111,7 +111,6 @@ class Mails extends Main {
       $oMail->IsMail();
 
     $oMail->CharSet = 'utf-8';
-    #$oMail->SetFrom(WEBSITE_MAIL, WEBSITE_NAME);
 
     $oMail->SetFrom(
             isset($aData['from_address']) ? $aData['from_address'] : WEBSITE_MAIL_NOREPLY,

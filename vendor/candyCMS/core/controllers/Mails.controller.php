@@ -52,9 +52,8 @@ class Mails extends Main {
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
       $this->oSmarty->assign('mails', $this->_oModel->getOverview());
-    }
 
     $this->setTitle(I18n::get('global.mails'));
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
@@ -165,7 +164,7 @@ class Mails extends Main {
       $oClass = new $sModel($this->_aRequest, $this->_aSession);
       $aRow   = $oClass::getUserNamesAndEmail($this->_iId);
 
-      # if id is specified, but user not found => 404
+      # If ID is specified and user not found => 404
       if (!$aRow && $this->_iId)
         return Helper::redirectTo('/errors/404');
 

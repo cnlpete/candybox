@@ -335,7 +335,7 @@ class Users extends Main {
         $this->oSmarty->clearCacheForController($this->_sController);
 
         # Send email if user has registered and creator is not an admin.
-        if ($this->_aSession['user']['role'] != 4) {
+        if ($this->_aSession['user']['role'] < 4) {
           $sModel = $this->__autoload('Mails', true);
           $oMails = new $sModel($this->_aRequest, $this->_aSession);
 
@@ -569,10 +569,8 @@ class Users extends Main {
     if (!$this->_aError)
       $sToken = $this->_oModel->getToken();
 
-    if (isset($sToken) && $sToken)
-      return json_encode(array('success' => true, 'token' => $sToken));
-
-    else
-      return json_encode(array('success' => false));
+    return isset($sToken) && $sToken ?
+            json_encode(array('success' => true, 'token' => $sToken)) :
+            json_encode(array('success' => false));
   }
 }

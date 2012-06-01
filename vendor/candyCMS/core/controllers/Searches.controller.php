@@ -22,6 +22,7 @@ class Searches extends Main {
    *
    * @var string
    * @access protected
+   * 
    */
   protected $_sSearch;
 
@@ -33,8 +34,8 @@ class Searches extends Main {
    *
    */
   protected function _show() {
-    if (! ( (isset($this->_aRequest['search']) && $this->_aRequest['search']) ||
-            (isset($this->_aRequest[$this->_sController]) && $this->_aRequest[$this->_sController]['search']) ) )
+    if (!( (isset($this->_aRequest['search']) && $this->_aRequest['search']) ||
+            (isset($this->_aRequest[$this->_sController]) && $this->_aRequest[$this->_sController]['search']) ))
       return $this->_create();
 
     else {

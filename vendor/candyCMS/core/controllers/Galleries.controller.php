@@ -324,18 +324,16 @@ class Galleries extends Main {
   /**
    * Update the positions of all files of a gallery.
    *
-   * Calls _updateFilePositions if data is given, otherwise returns false
+   * Calls _updateFilePositions if data is given, otherwise returns false.
    *
    * @access public
    * @return boolean returned status of model action (boolean).
    *
    */
   public function updateFilePositions() {
-    if ($this->_aSession['user']['role'] < 3)
-      return false;
-
-    else
-      return $this->_updateFilePositions();
+    return $this->_aSession['user']['role'] < 3 ?
+            false :
+            $this->_updateFilePositions();
   }
 
   /**

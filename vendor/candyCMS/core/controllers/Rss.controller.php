@@ -58,7 +58,6 @@ class Rss extends Main {
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
       $this->oSmarty->assign('data', $oModel->getOverview());
 
-//    $this->oSmarty->setCacheLifetime(60);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -94,7 +93,6 @@ class Rss extends Main {
       $this->oSmarty->assign('data', $aData);
     }
 
-//    $this->oSmarty->setCacheLifetime(60);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 

@@ -113,7 +113,7 @@ class I18n {
         }
       }
 
-      # do we have other parameters?
+      # Do we have other parameters?
       $iNumArgs = func_num_args();
       if ($iNumArgs > 1) {
         # use sprintf

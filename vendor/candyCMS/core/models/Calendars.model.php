@@ -210,6 +210,7 @@ class Calendars extends Main {
     if ($bUpdate === true) {
       $this->_aData = $this->_formatForUpdate($aRow);
       $this->_aData['start_date'] = date('Y-m-d', $this->_aData['start_date']);
+
       if ($this->_aData['end_date'])
         $this->_aData['end_date'] = date('Y-m-d', $this->_aData['end_date']);
     }

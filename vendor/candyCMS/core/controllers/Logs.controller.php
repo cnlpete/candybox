@@ -138,5 +138,4 @@ class Logs extends Main {
 
     return $bReturn;
   }
-
 }

@@ -42,17 +42,10 @@ class AdvancedException extends \Exception {
   public static function sendAdminMail($sMessage) {
     $sMessage = date('Y-m-d Hi', time()) . ' - ' . $sMessage;
 
-    $sClass = \CandyCMS\Core\Controllers\Main::__autoload('Mails', true);
-    $oMails = new $sClass();
+    $sModel = \CandyCMS\Core\Controllers\Main::__autoload('Mails', true);
+    $oMails = new $sModel();
 
-    return $oMails->create('Exception',
-            $sMessage,
-            '',
-            WEBSITE_MAIL,
-            '',
-            WEBSITE_MAIL_NOREPLY,
-            '',
-            false);
+    return $oMails->create(array('subject' => 'Exception', 'message' => $sMessage), false);
   }
 
   /**
@@ -68,8 +61,7 @@ class AdvancedException extends \Exception {
     if (!is_dir(PATH_STANDARD . '/app/logs'))
       mkdir(PATH_STANDARD . '/app/logs');
 
-    $sFileName = PATH_STANDARD . '/app/logs/' . WEBSITE_MODE . '.log';
-    $oFile = fopen($sFileName, 'a');
+    $oFile = fopen(PATH_STANDARD . '/app/logs/' . WEBSITE_MODE . '.log', 'a');
     fputs($oFile, $sMessage . "\n");
     fclose($oFile);
   }

@@ -508,6 +508,7 @@ class Index {
     # Start the dispatcher and grab the controller.
     $oSmarty = SmartySingleton::getInstance();
     $oSmarty->setRequestAndSession($this->_aRequest, $this->_aSession);
+
     $oDispatcher = new Dispatcher($this->_aRequest, $this->_aSession, $this->_aFile, $this->_aCookie);
     $oDispatcher->getController();
     $oDispatcher->getAction();

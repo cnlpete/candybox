@@ -48,10 +48,9 @@ class Blogs extends Main {
 
     else {
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-        if (isset($this->_aRequest['search']) && $this->_aRequest['search'])
-          $this->_aData = $this->_oModel->getOverviewByTag();
-        else
-          $this->_aData = $this->_oModel->getOverview();
+        $this->_aData = isset($this->_aRequest['search']) && $this->_aRequest['search'] ?
+                $this->_oModel->getOverviewByTag() :
+                $this->_oModel->getOverview();
 
         $this->oSmarty->assign('blogs', $this->_aData);
         $this->oSmarty->assign('_blog_footer_', $this->_oModel->oPagination->showSurrounding());
@@ -121,6 +120,7 @@ class Blogs extends Main {
     # Show overview with pages
     else {
       $iPage = isset($this->_aRequest['page']) ? (int) $this->_aRequest['page'] : 1;
+
       return $iPage > 1 ?
               Helper::singleize(I18n::get('global.blog')) . ' - ' . I18n::get('global.page') . ' ' . $iPage :
               Helper::singleize(I18n::get('global.blog'));
