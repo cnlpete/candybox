@@ -116,9 +116,11 @@ class Mails extends Main {
     $oMail->SetFrom(
             isset($aData['from_address']) ? $aData['from_address'] : WEBSITE_MAIL,
             isset($aData['from_name']) ? $aData['from_name'] : WEBSITE_NAME);
+
     $oMail->AddReplyTo(
             isset($aData['from_address']) ? $aData['from_address'] : '',
             isset($aData['from_name']) ? $aData['from_name'] : '');
+
     $oMail->AddAddress(
             isset($aData['to_address']) ? $aData['to_address'] : '',
             isset($aData['to_name']) ? $aData['to_name'] : '');

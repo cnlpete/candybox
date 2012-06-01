@@ -367,16 +367,15 @@ EOD;
 
     # Send the backup via mail
     if (PLUGIN_CRONJOB_SEND_PER_MAIL === true) {
-      $sClass = \CandyCMS\Core\Controllers\Main::__autoload('Mails', true);
-      $oMails = new $sClass($this->_aRequest, $this->_aSession);
+      $sModel = \CandyCMS\Core\Controllers\Main::__autoload('Mails', true);
+      $oMails = new $sModel($this->_aRequest, $this->_aSession);
 
-      return $oMails->create(I18n::get('cronjob.mail.subject', $sBackupName),
-              I18n::get('cronjob.mail.body'),
-              '',
-              WEBSITE_MAIL,
-              '',
-              WEBSITE_MAIL_NOREPLY,
-              $sBackupPath);
+      $aData['subject']       = I18n::get('cronjob.mail.subject', $sBackupName);
+      $aData['message']       = I18n::get('cronjob.mail.body');
+      $aData['from_address']  = WEBSITE_MAIL_NOREPLY;
+      $aData['attachement']   = $sBackupPath;
+
+      return $oMails->create($aData);
     }
 
     # Rollback, since we did only read statements
