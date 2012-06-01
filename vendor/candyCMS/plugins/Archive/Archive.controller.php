@@ -52,6 +52,7 @@ final class Archive {
       $sBlogsModel = \CandyCMS\Core\Models\Main::__autoload('Blogs');
       $oModel = new $sBlogsModel($aRequest, $aSession);
 
+      $aMonth = array();
       foreach ($oModel->getOverview(PLUGIN_ARCHIVE_LIMIT) as $aRow) {
         # Date format the month
         $sMonth = strftime('%m', $aRow['date']['raw']);
@@ -60,7 +61,7 @@ final class Archive {
 
         # Prepare array
         $iId = $aRow['id'];
-        $aMonth[$sMonth][$iId] = Helper::formatOutput($aRow);
+        $aMonth[$sMonth][$iId] = $aRow;
       }
 
       $oSmarty->assign('data', $aMonth);
