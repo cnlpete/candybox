@@ -527,4 +527,60 @@ class Blogs extends Main {
 
     return $bResult;
   }
+
+  /**
+   * Get blog overview data. Limit by date
+   *
+   * @access public
+   * @param integer $iLimit how many month should the result set be limited to?
+   * @return array data from _setData
+   *
+   */
+  public function getOverviewByMonthLimit($iLimit = 12) {
+    try {
+      # Show unpublished items and entries with diffent languages to moderators or administrators only
+      $sWhere = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ?
+              '' :
+              "WHERE published = '1' AND language = '" . WEBSITE_LANGUAGE . "'";
+
+      $oQuery = $this->_oDb->prepare("SELECT
+                                        b.*,
+                                        UNIX_TIMESTAMP(b.date) as date,
+                                        DATE_FORMAT(b.date,'%Y') as year,
+                                        DATE_FORMAT(b.date,'%m') as month,
+                                        u.id AS user_id,
+                                        u.name AS user_name,
+                                        u.surname AS user_surname,
+                                        u.email AS user_email
+                                      FROM
+                                        " . SQL_PREFIX . "blogs b
+                                      LEFT JOIN
+                                        " . SQL_PREFIX . "users u
+                                      ON
+                                        b.author_id=u.id
+                                      WHERE
+                                        b.date >= DATE_SUB(NOW(), INTERVAL :months MONTH)
+                                      ORDER BY
+                                        b.date DESC");
+
+      $oQuery->bindParam('months', $iLimit, PDO::PARAM_INT);
+      $oQuery->execute();
+      $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0120 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+
+    foreach ($aResult as $aRow) {
+      # We use the date as identifier to give plugins the possibility to patch into the system.
+      $iDate = $aRow['date'];
+
+      # We need to specify 'blogs' because this might also be called for rss
+      $this->_aData[$iDate] = $this->_formatForOutput($aRow, array('id', 'uid', 'author_id', 'comment_sum'),
+              array('published', 'use_gravatar'), 'blogs');
+    }
+
+    return $this->_aData;
+  }
 }

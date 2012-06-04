@@ -50,11 +50,15 @@ final class Archive {
       $sBlogsModel = \CandyCMS\Core\Models\Main::__autoload('Blogs');
       $oModel = new $sBlogsModel($aRequest, $aSession);
 
+      $aMonthNames = array();
+
       $aMonth = array();
-      foreach ($oModel->getOverview(PLUGIN_ARCHIVE_LIMIT) as $aRow) {
+      foreach ($oModel->getOverviewByMonthLimit(PLUGIN_ARCHIVE_RANGE) as $aRow) {
         # Date format the month
         $sMonth = date('n', $aRow['date']['raw']);
-        $sMonth = I18n::get('global.months.' . $sMonth) . ' ' . strftime('%Y', $aRow['date']['raw']);
+        if (!isset($aMonthNames[$sMonth]))
+          $aMonthNames[$sMonth] = I18n::get('global.months.' . $sMonth);
+        $sMonth = $aMonthNames[$sMonth] . ' ' . strftime('%Y', $aRow['date']['raw']);
 
         # Prepare array
         $aMonths[$sMonth][] = $aRow;
