@@ -363,7 +363,7 @@ class Index {
   }
 
   /**
-   * Checks the empuxa server for a new CandyCMS version.
+   * Checks the empuxa server for a new candyCMS version.
    *
    * @access private
    * @return string string with info message and link to download.
@@ -372,7 +372,7 @@ class Index {
   private function _checkForNewVersion() {
     if ($this->_aSession['user']['role'] == 4 && ALLOW_VERSION_CHECK === true &&
             (WEBSITE_MODE == 'staging' || WEBSITE_MODE == 'production')) {
-      $oFile = @fopen('https://github.com/marcoraddatz/candyCMS/blob/master/version.txt', 'rb');
+      $oFile = @fopen('https://raw.github.com/marcoraddatz/candyCMS/master/version.txt', 'rb');
       $sVersionContent = @stream_get_contents($oFile);
       @fclose($oFile);
 

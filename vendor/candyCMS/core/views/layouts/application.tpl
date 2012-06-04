@@ -156,7 +156,7 @@
               </div>
             {/if}
             {if $_update_available_}
-              <div class='notice'>
+              <div class='alert alert-warning'>
                 {$_update_available_}
               </div>
             {/if}
