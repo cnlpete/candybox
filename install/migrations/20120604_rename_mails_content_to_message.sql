@@ -1,0 +1,1 @@
+ALTER TABLE `%SQL_PREFIX%mails` CHANGE COLUMN `content` `message` TEXT NOT NULL;
