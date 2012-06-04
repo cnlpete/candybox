@@ -112,6 +112,7 @@ final class Cronjob {
                           " . SQL_PREFIX . "downloads,
                           " . SQL_PREFIX . "gallery_albums,
                           " . SQL_PREFIX . "gallery_files,
+                          " . SQL_PREFIX . "mails,
                           " . SQL_PREFIX . "migrations,
                           " . SQL_PREFIX . "logs,
                           " . SQL_PREFIX . "sessions,
@@ -127,11 +128,8 @@ final class Cronjob {
       $oQuery = $this->_oDB->prepare("DELETE FROM
                                               " . SQL_PREFIX . "sessions
                                             WHERE
-                                              date < :date");
+                                              date < DATE_SUB(NOW(), INTERVAL 6 MONTH)");
 
-      # Half a year
-      $iDate = time() - 15552000;
-      $oQuery->bindParam('date', $iDate, PDO::PARAM_INT);
       return $oQuery->execute();
     }
     catch (AdvancedException $e) {
@@ -323,10 +321,12 @@ EOD;
 
     # Get all tables and name them
     try {
-      $oQuery = $this->_oDB->query("SHOW TABLES FROM " .
-											defined('SQL_SINGLE_DB_MODE') && SQL_SINGLE_DB_MODE === true ?
+      $sDatabase = defined('SQL_SINGLE_DB_MODE') && SQL_SINGLE_DB_MODE === true ?
 											SQL_DB :
-											SQL_DB . '_' . WEBSITE_MODE);
+											SQL_DB . '_' . WEBSITE_MODE;
+      $oQuery = $this->_oDB->query("SHOW TABLES
+                                    FROM " . $sDatabase . "
+                                    WHERE `Tables_in_" . $sDatabase . "` LIKE '". SQL_PREFIX . "%'");
 
 			$aResult = $oQuery->fetchAll();
 

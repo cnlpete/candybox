@@ -376,7 +376,7 @@ class Index {
       $sVersionContent = @stream_get_contents($oFile);
       @fclose($oFile);
 
-      $sVersionContent = $sVersionContent > VERSION ? (int) $sVersionContent : '';
+      $sVersionContent = (int)$sVersionContent > (int)VERSION ? (int) $sVersionContent : '';
     }
 
     return isset($sVersionContent) && !empty($sVersionContent) ?
