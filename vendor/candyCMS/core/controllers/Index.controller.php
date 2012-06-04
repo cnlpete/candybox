@@ -372,11 +372,11 @@ class Index {
   private function _checkForNewVersion() {
     if ($this->_aSession['user']['role'] == 4 && ALLOW_VERSION_CHECK === true &&
             (WEBSITE_MODE == 'staging' || WEBSITE_MODE == 'production')) {
-      $oFile = @fopen('https://github.com/marcoraddatz/candyCMS/blob/master/version.txt', 'rb');
+      $oFile = @fopen('https://raw.github.com/marcoraddatz/candyCMS/master/version.txt', 'rb');
       $sVersionContent = @stream_get_contents($oFile);
       @fclose($oFile);
 
-      $sVersionContent = $sVersionContent > VERSION ? (int) $sVersionContent : '';
+      $sVersionContent = (int)$sVersionContent > (int)VERSION ? (int) $sVersionContent : '';
     }
 
     return isset($sVersionContent) && !empty($sVersionContent) ?
