@@ -97,14 +97,14 @@
           <p>{$lang.website.terms}</p>
         </div>
       </div>
-      <div class='control-group{if isset($error.disclaimer)} alert alert-error{/if}'>
+      <div class='control-group{if isset($error.terms)} alert alert-error{/if}'>
         <label for='input-terms' class='control-label'>
           {$lang.global.terms.terms} <span title='{$lang.global.required}'>*</span>
         </label>
         <div class='controls'>
           <label class='checkbox'>
-            <input name='{$_REQUEST.controller}[disclaimer]'
-                   value='disclaimer'
+            <input name='{$_REQUEST.controller}[terms]'
+                   value='terms'
                    type='checkbox'
                    id='input-terms'
                    required />
@@ -112,9 +112,9 @@
               {$lang.global.terms.read}
             </a>
           </label>
-          {if isset($error.disclaimer)}
+          {if isset($error.terms)}
             <span class='help-inline'>
-              {$error.disclaimer}
+              {$error.terms}
             </span>
           {/if}
         </div>

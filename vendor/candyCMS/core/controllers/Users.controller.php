@@ -309,9 +309,9 @@ class Users extends Main {
     if ($this->_aRequest[$this->_sController]['password'] !== $this->_aRequest[$this->_sController]['password2'])
       $this->_aError['password'] = I18n::get('error.passwords');
 
-    # Admin does not need to confirm disclaimer
-    if ($this->_aSession['user']['role'] < 4 && !isset($this->_aRequest[$this->_sController]['disclaimer']))
-      $this->_aError['disclaimer'] = I18n::get('error.form.missing.terms');
+    # Admin does not need to confirm terms
+    if ($this->_aSession['user']['role'] < 4 && !isset($this->_aRequest[$this->_sController]['terms']))
+      $this->_aError['terms'] = I18n::get('error.form.missing.terms');
 
     if ($bShowCaptcha === true && Recaptcha::getInstance()->checkCaptcha($this->_aRequest) === false)
         $this->_aError['captcha'] = I18n::get('error.captcha.incorrect');
