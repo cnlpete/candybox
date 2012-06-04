@@ -464,6 +464,9 @@ class Install extends Index {
         $oQuery->bindParam('file', $_REQUEST['file']);
         $oQuery->bindParam('date', time());
         $oQuery->execute();
+
+        // clear all caches
+        $this->oSmarty->clearCache(null, WEBSITE_MODE);
       }
       catch (\AdvancedException $e) {
         die($e->getMessage());
