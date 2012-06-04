@@ -128,11 +128,8 @@ final class Cronjob {
       $oQuery = $this->_oDB->prepare("DELETE FROM
                                               " . SQL_PREFIX . "sessions
                                             WHERE
-                                              date < :date");
+                                              date < DATE_SUB(NOW(), INTERVAL 6 MONTH)");
 
-      # Half a year
-      $iDate = time() - 15552000;
-      $oQuery->bindParam('date', $iDate, PDO::PARAM_INT);
       return $oQuery->execute();
     }
     catch (AdvancedException $e) {
