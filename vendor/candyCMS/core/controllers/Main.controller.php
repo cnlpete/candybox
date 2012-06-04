@@ -326,6 +326,10 @@ abstract class Main {
       if ($this->_sController == 'errors')
         $this->setTitle(I18n::get('error.' . $this->_aRequest['id'] . '.title'));
 
+      # Bugfix: We need that to cache our contents view.
+      elseif(isset($this->_aRequest['seo_title']))
+        $this->setTitle($this->_removeHighlight(url_decode($this->_aRequest['seo_title'])));
+
       else
         $this->setTitle(I18n::get('global.' . strtolower(Helper::singleize($this->_sController))));
     }

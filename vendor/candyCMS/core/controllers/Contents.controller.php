@@ -22,6 +22,7 @@ class Contents extends Main {
    *
    * @access protected
    * @return string HTML content
+   * @see /vendor/candyCMS/core/controllers/Main.controller.php for setTitle modifications.
    *
    */
   protected function _show() {
@@ -30,7 +31,7 @@ class Contents extends Main {
       $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'show');
       $this->oSmarty->setTemplateDir($sTemplateDir);
 
-      #if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+      if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
         $aData = $this->_oModel->getId($this->_iId);
 
         if (!isset($aData) || !$aData[$this->_iId]['id'])
@@ -41,7 +42,7 @@ class Contents extends Main {
         $this->setTitle($this->_removeHighlight($aData[$this->_iId]['title']));
 
         $this->oSmarty->assign('contents', $aData);
-      #}
+      }
 
       return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
