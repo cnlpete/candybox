@@ -483,7 +483,7 @@ class Users extends Main {
    *
    */
   protected function _destroy() {
-    require PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
+    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
     $aUser = $this->_oModel->getUserNamesAndEmail($this->_iId);
 
     # Do IDs match?
