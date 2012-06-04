@@ -20,6 +20,8 @@ class Contents extends Main {
   /**
    * Show content entry or content overview (depends on a given ID or not).
    *
+   * Caching is diabled due to needed title, keyword and description information.
+   *
    * @access protected
    * @return string HTML content
    * @see /vendor/candyCMS/core/controllers/Main.controller.php for setTitle modifications.
@@ -31,18 +33,16 @@ class Contents extends Main {
       $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'show');
       $this->oSmarty->setTemplateDir($sTemplateDir);
 
-      if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-        $aData = $this->_oModel->getId($this->_iId);
+      $aData = $this->_oModel->getId($this->_iId);
 
-        if (!isset($aData) || !$aData[$this->_iId]['id'])
-          return Helper::redirectTo('/errors/404');
+      if (!isset($aData) || !$aData[$this->_iId]['id'])
+        return Helper::redirectTo('/errors/404');
 
-        $this->setDescription($aData[$this->_iId]['teaser']);
-        $this->setKeywords($aData[$this->_iId]['keywords']);
-        $this->setTitle($this->_removeHighlight($aData[$this->_iId]['title']));
+      $this->setDescription($aData[$this->_iId]['teaser']);
+      $this->setKeywords($aData[$this->_iId]['keywords']);
+      $this->setTitle($this->_removeHighlight($aData[$this->_iId]['title']));
 
-        $this->oSmarty->assign('contents', $aData);
-      }
+      $this->oSmarty->assign('contents', $aData);
 
       return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
