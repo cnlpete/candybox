@@ -66,39 +66,44 @@ final class Bbcode {
       $sImageExtension = strtolower(substr(strrchr($sUrl[1], '.'), 1));
       $sTempFileName = md5(MEDIA_DEFAULT_X . $sUrl[1]);
       $sTempFilePath = Helper::removeSlash(PATH_UPLOAD . '/temp/bbcode/' . $sTempFileName . '.' . $sImageExtension);
+      $sHTML = '';
 
-      $aInfo = @getimagesize($sUrl[1]);
+      # Image is local
+      if(substr($sUrl[1], 0, 4) !== 'http') {
+        $aInfo   = @getimagesize($sUrl[1]);
+        $sUrl[1] = substr($sUrl[1], 0, 4) !== 'http' ? '/' . $sUrl[1] : $sUrl[1];
 
-      # Image is small and on our website, so we don't need a preview
-      if ($aInfo[0] <= MEDIA_DEFAULT_X) {
-        $sUrl[1] = substr($sUrl[1], 0, 7) !== 'http://' ? '/' . $sUrl[1] : $sUrl[1];
-        $sHTML  = '<div class=\'image\' rel="images">';
-        $sHTML .= '<img src="' . $sUrl[1] . '" width="' . $aInfo[0] . '" height="' . $aInfo[1] . '" alt="' . $sUrl[1] . '" />';
-        $sHTML .= '</div>';
-      }
-
-      # We do not have a preview
-      else {
-        require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Image.helper.php';
-
-        if (!file_exists($sTempFilePath)) {
-          $oImage = new Image($sTempFileName, 'temp', $sUrl[1], $sImageExtension);
-          $oImage->resizeDefault(MEDIA_DEFAULT_X, '', 'bbcode');
+        # We don't need a preview image
+        if ($aInfo[0] <= MEDIA_DEFAULT_X) {
+          $sHTML .= '<figure class="image" rel="images">';
+          $sHTML .= '<img src="' . $sUrl[1] . '" width="' . $aInfo[0] . '" height="' . $aInfo[1] . '" alt="' . $sUrl[1] . '" />';
+          $sHTML .= '</figure>';
         }
 
-        $aNewInfo = @getimagesize($sTempFilePath);
+        # Preview is needed
+        else {
+          if (!file_exists($sTempFilePath)) {
+            require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Image.helper.php';
 
-        # Language
-        $sText = I18n::get('global.image.click_to_enlarge', $aInfo[0], $aInfo[1]);
+            $oImage = new Image($sTempFileName, 'temp', $sUrl[1], $sImageExtension);
+            $oImage->resizeDefault(MEDIA_DEFAULT_X, '', 'bbcode');
+          }
 
-        # we have to make sure, that this absolute URL won't begin with a slash
-        $sUrl[1] = substr($sUrl[1], 0, 7) !== 'http://' ? '/' . $sUrl[1] : $sUrl[1];
-        $sTempFilePath = Helper::addSlash($sTempFilePath);
+          $aNewInfo = getImageSize($sTempFilePath);
 
-        $sHTML = '<figure class="image">';
-        $sHTML .= '<a class="js-fancybox" rel="images" href="' . $sUrl[1] . '">';
-        $sHTML .= '<img class="js-image" alt="' . $sText . '" src="' . $sTempFilePath . '" width="' . $aNewInfo[0] . '" height="' . $aNewInfo[1] . '" />';
-        $sHTML .= '</a>';
+          $sHTML .= '<figure class="image">';
+          $sHTML .= '<a class="js-fancybox" rel="images" href="' . $sUrl[1] . '">';
+          $sHTML .= '<img class="js-image" alt="' . I18n::get('global.image.click_to_enlarge', $aInfo[0], $aInfo[1]) . '"';
+          $sHTML .= 'src="' . Helper::addSlash($sTempFilePath) . '" ' . $aNewInfo[3] . ' />';
+          $sHTML .= '</a>';
+          $sHTML .= '</figure>';
+        }
+      }
+
+      # External image
+      else {
+        $sHTML .= '<figure class="image" rel="images">';
+        $sHTML .= '<img src="' . $sUrl[1] . '" width="' . MEDIA_DEFAULT_X . '" alt="' . $sUrl[1] . '" />';
         $sHTML .= '</figure>';
       }
 
@@ -151,7 +156,7 @@ final class Bbcode {
       $sStr = preg_replace("/\[toggle\=(.+)\](.*)\[\/toggle]/isU", "<span class='js-toggle-headline'><img src='%PATH_IMAGES%/candy.global/spacer.png' class='icon-toggle_max' alt='' /> \\1</span><div class=\"js-toggle-element\">\\2</div>", $sStr);
     }
 
-    # Fix quote and allow these tags
+    # Bugfix: Fix quote and allow these tags
     $sStr = str_replace("&lt;blockquote&gt;", "<blockquote>", $sStr);
     $sStr = str_replace("&lt;/blockquote&gt;", "</blockquote>", $sStr);
     $sStr = str_replace("&lt;h4&gt;", "<h4>", $sStr);

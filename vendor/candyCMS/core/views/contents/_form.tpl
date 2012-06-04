@@ -54,7 +54,9 @@
         {$lang.global.content} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <textarea name='{$_REQUEST.controller}[content]' class='js-tinymce required span4' id='input-content'>
+        <textarea name='{$_REQUEST.controller}[content]'
+                  class='js-tinymce required span5'
+                  id='input-content'>
           {$content}
         </textarea>
         {if isset($error.content)}
@@ -69,16 +71,22 @@
         {$lang.global.published}
       </label>
       <div class='controls'>
-        <input name='{$_REQUEST.controller}[published]' value='1' type='checkbox' class='checkbox'
-              id='input-published' {if $published == true}checked{/if} />
+        <input name='{$_REQUEST.controller}[published]'
+               value='1'
+               type='checkbox'
+               class='checkbox'
+               id='input-published'
+               {if $published == true}checked{/if} />
       </div>
     </div>
     <div class='form-actions'>
       <input type='submit' class='btn btn-primary'
             value="{if $_REQUEST.action == 'create'}{$lang.global.create.create}{else}{$lang.global.update.update}{/if}" />
       {if $_REQUEST.action == 'update'}
-        <input type='button' class='btn btn-danger' value='{$lang.contents.title.destroy}'
-              onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroy')" />
+        <input type='button'
+               class='btn btn-danger'
+               value='{$lang.contents.title.destroy}'
+               onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroy')" />
         <input type='reset' class='btn' value='{$lang.global.reset}' />
       {/if}
     </div>

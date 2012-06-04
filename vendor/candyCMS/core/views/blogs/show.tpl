@@ -94,7 +94,7 @@
   <script type="text/javascript">
     $(document).ready(function(){
       $('.js-fancybox').fancybox();
-      $('.js-image').capty({ height: 35 });
+      $('.js-image').capty({ height: 30 });
 
       if($('#socialshareprivacy').length > 0){
         $('#socialshareprivacy').socialSharePrivacy({

@@ -235,8 +235,8 @@ abstract class Main {
   protected function _formatForOutput(&$aData, $aInts = array('id'), $aBools = null, $sController = '') {
     $sController = !$sController ? $this->_sController : $sController;
 
-    foreach ($aData as $sColumn => $mData)
-      $aData[$sColumn] = Helper::formatOutput($mData);
+    foreach (array('content', 'teaser', 'title') as $sColumn)
+      $aData[$sColumn] = Helper::formatOutput($aData[$sColumn]);
 
     # Bugfix: Set types
     if ($aInts)
@@ -252,6 +252,7 @@ abstract class Main {
     # Format data
     self::_formatDates($aData);
 
+    # Set sitemaps.xml data
     if (isset($aData['date_raw'])) {
       $iTimestampNow = time();
 

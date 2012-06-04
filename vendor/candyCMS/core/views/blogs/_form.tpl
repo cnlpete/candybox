@@ -69,19 +69,24 @@
         {$lang.global.content} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <textarea name='{$_REQUEST.controller}[content]' class='js-tinymce required'
-                  id='input-content'>{$content}</textarea>
+        <textarea name='{$_REQUEST.controller}[content]'
+                  class='js-tinymce required span5'
+                  id='input-content'
+                  rows='6'>{$content}</textarea>
         {if isset($error.content)}
           <span class='help-inline'>{$error.content}</span>
         {/if}
       </div>
     </div>
     <div class='control-group'>
-      <label for='input-language' class='control-label'>
+      <label for='input-language'
+             class='control-label'>
         {$lang.global.language}
       </label>
       <div class='controls'>
-        <select name='{$_REQUEST.controller}[language]' class='span4' id='input-language'>
+        <select name='{$_REQUEST.controller}[language]'
+                class='span4'
+                id='input-language'>
           {foreach $languages as $l}
             <option value='{$l}' {if $l == $WEBSITE_LANGUAGE}selected='selected'{/if}>{$l}</option>
           {/foreach}
@@ -93,8 +98,12 @@
         {$lang.global.published}
       </label>
       <div class='controls'>
-        <input name='{$_REQUEST.controller}[published]' value='1' type='checkbox' class='checkbox'
-              id='input-published' {if $published == true}checked{/if} />
+        <input name='{$_REQUEST.controller}[published]'
+               value='1'
+               type='checkbox'
+               class='checkbox'
+               id='input-published'
+               {if $published == true}checked{/if} />
       </div>
     </div>
     {if $_REQUEST.action == 'update'}
@@ -103,8 +112,11 @@
           {$lang.blogs.label.date}
         </label>
         <div class='controls'>
-            <input name='{$_REQUEST.controller}[update_date]' value='1' type='checkbox'
-                  id='input-update_date' class='checkbox' />
+            <input name='{$_REQUEST.controller}[update_date]'
+                   value='1'
+                   type='checkbox'
+                   id='input-update_date'
+                   class='checkbox' />
         </div>
       </div>
       <div class='control-group'>
@@ -112,8 +124,12 @@
           {$lang.global.update.show}
         </label>
         <div class='controls'>
-            <input type='checkbox' class='checkbox' name='{$_REQUEST.controller}[show_update]' value='1'
-                  id='input-show_update' {if $date_modified > 0}checked{/if} />
+            <input type='checkbox'
+                   class='checkbox'
+                   name='{$_REQUEST.controller}[show_update]'
+                   value='1'
+                   id='input-show_update'
+                   {if $date_modified > 0}checked{/if} />
         </div>
       </div>
     {/if}
