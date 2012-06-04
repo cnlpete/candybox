@@ -115,12 +115,12 @@ abstract class Smarty_Resource {
         $_compile_id = isset($_template->compile_id) ? preg_replace('![^\w\|]+!', '_', $_template->compile_id) : null;
         $_filepath = $compiled->source->uid;
         // if use_sub_dirs, break file into directories
-        if ($_template->smarty->use_sub_dirs) {
-            $_filepath = substr($_filepath, 0, 2) . DS
-             . substr($_filepath, 2, 2) . DS
-             . substr($_filepath, 4, 2) . DS
-             . $_filepath;
-        }
+        //if ($_template->smarty->use_sub_dirs) {
+        //    $_filepath = substr($_filepath, 0, 2) . DS
+        //     . substr($_filepath, 2, 2) . DS
+        //     . substr($_filepath, 4, 2) . DS
+        //     . $_filepath;
+        //}
         $_compile_dir_sep = $_template->smarty->use_sub_dirs ? DS : '^';
         if (isset($_compile_id)) {
             $_filepath = $_compile_id . $_compile_dir_sep . $_filepath;
@@ -254,7 +254,7 @@ abstract class Smarty_Resource {
                 }
             }
         }
-        
+
         $_stream_resolve_include_path = function_exists('stream_resolve_include_path');
 
         // relative file name?
@@ -271,7 +271,7 @@ abstract class Smarty_Resource {
                     } else {
                         $_filepath = Smarty_Internal_Get_Include_Path::getIncludePath($_filepath);
                     }
-                    
+
                     if ($_filepath !== false) {
                         if ($this->fileExists($source, $_filepath)) {
                             return $_filepath;

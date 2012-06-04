@@ -32,12 +32,12 @@ class Smarty_Internal_CacheResource_File extends Smarty_CacheResource {
         $_compile_id = isset($_template->compile_id) ? preg_replace('![^\w\|]+!', '_', $_template->compile_id) : null;
         $_filepath = $_template->source->uid;
         // if use_sub_dirs, break file into directories
-        if ($_template->smarty->use_sub_dirs) {
-            $_filepath = substr($_filepath, 0, 2) . DS
-                . substr($_filepath, 2, 2) . DS
-                . substr($_filepath, 4, 2) . DS
-                . $_filepath;
-        }
+        //if ($_template->smarty->use_sub_dirs) {
+        //    $_filepath = substr($_filepath, 0, 2) . DS
+        //        . substr($_filepath, 2, 2) . DS
+        //        . substr($_filepath, 4, 2) . DS
+        //        . $_filepath;
+        //}
         $_compile_dir_sep = $_template->smarty->use_sub_dirs ? DS : '^';
         if (isset($_cache_id)) {
             $_cache_id = str_replace('|', $_compile_dir_sep, $_cache_id) . $_compile_dir_sep;
@@ -134,7 +134,8 @@ class Smarty_Internal_CacheResource_File extends Smarty_CacheResource {
         $_cache_id = isset($cache_id) ? preg_replace('![^\w\|]+!', '_', $cache_id) : null;
         $_compile_id = isset($compile_id) ? preg_replace('![^\w\|]+!', '_', $compile_id) : null;
         $_dir_sep = $smarty->use_sub_dirs ? '/' : '^';
-        $_compile_id_offset = $smarty->use_sub_dirs ? 3 : 0;
+   //     $_compile_id_offset = $smarty->use_sub_dirs ? 3 : 0;
+        $_compile_id_offset = 0;
         $_dir = $smarty->getCacheDir();
         $_dir_length = strlen($_dir);
         if (isset($_cache_id)) {
