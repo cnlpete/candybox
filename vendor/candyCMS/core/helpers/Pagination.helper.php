@@ -186,7 +186,17 @@ class Pagination {
 
       $this->_oSmarty->assign('_PAGE', $aPage);
 
-      return $this->_oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+      # turn off caching, because if cached, the content page that needs pagination is already cached
+      $iCaching = $this->_oSmarty->getCaching();
+      if ($iCaching !== SmartySingleton::CACHING_OFF)
+        $this->_oSmarty->setCaching(SmartySingleton::CACHING_OFF);
+
+      $sHTML = $this->_oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+
+      if ($iCaching !== SmartySingleton::CACHING_OFF)
+        $this->_oSmarty->setCaching($iCaching);
+
+      return $sHTML;
     }
   }
 
@@ -227,6 +237,16 @@ class Pagination {
 
     $this->_oSmarty->assign('_PAGE', $aPage);
 
-    return $this->_oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    # turn off caching, because if cached, the content page that needs pagination is already cached
+    $iCaching = $this->_oSmarty->getCaching();
+    if ($iCaching !== SmartySingleton::CACHING_OFF)
+      $this->_oSmarty->setCaching(SmartySingleton::CACHING_OFF);
+
+    $sHTML = $this->_oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+
+    if ($iCaching !== SmartySingleton::CACHING_OFF)
+      $this->_oSmarty->setCaching($iCaching);
+
+    return $sHTML;
   }
 }
