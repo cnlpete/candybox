@@ -27,9 +27,8 @@ class Calendars extends Main {
   protected function _show() {
      # Show single .ics file
     if ($this->_iId && !isset($this->_aRequest['action']))
-      exit($this->_showEntry());
+      exit($this->_showIcs($this->_iId));
 
-    # Show overview
     elseif (isset($this->_aRequest['action']) && $this->_aRequest['action'] == 'icalfeed')
       exit($this->_showIcalFeed());
 
@@ -41,17 +40,18 @@ class Calendars extends Main {
    * Show single event as ics file.
    * This needs to be specified as ajax, since there should be no surrounding templates.
    *
-   * @access private
+   * @access protected
+   * @param integer $iId ID to show
    * @return string ICS-File
    *
    */
-  private function _showEntry() {
+  protected function _showIcs($iId) {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'ics');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'ics');
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-      $aData = $this->_oModel->getId($this->_iId);
+      $aData = $this->_oModel->getId($iId);
       $this->oSmarty->assign('calendar', $aData);
 
       if (!$aData['id'])
@@ -61,17 +61,17 @@ class Calendars extends Main {
     header('Content-type: text/calendar; charset=utf-8');
     header('Content-Disposition: inline; filename=' . $aData['title_encoded'] . '.ics');
 
-    return ($this->oSmarty->fetch($sTemplateFile, UNIQUE_ID));
+    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
   /**
    * Show the overview
    *
-   * @access private
+   * @access protected
    * @return string HTML content
    *
    */
-  private function _showOverview() {
+  protected function _showOverview() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
     $this->oSmarty->setTemplateDir($sTemplateDir);

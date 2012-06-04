@@ -84,8 +84,8 @@ class Medias extends Main {
   protected function _showFormTemplate() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'create');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'create');
-
     $this->oSmarty->setTemplateDir($sTemplateDir);
+
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -93,16 +93,16 @@ class Medias extends Main {
    * Show an Overview of all Files
    * Needs to be custom since we want a different user right
    *
+   * @access public
    * @return type
+   *
    */
   public function show() {
     $this->oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
-    if ($this->_aSession['user']['role'] < 3)
-      return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
-
-    else
-      return $this->_show();
+    return $this->_aSession['user']['role'] < 3 ?
+            Helper::errorMessage(I18n::get('error.missing.permission'), '/') :
+            $this->_show();
   }
 
   /**

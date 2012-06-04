@@ -323,8 +323,12 @@ EOD;
 
     # Get all tables and name them
     try {
-      $oQuery = $this->_oDB->query("SHOW TABLES FROM " . SQL_DB . '_' . WEBSITE_MODE);
-      $aResult = $oQuery->fetchAll();
+      $oQuery = $this->_oDB->query("SHOW TABLES FROM " .
+											defined('SQL_SINGLE_DB_MODE') && SQL_SINGLE_DB_MODE === true ?
+											SQL_DB :
+											SQL_DB . '_' . WEBSITE_MODE);
+
+			$aResult = $oQuery->fetchAll();
 
       # Show all tables
       foreach ($aResult as $aTable) {
@@ -367,16 +371,15 @@ EOD;
 
     # Send the backup via mail
     if (PLUGIN_CRONJOB_SEND_PER_MAIL === true) {
-      $sClass = \CandyCMS\Core\Controllers\Main::__autoload('Mails', true);
-      $oMails = new $sClass($this->_aRequest, $this->_aSession);
+      $sModel = \CandyCMS\Core\Controllers\Main::__autoload('Mails', true);
+      $oMails = new $sModel($this->_aRequest, $this->_aSession);
 
-      return $oMails->create(I18n::get('cronjob.mail.subject', $sBackupName),
-              I18n::get('cronjob.mail.body'),
-              '',
-              WEBSITE_MAIL,
-              '',
-              WEBSITE_MAIL_NOREPLY,
-              $sBackupPath);
+      $aData['subject']       = I18n::get('cronjob.mail.subject', $sBackupName);
+      $aData['message']       = I18n::get('cronjob.mail.body');
+      $aData['to_address']    = WEBSITE_MAIL;
+      $aData['attachement']   = $sBackupPath;
+
+      return $oMails->create($aData);
     }
 
     # Rollback, since we did only read statements

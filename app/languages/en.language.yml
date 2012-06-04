@@ -263,6 +263,7 @@ error:
           empty: Please enter your old password!
           wrong: Your old password was incorrect!
     verification: Could not verify your account. This code does not exist!
+  warning: Warning!
 
 blogs:
   description:

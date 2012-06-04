@@ -5,9 +5,9 @@
         <li>
           <a href='#{$month}' name='archive-{$month}' class='js-archive_month'>{$month} ({$d|@count})</a>
           <ul style='display:none'>
-          {foreach from=$d item=entry}
+          {foreach $d as $entry}
             <li>
-              <a href='{$entry.url}' title='{$entry.date}' class='js-tooltip'>
+              <a href='{$entry.url}' title='{$entry.date.raw|date_format:$lang.global.time.format.date}' class='js-tooltip'>
                 {$entry.title}
               </a>
             </li>
@@ -20,7 +20,7 @@
   <script type='text/javascript'>
     if($('.js-archive_month')) {
       $('.js-archive_month').click(function(){
-        $(this).next().toggle();
+        $(this).next().slideToggle();
       });
     };
   </script>

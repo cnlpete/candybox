@@ -67,12 +67,13 @@ class Mails extends Main {
   /**
    * Replace the WEBSITE_NAME and WEBSITE_URL placeholders with its according constants
    *
+   * @static
    * @access private
    * @param string $sText the text in which to replace the placeholders
    * @return string the text with all placeholders replaced
    *
    */
-  private function _replaceNameAndUrl($sText) {
+  private static function _replaceNameAndUrl($sText) {
     $sText = str_replace('%%WEBSITE_NAME',  WEBSITE_NAME, $sText);
     $sText = str_replace('%%WEBSITE_URL',   WEBSITE_URL,  $sText);
     $sText = str_replace('%WEBSITE_NAME',   WEBSITE_NAME, $sText);
@@ -82,22 +83,16 @@ class Mails extends Main {
   }
 
   /**
-   * Send the mail and return phpmailers exit-status,
-   * will also throw phpmailers exceptions.
+   * Send the mail.
    *
-   * @access private
-   * @param string $sSubject mail subject
-   * @param string $sMessage mail message
-   * @param string $sToName name of the user to send the mail to
-   * @param string $sToMail email address to send mail to
-   * @param string $sReplyToName the name of the sender, can be empty
-   * @param string $sReplyToMail email address the user can reply to
-   * @param string $sAttachement path to the attachment
+   * @access protected
+   * @param array $aData array with information for subject, message, name of receipient, email of receipient,
+   * name of reply to, email of reply to and attachement path
    * @return boolean whether phpmailers returned true or false
    * @see vendor/phpmailer/class.phpmailer.php
    *
    */
-  private function _send($sSubject, $sMessage, $sToName, $sToMail, $sReplyToName, $sReplyToMail, $sAttachement = '') {
+  protected function _send($aData) {
     require_once 'vendor/phpmailer/class.phpmailer.php';
     $oMail = new \PHPMailer(true);
 
@@ -116,23 +111,33 @@ class Mails extends Main {
       $oMail->IsMail();
 
     $oMail->CharSet = 'utf-8';
-    $oMail->SetFrom(WEBSITE_MAIL, WEBSITE_NAME);
-    $oMail->AddReplyTo($sReplyToMail, $sReplyToName ? $sReplyToName : '');
-    $oMail->AddAddress($sToMail, $sToName ? $sToName : '');
-    $oMail->Subject = $sSubject;
-    $oMail->MsgHTML(nl2br($sMessage));
 
-    if ($sAttachement)
-      $oMail->AddAttachment($sAttachement);
+    $oMail->SetFrom(
+            isset($aData['from_address']) ? $aData['from_address'] : WEBSITE_MAIL_NOREPLY,
+            isset($aData['from_name']) ? $aData['from_name'] : WEBSITE_NAME);
+
+    $oMail->AddReplyTo(
+            isset($aData['from_address']) ? $aData['from_address'] : WEBSITE_MAIL_NOREPLY,
+            isset($aData['from_name']) ? $aData['from_name'] : '');
+
+    $oMail->AddAddress(
+            isset($aData['to_address']) ? $aData['to_address'] : '',
+            isset($aData['to_name']) ? $aData['to_name'] : '');
+
+    $oMail->Subject = isset($aData['subject']) ? $aData['subject'] : '';
+    $oMail->MsgHTML(nl2br(isset($aData['message']) ? $aData['message'] : ''));
+
+    if (isset($aData['attachement']))
+      $oMail->AddAttachment($aData['attachement']);
 
     return $oMail->Send();
   }
 
   /**
-   * Try to resend the mail, given by iId.
+   * Try to resend the mail, given by ID.
    *
    * @access public
-   * @param int $iId the id of the mail, we are trying to send
+   * @param integer $iId the id of the mail, we are trying to send
    * @return $bReturn boolean status
    *
    */
@@ -163,17 +168,11 @@ class Mails extends Main {
 
     # Try to resend
     try {
-      $bReturn = $this->_send($aResult['subject'],
-                              $aResult['content'],
-                              $aResult['to_name'],
-                              $aResult['to_address'],
-                              $aResult['from_name'],
-                              $aResult['from_address']);
+      if (isset($aResult['content']))
+        $aResult['message'] = $aResult['content'];
 
-      if ($bReturn)
-        $this->destroy($iId);
-
-      return $bReturn;
+      if ($this->_send($aResult))
+        return $this->destroy($iId);
     }
     catch (\phpmailerException $e) {
       AdvancedException::writeLog($e->errorMessage());
@@ -185,32 +184,26 @@ class Mails extends Main {
    * Create a new mail, store it to database on failure
    *
    * @access private
-   * @param string $sSubject mail subject
-   * @param string $sMessage mail message
-   * @param string $sToName name of the user to send the mail to
-   * @param string $sToMail email address to send mail to
-   * @param string $sReplyToName the name of the sender, can be empty
-   * @param string $sReplyToMail email address the user can reply to
-   * @param string $sAttachement path to the attachment
+   * @param array $aData array with information for subject, message, name of receipient, email of receipient,
+   * name of reply to, email of reply to and attachement path
    * @param bool $bSaveMail whehter the mail queue should be used on failure
    * @return boolean the status of the action
    * @see vendor/phpmailer/class.phpmailer.php
-   * @todo exception handling
    * @todo log entry
    *
    */
-  public function create($sSubject, $sMessage, $sToName, $sToMail, $sReplyToName, $sReplyToMail, $sAttachement = '', $bSaveMail = true) {
-    $sMessage = str_replace('%NOREPLY', I18n::get('mails.body.no_reply'), $sMessage);
-    $sMessage = str_replace('%SIGNATURE', I18n::get('mails.body.signature'), $sMessage);
+  public function create($aData, $bSaveMail = true) {
+    $aData['message'] = str_replace('%NOREPLY', I18n::get('mails.body.no_reply'), $aData['message']);
+    $aData['message'] = str_replace('%SIGNATURE', I18n::get('mails.body.signature'), $aData['message']);
 
-    $sMessage = $this->_replaceNameAndUrl($sMessage);
-    $sSubject = $this->_replaceNameAndUrl($sSubject);
+    $aData['message'] = $this->_replaceNameAndUrl($aData['message']);
+    $aData['subject'] = $this->_replaceNameAndUrl($aData['subject']);
 
     $sErrorMessage  = '';
     $bReturn        = false;
 
     try {
-      $bReturn = $this->_send($sSubject, $sMessage, $sToName, $sToMail, $sReplyToName, $sReplyToMail, $sAttachement);
+      $bReturn = $this->_send($aData);
     }
     catch (\phpmailerException $e) {
       AdvancedException::writeLog($e->errorMessage());
@@ -246,13 +239,14 @@ class Mails extends Main {
         $iUserId = (int) (isset($this->_aSession['user']['id']) ? $this->_aSession['user']['id'] : 0);
         $oQuery->bindParam('user_id', $iUserId, PDO::PARAM_INT);
         $oQuery->bindParam('ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
-        $oQuery->bindParam('from_address', $sReplyToMail, PDO::PARAM_STR);
-        $oQuery->bindParam('from_name', $sReplyToName, PDO::PARAM_STR);
-        $oQuery->bindParam('to_address', $sToMail, PDO::PARAM_STR);
-        $oQuery->bindParam('to_name', $sToName, PDO::PARAM_STR);
-        $oQuery->bindParam('subject', $sSubject, PDO::PARAM_STR);
-        $oQuery->bindParam('content', $sMessage, PDO::PARAM_STR);
         $oQuery->bindParam('error_message', $sErrorMessage, PDO::PARAM_STR);
+
+        foreach ($aData as $sKey => $sValue) {
+          if ($sKey == 'message')
+            $sKey = 'content';
+
+          $oQuery->bindParam($sKey, isset($sValue) ? $sValue : '', PDO::PARAM_STR);
+        }
 
         $oQuery->execute();
         parent::$iLastInsertId = Helper::getLastEntry('mails');

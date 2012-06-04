@@ -161,16 +161,14 @@ class Sessions extends Main {
     $sRedirect = '/' . $this->_sController . '/create';
 
     if ($bReturn == true) {
-      $sClass = $this->__autoload('Mails', true);
-      $oMails = new $sClass($this->_aRequest, $this->_aSession);
-      $bStatus = $oMails->create(I18n::get('sessions.password.mail.subject'),
-              I18n::get('sessions.password.mail.body', $sNewPasswordClean),
-              '',
-              Helper::formatInput($this->_aRequest[$this->_sController]['email']),
-              '',
-              WEBSITE_MAIL_NOREPLY );
+      $sModel = $this->__autoload('Mails', true);
+      $oMails = new $sModel($this->_aRequest, $this->_aSession);
 
-      return $bStatus === true ?
+      $aData['to_address']  = Helper::formatInput($this->_aRequest[$this->_sController]['email']);
+      $aData['subject']     = I18n::get('sessions.password.mail.subject');
+      $aData['message']     = I18n::get('sessions.password.mail.body', $sNewPasswordClean);
+
+      return $oMails->create($aData) === true ?
               Helper::successMessage(I18n::get('success.mail.create'), $sRedirect) :
               Helper::errorMessage(I18n::get('error.mail.create'), $sRedirect);
     }
@@ -222,18 +220,16 @@ class Sessions extends Main {
     $sRedirect = '/' . $this->_sController . '/create';
 
     if (is_array($aData) && !empty($aData)) {
-      $sClass = $this->__autoload('Mails', true);
-      $oMails = new $sClass($this->_aRequest, $this->_aSession);
-      $bStatus = $oMails->create(I18n::get('sessions.verification.mail.subject'),
-              I18n::get('sessions.verification.mail.body',
-                      $aData['name'],
-                      Helper::createLinkTo('users/' . $aData['verification_code'] . '/verification')),
-              '',
-              Helper::formatInput($this->_aRequest[$this->_sController]['email']),
-              '',
-              WEBSITE_MAIL_NOREPLY );
+      $sModel = $this->__autoload('Mails', true);
+      $oMails = new $sModel($this->_aRequest, $this->_aSession);
 
-      return $bStatus === true ?
+      $aData['to_address']  = Helper::formatInput($this->_aRequest[$this->_sController]['email']);
+      $aData['subject']     = I18n::get('sessions.verification.mail.subject');
+      $aData['message']     = I18n::get('sessions.verification.mail.body',
+                      $aData['name'],
+                      Helper::createLinkTo('users/' . $aData['verification_code'] . '/verification'));
+
+      return $oMails->create($aData) === true ?
               Helper::successMessage(I18n::get('success.mail.create'), $sRedirect) :
               Helper::errorMessage(I18n::get('error.mail.create'), $sRedirect);
     }
@@ -260,9 +256,8 @@ class Sessions extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
-    $this->oSmarty->assign('email', isset($this->_aRequest[$this->_sController]['email']) ?
-                    (string) $this->_aRequest[$this->_sController]['email'] :
-                    '');
+    foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
+      $this->oSmarty->assign($sInput, $sData);
 
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }

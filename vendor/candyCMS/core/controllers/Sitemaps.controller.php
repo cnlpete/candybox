@@ -26,6 +26,7 @@ class Sitemaps extends Main {
   protected function _showXML() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'xml');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'xml');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     Header('Content-Type: text/xml');
 
@@ -34,7 +35,6 @@ class Sitemaps extends Main {
       $this->_getSitemap();
     }
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     exit($this->oSmarty->display($sTemplateFile, UNIQUE_ID));
   }
 

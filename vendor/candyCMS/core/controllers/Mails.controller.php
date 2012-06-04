@@ -27,14 +27,14 @@ class Mails extends Main {
    */
   public function show() {
     if ($this->_aSession['user']['role'] < 4) {
-      if (!empty($this->_iId))
-        return Helper::redirectTo('/' . $this->_aRequest['controller'] . '/' . $this->_iId . '/create');
-      else
-        return Helper::redirectTo('/' . $this->_aRequest['controller'] . '/create');
+      return !empty($this->_iId) ?
+              Helper::redirectTo('/' . $this->_aRequest['controller'] . '/' . $this->_iId . '/create') :
+              Helper::redirectTo('/' . $this->_aRequest['controller'] . '/create');
     }
     else {
       if ($this->_aRequest['action'] == 'resend')
         exit($this->_resend());
+
       else
         return $this->_show();
     }
@@ -52,9 +52,8 @@ class Mails extends Main {
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
       $this->oSmarty->assign('mails', $this->_oModel->getOverview());
-    }
 
     $this->setTitle(I18n::get('global.mails'));
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
@@ -121,6 +120,10 @@ class Mails extends Main {
 
     $this->oSmarty->assign('user', $aUser);
 
+		# Set own email when logged in
+		if ($this->_aSession['user']['email'] && !isset($this->_aRequest[$this->_sController]['email']))
+			$this->_aRequest[$this->_sController]['email'] = $this->_aSession['user']['email'];
+
     foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
       $this->oSmarty->assign($sInput, $sData);
 
@@ -157,47 +160,51 @@ class Mails extends Main {
 
     else {
       # Select user name and surname
-      $oClass = $this->__autoload('Users', true);
-      $sModel = new $oClass($this->_aRequest, $this->_aSession);
-      $aRow   = $sModel::getUserNamesAndEmail($this->_iId);
+      $sModel = $this->__autoload('Users', true);
+      $oClass = new $sModel($this->_aRequest, $this->_aSession);
+      $aRow   = $oClass::getUserNamesAndEmail($this->_iId);
 
-      # if id is specified, but user not found => 404
+      # If ID is specified and user not found => 404
       if (!$aRow && $this->_iId)
         return Helper::redirectTo('/errors/404');
 
-      $sSendersName = isset($this->_aSession['user']['name']) ?
+      $aData['from_name']   = isset($this->_aSession['user']['name']) ?
               $this->_aSession['user']['name'] :
               I18n::get('global.system');
 
-      $sSubject = isset($this->_aRequest[$this->_sController]['subject']) && $this->_aRequest[$this->_sController]['subject'] ?
+      $aData['subject']     = isset($this->_aRequest[$this->_sController]['subject']) &&
+              $this->_aRequest[$this->_sController]['subject'] ?
               Helper::formatInput($this->_aRequest[$this->_sController]['subject']) :
-              I18n::get('mails.subject.by', $sSendersName);
+              I18n::get('mails.subject.by', $aData['from_name']);
 
-      $bStatus = $this->_oModel->create($sSubject,
-              Helper::formatInput($this->_aRequest[$this->_sController]['content']),
-              isset($aRow['name']) ? $aRow['name'] : '',
-              isset($aRow['email']) ? $aRow['email'] : WEBSITE_MAIL,
-              isset($this->_aSession['user']['name']) ? $this->_aSession['user']['name'] : '',
-              Helper::formatInput($this->_aRequest[$this->_sController]['email']));
+      $aData['message']     = Helper::formatInput($this->_aRequest[$this->_sController]['content']);
+      $aData['to_name']     = isset($aRow['name']) ? $aRow['name'] : '';
+      $aData['to_address']  = isset($aRow['email']) ? $aRow['email'] : WEBSITE_MAIL;
+      $aData['from_name']   = isset($this->_aSession['user']['name']) ? $this->_aSession['user']['name'] : '';
+      $aData['from_address']= Helper::formatInput($this->_aRequest[$this->_sController]['email']);
 
-      Logs::insert($this->_aRequest['controller'], 'create', (int) $this->_iId, $this->_aSession['user']['id'], '', '', $bStatus);
+      $bStatus = $this->_oModel->create($aData);
 
-      if ($bStatus == true)
-        return $this->_showSuccessPage();
+      Logs::insert( $this->_aRequest['controller'],
+                    'create',
+                    (int) $this->_iId,
+                    $this->_aSession['user']['id'],
+                    '', '', $bStatus);
 
-      else
-        Helper::errorMessage(I18n::get('error.mail.create'), '/users/' . $this->_iId);
+      return $bStatus === true ?
+              $this->_showSuccessPage() :
+              Helper::errorMessage(I18n::get('error.mail.create'), '/users/' . $this->_iId);
     }
   }
 
   /**
    * Show success message after mail is sent.
    *
-   * @access private
+   * @access protected
    * @return string HTML success page.
    *
    */
-  private function _showSuccessPage() {
+  protected function _showSuccessPage() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'success');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'success');
     $this->oSmarty->setTemplateDir($sTemplateDir);

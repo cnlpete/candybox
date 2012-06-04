@@ -38,10 +38,10 @@ class Sample extends \CandyCMS\core\Controllers\Main {
   protected function _show() {
     $sTemplateDir  = Helper::getTemplateDir('samples', 'show');
     $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'show');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
     $this->setTitle('Sample extension');
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
