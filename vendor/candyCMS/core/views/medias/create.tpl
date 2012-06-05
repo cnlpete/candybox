@@ -20,7 +20,6 @@
         </small>
       </label>
       <div class='controls'>
-
         {* @todo Rename file *}
         <input type='file'
                name='file[]'
@@ -52,7 +51,8 @@
   </form>
   <script type='text/javascript'>
     $("input[type='submit']").click(function() {
-      $(this).val(lang.loading);
+      $(this).hide();
+      $('.form-actions').append("<img src='{$_PATH.images}/candy.global/loading.gif' alt='" + lang.loading + "' />");
     });
 
     $('#input-file').change(function() {

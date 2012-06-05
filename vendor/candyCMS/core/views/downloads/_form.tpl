@@ -30,8 +30,12 @@
         {$lang.global.title} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <input class='span4 required' type='text' name='{$_REQUEST.controller}[title]' id='input-title'
-              value="{$title}" required />
+        <input class='span4 required'
+               type='text'
+               name='{$_REQUEST.controller}[title]'
+               id='input-title'
+               value="{$title}"
+               required />
         <span class='help-inline'>
           {if isset($error.title)}
             {$error.title}
@@ -55,7 +59,11 @@
                class='span4 required'
                autocomplete='off'
                required />
-        {if isset($error.category)}<span class='help-inline'>{$error.category}</span>{/if}
+        {if isset($error.category)}
+          <span class='help-inline'>
+            {$error.category}
+          </span>
+        {/if}
       </div>
     </div>
     <div class='control-group{if isset($error.content)} alert alert-error{/if}'>
@@ -68,7 +76,11 @@
                name='{$_REQUEST.controller}[content]'
                id='input-content'
               value="{$content}" />
-        {if isset($error.content)}<span class='help-inline'>{$error.content}</span>{/if}
+        {if isset($error.content)}
+          <span class='help-inline'>
+            {$error.content}
+          </span>
+        {/if}
       </div>
     </div>
     {if $_REQUEST.action == 'update'}
@@ -77,8 +89,11 @@
           {$lang.global.downloads}
         </label>
         <div class='controls'>
-          <input class='span4 required' type='text' name='{$_REQUEST.controller}[downloads]'
-                id='input-downloads' value='{$downloads}' />
+          <input class='span4 required'
+                 type='text'
+                 name='{$_REQUEST.controller}[downloads]'
+                 id='input-downloads'
+                 value='{$downloads}' />
         </div>
       </div>
     {/if}
@@ -105,6 +120,11 @@
   <script type='text/javascript'>
     $('#input-title').bind('keyup', function() {
       countCharLength(this, 128);
+    });
+
+    $("input[type='submit']").click(function() {
+      $(this).hide();
+      $('.form-actions').append("<img src='{$_PATH.images}/candy.global/loading.gif' alt='" + lang.loading + "' />");
     });
 
     $('#input-file').change(function() {
