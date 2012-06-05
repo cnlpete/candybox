@@ -19,4 +19,4 @@ composer.phar
 /vendor/composer/
 /vendor/symfony/
 /vendor/facebook/
-/vendor/leafo/lessphp/
+/vendor/leafo/
