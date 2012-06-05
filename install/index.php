@@ -12,10 +12,10 @@
 
 namespace CandyCMS;
 
-use \CandyCMS\Core\Controllers\Index;
-use \CandyCMS\Core\Helpers\Helper;
-use \CandyCMS\Core\Helpers\SmartySingleton;
-use \CandyCMS\Core\Helpers\I18n;
+use CandyCMS\Core\Controllers\Index;
+use CandyCMS\Core\Helpers\Helper;
+use CandyCMS\Core\Helpers\SmartySingleton;
+use CandyCMS\Core\Helpers\I18n;
 use PDO;
 
 define('PATH_STANDARD', dirname(__FILE__) . '/..');
@@ -25,7 +25,7 @@ require PATH_STANDARD . '/vendor/candyCMS/core/controllers/Index.controller.php'
 class Install extends Index {
 
   /**
-   * Set up setup ;)
+   * Setup setup ;)
    *
    * @access public
    * @param array $aRequest
@@ -56,6 +56,7 @@ class Install extends Index {
     $this->oSmarty->setCaching(SmartySingleton::CACHING_OFF);
     $this->oSmarty->setCompileCheck(true);
 
+    # Bugfix: We need this lines for creating an admin user.
     $this->_aRequest['controller'] = 'install';
     $this->oSmarty->assign('_REQUEST', $this->_aRequest);
     $this->_sController = $this->_aRequest['controller'];
@@ -91,11 +92,11 @@ class Install extends Index {
     define('EXTENSION_CHECK', false);
     define('MOBILE', false);
     define('MOBILE_DEVICE', false);
-    define('VERSION', '20120410');
+    define('VERSION', '20120605');
   }
 
   /**
-   * Create all Folders specified in given Array
+   * Create all Folders specified in given s drray
    *
    * @access private
    * @param array $aFolders array of Folders to create, can also contain subarrays
@@ -119,12 +120,13 @@ class Install extends Index {
   }
 
   /**
-   * Check all Folders specified in given Array and assign result to smarty
+   * Check all Folders specified in given array and assign result to smarty
    *
    * @param array $aFolders array of Folders to check for, can also contain subarrays
    * @param array $aReturn array of bool return values for smarty
    * @param string $sPrefix prefix for assigns and checks, default: '/'
    * @param string $sPermissions the permissions to create the folders with, default: '0777'
+   * @return boolean status of folders
    *
    */
   private function _checkFoldersAndAssign($aFolders, &$aReturn, $sPrefix = '/', $sPermissions = '0777') {
@@ -453,9 +455,9 @@ class Install extends Index {
 
   /**
    *
-   * @param type $sField
-   * @param type $sMessage
-   * @return \CandyCMS\Install
+   * @param string $sField
+   * @param string $sMessage
+   * @return object \CandyCMS\Install
    * @see /vendor/candyCMS/core/controllers/Main.controller.php - taken from there
    *
    */
