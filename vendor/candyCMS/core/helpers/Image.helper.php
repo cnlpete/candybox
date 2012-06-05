@@ -124,6 +124,18 @@ class Image {
 
     imagedestroy($oNewImg);
 
+    # Reduce image size via Smush.it
+    if (defined('ALLOW_SMUSHIT') && ALLOW_SMUSHIT === true) {
+      require_once PATH_STANDARD . '/vendor/smushit/smushit.php';
+
+      # Send information of our created image to the server.
+      $oSmushIt = new \SmushIt(WEBSITE_URL . '/' . $sPath);
+
+      # Download new image from Smush.it
+      if (empty($oSmushIt->error))
+        file_put_contents($sPath, file_get_contents($oSmushIt->compressedUrl));
+    }
+
     return $sPath;
   }
 

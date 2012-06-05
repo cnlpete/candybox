@@ -112,9 +112,18 @@ define('ALLOW_PLUGINS', 'Bbcode,FormatTimestamp,Headlines,Archive,TinyMCE');
 
 # ------------------------------------------------------------------------------
 
-# Allow this software to connect the CandyCMS website to check for an update
+# Allow this software to connect the CandyCMS website to check for an update.
+# OPTIONS: true / false
 # DEFAULT: true
 define('ALLOW_VERSION_CHECK', true);
+
+# ------------------------------------------------------------------------------
+
+# Smush.it can reduce your image size. Do not allow if you want maximum quality
+# for your images.
+# OPTIONS: true / false
+# DEFAULT: true
+define('ALLOW_SMUSHIT', true);
 
 # ------------------------------------------------------------------------------
 
