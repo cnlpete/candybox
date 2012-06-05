@@ -56,6 +56,10 @@ class Install extends Index {
     $this->oSmarty->setCaching(SmartySingleton::CACHING_OFF);
     $this->oSmarty->setCompileCheck(true);
 
+    $this->_aRequest['controller'] = 'install';
+    $this->oSmarty->assign('_REQUEST', $this->_aRequest);
+    $this->_sController = $this->_aRequest['controller'];
+
     # Direct actions
     if (isset($this->_aRequest['action']) && 'install' == $this->_aRequest['action'])
       $this->showInstallation();
@@ -241,30 +245,23 @@ class Install extends Index {
 
       case '4':
 
-        if (isset($this->_aRequest['create_admin'])) {
+        if (isset($this->_aRequest[$this->_sController])) {
           $this->_setError('name')->_setError('surname')->_setError('email')->_setError('password');
 
-          if ($this->_aRequest['password'] !== $this->_aRequest['password2'])
+          if ($this->_aRequest[$this->_sController]['password'] !== $this->_aRequest[$this->_sController]['password2'])
             $this->_aError['password'] = I18n::get('error.passwords');
 
           if ($this->_aError) {
+            foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
+              $this->oSmarty->assign($sInput, $sData);
+
             $this->oSmarty->assign('error', $this->_aError);
-
-            $this->oSmarty->assign('name', isset($this->_aRequest['name']) ?
-                            Helper::formatInput($this->_aRequest['name']) :
-                            '');
-
-            $this->oSmarty->assign('surname', isset($this->_aRequest['surname']) ?
-                            Helper::formatInput($this->_aRequest['surname']) :
-                            '');
-
-            $this->oSmarty->assign('email', isset($this->_aRequest['email']) ?
-                            Helper::formatInput($this->_aRequest['email']) :
-                            '');
           }
+
           else {
             $sUsers = \CandyCMS\Core\Models\Main::__autoload('Users');
             $oUsers = new $sUsers($this->_aRequest, $this->_aSession);
+
             $bResult = $oUsers->create('', 4);
             Helper::redirectTo('/install/?action=install&step=5&result=' . ($bResult ? '1' : '0'));
           }
@@ -283,39 +280,6 @@ class Install extends Index {
 
         break;
     }
-  }
-
-	/**
-	 * Set error messages. This is a copy from Main.controller.php
-	 *
-	 * @access protected
-	 * @param string $sField field to be checked
-	 * @param string $sMessage error to be displayed
-   * @return object $this due to method chaining
-	 *
-	 */
-	protected function _setError($sField, $sMessage = '') {
-    if ($sField == 'file' || $sField == 'image') {
-      if (!isset($this->_aFile[$sField]) || empty($this->_aFile[$sField]['name']))
-          $this->_aError[$sField] = $sMessage ?
-                $sMessage :
-                I18n::get('error.form.missing.file');
-    }
-
-    else {
-      if (!isset($this->_aRequest[$sField]) || empty($this->_aRequest[$sField]))
-          $sError = I18n::get('error.form.missing.' . strtolower($sField)) ?
-                I18n::get('error.form.missing.' . strtolower($sField)) :
-                I18n::get('error.form.missing.standard');
-
-      if ('email' == $sField && !Helper::checkEmailAddress($this->_aRequest['email']))
-          $sError = $sError ? $sError : I18n::get('error.mail.format');
-
-      if ($sError)
-        $this->_aError[$sField] = !$sMessage ? $sError : $sMessage;
-    }
-
-    return $this;
   }
 
   /**
@@ -485,6 +449,29 @@ class Install extends Index {
   public function showMigration() {
     $this->getCronjob(true);
     return isset($this->_aRequest['file']) ? $this->_doMigration($this->_aRequest['file']) : $this->_showMigrations();
+  }
+
+  /**
+   *
+   * @param type $sField
+   * @param type $sMessage
+   * @return \CandyCMS\Install
+   * @see /vendor/candyCMS/core/controllers/Main.controller.php - taken from there
+   *
+   */
+  protected function _setError($sField, $sMessage = '') {
+    if (!isset($this->_aRequest[$this->_sController][$sField]) || empty($this->_aRequest[$this->_sController][$sField]))
+      $sError = I18n::get('error.form.missing.' . strtolower($sField)) ?
+              I18n::get('error.form.missing.' . strtolower($sField)) :
+              I18n::get('error.form.missing.standard');
+
+    if ('email' == $sField && !Helper::checkEmailAddress($this->_aRequest[$this->_sController]['email']))
+      $sError = $sError ? $sError : I18n::get('error.mail.format');
+
+    if ($sError)
+      $this->_aError[$sField] = !$sMessage ? $sError : $sMessage;
+
+    return $this;
   }
 }
 
