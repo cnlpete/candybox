@@ -53,16 +53,24 @@
                   class='required span4' required>
           {if isset($content)}{$content}{/if}
         </textarea>
-        {if isset($error.content)}<span class='help-inline'>{$error.content}</span>{/if}
+        {if isset($error.content)}
+          <span class='help-inline'>{$error.content}</span>
+        {/if}
       </div>
     </div>
-    {if isset($_captcha_)}{$_captcha_}{/if}
-    {if $MOBILE}<div data-role='fieldcontain' class='center'>{/if}
-      <div class='form-actions' data-role='controlgroup' data-type='horizontal'>
-        <input type='submit' value='{$lang.comments.title.create}' data-theme='b' class='btn btn-primary' />
-        <input type='reset' value='{$lang.global.reset}' class='btn' />
-        <input type='hidden' value='{$_REQUEST.id}' name='{$_REQUEST.controller}[parent_id]' />
+    {if isset($_captcha_)}
+      {$_captcha_}
+    {/if}
+    {if $MOBILE}
+      <div data-role='fieldcontain' class='center'>
+    {/if}
+    <div class='form-actions' data-role='controlgroup' data-type='horizontal'>
+      <input type='submit' value='{$lang.comments.title.create}' data-theme='b' class='btn btn-primary' />
+      <input type='reset' value='{$lang.global.reset}' class='btn' />
+      <input type='hidden' value='{$_REQUEST.id}' name='{$_REQUEST.controller}[parent_id]' />
+    </div>
+    {if $MOBILE}
       </div>
-    {if $MOBILE}</div>{/if}
+    {/if}
   </form>
 {strip}

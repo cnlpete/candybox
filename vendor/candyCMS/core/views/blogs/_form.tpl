@@ -15,8 +15,12 @@
         {$lang.global.title} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <input name='{$_REQUEST.controller}[title]' value="{$title}" type='text' id='input-title'
-              class='span4 required' required />
+        <input name='{$_REQUEST.controller}[title]'
+               value="{$title}"
+               type='text'
+               id='input-title'
+               class='span4 required'
+               required />
         <span class='help-inline'>
           {if isset($error.title)}
             {$error.title}
@@ -29,8 +33,11 @@
         {$lang.global.teaser}
       </label>
       <div class='controls'>
-        <input name='{$_REQUEST.controller}[teaser]' value="{$teaser}" type='text' class='span4'
-              id='input-teaser' />
+        <input name='{$_REQUEST.controller}[teaser]'
+               value="{$teaser}"
+               type='text'
+               class='span4'
+               id='input-teaser' />
         <span class='help-inline'></span>
         <p class='help-block'>
           {$lang.blogs.info.teaser}
@@ -42,10 +49,15 @@
         {$lang.global.tags.tags}
       </label>
       <div class='controls'>
-        <input type='text' name='{$_REQUEST.controller}[tags]' id='input-tags'
-              data-provide='typeahead' value='{$tags}'
-              data-source='{$_tags_}' data-items='8'
-              class='span4' autocomplete='off' />
+        <input type='text'
+               name='{$_REQUEST.controller}[tags]'
+               id='input-tags'
+               data-provide='typeahead'
+               value="{$tags}"
+               data-source='{$_tags_}'
+               data-items='8'
+               class='span4'
+               autocomplete='off' />
         <p class='help-block'>
           {$lang.blogs.info.tag}
         </p>
@@ -56,8 +68,12 @@
         {$lang.global.keywords}
       </label>
       <div class='controls'>
-        <input name='{$_REQUEST.controller}[keywords]' value="{$keywords}" type='text' id='input-keywords'
-              title='{$lang.blogs.info.keywords}' class='span4' />
+        <input name='{$_REQUEST.controller}[keywords]'
+               value="{$keywords}"
+               type='text' 
+               id='input-keywords'
+               title='{$lang.blogs.info.keywords}'
+               class='span4' />
         <p class='help-block'>
           {$lang.blogs.info.keywords}
         </p>
