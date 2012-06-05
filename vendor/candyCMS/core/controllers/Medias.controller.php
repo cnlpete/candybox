@@ -87,6 +87,8 @@ class Medias extends Main {
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'create');
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
+    $this->setTitle(I18n::get('medias.title.create'));
+
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
