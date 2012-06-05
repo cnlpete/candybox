@@ -132,8 +132,10 @@ class Image {
       $oSmushIt = new \SmushIt(WEBSITE_URL . '/' . $sPath);
 
       # Download new image from Smush.it
-      if (empty($oSmushIt->error))
+      if (empty($oSmushIt->error)) {
+        unlink($sPath);
         file_put_contents($sPath, file_get_contents($oSmushIt->compressedUrl));
+      }
     }
 
     return $sPath;
