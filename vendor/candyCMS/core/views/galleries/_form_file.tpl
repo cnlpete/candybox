@@ -97,9 +97,10 @@
     $('#input-content').bind('keyup', function() {
       countCharLength(this, 160);
     });
-
+ 
     $("input[type='submit']").click(function() {
-      $(this).val(lang.loading);
+      $(this).hide();
+      $('.form-actions').append("<img src='{$_PATH.images}/candy.global/loading.gif' alt='" + lang.loading + "' />");
     });
 
     $('#input-file').change(function() {

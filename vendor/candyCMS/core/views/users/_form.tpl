@@ -259,6 +259,7 @@
   <script src='{$_PATH.js}/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.bootstrap.tabs{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript'>
+    {* @todo Change status when uploading avatar *}
     $('#input-use_gravatar').change(function() {
       var avatarIsChecked = $(this).is(':checked');
       $('#js-gravatar').toggleOpacity(avatarIsChecked);
@@ -269,6 +270,7 @@
     $('#input-content').bind('keyup', function() {
       countCharLength(this, 1000);
     });
+
     $('#input-image').change(function() {
       checkFileSize($(this),
         {$_SYSTEM.maximumUploadSize.raw},
