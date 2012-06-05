@@ -547,11 +547,11 @@ abstract class Main {
   /**
    * Clear all Caches for given Controllers
    *
-   * @access private
+   * @access protected
    * @param string|array $mAdditionalCaches specify aditional caches to clear on success
    *
    */
-  private function _clearCaches($mAdditionalCaches) {
+  protected function _clearCaches($mAdditionalCaches) {
     if (gettype($mAdditionalCaches) === 'string')
       $this->oSmarty->clearCacheForController($mAdditionalCaches);
 
