@@ -168,9 +168,6 @@ class Mails extends Main {
 
     # Try to resend
     try {
-      if (isset($aResult['content']))
-        $aResult['message'] = $aResult['content'];
-
       if ($this->_send($aResult))
         return $this->destroy($iId);
     }
@@ -222,7 +219,7 @@ class Mails extends Main {
                                             to_address,
                                             to_name,
                                             subject,
-                                            content,
+                                            message,
                                             error_message)
                                         VALUES
                                           ( :user_id,
@@ -233,7 +230,7 @@ class Mails extends Main {
                                             :to_address,
                                             :to_name,
                                             :subject,
-                                            :content,
+                                            :message,
                                             :error_message)");
 
         $iUserId = (int) (isset($this->_aSession['user']['id']) ? $this->_aSession['user']['id'] : 0);
@@ -241,12 +238,8 @@ class Mails extends Main {
         $oQuery->bindParam('ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
         $oQuery->bindParam('error_message', $sErrorMessage, PDO::PARAM_STR);
 
-        foreach ($aData as $sKey => $sValue) {
-          if ($sKey == 'message')
-            $sKey = 'content';
-
+        foreach ($aData as $sKey => $sValue)
           $oQuery->bindParam($sKey, isset($sValue) ? $sValue : '', PDO::PARAM_STR);
-        }
 
         $oQuery->execute();
         parent::$iLastInsertId = Helper::getLastEntry('mails');

@@ -168,7 +168,7 @@ CREATE TABLE `%SQL_PREFIX%mails` (
   `to_address` varchar(32) DEFAULT NULL,
   `to_name` varchar(32) DEFAULT NULL,
   `subject` varchar(128) NOT NULL,
-  `content` text NOT NULL,
+  `message` text NOT NULL,
   `error_message` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

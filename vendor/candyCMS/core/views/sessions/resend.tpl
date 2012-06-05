@@ -11,15 +11,15 @@
             {$lang.sessions.password.title}
           {/if}
         </h1>
+        <p>
+          {if $_REQUEST.action == 'verification'}
+            {$lang.sessions.verification.info}
+          {else}
+            {$lang.sessions.password.info}
+          {/if}
+        </p>
       </div>
     {/if}
-    <p>
-      {if $_REQUEST.action == 'verification'}
-        {$lang.sessions.verification.info}
-      {else}
-        {$lang.sessions.password.info}
-      {/if}
-    </p>
     <div class='control-group{if isset($error.email)} alert alert-error{/if}'>
       <label for='input-email' class='control-label'>
         {$lang.global.email.email} <span title='{$lang.global.required}'>*</span>

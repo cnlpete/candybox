@@ -110,13 +110,8 @@ class Mails extends Main {
     $sUser = $this->__autoload('Users', true);
     $aUser = $sUser::getUserNamesAndEmail($this->_iId);
 
-    if (!$aUser) {
-      if ($this->_iId)
-        return Helper::redirectTo('/errors/404');
-
-      else
-        $aUser['name'] = I18n::get('global.system');
-    }
+    if (!$aUser && $this->_iId)
+			return Helper::redirectTo('/errors/404');
 
     $this->oSmarty->assign('user', $aUser);
 
@@ -133,8 +128,10 @@ class Mails extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
-    $sFullname = $aUser['name'] . ' ' . $aUser['surname'];
-    $this->setTitle(I18n::get('global.contact') . ' ' . $sFullname);
+    $sFullname = trim($aUser['name'] . ' ' . $aUser['surname']);
+		$sFullname = empty($sFullname) ? WEBSITE_NAME : $sFullname;
+
+    $this->setTitle($sFullname . ' - ' . I18n::get('global.contact'));
     $this->setDescription(I18n::get('mails.description.show', $sFullname));
 
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);

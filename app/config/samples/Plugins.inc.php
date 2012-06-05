@@ -14,10 +14,9 @@
 # DEFAULT: 10
 define('PLUGIN_HEADLINES_LIMIT', 10);
 
-# How many archive entries should be displayed? Avoid to display only a few when also
-# using the headlines plugins due to categorization into month.
-# DEFAULT: 1000
-define('PLUGIN_ARCHIVE_LIMIT', 1000);
+# How many months should be displayed?
+# DEFAULT: 12
+define('PLUGIN_ARCHIVE_RANGE', 12);
 
 # How many Tags will be displayed at most
 # DEFAULT: 10
