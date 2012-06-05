@@ -60,7 +60,7 @@ final class Bbcode {
     # Insert uploaded image
     $sStr = preg_replace('#\[img:(.*)\]#Uis', '<img src="{$_PATH.images}/\1" alt="\1" style="vertical-align:baseline" />', $sStr);
 
-    # Replace images with image tag (every location allowed, but external is verrry slow)
+    # Replace images with image tag (every location allowed
     while (preg_match('=\[img\](.*)\[\/img\]=isU', $sStr, $sUrl)) {
       $sUrl[1] = Helper::removeSlash($sUrl[1]);
       $sImageExtension = strtolower(substr(strrchr($sUrl[1], '.'), 1));
@@ -68,44 +68,44 @@ final class Bbcode {
       $sTempFilePath = Helper::removeSlash(PATH_UPLOAD . '/temp/bbcode/' . $sTempFileName . '.' . $sImageExtension);
       $sHTML = '';
 
-      # Image is local
-      if(substr($sUrl[1], 0, 4) !== 'http') {
-        $aInfo   = @getimagesize($sUrl[1]);
-        $sUrl[1] = substr($sUrl[1], 0, 4) !== 'http' ? '/' . $sUrl[1] : $sUrl[1];
+      if (!file_exists($sTempFilePath)) {
+        require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Image.helper.php';
 
-        # We don't need a preview image
-        if ($aInfo[0] <= MEDIA_DEFAULT_X) {
-          $sHTML .= '<figure class="image" rel="images">';
-          $sHTML .= '<img src="' . $sUrl[1] . '" width="' . $aInfo[0] . '" height="' . $aInfo[1] . '" alt="' . $sUrl[1] . '" />';
-          $sHTML .= '</figure>';
-        }
+        # This might be very slow. So we try to use it rarely.
+        $aInfo = @getImageSize($sUrl[1]);
 
-        # Preview is needed
-        else {
-          if (!file_exists($sTempFilePath)) {
-            require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Image.helper.php';
+        # If external, download image and save as preview
+        if (substr($sUrl[1], 0, 4) == 'http')
+          file_put_contents($sTempFilePath, file_get_contents($sUrl[1]));
 
-            $oImage = new Image($sTempFileName, 'temp', $sUrl[1], $sImageExtension);
-            $oImage->resizeDefault(MEDIA_DEFAULT_X, '', 'bbcode');
-          }
-
-          $aNewInfo = getImageSize($sTempFilePath);
-
-          $sHTML .= '<figure class="image">';
-          $sHTML .= '<a class="js-fancybox" rel="images" href="' . $sUrl[1] . '">';
-          $sHTML .= '<img class="js-image" alt="' . I18n::get('global.image.click_to_enlarge', $aInfo[0], $aInfo[1]) . '"';
-          $sHTML .= 'src="' . Helper::addSlash($sTempFilePath) . '" ' . $aNewInfo[3] . ' />';
-          $sHTML .= '</a>';
-          $sHTML .= '</figure>';
+        if ($aInfo[0] > MEDIA_DEFAULT_X) {
+          $oImage = new Image($sTempFileName, 'temp', $sUrl[1], $sImageExtension);
+          $oImage->resizeDefault(MEDIA_DEFAULT_X, '', 'bbcode');
         }
       }
 
-      # External image
+      $sUrl[1]  = substr($sUrl[1], 0, 4) !== 'http' ? '/' . $sUrl[1] : $sUrl[1];
+
+      # Remove capty and change image information.
+      if (file_exists($sTempFilePath)) {
+        $aNewInfo = getImageSize($sTempFilePath);
+        $sClass   = 'js-image';
+        $sAlt     = I18n::get('global.image.click_to_enlarge');
+      }
+
       else {
-        $sHTML .= '<figure class="image" rel="images">';
-        $sHTML .= '<img src="' . $sUrl[1] . '" width="' . MEDIA_DEFAULT_X . '" alt="' . $sUrl[1] . '" />';
-        $sHTML .= '</figure>';
+        $aNewInfo[3]    = '';
+        $sTempFilePath  = $sUrl[1];
+        $sClass         = '';
+        $sAlt           = $sTempFilePath;
       }
+
+      $sHTML .= '<figure class="image">';
+      $sHTML .= '<a class="js-fancybox" rel="images" href="' . $sUrl[1] . '">';
+      $sHTML .= '<img class="' . $sClass . '" alt="' . $sAlt . '"';
+      $sHTML .= 'src="' . Helper::addSlash($sTempFilePath) . '" ' . $aNewInfo[3] . ' />';
+      $sHTML .= '</a>';
+      $sHTML .= '</figure>';
 
       $sStr = preg_replace('=\[img\](.*)\[\/img\]=isU', $sHTML, $sStr, 1);
     }

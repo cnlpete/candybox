@@ -230,7 +230,6 @@ class Galleries extends Main {
     $iLoop = 0;
     foreach ($aResult as $aRow) {
       $iId           = $aRow['id'];
-
       $sUrlUpload    = Helper::addSlash(PATH_UPLOAD . '/galleries/' . $aRow['album_id']);
 
       $this->_aThumbs[$iId]                 = $this->_formatForOutput($aRow, array('id', 'album_id', 'author_id'));

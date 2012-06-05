@@ -57,7 +57,7 @@ global:
   headlines: Überschriften
   id: ID
   image:
-    click_to_enlarge: "Klicken Sie auf das Bild, um es auf %d x %d Pixel zu vergrößern!"
+    click_to_enlarge: "Klicken Sie auf das Bild um es zu vergrößern!"
     image: Bild
   in: in
   keywords: Schlagworte
