@@ -37,6 +37,10 @@ catch (Exception $e) {
   die($e->getMessage());
 }
 
+# Redirect to www.website.tld if set in config. We need this for update urls etc.
+if('http://' . $_SERVER['HTTP_HOST'] !== WEBSITE_URL && 'https://' . $_SERVER['HTTP_HOST'] !== WEBSITE_URL)
+  exit(header('Location:' . WEBSITE_URL));
+
 # If we are on a productive enviroment, make sure that we can't override the system.
 if (WEBSITE_MODE == 'production' && is_dir('install'))
   exit('Please install software via <strong>install/</strong> and delete the folder afterwards.');
