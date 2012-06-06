@@ -25,9 +25,9 @@ $.fn.toggleOpacity = function (t) {
 
 /* Quote comment */
 function quote(sName, sDivId) {
-  var oTextField = $('#js-create_commment_text');
+  var oTextField  = $('#js-create_commment_text');
   var sOldMessage = oTextField.val();
-  var sQuote = $('#' + sDivId).html();
+  var sQuote      = $('#' + sDivId).html();
   var sNewMessage = "[quote=" + sName + "]" + sQuote + "[/quote]\n";
   oTextField.val(sOldMessage + sNewMessage);
 
@@ -51,6 +51,12 @@ function stripNoAlphaChars(sValue) {
 }
 
 function confirmDestroy(sUrl) {
+  if(typeof lang == 'undefined') {
+    var lang = {
+      'confirm_destroy' : 'Do you really want to destroy this entry?'
+    };
+  }
+
   if( confirm(lang.confirm_destroy) )
     parent.location.href = sUrl;
 }
@@ -65,11 +71,13 @@ function getSizeOfFiles(fileInput) {
   if (typeof window.FileReader !== 'function' || !fileInput.files || !fileInput.files[0]) {
     return 0;
   }
+
   var iFileSize = 0;
   var iLength = fileInput.files.length;
   for (var index = 0; index < iLength; index++) {
     iFileSize = iFileSize + fileInput.files[index].size;
   }
+
   return iFileSize;
 }
 
@@ -92,7 +100,7 @@ function checkFileSize(fileInput, iMaxFileSize, sMessage) {
     $('#' + jHelpId).fadeOut(function() {
       $(this).remove();
       if (!jControlGroup.find('.help-inline').length) {
-         jControlGroup.removeClass('alert alert-error');
+        jControlGroup.removeClass('alert alert-error');
       }
     });
   }
