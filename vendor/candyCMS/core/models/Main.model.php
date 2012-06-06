@@ -253,36 +253,36 @@ abstract class Main {
     self::_formatDates($aData);
 
     # Set sitemaps.xml data
-    if (isset($aData['date_raw'])) {
+    if (isset($aData['date']['raw'])) {
       $iTimestampNow = time();
 
       # Entry is less than a day old
-      if($iTimestampNow - $aData['date_raw'] < 86400) {
+      if($iTimestampNow - $aData['date']['raw'] < 86400) {
         $aData['changefreq']  = 'hourly';
         $aData['priority']    = '1.0';
       }
       # Entry is younger than a week
-      elseif($iTimestampNow - $aData['date_raw'] < 86400 * 7) {
+      elseif($iTimestampNow - $aData['date']['raw'] < 86400 * 7) {
         $aData['changefreq']  = 'daily';
         $aData['priority']    = '0.9';
       }
       # Entry is younger than a month
-      elseif($iTimestampNow - $aData['date_raw'] < 86400 * 31) {
+      elseif($iTimestampNow - $aData['date']['raw'] < 86400 * 31) {
         $aData['changefreq']  = 'weekly';
         $aData['priority']    = '0.75';
       }
       # Entry is younger than three month
-      elseif($iTimestampNow - $aData['date_raw'] < 86400 * 90) {
+      elseif($iTimestampNow - $aData['date']['raw'] < 86400 * 90) {
         $aData['changefreq']  = 'monthly';
         $aData['priority']    = '0.6';
       }
       # Entry is younger than half a year
-      elseif($iTimestampNow - $aData['date_raw'] < 86400 * 180) {
+      elseif($iTimestampNow - $aData['date']['raw'] < 86400 * 180) {
         $aData['changefreq']  = 'monthly';
         $aData['priority']    = '0.4';
       }
       # Entry is younger than a year
-      elseif($iTimestampNow - $aData['date_raw'] < 86400 * 360) {
+      elseif($iTimestampNow - $aData['date']['raw'] < 86400 * 360) {
         $aData['changefreq']  = 'monthly';
         $aData['priority']    = '0.25';
       }
