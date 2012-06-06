@@ -431,6 +431,7 @@ abstract class Main {
         else
           $aEntries[] = $aRow[$sColumn];
       }
+
       return json_encode($aEntries);
     }
     catch (\PDOException $p) {
