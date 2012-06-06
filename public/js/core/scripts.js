@@ -30,8 +30,10 @@ function quote(sName, sDivId) {
   var sQuote = $('#' + sDivId).html();
   var sNewMessage = "[quote=" + sName + "]" + sQuote + "[/quote]\n";
   oTextField.val(sOldMessage + sNewMessage);
+
   if ($.mobile)
     $.mobile.silentScroll(oTextField.offset().top);
+
   return false;
 }
 
@@ -49,6 +51,9 @@ function stripNoAlphaChars(sValue) {
 }
 
 function confirmDestroy(sUrl) {
+  if(typeof lang.confirm_destroy == 'undefined')
+    lang.confirm_destroy = 'Do you really want to destroy this entry?';
+
   if( confirm(lang.confirm_destroy) )
     parent.location.href = sUrl;
 }
