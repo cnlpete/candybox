@@ -46,7 +46,8 @@
             <a href='{$f.url_popup}'
                class='thumbnail js-fancybox fancybox-thumb'
                rel='fancybox-thumb'
-               title='{$f.content}'>
+               title='{$f.content}'
+               data-fancybox-group="thumb">
               <img src='{$f.url_thumb}'
                    alt='{$f.file}'
                    title=''
@@ -112,17 +113,12 @@
       </p>
     {/if}
   {/if}
-  <script src='{$_PATH.js}/core/jquery.fancybox.thumbs{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
   <script src='{$_PATH.js}/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
   <script type='text/javascript'>
     $(document).ready(function(){
       $('.js-fancybox').fancybox({
         nextEffect : 'fade',
-        prevEffect : 'fade',
-        thumbs	: {
-          width	: 50,
-          height	: 50
-        }
+        prevEffect : 'fade'
       });
     });
   </script>
