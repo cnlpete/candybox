@@ -43,9 +43,14 @@
       <ul class='thumbnails'>
         {foreach $files as $f}
           <li id='galleryfiles-{$f.id}'>
-            <a href='{$f.url_popup}' class=' thumbnail js-fancybox'
-              rel='images' title='{$f.content}'>
-              <img src='{$f.url_thumb}' alt='{$f.file}' title='' class='js-image' />
+            <a href='{$f.url_popup}'
+               class='thumbnail js-fancybox fancybox-thumb'
+               rel='fancybox-thumb'
+               title='{$f.content}'>
+              <img src='{$f.url_thumb}'
+                   alt='{$f.file}'
+                   title=''
+                   class='js-image'/>
             </a>
             {if $_SESSION.user.role >= 3}
               <p class='center'>
@@ -107,12 +112,18 @@
       </p>
     {/if}
   {/if}
+  <script src='{$_PATH.js}/core/jquery.fancybox.thumbs{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
   <script src='{$_PATH.js}/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
-  <script src='{$_PATH.js}/core/jquery.lazyload{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
   <script type='text/javascript'>
     $(document).ready(function(){
-      $('.js-fancybox').fancybox({ nextEffect : 'fade', prevEffect : 'fade' });
-      $('.js-image').lazyload({ threshold : 200, effect : 'fadeIn' });
+      $('.js-fancybox').fancybox({
+        nextEffect : 'fade',
+        prevEffect : 'fade',
+        thumbs	: {
+          width	: 50,
+          height	: 50
+        }
+      });
     });
   </script>
 {/strip}
