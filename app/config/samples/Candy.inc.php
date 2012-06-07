@@ -219,6 +219,10 @@ define('CRAWLERS', 'Google|msnbot|Rambler|Yahoo|AbachoBOT|accoona|AcioRobot|' .
                     'ASPSeek|CocoCrawler|Dumbot|FAST-WebCrawler|GeonaBot|Gigabot|' .
                     'Lycos|MSRBOT|Scooter|AltaVista|IDBot|eStyle|Scrubby');
 
+# List of Mobile User Agents
+# used to show the mobile Version of the Page
+define('MOBILES', 'Opera Mini|Symb|Windows CE|IEMobile|iPhone|iPod|Blackberry|Android|Mobile Safari');
+
 # ------------------------------------------------------------------------------
 
 # grab an API Key from https://us4.admin.mailchimp.com/account/api
