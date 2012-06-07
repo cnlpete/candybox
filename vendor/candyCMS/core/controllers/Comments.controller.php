@@ -81,9 +81,6 @@ class Comments extends Main {
     foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
       $this->oSmarty->assign($sInput, $sData);
 
-    if ($bShowCaptcha === true)
-      $this->oSmarty->assign('_captcha_', Recaptcha::getInstance()->show());
-
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 

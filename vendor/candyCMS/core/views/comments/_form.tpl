@@ -58,9 +58,7 @@
         {/if}
       </div>
     </div>
-    {if isset($_captcha_)}
-      {$_captcha_}
-    {/if}
+    <!-- plugin:recaptcha -->
     {if $MOBILE}
       <div data-role='fieldcontain' class='center'>
     {/if}

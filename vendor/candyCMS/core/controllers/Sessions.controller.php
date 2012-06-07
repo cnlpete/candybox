@@ -250,9 +250,6 @@ class Sessions extends Main {
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'resend');
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
-    if ($bShowCaptcha)
-      $this->oSmarty->assign('_captcha_', Recaptcha::getInstance()->show());
-
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 

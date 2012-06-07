@@ -84,7 +84,7 @@ final class Recaptcha {
   private $_sErrorMessage = '';
 
   /**
-   * Get the Smarty instance
+   * Get the Recaptcha instance
    *
    * @static
    * @access public
@@ -119,11 +119,11 @@ final class Recaptcha {
    *
    */
   public final function show(&$aRequest, &$aSession) {
-    $sTemplateDir   = Helper::getPluginTemplateDir('recaptcha', 'recaptcha');
+    $sTemplateDir   = Helper::getPluginTemplateDir('Recaptcha', 'recaptcha');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'recaptcha');
 
     $oSmarty = SmartySingleton::getInstance();
-    $oSmarty->addTemplateDir($sTemplateDir);
+    $oSmarty->setTemplateDir($sTemplateDir);
 
     # No caching for this very dynamic form
     $oSmarty->setCaching(SmartySingleton::CACHING_OFF);

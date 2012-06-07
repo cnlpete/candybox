@@ -568,7 +568,7 @@ class Index {
     unset($this->_aRequest['id'], $this->_aRequest['search'], $this->_aRequest['page']);
 
     foreach ($this->_aPlugins as $sPlugin) {
-      if($sPlugin == 'Bbcode' || $sPlugin == 'Cronjob' ||  $sPlugin == 'Recaptcha')
+      if($sPlugin == 'Bbcode' || $sPlugin == 'Cronjob')
         continue;
 
       if($sPlugin == 'Facebook')
@@ -577,7 +577,10 @@ class Index {
       $sPluginNamespace = '\CandyCMS\Plugins\\' . $sPlugin;
 
       if (class_exists($sPluginNamespace)) {
-        $oPlugin = new $sPluginNamespace();
+        if ($sPlugin == 'Recaptcha')
+          $oPlugin = $sPluginNamespace::getInstance();
+        else
+          $oPlugin = new $sPluginNamespace();
 
         if (preg_match('/<!-- plugin:' . $oPlugin::IDENTIFIER . ' -->/', $sCachedHTML))
           $sCachedHTML = str_replace('<!-- plugin:' . $oPlugin::IDENTIFIER . ' -->', $oPlugin->show($this->_aRequest, $this->_aSession), $sCachedHTML);

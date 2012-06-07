@@ -53,7 +53,7 @@
         {/if}
       </div>
     </div>
-    {if isset($_captcha_)}{$_captcha_}{/if}
+    <!-- plugin:recaptcha -->
     <div class='form-actions'>
       <input type='submit'
              class='btn btn-primary'

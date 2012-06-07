@@ -380,9 +380,6 @@ class Users extends Main {
       $this->setTitle(I18n::get('global.registration'));
       $this->setDescription(I18n::get('users.description.create'));
 
-      if ($bShowCaptcha)
-        $this->oSmarty->assign('_captcha_', Recaptcha::getInstance()->show());
-
       foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
         $this->oSmarty->assign($sInput, isset($sData) ?
                         Helper::formatInput($sData) :
