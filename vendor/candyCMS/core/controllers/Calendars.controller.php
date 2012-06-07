@@ -85,11 +85,11 @@ class Calendars extends Main {
   /**
    * show the overview
    *
-   * @access private
+   * @access protected
    * @return string HTML content
    *
    */
-  private function _showIcalFeed() {
+  protected function _showIcalFeed() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'icalfeed');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'icalfeed');
     $this->oSmarty->setTemplateDir($sTemplateDir);

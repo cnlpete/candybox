@@ -22,11 +22,11 @@ class Calendars extends Main {
   /**
    * Build the PDO-Statement for getting entries for the specified year
    *
-   * @access private
+   * @access protected
    * @return PDOStatement the PDOStatement to execute
    *
    */
-  private function _getPreparedArchiveStatement() {
+  protected function _getPreparedArchiveStatement() {
     $iYear = isset($this->_aRequest['id']) && !empty($this->_aRequest['id']) ?
             (int) $this->_aRequest['id'] :
             date('Y');
@@ -61,11 +61,11 @@ class Calendars extends Main {
   /**
    * Build the PDO-Statement for getting all future entries
    *
-   * @access private
+   * @access protected
    * @return PDOStatement the PDOStatement to execute
    *
    */
-  private function _getPreparedOverviewStatement() {
+  protected function _getPreparedOverviewStatement() {
     return $this->_oDb->prepare("SELECT
                                     c.*,
                                     UNIX_TIMESTAMP(c.date) as date,
@@ -95,11 +95,11 @@ class Calendars extends Main {
   /**
    * Build the PDO-Statement for getting all entries
    *
-   * @access private
+   * @access protected
    * @return PDOStatement the PDOStatement to execute
    *
    */
-  private function _getPreparedIcalFeedStatement() {
+  protected function _getPreparedIcalFeedStatement() {
     return $this->_oDb->prepare("SELECT
                                     c.*,
                                     UNIX_TIMESTAMP(c.date) as date,
@@ -125,7 +125,7 @@ class Calendars extends Main {
   /**
    * Get calendar overview data.
    *
-   * @access private
+   * @access public
    * @param integer $iId Id to work with
    * @return array data
    *
@@ -170,7 +170,7 @@ class Calendars extends Main {
   /**
    * Get calendar data.
    *
-   * @access private
+   * @access public
    * @param integer $iId Id to work with
    * @param boolean $bUpdate prepare data for update
    * @return array data
