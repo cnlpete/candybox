@@ -59,11 +59,10 @@ class Sitemaps extends Main {
   /**
    * Generate the sitemap. Query tables and build structure.
    *
-   * @access private
+   * @access protected
    *
    */
-  private function _getSitemap() {
-
+  protected function _getSitemap() {
     $sModel     = $this->__autoload('Blogs', true);
     $oBlogs     = new $sModel($this->_aRequest, $this->_aSession);
 

@@ -180,7 +180,7 @@ class Mails extends Main {
   /**
    * Create a new mail, store it to database on failure
    *
-   * @access private
+   * @access public
    * @param array $aData array with information for subject, message, name of receipient, email of receipient,
    * name of reply to, email of reply to and attachement path
    * @param bool $bSaveMail whehter the mail queue should be used on failure

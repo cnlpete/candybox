@@ -43,11 +43,11 @@ class Rss extends Main {
   /**
    * Show default RSS template.
    *
-   * @access private
+   * @access protected
    * @return string HTML content
    *
    */
-  private function _showDefault() {
+  protected function _showDefault() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'default');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'default');
     $this->oSmarty->setTemplateDir($sTemplateDir);
@@ -64,11 +64,11 @@ class Rss extends Main {
   /**
    * Show media RSS template
    *
-   * @access private
+   * @access protected
    * @return string HTML content
    *
    */
-  private function _showMedia() {
+  protected function _showMedia() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'media');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'media');
     $this->oSmarty->setTemplateDir($sTemplateDir);

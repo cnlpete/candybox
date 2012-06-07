@@ -240,12 +240,12 @@ class Sessions extends Main {
   /**
    * Build form template to resend verification or resend password.
    *
-   * @access private
+   * @access protected
    * @param boolean $bShowCaptcha display Captcha?
    * @return string HTML content
    *
    */
-  private function _showCreateResendActionsTemplate($bShowCaptcha) {
+  protected function _showCreateResendActionsTemplate($bShowCaptcha) {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'resend');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'resend');
     $this->oSmarty->setTemplateDir($sTemplateDir);

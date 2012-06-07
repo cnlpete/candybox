@@ -246,11 +246,11 @@ class Galleries extends Main {
    * Check if required data is given or throw an error instead.
    * If data is given, upload each selected file, insert them into the database and redirect afterwards.
    *
-   * @access private
+   * @access protected
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  private function _createFile() {
+  protected function _createFile() {
     require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
 
     $this->_setError('cut');
@@ -341,11 +341,11 @@ class Galleries extends Main {
    *
    * Activate model, Update data in the database and redirect afterwards.
    *
-   * @access private
+   * @access protected
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  private function _updateFile() {
+  protected function _updateFile() {
     if ($this->_aError)
       return $this->_showFormFileTemplate();
 
@@ -375,11 +375,11 @@ class Galleries extends Main {
    *
    * Activate model, Update data in the database and redirect afterwards.
    *
-   * @access private
+   * @access protected
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  private function _updateFilePositions() {
+  protected function _updateFilePositions() {
     if (!$this->_aRequest['galleryfiles'])
       return false;
 
@@ -420,11 +420,11 @@ class Galleries extends Main {
   /**
    * Destroy a gallery entry.
    *
-   * @access private
+   * @access protected
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  private function _destroyFile() {
+  protected function _destroyFile() {
     $aDetails = $this->_oModel->getFileData($this->_iId);
     $bReturn  = $this->_oModel->destroyFile($this->_iId) === true;
 
