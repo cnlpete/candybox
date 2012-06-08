@@ -17,6 +17,8 @@ use CandyCMS\Core\Helpers\Helper;
 use CandyCMS\Core\Helpers\Pagination;
 use PDO;
 
+require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Pagination.helper.php';
+
 class Contents extends Main {
 
   /**
@@ -25,11 +27,23 @@ class Contents extends Main {
    * @access public
    * @param integer $iLimit blog post limit
    * @return array $this->_aData
-   * @todo Pagination (2.2)
    *
    */
-  public function getOverview($iLimit = 100) {
+  public function getOverview($iLimit = 50) {
     $iPublished = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ? 0 : 1;
+
+    try {
+      $oQuery = $this->_oDb->prepare("SELECT COUNT(*) FROM " . SQL_PREFIX . "contents WHERE published >= :published");
+      $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
+      $oQuery->execute();
+      $iResult = $oQuery->fetchColumn();
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0105 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+
+    $this->oPagination = new Pagination($this->_aRequest, $iResult, $iLimit);
 
     try {
       $oQuery = $this->_oDb->prepare("SELECT
@@ -50,10 +64,11 @@ class Contents extends Main {
                                       ORDER BY
                                         c.title ASC
                                       LIMIT
-                                        :limit");
+                                        :offset, :limit");
 
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
-      $oQuery->bindParam('limit', $iLimit, PDO::PARAM_INT);
+      $oQuery->bindParam('limit', $this->oPagination->getLimit(), PDO::PARAM_INT);
+      $oQuery->bindParam('offset', $this->oPagination->getOffset(), PDO::PARAM_INT);
       $oQuery->execute();
 
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
