@@ -73,7 +73,13 @@
   </table>
   {$_pages_}
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.tablesorter{$_SYSTEM.compress_files_suffix}.js'></script>
+  <script src='{$_PATH.js}/core/jquery.infiniteScroll{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
   <script type='text/javascript'>
+    {if $_AUTOLOAD_.enabled}
+      $(document).ready(function(){
+        enableInfiniteScroll('table', 'table tbody tr', {$_AUTOLOAD_.times});
+      });
+    {/if}
     $('table').tablesorter();
   </script>
 {/strip}

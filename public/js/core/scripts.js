@@ -106,6 +106,37 @@ function checkFileSize(fileInput, iMaxFileSize, sMessage) {
   }
 }
 
+var iCounter = 0;
+function enableInfiniteScroll(selector, itemselector, repeatTimes) {
+  $(selector).infinitescroll({
+    navSelector   : 'div.pagination',
+    nextSelector  : 'div.pagination a:first',
+    itemSelector  : itemselector,
+    loading       : { msgText : '',
+      img         : '{$_PATH.images}/candy.global/loading.gif',
+      finishedMsg : '',
+      selector    : 'div.js-pagination',
+      finished    : function(opts){
+        opts.loading.msg.fadeOut(opts.loading.speed);
+        iCounter = iCounter + 1;
+        if (iCounter % repeatTimes == 0){
+          /** if we did load a few times, we want to stop and display a resume button **/
+          opts.contentSelector.infinitescroll('pause');
+          var a = $('<a alt="{$lang.pages.more}" data-role="button" class="btn">{$lang.pages.more}</a>');
+          a.click(function(){
+            $(this).fadeOut( opts.loading.speed, function(){
+              opts.contentSelector.infinitescroll('resume');
+            });
+          });
+          $(opts.loading.selector).append(a);
+        }
+        return true;
+      }
+    },
+    animate       : true
+  });
+}
+
 /* Show success and error messages */
 if($('#js-flash_success') || $('#js-flash_error')) {
   show('#js-flash_message');
