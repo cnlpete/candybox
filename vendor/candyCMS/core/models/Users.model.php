@@ -17,8 +17,6 @@ use CandyCMS\Core\Helpers\Helper;
 use CandyCMS\Core\Helpers\Pagination;
 use PDO;
 
-require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Pagination.helper.php';
-
 class Users extends Main {
 
   /**
@@ -177,7 +175,7 @@ class Users extends Main {
    * @return array data from _setData
    *
    */
-  public function getOverview($iLimit = 20) {
+  public function getOverview($iLimit = 50) {
     try {
       $oQuery = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "users");
       $iResult = $oQuery->fetchColumn();
@@ -187,7 +185,9 @@ class Users extends Main {
       exit('SQL error.');
     }
 
+    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Pagination.helper.php';
     $this->oPagination = new Pagination($this->_aRequest, $iResult, $iLimit);
+
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         u.id,
