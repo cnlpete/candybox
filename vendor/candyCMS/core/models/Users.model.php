@@ -17,6 +17,8 @@ use CandyCMS\Core\Helpers\Helper;
 use CandyCMS\Core\Helpers\Pagination;
 use PDO;
 
+require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Pagination.helper.php';
+
 class Users extends Main {
 
   /**
@@ -173,10 +175,19 @@ class Users extends Main {
    * @access public
    * @param integer $iLimit user overview limit
    * @return array data from _setData
-   * @todo pagination (2.2)
    *
    */
-  public function getOverview($iLimit = 1000) {
+  public function getOverview($iLimit = 20) {
+    try {
+      $oQuery = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "users");
+      $iResult = $oQuery->fetchColumn();
+    }
+    catch (\PDOException $p) {
+      AdvancedException::reportBoth('0121 - ' . $p->getMessage());
+      exit('SQL error.');
+    }
+
+    $this->oPagination = new Pagination($this->_aRequest, $iResult, $iLimit);
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         u.id,
@@ -188,19 +199,24 @@ class Users extends Main {
                                         u.receive_newsletter,
                                         u.verification_code,
                                         u.role,
-                                        UNIX_TIMESTAMP(s.date) as last_login
+                                        (
+                                          SELECT
+                                            UNIX_TIMESTAMP(s.date) as last_login
+                                          FROM
+                                            " . SQL_PREFIX . "sessions as s
+                                          WHERE
+                                            s.user_id = u.id
+                                          ORDER BY s.date DESC
+                                          LIMIT 1
+                                        ) AS last_login
                                       FROM
                                         " . SQL_PREFIX . "users as u
-                                      LEFT JOIN
-                                        " . SQL_PREFIX . "sessions as s
-                                      ON
-                                        s.user_id = u.id
                                       ORDER BY
-                                        u.id ASC
+                                        date ASC
                                       LIMIT
-                                        :limit");
-
-      $oQuery->bindParam('limit', $iLimit, PDO::PARAM_INT);
+                                        :offset, :limit");
+      $oQuery->bindParam('limit', $this->oPagination->getLimit(), PDO::PARAM_INT);
+      $oQuery->bindParam('offset', $this->oPagination->getOffset(), PDO::PARAM_INT);
       $oQuery->execute();
 
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);

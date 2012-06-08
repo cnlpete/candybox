@@ -106,8 +106,12 @@ class Users extends Main {
         $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
         $this->oSmarty->setTemplateDir($sTemplateDir);
 
-        if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
+        if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
           $this->oSmarty->assign('user', $this->_oModel->getOverview());
+
+          $this->oSmarty->assign('_pages_',
+                  $this->_oModel->oPagination->showPages('/' . $this->_sController));
+        }
 
         $this->setTitle(I18n::get('users.title.overview'));
         return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
