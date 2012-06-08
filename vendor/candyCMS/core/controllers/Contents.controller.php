@@ -53,9 +53,11 @@ class Contents extends Main {
 
       $this->setTitle(I18n::get('global.manager.content'));
 
-      $this->oSmarty->assign('contents', $this->_oModel->getOverview());
+      if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+        $this->oSmarty->assign('contents', $this->_oModel->getOverview());
         $this->oSmarty->assign('_pages_',
                   $this->_oModel->oPagination->showPages('/' . $this->_sController));
+      }
 
       return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
