@@ -17,8 +17,6 @@ use CandyCMS\Core\Helpers\Helper;
 use CandyCMS\Core\Helpers\Pagination;
 use PDO;
 
-require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Pagination.helper.php';
-
 class Contents extends Main {
 
   /**
@@ -43,6 +41,7 @@ class Contents extends Main {
       exit('SQL error.');
     }
 
+    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Pagination.helper.php';
     $this->oPagination = new Pagination($this->_aRequest, $iResult, $iLimit);
 
     try {

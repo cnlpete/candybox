@@ -18,8 +18,6 @@ use CandyCMS\Core\Helpers\Pagination;
 use CandyCMS\Core\Helpers\Upload;
 use PDO;
 
-require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Pagination.helper.php';
-
 class Galleries extends Main {
 
   /**
@@ -124,6 +122,7 @@ class Galleries extends Main {
       exit('SQL error.');
     }
 
+    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Pagination.helper.php';
     $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit);
 
     try {

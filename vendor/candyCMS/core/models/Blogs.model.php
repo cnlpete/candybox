@@ -17,8 +17,6 @@ use CandyCMS\Core\Helpers\Helper;
 use CandyCMS\Core\Helpers\Pagination;
 use PDO;
 
-require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Pagination.helper.php';
-
 class Blogs extends Main {
 
   /**
@@ -107,6 +105,8 @@ class Blogs extends Main {
     }
 
     $iResult = $this->getCountForTag($sTagname);
+
+    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Pagination.helper.php';
     $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit != 0 ? $iLimit : $iResult);
 
     try {
@@ -202,6 +202,8 @@ class Blogs extends Main {
       $iLimit = 2;
 
     $iResult = $this->getCount();
+
+    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Pagination.helper.php';
     $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit != 0 ? $iLimit : $iResult);
 
     try {
