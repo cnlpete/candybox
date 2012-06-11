@@ -577,10 +577,9 @@ class Index {
       $sPluginNamespace = '\CandyCMS\Plugins\\' . $sPlugin;
 
       if (class_exists($sPluginNamespace)) {
-        if ($sPlugin == 'Recaptcha')
-          $oPlugin = $sPluginNamespace::getInstance();
-        else
-          $oPlugin = new $sPluginNamespace();
+				$oPlugin = $sPlugin == 'Recaptcha' ?
+								$sPluginNamespace::getInstance() :
+								new $sPluginNamespace();
 
         if (preg_match('/<!-- plugin:' . $oPlugin::IDENTIFIER . ' -->/', $sCachedHTML))
           $sCachedHTML = str_replace('<!-- plugin:' . $oPlugin::IDENTIFIER . ' -->', $oPlugin->show($this->_aRequest, $this->_aSession), $sCachedHTML);

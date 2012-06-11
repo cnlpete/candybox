@@ -25,7 +25,7 @@ require PATH_STANDARD . '/vendor/candyCMS/core/controllers/Index.controller.php'
 class Install extends Index {
 
   /**
-   * Setup setup ;)
+   * Set up setup ;)
    *
    * @access public
    * @param array $aRequest
@@ -96,7 +96,7 @@ class Install extends Index {
   }
 
   /**
-   * Create all Folders specified in given s drray
+   * Create all Folders specified in given array
    *
    * @access private
    * @param array $aFolders array of Folders to create, can also contain subarrays
@@ -133,7 +133,6 @@ class Install extends Index {
     $bReturn = true;
 
     foreach ($aFolders as $sKey => $mFolder) {
-
       # check multiple folders
       if (is_array($mFolder)) {
         # check root folder

@@ -150,8 +150,13 @@ $('#js-flash_error').click(function() {
   hide(this, 0);
 });
 
+$('#js-flash_warning').click(function() {
+  hide(this, 0);
+});
+
 /* Show tooltips */
 if ($('.js-tooltip').length)
   $('.js-tooltip').tooltip();
+
 if ($('p.error').length)
   $('p.error').tooltip();
