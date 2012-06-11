@@ -138,7 +138,7 @@ function enableInfiniteScroll(selector, itemselector, repeatTimes) {
 }
 
 /* Show success and error messages */
-if($('#js-flash_success') || $('#js-flash_error')) {
+if($('#js-flash_success').length || $('#js-flash_error').length) {
   show('#js-flash_message');
 }
 
@@ -151,5 +151,7 @@ $('#js-flash_error').click(function() {
 });
 
 /* Show tooltips */
-$('.js-tooltip').tooltip();
-$('p.error').tooltip();
+if ($('.js-tooltip').length)
+  $('.js-tooltip').tooltip();
+if ($('p.error').length)
+  $('p.error').tooltip();
