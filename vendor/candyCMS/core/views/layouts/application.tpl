@@ -151,7 +151,9 @@
                 <div class='alert alert-{$_flash_type_}' id='js-flash_{$_flash_type_}'>
                   <a class='close' href='#'>×</a>
                   <h4 class='alert-heading'>{$_flash_headline_}</h4>
-                  {$_flash_message_}
+                  <p>
+                    {$_flash_message_}
+                  </p>
                 </div>
               </div>
             {/if}
