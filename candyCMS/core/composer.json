@@ -1,0 +1,21 @@
+{
+    "name": "candyCMS/core",
+    "type": "library",
+    "description": "Core elements for candyCMS.",
+    "keywords": ["php", "candy", "cms"],
+    "homepage": "http://www.candycms.com",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3.0",
+        "facebook/php-sdk": "",
+        "leafo/lessphp": "",
+        "symfony/yaml": ""
+    },
+    "authors": [
+        {
+            "name": "Marco Raddatz",
+            "email": "info@marcoraddatz.com",
+            "homepage": "http://www.marcoraddatz.com"
+        }
+    ],
+}
