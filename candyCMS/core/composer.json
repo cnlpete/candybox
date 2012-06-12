@@ -7,9 +7,9 @@
     "license": "MIT",
     "require": {
         "php": ">=5.3.0",
-        "facebook/php-sdk": "",
-        "leafo/lessphp": "",
-        "symfony/yaml": ""
+        "facebook/php-sdk": "dev-master",
+        "leafo/lessphp": "dev-master",
+        "symfony/yaml": "master"
     },
     "authors": [
         {
