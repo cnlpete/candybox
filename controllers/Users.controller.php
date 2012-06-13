@@ -123,7 +123,7 @@ class Users extends Main {
    * Build form template to create or update a user.
    *
    * @access protected
-   * @param boolean $bUseRequest whether the Displayed Data should be overwritten by Query Result
+   * @param boolean $bUseRequest whether the displayed data should be overwritten by query result
    * @return string HTML content
    *
    */
@@ -291,7 +291,7 @@ class Users extends Main {
     else
       return isset($this->_aRequest[$this->_sController]) ?
               $this->_create($bShowCaptcha) :
-              $this->_showCreateUserTemplate($bShowCaptcha);
+              $this->_showCreateUserTemplate();
   }
 
   /**
@@ -367,9 +367,10 @@ class Users extends Main {
    *
    * @access protected
    * @return string HTML content
+	 * @todo does this work with captcha?
    *
    */
-  protected function _showCreateUserTemplate($bShowCaptcha) {
+  protected function _showCreateUserTemplate() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'create');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'create');
     $this->oSmarty->setTemplateDir($sTemplateDir);

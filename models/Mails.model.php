@@ -89,11 +89,11 @@ class Mails extends Main {
    * @param array $aData array with information for subject, message, name of receipient, email of receipient,
    * name of reply to, email of reply to and attachement path
    * @return boolean whether phpmailers returned true or false
-   * @see vendor/phpmailer/class.phpmailer.php
+   * @see vendor/phpmailer/phpmailer/class.phpmailer.php
    *
    */
   protected function _send($aData) {
-    require_once 'vendor/phpmailer/class.phpmailer.php';
+    require_once 'vendor/phpmailer/phpmailer/class.phpmailer.php';
     $oMail = new \PHPMailer(true);
 
     if (SMTP_ENABLE === true) {
@@ -185,7 +185,7 @@ class Mails extends Main {
    * name of reply to, email of reply to and attachement path
    * @param bool $bSaveMail whehter the mail queue should be used on failure
    * @return boolean the status of the action
-   * @see vendor/phpmailer/class.phpmailer.php
+   * @see vendor/phpmailer/phpmailer/class.phpmailer.php
    * @todo log entry
    *
    */

@@ -74,14 +74,10 @@ class Galleries extends Main {
    *
    */
   protected function _show() {
-    # Album images
-    if ($this->_iId && !isset($this->_aRequest['album_id']))
-      return $this->_showAlbum();
-
-    # Album overview
-    else
-      return $this->_showOverview();
-  }
+		return	$this->_iId && !isset($this->_aRequest['album_id']) ?
+						$this->_showAlbum() :
+						$this->_showOverview();
+	}
 
   /**
    * Show overview of albums.
@@ -376,7 +372,7 @@ class Galleries extends Main {
    * Activate model, Update data in the database and redirect afterwards.
    *
    * @access protected
-   * @return string|boolean HTML content (string) or returned status of model action (boolean).
+   * @return boolean status of action
    *
    */
   protected function _updateFilePositions() {
@@ -409,12 +405,10 @@ class Galleries extends Main {
   public function destroyFile() {
     $aDetails = $this->_oModel->getFileData($this->_iId);
 
-    if ($this->_aSession['user']['role'] < 3)
-      return Helper::errorMessage(I18n::get('error.missing.permission'), '/' .
-              $this->_sController . '/' . $aDetails['album_id']);
-
-    else
-      return $this->_destroyFile();
+		return $this->_aSession['user']['role'] < 3 ?
+						Helper::errorMessage(I18n::get('error.missing.permission'), '/' .
+										$this->_sController . '/' . $aDetails['album_id']) :
+						$this->_destroyFile();
   }
 
   /**

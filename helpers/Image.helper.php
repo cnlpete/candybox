@@ -126,7 +126,7 @@ class Image {
 
     # Reduce image size via Smush.it
     if (defined('ALLOW_SMUSHIT') && ALLOW_SMUSHIT === true) {
-      require_once PATH_STANDARD . '/vendor/smushit/smushit.php';
+      require_once PATH_STANDARD . '/vendor/smushit/smushit/class.smushit.php';
 
       # Send information of our created image to the server.
       $oSmushIt = new \SmushIt(WEBSITE_URL . '/' . $sPath);
