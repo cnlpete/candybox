@@ -136,7 +136,7 @@ class Comments extends Main {
 
     else {
       # Bugfix for jquery mobile not handling this redirect with hash very vell
-      $sRedirect = '/blogs/' . (int) $this->_aRequest[$this->_sController]['parent_id'] . (MOBILE ? '' : '#create');
+      $sRedirect = '/blogs/' . (int) $this->_aRequest[$this->_sController]['parent_id'] . (MOBILE ? '' : '#comments');
 
       if ($this->_oModel->create() === true) {
         # This also clears cache for our comments, since they are stored in the blogs namespace.
