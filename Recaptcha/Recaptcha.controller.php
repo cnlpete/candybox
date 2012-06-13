@@ -105,7 +105,7 @@ final class Recaptcha {
    *
    */
   public function __construct() {
-    require PATH_STANDARD . '/vendor/recaptcha/recaptchalib.php';
+    require PATH_STANDARD . '/vendor/recaptcha/recaptcha/recaptchalib.php';
   }
 
   /**
