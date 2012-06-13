@@ -9,6 +9,7 @@ upload/*
 app/logs/*
 app/backup/*
 public/templates/*
+!public/templates/sample
 .project
 !/app/config/samples/
 
@@ -16,3 +17,4 @@ composer.lock
 composer.phar
 /vendor/*
 !/vendor/tiny_mce
+tools/migrate
