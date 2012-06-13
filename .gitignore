@@ -21,3 +21,5 @@ composer.phar
 /vendor/facebook/
 /vendor/leafo/
 /vendor/smarty/
+/vendor/recaptcha/
+/vendor/smushit/
