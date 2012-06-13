@@ -4,6 +4,38 @@
       {
         "type": "package",
         "package": {
+          "name": "candyCMS/core",
+          "version": "20120604",
+          "dist": {
+            "url": "https://github.com/marcoraddatz/candyCMS-Core/zipball/master",
+            "type": "zip"
+          },
+          "source": {
+            "url": "https://github.com/marcoraddatz/candyCMS-Core",
+            "type": "git",
+            "reference": "master"
+          }
+        }
+      },
+      {
+        "type": "package",
+        "package": {
+          "name": "candyCMS/plugins",
+          "version": "20120604",
+          "dist": {
+            "url": "https://github.com/marcoraddatz/candyCMS-Plugins/zipball/master",
+            "type": "zip"
+          },
+          "source": {
+            "url": "https://github.com/marcoraddatz/candyCMS-Plugins",
+            "type": "git",
+            "reference": "master"
+          }
+        }
+      },
+      {
+        "type": "package",
+        "package": {
           "name": "smarty/smarty",
           "version": "3.1.8",
           "dist": {
@@ -59,7 +91,7 @@
             "type": "zip"
           },
           "source": {
-            "url": "https://github.com/tylerhall/smushit-php.git",
+            "url": "https://github.com/tylerhall/smushit-php",
             "type": "git",
             "reference": "master"
           }
@@ -68,6 +100,8 @@
     ],
 
   "require": {
+    "candyCMS/core": "20120604",
+    "candyCMS/plugins": "20120604",
     "phpmailer/phpmailer": "5.2.1",
     "smushit/smushit": "0.*",
     "recaptcha/recaptcha": "1.11",

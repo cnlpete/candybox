@@ -17,6 +17,7 @@ composer.phar
 /vendor/autoload.php
 /vendor/.composer/
 /vendor/composer/*
+/vendor/candyCMS
 /vendor/symfony/
 /vendor/facebook/
 /vendor/leafo/
