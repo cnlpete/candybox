@@ -69,11 +69,11 @@ class Comments extends Main {
    * Build form template to create a comment.
    *
    * @access protected
-   * @param boolean $bShowCaptcha force captcha or not
    * @return string HTML content
+	 * @todo prove if it works with captcha
    *
    */
-  protected function _showFormTemplate($bShowCaptcha) {
+  protected function _showFormTemplate() {
     $sTemplateDir   = Helper::getTemplateDir('comments', '_form');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
     $this->oSmarty->setTemplateDir($sTemplateDir);
@@ -105,7 +105,7 @@ class Comments extends Main {
 
     return isset($this->_aRequest[$this->_sController]) ?
             $this->_create($bShowCaptcha) :
-            $this->_showFormTemplate($bShowCaptcha);
+            $this->_showFormTemplate();
   }
 
   /**
@@ -132,7 +132,7 @@ class Comments extends Main {
       $this->_aError['captcha'] = I18n::get('error.captcha.loading');
 
     if ($this->_aError)
-      return $this->_showFormTemplate($bShowCaptcha);
+      return $this->_showFormTemplate();
 
     else {
       # Bugfix for jquery mobile not handling this redirect with hash very vell
