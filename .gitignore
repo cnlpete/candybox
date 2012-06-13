@@ -20,3 +20,4 @@ composer.phar
 /vendor/symfony/
 /vendor/facebook/
 /vendor/leafo/
+/vendor/smarty/
