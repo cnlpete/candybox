@@ -193,7 +193,7 @@ class Index {
    *
    */
   public function getRoutes() {
-    require_once PATH_STANDARD . '/vendor/simonhamp/routes/routes.php';
+    require_once PATH_STANDARD . '/vendor/routes/Routes.php';
 
     # Cache routes for performance reasons
     if(!isset($this->_aSession['routes']) || WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test')
@@ -204,8 +204,9 @@ class Index {
     if (!defined('WEBSITE_LANDING_PAGE'))
       define('WEBSITE_LANDING_PAGE', Routes::route('/'));
 
-    $sURI         = isset($_SERVER['REQUEST_URI']) ? Helper::removeSlash($_SERVER['REQUEST_URI']) : '/';
-    $aRouteParts  = explode('&', Routes::route($sURI));
+    $sURI         = isset($_SERVER['REQUEST_URI']) ? Helper::removeSlash($_SERVER['REQUEST_URI']) : '';
+    $sRoutemap    = Routes::route($sURI);
+    $aRouteParts  = explode('&', $sRoutemap);
 
     if (count($aRouteParts) > 1) {
       foreach ($aRouteParts as $sRoutes) {
@@ -216,7 +217,8 @@ class Index {
       }
     }
     else
-      $this->_aRequest['controller'] = isset($this->_aRequest['controller']) ? $this->_aRequest['controller'] : Routes::route('/');
+      $this->_aRequest['controller'] = isset($this->_aRequest['controller']) ? $this->_aRequest['controller'] : $sRoutemap;
+
 
     # Show files from public folder (robots.txt, human.txt and favicon.ico)
     if (preg_match('/\./', $this->_aRequest['controller'])) {
