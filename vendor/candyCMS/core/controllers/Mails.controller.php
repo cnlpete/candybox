@@ -88,7 +88,7 @@ class Mails extends Main {
 
     return isset($this->_aRequest[$this->_sController]) ?
             $this->_create($bShowCaptcha) :
-            $this->_showCreateMailTemplate($bShowCaptcha);
+            $this->_showCreateMailTemplate();
   }
 
   /**
@@ -97,12 +97,12 @@ class Mails extends Main {
    * Show the create mail form and check data for correct information.
    *
    * @access protected
-   * @param boolean $bShowCaptcha show captcha or not.
    * @return string HTML content
    * @todo rename to _show?
+	 * @todo does it work with captcha?
    *
    */
-  protected function _showCreateMailTemplate($bShowCaptcha) {
+  protected function _showCreateMailTemplate() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'create');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'create');
     $this->oSmarty->setTemplateDir($sTemplateDir);
@@ -150,7 +150,7 @@ class Mails extends Main {
         $this->_aError['captcha'] = I18n::get('error.captcha.incorrect');
 
     if (isset($this->_aError))
-      return $this->_showCreateMailTemplate($bShowCaptcha);
+      return $this->_showCreateMailTemplate();
 
     else {
       # Select user name and surname
