@@ -92,7 +92,7 @@ class Install extends Index {
     define('EXTENSION_CHECK', false);
     define('MOBILE', false);
     define('MOBILE_DEVICE', false);
-    define('VERSION', '20120605');
+    define('VERSION', '20120613');
   }
 
   /**
