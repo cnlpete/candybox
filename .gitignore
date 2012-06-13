@@ -23,3 +23,4 @@ composer.phar
 /vendor/smarty/
 /vendor/recaptcha/
 /vendor/smushit/
+/vendor/phpmailer/
