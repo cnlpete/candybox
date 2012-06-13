@@ -14,15 +14,5 @@ public/templates/*
 
 composer.lock
 composer.phar
-/vendor/autoload.php
-/vendor/.composer/
-/vendor/composer/*
-/vendor/candyCMS
-/vendor/symfony/
-/vendor/facebook/
-/vendor/leafo/
-/vendor/mailchimp
-/vendor/smarty/
-/vendor/recaptcha/
-/vendor/smushit/
-/vendor/phpmailer/
+/vendor/*
+!/vendor/tiny_mce
