@@ -138,19 +138,11 @@ function enableInfiniteScroll(selector, itemselector, repeatTimes) {
 }
 
 /* Show success and error messages */
-if($('#js-flash_success').length || $('#js-flash_error').length) {
+if($('#js-flash_success, #js-flash_error, #js-flash_warning').length) {
   show('#js-flash_message');
 }
 
-$('#js-flash_success').click(function() {
-  hide(this, 0);
-});
-
-$('#js-flash_error').click(function() {
-  hide(this, 0);
-});
-
-$('#js-flash_warning').click(function() {
+$('#js-flash_success, #js-flash_error, #js-flash_warning').click(function() {
   hide(this, 0);
 });
 
