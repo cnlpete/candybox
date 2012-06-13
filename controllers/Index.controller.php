@@ -204,9 +204,8 @@ class Index {
     if (!defined('WEBSITE_LANDING_PAGE'))
       define('WEBSITE_LANDING_PAGE', Routes::route('/'));
 
-    $sURI         = isset($_SERVER['REQUEST_URI']) ? Helper::removeSlash($_SERVER['REQUEST_URI']) : '';
-    $sRoutemap    = Routes::route($sURI);
-    $aRouteParts  = explode('&', $sRoutemap);
+    $sURI         = isset($_SERVER['REQUEST_URI']) ? Helper::removeSlash($_SERVER['REQUEST_URI']) : '/';
+    $aRouteParts  = explode('&', Routes::route($sURI));
 
     if (count($aRouteParts) > 1) {
       foreach ($aRouteParts as $sRoutes) {
@@ -217,8 +216,7 @@ class Index {
       }
     }
     else
-      $this->_aRequest['controller'] = isset($this->_aRequest['controller']) ? $this->_aRequest['controller'] : $sRoutemap;
-
+      $this->_aRequest['controller'] = isset($this->_aRequest['controller']) ? $this->_aRequest['controller'] : Routes::route('/');
 
     # Show files from public folder (robots.txt, human.txt and favicon.ico)
     if (preg_match('/\./', $this->_aRequest['controller'])) {
