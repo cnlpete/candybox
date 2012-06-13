@@ -21,6 +21,7 @@ composer.phar
 /vendor/symfony/
 /vendor/facebook/
 /vendor/leafo/
+/vendor/mailchimp
 /vendor/smarty/
 /vendor/recaptcha/
 /vendor/smushit/
