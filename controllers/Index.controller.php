@@ -193,7 +193,7 @@ class Index {
    *
    */
   public function getRoutes() {
-    require_once PATH_STANDARD . '/vendor/routes/Routes.php';
+    require_once PATH_STANDARD . '/vendor/simonhamp/routes/routes.php';
 
     # Cache routes for performance reasons
     if(!isset($this->_aSession['routes']) || WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test')
