@@ -5,7 +5,8 @@
     </div>
   {else}
     {foreach $downloads as $d}
-      <ul data-role='listview' data-inset='true' {if $_SESSION.user.role >= 3}data-split-theme='a' data-split-icon='gear'{/if}>
+      <ul data-role='listview'
+          data-inset='true' {if $_SESSION.user.role >= 3}data-split-theme='a' data-split-icon='gear'{/if}>
         <li data-role='list-divider'>
           {$d.category}
         </li>

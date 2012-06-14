@@ -3,9 +3,9 @@
     <p class='center'>
       <a href='/{$_REQUEST.controller}/create'>
         <img src='{$_PATH.images}/candy.global/spacer.png'
-            class='icon-create'
-            alt='{$lang.global.create.entry}'
-            width='16' height='16' />
+             class='icon-create'
+             alt='{$lang.global.create.entry}'
+             width='16' height='16' />
         {$lang.global.create.entry}
       </a>
     </p>
@@ -58,18 +58,18 @@
               {if $_SESSION.user.role >= 3}
                 <a href='{$f.url_update}'>
                   <img src='{$_PATH.images}/candy.global/spacer.png'
-                      class='icon-update js-tooltip'
-                      alt='{$lang.global.update.update}'
-                      title='{$lang.global.update.update}'
-                      width='16' height='16' />
+                       class='icon-update js-tooltip'
+                       alt='{$lang.global.update.update}'
+                       title='{$lang.global.update.update}'
+                       width='16' height='16' />
                 </a>
                 &nbsp;
                 <a href="#" onclick="confirmDestroy('{$f.url_destroy}')">
                   <img src='{$_PATH.images}/candy.global/spacer.png'
-                      class='icon-destroy js-tooltip'
-                      alt='{$lang.global.destroy.destroy}'
-                      title='{$lang.global.destroy.destroy}'
-                      width='16' height='16' />
+                       class='icon-destroy js-tooltip'
+                       alt='{$lang.global.destroy.destroy}'
+                       title='{$lang.global.destroy.destroy}'
+                       width='16' height='16' />
                 </a>
               {else}
                 <a href='{$f.url}'>

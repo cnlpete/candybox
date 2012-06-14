@@ -5,22 +5,30 @@
   <div class='tabbable'>
     <ul class='nav nav-tabs'>
       <li{if $_REQUEST['action'] == 'update'} class='active'{/if}>
-        <a href='#user-personal' data-toggle='tab'>{$lang.users.title.personal_data}</a>
+        <a href='#user-personal' data-toggle='tab'>
+          {$lang.users.title.personal_data}
+        </a>
       </li>
       {if $_SESSION.user.id == $uid}
         <li{if $_REQUEST['action'] == 'password'} class='active'{/if}>
-          <a href='#user-password' data-toggle='tab'>{$lang.users.title.password}</a>
+          <a href='#user-password' data-toggle='tab'>
+            {$lang.users.title.password}
+          </a>
         </li>
       {/if}
       <li id='js-avatar_tab'
           {if $_REQUEST['action'] == 'avatar' && $use_gravatar == 1}class='active hide'
           {elseif $use_gravatar == 1}class='hide'
           {elseif $_REQUEST['action'] == 'avatar'}class='active'{/if}>
-        <a href='#user-image' data-toggle='tab'>{$lang.users.title.image}</a>
+        <a href='#user-image' data-toggle='tab'>
+          {$lang.users.title.image}
+        </a>
       </li>
       {if $_SESSION.user.role < 4}
         <li{if $_REQUEST['action'] == 'destroy'} class='active'{/if}>
-          <a href='#user-destroy' data-toggle='tab'>{$lang.users.title.account}</a>
+          <a href='#user-destroy' data-toggle='tab'>
+            {$lang.users.title.account}
+          </a>
         </li>
       {/if}
     </ul>
@@ -35,9 +43,17 @@
             {$lang.global.name} <span title='{$lang.global.required}'>*</span>
           </label>
           <div class='controls'>
-            <input class='span4 required' name='{$_REQUEST.controller}[name]' value="{$name}" type='name'
-                  id='input-name' required />
-            {if isset($error.name)}<span class='help-inline'>{$error.name}</span>{/if}
+            <input class='span4 required'
+                   name='{$_REQUEST.controller}[name]'
+                   value="{$name}"
+                   type='name'
+                   id='input-name'
+                   required />
+            {if isset($error.name)}
+              <span class='help-inline'>
+                {$error.name}
+              </span>
+            {/if}
           </div>
         </div>
         <div class='control-group'>
@@ -45,8 +61,11 @@
             {$lang.global.surname}
           </label>
           <div class='controls'>
-            <input class='span4' name='{$_REQUEST.controller}[surname]' value="{$surname}" type='text'
-                  id='input-surname' />
+            <input class='span4'
+                   name='{$_REQUEST.controller}[surname]'
+                   value="{$surname}"
+                   type='text'
+                   id='input-surname' />
           </div>
         </div>
         <div class='control-group'>
@@ -71,14 +90,17 @@
                    {if $use_gravatar == 1}checked{/if} />
             <div class='help-inline'>
               <a href='{$gravatar_avatar_popup}'
-                class='thumbnail js-fancybox'
-                title='{$full_name}'
-                id='js-gravatar'
-                style='{if $use_gravatar == 0}opacity:0.25{/if}'>
-                <img alt='{$name} {$surname}' src='{$gravatar_avatar_32}' width='32' height='32' />
+                 class='thumbnail js-fancybox'
+                 title='{$full_name}'
+                 id='js-gravatar'
+                 style='{if $use_gravatar == 0}opacity:0.25{/if}'>
+                <img alt='{$name} {$surname}'
+                     src='{$gravatar_avatar_32}'
+                     width='32' height='32' />
               </a>
             </div>
-            <p id='js-gravatar_help' class='help-block{if $use_gravatar == 1} hide{/if}'>
+            <p id='js-gravatar_help'
+               class='help-block{if $use_gravatar == 1} hide{/if}'>
               {$lang.users.info.gravatar}
             </p>
           </div>
@@ -88,7 +110,10 @@
             {$lang.users.label.content.update}
           </label>
           <div class='controls'>
-            <textarea name='{$_REQUEST.controller}[content]' rows='6' class='span4' id='input-content'>
+            <textarea name='{$_REQUEST.controller}[content]'
+                      rows='6'
+                      class='span4'
+                      id='input-content'>
               {$content}
             </textarea>
             <span class='help-inline'></span>
@@ -99,8 +124,11 @@
             {$lang.users.label.newsletter}
           </label>
           <div class='controls'>
-            <input name='{$_REQUEST.controller}[receive_newsletter]' id='input-receive_newsletter' value='1'
-                    type='checkbox' class='checkbox' {if $receive_newsletter == 1}checked{/if} />
+            <input name='{$_REQUEST.controller}[receive_newsletter]'
+                   id='input-receive_newsletter'
+                   value='1'
+                   type='checkbox'
+                   class='checkbox' {if $receive_newsletter == 1}checked{/if} />
           </div>
         </div>
         {if $_SESSION.user.role == 4 && $_SESSION.user.id !== $uid}
@@ -119,9 +147,15 @@
           </div>
         {/if}
         <div class='form-actions'>
-          <input type='submit' class='btn btn-primary' value='{$lang.users.label.update}' />
-          <input type='reset' class='btn' value='{$lang.global.reset}' />
-          <input type='hidden' value="{$email}" name='{$_REQUEST.controller}[email]' />
+          <input type='submit'
+                 class='btn btn-primary'
+                 value='{$lang.users.label.update}' />
+          <input type='reset'
+                 class='btn'
+                 value='{$lang.global.reset}' />
+          <input type='hidden'
+                 value="{$email}"
+                 name='{$_REQUEST.controller}[email]' />
         </div>
       </form>
     </div>
@@ -129,15 +163,24 @@
     {* Password *}
     {if $_SESSION.user.id == $uid}
       <div class="tab-pane{if $_REQUEST['action'] == 'password'} active{/if}" id='user-password'>
-        <form method='post' action='/{$_REQUEST.controller}/{$uid}/password' class='form-horizontal'>
+        <form method='post'
+              action='/{$_REQUEST.controller}/{$uid}/password'
+              class='form-horizontal'>
           <div class='control-group{if isset($error.password_old)} alert alert-error{/if}'>
             <label for='input-password_old' class='control-label'>
               {$lang.users.label.password.old} <span title='{$lang.global.required}'>*</span>
             </label>
             <div class='controls'>
-              <input name='{$_REQUEST.controller}[password_old]' id='input-password_old' type='password'
-                    class='span4 required' required />
-              {if isset($error.password_old)}<span class='help-inline'>{$error.password_old}</span>{/if}
+              <input name='{$_REQUEST.controller}[password_old]'
+                     id='input-password_old'
+                     type='password'
+                     class='span4 required'
+                     required />
+              {if isset($error.password_old)}
+                <span class='help-inline'>
+                  {$error.password_old}
+                </span>
+              {/if}
             </div>
           </div>
           <div class='control-group{if isset($error.password_new)} alert alert-error{/if}'>
@@ -145,9 +188,16 @@
               {$lang.users.label.password.new} <span title='{$lang.global.required}'>*</span>
             </label>
             <div class='controls'>
-              <input name='{$_REQUEST.controller}[password_new]' id='input-password_new' type='password'
-                      class='span4 required' required />
-              {if isset($error.password_new)}<span class='help-inline'>{$error.password_new}</span>{/if}
+              <input name='{$_REQUEST.controller}[password_new]'
+                     id='input-password_new'
+                     type='password'
+                     class='span4 required'
+                     required />
+              {if isset($error.password_new)}
+                <span class='help-inline'>
+                  {$error.password_new}
+                </span>
+              {/if}
             </div>
           </div>
           <div class='control-group'>
@@ -155,14 +205,25 @@
               {$lang.global.password.repeat} <span title='{$lang.global.required}'>*</span>
             </label>
             <div class='controls'>
-              <input name='{$_REQUEST.controller}[password_new2]' id='input-password_new2' type='password'
-                    class='span4 required' required />
-              {if isset($error.password_new2)}<span class='help-inline'>{$error.password_new2}</span>{/if}
+              <input name='{$_REQUEST.controller}[password_new2]'
+                     id='input-password_new2'
+                     type='password'
+                     class='span4 required'
+                     required />
+              {if isset($error.password_new2)}
+                <span class='help-inline'>
+                  {$error.password_new2}
+                </span>
+              {/if}
             </div>
           </div>
           <div class='form-actions'>
-            <input type='submit' class='btn btn-primary' value='{$lang.users.label.password.create}' />
-            <input type='reset' class='btn' value='{$lang.global.reset}' />
+            <input type='submit'
+                   class='btn btn-primary'
+                   value='{$lang.users.label.password.create}' />
+            <input type='reset'
+                   class='btn'
+                   value='{$lang.global.reset}' />
           </div>
         </form>
       </div>
@@ -170,7 +231,9 @@
 
     {* Avatar *}
     <div class="tab-pane{if $_REQUEST['action'] == 'avatar'} active{/if}" id='user-image'>
-      <form enctype='multipart/form-data' method='post' action='/{$_REQUEST.controller}/{$uid}/avatar'
+      <form enctype='multipart/form-data'
+            method='post'
+            action='/{$_REQUEST.controller}/{$uid}/avatar'
             class='form-horizontal'>
         <div class='control-group{if isset($error.image)} alert alert-error{/if}'>
           {if $standard_avatar_popup !== $gravatar_avatar_popup}
@@ -190,10 +253,15 @@
           </label>
           <div class='controls'>
             {* @todo: Rename file *}
-            <input type='file' name='image' id='input-image' class='span4'
-                  accept='image/jpg,image/gif,image/png' />
+            <input type='file'
+                   name='image'
+                   id='input-image'
+                   class='span4'
+                   accept='image/jpg,image/gif,image/png' />
             {if isset($error.image)}
-              <span class='help-inline'>{$error.image}</span>
+              <span class='help-inline'>
+                {$error.image}
+              </span>
             {/if}
             <span class='help-block'>
               {if $_SYSTEM.maximumUploadSize.raw <= 1536}
@@ -220,14 +288,22 @@
                 {$lang.users.label.image.terms}
             </label>
             {if isset($error.terms)}
-              <span class='help-inline'>{$error.terms}</span>
+              <span class='help-inline'>
+                {$error.terms}
+              </span>
             {/if}
           </div>
         </div>
         <div class='form-actions'>
-          <input type='submit' class='btn btn-primary' value='{$lang.users.title.image}' />
-          <input type='reset' class='btn' value='{$lang.global.reset}' />
-          <input type='hidden' name='MAX_FILE_SIZE' value='409600' />
+          <input type='submit'
+                 class='btn btn-primary'
+                 value='{$lang.users.title.image}' />
+          <input type='reset'
+                 class='btn'
+                 value='{$lang.global.reset}' />
+          <input type='hidden'
+                 name='MAX_FILE_SIZE'
+                 value='409600' />
         </div>
       </form>
     </div>
@@ -235,7 +311,9 @@
   {* Destroy account *}
   {if $_SESSION.user.role < 4}
     <div class="tab-pane{if $_REQUEST['action'] == 'destroy'} active{/if}" id='user-destroy'>
-      <form method='post' action='/{$_REQUEST.controller}/{$uid}/destroy' class='form-horizontal'>
+      <form method='post'
+            action='/{$_REQUEST.controller}/{$uid}/destroy'
+            class='form-horizontal'>
         <p class='alert alert-danger'>
           {$lang.users.info.destroy_account}
         </p>
@@ -251,7 +329,9 @@
           </div>
         </div>
         <div class='form-actions'>
-          <input type='submit' class='btn btn-danger' value='{$lang.users.label.account.destroy}' />
+          <input type='submit'
+                 class='btn btn-danger'
+                 value='{$lang.users.label.account.destroy}' />
         </div>
       </form>
     </div>

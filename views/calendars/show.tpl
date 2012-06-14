@@ -51,8 +51,12 @@
       <table class='table tablesorter'>
         <thead>
           <tr>
-            <th class='column-date headerSortDown'>{$lang.global.date.date}</th>
-            <th class='column-description'>{$lang.global.description}</th>
+            <th class='column-date headerSortDown'>
+              {$lang.global.date.date}
+            </th>
+            <th class='column-description'>
+              {$lang.global.description}
+            </th>
             <th class='column-actions'></th>
           </tr>
         </thead>

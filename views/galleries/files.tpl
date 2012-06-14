@@ -3,9 +3,9 @@
     <p class='center'>
       <a href='/{$_REQUEST.controller}/{$_REQUEST.id}/createfile'>
         <img src='{$_PATH.images}/candy.global/spacer.png'
-            class='icon-create'
-            alt='{$lang.global.create.entry}'
-            width='16' height='16' />
+             class='icon-create'
+             alt='{$lang.global.create.entry}'
+             width='16' height='16' />
         {$lang.galleries.files.title.create}
       </a>
     </p>
@@ -24,10 +24,10 @@
         {if $_SESSION.user.role >= 3}
           <a href='/{$_REQUEST.controller}/{$_REQUEST.id}/update'>
             <img src='{$_PATH.images}/candy.global/spacer.png'
-                class='icon-update js-tooltip'
-                alt='{$lang.global.update.update}'
-                title='{$lang.global.update.update}'
-                width='16' height='16' />
+                 class='icon-update js-tooltip'
+                 alt='{$lang.global.update.update}'
+                 title='{$lang.global.update.update}'
+                 width='16' height='16' />
           </a>
         {/if}
       </h1>
@@ -51,23 +51,23 @@
               <img src='{$f.url_thumb}'
                    alt='{$f.file}'
                    title=''
-                   class='js-image'/>
+                   class='js-image' />
             </a>
             {if $_SESSION.user.role >= 3}
               <p class='center'>
                 <a href='{$f.url_update}'>
                   <img src='{$_PATH.images}/candy.global/spacer.png'
-                      class='icon-update js-tooltip'
-                      alt='{$lang.global.update.update}'
-                      title='{$lang.global.update.update}'
-                      width='16' height='16' />
+                       class='icon-update js-tooltip'
+                       alt='{$lang.global.update.update}'
+                       title='{$lang.global.update.update}'
+                       width='16' height='16' />
                 </a>
                 <a href='#' onclick="confirmDestroy('{$f.url_destroy}')">
                   <img src='{$_PATH.images}/candy.global/spacer.png'
-                      class='icon-destroy js-tooltip'
-                      alt='{$lang.global.destroy.destroy}'
-                      title='{$lang.global.destroy.destroy}'
-                      width='16' height='16' />
+                       class='icon-destroy js-tooltip'
+                       alt='{$lang.global.destroy.destroy}'
+                       title='{$lang.global.destroy.destroy}'
+                       width='16' height='16' />
                 </a>
               </p>
             {/if}

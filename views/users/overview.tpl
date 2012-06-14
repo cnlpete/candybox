@@ -3,9 +3,9 @@
     <p class='center'>
       <a href='/{$_REQUEST.controller}/create'>
         <img src='{$_PATH.images}/candy.global/spacer.png'
-            class='icon-create'
-            alt='{$lang.global.create.entry}'
-            width='16' height='16' />
+             class='icon-create'
+             alt='{$lang.global.create.entry}'
+             width='16' height='16' />
         {$lang.users.title.create}
       </a>
     </p>
@@ -72,27 +72,27 @@
         </td>
         <td class='center'>
           <img src='{$_PATH.images}/candy.global/spacer.png'
-              class='icon-{if $u.receive_newsletter == 1}success{else}close{/if}'
-              alt='{if $u.receive_newsletter == 1}✔{else}✖{/if}' width='16'
-              title='{if $u.receive_newsletter == 1}✔{else}✖{/if}' width='16'
-              height='16' title='{if $u.receive_newsletter == 1}✔{else}✖{/if}' />
+               class='icon-{if $u.receive_newsletter == 1}success{else}close{/if}'
+               alt='{if $u.receive_newsletter == 1}✔{else}✖{/if}' width='16'
+               title='{if $u.receive_newsletter == 1}✔{else}✖{/if}' width='16'
+               height='16' title='{if $u.receive_newsletter == 1}✔{else}✖{/if}' />
         </td>
         {if $_SESSION.user.role == 4}
           <td class='center'>
             <a href='{$u.url_update}'>
               <img src='{$_PATH.images}/candy.global/spacer.png'
-                  class='icon-update js-tooltip'
-                  alt='{$lang.global.update.update}'
-                  title='{$lang.global.update.update}'
-                  width='16' height='16' />
+                   class='icon-update js-tooltip'
+                   alt='{$lang.global.update.update}'
+                   title='{$lang.global.update.update}'
+                   width='16' height='16' />
             </a>
             &nbsp;
             <a href='#' onclick="confirmDestroy('{$u.url_destroy}')">
               <img src='{$_PATH.images}/candy.global/spacer.png'
-                  class='icon-destroy js-tooltip'
-                  alt='{$lang.global.destroy.destroy}'
-                  title='{$lang.global.destroy.destroy}'
-                  width='16' height='16' />
+                   class='icon-destroy js-tooltip'
+                   alt='{$lang.global.destroy.destroy}'
+                   title='{$lang.global.destroy.destroy}'
+                   width='16' height='16' />
             </a>
           </td>
         {/if}

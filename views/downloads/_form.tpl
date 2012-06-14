@@ -2,7 +2,9 @@
   <div class='page-header'>
     <h1>{$lang.global.download}</h1>
   </div>
-  <form method='post' class='form-horizontal' enctype='multipart/form-data'
+  <form method='post'
+        class='form-horizontal'
+        enctype='multipart/form-data'
         action='/{$_REQUEST.controller}/{if isset($_REQUEST.id)}{$_REQUEST.id}/{/if}{$_REQUEST.action}'>
     {if $_REQUEST.action == 'create'}
       <div class='control-group{if isset($error.file)} alert alert-error{/if}'>
@@ -20,8 +22,11 @@
         </label>
         <div class='controls'>
           {* @todo: Rename file *}
-          <input class='input-file span4 required' type='file' name='file[]'
-                required id='input-file'/>
+          <input class='input-file span4 required'
+                 type='file'
+                 name='file[]'
+                 id='input-file'
+                 required />
         </div>
       </div>
     {/if}

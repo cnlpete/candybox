@@ -15,8 +15,12 @@
         {$lang.global.title} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <input type='text' name='{$_REQUEST.controller}[title]' class='span4 required focused'
-              value="{$title}" id='input-title' autofocus required />
+        <input type='text'
+               name='{$_REQUEST.controller}[title]'
+               class='span4 required focused'
+               value="{$title}"
+               id='input-title'
+               autofocus required />
         <span class='help-inline'>
           {if isset($error.title)}
             {$error.title}
@@ -29,8 +33,11 @@
         {$lang.global.teaser}
       </label>
       <div class='controls'>
-        <input name='{$_REQUEST.controller}[teaser]' value="{$teaser}" type='text' class='span4'
-              id='input-teaser' />
+        <input name='{$_REQUEST.controller}[teaser]'
+               value="{$teaser}"
+               type='text'
+               class='span4'
+               id='input-teaser' />
         <span class='help-inline'></span>
         <p class='help-block'>
           {$lang.blogs.info.teaser}
@@ -42,8 +49,11 @@
         {$lang.global.keywords}
       </label>
       <div class='controls'>
-        <input name='{$_REQUEST.controller}[keywords]' value="{$keywords}" type='text'
-              class='span4' id='input-keywords' />
+        <input name='{$_REQUEST.controller}[keywords]'
+               value="{$keywords}"
+               type='text'
+               class='span4'
+               id='input-keywords' />
         <p class='help-block'>
           {$lang.contents.info.keywords}
         </p>
@@ -87,7 +97,9 @@
                class='btn btn-danger'
                value='{$lang.contents.title.destroy}'
                onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroy')" />
-        <input type='reset' class='btn' value='{$lang.global.reset}' />
+        <input type='reset'
+               class='btn'
+               value='{$lang.global.reset}' />
       {/if}
     </div>
   </form>

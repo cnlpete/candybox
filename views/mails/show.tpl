@@ -20,10 +20,22 @@
       {foreach $mails as $m}
         <tr class='js-tooltip' title='{$m.error_message}'>
           <td class='left'>
-            <a href='mailto:{$m.from_address}'>{if !empty($m.from_name)}{$m.from_name}{else}{$m.from_address}{/if}</a>
+            <a href='mailto:{$m.from_address}'>
+              {if !empty($m.from_name)}
+                {$m.from_name}
+              {else}
+                {$m.from_address}
+              {/if}
+            </a>
           </td>
           <td>
-            <a href='mailto:{$m.to_address}'>{if !empty($m.to_name)}{$m.to_name}{else}{$m.to_address}{/if}</a>
+            <a href='mailto:{$m.to_address}'>
+              {if !empty($m.to_name)}
+                {$m.to_name}
+              {else}
+                {$m.to_address}
+              {/if}
+            </a>
           </td>
           <td>
             {$m.subject}
@@ -36,10 +48,10 @@
           <td class='center'>
             <a href="#" onclick="resendMail(this, {$m.id})">
               <img src='{$_PATH.images}/candy.global/spacer.png'
-                  class='icon-mail js-tooltip'
-                  alt='{$lang.global.email.send}'
-                  title='{$lang.global.email.send}'
-                  width='16' height='16' />
+                   class='icon-mail js-tooltip'
+                   alt='{$lang.global.email.send}'
+                   title='{$lang.global.email.send}'
+                   width='16' height='16' />
             </a>
           </td>
         </tr>

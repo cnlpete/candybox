@@ -8,14 +8,26 @@
       {foreach $comments as $c}
         <article{if $c.author.id == $author_id} class='from_author'{/if}>
           <header>
-            <a href='#{$c.id}' name='{$c.id}' class='count'>{$c.loop+$comment_number}</a>
-            <img class='thumbnail' src='{$c.author.avatar_64}' width='40' height='40' alt='' />
+            <a href='#{$c.id}'
+               name='{$c.id}'
+               class='count'>
+              {$c.loop+$comment_number}
+            </a>
+            <img class='thumbnail'
+                 src='{$c.author.avatar_64}'
+                 width='40'
+                 height='40'
+                 alt='{$c.author.name}' />
             {if $c.author.id > 0}
-              <a href='{$c.author.url}' rel='author'>{$c.author.full_name}</a>
+              <a href='{$c.author.url}' rel='author'>
+                {$c.author.full_name}
+              </a>
             {elseif $c.author.full_name}
               {$c.author.full_name}
             {else}
-              <em style='text-decoration:line-through'>{$lang.global.deleted_user}</em>
+              <em style='text-decoration:line-through'>
+                {$lang.global.deleted_user}
+              </em>
             {/if}
             <br />
             <time datetime='{$c.date.w3c}' class='js-timeago'>
@@ -27,7 +39,9 @@
           </div>
           <footer>
             {if $_SESSION.user.role >= 3 && $c.author.email}
-              <a href='mailto:{$c.author.email}'>{$c.author.email}</a>
+              <a href='mailto:{$c.author.email}'>
+                {$c.author.email}
+              </a>
               &nbsp;
             {/if}
             {if $_SESSION.user.role >= 3 && $c.author.ip}

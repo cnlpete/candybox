@@ -32,7 +32,7 @@
                name='{$_REQUEST.controller}[surname]'
                value='{if isset($surname)}{$surname}{/if}'
                id='input-surname'
-               type='text'  />
+               type='text' />
         {if isset($error.surname)}
           <span class='help-inline'>
             {$error.surname}

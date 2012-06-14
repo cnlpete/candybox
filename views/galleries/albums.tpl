@@ -3,9 +3,9 @@
     <p class='center'>
       <a href='/{$_REQUEST.controller}/create'>
         <img src='{$_PATH.images}/candy.global/spacer.png'
-            class='icon-create'
-            alt='{$lang.global.create.entry}'
-            width='16' height='16' />
+             class='icon-create'
+             alt='{$lang.global.create.entry}'
+             width='16' height='16' />
         {$lang.galleries.albums.title.create}
       </a>
     </p>
@@ -26,17 +26,17 @@
             {if $_SESSION.user.role >= 3}
               <a href='{$a.url_createfile}'>
                 <img src='{$_PATH.images}/candy.global/spacer.png'
-                    class='icon-create js-tooltip'
-                    alt='{$lang.galleries.files.title.create}'
-                    title='{$lang.galleries.files.title.create}'
-                    width='16' height='16' />
+                     class='icon-create js-tooltip'
+                     alt='{$lang.galleries.files.title.create}'
+                     title='{$lang.galleries.files.title.create}'
+                     width='16' height='16' />
               </a>
               <a href='{$a.url_update}'>
                 <img src='{$_PATH.images}/candy.global/spacer.png'
-                    class='icon-update js-tooltip'
-                    alt='{$lang.global.update.update}'
-                    title='{$lang.global.update.update}'
-                    width='16' height='16' />
+                     class='icon-update js-tooltip'
+                     alt='{$lang.global.update.update}'
+                     title='{$lang.global.update.update}'
+                     width='16' height='16' />
               </a>
             {/if}
           </h2>

@@ -46,25 +46,25 @@
         {if $_SESSION.user.role >= 3}
           <td class='center'>
             <img src='{$_PATH.images}/candy.global/spacer.png'
-                class='icon-{if $c.published == true}success{else}close{/if}'
-                alt='{if $c.published == true}✔{else}✖{/if}' height='16'
-                title='{if $c.published == true}✔{else}✖{/if}' width='16' />
+                 class='icon-{if $c.published == true}success{else}close{/if}'
+                 alt='{if $c.published == true}✔{else}✖{/if}' height='16'
+                 title='{if $c.published == true}✔{else}✖{/if}' width='16' />
           </td>
           <td>
             <a href='{$c.url_update}'>
               <img src='{$_PATH.images}/candy.global/spacer.png'
-                  class='icon-update js-tooltip'
-                  alt='{$lang.global.update.update}'
-                  title='{$lang.global.update.update}'
-                  width='16' height='16' />
+                   class='icon-update js-tooltip'
+                   alt='{$lang.global.update.update}'
+                   title='{$lang.global.update.update}'
+                   width='16' height='16' />
             </a>
             &nbsp;
             <a href='#' onclick="confirmDestroy('{$c.url_destroy}')">
               <img src='{$_PATH.images}/candy.global/spacer.png'
-                  class='icon-destroy js-tooltip'
-                  alt='{$lang.global.destroy.destroy}'
-                  title='{$lang.global.destroy.destroy}'
-                  width='16' height='16' />
+                   class='icon-destroy js-tooltip'
+                   alt='{$lang.global.destroy.destroy}'
+                   title='{$lang.global.destroy.destroy}'
+                   width='16' height='16' />
             </a>
           </td>
         {/if}
