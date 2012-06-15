@@ -5,13 +5,19 @@
   <div class='tabbable'>
     <ul class='nav nav-tabs'>
       <li class='active'>
-        <a href='#sitemap-blogs' data-toggle='tab'>{$lang.global.blogs}</a>
+        <a href='#sitemap-blogs' data-toggle='tab'>
+          {$lang.global.blogs}
+        </a>
       </li>
       <li>
-        <a href='#sitemap-contents' data-toggle='tab'>{$lang.global.contents}</a>
+        <a href='#sitemap-contents' data-toggle='tab'>
+          {$lang.global.contents}
+        </a>
       </li>
       <li>
-        <a href='#sitemap-galleries' data-toggle='tab'>{$lang.global.galleries}</a>
+        <a href='#sitemap-galleries' data-toggle='tab'>
+          {$lang.global.galleries}
+        </a>
       </li>
     </ul>
     <div class='tab-content'>

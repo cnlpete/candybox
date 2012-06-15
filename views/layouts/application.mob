@@ -31,9 +31,13 @@
         <div data-role='header'>
           <h1>{$_title_}</h1>
           {if $_SESSION.user.role == 0}
-            <a href='/sessions/create' class='ui-btn-right'>{$lang.global.login}</a>
+            <a href='/sessions/create' class='ui-btn-right'>
+              {$lang.global.login}
+            </a>
           {else}
-            <a href='/sessions/destroy' class='ui-btn-right'>{$lang.global.logout}</a>
+            <a href='/sessions/destroy' class='ui-btn-right'>
+              {$lang.global.logout}
+            </a>
           {/if}
         </div><!-- /header -->
         <div data-role='navbar'>
@@ -49,9 +53,14 @@
           <section id='{$_REQUEST.controller}'>
             {if $_flash_type_}
               <div id='js-flash_message'>
-                <div class='alert alert-{$_flash_type_}' id='js-flash_{$_flash_type_}'>
-                  <h4 class='alert-heading'>{$_flash_headline_}</h4>
-                  <p>{$_flash_message_}</p>
+                <div class='alert alert-{$_flash_type_}'
+                     id='js-flash_{$_flash_type_}'>
+                  <h4 class='alert-heading'>
+                    {$_flash_headline_}
+                  </h4>
+                  <p>
+                    {$_flash_message_}
+                  </p>
                 </div>
               </div>
             {/if}
@@ -66,20 +75,10 @@
         </div><!-- /footer -->
       </div><!-- /page -->
 
-      {* Mobile fixes: Put images to screen size. *}
       <script type='text/javascript'>
         $('#top').live('click', function(e){
           $('body').clearQueue();
           $.mobile.silentScroll(0);
-        });
-
-        $('img').each(function() {
-          var iNewWidth = screen.width - 30;
-          var iNewHeight =  iNewWidth / $(this).width() * $(this).height();
-          if($(this).width() > iNewWidth) {
-            $(this).attr('width', iNewWidth);
-            $(this).attr('height', iNewHeight);
-          }
         });
       </script>
       <script type='text/javascript' src='{$_PATH.js}/core/scripts{$_SYSTEM.compress_files_suffix}.js'></script>

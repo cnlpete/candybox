@@ -14,7 +14,9 @@
                   <h2>
                     {$data.title}
                   </h2>
-                  <p>{$data.date.raw|date_format:$lang.global.time.format.datetime}</p>
+                  <p>
+                    {$data.date.raw|date_format:$lang.global.time.format.datetime}
+                  </p>
                 </a>
               </li>
             {/if}
@@ -26,6 +28,11 @@
     <div class='alert alert-warning'>
       <h4>{$lang.searches.info.fail|replace:'%s':$string}</h4>
     </div>
-    <a href='/{$_REQUEST.controller}' data-role='button' data-ajax='false' data-theme='b'>{$lang.searches.info.research}</a>
+    <a href='/{$_REQUEST.controller}'
+       data-role='button'
+       data-ajax='false'
+       data-theme='b'>
+      {$lang.searches.info.research}
+    </a>
   {/if}
 {/strip}

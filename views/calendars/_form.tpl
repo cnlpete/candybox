@@ -9,8 +9,11 @@
         {$lang.global.title} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <input class='span4 required focused' type='text' name='{$_REQUEST.controller}[title]' id='input-title'
-              value="{$title}" required autofocus />
+        <input class='span4 required focused'
+               type='text' name='{$_REQUEST.controller}[title]'
+               id='input-title'
+               value="{$title}"
+               required autofocus />
         <span class='help-inline'>
           {if isset($error.title)}
             {$error.title}
@@ -23,7 +26,11 @@
         {$lang.global.description}
       </label>
       <div class='controls'>
-        <input class='span4' type='text' name='{$_REQUEST.controller}[content]' id='input-content' value='{$content}' />
+        <input class='span4'
+               type='text'
+               name='{$_REQUEST.controller}[content]'
+               id='input-content'
+               value='{$content}' />
       </div>
     </div>
     <div class='control-group{if isset($error.start_date)} alert alert-error{/if}'>
@@ -31,8 +38,13 @@
         {$lang.global.date.start} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <input type='date' name='{$_REQUEST.controller}[start_date]' id='input-start_date' value="{$start_date}"
-              min='{$_SYSTEM.date}' class='span4 required' autocomplete required />
+        <input type='date'
+               name='{$_REQUEST.controller}[start_date]'
+               id='input-start_date'
+               value="{$start_date}"
+               min='{$_SYSTEM.date}'
+               class='span4 required'
+               autocomplete required />
         {if isset($error.start_date)}
           <span class='help-inline'>{$error.start_date}</span>
         {/if}
@@ -46,8 +58,13 @@
         {$lang.global.date.end}
       </label>
       <div class='controls'>
-        <input type='date' name='{$_REQUEST.controller}[end_date]' id='input-end_date' value="{$end_date}"
-              class='span4' min='{$_SYSTEM.date}' autocomplete />
+        <input type='date'
+               name='{$_REQUEST.controller}[end_date]'
+               id='input-end_date'
+               value="{$end_date}"
+               class='span4'
+               min='{$_SYSTEM.date}'
+               autocomplete />
         {if isset($error.end_date)}
           <span class='help-inline'>{$error.end_date}</span>
         {/if}
@@ -57,12 +74,18 @@
       </div>
     </div>
     <div data-role='fieldcontain' class='form-actions'>
-      <input class='btn btn-primary' type='submit' data-theme='b'
+      <input class='btn btn-primary'
+             type='submit'
+             data-theme='b'
              value="{if $_REQUEST.action == 'create'}{$lang.global.create.create}{else}{$lang.global.update.update}{/if}" />
       {if $_REQUEST.action == 'update'}
-        <input class='btn btn-danger' type='button' value='{$lang.global.destroy.destroy}'
-              onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroy')" />
-        <input class='btn' type='reset' value='{$lang.global.reset}' />
+        <input class='btn btn-danger'
+               type='button'
+               value='{$lang.global.destroy.destroy}'
+               onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroy')" />
+        <input class='btn'
+               type='reset'
+               value='{$lang.global.reset}' />
       {/if}
     </div>
   </form>

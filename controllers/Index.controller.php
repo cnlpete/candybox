@@ -220,14 +220,18 @@ class Index {
 
 
     # Show files from public folder (robots.txt, human.txt and favicon.ico)
-    if (preg_match('/\./', $this->_aRequest['controller'])) {
-      $sFile = Helper::removeSlash(WEBSITE_CDN) . '/templates/' . PATH_TEMPLATE . '/' . $this->_aRequest['controller'];
+    if (preg_match('/\./', $sURI)) {
+			$sFileTemplate	= Helper::removeSlash(WEBSITE_CDN) . '/templates/' . PATH_TEMPLATE . '/' . $sURI;
+			$sFileRoot			= Helper::removeSlash(WEBSITE_CDN) . '/' . $sURI;
 
-			if (PATH_TEMPLATE && file_exists($sFile))
-				exit(file_get_contents($sFile));
+			if (PATH_TEMPLATE && file_exists($sFileTemplate))
+				exit(file_get_contents($sFileTemplate));
+
+			elseif (file_exists($sFileRoot))
+				exit(file_get_contents($sFileRoot));
 
 			else
-				exit(file_get_contents(Helper::removeSlash(WEBSITE_CDN) . '/' . $this->_aRequest['controller']));
+				return Helper::redirectTo('/errors/404');
 		}
 
     return $this->_aRequest;

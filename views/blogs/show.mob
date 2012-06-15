@@ -1,7 +1,10 @@
 {strip}
   {if $_SESSION.user.role >= 3}
-    <p class="create">
-      <a href='/{$_REQUEST.controller}/create' data-role="button" data-theme="b" data-icon="plus">
+    <p class='create'>
+      <a href='/{$_REQUEST.controller}/create'
+         data-role='button'
+         data-theme='b'
+         data-icon='plus'>
         {$lang.global.create.entry}
       </a>
     </p>
@@ -35,7 +38,7 @@
               {else}
                 {$b.content}
               {/if}
-              <span class="ui-li-count">{$b.comment_sum}</span>
+              <span class='ui-li-count'>{$b.comment_sum}</span>
             </a>
           </li>
         </ul>
@@ -61,7 +64,10 @@
             <p>
               {$lang.global.tags.tags}:
               {foreach $b.tags as $t}
-                <a title='{$lang.global.tags.info}: {$t}' href='/{$_REQUEST.controller}/{$t}'>{$t}</a>
+                <a title='{$lang.global.tags.info}: {$t}'
+                   href='/{$_REQUEST.controller}/{$t}'>
+                  {$t}
+                </a>
                 {if !$t@last}, {/if}
               {/foreach}
             </p>

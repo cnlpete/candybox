@@ -7,10 +7,10 @@
           {if $_SESSION.user.role >= 3}
             <a href='{$c.url_update}'>
               <img src='{$_PATH.images}/candy.global/spacer.png'
-                  class='icon-update js-tooltip'
-                  alt='{$lang.global.update.update}'
-                  title='{$lang.global.update.update}'
-                  width='16' height='16' />
+                   class='icon-update js-tooltip'
+                   alt='{$lang.global.update.update}'
+                   title='{$lang.global.update.update}'
+                   width='16' height='16' />
             </a>
           {/if}
         </h1>
@@ -23,7 +23,9 @@
           &nbsp;
           {$lang.global.by}
           &nbsp;
-          <a href='{$c.author.url}' rel='author'>{$c.author.full_name}</a>
+          <a href='{$c.author.url}' rel='author'>
+            {$c.author.full_name}
+          </a>
         </p>
       </header>
       {if $c.teaser}

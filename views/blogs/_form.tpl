@@ -70,7 +70,7 @@
       <div class='controls'>
         <input name='{$_REQUEST.controller}[keywords]'
                value="{$keywords}"
-               type='text' 
+               type='text'
                id='input-keywords'
                title='{$lang.blogs.info.keywords}'
                class='span4' />
@@ -128,11 +128,11 @@
           {$lang.blogs.label.date}
         </label>
         <div class='controls'>
-            <input name='{$_REQUEST.controller}[update_date]'
-                   value='1'
-                   type='checkbox'
-                   id='input-update_date'
-                   class='checkbox' />
+          <input name='{$_REQUEST.controller}[update_date]'
+                  value='1'
+                  type='checkbox'
+                  id='input-update_date'
+                  class='checkbox' />
         </div>
       </div>
       <div class='control-group'>
@@ -140,12 +140,12 @@
           {$lang.global.update.show}
         </label>
         <div class='controls'>
-            <input type='checkbox'
-                   class='checkbox'
-                   name='{$_REQUEST.controller}[show_update]'
-                   value='1'
-                   id='input-show_update'
-                   {if $date_modified > 0}checked{/if} />
+          <input type='checkbox'
+                  class='checkbox'
+                  name='{$_REQUEST.controller}[show_update]'
+                  value='1'
+                  id='input-show_update'
+                  {if $date_modified > 0}checked{/if} />
         </div>
       </div>
     {/if}

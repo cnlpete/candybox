@@ -6,10 +6,10 @@
         {if $_SESSION.user.role == 4 || $u.id == $_SESSION.user.id}
           <a href='{$u.url_update}'>
             <img src='{$_PATH.images}/candy.global/spacer.png'
-                class='icon-update js-tooltip'
-                alt='{$lang.global.update.update}'
-                title='{$lang.global.update.update}'
-                width='16' height='16' />
+                 class='icon-update js-tooltip'
+                 alt='{$lang.global.update.update}'
+                 title='{$lang.global.update.update}'
+                 width='16' height='16' />
           </a>
         {/if}
       </h1>
