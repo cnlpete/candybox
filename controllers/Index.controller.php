@@ -218,7 +218,7 @@ class Index {
       foreach ($aRouteParts as $sRoutes) {
         $aRoute = explode('=', $sRoutes);
 
-        if(!isset($this->_aRequest[$aRoute[0]]))
+        if(!isset($this->_aRequest[$aRoute[0]]) && strlen(trim($aRoute[0])) > 0)
           $this->_aRequest[$aRoute[0]] = $aRoute[1];
       }
     }
