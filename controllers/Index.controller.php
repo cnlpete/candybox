@@ -204,8 +204,15 @@ class Index {
     if (!defined('WEBSITE_LANDING_PAGE'))
       define('WEBSITE_LANDING_PAGE', Routes::route('/'));
 
-    $sURI         = isset($_SERVER['REQUEST_URI']) ? Helper::removeSlash($_SERVER['REQUEST_URI']) : '';
-    $aRouteParts  = explode('&', Routes::route($sURI));
+    $sURI = isset($_SERVER['REQUEST_URI']) ? Helper::removeSlash($_SERVER['REQUEST_URI']) : '';
+    if ( strpos( $sURI, '?' ) !== false ) {
+      // Break the query string off and attach later
+      $sAdditionalParams = parse_url( $sURI, PHP_URL_QUERY );
+      $sURI = str_replace( '?' . $sAdditionalParams, '', $sURI );
+    }
+    $aRouteParts = explode('&', Routes::route($sURI));
+    if (strlen($sAdditionalParams) > 0)
+      $aRouteParts = array_merge($aRouteParts, explode('&', $sAdditionalParams));
 
     if (count($aRouteParts) > 1) {
       foreach ($aRouteParts as $sRoutes) {
