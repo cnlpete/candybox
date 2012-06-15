@@ -214,7 +214,7 @@ class Index {
     if (strlen($sAdditionalParams) > 0)
       $aRouteParts = array_merge($aRouteParts, explode('&', $sAdditionalParams));
 
-    if (count($aRouteParts) > 1) {
+    if (count($aRouteParts) > 0) {
       foreach ($aRouteParts as $sRoutes) {
         $aRoute = explode('=', $sRoutes);
 
@@ -222,9 +222,9 @@ class Index {
           $this->_aRequest[$aRoute[0]] = $aRoute[1];
       }
     }
-    else
-      $this->_aRequest['controller'] = isset($this->_aRequest['controller']) ? $this->_aRequest['controller'] : Routes::route('/');
 
+    if (!isset($this->_aRequest['controller']))
+      $this->_aRequest['controller'] = Routes::route('/');
 
     # Show files from public folder (robots.txt, human.txt and favicon.ico)
     if (preg_match('/\./', $sURI)) {
