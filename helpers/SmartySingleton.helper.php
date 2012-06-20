@@ -112,6 +112,7 @@ class SmartySingleton extends Smarty {
     # Define system variables
     $this->assign('_PATH', $this->getPaths());
     require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
+
     $iMaximumUploadSize = \CandyCMS\Core\Helpers\Upload::getUploadLimit();
     $this->assign('_SYSTEM', array(
         'date'                  => date('Y-m-d'),
@@ -183,13 +184,16 @@ class SmartySingleton extends Smarty {
             file_exists(Helper::removeSlash($aPaths['less'] . '/core/application.less'))) {
 
       try {
-        @unlink(Helper::removeSlash($aPaths['css'] . '/core/application.css'));
-        @unlink(Helper::removeSlash($aPaths['css'] . '/mobile/application.css'));
-
-        lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/core/application.less'),
-                Helper::removeSlash($aPaths['css'] . '/core/application.css'));
-        lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
-                Helper::removeSlash($aPaths['css'] . '/mobile/application.css'));
+        if (MOBILE === true) {
+          @unlink(Helper::removeSlash($aPaths['css'] . '/mobile/application.css'));
+          lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
+                  Helper::removeSlash($aPaths['css'] . '/mobile/application.css'));
+        }
+        else {
+          @unlink(Helper::removeSlash($aPaths['css'] . '/core/application.css'));
+          lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/core/application.less'),
+                  Helper::removeSlash($aPaths['css'] . '/core/application.css'));
+        }
       }
       catch (AdvancedException $e) {
         AdvancedException::reportBoth($e->getMessage());
