@@ -1,12 +1,13 @@
 <?php
 
 /**
- * Cache analytics code.
+ * This plugins shows sharing options with a two-click-option to save the users privacy.
  *
  * @link http://github.com/marcoraddatz/candyCMS
  * @author Marco Raddatz <http://marcoraddatz.com>
  * @license MIT
- * @since 2.0
+ * @since 2.1.1
+ * @see http://www.heise.de/extras/socialshareprivacy/
  *
  */
 
@@ -15,7 +16,7 @@ namespace CandyCMS\Plugins;
 use CandyCMS\Core\Helpers\Helper;
 use CandyCMS\Core\Helpers\SmartySingleton;
 
-final class Analytics {
+final class SocialSharePrivacy {
 
   /**
    * Identifier for Template Replacements
@@ -23,29 +24,27 @@ final class Analytics {
    * @var constant
    *
    */
-  const IDENTIFIER = 'analytics';
+  const IDENTIFIER = 'socialshareprivacy';
 
   /**
+   * Show the (cached) javascript code, that enables the jQuery plugin.
+   *
    * @final
    * @access public
    * @param array $aRequest
    * @param array $aSession
-   * @return string HTML content
+   * @return string HTML
    *
    */
   public final function show(&$aRequest, &$aSession) {
-    $sTemplateDir   = Helper::getPluginTemplateDir('analytics', 'show');
+    $sTemplateDir   = Helper::getPluginTemplateDir('SocialSharePrivacy', 'show');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
 
     $oSmarty = SmartySingleton::getInstance();
     $oSmarty->setTemplateDir($sTemplateDir);
     $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
-    $sCacheId = WEBSITE_MODE . '|plugins|' . WEBSITE_LOCALE . '|' . IDENTIFIER;
-    if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
-      $oSmarty->assign('WEBSITE_MODE', WEBSITE_MODE);
-      $oSmarty->assign('PLUGIN_ANALYTICS_TRACKING_CODE', PLUGIN_ANALYTICS_TRACKING_CODE);
-    }
+    $sCacheId = WEBSITE_MODE . '|layout|' . WEBSITE_LOCALE . '|' . IDENTIFIER . '|';
 
     return $oSmarty->fetch($sTemplateFile, $sCacheId);
   }

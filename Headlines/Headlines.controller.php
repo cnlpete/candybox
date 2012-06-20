@@ -43,7 +43,7 @@ final class Headlines {
     $oSmarty->setTemplateDir($sTemplateDir);
     $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
-    $sCacheId = WEBSITE_MODE . '|blogs|' . WEBSITE_LOCALE . '|headlines|' . substr(md5($aSession['user']['role']), 0 , 10);
+    $sCacheId = WEBSITE_MODE . '|blogs|' . WEBSITE_LOCALE . '|' . IDENTIFIER . '|' . substr(md5($aSession['user']['role']), 0 , 10);
     if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
       $sBlogsModel = \CandyCMS\Core\Models\Main::__autoload('Blogs');
       $oModel = new $sBlogsModel($aRequest, $aSession);

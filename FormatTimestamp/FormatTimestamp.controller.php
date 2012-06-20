@@ -43,7 +43,7 @@ final class FormatTimestamp {
     $oSmarty->setTemplateDir($sTemplateDir);
     $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
-    $sCacheId = WEBSITE_MODE . '|layout|' . WEBSITE_LOCALE . '|formattimestamp|';
+    $sCacheId = WEBSITE_MODE . '|layout|' . WEBSITE_LOCALE . '|' . IDENTIFIER . '|';
     if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
       # the jQuery.timeago plugin takes it range in milliseconds,
       # PLUGIN_FORMATTIMESTAMP_RANGE is in minutes and defaults to 3 days

@@ -44,20 +44,22 @@ final class Archive {
     $oSmarty->setTemplateDir($sTemplateDir);
     $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
-    $sCacheId = WEBSITE_MODE . '|blogs|' . WEBSITE_LOCALE . '|archive|' . substr(md5($aSession['user']['role']), 0 , 10);
-    if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
+    $sCacheId = WEBSITE_MODE . '|blogs|' . WEBSITE_LOCALE . '|' . IDENTIFIER . '|' .
+            substr(md5($aSession['user']['role']), 0 , 10);
 
+    if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
       $sBlogsModel = \CandyCMS\Core\Models\Main::__autoload('Blogs');
       $oModel = new $sBlogsModel($aRequest, $aSession);
 
-      $aMonthNames = array();
+      $aMonthNames  = array();
+      $aMonth       = array();
 
-      $aMonth = array();
       foreach ($oModel->getOverviewByMonthLimit(PLUGIN_ARCHIVE_RANGE) as $aRow) {
         # Date format the month
         $sMonth = date('n', $aRow['date']['raw']);
         if (!isset($aMonthNames[$sMonth]))
           $aMonthNames[$sMonth] = I18n::get('global.months.' . $sMonth);
+
         $sMonth = $aMonthNames[$sMonth] . ' ' . strftime('%Y', $aRow['date']['raw']);
 
         # Prepare array

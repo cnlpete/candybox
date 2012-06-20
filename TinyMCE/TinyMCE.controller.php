@@ -43,10 +43,7 @@ final class TinyMCE {
     $oSmarty->setTemplateDir($sTemplateDir);
     $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
-    $sCacheId = WEBSITE_MODE . '|layout|' . WEBSITE_LOCALE . '|tinymce|';
-    #if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
-      # cached actions
-    #}
+    $sCacheId = WEBSITE_MODE . '|layout|' . WEBSITE_LOCALE . '|' . IDENTIFIER . '|';
 
     return $oSmarty->fetch($sTemplateFile, $sCacheId);
   }
