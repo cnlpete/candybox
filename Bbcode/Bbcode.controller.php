@@ -101,7 +101,7 @@ final class Bbcode {
       }
 
       $sHTML .= '<figure class="image">';
-      $sHTML .= '<a class="js-fancybox" rel="images" href="' . $sUrl[1] . '">';
+      $sHTML .= '<a class="js-fancybox fancybox-thumb" rel="fancybox-thumb" href="' . $sUrl[1] . '">';
       $sHTML .= '<img class="' . $sClass . '" alt="' . $sAlt . '"';
       $sHTML .= 'src="' . Helper::addSlash($sTempFilePath) . '" ' . $aNewInfo[3] . ' />';
       $sHTML .= '</a>';
