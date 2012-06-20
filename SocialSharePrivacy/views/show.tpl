@@ -1,5 +1,5 @@
 <div id='socialshareprivacy'></div>
-<script src='{$_PATH.js}/core/jquery.socialshareprivacy{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
+<script src='{$_PATH.js}/plugins/jquery.socialshareprivacy{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
 <script type='text/javascript'>
   $(document).ready(function(){
     if($('#socialshareprivacy').length > 0){
