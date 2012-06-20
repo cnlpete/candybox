@@ -95,26 +95,6 @@
       $('.js-fancybox').fancybox();
       $('.js-image').capty({ height: 30 });
 
-      if($('#socialshareprivacy').length > 0){
-        $('#socialshareprivacy').socialSharePrivacy({
-          services : {
-            facebook : {
-              'language' : '{$WEBSITE_LOCALE}',
-              'dummy_img' : '{$_PATH.images}/jquery.socialshareprivacy/dummy_facebook.png'
-            },
-            twitter : {
-              'dummy_img' : '{$_PATH.images}/jquery.socialshareprivacy/dummy_twitter.png'
-            },
-            gplus : {
-              'dummy_img' : '{$_PATH.images}/jquery.socialshareprivacy/dummy_gplus.png',
-              'display_name' : 'Google Plus'
-            }
-          },
-          css_path : ''
-        });
-      };
-    });
-
     $('.js-media').each(function(e) {
       var $this = $(this);
       $.getJSON(this.title, function(data) {
