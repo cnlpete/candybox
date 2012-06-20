@@ -77,8 +77,7 @@
           {if isset($_REQUEST.id)}
             <div class='span8'>
               <hr />
-              <div id='socialshareprivacy'></div>
-              <script src='{$_PATH.js}/core/jquery.socialshareprivacy{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
+              <!-- plugin:socialshareprivacy -->
             </div>
           {/if}
         </footer>
