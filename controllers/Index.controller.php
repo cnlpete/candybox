@@ -205,12 +205,15 @@ class Index {
       define('WEBSITE_LANDING_PAGE', Routes::route('/'));
 
     $sURI = isset($_SERVER['REQUEST_URI']) ? Helper::removeSlash($_SERVER['REQUEST_URI']) : '';
+
     if ( strpos( $sURI, '?' ) !== false ) {
-      // Break the query string off and attach later
+      # Break the query string off and attach later
       $sAdditionalParams = parse_url( $sURI, PHP_URL_QUERY );
       $sURI = str_replace( '?' . $sAdditionalParams, '', $sURI );
     }
+
     $aRouteParts = explode('&', Routes::route($sURI));
+
     if (strlen($sAdditionalParams) > 0)
       $aRouteParts = array_merge($aRouteParts, explode('&', $sAdditionalParams));
 
@@ -227,7 +230,7 @@ class Index {
       $this->_aRequest['controller'] = Routes::route('/');
 
     # Show files from public folder (robots.txt, human.txt and favicon.ico)
-    if (preg_match('/\./', $sURI)) {
+    if (preg_match('/\./', $sURI) && (!isset($this->_aRequest['action']) || $this->_aRequest['action'] !== 'xml')) {
 			$sFileTemplate	= Helper::removeSlash(WEBSITE_CDN) . '/templates/' . PATH_TEMPLATE . '/' . $sURI;
 			$sFileRoot			= Helper::removeSlash(WEBSITE_CDN) . '/' . $sURI;
 
