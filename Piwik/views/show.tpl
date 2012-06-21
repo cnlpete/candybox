@@ -1,7 +1,7 @@
 {strip}
   {if $PLUGIN_PIWIK_URL !== '' && $PLUGIN_PIWIK_ID !== '' &&
           ($WEBSITE_MODE == 'production' || $WEBSITE_MODE == 'staging')}
-    <!-- Piwik --> <script type='text/javascript'>
+    <script type='text/javascript'>
       var siteId  = '{$PLUGIN_PIWIK_ID}';
       var siteURL = '{$PLUGIN_PIWIK_URL}';
       {literal}
@@ -15,6 +15,10 @@
           s.parentNode.insertBefore(g,s);
         })();
       {/literal}
-    </script> <!-- End Piwik Code -->
+    </script>
+  {else}
+    <script type='text/javascript'>
+      console.log('Piwik code would be shown in production and staging mode.');
+    </script>
   {/if}
 {/strip}

@@ -15,5 +15,9 @@
         })();
       {/literal}
     </script>
+  {else}
+    <script type='text/javascript'>
+      console.log('Analytics code would be shown in production and staging mode.');
+    </script>
   {/if}
 {/strip}
