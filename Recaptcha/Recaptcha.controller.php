@@ -119,23 +119,25 @@ final class Recaptcha {
    *
    */
   public final function show(&$aRequest, &$aSession) {
-    $sTemplateDir   = Helper::getPluginTemplateDir('Recaptcha', 'recaptcha');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'recaptcha');
+		if ($aSession['user']['role'] == 0) {
+			$sTemplateDir   = Helper::getPluginTemplateDir('Recaptcha', 'recaptcha');
+			$sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'recaptcha');
 
-    $oSmarty = SmartySingleton::getInstance();
-    $oSmarty->setTemplateDir($sTemplateDir);
+			$oSmarty = SmartySingleton::getInstance();
+			$oSmarty->setTemplateDir($sTemplateDir);
 
-    # No caching for this very dynamic form
-    $oSmarty->setCaching(SmartySingleton::CACHING_OFF);
+			# No caching for this very dynamic form
+			$oSmarty->setCaching(SmartySingleton::CACHING_OFF);
 
-    $oSmarty->assign('WEBSITE_MODE', WEBSITE_MODE);
-    $oSmarty->assign('MOBILE', MOBILE);
-    $oSmarty->assign('_captcha_', recaptcha_get_html($this->_sPublicKey, $this->_sError));
+			$oSmarty->assign('WEBSITE_MODE', WEBSITE_MODE);
+			$oSmarty->assign('MOBILE', MOBILE);
+			$oSmarty->assign('_captcha_', recaptcha_get_html($this->_sPublicKey, $this->_sError));
 
-    if ($this->_sErrorMessage)
-      $oSmarty->assign('_error_', $this->_sErrorMessage);
+			if ($this->_sErrorMessage)
+				$oSmarty->assign('_error_', $this->_sErrorMessage);
 
-    return $oSmarty->fetch($sTemplateFile);
+			return $oSmarty->fetch($sTemplateFile);
+		}
   }
 
   /**
