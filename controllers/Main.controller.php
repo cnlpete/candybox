@@ -432,22 +432,40 @@ abstract class Main {
    */
   public function show() {
     $this->oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
-    return $this->_show();
+
+		if (isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'])
+			return $this->_showJSON();
+
+		elseif (isset($this->_aRequest['type']) && 'xml' == $this->_aRequest['type'])
+			return $this->_showXML();
+
+		else
+			return $this->_show();
   }
 
-  /**
-   * Show a entry as XML.
-   *
-   * @access public
-   * @return string HTML
-   *
-   */
-  public function showXML() {
-    $this->oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
-    return $this->_showXML();
-  }
+	/**
+	 * Just a backup method to show entry as XML.
+	 *
+	 * @access protected
+	 * @return string XML
+	 *
+	 */
+	protected function _showXML() {
+		return Helper::redirectTo('/errors/404');
+	}
 
-  /**
+	/**
+	 * Just a backup method to show entry as JSON.
+	 *
+	 * @access protected
+	 * @return string html
+	 *
+	 */
+	protected function _showJSON() {
+		return json_decode(array('error' => 'This is no valid JSON.'));
+	}
+
+	/**
    * Create an action.
    *
    * Create entry or show form template if we have enough rights.

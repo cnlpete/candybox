@@ -565,14 +565,11 @@ class Users extends Main {
    *
    */
   public function getToken() {
-    $this->_setError('email');
-    $this->_setError('password');
-
-    if (!$this->_aError)
+    if (isset($this->_aRequest['email']) && isset($this->_aRequest['password']))
       $sToken = $this->_oModel->getToken();
 
-    return isset($sToken) && $sToken ?
-            json_encode(array('success' => true, 'token' => $sToken)) :
-            json_encode(array('success' => false));
+    exit(isset($sToken) && $sToken ?
+										json_encode(array('success' => true,	'error' => '', 'token' => $sToken)) :
+										json_encode(array('success' => false, 'error' => 'No matching results.', 'token' => '')));
   }
 }

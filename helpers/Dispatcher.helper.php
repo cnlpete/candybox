@@ -128,12 +128,6 @@ class Dispatcher {
         $this->oController->setContent($this->oController->update());
 
         break;
-
-      case 'xml':
-
-        $this->oController->setContent($this->oController->showXML());
-
-        break;
     }
   }
 }
