@@ -1,6 +1,13 @@
 {strip}
-  <form method='post' class='form-horizontal'
-        action='/{$_REQUEST.controller}/{if isset($_REQUEST.id)}{$_REQUEST.id}/{/if}{$_REQUEST.action}'>
+  {if $_REQUEST.action == 'create'}
+    <form method='post'
+          class='form-horizontal'
+          action='/{$_REQUEST.controller}/{$_REQUEST.action}'>
+  {elseif $_REQUEST.action == 'update'}
+    <form method='put'
+          class='form-horizontal'
+          action='/{$_REQUEST.controller}/{$_REQUEST.id}/{$_REQUEST.action}'>
+  {/if}
     <div class='page-header'>
       <h1>
         {if $_REQUEST.action == 'create'}

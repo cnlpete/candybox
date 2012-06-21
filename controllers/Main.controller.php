@@ -462,7 +462,7 @@ abstract class Main {
 	 *
 	 */
 	protected function _showJSON() {
-		return json_decode(array('error' => 'This is no valid JSON.'));
+		return json_decode(array('error' => 'There is no JSON handling method.'));
 	}
 
 	/**

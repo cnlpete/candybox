@@ -1,8 +1,15 @@
 {strip}
-  <form action='/{$_REQUEST.controller}/{$_REQUEST.id}/{$_REQUEST.action}'
-        method='post'
-        enctype='multipart/form-data'
-        class='form-horizontal'>
+  {if $_REQUEST.action == 'create'}
+    <form method='post'
+          class='form-horizontal'
+          enctype='multipart/form-data'
+          action='/{$_REQUEST.controller}/{$_REQUEST.action}'>
+  {elseif $_REQUEST.action == 'update'}
+    <form method='put'
+          class='form-horizontal'
+          enctype='multipart/form-data'
+          action='/{$_REQUEST.controller}/{$_REQUEST.id}/{$_REQUEST.action}'>
+  {/if}
     <div class='page-header'>
       <h1>
         {if $_REQUEST.action == 'createfile'}
@@ -97,9 +104,11 @@
     $('#input-content').bind('keyup', function() {
       countCharLength(this, 160);
     });
- 
+
     $("input[type='submit']").click(function() {
       $(this).hide();
+      $("input[type='button']").hide();
+      $("input[type='reset']").hide();
       $('.form-actions').append("<img src='{$_PATH.images}/candy.global/loading.gif' alt='" + lang.loading + "' />");
     });
 

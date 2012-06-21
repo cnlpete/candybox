@@ -2,10 +2,17 @@
   <div class='page-header'>
     <h1>{$lang.global.download}</h1>
   </div>
-  <form method='post'
-        class='form-horizontal'
-        enctype='multipart/form-data'
-        action='/{$_REQUEST.controller}/{if isset($_REQUEST.id)}{$_REQUEST.id}/{/if}{$_REQUEST.action}'>
+  {if $_REQUEST.action == 'create'}
+    <form method='post'
+          class='form-horizontal'
+          enctype='multipart/form-data'
+          action='/{$_REQUEST.controller}/{$_REQUEST.action}'>
+  {elseif $_REQUEST.action == 'update'}
+    <form method='put'
+          class='form-horizontal'
+          enctype='multipart/form-data'
+          action='/{$_REQUEST.controller}/{$_REQUEST.id}/{$_REQUEST.action}'>
+  {/if}
     {if $_REQUEST.action == 'create'}
       <div class='control-group{if isset($error.file)} alert alert-error{/if}'>
         <label for='input-file' class='control-label'>
@@ -129,6 +136,8 @@
 
     $("input[type='submit']").click(function() {
       $(this).hide();
+      $("input[type='button']").hide();
+      $("input[type='reset']").hide();
       $('.form-actions').append("<img src='{$_PATH.images}/candy.global/loading.gif' alt='" + lang.loading + "' />");
     });
 

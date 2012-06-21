@@ -8,8 +8,15 @@
       {/if}
     </h1>
   </div>
-  <form method='post' class='form-horizontal'
-        action='/{$_REQUEST.controller}/{if isset($_REQUEST.id)}{$_REQUEST.id}/{/if}{$_REQUEST.action}'>
+  {if $_REQUEST.action == 'create'}
+    <form method='post'
+          class='form-horizontal'
+          action='/{$_REQUEST.controller}/{$_REQUEST.action}'>
+  {elseif $_REQUEST.action == 'update'}
+    <form method='put'
+          class='form-horizontal'
+          action='/{$_REQUEST.controller}/{$_REQUEST.id}/{$_REQUEST.action}'>
+  {/if}
     <div class='control-group{if isset($error.title)} alert alert-error{/if}'>
       <label for='input-title' class='control-label'>
         {$lang.global.title} <span title='{$lang.global.required}'>*</span>
