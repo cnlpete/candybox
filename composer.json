@@ -5,14 +5,14 @@
         "type": "package",
         "package": {
           "name": "candyCMS/core",
-          "version": "20120604",
+          "version": "2.1",
           "dist": {
             "url": "https://github.com/marcoraddatz/candyCMS-Core/zipball/master",
             "type": "zip"
           },
           "source": {
             "url": "https://github.com/marcoraddatz/candyCMS-Core",
-            "type": "git",
+            "type": "vcs",
             "reference": "master"
           }
         }
@@ -21,14 +21,14 @@
         "type": "package",
         "package": {
           "name": "candyCMS/plugins",
-          "version": "20120604",
+          "version": "2.1",
           "dist": {
             "url": "https://github.com/marcoraddatz/candyCMS-Plugins/zipball/master",
             "type": "zip"
           },
           "source": {
             "url": "https://github.com/marcoraddatz/candyCMS-Plugins",
-            "type": "git",
+            "type": "vcs",
             "reference": "master"
           }
         }
@@ -127,8 +127,8 @@
     ],
 
   "require": {
-    "candyCMS/core": "20120604",
-    "candyCMS/plugins": "20120604",
+    "candyCMS/core": "2.1",
+    "candyCMS/plugins": "2.1",
     "phpmailer/phpmailer": "5.2.1",
     "smushit/smushit": "0.*",
     "recaptcha/recaptcha": "1.11",
