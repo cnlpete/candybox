@@ -13,6 +13,10 @@
     "leafo/lessphp": "0.3.5"
   },
 
+  "suggest": {
+    "candyCMS/plugins": "Enhances core functionality."
+  },
+
   "authors": [
   {
     "name": "Marco Raddatz",
