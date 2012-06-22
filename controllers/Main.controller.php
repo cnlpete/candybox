@@ -458,11 +458,11 @@ abstract class Main {
 	 * Just a backup method to show entry as JSON.
 	 *
 	 * @access protected
-	 * @return string html
+	 * @return string json
 	 *
 	 */
 	protected function _showJSON() {
-		return json_decode(array('error' => 'There is no JSON handling method.'));
+		exit(json_encode(array('error' => 'There is no JSON handling method.')));
 	}
 
 	/**
