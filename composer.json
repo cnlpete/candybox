@@ -12,7 +12,7 @@
           },
           "source": {
             "url": "https://github.com/marcoraddatz/candyCMS-Core",
-            "type": "vcs",
+            "type": "git",
             "reference": "master"
           }
         }
@@ -28,7 +28,7 @@
           },
           "source": {
             "url": "https://github.com/marcoraddatz/candyCMS-Plugins",
-            "type": "vcs",
+            "type": "git",
             "reference": "master"
           }
         }
@@ -135,7 +135,7 @@
     "smarty/smarty": "3.1.*",
     "symfony/yaml": "master",
     "facebook/php-sdk": "dev-master",
-    "leafo/lessphp": "dev-master",
+    "leafo/lessphp": "0.3.5",
     "mailchimp/mcapi": "1.3.1",
     "simonhamp/routes": "0.1"
   }
