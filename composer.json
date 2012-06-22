@@ -4,38 +4,6 @@
       {
         "type": "package",
         "package": {
-          "name": "candyCMS/core",
-          "version": "2.1",
-          "dist": {
-            "url": "https://github.com/marcoraddatz/candyCMS-Core/zipball/master",
-            "type": "zip"
-          },
-          "source": {
-            "url": "https://github.com/marcoraddatz/candyCMS-Core",
-            "type": "git",
-            "reference": "master"
-          }
-        }
-      },
-      {
-        "type": "package",
-        "package": {
-          "name": "candyCMS/plugins",
-          "version": "2.1",
-          "dist": {
-            "url": "https://github.com/marcoraddatz/candyCMS-Plugins/zipball/master",
-            "type": "zip"
-          },
-          "source": {
-            "url": "https://github.com/marcoraddatz/candyCMS-Plugins",
-            "type": "git",
-            "reference": "master"
-          }
-        }
-      },
-      {
-        "type": "package",
-        "package": {
           "name": "smarty/smarty",
           "version": "3.1.8",
           "dist": {
@@ -127,8 +95,8 @@
     ],
 
   "require": {
-    "candyCMS/core": "2.1",
-    "candyCMS/plugins": "2.1",
+    "candyCMS/core": "dev-master",
+    "candyCMS/plugins": "dev-master",
     "phpmailer/phpmailer": "5.2.1",
     "smushit/smushit": "0.*",
     "recaptcha/recaptcha": "1.11",
