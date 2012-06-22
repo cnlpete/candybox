@@ -13,8 +13,8 @@
 define('PATH_STANDARD', dirname(__FILE__) . '/..');
 
 require_once PATH_STANDARD . '/vendor/autoload.php';
-require_once PATH_STANDARD . '/tests/simpletest/autorun.php';
-require_once PATH_STANDARD . '/tests/simpletest/web_tester.php';
+require_once PATH_STANDARD . '/vendor/vierbergenlars/simpletest/autorun.php';
+require_once PATH_STANDARD . '/vendor/vierbergenlars/simpletest/web_tester.php';
 
 require_once PATH_STANDARD . '/tests/candy/Candy.unit.php';
 require_once PATH_STANDARD . '/tests/candy/Candy.web.php';
@@ -33,7 +33,7 @@ define('UNIQUE_ID', 'tests');
 define('VERSION', '0');
 define('TESTFILE', '/private/var/tmp/test'.md5(time()));
 define('WEBSITE_LOCALE', 'en_US');
-define('WEBSITE_LANGUAGE', DEFAULT_LANGUAGE);
+define('WEBSITE_LANGUAGE', 'en');
 define('EXTENSION_CHECK', ALLOW_EXTENSIONS === true || WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test');
 
 setlocale(LC_ALL, WEBSITE_LOCALE);
@@ -47,9 +47,6 @@ class AllFileTests extends TestSuite {
     if (WEBSITE_MODE !== 'test')
       die('not in testing mode');
 
-    else if (DEFAULT_LANGUAGE !== 'en')
-      die('language not set to "en"');
-
     else {
       new \CandyCMS\Core\Helpers\I18n(WEBSITE_LANGUAGE, $_SESSION);
 
@@ -57,76 +54,76 @@ class AllFileTests extends TestSuite {
       $aTests = array(
           # @todo AdvancedException
           # @todo Dispatcher
-          'Helper.helper'   => PATH_STANDARD . '/tests/tests/app/helpers/Helper.helper.php',
-          'I18n.helper'     => PATH_STANDARD . '/tests/tests/app/helpers/I18n.helper.php',
+          'Helper.helper'   => PATH_STANDARD . '/tests/core/helpers/Helper.helper.php',
+          'I18n.helper'     => PATH_STANDARD . '/tests/core/helpers/I18n.helper.php',
 
-          'Image.helper'    => PATH_STANDARD . '/tests/tests/app/helpers/Image.helper.php',
+          'Image.helper'    => PATH_STANDARD . '/tests/core/helpers/Image.helper.php',
           # @todo pagination
-          'SmartySingleton' => PATH_STANDARD . '/tests/tests/app/helpers/SmartySingleton.helper.php',
-          'Upload.helper'   => PATH_STANDARD . '/tests/tests/app/helpers/Upload.helper.php',
+          'SmartySingleton' => PATH_STANDARD . '/tests/core/helpers/SmartySingleton.helper.php',
+          'Upload.helper'   => PATH_STANDARD . '/tests/core/helpers/Upload.helper.php',
 
           'blogs'     => array(
-                          PATH_STANDARD . '/tests/tests/app/models/Blogs.model.php',
-                          PATH_STANDARD . '/tests/tests/app/controllers/Blogs.controller.php'),
+                          PATH_STANDARD . '/tests/core/models/Blogs.model.php',
+                          PATH_STANDARD . '/tests/core/controllers/Blogs.controller.php'),
 
           'calendars' => array(
-                          PATH_STANDARD . '/tests/tests/app/models/Calendars.model.php',
-                          PATH_STANDARD . '/tests/tests/app/controllers/Calendars.controller.php'),
+                          PATH_STANDARD . '/tests/core/models/Calendars.model.php',
+                          PATH_STANDARD . '/tests/core/controllers/Calendars.controller.php'),
 
           'comments'  => array(
-                          PATH_STANDARD . '/tests/tests/app/models/Comments.model.php',
-                          PATH_STANDARD . '/tests/tests/app/controllers/Comments.controller.php'),
+                          PATH_STANDARD . '/tests/core/models/Comments.model.php',
+                          PATH_STANDARD . '/tests/core/controllers/Comments.controller.php'),
 
           'contents'  => array(
-                          PATH_STANDARD . '/tests/tests/app/models/Contents.model.php',
-                          PATH_STANDARD . '/tests/tests/app/controllers/Contents.controller.php'),
+                          PATH_STANDARD . '/tests/core/models/Contents.model.php',
+                          PATH_STANDARD . '/tests/core/controllers/Contents.controller.php'),
 
           'downloads' => array(
-                          PATH_STANDARD . '/tests/tests/app/models/Downloads.model.php',
-                          PATH_STANDARD . '/tests/tests/app/controllers/Downloads.controller.php'),
+                          PATH_STANDARD . '/tests/core/models/Downloads.model.php',
+                          PATH_STANDARD . '/tests/core/controllers/Downloads.controller.php'),
 
-          'errors'    => PATH_STANDARD . '/tests/tests/app/controllers/Errors.controller.php',
+          'errors'    => PATH_STANDARD . '/tests/core/controllers/Errors.controller.php',
 
           'galleries' => array(
-                          PATH_STANDARD . '/tests/tests/app/models/Galleries.model.php',
-                          PATH_STANDARD . '/tests/tests/app/controllers/Galleries.controller.php'),
+                          PATH_STANDARD . '/tests/core/models/Galleries.model.php',
+                          PATH_STANDARD . '/tests/core/controllers/Galleries.controller.php'),
 
-          'index'     =>  PATH_STANDARD . '/tests/tests/app/controllers/Index.controller.php',
+          'index'     =>  PATH_STANDARD . '/tests/core/controllers/Index.controller.php',
 
 
           'logs'      => array(
-                          PATH_STANDARD . '/tests/tests/app/models/Logs.model.php',
-                          PATH_STANDARD . '/tests/tests/app/controllers/Logs.controller.php'),
+                          PATH_STANDARD . '/tests/core/models/Logs.model.php',
+                          PATH_STANDARD . '/tests/core/controllers/Logs.controller.php'),
 
           'mails'     => array(
-                          PATH_STANDARD . '/tests/tests/app/controllers/Mails.controller.php',
-                          PATH_STANDARD . '/tests/tests/app/models/Mails.model.php'),
+                          PATH_STANDARD . '/tests/core/controllers/Mails.controller.php',
+                          PATH_STANDARD . '/tests/core/models/Mails.model.php'),
 
           'main'      => array(
-                          PATH_STANDARD . '/tests/tests/app/models/Main.model.php'),
+                          PATH_STANDARD . '/tests/core/models/Main.model.php'),
           # @todo controller
 
-          'medias'    => PATH_STANDARD . '/tests/tests/app/controllers/Medias.controller.php',
+          'medias'    => PATH_STANDARD . '/tests/core/controllers/Medias.controller.php',
 
-          'newsletters' => PATH_STANDARD . '/tests/tests/app/controllers/Newsletters.controller.php',
+          'newsletters' => PATH_STANDARD . '/tests/core/controllers/Newsletters.controller.php',
 
-          'rss'       => PATH_STANDARD . '/tests/tests/app/controllers/Rss.controller.php',
+          'rss'       => PATH_STANDARD . '/tests/core/controllers/Rss.controller.php',
 
           'searches'  => array(
-                          PATH_STANDARD . '/tests/tests/app/models/Searches.model.php',
-                          PATH_STANDARD . '/tests/tests/app/controllers/Searches.controller.php'),
+                          PATH_STANDARD . '/tests/core/models/Searches.model.php',
+                          PATH_STANDARD . '/tests/core/controllers/Searches.controller.php'),
 
           'sessions'  => array(
-                          PATH_STANDARD . '/tests/tests/app/models/Sessions.model.php',
-                          PATH_STANDARD . '/tests/tests/app/controllers/Sessions.controller.php'),
+                          PATH_STANDARD . '/tests/core/models/Sessions.model.php',
+                          PATH_STANDARD . '/tests/core/controllers/Sessions.controller.php'),
 
-          'sitemaps'  => PATH_STANDARD . '/tests/tests/app/controllers/Sitemaps.controller.php',
+          'sitemaps'  => PATH_STANDARD . '/tests/core/controllers/Sitemaps.controller.php',
 
-          'sites'     => PATH_STANDARD . '/tests/tests/app/controllers/Sites.controller.php',
+          'sites'     => PATH_STANDARD . '/tests/core/controllers/Sites.controller.php',
 
           'users'     => array(
-                          PATH_STANDARD . '/tests/tests/app/models/Users.model.php',
-                          PATH_STANDARD . '/tests/tests/app/controllers/Users.controller.php'),
+                          PATH_STANDARD . '/tests/core/models/Users.model.php',
+                          PATH_STANDARD . '/tests/core/controllers/Users.controller.php'),
       );
 
       $argv = $_SERVER['argv'];
