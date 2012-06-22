@@ -180,16 +180,14 @@ class SmartySingleton extends Smarty {
     }
 
     # Compile CSS when in development mode and clearing the cache
-    if (WEBSITE_MODE == 'development' &&
-            file_exists(Helper::removeSlash($aPaths['less'] . '/core/application.less'))) {
-
+    if (WEBSITE_MODE == 'development') {
       try {
-        if (MOBILE === true) {
+        if (MOBILE === true && file_exists(Helper::removeSlash($aPaths['less'] . '/mobile/application.less'))) {
           @unlink(Helper::removeSlash($aPaths['css'] . '/mobile/application.css'));
           lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
                   Helper::removeSlash($aPaths['css'] . '/mobile/application.css'));
         }
-        else {
+        elseif (file_exists(Helper::removeSlash($aPaths['less'] . '/core/application.less'))) {
           @unlink(Helper::removeSlash($aPaths['css'] . '/core/application.css'));
           lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/core/application.less'),
                   Helper::removeSlash($aPaths['css'] . '/core/application.css'));
