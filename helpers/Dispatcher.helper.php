@@ -98,10 +98,15 @@ class Dispatcher {
    * Handle the pre-defined actions.
    *
    * @access public
+   * @todo don't map all information to show action
    *
    */
   public function getAction() {
-    $sAction = isset($this->_aRequest['action']) ? strtolower((string) $this->_aRequest['action']) : 'show';
+    $sAction = isset($this->_aRequest['action']) &&
+            $this->_aRequest['action'] == 'create' ||
+            $this->_aRequest['action'] == 'update' ||
+            $this->_aRequest['action'] == 'destroy' ?
+            strtolower((string) $this->_aRequest['action']) : 'show';
     $this->oController->setContent($this->oController->$sAction());
   }
 }
