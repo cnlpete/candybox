@@ -28,5 +28,7 @@
     "psr-0": {
       "CandyCMS\\Core\\Index": ""
     }
-  }
+  },
+
+  "target-dir": "candyCMS/core"
 }
