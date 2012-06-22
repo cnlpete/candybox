@@ -8,13 +8,13 @@
   "version": "0.0.1",
 
   "require": {
-    "php": ">=5.3.0"
+    "php": ">=5.3.0",
+    "candyCMS/core": "dev-master"
   },
 
   "authors": [
   {
     "name": "Marco Raddatz",
-    "email": "info@marcoraddatz.com",
     "homepage": "http://www.marcoraddatz.com"
   },
   {
