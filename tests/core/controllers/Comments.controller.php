@@ -38,19 +38,19 @@ class WebTestOfCommentController extends CandyWebTest {
     $this->assertField('blogs[email]', '');
     $this->assertField('blogs[content]', '');
 
-    #empty submit
+    # empty submit
     $this->click(I18n::get('comments.title.create'));
 		$this->assertText(I18n::get('error.form.missing.name'));
 		$this->assertText(I18n::get('error.form.missing.content'));
 
-    #create with wrong email
+    # create with wrong email
     $this->assertTrue($this->setField('blogs[name]', 'Name'));
     $this->assertTrue($this->setField('blogs[email]', 'notAnEmailAdress'));
     $this->assertTrue($this->setField('blogs[content]', 'hello'));
     $this->click(I18n::get('comments.title.create'));
 		$this->assertText(I18n::get('error.mail.format'));
 
-    #create with empty email
+    # create with empty email
     $this->assertTrue($this->setField('blogs[name]', 'Name'));
     $this->assertTrue($this->setField('blogs[email]', ''));
     $this->assertTrue($this->setField('blogs[content]', 'hello without email adress'));

@@ -23,7 +23,7 @@ class UnitTestOfUserModel extends CandyUnitTest {
   function setUp() {
 
     $this->aRequest = array(
-        'users'         => array(
+          'users'         => array(
           'email'         => 'email@example.com',
           'password'      => 'Password',
           'name'          => 'Name',
@@ -32,7 +32,7 @@ class UnitTestOfUserModel extends CandyUnitTest {
           'receive_newsletter' => 0,
           'role'          => 0,
           'use_gravatar'  => 0),
-        'controller'    => 'users');
+          'controller'    => 'users');
 
     $this->oObject = new Users($this->aRequest, $this->aSession);
     $this->oSession = new Sessions($this->aRequest, $this->aSession);
@@ -94,9 +94,8 @@ class UnitTestOfUserModel extends CandyUnitTest {
     $this->assertIsA($this->oObject->getLoginData(), 'array');
 
     # Get user token.
-    $sToken = $this->oObject->getToken(false);
+    $sToken = $this->oObject->getToken();
     $this->assertIsA($sToken, 'string');
-
     $this->assertIsA($this->oObject->getUserByToken($sToken), 'array');
 
     /*******************************************************

@@ -16,28 +16,19 @@ require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Helper.helper.php';
 use \CandyCMS\Core\Models\Main;
 use \CandyCMS\Core\Helpers\Helper;
 
-class MyMain extends Main {
-  // since the Main class is abstract
-
-  // wrapper for _formatDates
+class UnitTestOfMainModelInstance extends Main {
   public function formatDates(&$aData, $sKey = '') {
-    if ($sKey)
-      return $this->_formatDates($aData, $sKey);
-    else
-      return $this->_formatDates($aData);
+    return $sKey ? $this->_formatDates($aData, $sKey) : $this->_formatDates($aData);
   }
 
-  // wrapper for _formatForUpdate
   public function formatForUpdate($aRow) {
     return $this->_formatForUpdate($aRow);
   }
 
-  // wrapper for _formatForOutput
   public function formatForOutput(&$aData, $aInts = array('id'), $aBools = null, $sController = '') {
     return $this->_formatForOutput($aData, $aInts, $aBools, $sController);
   }
 
-  // wrapper for _formatForUserOutput
   public function formatForUserOutput(&$aData) {
     return $this->_formatForUserOutput($aData);
   }
@@ -46,10 +37,8 @@ class MyMain extends Main {
 class UnitTestOfMainModel extends CandyUnitTest {
 
   function setUp() {
-    $this->aRequest = array(
-        'controller'  => 'main');
-
-    $this->oObject = new MyMain($this->aRequest, $this->aSession);
+    $this->aRequest = array('controller'  => 'main');
+    $this->oObject  = new UnitTestOfMainModelInstance($this->aRequest, $this->aSession);
   }
 
 	function tearDown() {
@@ -57,13 +46,13 @@ class UnitTestOfMainModel extends CandyUnitTest {
 	}
 
   function testConnectToDatabase() {
-    $oDB = MyMain::connectToDatabase();
+    $oDB = UnitTestOfMainModelInstance::connectToDatabase();
     $this->assertNotNull($oDB);
-    $this->assertSame($oDB, MyMain::connectToDatabase());
+    $this->assertSame($oDB, UnitTestOfMainModelInstance::connectToDatabase());
   }
 
   function testDisconnectToDatabase() {
-    $this->assertNull(MyMain::disconnectFromDatabase());
+    $this->assertNull(UnitTestOfMainModelInstance::disconnectFromDatabase());
   }
 
   function testFormatForUpdate() {

@@ -45,7 +45,10 @@ class AllFileTests extends TestSuite {
 		$this->TestSuite('All tests');
 
     if (WEBSITE_MODE !== 'test')
-      die('not in testing mode');
+      die('Not in testing mode.');
+
+    elseif (DEFAULT_LANGUAGE !== 'en')
+      die('Please change language to EN.');
 
     else {
       new \CandyCMS\Core\Helpers\I18n(WEBSITE_LANGUAGE, $_SESSION);

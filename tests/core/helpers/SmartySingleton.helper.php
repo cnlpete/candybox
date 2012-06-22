@@ -25,7 +25,6 @@ class UnitTestOfSmartySingletonHelper extends CandyUnitTest {
 	function setUp() {
     # Bugfix
     $_SESSION = array('lang' => null);
-
     $this->oObject = SmartySingleton::getInstance();
 	}
 
@@ -35,7 +34,7 @@ class UnitTestOfSmartySingletonHelper extends CandyUnitTest {
 	}
 
   function testIsSmarty() {
-    $this->assertTrue(is_a($this->oObject, "Smarty"));
+    $this->assertTrue(is_a($this->oObject, 'Smarty'));
   }
 
   function testSingleton() {
@@ -55,12 +54,12 @@ class UnitTestOfSmartySingletonHelper extends CandyUnitTest {
     # fill the cache
     $oSmarty = SmartySingleton::getInstance();
     $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
-    $oSmarty->setTemplateDir(PATH_STANDARD . '/tests/tests/app/views');
+    $oSmarty->setTemplateDir(PATH_STANDARD . '/tests/core/views');
     $oSmarty->fetch('helloworld.tpl', 'test|mytest|hello');
 
     $this->assertTrue(file_exists(PATH_STANDARD . '/' . CACHE_DIR . '/test/mytest/hello/'));
 
-    $aPaths = $this->oObject->clearCacheForController('mytest');
+    $this->oObject->clearCacheForController('mytest');
     $this->assertFalse(file_exists(PATH_STANDARD . '/' . CACHE_DIR . '/test/mytest/hello/'));
   }
 
