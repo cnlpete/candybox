@@ -76,11 +76,11 @@ class Dispatcher {
     catch (AdvancedException $e) {
       # Check if site should be compatible to candyCMS version 1.x and send headers to browser.
       if (defined('CHECK_DEPRECATED_LINKS') && CHECK_DEPRECATED_LINKS === true &&
-							Helper::pluralize($sController) !== $sController &&
-							file_exists(PATH_STANDARD . '/vendor/candyCMS/core/controllers/' . Helper::pluralize($sController) . '.controller.php')) {
-        $sUrl = str_replace(	strtolower($sController),
-															strtolower(Helper::pluralize($sController)),
-															$_SERVER['REQUEST_URI']);
+              Helper::pluralize($sController) !== $sController &&
+              file_exists(PATH_STANDARD . '/vendor/candyCMS/core/controllers/' . Helper::pluralize($sController) . '.controller.php')) {
+        $sUrl = str_replace(  strtolower($sController),
+                              strtolower(Helper::pluralize($sController)),
+                              $_SERVER['REQUEST_URI']);
 
         Helper::warningMessage(I18n::get('error.302.info', $sUrl), $sUrl);
       }
@@ -102,32 +102,6 @@ class Dispatcher {
    */
   public function getAction() {
     $sAction = isset($this->_aRequest['action']) ? strtolower((string) $this->_aRequest['action']) : 'show';
-
-    switch ($sAction) {
-      case 'create':
-
-        $this->oController->setContent($this->oController->create());
-
-        break;
-
-      case 'destroy':
-
-        $this->oController->setContent($this->oController->destroy());
-
-        break;
-
-      default:
-      case 'show':
-
-        $this->oController->setContent($this->oController->show());
-
-        break;
-
-      case 'update':
-
-        $this->oController->setContent($this->oController->update());
-
-        break;
-    }
+    $this->oController->setContent($this->oController->$sAction());
   }
 }
