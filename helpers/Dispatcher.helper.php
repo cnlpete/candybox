@@ -34,8 +34,8 @@ class Dispatcher {
   public function __construct(&$aRequest, &$aSession, &$aFile = '', &$aCookie = '') {
     $this->_aRequest = & $aRequest;
     $this->_aSession = & $aSession;
-    $this->_aFile    = & $aFile;
-    $this->_aCookie  = & $aCookie;
+    $this->_aFile = & $aFile;
+    $this->_aCookie = & $aCookie;
   }
 
   /**
@@ -65,10 +65,9 @@ class Dispatcher {
         $sClassName = '\CandyCMS\Core\Controllers\\' . $sController;
         $this->oController = new $sClassName($this->_aRequest, $this->_aSession, $this->_aFile, $this->_aCookie);
       }
-
       else {
         # Bugfix: Fix exceptions when upload file is missing
-        if($sController && substr(strtolower($sController), 0, 6) !== 'upload')
+        if ($sController && substr(strtolower($sController), 0, 6) !== 'upload')
           throw new AdvancedException('Controller not found:' . PATH_STANDARD .
                   '/vendor/candyCMS/core/controllers/' . $sController . '.controller.php');
       }
@@ -78,9 +77,7 @@ class Dispatcher {
       if (defined('CHECK_DEPRECATED_LINKS') && CHECK_DEPRECATED_LINKS === true &&
               Helper::pluralize($sController) !== $sController &&
               file_exists(PATH_STANDARD . '/vendor/candyCMS/core/controllers/' . Helper::pluralize($sController) . '.controller.php')) {
-        $sUrl = str_replace(  strtolower($sController),
-                              strtolower(Helper::pluralize($sController)),
-                              $_SERVER['REQUEST_URI']);
+        $sUrl = str_replace(strtolower($sController), strtolower(Helper::pluralize($sController)), $_SERVER['REQUEST_URI']);
 
         Helper::warningMessage(I18n::get('error.302.info', $sUrl), $sUrl);
       }
@@ -103,9 +100,9 @@ class Dispatcher {
    */
   public function getAction() {
     $sAction = isset($this->_aRequest['action']) &&
-            $this->_aRequest['action'] == 'create' ||
-            $this->_aRequest['action'] == 'update' ||
-            $this->_aRequest['action'] == 'destroy' ?
+            strtolower((string) $this->_aRequest['action']) == 'create' ||
+            strtolower((string) $this->_aRequest['action']) == 'update' ||
+            strtolower((string) $this->_aRequest['action']) == 'destroy' ?
             strtolower((string) $this->_aRequest['action']) : 'show';
     $this->oController->setContent($this->oController->$sAction());
   }

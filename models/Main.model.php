@@ -236,7 +236,7 @@ abstract class Main {
     $sController = !$sController ? $this->_sController : $sController;
 
     foreach (array('content', 'teaser', 'title') as $sColumn)
-      $aData[$sColumn] = Helper::formatOutput($aData[$sColumn]);
+      $aData[$sColumn] = isset($aData[$sColumn]) ? Helper::formatOutput($aData[$sColumn]) : '';
 
     # Bugfix: Set types
     if ($aInts)
