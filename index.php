@@ -93,10 +93,8 @@ if(!isset($_REQUEST['mobile']))
 else
   $_SESSION['mobile'] = (boolean) $_REQUEST['mobile'];
 
-#define('MOBILE', $_SESSION['mobile'] == true ? true : false);
-#define('MOBILE_DEVICE', $bMobile);
-define('MOBILE', true);
-define('MOBILE_DEVICE', true);
+define('MOBILE', $_SESSION['mobile'] == true ? true : false);
+define('MOBILE_DEVICE', $bMobile);
 
 # page called by crawler?
 define('CRAWLER', defined('CRAWLERS') ?
