@@ -23,7 +23,7 @@ ini_set('zlib.output_compression_level', 9);
 date_default_timezone_set('Europe/Berlin');
 
 # Current version we are working with.
-define('VERSION', '20120613');
+define('VERSION', '20120622');
 
 # Define a standard path
 define('PATH_STANDARD', dirname(__FILE__));
@@ -109,18 +109,18 @@ define('EXTENSION_CHECK', ALLOW_EXTENSIONS === true || WEBSITE_MODE == 'developm
 # @todo better use
 # @todo default method
 switch ($_SERVER['REQUEST_METHOD']) {
-	case 'PUT':
-		$aMethod = $_PUT;
-		break;
-	case 'POST':
-		$aMethod = $_POST;
-		break;
-	case 'GET':
-		$aMethod = $_GET;
-		break;
-	case 'DELETE':
-		$aMethod = $_DELETE;
-		break;
+  case 'PUT':
+    $aMethod = $_PUT;
+    break;
+  case 'POST':
+    $aMethod = $_POST;
+    break;
+  case 'GET':
+    $aMethod = $_GET;
+    break;
+  case 'DELETE':
+    $aMethod = $_DELETE;
+    break;
 }
 
 $aMethod['method'] = $_SERVER['REQUEST_METHOD'];
