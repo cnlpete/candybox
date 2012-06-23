@@ -107,7 +107,8 @@ define('ALLOW_EXTENSIONS', false);
 
 # Tell the allowed plugins seperated by comma
 # DEFAULT: 'Bbcode,FormatTimestamp,Headlines,Archive,TinyMCE'
-# OTHER OFFICIALLY SUPPORTED PLUGINS: Facebook, Cronjob, Piwik, Analytics, TagCloud
+# OTHER OFFICIALLY SUPPORTED PLUGINS: Facebook, Cronjob, Piwik, Analytics,
+# TagCloud, AddThis, SocialSharePrivacy
 define('ALLOW_PLUGINS', 'Bbcode,FormatTimestamp,Headlines,Archive,TinyMCE');
 
 # ------------------------------------------------------------------------------
@@ -163,7 +164,7 @@ define('POPUP_DEFAULT_Y', '640');
 # ------------------------------------------------------------------------------
 
 # If you want to use templates, enter name of template-folder here
-# They are placed at templates/<SkinName>/...
+# They are placed at templates/<TemplateName>/...
 # DEFAULT: ''
 define('PATH_TEMPLATE', '');
 

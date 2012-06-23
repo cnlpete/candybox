@@ -42,31 +42,30 @@ if('http://' . $_SERVER['HTTP_HOST'] !== WEBSITE_URL && 'https://' . $_SERVER['H
   exit(header('Location:' . WEBSITE_URL));
 
 # If we are on a productive enviroment, make sure that we can't override the system.
-if (WEBSITE_MODE == 'production' && is_dir('install'))
+if (WEBSITE_MODE == 'production' && is_dir('/install'))
   exit('Please install software via <strong>install/</strong> and delete the folder afterwards.');
 
 # Also disable tools to avoid system crashes.
-if (WEBSITE_MODE == 'production' && is_dir('tools'))
+if (WEBSITE_MODE == 'production' && is_dir('/tools'))
   exit('Please delete the tools folder.');
 
 # Disable tests on productive system.
 if (WEBSITE_MODE == 'production' && is_dir('tests'))
-  exit('Please delete the tests enviroment (tests.php).');
+  exit('Please delete the tests enviroment (/tests).');
 
 # Disable the use of composer.
 if (WEBSITE_MODE == 'production' && is_file('composer.phar'))
   exit('Please delete the composer.phar.');
 
 # Override the system variables in development mode.
+ini_set('log_errors', 1);
 if (WEBSITE_MODE == 'test') {
   ini_set('display_errors', 0);
   ini_set('error_reporting', 0);
-  ini_set('log_errors', 1);
 }
 else {
   ini_set('display_errors', 1);
   ini_set('error_reporting', 1);
-  ini_set('log_errors', 1);
 }
 
 # Define current url
