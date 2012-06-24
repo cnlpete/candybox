@@ -28,8 +28,6 @@ class Galleries extends Main {
    *
    */
   protected function _show() {
-    $this->oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
-
 		return	$this->_iId && !isset($this->_aRequest['album_id']) ?
 						$this->album() :
 						$this->overview();
@@ -363,7 +361,6 @@ class Galleries extends Main {
    *
    */
   public function destroyFile() {
-    $this->setTitle(I18n::get('gallery.files.title.destroy'));
     $aDetails = $this->_oModel->getFileData($this->_iId);
 
 		return $this->_aSession['user']['role'] < 3 ?

@@ -27,7 +27,7 @@ class Calendars extends Main {
   protected function _show() {
      # Show single .ics file
     if ($this->_iId)
-      exit($this->ics($this->_iId));
+      return $this->ics($this->_iId);
 
     else
       return $this->overview();
@@ -69,7 +69,7 @@ class Calendars extends Main {
     header('Content-type: text/calendar; charset=utf-8');
     header('Content-Disposition: inline; filename=' . $aData['title_encoded'] . '.ics');
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    exit($this->oSmarty->fetch($sTemplateFile, UNIQUE_ID));
   }
 
   /**

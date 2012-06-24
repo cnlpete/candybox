@@ -62,7 +62,7 @@ class Mails extends Main {
    *
    */
   public function resend() {
-    return json_encode($this->_oModel->resend($this->_iId) == true);
+    exit(json_encode($this->_oModel->resend($this->_iId) == true));
   }
 
   /**
