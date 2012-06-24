@@ -99,11 +99,9 @@ class Dispatcher {
    *
    */
   public function getAction() {
-    $sAction = isset($this->_aRequest['action']) &&
-            strtolower((string) $this->_aRequest['action']) == 'create' ||
-            strtolower((string) $this->_aRequest['action']) == 'update' ||
-            strtolower((string) $this->_aRequest['action']) == 'destroy' ?
+    $sAction = isset($this->_aRequest['action']) ?
             strtolower((string) $this->_aRequest['action']) : 'show';
+
     $this->oController->setContent($this->oController->$sAction());
   }
 }

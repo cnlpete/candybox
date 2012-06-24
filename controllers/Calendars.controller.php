@@ -26,26 +26,34 @@ class Calendars extends Main {
    */
   protected function _show() {
      # Show single .ics file
-    if ($this->_iId && !isset($this->_aRequest['action']))
-      exit($this->_showIcs($this->_iId));
-
-    elseif (isset($this->_aRequest['action']) && $this->_aRequest['action'] == 'icalfeed')
-      exit($this->_showIcalFeed());
+    if ($this->_iId)
+      exit($this->ics($this->_iId));
 
     else
-      return $this->_showOverview();
+      return $this->overview();
+  }
+
+  /**
+   * Helper method to redirect archive action to show overview.
+   *
+   * @access public
+   * @return string HTML
+   *
+   */
+  public function archive() {
+    return $this->overview();
   }
 
   /**
    * Show single event as ics file.
    * This needs to be specified as ajax, since there should be no surrounding templates.
    *
-   * @access protected
+   * @access public
    * @param integer $iId ID to show
    * @return string ICS-File
    *
    */
-  protected function _showIcs($iId) {
+  public function ics($iId) {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'ics');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'ics');
     $this->oSmarty->setTemplateDir($sTemplateDir);
@@ -67,11 +75,11 @@ class Calendars extends Main {
   /**
    * Show the overview
    *
-   * @access protected
+   * @access public
    * @return string HTML content
    *
    */
-  protected function _showOverview() {
+  public function overview() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
     $this->oSmarty->setTemplateDir($sTemplateDir);
@@ -85,11 +93,11 @@ class Calendars extends Main {
   /**
    * show the overview
    *
-   * @access protected
+   * @access public
    * @return string HTML content
    *
    */
-  protected function _showIcalFeed() {
+  public function iCalFeed() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'icalfeed');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'icalfeed');
     $this->oSmarty->setTemplateDir($sTemplateDir);
@@ -100,7 +108,7 @@ class Calendars extends Main {
     header('Content-type: text/calendar; charset=utf-8');
     header('Content-Disposition: inline; filename=' . WEBSITE_NAME . '.ics');
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    exit($this->oSmarty->fetch($sTemplateFile, UNIQUE_ID));
   }
 
   /**

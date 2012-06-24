@@ -20,57 +20,6 @@ use CandyCMS\Plugins\Recaptcha;
 class Users extends Main {
 
   /**
-   * Route to right action.
-   *
-   * @access public
-   * @return string HTML
-   *
-   */
-  public function show() {
-    if (!isset($this->_aRequest['action']))
-       $this->_aRequest['action'] = 'show';
-
-    switch ($this->_aRequest['action']) {
-
-      case 'avatar':
-
-        $this->setTitle(I18n::get('users.title.avatar'));
-        return $this->updateAvatar();
-
-        break;
-
-      case 'password':
-
-        $this->setTitle(I18n::get('users.title.password'));
-        return $this->updatePassword();
-
-        break;
-
-      case 'token':
-
-        $this->setTitle(I18n::get('global.api_token'));
-        return $this->getToken();
-
-        break;
-
-      case 'verification':
-
-        $this->setTitle(I18n::get('global.email.verification'));
-        return $this->verifyEmail();
-
-        break;
-
-      default:
-      case 'show':
-
-        $this->oSmarty->setCaching(\CandyCMS\Core\Helpers\SmartySingleton::CACHING_LIFETIME_SAVED);
-        return $this->_show();
-
-        break;
-    }
-  }
-
-  /**
    * Show user or user overview.
    *
    * @access protected
@@ -140,6 +89,9 @@ class Users extends Main {
     # Fetch data from database
     $aData = $this->_oModel->getId($iId, true);
 
+    # Set title
+    $this->setTitle(vsprintf(I18n::get('users.title.update'), $aData['full_name']));
+
     # Add the gravatar_urls, so the user can preview those.
     Helper::createAvatarURLs($aData, $aData['id'], $aData['email'], true,  'gravatar_');
     Helper::createAvatarURLs($aData, $aData['id'], $aData['email'], false, 'standard_');
@@ -170,9 +122,9 @@ class Users extends Main {
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  public function updateAvatar() {
+  public function avatar() {
     return isset($this->_aRequest[$this->_sController]) ?
-            $this->_updateAvatar() :
+            $this->_avatar() :
             $this->_showFormTemplate();
   }
 
@@ -186,7 +138,7 @@ class Users extends Main {
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  public function _updateAvatar() {
+  public function _avatar() {
     $this->_setError('terms', I18n::get('error.file.upload'));
     $this->_setError('image');
 
@@ -221,9 +173,9 @@ class Users extends Main {
    * @return string HTML content
    *
    */
-  public function updatePassword() {
+  public function password() {
     return isset($this->_aRequest[$this->_sController]) ?
-            $this->_updatePassword() :
+            $this->_password() :
             $this->_showFormTemplate();
   }
 
@@ -237,7 +189,7 @@ class Users extends Main {
    * @return string HTML content
    *
    */
-  protected function _updatePassword() {
+  protected function _password() {
     # Check if old password is set
     $this->_setError('password_old', I18n::get('error.user.update.password.old.empty'));
 
@@ -407,6 +359,8 @@ class Users extends Main {
    *
    */
   public function update() {
+
+
     if ($this->_aSession['user']['id'] == 0)
       return Helper::errorMessage(I18n::get('error.session.create_first'), '/sessions/create');
 
@@ -540,7 +494,7 @@ class Users extends Main {
    * @return boolean status of message
    *
    */
-  public function verifyEmail() {
+  public function verification() {
     if (!isset($this->_aRequest['code']) || empty($this->_aRequest['code']))
       return Helper::errorMessage(I18n::get('error.missing.id'), '/');
 
@@ -564,7 +518,7 @@ class Users extends Main {
    * @return string token or null
    *
    */
-  public function getToken() {
+  public function token() {
     if (isset($this->_aRequest['email']) && isset($this->_aRequest['password']))
       $sToken = $this->_oModel->getToken();
 
