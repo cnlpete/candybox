@@ -543,7 +543,7 @@ class Blogs extends Main {
       # Show unpublished items and entries with diffent languages to moderators or administrators only
       $sWhere = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ?
               '' :
-              "WHERE published = '1' AND language = '" . WEBSITE_LANGUAGE . "'";
+              "AND published = '1' AND language = '" . WEBSITE_LANGUAGE . "'";
 
       $oQuery = $this->_oDb->prepare("SELECT
                                         b.*,
@@ -562,6 +562,7 @@ class Blogs extends Main {
                                         b.author_id=u.id
                                       WHERE
                                         b.date >= DATE_SUB(NOW(), INTERVAL :months MONTH)
+                                        " . $sWhere . "
                                       ORDER BY
                                         b.date DESC");
 
