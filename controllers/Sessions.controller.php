@@ -21,37 +21,6 @@ use CandyCMS\Plugins\Recaptcha;
 class Sessions extends Main {
 
   /**
-   * Route to right action.
-   *
-   * @access public
-   * @return string HTML or redirect to create session.
-   *
-   */
-  public function show() {
-    if (!isset($this->_aRequest['action']))
-      return Helper::redirectTo('/' . $this->_sController . '/create');
-
-    switch ($this->_aRequest['action']) {
-
-      case 'password':
-
-        $this->setTitle(I18n::get('sessions.password.title'));
-        $this->setDescription(I18n::get('sessions.password.description'));
-        return $this->resendPassword();
-
-        break;
-
-      case 'verification':
-
-        $this->setTitle(I18n::get('sessions.verification.title'));
-        $this->setDescription(I18n::get('sessions.verification.description'));
-        return $this->resendVerification();
-
-        break;
-    }
-  }
-
-  /**
    * Create a session or show template instead.
    * We must override the main method due to a diffent required user right policy.
    *
@@ -124,15 +93,18 @@ class Sessions extends Main {
    * @return string HTML
    *
    */
-  public function resendPassword() {
+  public function password() {
     if ($this->_aSession['user']['role'] > 0)
       return Helper::redirectTo('/');
 
     else {
+      $this->setTitle(I18n::get('sessions.password.title'));
+      $this->setDescription(I18n::get('sessions.password.description'));
+
       $bShowCaptcha = class_exists('\CandyCMS\Plugins\Recaptcha') ? SHOW_CAPTCHA : false;
 
       return isset($this->_aRequest[$this->_sController]['email']) ?
-              $this->_resendPassword($bShowCaptcha) :
+              $this->_password($bShowCaptcha) :
               $this->_showCreateResendActionsTemplate($bShowCaptcha);
     }
   }
@@ -143,11 +115,11 @@ class Sessions extends Main {
    * Check if required data is given or throw an error instead.
    * If data is given, try to send mail.
    *
-   * @access public
+   * @access protected
    * @return string HTML
    *
    */
-  protected function _resendPassword($bShowCaptcha) {
+  protected function _password($bShowCaptcha) {
     $this->_setError('email');
 
     if ($bShowCaptcha === true && Recaptcha::getInstance()->checkCaptcha($this->_aRequest) === false)
@@ -183,15 +155,18 @@ class Sessions extends Main {
    * @return string HTML
    *
    */
-  public function resendVerification() {
+  public function verification() {
     if ($this->_aSession['user']['role'] > 0)
       return Helper::redirectTo('/');
 
     else {
+      $this->setTitle(I18n::get('sessions.verification.title'));
+      $this->setDescription(I18n::get('sessions.verification.description'));
+
       $bShowCaptcha = class_exists('\CandyCMS\Plugins\Recaptcha') ? SHOW_CAPTCHA : false;
 
       return isset($this->_aRequest[$this->_sController]['email']) ?
-              $this->_resendVerification($bShowCaptcha) :
+              $this->_verification($bShowCaptcha) :
               $this->_showCreateResendActionsTemplate($bShowCaptcha);
     }
   }
@@ -207,7 +182,7 @@ class Sessions extends Main {
    * @return string HTML
    *
    */
-  protected function _resendVerification($bShowCaptcha) {
+  protected function _verification($bShowCaptcha) {
     $this->_setError('email');
 
     if ($bShowCaptcha === true && Recaptcha::getInstance()->checkCaptcha($this->_aRequest) === false)

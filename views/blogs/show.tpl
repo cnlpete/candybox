@@ -77,6 +77,7 @@
           {if isset($_REQUEST.id)}
             <div class='span8'>
               <hr />
+              <!-- plugin:addthis -->
               <!-- plugin:socialshareprivacy -->
             </div>
           {/if}

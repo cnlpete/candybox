@@ -35,6 +35,7 @@
       <footer>
         {if $_REQUEST.id && (!isset($_REQUEST.action) || $_REQUEST.action !== 'page')}
           <hr />
+          <!-- plugin:addthis -->
           <!-- plugin:socialshareprivacy -->
         {/if}
       </footer>

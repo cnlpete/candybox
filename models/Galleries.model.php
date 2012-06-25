@@ -91,7 +91,7 @@ class Galleries extends Main {
                 'galleries');
 
         $this->_aData[$iId]['files'] = $aRow['files_sum'] > 0 ?
-                $this->getThumbs($aRow['id'], $bAdvancedImageInformation) :
+                $this->getThumbnails($aRow['id'], $bAdvancedImageInformation) :
                 '';
 
         $this->_aData[$iId]['url_createfile'] = $this->_aData[$iId]['url_clean'] . '/createfile';
@@ -173,7 +173,7 @@ class Galleries extends Main {
               'galleries');
 
       $this->_aData[$iId]['files'] = $aRow['files_sum'] > 0 ?
-              $this->getThumbs($aRow['id'], $bAdvancedImageInformation) :
+              $this->getThumbnails($aRow['id'], $bAdvancedImageInformation) :
               '';
 
       $this->_aData[$iId]['url_createfile'] = $this->_aData[$iId]['url_clean'] . '/createfile';
@@ -191,7 +191,7 @@ class Galleries extends Main {
    * @return array $this->_aThumbs processed array with image information
    *
    */
-  public function getThumbs($iId, $bAdvancedImageInformation = false) {
+  public function getThumbnails($iId, $bAdvancedImageInformation = false) {
     # Clear existing array (fix, when we got no images at a gallery
     if (!empty($this->_aThumbs))
       unset($this->_aThumbs);

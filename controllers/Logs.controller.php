@@ -100,6 +100,7 @@ class Logs extends Main {
    * Update the Endtime of some LogEntry
    *
    * @static
+   * @access public
    * @param integer $iLogsId id of log entry to update
    * @param integer $iEndTime the new timestamp
    * @return boolean status of query
@@ -122,6 +123,7 @@ class Logs extends Main {
    * Update the Result of some LogEntry
    *
    * @static
+   * @access public
    * @param integer $iLogsId id of log entry to update
    * @param boolean $bResultFlag the new Timestamp
    * @return boolean status of query

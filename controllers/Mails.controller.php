@@ -31,13 +31,8 @@ class Mails extends Main {
               Helper::redirectTo('/' . $this->_aRequest['controller'] . '/' . $this->_iId . '/create') :
               Helper::redirectTo('/' . $this->_aRequest['controller'] . '/create');
     }
-    else {
-      if ($this->_aRequest['action'] == 'resend')
-        exit($this->_resend());
-
-      else
-        return $this->_show();
-    }
+    else
+      return $this->_show();
   }
 
   /**
@@ -60,14 +55,14 @@ class Mails extends Main {
   }
 
   /**
-   * Show log overview if we have admin rights.
+   * Show mail overview if we have admin rights.
    *
-   * @access protected
+   * @access public
    * @return string HTML content
    *
    */
-  protected function _resend() {
-    return json_encode($this->_oModel->resend($this->_iId) == true);
+  public function resend() {
+    exit(json_encode($this->_oModel->resend($this->_iId) == true));
   }
 
   /**

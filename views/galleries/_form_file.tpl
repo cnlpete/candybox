@@ -1,10 +1,10 @@
 {strip}
-  {if $_REQUEST.action == 'create'}
+  {if $_REQUEST.action == 'createfile'}
     <form method='post'
           class='form-horizontal'
           enctype='multipart/form-data'
-          action='/{$_REQUEST.controller}/{$_REQUEST.action}'>
-  {elseif $_REQUEST.action == 'update'}
+          action='/{$_REQUEST.controller}/{$_REQUEST.id}/{$_REQUEST.action}'>
+  {elseif $_REQUEST.action == 'updatefile'}
     <form method='put'
           class='form-horizontal'
           enctype='multipart/form-data'

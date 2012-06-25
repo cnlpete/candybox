@@ -21,52 +21,6 @@ use CandyCMS\Core\Helpers\SmartySingleton;
 class Galleries extends Main {
 
   /**
-   * Route to right action.
-   *
-   * @access public
-   * @return string HTML
-   *
-   */
-  public function show() {
-    switch ($this->_aRequest['action']) {
-      case 'createfile':
-
-        $this->setTitle(I18n::get('gallery.files.title.create'));
-        return $this->createFile();
-
-        break;
-
-      case 'updatefile':
-
-        $this->setTitle(I18n::get('gallery.files.title.update'));
-        return $this->updateFile();
-
-        break;
-
-      case 'updatefilepositions':
-
-        exit(json_encode($this->updateFilePositions()));
-
-        break;
-
-      case 'destroyfile':
-
-        $this->setTitle(I18n::get('gallery.files.title.destroy'));
-        return $this->destroyFile();
-
-        break;
-
-      default:
-      case '':
-
-        $this->oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
-        return $this->_show();
-
-        break;
-    }
-  }
-
-  /**
    * Show image, gallery album or overview (depends on a given ID and album_id).
    *
    * @access protected
@@ -75,18 +29,18 @@ class Galleries extends Main {
    */
   protected function _show() {
 		return	$this->_iId && !isset($this->_aRequest['album_id']) ?
-						$this->_showAlbum() :
-						$this->_showOverview();
+						$this->album() :
+						$this->overview();
 	}
 
   /**
    * Show overview of albums.
    *
-   * @access protected
+   * @access public
    * @return string HTML content
    *
    */
-  protected function _showOverview() {
+  public function overview() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'albums');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'albums');
     $this->oSmarty->setTemplateDir($sTemplateDir);
@@ -102,11 +56,11 @@ class Galleries extends Main {
   /**
    * Show overview of images in one album.
    *
-   * @access protected
+   * @access public
    * @return string HTML content
    *
    */
-  protected function _showAlbum() {
+  public function album() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'files');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'files');
     $this->oSmarty->setTemplateDir($sTemplateDir);
@@ -118,7 +72,7 @@ class Galleries extends Main {
     $this->setDescription($this->_removeHighlight($sAlbumData['content']));
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-      $aData = $this->_oModel->getThumbs($this->_iId);
+      $aData = $this->_oModel->getThumbnails($this->_iId);
 
       $this->oSmarty->assign('files', $aData);
       $this->oSmarty->assign('file_no', count($aData));
@@ -228,6 +182,8 @@ class Galleries extends Main {
    *
    */
   public function createFile() {
+    $this->setTitle(I18n::get('gallery.files.title.create'));
+
     if ($this->_aSession['user']['role'] < 3)
       return Helper::errorMessage(I18n::get('error.missing.permission'));
 
@@ -308,6 +264,8 @@ class Galleries extends Main {
    *
    */
   public function updateFile() {
+    $this->setTitle(I18n::get('gallery.files.title.update'));
+
     if ($this->_aSession['user']['role'] < 3)
       return Helper::errorMessage(I18n::get('error.missing.permission'), '/' . $this->_sController);
 
@@ -315,21 +273,6 @@ class Galleries extends Main {
       return isset($this->_aRequest[$this->_sController]) ?
               $this->_updateFile() :
               $this->_showFormFileTemplate();
-  }
-
-  /**
-   * Update the positions of all files of a gallery.
-   *
-   * Calls _updateFilePositions if data is given, otherwise returns false.
-   *
-   * @access public
-   * @return boolean returned status of model action (boolean).
-   *
-   */
-  public function updateFilePositions() {
-    return $this->_aSession['user']['role'] < 3 ?
-            false :
-            $this->_updateFilePositions();
   }
 
   /**
@@ -364,6 +307,21 @@ class Galleries extends Main {
     }
     else
       return Helper::errorMessage(I18n::get('error.sql'), $sRedirectPath);
+  }
+
+  /**
+   * Update the positions of all files of a gallery.
+   *
+   * Calls _updateFilePositions if data is given, otherwise returns false.
+   *
+   * @access public
+   * @return boolean returned status of model action (boolean).
+   *
+   */
+  public function updateFilePositions() {
+    return $this->_aSession['user']['role'] < 3 ?
+            false :
+            exit(json_encode($this->_updateFilePositions()));
   }
 
   /**

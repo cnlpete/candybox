@@ -232,7 +232,7 @@
     {* Avatar *}
     <div class="tab-pane{if $_REQUEST['action'] == 'avatar'} active{/if}" id='user-image'>
       <form enctype='multipart/form-data'
-            method='put'
+            method='post'
             action='/{$_REQUEST.controller}/{$uid}/avatar'
             class='form-horizontal'>
         <div class='control-group{if isset($error.image)} alert alert-error{/if}'>
@@ -311,7 +311,8 @@
   {* Destroy account *}
   {if $_SESSION.user.role < 4}
     <div class="tab-pane{if $_REQUEST['action'] == 'destroy'} active{/if}" id='user-destroy'>
-      <form method='put'
+      {* @todo change to put *}
+      <form method='post'
             action='/{$_REQUEST.controller}/{$uid}/destroy'
             class='form-horizontal'>
         <p class='alert alert-danger'>
