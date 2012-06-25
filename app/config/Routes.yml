@@ -12,7 +12,7 @@
 "searches/(:any)": controller=searches&search=$1
 "sessions/(password|verification|destroy)": controller=sessions&action=$1
 "sites/(:alnum)": controller=sites&site=$1
-"sitemap.xml": controller=sitemaps&type=xml
+"sitemap.xml": controller=sitemaps&type=xml&action=xml
 "users/(:num)/token": controller=users&action=token&id=$1
 "users/(:alnum)/verification": controller=users&action=verification&code=$1
 "users/(:num)/(:alpha)": controller=users&action=$2&id=$1

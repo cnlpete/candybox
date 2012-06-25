@@ -74,12 +74,13 @@ define('CURRENT_URL', isset($_SERVER['REQUEST_URI']) ? WEBSITE_URL . $_SERVER['R
 # Start user session.
 @session_start();
 
-# Do we have a mobile device?
+# Do we have a mobile device?#
+# @todo
 if(isset($_SERVER['HTTP_USER_AGENT'])) {
   if (!defined('MOBILES'))
     define('MOBILES', 'Opera Mini|Symb|Windows CE|IEMobile|iPhone|iPod|Blackberry|Android|Mobile Safari');
 
-  $bMobile    = preg_match('/' . MOBILES . '/i', $_SERVER['HTTP_USER_AGENT']) ? true : false;
+  $bMobile = preg_match('/' . MOBILES . '/i', $_SERVER['HTTP_USER_AGENT']) ? true : false;
 }
 else
   $bMobile = false;
@@ -92,7 +93,7 @@ if(!isset($_REQUEST['mobile']))
 else
   $_SESSION['mobile'] = (boolean) $_REQUEST['mobile'];
 
-define('MOBILE', $_SESSION['mobile'] == true ? true : false);
+define('MOBILE', $_SESSION['mobile'] === true ? true : false);
 define('MOBILE_DEVICE', $bMobile);
 
 # page called by crawler?
