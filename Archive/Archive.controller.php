@@ -37,14 +37,14 @@ final class Archive {
    *
    */
   public final function show(&$aRequest, &$aSession) {
-    $sTemplateDir   = Helper::getPluginTemplateDir('archive', 'show');
+    $sTemplateDir   = Helper::getPluginTemplateDir(self::IDENTIFIER, 'show');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
 
     $oSmarty = SmartySingleton::getInstance();
     $oSmarty->setTemplateDir($sTemplateDir);
     $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
-    $sCacheId = WEBSITE_MODE . '|blogs|' . WEBSITE_LOCALE . '|' . IDENTIFIER . '|' .
+    $sCacheId = WEBSITE_MODE . '|blogs|' . WEBSITE_LOCALE . '|' . self::IDENTIFIER . '|' .
             substr(md5($aSession['user']['role']), 0 , 10);
 
     if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {

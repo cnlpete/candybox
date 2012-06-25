@@ -120,7 +120,7 @@ final class Recaptcha {
    */
   public final function show(&$aRequest, &$aSession) {
 		if ($aSession['user']['role'] == 0) {
-			$sTemplateDir   = Helper::getPluginTemplateDir('Recaptcha', 'recaptcha');
+			$sTemplateDir   = Helper::getPluginTemplateDir(self::IDENTIFIER, 'recaptcha');
 			$sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'recaptcha');
 
 			$oSmarty = SmartySingleton::getInstance();
