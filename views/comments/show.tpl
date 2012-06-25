@@ -72,7 +72,7 @@
     </div>
   </div>
   {$_pages_}
-  {if $_AUTOLOAD_.enabled}
+  {if $_AUTOLOAD_.enabled && isset($comments) && count($comments) > 0}
     <script src='{$_PATH.js}/core/jquery.infiniteScroll{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
     <script type="text/javascript">
       $(document).ready(function(){

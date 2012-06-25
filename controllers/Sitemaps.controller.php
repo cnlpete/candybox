@@ -19,11 +19,11 @@ class Sitemaps extends Main {
   /**
    * Show the sitemap as XML.
    *
-   * @access protected
+   * @access public
    * @return string XML content
    *
    */
-  protected function _showXML() {
+  public function xml() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'xml');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'xml');
     $this->oSmarty->setTemplateDir($sTemplateDir);

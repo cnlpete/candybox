@@ -39,23 +39,23 @@
         {/if}
       </footer>
     </article>
-    <script src='{$_PATH.js}/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
-    <script src='{$_PATH.js}/core/jquery.capty{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
-    <script type="text/javascript">
-      $(document).ready(function(){
-        $('.js-fancybox').fancybox({
-          nextEffect : 'fade',
-          prevEffect : 'fade'
-        });
-        $('.js-image').capty({ height: 30 });
+  {/foreach}
+  <script src='{$_PATH.js}/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
+  <script src='{$_PATH.js}/core/jquery.capty{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.js-fancybox').fancybox({
+        nextEffect : 'fade',
+        prevEffect : 'fade'
+      });
+      $('.js-image').capty({ height: 30 });
 
-        $('.js-media').each(function(e) {
-          var $this = $(this);
-          $.getJSON(this.title, function(data) {
-            $this.html(data['html']);
-          });
+      $('.js-media').each(function(e) {
+        var $this = $(this);
+        $.getJSON(this.title, function(data) {
+          $this.html(data['html']);
         });
       });
-    </script>
-  {/foreach}
+    });
+  </script>
 {/strip}
