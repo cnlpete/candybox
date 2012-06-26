@@ -36,7 +36,8 @@ final class TinyMCE {
    *
    */
   public final function show(&$aRequest, &$aSession) {
-    $sTemplateDir   = Helper::getPluginTemplateDir(self::IDENTIFIER, 'show');
+    # Bugfix: TinyMCE is camel case and would fail under Linux.
+    $sTemplateDir   = Helper::getPluginTemplateDir('TinyMCE', 'show');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
 
     $oSmarty = SmartySingleton::getInstance();
