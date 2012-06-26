@@ -12,6 +12,7 @@
 
 namespace CandyCMS\Core\Controllers;
 
+use CandyCMS\Core\Helpers\AdvancedException;
 use CandyCMS\Core\Controllers\Main;
 use CandyCMS\Core\Helpers\Helper;
 use CandyCMS\Core\Helpers\I18n;
@@ -241,6 +242,7 @@ class Sessions extends Main {
    *
    */
   public function update() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->update()');
     return Helper::redirectTo('/errors/404');
   }
 

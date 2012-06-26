@@ -53,10 +53,11 @@ class AdvancedException extends \Exception {
    *
    * @static
    * @access public
+   * @todo better use of request
    *
    */
   public static function writeLog($sMessage) {
-    $sMessage = date('Y-m-d Hi', time()) . ' - ' . $sMessage;
+    $sMessage = date('Y-m-d Hi', time()) . ' - ' . $_SERVER['REMOTE_ADDR'] . ' - ' . $sMessage . ' - ' . print_r($_REQUEST);
 
     if (!is_dir(PATH_STANDARD . '/app/logs'))
       mkdir(PATH_STANDARD . '/app/logs');

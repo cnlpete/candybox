@@ -12,6 +12,7 @@
 
 namespace CandyCMS\Core\Controllers;
 
+use CandyCMS\Core\Helpers\AdvancedException;
 use CandyCMS\Core\Helpers\Helper;
 use CandyCMS\Core\Helpers\I18n;
 use CandyCMS\Plugins\Recaptcha;
@@ -186,6 +187,7 @@ class Comments extends Main {
    *
    */
   public function update() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->update()');
     return Helper::redirectTo('/errors/404');
   }
 }
