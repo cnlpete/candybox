@@ -28,7 +28,7 @@ final class FacebookCMS extends Facebook {
    * @var contant
    *
    */
-  const IDENTIFIER = 'facebook';
+  const IDENTIFIER = 'Facebook';
 
   /**
    * Get user data.

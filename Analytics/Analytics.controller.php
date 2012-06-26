@@ -23,7 +23,7 @@ final class Analytics {
    * @var constant
    *
    */
-  const IDENTIFIER = 'analytics';
+  const IDENTIFIER = 'Analytics';
 
   /**
    * @final

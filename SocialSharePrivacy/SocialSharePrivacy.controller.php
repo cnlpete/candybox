@@ -24,7 +24,7 @@ final class SocialSharePrivacy {
    * @var constant
    *
    */
-  const IDENTIFIER = 'socialshareprivacy';
+  const IDENTIFIER = 'SocialSharePrivacy';
 
   /**
    * Show the (cached) javascript code, that enables the jQuery plugin.

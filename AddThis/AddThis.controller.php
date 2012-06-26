@@ -24,7 +24,7 @@ final class AddThis {
    * @var constant
    *
    */
-  const IDENTIFIER = 'addthis';
+  const IDENTIFIER = 'AddThis';
 
   /**
    * Show the (cached) javascript code, that enables the jQuery plugin.

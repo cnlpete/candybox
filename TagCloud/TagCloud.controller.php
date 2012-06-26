@@ -23,7 +23,7 @@ final class TagCloud {
    * @var constant
    *
    */
-  const IDENTIFIER = 'tagcloud';
+  const IDENTIFIER = 'TagCloud';
 
   /**
    * Show the (cached) tagcloud.

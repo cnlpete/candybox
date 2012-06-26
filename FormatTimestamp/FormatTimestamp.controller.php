@@ -23,7 +23,7 @@ final class FormatTimestamp {
    * @var constant
    *
    */
-  const IDENTIFIER = 'formattimestamp';
+  const IDENTIFIER = 'FormatTimestamp';
 
   /**
    * Show the (cached) javascript code, that enables the jQuery plugin.

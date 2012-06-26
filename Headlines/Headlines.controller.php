@@ -23,7 +23,7 @@ final class Headlines {
    * @var constant
    *
    */
-  const IDENTIFIER = 'headlines';
+  const IDENTIFIER = 'Headlines';
 
   /**
    * Show the (cached) headlines.

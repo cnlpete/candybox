@@ -23,7 +23,7 @@ final class Piwik {
    * @var constant
    *
    */
-  const IDENTIFIER = 'piwik';
+  const IDENTIFIER = 'Piwik';
 
   /**
    * Get The HTML-Code for Piwik.

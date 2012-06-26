@@ -24,7 +24,7 @@ final class Archive {
    * @var constant
    *
    */
-  const IDENTIFIER = 'archive';
+  const IDENTIFIER = 'Archive';
 
   /**
    * Show the (cached) archive.

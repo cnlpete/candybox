@@ -23,7 +23,7 @@ final class TinyMCE {
    * @var constant
    *
    */
-  const IDENTIFIER = 'tinymce';
+  const IDENTIFIER = 'TinyMCE';
 
   /**
    * Show the (cached) tinymce javascript code.
@@ -36,8 +36,7 @@ final class TinyMCE {
    *
    */
   public final function show(&$aRequest, &$aSession) {
-    # Bugfix: TinyMCE is camel case and would fail under Linux.
-    $sTemplateDir   = Helper::getPluginTemplateDir('TinyMCE', 'show');
+    $sTemplateDir   = Helper::getPluginTemplateDir(self::IDENTIFIER, 'show');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
 
     $oSmarty = SmartySingleton::getInstance();

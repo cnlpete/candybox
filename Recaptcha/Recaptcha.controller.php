@@ -65,7 +65,7 @@ final class Recaptcha {
    * @var constant
    *
    */
-  const IDENTIFIER = 'recaptcha';
+  const IDENTIFIER = 'Recaptcha';
 
   /**
    *
