@@ -594,8 +594,8 @@ class Index {
 								$sPluginNamespace::getInstance() :
 								new $sPluginNamespace();
 
-        if (preg_match('/<!-- plugin:' . $oPlugin::IDENTIFIER . ' -->/', $sCachedHTML))
-          $sCachedHTML = str_replace('<!-- plugin:' . $oPlugin::IDENTIFIER . ' -->',
+        if (preg_match('/<!-- plugin:' . strtolower($oPlugin::IDENTIFIER) . ' -->/', $sCachedHTML))
+          $sCachedHTML = str_replace('<!-- plugin:' . strtolower($oPlugin::IDENTIFIER) . ' -->',
                   $oPlugin->show($this->_aRequest, $this->_aSession), $sCachedHTML);
       }
     }
