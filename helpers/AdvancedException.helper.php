@@ -57,7 +57,7 @@ class AdvancedException extends \Exception {
    *
    */
   public static function writeLog($sMessage) {
-    $sMessage = date('Y-m-d Hi', time()) . ' - ' . $_SERVER['REMOTE_ADDR'] . ' - ' . $sMessage . ' - ' . print_r($_REQUEST);
+    $sMessage = date('Y-m-d Hi', time()) . ' - ' . $_SERVER['REMOTE_ADDR'] . ' - ' . $sMessage;
 
     if (!is_dir(PATH_STANDARD . '/app/logs'))
       mkdir(PATH_STANDARD . '/app/logs');
