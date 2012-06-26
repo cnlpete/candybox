@@ -4,7 +4,7 @@
           class='form-horizontal'
           action='/{$_REQUEST.controller}/{$_REQUEST.action}'>
   {elseif $_REQUEST.action == 'update'}
-    <form method='put'
+    <form method='post'
           class='form-horizontal'
           action='/{$_REQUEST.controller}/{$_REQUEST.id}/{$_REQUEST.action}'>
   {/if}

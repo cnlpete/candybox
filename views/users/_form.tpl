@@ -37,7 +37,7 @@
 
     {* Account data *}
     <div class="tab-pane{if $_REQUEST['action'] == 'update'} active{/if}" id='user-personal'>
-      <form method='put' action='/{$_REQUEST.controller}/{$uid}/update' class='form-horizontal'>
+      <form method='post' action='/{$_REQUEST.controller}/{$uid}/update' class='form-horizontal'>
         <div class='control-group{if isset($error.name)} alert alert-error{/if}'>
           <label for='input-name' class='control-label'>
             {$lang.global.name} <span title='{$lang.global.required}'>*</span>
@@ -163,7 +163,7 @@
     {* Password *}
     {if $_SESSION.user.id == $uid}
       <div class="tab-pane{if $_REQUEST['action'] == 'password'} active{/if}" id='user-password'>
-        <form method='put'
+        <form method='post'
               action='/{$_REQUEST.controller}/{$uid}/password'
               class='form-horizontal'>
           <div class='control-group{if isset($error.password_old)} alert alert-error{/if}'>

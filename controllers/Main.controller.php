@@ -444,7 +444,18 @@ abstract class Main {
   }
 
   /**
-   * Just a backup method to show entry as XML.
+   * Just a backup method to show an entry.
+   *
+   * @access protected
+   * @return string XML
+   *
+   */
+  protected function _show() {
+    return Helper::redirectTo('/errors/404');
+  }
+
+  /**
+   * Just a backup method to show an entry as XML.
    *
    * @access protected
    * @return string XML
@@ -455,7 +466,7 @@ abstract class Main {
   }
 
   /**
-   * Just a backup method to show entry as JSON.
+   * Just a backup method to show an entry as JSON.
    *
    * @access protected
    * @return string json
