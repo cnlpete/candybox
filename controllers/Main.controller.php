@@ -451,6 +451,7 @@ abstract class Main {
    *
    */
   protected function _show() {
+    AdvancedException::writeLog('Error 404: Trying to access ' . $this->_sController . '->_show()');
     return Helper::redirectTo('/errors/404');
   }
 
@@ -462,6 +463,7 @@ abstract class Main {
    *
    */
   protected function _showXML() {
+    AdvancedException::writeLog('Error 404: Trying to access ' . $this->_sController . '->_showXML()');
     return Helper::redirectTo('/errors/404');
   }
 
@@ -473,6 +475,7 @@ abstract class Main {
    *
    */
   protected function _showJSON() {
+    AdvancedException::writeLog('Error 404: Trying to access ' . $this->_sController . '->_showJSON()');
     exit(json_encode(array('error' => 'There is no JSON handling method.')));
   }
 
