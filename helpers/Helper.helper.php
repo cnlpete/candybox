@@ -337,7 +337,7 @@ class Helper {
       # Standard views
       else {
         if (!file_exists(PATH_STANDARD . '/vendor/candyCMS/plugins/' . ucfirst($sFolder) . '/views/' . $sFile . '.tpl'))
-          throw new AdvancedException('This plugin template does not exist: ' . $sFolder . '/' . $sFile . '.tpl');
+          throw new AdvancedException('This plugin template does not exist: ' . ucfirst($sFolder) . '/views/' . $sFile . '.tpl');
 
         else
           return PATH_STANDARD . '/vendor/candyCMS/plugins/' . ucfirst($sFolder) . '/views';
