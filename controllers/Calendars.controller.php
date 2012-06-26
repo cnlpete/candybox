@@ -25,12 +25,10 @@ class Calendars extends Main {
    *
    */
   protected function _show() {
-     # Show single .ics file
-    if ($this->_iId)
-      return $this->ics($this->_iId);
-
-    else
-      return $this->overview();
+    # Show single .ics file
+    return $this->_iId ?
+            $this->ics($this->_iId) :
+            $this->overview();
   }
 
   /**
