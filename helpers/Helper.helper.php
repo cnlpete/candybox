@@ -331,8 +331,8 @@ class Helper {
   public static function getPluginTemplateDir($sFolder, $sFile) {
     try {
       # Template
-      if (file_exists(PATH_STANDARD . '/public/templates/' . PATH_TEMPLATE . '/views/' . $sFolder . '/' . $sFile . '.tpl'))
-        return PATH_STANDARD . '/public/templates/' . PATH_TEMPLATE . '/views/' . $sFolder;
+      if (file_exists(PATH_STANDARD . '/public/templates/' . PATH_TEMPLATE . '/views/' . strtolower($sFolder) . '/' . $sFile . '.tpl'))
+        return PATH_STANDARD . '/public/templates/' . PATH_TEMPLATE . '/views/' . strtolower($sFolder);
 
       # Standard views
       else {
