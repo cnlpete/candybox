@@ -12,6 +12,7 @@
 
 namespace CandyCMS\Core\Controllers;
 
+use CandyCMS\Core\Helpers\AdvancedException;
 use CandyCMS\Core\Helpers\Helper;
 
 class Sitemaps extends Main {
@@ -84,6 +85,7 @@ class Sitemaps extends Main {
    *
    */
   public function create() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->create()');
     return Helper::redirectTo('/errors/404');
   }
 
@@ -94,6 +96,7 @@ class Sitemaps extends Main {
    *
    */
   public function update() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->update()');
     return Helper::redirectTo('/errors/404');
   }
 
@@ -104,6 +107,7 @@ class Sitemaps extends Main {
    *
    */
   public function destroy() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->destroy()');
     return Helper::redirectTo('/errors/404');
   }
 }

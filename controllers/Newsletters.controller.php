@@ -12,6 +12,7 @@
 
 namespace CandyCMS\Core\Controllers;
 
+use CandyCMS\Core\Helpers\AdvancedException;
 use CandyCMS\Core\Helpers\Helper;
 use CandyCMS\Core\Helpers\I18n;
 
@@ -91,6 +92,7 @@ class Newsletters extends Main {
    *
    */
   public function update() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->update()');
     return Helper::redirectTo('/errors/404');
   }
 
@@ -101,6 +103,7 @@ class Newsletters extends Main {
    *
    */
   public function destroy() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->destroy()');
     return Helper::redirectTo('/errors/404');
   }
 }

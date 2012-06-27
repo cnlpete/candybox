@@ -444,24 +444,38 @@ abstract class Main {
   }
 
   /**
-   * Just a backup method to show entry as XML.
+   * Just a backup method to show an entry.
+   *
+   * @access protected
+   * @return string XML
+   *
+   */
+  protected function _show() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_show()');
+    return Helper::redirectTo('/errors/404');
+  }
+
+  /**
+   * Just a backup method to show an entry as XML.
    *
    * @access protected
    * @return string XML
    *
    */
   protected function _showXML() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_showXML()');
     return Helper::redirectTo('/errors/404');
   }
 
   /**
-   * Just a backup method to show entry as JSON.
+   * Just a backup method to show an entry as JSON.
    *
    * @access protected
    * @return string json
    *
    */
   protected function _showJSON() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_showJSON()');
     exit(json_encode(array('error' => 'There is no JSON handling method.')));
   }
 
