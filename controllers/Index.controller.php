@@ -536,10 +536,7 @@ class Index {
       $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'application');
 
       # Get flash messages (success and error)
-      $aFlashMessages = $this->_getFlashMessage();
-      $oSmarty->assign('_flash_type_', $aFlashMessages['type']);
-      $oSmarty->assign('_flash_message_', $aFlashMessages['message']);
-      $oSmarty->assign('_flash_headline_', $aFlashMessages['headline']);
+      $oSmarty->assign('_FLASH', $this->_getFlashMessage());
 
       # Define meta elements
       $aWebsite['title']    = $oDispatcher->oController->getTitle();

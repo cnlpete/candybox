@@ -152,20 +152,20 @@
       <div class='container'>
         <div class='row'>
           <div class='span8'>
-            {if $_flash_type_}
+            {if !empty($_FLASH.message)}
               <div id='js-flash_message'>
-                <div class='alert alert-{$_flash_type_}' id='js-flash_{$_flash_type_}'>
+                <div class='alert alert-{$_FLASH.type}' id='js-flash_{$_FLASH.type}'>
                   <a class='close' href='#'>×</a>
-                  <h4 class='alert-heading'>{$_flash_headline_}</h4>
+                  <h4 class='alert-heading'>{$_FLASH.headline}</h4>
                   <p>
-                    {$_flash_message_}
+                    {$_FLASH.message}
                   </p>
                 </div>
               </div>
             {/if}
-            {if $_update_available_}
+            {if !empty($_WEBSITE.update)}
               <div class='alert alert-warning'>
-                {$_update_available_}
+                {$_WEBSITE.update}
               </div>
             {/if}
             <section id='{$_REQUEST.controller}'>
