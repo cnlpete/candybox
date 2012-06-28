@@ -163,13 +163,13 @@
                 </div>
               </div>
             {/if}
-            {if !empty($_WEBSITE.update)}
+            {if isset($_WEBSITE.update)}
               <div class='alert alert-warning'>
                 {$_WEBSITE.update}
               </div>
             {/if}
             <section id='{$_REQUEST.controller}'>
-              {$_content_}
+              {$_WEBSITE.content}
             </section>
           </div>
           <div class='span4'>

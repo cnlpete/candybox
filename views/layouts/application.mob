@@ -45,7 +45,7 @@
       {* Photoswipe *}
       <script type='text/javascript' src='{$_PATH.js}/mobile/klass{$_SYSTEM.compress_files_suffix}.js'></script>
       <script type='text/javascript' src='{$_PATH.js}/mobile/jquery.photoswipe-3.0.4{$_SYSTEM.compress_files_suffix}.js'></script>
-      <title>{$_WEBSITE.meta.title}</title>
+      <title>{$_WEBSITE.title}</title>
     </head>
     <body>
       <div class='js-page-{$_REQUEST.controller}' data-role='page' data-theme='d' data-add-back-btn='true'>
@@ -83,7 +83,7 @@
                 </div>
               </div>
             {/if}
-            {$_content_}
+            {$_WEBSITE.content}
           </section>
         </div><!-- /content -->
         <div data-role='footer' data-position='fixed' class='ui-bar'>
