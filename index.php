@@ -23,7 +23,7 @@ ini_set('zlib.output_compression_level', 9);
 date_default_timezone_set('Europe/Berlin');
 
 # Current version we are working with.
-define('VERSION', '20120622');
+define('VERSION', '20120628');
 
 # Define a standard path
 define('PATH_STANDARD', dirname(__FILE__));
@@ -93,7 +93,7 @@ if(!isset($_REQUEST['mobile']))
 else
   $_SESSION['mobile'] = (boolean) $_REQUEST['mobile'];
 
-define('MOBILE', $_SESSION['mobile'] === true ? true : false);
+define('MOBILE', $_SESSION['mobile']);
 define('MOBILE_DEVICE', $bMobile);
 
 # page called by crawler?
