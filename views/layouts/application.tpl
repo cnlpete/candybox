@@ -9,18 +9,18 @@
             rel='stylesheet' type='text/css' media='screen, projection'/>
 
       <meta http-equiv='content-type' content='text/html;charset=utf-8'/>
-      <meta name='description' content='{$meta_description}'/>
-      <meta name='keywords' content='{$meta_keywords}'/>
-      <meta name='dc.title' content='{$_title_}'/>
+      <meta name='description' content='{$_WEBSITE.meta.description}'/>
+      <meta name='keywords' content='{$_WEBSITE.meta.keywords}'/>
+      <meta name='dc.title' content='{$_WEBSITE.meta.title}'/>
 
       {* Provide more details for specific entry. *}
       {if isset($_REQUEST.id)}
-        <meta property='og:description' content='{$meta_og_description}'/>
-        <meta property='og:site_name' content='{$meta_og_site_name}'/>
-        <meta property='og:title' content='{$meta_og_title}'/>
-        <meta property='og:url' content='{$meta_og_url}'/>
-        <meta itemprop='name' content='{$meta_og_title}'>
-        <meta itemprop='description' content='{$meta_og_description}'>
+        <meta property='og:description' content='{$_WEBSITE.meta.og.description}'/>
+        <meta property='og:site_name' content='{$_WEBSITE.meta.og.site_name}'/>
+        <meta property='og:title' content='{$_WEBSITE.meta.og.title}'/>
+        <meta property='og:url' content='{$_WEBSITE.meta.og.url}'/>
+        <meta itemprop='name' content='{$_WEBSITE.meta.og.title}'>
+        <meta itemprop='description' content='{$_WEBSITE.meta.og.description}'>
       {/if}
 
       {* If we want to use a facebook plugin, provide tracking data. *}
@@ -44,7 +44,7 @@
         var lang = {$_SYSTEM.json_language};
       </script>
 
-      <title>{$_title_} - {$WEBSITE_NAME}</title>
+      <title>{$_WEBSITE.meta.title} - {$WEBSITE_NAME}</title>
     </head>
     <!--[if lt IE 7]><body class='ie6'><![endif]-->
     <!--[if IE 7]><body class='ie7'><![endif]-->

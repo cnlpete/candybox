@@ -542,18 +542,24 @@ class Index {
       $oSmarty->assign('_flash_headline_', $aFlashMessages['headline']);
 
       # Define meta elements
-      $oSmarty->assign('meta_og_description', $oDispatcher->oController->getDescription());
-      $oSmarty->assign('meta_og_site_name', WEBSITE_NAME);
-      $oSmarty->assign('meta_og_title', $oDispatcher->oController->getTitle());
-      $oSmarty->assign('meta_og_url', CURRENT_URL);
+      $aWebsite['title']    = $oDispatcher->oController->getTitle();
+      $aWebsite['content']  = $oDispatcher->oController->getContent();
 
-      $oSmarty->assign('meta_description', $oDispatcher->oController->getDescription());
-      $oSmarty->assign('meta_expires', gmdate('D, d M Y H:i:s', time() + 60) . ' GMT');
-      $oSmarty->assign('meta_keywords', $oDispatcher->oController->getKeywords());
-      # System required variables
-      $oSmarty->assign('_content_', $oDispatcher->oController->getContent());
-      $oSmarty->assign('_title_', $oDispatcher->oController->getTitle());
-      $oSmarty->assign('_update_available_', $this->_checkForNewVersion());
+      if (ALLOW_VERSION_CHECK === true)
+        $aWebsite['update'] = $this->_checkForNewVersion();
+
+      $aWebsite['meta'] = array(
+          'description' => $oDispatcher->oController->getDescription(),
+          'expires'     => gmdate('D, d M Y H:i:s', time() + 60) . ' GMT',
+          'keywords'    => $oDispatcher->oController->getKeywords(),
+          'og'          => array(
+              'description' => $oDispatcher->oController->getDescription(),
+              'site_name'   => WEBSITE_NAME,
+              'title'       => $oDispatcher->oController->getTitle(),
+              'url'         => CURRENT_URL
+          ));
+
+      $oSmarty->assign('_WEBSITE', $aWebsite);
 
       $oSmarty->setTemplateDir($sTemplateDir);
       $oSmarty->setCaching(\CandyCMS\Core\Helpers\SmartySingleton::CACHING_OFF);

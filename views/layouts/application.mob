@@ -2,6 +2,27 @@
   <!DOCTYPE html>
   <html>
     <head>
+      <meta http-equiv='content-type' content='text/html;charset=utf-8'/>
+      <meta name='description' content='{$_WEBSITE.meta.description}'/>
+      <meta name='keywords' content='{$_WEBSITE.meta.keywords}'/>
+      <meta name='dc.title' content='{$_WEBSITE.meta.title}'/>
+
+      {* Provide more details for specific entry. *}
+      {if isset($_REQUEST.id)}
+        <meta property='og:description' content='{$_WEBSITE.meta.og.description}'/>
+        <meta property='og:site_name' content='{$_WEBSITE.meta.og.site_name}'/>
+        <meta property='og:title' content='{$_WEBSITE.meta.og.title}'/>
+        <meta property='og:url' content='{$_WEBSITE.meta.og.url}'/>
+        <meta itemprop='name' content='{$_WEBSITE.meta.og.title}'>
+        <meta itemprop='description' content='{$_WEBSITE.meta.og.description}'>
+      {/if}
+
+      {* If we want to use a facebook plugin, provide tracking data. *}
+      {if $_SYSTEM.facebook_plugin == true}
+        <meta property='fb:admins' content='{$PLUGIN_FACEBOOK_ADMIN_ID}'/>
+        <meta property='fb:app_id' content='{$PLUGIN_FACEBOOK_APP_ID}'/>
+      {/if}
+
       <meta name='viewport' content='width=device-width, initial-scale=1' />
       <meta http-equiv='content-type' content='text/html;charset=utf-8'/>
       <link href='{$_PATH.css}/mobile/application{$_SYSTEM.compress_files_suffix}.css' rel='stylesheet' type='text/css' media='screen, projection'/>
@@ -24,7 +45,7 @@
       {* Photoswipe *}
       <script type='text/javascript' src='{$_PATH.js}/mobile/klass{$_SYSTEM.compress_files_suffix}.js'></script>
       <script type='text/javascript' src='{$_PATH.js}/mobile/jquery.photoswipe-3.0.4{$_SYSTEM.compress_files_suffix}.js'></script>
-      <title>{$_title_}</title>
+      <title>{$_WEBSITE.meta.title}</title>
     </head>
     <body>
       <div class='js-page-{$_REQUEST.controller}' data-role='page' data-theme='d' data-add-back-btn='true'>
