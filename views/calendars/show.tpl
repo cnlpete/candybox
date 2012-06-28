@@ -14,7 +14,9 @@
     <h1>
       {$lang.global.calendar}
       {if isset($_REQUEST.action) && $_REQUEST.action == 'archive'}
+        &nbsp;
         -
+        &nbsp;
         {$lang.global.archive}
       {else}
         &nbsp;

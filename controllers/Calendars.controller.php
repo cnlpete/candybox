@@ -82,6 +82,9 @@ class Calendars extends Main {
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
+    $this->setTitle(I18n::get('global.calendar') . ' - ' . I18n::get('global.archive') . ' - ' . $this->_iId);
+    $this->setDescription(I18n::get('global.calendar') . ' - ' . I18n::get('global.archive') . ' - ' . $this->_iId);
+
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
       $this->oSmarty->assign('calendar', $this->_oModel->getOverview());
 
