@@ -538,9 +538,7 @@ class Index {
       # Define meta elements
       $aWebsite['title']    = $oDispatcher->oController->getTitle();
       $aWebsite['content']  = $oDispatcher->oController->getContent();
-
-      if (ALLOW_VERSION_CHECK === true)
-        $aWebsite['update'] = $this->_checkForNewVersion();
+      $aWebsite['update']   = $this->_checkForNewVersion();
 
       $aWebsite['meta'] = array(
           'description' => $oDispatcher->oController->getDescription(),
