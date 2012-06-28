@@ -104,29 +104,8 @@ define('CRAWLER', defined('CRAWLERS') ?
 # Check for extensions?
 define('EXTENSION_CHECK', ALLOW_EXTENSIONS === true || WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test');
 
-# Initialize software
-# @todo HEAD, OPTIONS
-# @todo better use
-# @todo default method
-switch ($_SERVER['REQUEST_METHOD']) {
-  case 'PUT':
-    $aMethod = $_PUT;
-    break;
-  case 'POST':
-    $aMethod = $_POST;
-    break;
-  case 'GET':
-    $aMethod = $_GET;
-    break;
-  case 'DELETE':
-    $aMethod = $_DELETE;
-    break;
-}
-
-$aMethod['method'] = $_SERVER['REQUEST_METHOD'];
-
 # @todo extension check
-$oIndex = new \CandyCMS\Core\Controllers\Index($aMethod, $_SESSION, $_FILES, $_COOKIE);
+$oIndex = new \CandyCMS\Core\Controllers\Index(array_merge($_GET, $_POST), $_SESSION, $_FILES, $_COOKIE);
 
 # Print out HTML
 echo $oIndex->show();

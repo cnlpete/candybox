@@ -34,7 +34,7 @@ define('VERSION', '0');
 define('TESTFILE', '/private/var/tmp/test'.md5(time()));
 define('WEBSITE_LOCALE', 'en_US');
 define('WEBSITE_LANGUAGE', 'en');
-define('EXTENSION_CHECK', ALLOW_EXTENSIONS === true || WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test');
+define('EXTENSION_CHECK', true);
 
 setlocale(LC_ALL, WEBSITE_LOCALE);
 
