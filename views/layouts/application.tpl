@@ -44,7 +44,7 @@
         var lang = {$_SYSTEM.json_language};
       </script>
 
-      <title>{$_WEBSITE.meta.title} - {$WEBSITE_NAME}</title>
+      <title>{$_WEBSITE.title} - {$WEBSITE_NAME}</title>
     </head>
     <!--[if lt IE 7]><body class='ie6'><![endif]-->
     <!--[if IE 7]><body class='ie7'><![endif]-->
@@ -152,7 +152,7 @@
       <div class='container'>
         <div class='row'>
           <div class='span8'>
-            {if !empty($_FLASH.message)}
+            {if isset($_FLASH.message)}
               <div id='js-flash_message'>
                 <div class='alert alert-{$_FLASH.type}' id='js-flash_{$_FLASH.type}'>
                   <a class='close' href='#'>×</a>

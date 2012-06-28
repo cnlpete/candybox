@@ -366,10 +366,7 @@ class Index {
    *
    */
   protected function _getFlashMessage() {
-    $aFlashMessage = isset($this->_aSession['flash_message']) ? $this->_aSession['flash_message'] : array(
-        'type'      => '',
-        'message'    => '',
-        'headline'  => '');
+    $aFlashMessage = isset($this->_aSession['flash_message']) ? $this->_aSession['flash_message'] : '';
 
     unset($this->_aSession['flash_message']);
     return $aFlashMessage;
