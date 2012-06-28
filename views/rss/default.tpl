@@ -18,8 +18,9 @@
           <![CDATA[
             {if $d.teaser}
               {$d.teaser}
+            {else}
+              {$d.content}
             {/if}
-            {$d.content}
           ]]>
         </description>
         <dc:creator>{$d.author.full_name}</dc:creator>
