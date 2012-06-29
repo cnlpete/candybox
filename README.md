@@ -8,7 +8,7 @@ CandyCMS is a modern PHP CMS with its main focus on usability, speed and securit
 
 It provides...
 
-- a blog that supports tags, comments, RSS and full social media integration
+- a blog that supports tags, comments, RSS and full social media integration (as a plugin)
 - content pages
 - a gallery with multiple file upload (based on HTML5) and Media RSS
 - a calendar with the option to download iCalendar events
@@ -17,6 +17,7 @@ It provides...
 - file management
 - newsletter management (uses [Mailchimp API](http://mailchimp.com))
 - a full log system
+- Plugins to extend the functionality to your needs
 - and many more!
 
 
@@ -34,8 +35,9 @@ Additional reasons, why CandyCMS might be interesting for you
 - supports CDNs
 - easy to update or migrate
 - SEO optimized (sitemap.xml and basic stuff)
-- 2click social share privacy
+- 2click social share privacy and addThis to make sharing easy
 - Tests for the whole core functions
+- many plugins
 
 
 Requirements
