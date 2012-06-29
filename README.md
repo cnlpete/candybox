@@ -49,14 +49,18 @@ Requirements
 
 Setup
 ------------------------------------------------------------------------------------------------------------------------
-1. Configure your website settings at "app/config/Candy.inc.php, upload all files.
-2. Execute the "/install/index.php" file.
-3. Follow the instructions and make sure, you delete the install dir after installation.
-4. Download and install Composer (http://getcomposer.org/): `curl -s http://getcomposer.org/installer | php`.
-5. Update your packages afterwards: `php composer.phar update`.
+1. Download and install Composer (http://getcomposer.org/): `curl -s http://getcomposer.org/installer | php`.
+2. Install the vendor packages afterwards: `php composer.phar install`.
+3. Configure your website settings at "app/config/Candy.inc.php", upload all files.
+4. Execute the "/install/index.php" file.
+5. Follow the instructions and make sure, you delete the install dir after installation.
 
-To upgrade CandyCMS, upload the install folder, run "/install/index.php" and click on "migrate". Make sure you override
-the existing "vendor/*", folders before. Please also take a look at the release notes.
+Update
+------------------------------------------------------------------------------------------------------------------------
+To upgrade CandyCMS, read the release notes first. If no specific information are given,
+upload following folders and dirs after using the Composer (`php composer.phar update`):
+"index.php", "composer.json" and "install". You might also update all javascript files under "public/js". Make
+sure, the links in your views are still correct!
 
 
 Credits
