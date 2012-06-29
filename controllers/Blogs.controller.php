@@ -42,7 +42,7 @@ class Blogs extends Main {
       $this->oSmarty->assign('blogs', $this->_aData);
       $this->oSmarty->assign('_blog_footer_', $oComments->show());
 
-      # Bugfix: This is necessary, because comments does a setDir on the singleton object aswell.
+      # Bugfix: This is necessary, because comments also do a setDir on the singleton object.
       $this->oSmarty->setTemplateDir($sTemplateDir);
     }
 
