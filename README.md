@@ -46,7 +46,7 @@ Requirements
 - Imagemagick, GD2 and mod_rewrite
 - an account at http://recaptcha.org to use captchas
 - an account at http://mailchimp.com to use the newsletter management
-- about 10MB webspace
+- about 25MB webspace
 
 
 Setup
