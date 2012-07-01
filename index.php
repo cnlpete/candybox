@@ -74,7 +74,7 @@ define('CURRENT_URL', isset($_SERVER['REQUEST_URI']) ? WEBSITE_URL . $_SERVER['R
 # Start user session.
 @session_start();
 
-# Do we have a mobile device?#
+# Do we have a mobile device?
 # @todo
 if(isset($_SERVER['HTTP_USER_AGENT'])) {
   if (!defined('MOBILES'))
