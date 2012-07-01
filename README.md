@@ -8,7 +8,7 @@ CandyCMS is a modern PHP CMS with its main focus on usability, speed and securit
 
 It provides...
 
-- a blog that supports tags, comments, RSS and full social media integration
+- a blog that supports tags, comments, RSS and full social media integration (as a plugin)
 - content pages
 - a gallery with multiple file upload (based on HTML5) and Media RSS
 - a calendar with the option to download iCalendar events
@@ -17,6 +17,7 @@ It provides...
 - file management
 - newsletter management (uses [Mailchimp API](http://mailchimp.com))
 - a full log system
+- Plugins to extend the functionality to your needs
 - and many more!
 
 
@@ -34,8 +35,9 @@ Additional reasons, why CandyCMS might be interesting for you
 - supports CDNs
 - easy to update or migrate
 - SEO optimized (sitemap.xml and basic stuff)
-- 2click social share privacy
+- 2click social share privacy and addThis to make sharing easy
 - Tests for the whole core functions
+- many plugins
 
 
 Requirements
@@ -44,19 +46,23 @@ Requirements
 - Imagemagick, GD2 and mod_rewrite
 - an account at http://recaptcha.org to use captchas
 - an account at http://mailchimp.com to use the newsletter management
-- about 10MB webspace
+- about 25MB webspace
 
 
 Setup
 ------------------------------------------------------------------------------------------------------------------------
-1. Configure your website settings at "app/config/Candy.inc.php, upload all files.
-2. Execute the "/install/index.php" file.
-3. Follow the instructions and make sure, you delete the install dir after installation.
-4. Download and install Composer (http://getcomposer.org/): `curl -s http://getcomposer.org/installer | php`.
-5. Update your packages afterwards: `php composer.phar update`.
+1. Download and install Composer (http://getcomposer.org/): `curl -s http://getcomposer.org/installer | php`.
+2. Install the vendor packages afterwards: `php composer.phar install`.
+3. Configure your website settings at "app/config/Candy.inc.php", upload all files.
+4. Execute the "/install/index.php" file.
+5. Follow the instructions and make sure, you delete the install dir after installation.
 
-To upgrade CandyCMS, upload the install folder, run "/install/index.php" and click on "migrate". Make sure you override
-the existing "vendor/*", folders before. Please also take a look at the release notes.
+Update
+------------------------------------------------------------------------------------------------------------------------
+To upgrade CandyCMS, read the release notes first. If no specific information are given,
+upload following folders and dirs after using the Composer (`php composer.phar update`):
+"index.php", "composer.json" and "install". You might also update all javascript files under "public/js". Make
+sure, the links in your views are still correct!
 
 
 Credits
