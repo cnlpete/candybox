@@ -70,7 +70,7 @@ class SmartySingleton extends Smarty {
 
     $this->setCacheDir(PATH_STANDARD . '/' . CACHE_DIR);
     $this->setCompileDir(PATH_STANDARD . '/' . COMPILE_DIR);
-    $this->setPluginsDir(PATH_STANDARD . '/vendor/smarty/smarty/libs/plugins');
+    $this->setPluginsDir(PATH_STANDARD . '/vendor/smarty/smarty/distribution/libs/plugins');
     $this->setTemplateDir(PATH_STANDARD . '/vendor/candyCMS/core/views');
 
     # See http://www.smarty.net/docs/en/variable.merge.compiled.includes.tpl
