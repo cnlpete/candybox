@@ -97,7 +97,6 @@
   "require": {
     "candyCMS/core": "dev-master",
     "candyCMS/plugins": "dev-master",
-    "candyCMS/tests": "dev-master",
     "phpmailer/phpmailer": "5.2.1",
     "smushit/smushit": "0.*",
     "recaptcha/recaptcha": "1.11",
