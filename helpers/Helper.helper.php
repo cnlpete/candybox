@@ -243,7 +243,7 @@ class Helper {
    *
    */
   public static function getFileSize($sPath) {
-    $iSize = @filesize(Helper::removeSlash($sPath));
+    $iSize = @filesize( WEBSITE_MODE == 'test' ? $sPath : Helper::removeSlash($sPath) );
 
     if ($iSize > 1024 && $iSize < 1048576)
       return round(($iSize / 1024), 2) . ' KB';
@@ -345,7 +345,6 @@ class Helper {
     }
     catch (AdvancedException $e) {
       AdvancedException::reportBoth($e->getMessage());
-      exit($e->getMessage());
     }
   }
 
@@ -414,6 +413,7 @@ class Helper {
    * @access public
    * @param string $sTable table to fetch data from
    * @return integer latest ID
+   * @todo test
    *
    */
   public static function getLastEntry($sTable) {

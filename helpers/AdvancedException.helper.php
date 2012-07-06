@@ -25,7 +25,10 @@ class AdvancedException extends \Exception {
    *
    */
   public static function reportBoth($sMessage) {
-    AdvancedException::writeLog($sMessage);
+    if(WEBSITE_MODE !== 'test')
+      AdvancedException::writeLog($sMessage);
+    else
+      printf("\n" . $sMessage);
 
     if (WEBSITE_MODE == 'production' || WEBSITE_MODE == 'staging')
       AdvancedException::sendAdminMail($sMessage);
