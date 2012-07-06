@@ -15,7 +15,7 @@ namespace CandyCMS\Core\Helpers;
 use Smarty;
 use lessc;
 
-require_once PATH_STANDARD . '/vendor/smarty/smarty/libs/Smarty.class.php';
+require_once PATH_STANDARD . '/vendor/smarty/smarty/distribution/libs/Smarty.class.php';
 
 class SmartySingleton extends Smarty {
 
