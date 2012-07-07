@@ -51,7 +51,7 @@ Requirements
 
 Setup
 ------------------------------------------------------------------------------------------------------------------------
-1. Download and install Composer (http://getcomposer.org/): `curl -s http://getcomposer.org/installer | php`.
+1. Download and install Composer (http://getcomposer.org ): `curl -s http://getcomposer.org/installer | php`.
 2. Install the vendor packages afterwards: `php composer.phar install`.
 3. Configure your website settings at "app/config/Candy.inc.php", upload all files.
 4. Execute the "/install/index.php" file.
