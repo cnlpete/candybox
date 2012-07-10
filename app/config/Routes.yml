@@ -34,3 +34,4 @@
 # Fixes
 "blogs/(:any)/page/(:num)": controller=blogs&search=$1&page=$2
 "blogs/(:any)": controller=blogs&search=$1
+"(:alpha)/(update|destroy)": controller=errors&action=show
