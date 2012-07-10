@@ -80,10 +80,10 @@ class Rss extends Main {
 
       $aData  = $oModel->getId($this->_iId, false, true);
 
+      $this->oSmarty->assign('r', $aData[$this->_iId]);
+
+      # @todo: Deprecated... remove!
       $this->oSmarty->assign('_copyright_', $aData[$this->_iId]['author']['full_name']);
-      $this->oSmarty->assign('_title_', $aData[$this->_iId]['title']);
-      $this->oSmarty->assign('_content_', $aData[$this->_iId]['content']);
-      $this->oSmarty->assign('_locale_', WEBSITE_LOCALE);
       $this->oSmarty->assign('_link_', Helper::removeSlash($aData[$this->_iId]['url']));
       $sGalleryDate = $aData[$this->_iId]['date']['raw'];
 

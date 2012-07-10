@@ -3,12 +3,12 @@
     xmlns:media="http://search.yahoo.com/mrss/"
     xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>{$WEBSITE_NAME} - {$_title_}</title>
-    <description>{$_content_}</description>
-    <language>{$_locale_}</language>
+    <title>{$WEBSITE_NAME} - {$r.title}</title>
+    <description>{$r.content}</description>
+    <language>{$WEBSITE_LOCALE}</language>
     <link>{$_link_}</link>
     <copyright>{$_copyright_}</copyright>
-    <pubDate>{$_pubdate_|date_format:'%a, %d %b %Y %H:%M:%S %z'}</pubDate>
+    <pubDate>{if $WEBSITE_MODE !== 'test'}{$smarty.now|date_format:'%a, %d %b %Y %H:%M:%S %z'}{/if}</pubDate>
     <atom:link href="{$CURRENT_URL}" rel="self" type="application/rss+xml" />
     {foreach $data as $d}
     <item>
@@ -16,17 +16,19 @@
       <pubDate>{$d.date.rss}</pubDate>
       <guid isPermaLink="false">{$d.url_popup}</guid>
       <link>{$d.url_popup}</link>
-      <description>
-        <![CDATA[
-        <img src="{$WEBSITE_URL}/{$d.url_thumb}"
-            width="{$d.thumb_width}"
-            height="{$d.thumb_height}"
-            alt="{$d.file}" />
-        {if $d.content}
-          <p>{$d.content}</p>
-        {/if}
-        ]]>
-      </description>
+      {if $WEBSITE_MODE !== 'test'}
+        <description>
+          <![CDATA[
+          <img src="{$WEBSITE_URL}/{$d.url_thumb}"
+              width="{$d.thumb_width}"
+              height="{$d.thumb_height}"
+              alt="{$d.file}" />
+          {if $d.content}
+            <p>{$d.content}</p>
+          {/if}
+          ]]>
+        </description>
+      {/if}
       <media:title>{$d.file}</media:title>
       <media:description><![CDATA[{$d.content}]]></media:description>
       <media:thumbnail

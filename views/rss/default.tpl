@@ -5,24 +5,26 @@
   <channel>
     <title>{$WEBSITE_NAME}</title>
     <description>{$lang.website.description}</description>
-    <language>{$WEBSITE_LANGUAGE}</language>
+    <language>{$WEBSITE_LOCALE}</language>
     <link>{$WEBSITE_URL}</link>
     <copyright>{$WEBSITE_NAME}</copyright>
-    <pubDate>{$smarty.now|date_format:'%a, %d %b %Y %H:%M:%S %z'}</pubDate>
+    <pubDate>{if $WEBSITE_MODE !== 'test'}{$smarty.now|date_format:'%a, %d %b %Y %H:%M:%S %z'}{/if}</pubDate>
     <atom:link href="{$CURRENT_URL}" rel="self" type="application/rss+xml" />
     {foreach $data as $d}
       <item>
         <title>{$d.title}</title>
         <pubDate>{$d.date.rss}</pubDate>
-        <description>
-          <![CDATA[
-            {if $d.teaser}
-              {$d.teaser}
-            {else}
-              {$d.content}
-            {/if}
-          ]]>
-        </description>
+        {if $WEBSITE_MODE !== 'test'}
+          <description>
+            <![CDATA[
+              {if $d.teaser}
+                {$d.teaser}
+              {else}
+                {$d.content}
+              {/if}
+            ]]>
+          </description>
+        {/if}
         <dc:creator>{$d.author.full_name}</dc:creator>
         <comments>{$d.url}</comments>
         <guid isPermaLink="true">{$d.url}</guid>
