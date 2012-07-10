@@ -229,6 +229,11 @@ class Index {
     if (!isset($this->_aRequest['controller']))
       $this->_aRequest['controller'] = Routes::route('/');
 
+    # Fix route if we got something like "sitemaps/update"
+    elseif (isset($this->_aRequest['controller']) && 'errors' == $this->_aRequest['controller'] &&
+            isset($this->_aRequest['action']) && 'show' == $this->_aRequest['action'])
+      Helper::redirectTo('/errors/404');
+
     # Show files from public folder (robots.txt, human.txt and favicon.ico)
     if (preg_match('/\.txt/', $sURI) || preg_match('/\.ico/', $sURI) && !isset($this->_aRequest['action'])) {
 			$sFileTemplate	= Helper::removeSlash(WEBSITE_CDN) . '/templates/' . PATH_TEMPLATE . '/' . $sURI;
