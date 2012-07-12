@@ -29,9 +29,9 @@
 "(:alpha)/(:num).(xml|json)": controller=$1&id=$2&type=$3&page=1
 "(:alpha)/(:num)/(:any)": controller=$1&id=$2&seo_title=$3&page=1
 "(:alpha)/(:alpha).(xml|json)": controller=$1&action=$2&type=$3
+"(:alpha)/(update|destroy)": controller=errors&action=show
 "(:alpha).(xml|json)": controller=$1&type=$2
 
 # Fixes
 "blogs/(:any)/page/(:num)": controller=blogs&search=$1&page=$2
 "blogs/(:any)": controller=blogs&search=$1
-"(:alpha)/(update|destroy)": controller=errors&action=show
