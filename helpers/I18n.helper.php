@@ -44,7 +44,7 @@ class I18n {
    * @param array $aSession the session object, if given save the translations in S_SESSION['lang']
    *
    */
-  public function __construct($sLanguage, &$aSession = null) {
+  public function __construct($sLanguage = 'en', &$aSession = null) {
     if ($aSession)
       $this->_aSession = $aSession;
 
@@ -53,7 +53,7 @@ class I18n {
     if (!isset(I18n::$_aLang) || WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test') {
       $sLanguageFile = PATH_STANDARD . '/app/languages/' . $sLanguage . '.language.yml';
 
-      # Remove mistakenly set cookie to avoid exceptions.
+      # Bugfix: Remove mistakenly set cookie to avoid exceptions.
       if (!file_exists($sLanguageFile))
         $_COOKIE['default_language'] = 'en';
 
