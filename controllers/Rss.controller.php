@@ -36,9 +36,17 @@ class Rss extends Main {
    *
    */
   protected function _show() {
-    exit($this->_aRequest['section'] == 'galleries' && $this->_iId > 0 ?
-          $this->_showMedia() :
-          $this->_showDefault());
+    if ($this->_aRequest['section'] == 'galleries' && $this->_iId > 0)
+      exit($this->_showMedia());
+
+    # Don't even try to manipulate data
+    elseif ($this->_aRequest['section'] == 'create' ||
+            $this->_aRequest['section'] == 'update' ||
+            $this->_aRequest['section'] == 'destroy')
+      Helper::redirectTo('/errors/404');
+
+    else
+      exit($this->_showDefault());
   }
 
   /**
