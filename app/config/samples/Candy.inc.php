@@ -9,6 +9,10 @@
 
 # Set up your SQL preferences. If they are incorrect, the website won't work.
 
+# SQL type
+# DEFAULT: mysql
+define('SQL_TYPE', 'mysql');
+
 # SQL host
 # DEFAULT: 'locahost'
 define('SQL_HOST', 'localhost');
