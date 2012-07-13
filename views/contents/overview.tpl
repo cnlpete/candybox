@@ -35,9 +35,10 @@
           </a>
         </td>
         <td>
-          <time datetime='{$c.date.w3c}'>
+          <time datetime='{$c.date.w3c}' class='js-timeago'>
             {$c.date.raw|date_format:$lang.global.time.format.datetime}
-          </time></td>
+          </time>
+        </td>
         <td>
           <a href='{$c.author.url}'>
             {$c.author.full_name}

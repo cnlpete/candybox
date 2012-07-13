@@ -66,12 +66,12 @@
           {foreach $c.dates as $d}
             <tr>
               <td>
-                <time datetime='{$d.start_date.w3c_date}'>
+                <time datetime='{$d.start_date.w3c_date}' class='js-timeago'>
                   {$d.start_date.raw|date_format:$lang.global.time.format.date}
                 </time>
                 {if $d.end_date.raw}
                   &nbsp;-&nbsp;
-                  <time datetime='{$d.end_date.w3c_date}'>
+                  <time datetime='{$d.end_date.w3c_date}' class='js-timeago'>
                     {$d.end_date.raw|date_format:$lang.global.time.format.date}
                   </time>
                 {/if}

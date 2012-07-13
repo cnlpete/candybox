@@ -28,7 +28,7 @@
                       {$data.title}
                     </a>,
                     &nbsp;
-                    <time datetime='{$data.date.w3c}'>
+                    <time datetime='{$data.date.w3c}' class='js-timeago'>
                       {$data.date.raw|date_format:$lang.global.time.format.datetime}
                     </time>
                   </li>

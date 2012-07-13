@@ -52,18 +52,19 @@
         <td class='center'>
           {if $u.verification_code}
             <span style='text-decoration:line-through'>
-              <time datetime='{$u.date.w3c}'>
+              <time datetime='{$u.date.w3c}' class='js-timeago'>
                 {$u.date.raw|date_format:$lang.global.time.format.date}
-              </time></span>
+              </time>
+            </span>
           {else}
-            <time datetime='{$u.date.w3c}'>
+            <time datetime='{$u.date.w3c}' class='js-timeago'>
               {$u.date.raw|date_format:$lang.global.time.format.date}
             </time>
           {/if}
         </td>
         <td class='center'>
           {if $u.last_login}
-            <time datetime='{$u.last_login.w3c}'>
+            <time datetime='{$u.last_login.w3c}' class='js-timeago'>
               {$u.last_login.raw|date_format:$lang.global.time.format.date}
             </time>
           {else}

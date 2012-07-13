@@ -20,7 +20,7 @@
         <p>
           {$lang.global.last_update}:
           &nbsp;
-          <time datetime='{$c.date.w3c}'>
+          <time datetime='{$c.date.w3c}' class='js-timeago'>
             {$c.date.raw|date_format:$lang.global.time.format.datetime}
           </time>
           &nbsp;

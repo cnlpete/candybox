@@ -20,7 +20,7 @@
           {$lang.users.label.registered_since}
         </td>
         <td>
-          <time datetime='{$u.date.w3c}'>
+          <time datetime='{$u.date.w3c}' class='js-timeago'>
             {$u.date.raw|date_format:$lang.global.time.format.date}
           </time>
         </td>

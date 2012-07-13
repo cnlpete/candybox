@@ -44,9 +44,11 @@
                 {$f.content}
               {/if}
             </td>
-            <td><time datetime='{$f.date.w3c}' class='js-timeago'>
+            <td>
+              <time datetime='{$f.date.w3c}' class='js-timeago'>
                 {$f.date.raw|date_format:$lang.global.time.format.date}
-              </time></td>
+              </time>
+            </td>
             <td>
               {$f.size}
               {if $_SESSION.user.role >= 3}
