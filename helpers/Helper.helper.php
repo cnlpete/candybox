@@ -388,22 +388,22 @@ class Helper {
    *
    * @static
    * @access public
-   * @param mixed $mStr string to format
+   * @param string $sStr string to format
    * @param string $sHighlight string to highlight
    * @return string $sStr formatted string
    * @see vendor/candyCMS/core/Bbcode/Bbcode.controller.php
    *
    */
-  public static function formatOutput($mStr, $sHighlight = '') {
+  public static function formatOutput($sStr, $sHighlight = '') {
     if ($sHighlight)
-      $mStr = str_ireplace($sHighlight, '<mark>' . $sHighlight . '</mark>', $mStr);
+      $sStr = str_ireplace($sHighlight, '<mark>' . $sHighlight . '</mark>', $sStr);
 
     if (class_exists('\CandyCMS\Plugins\Bbcode') == true) {
       $oBbcode = new Bbcode();
-      return $oBbcode->getFormatedText($mStr);
+      return $oBbcode->getFormatedText($sStr);
     }
 
-    return $mStr;
+    return $sStr;
   }
 
   /**
@@ -413,7 +413,6 @@ class Helper {
    * @access public
    * @param string $sTable table to fetch data from
    * @return integer latest ID
-   * @todo test
    *
    */
   public static function getLastEntry($sTable) {
@@ -424,7 +423,7 @@ class Helper {
       $oQuery = $oDb->query("SELECT id FROM " . SQL_PREFIX . $sTable . " ORDER BY id DESC LIMIT 1");
       $aRow = $oQuery->fetch();
 
-      return $aRow['id'];
+      return (int) $aRow['id'];
     }
     catch (AdvancedException $e) {
       AdvancedException::reportBoth('0104 - ' . $e->getMessage());

@@ -34,7 +34,7 @@ class Blogs extends Main {
 
     try {
       $oQuery  = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "blogs " . $sWhere);
-      return $oQuery->fetchColumn();
+      return (int) $oQuery->fetchColumn();
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth('0043 - ' . $p->getMessage());
@@ -79,7 +79,7 @@ class Blogs extends Main {
       $oQuery->bindValue(':commaSpaceTagnameComma', '%, ' . $sTagname . ',%', PDO::PARAM_STR);
       $oQuery->execute();
 
-      return $oQuery->fetchColumn();
+      return (int) $oQuery->fetchColumn();
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth('0043 - ' . $p->getMessage());

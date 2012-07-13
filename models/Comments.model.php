@@ -222,7 +222,7 @@ class Comments extends Main {
       $oQuery->execute();
 
       $aResult = $oQuery->fetch(PDO::FETCH_ASSOC);
-      return $aResult['parent_id'];
+      return (int) $aResult['parent_id'];
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth('0103 - ' . $p->getMessage());

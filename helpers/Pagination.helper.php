@@ -125,7 +125,7 @@ class Pagination {
    *
    */
   public function getOffset() {
-    return $this->_iOffset;
+    return (int) $this->_iOffset;
   }
 
   /**
@@ -136,7 +136,7 @@ class Pagination {
    *
    */
   public function getLimit() {
-    return $this->_iLimit;
+    return (int) $this->_iLimit;
   }
 
   /**
@@ -147,7 +147,7 @@ class Pagination {
    *
    */
   public function getPages() {
-    return $this->_iPages;
+    return (int) $this->_iPages;
   }
 
   /**
@@ -158,7 +158,7 @@ class Pagination {
    *
    */
   public function getCurrentPage() {
-    return $this->_iCurrentPage;
+    return (int) $this->_iCurrentPage;
   }
 
   /**

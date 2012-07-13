@@ -78,23 +78,30 @@ class Upload {
   }
 
   /**
-   * get the maximum upload Limit allowed by php.ini
+   * Get the maximum upload Limit allowed by php.ini.
    *
+   * @static
+   * @access public
+   * @param boolean $bToBytes convert to bytes?
    * @return integer the upload limit in bytes
    *
    */
   public static function getUploadLimit($bToBytes = true) {
-    $iMaxUpload = (int)(ini_get('upload_max_filesize'));
-    $iMaxPost = (int)(ini_get('post_max_size'));
+    $iMaxUpload   = (int)(ini_get('upload_max_filesize'));
+    $iMaxPost     = (int)(ini_get('post_max_size'));
     $iMemoryLimit = (int)(ini_get('memory_limit'));
-    // 1024 * 1024 = 1048576
-    return min($iMaxUpload, $iMaxPost, $iMemoryLimit) * ($bToBytes ? 1048576 : 1);
+
+    # 1024 * 1024 = 1048576
+    return (int) min($iMaxUpload, $iMaxPost, $iMemoryLimit) * ($bToBytes ? 1048576 : 1);
   }
 
   /**
-   * get the filesize of the about to be uploaded files
+   * Get the filesize of the about to be uploaded files.
    *
+   * @static
+   * @access public
    * @return integer the total file size
+   *
    */
   public function getFileSize() {
     $sType = isset($this->_aFile['image']) ? 'image' : 'file';
@@ -106,7 +113,7 @@ class Upload {
     else
       $iFileSize = $this->_aFile[$sType]['size'];
 
-    return $iFileSize > 0 ? $iFileSize : (self::getUploadLimit() + 1);
+    return (int) $iFileSize > 0 ? $iFileSize : (self::getUploadLimit() + 1);
   }
 
   /**

@@ -394,7 +394,7 @@ abstract class Main {
    *
    */
   public static function getLastInsertId() {
-    return self::$iLastInsertId;
+    return (int) self::$iLastInsertId;
   }
 
   /**

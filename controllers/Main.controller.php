@@ -367,7 +367,7 @@ abstract class Main {
    *
    */
   public function getId() {
-    return $this->_iId;
+    return (int) $this->_iId;
   }
 
   /**
