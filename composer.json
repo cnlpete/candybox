@@ -15,7 +15,7 @@
 
   "suggest": {
     "candyCMS/plugins": "Enhances core functionality.",
-    "candyCMS/tests": "Test for all core modules."
+    "candyCMS/tests": "Tests for all core modules."
   },
 
   "authors": [

@@ -15,7 +15,12 @@ namespace CandyCMS\Core\Helpers;
 use Smarty;
 use lessc;
 
-require_once PATH_STANDARD . '/vendor/smarty/smarty/distribution/libs/Smarty.class.php';
+# @todo remove deprecated dir
+if (file_exists(PATH_STANDARD . '/vendor/smarty/smarty/distribution/libs/Smarty.class.php'))
+  require_once PATH_STANDARD . '/vendor/smarty/smarty/distribution/libs/Smarty.class.php';
+
+else
+  require_once PATH_STANDARD . '/vendor/smarty/smarty/libs/Smarty.class.php';
 
 class SmartySingleton extends Smarty {
 
@@ -70,7 +75,14 @@ class SmartySingleton extends Smarty {
 
     $this->setCacheDir(PATH_STANDARD . '/' . CACHE_DIR);
     $this->setCompileDir(PATH_STANDARD . '/' . COMPILE_DIR);
-    $this->setPluginsDir(PATH_STANDARD . '/vendor/smarty/smarty/distribution/libs/plugins');
+
+    # @todo check real path
+    if (is_dir(PATH_STANDARD . '/vendor/smarty/smarty/distribution'))
+      $this->setPluginsDir(PATH_STANDARD . '/vendor/smarty/smarty/distribution/libs/plugins');
+
+    else
+      $this->setPluginsDir(PATH_STANDARD . '/vendor/smarty/smarty/libs/plugins');
+
     $this->setTemplateDir(PATH_STANDARD . '/vendor/candyCMS/core/views');
 
     # See http://www.smarty.net/docs/en/variable.merge.compiled.includes.tpl
