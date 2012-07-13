@@ -394,7 +394,7 @@ class Blogs extends Main {
                 PDO::PARAM_STR);
 
       $bReturn = $oQuery->execute();
-      parent::$iLastInsertId = Helper::getLastEntry($this->_sController);
+      parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
 
       return $bReturn;
     }

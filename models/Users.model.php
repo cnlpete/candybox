@@ -336,7 +336,7 @@ class Users extends Main {
                 PDO::PARAM_STR);
 
       $bReturn = $oQuery->execute();
-      parent::$iLastInsertId = Helper::getLastEntry('users');
+      parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
 
       return $bReturn;
     }

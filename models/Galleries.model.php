@@ -378,7 +378,7 @@ class Galleries extends Main {
                 PDO::PARAM_STR);
 
       $bReturn = $oQuery->execute();
-      parent::$iLastInsertId = Helper::getLastEntry('gallery_albums');
+      parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
 
       return $bReturn;
     }
@@ -571,7 +571,7 @@ class Galleries extends Main {
                 PDO::PARAM_STR);
 
       $bReturn = $oQuery->execute();
-      parent::$iLastInsertId = Helper::getLastEntry('gallery_files');
+      parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
 
       return $bReturn;
     }

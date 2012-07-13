@@ -194,7 +194,7 @@ class Downloads extends Main {
                 PDO::PARAM_STR);
 
       $bReturn = $oQuery->execute();
-      parent::$iLastInsertId = Helper::getLastEntry('downloads');
+      parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
 
       return $bReturn;
     }

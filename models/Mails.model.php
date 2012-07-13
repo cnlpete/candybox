@@ -242,7 +242,7 @@ class Mails extends Main {
           $oQuery->bindParam($sKey, isset($sValue) ? $sValue : '', PDO::PARAM_STR);
 
         $oQuery->execute();
-        parent::$iLastInsertId = Helper::getLastEntry('mails');
+        parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
       }
       catch (\PDOException $p) {
         try {

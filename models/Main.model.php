@@ -140,11 +140,13 @@ abstract class Main {
   public static function connectToDatabase() {
     if (empty(self::$_oDbStatic)) {
       try {
-				$sDatabase = defined('SQL_SINGLE_DB_MODE') && SQL_SINGLE_DB_MODE === true ?
+        $sSQLType   = defined('SQL_TYPE') ? strtolower(SQL_TYPE) : 'mysql';
+				$sDatabase  = defined('SQL_SINGLE_DB_MODE') && SQL_SINGLE_DB_MODE === true ?
 								SQL_DB :
 								SQL_DB . '_' . WEBSITE_MODE;
 
-        self::$_oDbStatic = new PDO('mysql:host=' . SQL_HOST . ';port=' . SQL_PORT . ';dbname=' . $sDatabase,
+
+        self::$_oDbStatic = new PDO($sSQLType . ':host=' . SQL_HOST . ';port=' . SQL_PORT . ';dbname=' . $sDatabase,
                         SQL_USER,
                         SQL_PASSWORD,
                         array(PDO::ATTR_PERSISTENT => true));

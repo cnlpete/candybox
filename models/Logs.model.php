@@ -136,7 +136,7 @@ class Logs extends Main {
       $oQuery->bindParam('result_flag', $bResultFlag, PDO::PARAM_BOOL);
 
       $bReturn = $oQuery->execute();
-      parent::$iLastInsertId = Helper::getLastEntry('logs');
+      parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
 
       return $bReturn;
     }

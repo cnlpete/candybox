@@ -179,7 +179,7 @@ class Comments extends Main {
       $oQuery->bindParam('parent_id', $this->_aRequest[$this->_sController]['parent_id'], PDO::PARAM_INT);
 
       $bReturn = $oQuery->execute();
-      parent::$iLastInsertId = Helper::getLastEntry('comments');
+      parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
 
       return $bReturn;
     }

@@ -263,7 +263,7 @@ class Calendars extends Main {
                 PDO::PARAM_INT);
 
       $bReturn = $oQuery->execute();
-      parent::$iLastInsertId = Helper::getLastEntry('calendars');
+      parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
 
       return $bReturn;
     }
