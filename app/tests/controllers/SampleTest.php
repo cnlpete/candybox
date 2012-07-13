@@ -30,6 +30,17 @@ class SampleTest extends \CandyCMS\Core\Controllers\CandyControllerTestCase {
   protected function setUp() {
     parent::setUp();
 
+    $this->aSession['user'] = array(
+        'email'       => '',
+        'facebook_id' => '',
+        'id'          => 0,
+        'name'        => '',
+        'surname'     => '',
+        'password'    => '',
+        'role'        => 0,
+        'full_name'   => ''
+    );
+
     $this->aRequest	= array('controller' => 'sample');
     $this->oObject  = new Sample($this->aRequest, $this->aSession);
   }
@@ -55,34 +66,4 @@ class SampleTest extends \CandyCMS\Core\Controllers\CandyControllerTestCase {
     $this->open(WEBSITE_URL . '/' . $this->aRequest['controller']);
     $this->verifyTextPresent('This is a sample extension.');
 	}
-
-  /**
-   * Use candyCMS' main test cases.
-   *
-   * @access public
-   *
-   */
-  public function testCreate() {
-    $this->create($this->aRequest['controller']);
-  }
-
-  /**
-   * Use candyCMS' main test cases.
-   *
-   * @access public
-   *
-   */
-  public function testUpdate() {
-    $this->update($this->aRequest['controller']);
-  }
-
-  /**
-   * Use candyCMS' main test cases.
-   *
-   * @access public
-   *
-   */
-  public function testDestroy() {
-    $this->destroy($this->aRequest['controller']);
-  }
 }
