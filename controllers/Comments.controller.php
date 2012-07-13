@@ -71,7 +71,6 @@ class Comments extends Main {
    *
    * @access protected
    * @return string HTML content
-	 * @todo prove if it works with captcha
    *
    */
   protected function _showFormTemplate() {

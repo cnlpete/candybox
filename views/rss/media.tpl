@@ -3,14 +3,14 @@
     xmlns:media="http://search.yahoo.com/mrss/"
     xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>{$WEBSITE_NAME} - {$r.title}</title>
-    <description>{$r.content}</description>
+    <title>{$WEBSITE_NAME} - {$data.title}</title>
+    <description>{$data.content}</description>
     <language>{$WEBSITE_LOCALE}</language>
-    <link>{$_link_}</link>
-    <copyright>{$_copyright_}</copyright>
+    <link>{$data.url}</link>
+    <copyright>{$data.author.full_name}</copyright>
     <pubDate>{if $WEBSITE_MODE !== 'test'}{$smarty.now|date_format:'%a, %d %b %Y %H:%M:%S %z'}{/if}</pubDate>
     <atom:link href="{$CURRENT_URL}" rel="self" type="application/rss+xml" />
-    {foreach $data as $d}
+    {foreach $data.files as $d}
     <item>
       <title>{$d.file}</title>
       <pubDate>{$d.date.rss}</pubDate>

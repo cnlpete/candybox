@@ -87,19 +87,7 @@ class Rss extends Main {
       $oModel = new $sModel($this->_aRequest, $this->_aSession);
 
       $aData  = $oModel->getId($this->_iId, false, true);
-
-      $this->oSmarty->assign('r', $aData[$this->_iId]);
-
-      # @todo: Deprecated... remove!
-      $this->oSmarty->assign('_copyright_', $aData[$this->_iId]['author']['full_name']);
-      $this->oSmarty->assign('_link_', Helper::removeSlash($aData[$this->_iId]['url']));
-      $sGalleryDate = $aData[$this->_iId]['date']['raw'];
-
-      $aData = & $aData[$this->_iId]['files'];
-      rsort($aData);
-
-      $this->oSmarty->assign('_pubdate_', count($aData) > 0 ? $aData[0]['date']['raw'] : $sGalleryDate);
-      $this->oSmarty->assign('data', $aData);
+      $this->oSmarty->assign('data', $aData[$this->_iId]);
     }
 
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);

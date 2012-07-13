@@ -56,7 +56,7 @@ class AdvancedException extends \Exception {
    *
    * @static
    * @access public
-   * @todo better use of request
+   * @todo better use of $_SERVER
    *
    */
   public static function writeLog($sMessage) {

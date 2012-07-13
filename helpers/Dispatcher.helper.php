@@ -95,7 +95,6 @@ class Dispatcher {
    * Handle the pre-defined actions.
    *
    * @access public
-   * @todo don't map all information to show action
    *
    */
   public function getAction() {

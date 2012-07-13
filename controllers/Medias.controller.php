@@ -26,7 +26,6 @@ class Medias extends Main {
    *
    * @access protected
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
-   * @todo page title
    *
    */
   protected function _create() {

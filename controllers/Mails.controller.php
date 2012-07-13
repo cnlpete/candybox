@@ -95,7 +95,6 @@ class Mails extends Main {
    * @access protected
    * @return string HTML content
    * @todo rename to _show?
-	 * @todo does it work with captcha?
    *
    */
   protected function _showCreateMailTemplate() {
