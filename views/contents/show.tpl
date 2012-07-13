@@ -3,6 +3,9 @@
     <article class='contents'>
       <header class='page-header'>
         <h1>
+          {if $c.published == false}
+            {$lang.global.not_published}:&nbsp;
+          {/if}
           {$c.title}
           {if $_SESSION.user.role >= 3}
             <a href='{$c.url_update}'>
