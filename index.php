@@ -19,9 +19,6 @@ ini_set('arg_separator.output', '&amp;');
 ini_set('zlib.output_compression', "On");
 ini_set('zlib.output_compression_level', 9);
 
-# Set standard timezone for PHP5.
-date_default_timezone_set('Europe/Berlin');
-
 # Current version we are working with.
 define('VERSION', '20120628');
 
