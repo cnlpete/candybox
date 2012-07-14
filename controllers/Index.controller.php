@@ -290,22 +290,32 @@ class Index {
     switch (substr($sLanguage, 0, 2)) {
       case 'de':
         $sLocale = 'de_DE';
+        ini_set('date.timezone', 'Europe/Berlin');
+
         break;
 
       case 'en':
         $sLocale = 'en_US';
+        ini_set('date.timezone', 'America/New_York');
+
         break;
 
       case 'es':
         $sLocale = 'es_ES';
+        ini_set('date.timezone', 'Europe/Madrid');
+
         break;
 
       case 'fr':
         $sLocale = 'fr_FR';
+        ini_set('date.timezone', 'Europe/Paris');
+
         break;
 
       case 'pt':
         $sLocale = 'pt_PT';
+        ini_set('date.timezone', 'Europe/Lisbon');
+
         break;
     }
 

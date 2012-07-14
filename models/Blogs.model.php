@@ -538,7 +538,7 @@ class Blogs extends Main {
    * @return array data from _setData
    *
    */
-  public function getOverviewByMonthLimit($iLimit = 12) {
+  public function getOverviewByMonth($iLimit = 12) {
     try {
       # Show unpublished items and entries with diffent languages to moderators or administrators only
       $sWhere = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ?
