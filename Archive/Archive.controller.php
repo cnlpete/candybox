@@ -54,7 +54,7 @@ final class Archive {
       $aMonthNames  = array();
       $aMonths      = array();
 
-      foreach ($oModel->getOverviewByMonthLimit(defined('PLUGIN_ARCHIVE_RANGE') ? PLUGIN_ARCHIVE_RANGE : '12') as $aRow) {
+      foreach ($oModel->getOverviewByMonth(defined('PLUGIN_ARCHIVE_RANGE') ? PLUGIN_ARCHIVE_RANGE : '12') as $aRow) {
         # Date format the month
         $sMonth = date('n', $aRow['date']['raw']);
         if (!isset($aMonthNames[$sMonth]))
