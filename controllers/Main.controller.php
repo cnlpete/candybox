@@ -600,11 +600,16 @@ abstract class Main {
    *
    * @access protected
    * @param string|array $mAdditionalCaches specify aditional caches to clear on success
+   * @param string $sRedirectURL specify the URL to redirect to after execution
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _create($mAdditionalCaches = null) {
+  protected function _create($mAdditionalCaches = null, $sRedirectURL = '') {
     $this->_setError('title');
+
+    $sRedirectURL = empty($sRedirectURL) ?
+            '/' . $this->_sController :
+            $sRedirectURL;
 
     if ($this->_aError)
       return $this->_showFormTemplate();
@@ -625,10 +630,10 @@ abstract class Main {
         if ($mAdditionalCaches)
           $this->_clearCaches($mAdditionalCaches);
 
-        return Helper::successMessage(I18n::get('success.create'), '/' . $this->_sController);
+        return Helper::successMessage(I18n::get('success.create'), $sRedirectURL);
       }
       else
-        return Helper::errorMessage(I18n::get('error.sql.query'), '/' . $this->_sController);
+        return Helper::errorMessage(I18n::get('error.sql.query'), $sRedirectURL);
     }
   }
 
@@ -683,11 +688,16 @@ abstract class Main {
    *
    * @access protected
    * @param string|array $mAdditionalCaches specify aditional caches to clear on success
+   * @param string $sRedirectURL specify the URL to redirect to after execution
    * @return boolean status of model action
    *
    */
-  protected function _destroy($mAdditionalCaches = null) {
+  protected function _destroy($mAdditionalCaches = null, $sRedirectURL = '') {
     $bReturn = $this->_oModel->destroy($this->_iId) === true;
+
+    $sRedirectURL = empty($sRedirectURL) ?
+            '/' . $this->_sController :
+            $sRedirectURL;
 
     Logs::insert( $this->_sController,
                   $this->_aRequest['action'],
@@ -702,11 +712,11 @@ abstract class Main {
       if ($mAdditionalCaches)
         $this->_clearCaches($mAdditionalCaches);
 
-      return Helper::successMessage(I18n::get('success.destroy'), '/' . $this->_sController);
+      return Helper::successMessage(I18n::get('success.destroy'), $sRedirectURL);
     }
 
     else
-      return Helper::errorMessage(I18n::get('error.sql'), '/' . $this->_sController);
+      return Helper::errorMessage(I18n::get('error.sql'), $sRedirectURL);
   }
 
   /**
