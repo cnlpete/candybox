@@ -316,9 +316,9 @@ class Index {
       define('WEBSITE_LOCALE', $sLocale);
 
     setlocale(LC_ALL, WEBSITE_LOCALE);
-    new I18n(WEBSITE_LANGUAGE, $this->_aSession);
+    new I18n($sLanguage, $this->_aSession);
 
-    return WEBSITE_LOCALE;
+    return $sLocale;
   }
 
   /**
