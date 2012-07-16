@@ -540,4 +540,21 @@ class Helper {
     else
       return $sStr;
   }
+
+  /**
+   * Recursively replace one Array with values from a second array.
+   *
+   * @param array $aAr1 this is the target array
+   * @param array $aAr2 all values from $aAr1 will be replaced with values from this array
+   */
+  public static function recursiveOnewayArrayReplace(&$aAr1, &$aAr2) {
+    foreach ($aAr2 as $sKey => &$mValue) {
+      if (isset($aAr2[$sKey])) {
+        if (is_array($mValue))
+          self::recursiveOnewayArrayReplace ($aAr1[$sKey], $aAr2[$sKey]);
+        else
+          $aAr1[$sKey] = $aAr2[$sKey];
+      }
+    }
+  }
 }

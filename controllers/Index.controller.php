@@ -26,6 +26,7 @@ require_once PATH_STANDARD . '/vendor/candyCMS/core/models/Main.model.php';
 require_once PATH_STANDARD . '/vendor/candyCMS/core/controllers/Main.controller.php';
 require_once PATH_STANDARD . '/vendor/candyCMS/core/controllers/Sessions.controller.php';
 require_once PATH_STANDARD . '/vendor/candyCMS/core/controllers/Logs.controller.php';
+require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Helper.helper.php';
 require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/AdvancedException.helper.php';
 require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Dispatcher.helper.php';
 require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/I18n.helper.php';
@@ -315,10 +316,10 @@ class Index {
     if (!defined('WEBSITE_LOCALE'))
       define('WEBSITE_LOCALE', $sLocale);
 
-    setlocale(LC_ALL, WEBSITE_LOCALE);
-    new I18n(WEBSITE_LANGUAGE, $this->_aSession);
+    setlocale(LC_ALL, $sLocale);
+    new I18n($sLanguage, $this->_aSession);
 
-    return WEBSITE_LOCALE;
+    return $sLocale;
   }
 
   /**

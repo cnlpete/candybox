@@ -51,14 +51,62 @@ class I18n {
     I18n::$_oObject = $this;
 
     if (!isset(I18n::$_aLang) || WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test') {
-      $sLanguageFile = PATH_STANDARD . '/app/languages/' . $sLanguage . '.language.yml';
+      $sLanguageFile = $sLanguage . '.language.yml';
+      $sLanguagePath = PATH_STANDARD . '/app/languages/' . $sLanguageFile;
 
-      # Bugfix: Remove mistakenly set cookie to avoid exceptions.
-      if (!file_exists($sLanguageFile))
+      # Remove mistakenly set cookie to avoid exceptions.
+      if (!file_exists($sLanguagePath))
         $_COOKIE['default_language'] = 'en';
 
+      # reload the files, if necessary
       if (WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test' || !isset($aSession['lang'])) {
-        I18n::$_aLang = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sLanguageFile));
+        # load the core language file
+        I18n::$_aLang = \Symfony\Component\Yaml\Yaml::parse(file_get_contents(PATH_STANDARD . '/vendor/candyCMS/core/languages/' . $sLanguageFile));
+
+        # load the plugin language files and merge them
+        //FIXME only load enabled plugins ...
+        $sPluginPath = PATH_STANDARD . '/vendor/candyCMS/plugins/';
+        $oDir = opendir($sPluginPath);
+        $aPlugins = array();
+        while ($sFile = readdir($oDir)) {
+          if ($sFile == '.' || $sFile == '..')
+            continue;
+          $aPlugins[] = $sFile;
+        }
+        foreach ($aPlugins as $sPlugin)
+          if (file_exists($sPluginPath . $sPlugin . '/languages')) {
+            $aPluginLang = array();
+            if (file_exists($sPluginPath . $sPlugin . '/languages/' . $sLanguageFile))
+              $aPluginLang = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sPluginPath . $sPlugin . '/languages/' . $sLanguageFile));
+            else
+              # default to en, if required language si not found
+              $aPluginLang = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sPluginPath . $sPlugin . '/languages/en.language.yml'));
+
+            Helper::recursiveOnewayArrayReplace(I18n::$_aLang, $aPluginLang);
+          }
+
+        # load the extension languag-files and merge them
+        if (EXTENSION_CHECK) {
+          $sExtensionLanguagePath = PATH_STANDARD . '/app/extensions/languages/';
+          $oDir = opendir($sExtensionLanguagePath);
+          while ($sFile = readdir($oDir)) {
+            if ($sFile == '.' || $sFile == '..')
+              continue;
+
+            $aExtensionLang = array();
+            if (file_exists($sExtensionLanguagePath . $sFile . '/' . $sLanguageFile))
+              $aExtensionLang = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sExtensionLanguagePath . $sFile . '/' . $sLanguageFile));
+            else
+              # default to en, if required language si not found
+              $aExtensionLang = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sExtensionLanguagePath . $sFile . '/en.language.yml'));
+
+            Helper::recursiveOnewayArrayReplace(I18n::$_aLang, $aExtensionLang);
+          }
+        }
+
+        # merge all that with the users cusom language file
+        $aUserLang = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sLanguagePath));
+        Helper::recursiveOnewayArrayReplace(I18n::$_aLang, $aUserLang);
 
         if ($aSession != null)
           $aSession['lang'] = & I18n::$_aLang;
