@@ -23,7 +23,6 @@ class Mails extends \CandyCMS\Core\Controllers\Mails {
    *
    * @access public
    * @return string
-   * @todo test
    *
    */
   public function update() {

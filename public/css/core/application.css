@@ -2603,3 +2603,4 @@ table tr.result-error {
 }
 .alert p { margin-bottom:0px; }
 .addthis_default_style { float:right; }
+time { cursor:help; }
