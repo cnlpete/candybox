@@ -9,7 +9,8 @@
 
 # Set up your SQL preferences. If they are incorrect, the website won't work.
 
-# SQL type
+# SQL type.
+# SUPPORTED: mysql / 
 # DEFAULT: mysql
 define('SQL_TYPE', 'mysql');
 
@@ -103,13 +104,13 @@ define('WEBSITE_MODE', 'development');
 # ------------------------------------------------------------------------------
 
 # Set true, if you want to build your own app. Also, this is always set to true
-# in development or testing mode.
+# in development or testing mode. Setting to false will speed the page up.
 # DEFAULT: false
 define('ALLOW_EXTENSIONS', false);
 
 # ------------------------------------------------------------------------------
 
-# Tell the allowed plugins seperated by comma
+# Tell the allowed plugins seperated by comma.
 # DEFAULT: 'Bbcode,FormatTimestamp,Headlines,Archive,TinyMCE'
 # OTHER OFFICIALLY SUPPORTED PLUGINS: Facebook, Cronjob, Piwik, Analytics,
 # TagCloud, AddThis, SocialSharePrivacy
@@ -117,7 +118,7 @@ define('ALLOW_PLUGINS', 'Bbcode,FormatTimestamp,Headlines,Archive,TinyMCE');
 
 # ------------------------------------------------------------------------------
 
-# Allow this software to connect the CandyCMS website to check for an update.
+# Allow this software to connect to the candyCMS website to check for an update.
 # OPTIONS: true / false
 # DEFAULT: true
 define('ALLOW_VERSION_CHECK', true);
@@ -125,21 +126,24 @@ define('ALLOW_VERSION_CHECK', true);
 # ------------------------------------------------------------------------------
 
 # Smush.it can reduce your image size. Do not allow if you want maximum quality
-# for your images.
+# for your images or uploading causes timeouts.
 # OPTIONS: true / false
 # DEFAULT: true
 define('ALLOW_SMUSHIT', true);
 
 # ------------------------------------------------------------------------------
 
-# Set the standard language (file must be placed in "languages")
-# NOTE: lower cases required!
+# Set the standard language (file must be placed in "languages"). Note that the
+# language will be determined by the browsers settings. If there is no
+# translation available and the user didn't choose a language by himself, we fall
+# back to the system language.
 # DEFAULT: 'en'
 define('DEFAULT_LANGUAGE', 'en');
 
 # ------------------------------------------------------------------------------
 
-# Enter a random hash to higher the security of md5 hashs
+# Enter a random hash to higher the security of md5 hashs. This hash is used by
+# several methods and as md5 salt, too.
 # DEFAULT: None. Create one before you install this software
 # NOTE: AVOID THE CHANGE OF THIS HASH AFTER USERS HAVE REGISTERED OR YOU WILL
 # DESTROY THEIR LOGINS!
@@ -147,7 +151,8 @@ define('RANDOM_HASH', '');
 
 # ------------------------------------------------------------------------------
 
-# Set maximum image/video width (MEDIA_DEFAULT_X) and height (MEDIA_DEFAULT_Y) in px.
+# Set maximum image/video width (MEDIA_DEFAULT_X) and height (MEDIA_DEFAULT_Y) in
+# px.
 # Larger images and videos will be reseized or scaled down!
 # DEFAULT: 660
 define('MEDIA_DEFAULT_X', '620');
