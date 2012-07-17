@@ -191,22 +191,24 @@ class Helper {
    * @return string URL of the avatar
    *
    */
-  public static function getAvatar($iSize, $iUserId, $sEmail = '', $bUseGravatar = false) {
+  public static function getAvatar($iSize, $iUserId, $sEmail, $bUseGravatar = false) {
     $sFilePath = Helper::removeSlash(PATH_UPLOAD . '/users/' . $iSize . '/' . $iUserId);
 
-    if ($bUseGravatar == false && file_exists($sFilePath . '.jpg'))
+    if ($bUseGravatar === false && file_exists($sFilePath . '.jpg'))
       return '/' . $sFilePath . '.jpg';
 
-    elseif ($bUseGravatar == false && file_exists($sFilePath . '.png'))
+    elseif ($bUseGravatar === false && file_exists($sFilePath . '.png'))
       return '/' . $sFilePath . '.png';
 
-    elseif ($bUseGravatar == false && file_exists($sFilePath . '.gif'))
+    elseif ($bUseGravatar === false && file_exists($sFilePath . '.gif'))
       return '/' . $sFilePath . '.gif';
 
     else {
       if (!is_int($iSize))
         $iSize = POPUP_DEFAULT_X;
 
+      # Bugfix: Make sure, that user wants to show his Gravatar and system url does'nt match with user ones.
+      $sEmail = $bUseGravatar === true ? $sEmail : md5(WEBSITE_MAIL_NOREPLY);
       return 'http://www.gravatar.com/avatar/' . md5($sEmail) . '.jpg?s=' . $iSize . '&d=mm';
     }
   }

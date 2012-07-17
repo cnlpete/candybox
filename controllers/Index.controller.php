@@ -280,10 +280,19 @@ class Index {
               array_merge($this->_aRequest, $this->_aCookie) :
               $this->_aRequest;
 
-      $sLanguage = isset($aRequest['default_language']) &&
-              file_exists(PATH_STANDARD . '/app/languages/' . strtolower((string) $aRequest['default_language']) . '.language.yml') ?
-              strtolower((string) $aRequest['default_language']) :
-              strtolower(DEFAULT_LANGUAGE);
+      # Get language by browser
+      $aBrowserLanguage = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+      $sBrowserLanguage = (string) substr($aBrowserLanguage[0], 0, 2);
+
+      if (isset($aRequest['default_language']) &&
+              file_exists(PATH_STANDARD . '/app/languages/' . strtolower((string) $aRequest['default_language']) . '.language.yml'))
+        $sLanguage = strtolower((string) $aRequest['default_language']);
+
+      elseif (file_exists(PATH_STANDARD . '/app/languages/' . strtolower($sBrowserLanguage) . '.language.yml'))
+        $sLanguage = $sBrowserLanguage;
+
+      else
+        $sLanguage = strtolower(DEFAULT_LANGUAGE);
     }
 
     # Set iso language codes
@@ -326,9 +335,9 @@ class Index {
       define('WEBSITE_LOCALE', $sLocale);
 
     setlocale(LC_ALL, WEBSITE_LOCALE);
-    new I18n(WEBSITE_LANGUAGE, $this->_aSession);
+    new I18n($sLanguage, $this->_aSession);
 
-    return WEBSITE_LOCALE;
+    return $sLocale;
   }
 
   /**
