@@ -281,32 +281,51 @@ class Index {
               array_merge($this->_aRequest, $this->_aCookie) :
               $this->_aRequest;
 
-      $sLanguage = isset($aRequest['default_language']) &&
-              file_exists(PATH_STANDARD . '/app/languages/' . strtolower((string) $aRequest['default_language']) . '.yml') ?
-              strtolower((string) $aRequest['default_language']) :
-              strtolower(DEFAULT_LANGUAGE);
+      # Get language by browser
+      $aBrowserLanguage = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+      $sBrowserLanguage = (string) substr($aBrowserLanguage[0], 0, 2);
+
+      if (isset($aRequest['default_language']) &&
+              file_exists(PATH_STANDARD . '/app/languages/' . strtolower((string) $aRequest['default_language']) . '.yml'))
+        $sLanguage = strtolower((string) $aRequest['default_language']);
+
+      elseif (file_exists(PATH_STANDARD . '/app/languages/' . strtolower($sBrowserLanguage) . '.language.yml'))
+        $sLanguage = $sBrowserLanguage;
+
+      else
+        $sLanguage = strtolower(DEFAULT_LANGUAGE);
     }
 
     # Set iso language codes
     switch (substr($sLanguage, 0, 2)) {
       case 'de':
         $sLocale = 'de_DE';
+        ini_set('date.timezone', 'Europe/Berlin');
+
         break;
 
       case 'en':
         $sLocale = 'en_US';
+        ini_set('date.timezone', 'America/New_York');
+
         break;
 
       case 'es':
         $sLocale = 'es_ES';
+        ini_set('date.timezone', 'Europe/Madrid');
+
         break;
 
       case 'fr':
         $sLocale = 'fr_FR';
+        ini_set('date.timezone', 'Europe/Paris');
+
         break;
 
       case 'pt':
         $sLocale = 'pt_PT';
+        ini_set('date.timezone', 'Europe/Lisbon');
+
         break;
     }
 

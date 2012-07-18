@@ -119,14 +119,17 @@ abstract class Main {
   }
 
   /**
-   * Close DB connection.
+   * Tear down actions.
+   *
+   * Not unsetting the database, because it is unset by Index.controller.php.
    *
    * @access public
    * @return null
    *
    */
   public function __destruct() {
-    # Not unsetting the database, because it is unset by Index.controller.php.
+    # We must reset saved data due to wrong output
+    $this->_aData = array();
   }
 
   /**
