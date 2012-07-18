@@ -265,36 +265,25 @@ class Index {
     if (!defined('DEFAULT_LANGUAGE'))
       define('DEFAULT_LANGUAGE', 'en');
 
-    # We got a language request? Let's switch the language!
-    # Bugfix: Added "$this->_aRequest['blogs']" to make a blog update possible.
-    if (isset($this->_aRequest['language']) &&
-            file_exists(PATH_STANDARD . '/app/languages/' . (string) $this->_aRequest['language'] . '.yml') &&
-            !isset($this->_aRequest['blogs'])) {
-      $sLanguage = (string) $this->_aRequest['language'];
-      setcookie('default_language', (string) $this->_aRequest['language'], time() + 2592000, '/');
-      return Helper::redirectTo('/');
+    $aRequest = (isset($this->_aCookie) && is_array($this->_aCookie)) ?
+                  array_merge($this->_aRequest, $this->_aCookie) :
+                  $this->_aRequest;
+
+    # Get language by browser
+    $aBrowserLanguage = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+    $sBrowserLanguage = (string) substr($aBrowserLanguage[0], 0, 2);
+
+      # We got a language request? This si either done via putting ?mylanguage=en or via cookie Let's switch the language!
+    if (isset($aRequest['mylanguage']) &&
+        file_exists(PATH_STANDARD . '/app/languages/' . strtolower((string) $aRequest['mylanguage']) . '.yml')) {
+      $sLanguage = strtolower((string) $aRequest['mylanguage']);
+      setcookie('mylanguage', (string) $this->_aRequest['mylanguage'], time() + 2592000, '/');
     }
+    elseif (file_exists(PATH_STANDARD . '/app/languages/' . strtolower($sBrowserLanguage) . '.yml'))
+      $sLanguage = $sBrowserLanguage;
 
-    # There is no request, but there might be a cookie instead.
-    else {
-      $aRequest = isset($this->_aCookie) && is_array($this->_aCookie) ?
-              array_merge($this->_aRequest, $this->_aCookie) :
-              $this->_aRequest;
-
-      # Get language by browser
-      $aBrowserLanguage = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-      $sBrowserLanguage = (string) substr($aBrowserLanguage[0], 0, 2);
-
-      if (isset($aRequest['default_language']) &&
-              file_exists(PATH_STANDARD . '/app/languages/' . strtolower((string) $aRequest['default_language']) . '.yml'))
-        $sLanguage = strtolower((string) $aRequest['default_language']);
-
-      elseif (file_exists(PATH_STANDARD . '/app/languages/' . strtolower($sBrowserLanguage) . '.language.yml'))
-        $sLanguage = $sBrowserLanguage;
-
-      else
-        $sLanguage = strtolower(DEFAULT_LANGUAGE);
-    }
+    else
+      $sLanguage = strtolower(DEFAULT_LANGUAGE);
 
     # Set iso language codes
     switch (substr($sLanguage, 0, 2)) {
