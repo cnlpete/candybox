@@ -268,7 +268,7 @@ class Index {
     # We got a language request? Let's switch the language!
     # Bugfix: Added "$this->_aRequest['blogs']" to make a blog update possible.
     if (isset($this->_aRequest['language']) &&
-            file_exists(PATH_STANDARD . '/app/languages/' . (string) $this->_aRequest['language'] . '.language.yml') &&
+            file_exists(PATH_STANDARD . '/app/languages/' . (string) $this->_aRequest['language'] . '.yml') &&
             !isset($this->_aRequest['blogs'])) {
       $sLanguage = (string) $this->_aRequest['language'];
       setcookie('default_language', (string) $this->_aRequest['language'], time() + 2592000, '/');
@@ -282,7 +282,7 @@ class Index {
               $this->_aRequest;
 
       $sLanguage = isset($aRequest['default_language']) &&
-              file_exists(PATH_STANDARD . '/app/languages/' . strtolower((string) $aRequest['default_language']) . '.language.yml') ?
+              file_exists(PATH_STANDARD . '/app/languages/' . strtolower((string) $aRequest['default_language']) . '.yml') ?
               strtolower((string) $aRequest['default_language']) :
               strtolower(DEFAULT_LANGUAGE);
     }

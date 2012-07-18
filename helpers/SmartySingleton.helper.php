@@ -137,14 +137,23 @@ class SmartySingleton extends Smarty {
             'mb'                => ($iMaximumUploadSize / 1048576) . 'MB'),
         'json_language'         => I18n::getJson()));
 
-    $this->assign('lang', I18n::getArray());
-
     # Do we want autoloading of pages?
     $aAutoload = array(
         'enabled' => !defined('AUTOLOAD') || AUTOLOAD ? true : false,
         'times'   => !defined('AUTOLOAD_TIMES') ? 3 : AUTOLOAD_TIMES
     );
     $this->assign('_AUTOLOAD_', $aAutoload);
+  }
+
+  /**
+  * Assign the language array to smartys templates
+  *
+  * @access public
+  * @param array $aLang the language array
+  *
+  */
+  public function setDefaultLanguage(&$aLang) {
+    $this->assign('lang', $aLang);
   }
 
   /**
