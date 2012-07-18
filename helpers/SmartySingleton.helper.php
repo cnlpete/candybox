@@ -115,7 +115,6 @@ class SmartySingleton extends Smarty {
     $this->assign('THUMB_DEFAULT_X', THUMB_DEFAULT_X);
     $this->assign('VERSION', VERSION);
     $this->assign('WEBSITE_COMPRESS_FILES', WEBSITE_COMPRESS_FILES);
-    $this->assign('WEBSITE_LANGUAGE', WEBSITE_LANGUAGE);
     $this->assign('WEBSITE_LOCALE', WEBSITE_LOCALE);
     $this->assign('WEBSITE_MODE', WEBSITE_MODE);
     $this->assign('WEBSITE_NAME', WEBSITE_NAME);
@@ -152,8 +151,9 @@ class SmartySingleton extends Smarty {
   * @param array $aLang the language array
   *
   */
-  public function setDefaultLanguage(&$aLang) {
+  public function setDefaultLanguage(&$aLang, $sLanguage) {
     $this->assign('lang', $aLang);
+    $this->assign('WEBSITE_LANGUAGE', $sLanguage);
   }
 
   /**

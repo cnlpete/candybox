@@ -96,7 +96,7 @@ class I18n {
     # already loaded?
     if (isset(I18n::$_aLang[$sLanguage])) {
       self::$_sLanguage = $sLanguage;
-      SmartySingleton::getInstance()->setDefaultLanguage(self::$_aLang[$sLanguage]);
+      SmartySingleton::getInstance()->setDefaultLanguage(self::$_aLang[$sLanguage], $sLanguage);
       return true;
     }
 
@@ -158,7 +158,7 @@ class I18n {
     Helper::recursiveOnewayArrayReplace(I18n::$_aLang, $aUserLang);
 
     self::$_sLanguage = $sLanguage;
-    SmartySingleton::getInstance()->setDefaultLanguage(self::$_aLang[$sLanguage]);
+    SmartySingleton::getInstance()->setDefaultLanguage(self::$_aLang[$sLanguage], $sLanguage);
 
     return true;
   }
