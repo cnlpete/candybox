@@ -1,1 +1,6 @@
 captcha: Captcha
+
+error:
+  captcha:
+    incorrect: Der Code war leider nicht korrekt!
+    loading: Captcha konnte nicht geladen werden, bitte aktiviere Javascript!
