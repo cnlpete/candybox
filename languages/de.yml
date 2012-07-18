@@ -190,9 +190,6 @@ error:
   404:
     info: Die angeforderte URL wurde nicht gefunden. Entweder haben Sie auf einen fehlerhaften Link geklickt, die Seite wurde gelöscht oder die URL ist falsch eingegeben worden.
     title: Error 404 - URL nicht gefunden
-  captcha:
-    incorrect: Der Code war leider nicht korrekt!
-    loading: Captcha konnte nicht geladen werden, bitte aktiviere Javascript!
   file:
     destroy: Die Datei konnte nicht gelöscht werden!
     size: Maximale Dateigröße von %s erreicht!

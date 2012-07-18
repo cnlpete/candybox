@@ -207,9 +207,6 @@ error:
   404:
     info: The requested URL was not found. Either you clicked on a faulty link, the page has been deleted or the URL has been entered incorrectly.
     title: Error 404
-  captcha:
-    incorrect: The code was incorrect!
-    loading: Captcha could not be loaded, please activate Javascript!
   file:
     destroy: This file could not be deleted!
     size: Your file is bigger than %s!
