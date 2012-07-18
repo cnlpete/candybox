@@ -173,5 +173,3 @@ CREATE TABLE `%SQL_PREFIX%users` (
   UNIQUE KEY `api_token` (`api_token`),
   KEY `name` (`name`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `%SQL_PREFIX%mails`;
