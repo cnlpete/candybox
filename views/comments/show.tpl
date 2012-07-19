@@ -57,7 +57,7 @@
               {if $_SESSION.user.role >= 3}
                 &nbsp;
                 <a href="#" onclick="confirmDestroy('{$c.url_destroy}')">
-                  <span class='icon-pencil js-tooltip'
+                  <span class='icon-trash js-tooltip'
                         title='{$lang.global.destroy.destroy}'></span>
                 </a>
               {/if}

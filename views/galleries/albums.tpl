@@ -44,8 +44,8 @@
               <li>
                 <a href='{$a.url}' class='thumbnail'>
                   <img src='{$f.url_32}'
-                      alt='{$f.file}'
-                      height='32' width='32' />
+                       alt='{$f.file}'
+                       height='32' width='32' />
                 </a>
               </li>
             {/foreach}

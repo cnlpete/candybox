@@ -3,7 +3,7 @@
     <p class='center'>
       <a href='/{$_REQUEST.controller}/create'>
         <span class='icon-plus'
-              title='{$lang.global.create.entry}'></span>
+              title='{$lang.users.title.create}'></span>
         {$lang.users.title.create}
       </a>
     </p>
@@ -81,7 +81,7 @@
             </a>
             &nbsp;
             <a href='#' onclick="confirmDestroy('{$u.url_destroy}')">
-              <span class='icon-pencil js-tooltip'
+              <span class='icon-trash js-tooltip'
                     title='{$lang.global.destroy.destroy}'></span>
             </a>
           </td>

@@ -55,7 +55,7 @@
                         title='{$lang.global.update.update}'></span>
                 </a>
                 <a href='#' onclick="confirmDestroy('{$f.url_destroy}')">
-                  <span class='icon-pencil js-tooltip'
+                  <span class='icon-trash js-tooltip'
                         title='{$lang.global.destroy.destroy}'></span>
                 </a>
               </p>
