@@ -55,7 +55,7 @@ final class Bbcode {
     $sStr = preg_replace('#\[anchor:(.*)\]#Uis', '<a name="\1"></a>', $sStr);
 
     # Load specific icon
-    $sStr = preg_replace('#\[icon:(.*)\]#Uis', '<img src="{$_PATH.images}/candy.global/spacer.png" class="icon-\1" />', $sStr);
+    $sStr = preg_replace('#\[icon:(.*)\]#Uis', '<span class="icon-\1"></span>', $sStr);
 
     # Insert uploaded image
     $sStr = preg_replace('#\[img:(.*)\]#Uis', '<img src="{$_PATH.images}/\1" alt="\1" style="vertical-align:baseline" />', $sStr);
@@ -153,7 +153,7 @@ final class Bbcode {
     }
 
     while (preg_match("/\[toggle\=/isU", $sStr) && preg_match("/\[\/toggle]/isU", $sStr)) {
-      $sStr = preg_replace("/\[toggle\=(.+)\](.*)\[\/toggle]/isU", "<span class='js-toggle-headline'><img src='%PATH_IMAGES%/candy.global/spacer.png' class='icon-toggle_max' alt='' /> \\1</span><div class=\"js-toggle-element\">\\2</div>", $sStr);
+      $sStr = preg_replace("/\[toggle\=(.+)\](.*)\[\/toggle]/isU", "<span class='js-toggle-headline'>\\1</span><div class=\"js-toggle-element\">\\2</div>", $sStr);
     }
 
     # Bugfix: Fix quote and allow these tags
