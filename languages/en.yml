@@ -1,8 +1,3 @@
-website:
-  description: Free, fast and simple PHP CMS.
-  keywords: PHP, CMS, Free CMS, Open Source CMS
-  terms: Enter your terms here.
-
 global:
   about: About
   action: Action

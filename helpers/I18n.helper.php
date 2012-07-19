@@ -150,8 +150,8 @@ class I18n {
     Helper::recursiveOnewayArrayReplace(I18n::$_aLang,
             \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sCustomLanguageFile)));
 
+    self::$_sLanguage = $sLanguage;
     SmartySingleton::getInstance()->setDefaultLanguage(self::$_aLang[$sLanguage], $sLanguage);
-    self::$_sLanguage &= $sLanguage;
 
     return true;
   }
