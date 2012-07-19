@@ -18,7 +18,7 @@ class I18n {
 
   /**
    *
-   * holds all translations
+   * Holds all translations
    *
    * @var static
    * @access private
@@ -28,7 +28,7 @@ class I18n {
 
   /**
    *
-   * holds the object
+   * Holds the object
    *
    * @var static
    * @access private
@@ -38,7 +38,7 @@ class I18n {
 
   /**
   *
-  * holds the wanted Language
+  * Holds the wanted Language
   *
   * @var static
   * @access private
@@ -52,9 +52,10 @@ class I18n {
    * @access public
    * @param string $sLanguage language to load
    * @param array $aSession the session object, if given save the translations in S_SESSION['lang']
+   * @param array $aPlugins plugins to load
    *
    */
-  public function __construct($sLanguage = 'en', &$aSession = null) {
+  public function __construct($sLanguage = 'en', &$aSession = null, $aPlugins = array()) {
     if ($aSession)
       $this->_aSession = $aSession;
 
@@ -81,84 +82,76 @@ class I18n {
         self::$_aLang = & $aSession['lang'];
 
       # load the default language
-      self::load($sLanguage);
+      self::load($sLanguage, $aPlugins);
     }
   }
 
   /**
    *
-   * load a language to internal language cache
+   * Load a language to internal language cache
    *
+   * @access public
    * @param string $sLanguage the language to load
+   * @param array $aPlugins plugins to load language files from
    * @return boolean whether language could be loaded
+   *
    */
-  public static function load($sLanguage) {
-    # already loaded?
+  public static function load($sLanguage, $aPlugins = array()) {
+    # Already loaded?
     if (isset(I18n::$_aLang[$sLanguage])) {
       self::$_sLanguage = $sLanguage;
       SmartySingleton::getInstance()->setDefaultLanguage(self::$_aLang[$sLanguage], $sLanguage);
       return true;
     }
 
-    # have to load from yml-files
+    # Have to load from YML files
     $sLanguageFile        = $sLanguage . '.yml';
     $sCustomLanguageFile  = PATH_STANDARD . '/app/languages/' . $sLanguageFile;
     $sCoreLanguageFile    = PATH_STANDARD . '/vendor/candyCMS/core/languages/' . $sLanguageFile;
 
-    # language does not exist
+    # Language does not exist
     if (!file_exists($sCustomLanguageFile))
       return false;
 
-    # load the core language file
+    # Load the core language file
     self::$_aLang[$sLanguage] = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sCoreLanguageFile));
 
-    # load the plugin language files and merge them
-    //FIXME only load enabled plugins ...
+    # Load the plugin language files and merge them
     $sPluginPath = PATH_STANDARD . '/vendor/candyCMS/plugins/';
-    $oDir = opendir($sPluginPath);
-    $aPlugins = array();
-    while ($sFile = readdir($oDir)) {
-      if ($sFile == '.' || $sFile == '..')
-        continue;
-      $aPlugins[] = $sFile;
-    }
-    foreach ($aPlugins as $sPlugin)
+
+    foreach ($aPlugins as $sPlugin) {
       if (file_exists($sPluginPath . $sPlugin . '/languages')) {
-        $aPluginLang = array();
-        if (file_exists($sPluginPath . $sPlugin . '/languages/' . $sLanguageFile))
-          $aPluginLang = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sPluginPath . $sPlugin . '/languages/' . $sLanguageFile));
-        else
-          # default to en, if required language is not found
-          $aPluginLang = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sPluginPath . $sPlugin . '/languages/en.yml'));
+        $aPluginLang = file_exists($sPluginPath . $sPlugin . '/languages/' . $sLanguageFile) ?
+                \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sPluginPath . $sPlugin . '/languages/' . $sLanguageFile)) :
+                \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sPluginPath . $sPlugin . '/languages/en.yml'));
 
         Helper::recursiveOnewayArrayReplace(self::$_aLang[$sLanguage], $aPluginLang);
       }
+    }
 
-    # load the extension languag-files and merge them
+    # Load the extension language files and merge them
     if (EXTENSION_CHECK) {
       $sExtensionLanguagePath = PATH_STANDARD . '/app/extensions/languages/';
       $oDir = opendir($sExtensionLanguagePath);
+
       while ($sFile = readdir($oDir)) {
         if ($sFile == '.' || $sFile == '..')
           continue;
 
-        $aExtensionLang = array();
-        if (file_exists($sExtensionLanguagePath . $sFile . '/' . $sLanguageFile))
-          $aExtensionLang = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sExtensionLanguagePath . $sFile . '/' . $sLanguageFile));
-        else
-          # default to en, if required language si not found
-          $aExtensionLang = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sExtensionLanguagePath . $sFile . '/en.yml'));
+        $aExtensionLang = file_exists($sExtensionLanguagePath . $sFile . '/' . $sLanguageFile) ?
+                \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sExtensionLanguagePath . $sFile . '/' . $sLanguageFile)) :
+                \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sExtensionLanguagePath . $sFile . '/en.yml'));
 
         Helper::recursiveOnewayArrayReplace(self::$_aLang[$sLanguage], $aExtensionLang);
       }
     }
 
-    # merge all that with the users cusom language file
-    $aUserLang = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sCustomLanguageFile));
-    Helper::recursiveOnewayArrayReplace(I18n::$_aLang, $aUserLang);
+    # Merge all that with the users custom language file
+    Helper::recursiveOnewayArrayReplace(I18n::$_aLang,
+            \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sCustomLanguageFile)));
 
-    self::$_sLanguage = $sLanguage;
     SmartySingleton::getInstance()->setDefaultLanguage(self::$_aLang[$sLanguage], $sLanguage);
+    self::$_sLanguage &= $sLanguage;
 
     return true;
   }
