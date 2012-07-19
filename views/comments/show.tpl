@@ -52,7 +52,7 @@
               <a href='#create' rel='nofollow'
                 onclick="quote('{$c.author.full_name}', 'js-comment_{$c.id}')">
                 <img src='{$_PATH.images}/candy.global/spacer.png'
-                    class='icon-quote js-tooltip'
+                    class='icon-comment js-tooltip'
                     alt='{$lang.global.quote.quote}'
                     width='16' height='16'
                     title='{$lang.global.quote.quote}' />
@@ -61,7 +61,7 @@
                 &nbsp;
                 <a href="#" onclick="confirmDestroy('{$c.url_destroy}')">
                   <img src='{$_PATH.images}/candy.global/spacer.png'
-                      class='icon-destroy js-tooltip'
+                      class='icon-trash js-tooltip'
                       alt='{$lang.global.destroy.destroy}'
                       title='{$lang.global.destroy.destroy}'
                       width='16' height='16' />

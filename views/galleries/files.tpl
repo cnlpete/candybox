@@ -3,7 +3,7 @@
     <p class='center'>
       <a href='/{$_REQUEST.controller}/{$_REQUEST.id}/createfile'>
         <img src='{$_PATH.images}/candy.global/spacer.png'
-             class='icon-create'
+             class='icon-plus'
              alt='{$lang.global.create.entry}'
              width='16' height='16' />
         {$lang.galleries.files.title.create}
@@ -24,7 +24,7 @@
         {if $_SESSION.user.role >= 3}
           <a href='/{$_REQUEST.controller}/{$_REQUEST.id}/update'>
             <img src='{$_PATH.images}/candy.global/spacer.png'
-                 class='icon-update js-tooltip'
+                 class='icon-pencil js-tooltip'
                  alt='{$lang.global.update.update}'
                  title='{$lang.global.update.update}'
                  width='16' height='16' />
@@ -57,14 +57,14 @@
               <p class='center'>
                 <a href='{$f.url_update}'>
                   <img src='{$_PATH.images}/candy.global/spacer.png'
-                       class='icon-update js-tooltip'
+                       class='icon-pencil js-tooltip'
                        alt='{$lang.global.update.update}'
                        title='{$lang.global.update.update}'
                        width='16' height='16' />
                 </a>
                 <a href='#' onclick="confirmDestroy('{$f.url_destroy}')">
                   <img src='{$_PATH.images}/candy.global/spacer.png'
-                       class='icon-destroy js-tooltip'
+                       class='icon-trash js-tooltip'
                        alt='{$lang.global.destroy.destroy}'
                        title='{$lang.global.destroy.destroy}'
                        width='16' height='16' />

@@ -3,7 +3,7 @@
     <p class='center'>
       <a href='/{$_REQUEST.controller}/create'>
         <img src='{$_PATH.images}/candy.global/spacer.png'
-            class='icon-create'
+            class='icon-plus'
             alt='{$lang.global.create.entry}'
             width='16' height='16' />
         {$lang.global.create.entry}
@@ -22,7 +22,7 @@
         &nbsp;
         <a id='test-icalfeedlink' href='/{$_REQUEST.controller}/icalfeed'>
           <img src='{$_PATH.images}/candy.global/spacer.png'
-              class='icon-calendar_add js-tooltip'
+              class='icon-calendar js-tooltip'
               alt='{$lang.calendars.info.icsfeed}'
               title='{$lang.calendars.info.icsfeed}'
               width='16' height='16' />
@@ -88,7 +88,7 @@
               <td class='center'>
                 <a href='{$d.url}'>
                   <img src='{$_PATH.images}/candy.global/spacer.png'
-                      class='icon-calendar_add js-tooltip'
+                      class='icon-calendar js-tooltip'
                       alt='{$lang.calendars.info.ics}'
                       title='{$lang.calendars.info.ics}'
                       width='16' height='16' />
@@ -97,7 +97,7 @@
                   &nbsp;
                   <a href='/{$_REQUEST.controller}/{$d.id}/update'>
                     <img src='{$_PATH.images}/candy.global/spacer.png'
-                        class='icon-update js-tooltip'
+                        class='icon-pencil js-tooltip'
                         alt='{$lang.global.update.update}'
                         title='{$lang.global.update.update}'
                         width='16' height='16' />
@@ -105,7 +105,7 @@
                   &nbsp;
                   <a href="#" onclick="confirmDestroy('/{$_REQUEST.controller}/{$d.id}/destroy')">
                     <img src='{$_PATH.images}/candy.global/spacer.png'
-                        class='icon-destroy js-tooltip'
+                        class='icon-trash js-tooltip'
                         alt='{$lang.global.destroy.destroy}'
                         title='{$lang.global.destroy.destroy}'
                         width='16' height='16' />

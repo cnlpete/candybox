@@ -3,7 +3,7 @@
     <p class='center'>
       <a href='/{$_REQUEST.controller}/create'>
         <img src='{$_PATH.images}/candy.global/spacer.png'
-            class='icon-create'
+            class='icon-plus'
             alt='{$lang.global.create.entry}'
             width='16' height='16' />
         {$lang.global.create.entry}
@@ -47,14 +47,14 @@
         {if $_SESSION.user.role >= 3}
           <td class='center'>
             <img src='{$_PATH.images}/candy.global/spacer.png'
-                 class='icon-{if $c.published == true}success{else}close{/if}'
+                 class='icon-{if $c.published == true}ok{else}remove{/if}'
                  alt='{if $c.published == true}✔{else}✖{/if}' height='16'
                  title='{if $c.published == true}✔{else}✖{/if}' width='16' />
           </td>
           <td>
             <a href='{$c.url_update}'>
               <img src='{$_PATH.images}/candy.global/spacer.png'
-                   class='icon-update js-tooltip'
+                   class='icon-pencil js-tooltip'
                    alt='{$lang.global.update.update}'
                    title='{$lang.global.update.update}'
                    width='16' height='16' />
@@ -62,7 +62,7 @@
             &nbsp;
             <a href='#' onclick="confirmDestroy('{$c.url_destroy}')">
               <img src='{$_PATH.images}/candy.global/spacer.png'
-                   class='icon-destroy js-tooltip'
+                   class='icon-trash js-tooltip'
                    alt='{$lang.global.destroy.destroy}'
                    title='{$lang.global.destroy.destroy}'
                    width='16' height='16' />

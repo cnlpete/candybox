@@ -9,9 +9,11 @@
             rel='stylesheet' type='text/css' media='screen, projection'/>
 
       <meta http-equiv='content-type' content='text/html;charset=utf-8'/>
+      <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
       <meta name='description' content='{$_WEBSITE.meta.description}'/>
       <meta name='keywords' content='{$_WEBSITE.meta.keywords}'/>
       <meta name='dc.title' content='{$_WEBSITE.title}'/>
+
 
       {* Provide more details for specific entry. *}
       {if isset($_REQUEST.id)}
@@ -61,89 +63,96 @@
                 &nbsp;- {$WEBSITE_MODE|upper}
               {/if}
             </a>
-            <ul class='nav'>
-              <li{if $_REQUEST.controller == 'blogs'} class='active'{/if}>
-                <a href='/blogs'>{$lang.global.blog}</a>
-              </li>
-              <li{if $_REQUEST.controller == 'galleries'} class='active'{/if}>
-                <a href='/galleries'>{$lang.global.gallery}</a>
-              </li>
-              <li{if $_REQUEST.controller == 'calendars'} class='active'{/if}>
-                <a href='/calendars'>{$lang.global.calendar}</a>
-              </li>
-              <li{if $_REQUEST.controller == 'downloads'} class='active'{/if}>
-                <a href='/downloads'>{$lang.global.download}</a>
-              </li>
-              <li{if $_REQUEST.controller == 'searches'} class='active'{/if}>
-                <a href='/searches'>{$lang.global.search}</a>
-              </li>
-            </ul>
-            <ul class='nav pull-right'>
-              {if $_SESSION.user.id == 0}
-                <li{if $_REQUEST.controller == 'users' && isset($_REQUEST.action) && $_REQUEST.action == 'create'} class='active'{/if}>
-                  <a href='/users/create'>
-                    {$lang.global.register}
-                  </a>
+            <a class='btn btn-navbar' data-toggle='collapse' data-target='.nav-collapse'>
+              <span class='icon-bar'></span>
+              <span class='icon-bar'></span>
+              <span class='icon-bar'></span>
+            </a>
+            <div class='nav-collapse'>
+              <ul class='nav'>
+                <li{if $_REQUEST.controller == 'blogs'} class='active'{/if}>
+                  <a href='/blogs'>{$lang.global.blog}</a>
                 </li>
-                <li class='divider-vertical'/>
-              {/if}
-              {if $_SESSION.user.role == 0}
-                <li{if $_REQUEST.controller == 'sessions'} class='active'{/if}>
-                  <a href='/sessions/create'>
-                    {$lang.global.login}
-                  </a>
+                <li{if $_REQUEST.controller == 'galleries'} class='active'{/if}>
+                  <a href='/galleries'>{$lang.global.gallery}</a>
                 </li>
-              {else}
-                <li class='dropdown'>
-                  <a href='#' class='dropdown-toggle' data-toggle='dropdown'>
-                    <strong>{$lang.global.welcome} {$_SESSION.user.name}!</strong>
-                    <b class='caret'></b>
-                  </a>
-                  <ul class='dropdown-menu'>
-                    {if $_SESSION.user.id > 0}
-                      <li>
-                        <a href='/users/{$_SESSION.user.id}/update'>
-                          {$lang.global.settings}
-                        </a>
-                      </li>
-                    {/if}
-                    <li>
-                      <a href='/sessions/destroy'>{$lang.global.logout}</a>
-                    </li>
-                    {if $_SESSION.user.role >= 3}
-                      <li class='divider'></li>
-                      <li>
-                        <a href='/medias' title='{$lang.global.manager.media}'>
-                          {$lang.global.manager.media}
-                        </a>
-                      </li>
-                      <li>
-                        <a href='/contents' title='{$lang.global.manager.content}'>
-                          {$lang.global.manager.content}
-                        </a>
-                      </li>
-                      {if $_SESSION.user.role == 4}
+                <li{if $_REQUEST.controller == 'calendars'} class='active'{/if}>
+                  <a href='/calendars'>{$lang.global.calendar}</a>
+                </li>
+                <li{if $_REQUEST.controller == 'downloads'} class='active'{/if}>
+                  <a href='/downloads'>{$lang.global.download}</a>
+                </li>
+                <li{if $_REQUEST.controller == 'searches'} class='active'{/if}>
+                  <a href='/searches'>{$lang.global.search}</a>
+                </li>
+              </ul>
+              <ul class='nav pull-right'>
+                {if $_SESSION.user.id == 0}
+                  <li{if $_REQUEST.controller == 'users' && isset($_REQUEST.action) && $_REQUEST.action == 'create'} class='active'{/if}>
+                    <a href='/users/create'>
+                      {$lang.global.register}
+                    </a>
+                  </li>
+                  <li class='divider-vertical'/>
+                {/if}
+                {if $_SESSION.user.role == 0}
+                  <li{if $_REQUEST.controller == 'sessions'} class='active'{/if}>
+                    <a href='/sessions/create'>
+                      {$lang.global.login}
+                    </a>
+                  </li>
+                {else}
+                  <li class='dropdown'>
+                    <a href='#' class='dropdown-toggle' data-toggle='dropdown'>
+                      <strong>{$lang.global.welcome} {$_SESSION.user.name}!</strong>
+                      <b class='caret'></b>
+                    </a>
+                    <ul class='dropdown-menu'>
+                      {if $_SESSION.user.id > 0}
                         <li>
-                          <a href='/logs' title='{$lang.global.logs}'>
-                            {$lang.global.logs}
-                          </a>
-                        </li>
-                        <li>
-                          <a href='/users' title='{$lang.global.manager.user}'>
-                            {$lang.global.manager.user}
-                          </a>
-                        </li>
-                        <li>
-                          <a href='/mails' title='{$lang.global.mails}'>
-                            {$lang.global.mails}
+                          <a href='/users/{$_SESSION.user.id}/update'>
+                            {$lang.global.settings}
                           </a>
                         </li>
                       {/if}
-                    {/if}
-                  </ul>
-                </li>
-              {/if}
-            </ul>
+                      <li>
+                        <a href='/sessions/destroy'>{$lang.global.logout}</a>
+                      </li>
+                      {if $_SESSION.user.role >= 3}
+                        <li class='divider'></li>
+                        <li>
+                          <a href='/medias' title='{$lang.global.manager.media}'>
+                            {$lang.global.manager.media}
+                          </a>
+                        </li>
+                        <li>
+                          <a href='/contents' title='{$lang.global.manager.content}'>
+                            {$lang.global.manager.content}
+                          </a>
+                        </li>
+                        {if $_SESSION.user.role == 4}
+                          <li>
+                            <a href='/logs' title='{$lang.global.logs}'>
+                              {$lang.global.logs}
+                            </a>
+                          </li>
+                          <li>
+                            <a href='/users' title='{$lang.global.manager.user}'>
+                              {$lang.global.manager.user}
+                            </a>
+                          </li>
+                          <li>
+                            <a href='/mails' title='{$lang.global.mails}'>
+                              {$lang.global.mails}
+                            </a>
+                          </li>
+                        {/if}
+                      {/if}
+                    </ul>
+                  </li>
+                {/if}
+              </ul>
+            </div>
           </div>
         </div>
       </nav>
@@ -189,6 +198,7 @@
       {* Add bootstrap support *}
       <script type='text/javascript' src='{$_PATH.js}/core/jquery.bootstrap.dropdown{$_SYSTEM.compress_files_suffix}.js'></script>
       <script type='text/javascript' src='{$_PATH.js}/core/jquery.bootstrap.tooltip{$_SYSTEM.compress_files_suffix}.js'></script>
+      <script type='text/javascript' src='{$_PATH.js}/core/jquery.bootstrap.collapse{$_SYSTEM.compress_files_suffix}.js'></script>
 
       {* Own JS and plugins *}
       <script type='text/javascript' src='{$_PATH.js}/core/scripts{$_SYSTEM.compress_files_suffix}.js'></script>

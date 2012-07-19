@@ -49,7 +49,7 @@
         <td class='center'>
           <a href="#" onclick="confirmDestroy('{$l.url_destroy}')">
             <img src='{$_PATH.images}/candy.global/spacer.png'
-                 class='icon-destroy js-tooltip'
+                 class='icon-trash js-tooltip'
                  alt='{$lang.global.destroy.destroy}'
                  title='{$lang.global.destroy.destroy}'
                  width='16' height='16' />

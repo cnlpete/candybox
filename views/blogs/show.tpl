@@ -3,7 +3,7 @@
     <p class='center'>
       <a href='/{$_REQUEST.controller}/create'>
         <img src='{$_PATH.images}/candy.global/spacer.png'
-            class='icon-create'
+            class='icon-plus'
             alt='{$lang.global.create.entry}'
             width='16' height='16' />
         {$lang.global.create.entry}
@@ -26,7 +26,7 @@
             {if $_SESSION.user.role >= 3}
               <a href='{$b.url_update}'>
                 <img src='{$_PATH.images}/candy.global/spacer.png'
-                    class='icon-update js-tooltip'
+                    class='icon-pencil js-tooltip'
                     alt='{$lang.global.update.update}'
                     title='{$lang.global.update.update}'
                     width='16' height='16' />

@@ -10,7 +10,7 @@
           {if $_SESSION.user.role >= 3}
             <a href='{$c.url_update}'>
               <img src='{$_PATH.images}/candy.global/spacer.png'
-                   class='icon-update js-tooltip'
+                   class='icon-pencil js-tooltip'
                    alt='{$lang.global.update.update}'
                    title='{$lang.global.update.update}'
                    width='16' height='16' />

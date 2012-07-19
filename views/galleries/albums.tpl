@@ -3,7 +3,7 @@
     <p class='center'>
       <a href='/{$_REQUEST.controller}/create'>
         <img src='{$_PATH.images}/candy.global/spacer.png'
-             class='icon-create'
+             class='icon-plus'
              alt='{$lang.global.create.entry}'
              width='16' height='16' />
         {$lang.galleries.albums.title.create}
@@ -26,14 +26,14 @@
             {if $_SESSION.user.role >= 3}
               <a href='{$a.url_createfile}'>
                 <img src='{$_PATH.images}/candy.global/spacer.png'
-                     class='icon-create js-tooltip'
+                     class='icon-plus js-tooltip'
                      alt='{$lang.galleries.files.title.create}'
                      title='{$lang.galleries.files.title.create}'
                      width='16' height='16' />
               </a>
               <a href='{$a.url_update}'>
                 <img src='{$_PATH.images}/candy.global/spacer.png'
-                     class='icon-update js-tooltip'
+                     class='icon-pencil js-tooltip'
                      alt='{$lang.global.update.update}'
                      title='{$lang.global.update.update}'
                      width='16' height='16' />
