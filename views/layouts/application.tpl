@@ -10,8 +10,10 @@
 
       <meta http-equiv='content-type' content='text/html;charset=utf-8'/>
       <meta name='description' content='{$_WEBSITE.meta.description}'/>
-      <meta name='keywords' content='{$_WEBSITE.meta.keywords}'/>
       <meta name='dc.title' content='{$_WEBSITE.title}'/>
+      {if $_WEBSITE.meta.keywords}
+        <meta name='keywords' content='{$_WEBSITE.meta.keywords}'/>
+      {/if}
 
       {* Provide more details for specific entry. *}
       {if isset($_REQUEST.id)}
