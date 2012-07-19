@@ -51,20 +51,14 @@
               {/if}
               <a href='#create' rel='nofollow'
                 onclick="quote('{$c.author.full_name}', 'js-comment_{$c.id}')">
-                <img src='{$_PATH.images}/candy.global/spacer.png'
-                    class='icon-comment js-tooltip'
-                    alt='{$lang.global.quote.quote}'
-                    width='16' height='16'
-                    title='{$lang.global.quote.quote}' />
+                <span class='icon-comment js-tooltip'
+                      title='{$lang.global.quote.quote}'></span>
               </a>
               {if $_SESSION.user.role >= 3}
                 &nbsp;
                 <a href="#" onclick="confirmDestroy('{$c.url_destroy}')">
-                  <img src='{$_PATH.images}/candy.global/spacer.png'
-                      class='icon-trash js-tooltip'
-                      alt='{$lang.global.destroy.destroy}'
-                      title='{$lang.global.destroy.destroy}'
-                      width='16' height='16' />
+                  <span class='icon-pencil js-tooltip'
+                        title='{$lang.global.destroy.destroy}'></span>
                 </a>
               {/if}
             </footer>

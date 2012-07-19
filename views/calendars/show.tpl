@@ -2,10 +2,8 @@
   {if $_SESSION.user.role >= 3}
     <p class='center'>
       <a href='/{$_REQUEST.controller}/create'>
-        <img src='{$_PATH.images}/candy.global/spacer.png'
-            class='icon-plus'
-            alt='{$lang.global.create.entry}'
-            width='16' height='16' />
+        <span class='icon-plus'
+              title='{$lang.global.create.entry}'></span>
         {$lang.global.create.entry}
       </a>
     </p>
@@ -21,11 +19,8 @@
       {else}
         &nbsp;
         <a id='test-icalfeedlink' href='/{$_REQUEST.controller}/icalfeed'>
-          <img src='{$_PATH.images}/candy.global/spacer.png'
-              class='icon-calendar js-tooltip'
-              alt='{$lang.calendars.info.icsfeed}'
-              title='{$lang.calendars.info.icsfeed}'
-              width='16' height='16' />
+          <span class='icon-calendar js-tooltip'
+                title='{$lang.calendars.info.icsfeed}'></span>
         </a>
       {/if}
     </h1>
@@ -87,28 +82,19 @@
               </td>
               <td class='center'>
                 <a href='{$d.url}'>
-                  <img src='{$_PATH.images}/candy.global/spacer.png'
-                      class='icon-calendar js-tooltip'
-                      alt='{$lang.calendars.info.ics}'
-                      title='{$lang.calendars.info.ics}'
-                      width='16' height='16' />
+                  <span class='icon-calendar js-tooltip'
+                        title='{$lang.calendars.info.ics}'></span>
                 </a>
                 {if $_SESSION.user.role >= 3}
                   &nbsp;
                   <a href='/{$_REQUEST.controller}/{$d.id}/update'>
-                    <img src='{$_PATH.images}/candy.global/spacer.png'
-                        class='icon-pencil js-tooltip'
-                        alt='{$lang.global.update.update}'
-                        title='{$lang.global.update.update}'
-                        width='16' height='16' />
+                    <span class='icon-pencil js-tooltip'
+                          title='{$lang.global.update.update}'></span>
                   </a>
                   &nbsp;
                   <a href="#" onclick="confirmDestroy('/{$_REQUEST.controller}/{$d.id}/destroy')">
-                    <img src='{$_PATH.images}/candy.global/spacer.png'
-                        class='icon-trash js-tooltip'
-                        alt='{$lang.global.destroy.destroy}'
-                        title='{$lang.global.destroy.destroy}'
-                        width='16' height='16' />
+                    <span class='icon-pencil js-tooltip'
+                        title='{$lang.global.destroy.destroy}'></span>
                   </a>
                 {/if}
               </td>

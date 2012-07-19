@@ -9,11 +9,8 @@
           {$c.title}
           {if $_SESSION.user.role >= 3}
             <a href='{$c.url_update}'>
-              <img src='{$_PATH.images}/candy.global/spacer.png'
-                   class='icon-pencil js-tooltip'
-                   alt='{$lang.global.update.update}'
-                   title='{$lang.global.update.update}'
-                   width='16' height='16' />
+              <span class='icon-pencil js-tooltip'
+                    title='{$lang.global.update.update}'></span>
             </a>
           {/if}
         </h1>

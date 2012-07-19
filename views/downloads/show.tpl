@@ -2,10 +2,8 @@
   {if $_SESSION.user.role >= 3}
     <p class='center'>
       <a href='/{$_REQUEST.controller}/create'>
-        <img src='{$_PATH.images}/candy.global/spacer.png'
-             class='icon-plus'
-             alt='{$lang.global.create.entry}'
-             width='16' height='16' />
+        <span class='icon-plus'
+              title='{$lang.global.create.entry}'></span>
         {$lang.global.create.entry}
       </a>
     </p>
@@ -59,27 +57,18 @@
             <td class='center'>
               {if $_SESSION.user.role >= 3}
                 <a href='{$f.url_update}'>
-                  <img src='{$_PATH.images}/candy.global/spacer.png'
-                       class='icon-pencil js-tooltip'
-                       alt='{$lang.global.update.update}'
-                       title='{$lang.global.update.update}'
-                       width='16' height='16' />
+                  <span class='icon-pencil js-tooltip'
+                        title='{$lang.global.update.update}'></span>
                 </a>
                 &nbsp;
                 <a href="#" onclick="confirmDestroy('{$f.url_destroy}')">
-                  <img src='{$_PATH.images}/candy.global/spacer.png'
-                       class='icon-trash js-tooltip'
-                       alt='{$lang.global.destroy.destroy}'
-                       title='{$lang.global.destroy.destroy}'
-                       width='16' height='16' />
+                  <span class='icon-pencil js-tooltip'
+                        title='{$lang.global.destroy.destroy}'></span>
                 </a>
               {else}
                 <a href='{$f.url}'>
-                  <img src='{$_PATH.images}/candy.global/spacer.png'
-                       class='icon-download js-tooltip'
-                       alt='{$lang.global.download}'
-                       title='{$lang.global.download}'
-                       width="32" height="32" />
+                  <span class='icon-download js-tooltip'
+                        title='{$lang.global.download}'></span>
                 </a>
               {/if}
             </td>

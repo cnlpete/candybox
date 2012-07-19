@@ -2,10 +2,8 @@
   {if $_SESSION.user.role == 4}
     <p class='center'>
       <a href='/{$_REQUEST.controller}/create'>
-        <img src='{$_PATH.images}/candy.global/spacer.png'
-             class='icon-plus'
-             alt='{$lang.global.create.entry}'
-             width='16' height='16' />
+        <span class='icon-plus'
+              title='{$lang.global.create.entry}'></span>
         {$lang.users.title.create}
       </a>
     </p>
@@ -72,28 +70,19 @@
           {/if}
         </td>
         <td class='center'>
-          <img src='{$_PATH.images}/candy.global/spacer.png'
-               class='icon-{if $u.receive_newsletter == 1}ok{else}remove{/if}'
-               alt='{if $u.receive_newsletter == 1}✔{else}✖{/if}' width='16'
-               title='{if $u.receive_newsletter == 1}✔{else}✖{/if}' width='16'
-               height='16' title='{if $u.receive_newsletter == 1}✔{else}✖{/if}' />
+          <span class='icon-{if $u.receive_newsletter == 1}ok{else}remove{/if} js-tooltip'
+                title='{if $u.receive_newsletter == 1}✔{else}✖{/if}'></span>
         </td>
         {if $_SESSION.user.role == 4}
           <td class='center'>
             <a href='{$u.url_update}'>
-              <img src='{$_PATH.images}/candy.global/spacer.png'
-                   class='icon-pencil js-tooltip'
-                   alt='{$lang.global.update.update}'
-                   title='{$lang.global.update.update}'
-                   width='16' height='16' />
+              <span class='icon-pencil js-tooltip'
+                    title='{$lang.global.update.update}'></span>
             </a>
             &nbsp;
             <a href='#' onclick="confirmDestroy('{$u.url_destroy}')">
-              <img src='{$_PATH.images}/candy.global/spacer.png'
-                   class='icon-trash js-tooltip'
-                   alt='{$lang.global.destroy.destroy}'
-                   title='{$lang.global.destroy.destroy}'
-                   width='16' height='16' />
+              <span class='icon-pencil js-tooltip'
+                    title='{$lang.global.destroy.destroy}'></span>
             </a>
           </td>
         {/if}

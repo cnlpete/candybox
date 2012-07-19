@@ -48,11 +48,8 @@
         </td>
         <td class='center'>
           <a href="#" onclick="confirmDestroy('{$l.url_destroy}')">
-            <img src='{$_PATH.images}/candy.global/spacer.png'
-                 class='icon-trash js-tooltip'
-                 alt='{$lang.global.destroy.destroy}'
-                 title='{$lang.global.destroy.destroy}'
-                 width='16' height='16' />
+            <span class='icon-pencil js-tooltip'
+                  title='{$lang.global.destroy.destroy}'></span>
           </a>
         </td>
       </tr>

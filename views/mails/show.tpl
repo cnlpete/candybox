@@ -46,12 +46,9 @@
             </time>
           </td>
           <td class='center'>
-            <a href="#" onclick="resendMail(this, {$m.id})">
-              <img src='{$_PATH.images}/candy.global/spacer.png'
-                   class='icon-mail js-tooltip'
-                   alt='{$lang.global.email.send}'
-                   title='{$lang.global.email.send}'
-                   width='16' height='16' />
+            <a href='#' onclick="resendMail(this, {$m.id})">
+              <span class='icon-mail js-tooltip'
+                    title='{$lang.global.email.send}'></span>
             </a>
           </td>
         </tr>

@@ -2,10 +2,8 @@
   {if $_SESSION.user.role >= 3}
     <p class='center'>
       <a href='/{$_REQUEST.controller}/create'>
-        <img src='{$_PATH.images}/candy.global/spacer.png'
-            class='icon-plus'
-            alt='{$lang.global.create.entry}'
-            width='16' height='16' />
+        <span class='icon-plus'
+              title='{$lang.global.create.entry}'></span>
         {$lang.global.create.entry}
       </a>
     </p>
@@ -25,11 +23,8 @@
             <a href='{$b.url}'>{$b.title}</a>
             {if $_SESSION.user.role >= 3}
               <a href='{$b.url_update}'>
-                <img src='{$_PATH.images}/candy.global/spacer.png'
-                    class='icon-pencil js-tooltip'
-                    alt='{$lang.global.update.update}'
-                    title='{$lang.global.update.update}'
-                    width='16' height='16' />
+                <span class='icon-pencil js-tooltip'
+                      title='{$lang.global.update.update}'></span>
               </a>
             {/if}
           </h2>

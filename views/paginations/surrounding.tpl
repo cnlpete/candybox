@@ -13,11 +13,8 @@
   </ul>
   <p class='center'>
     <a href='/rss/{$_PAGE.controller}'>
-      <img src='{$_PATH.images}/candy.global/spacer.png'
-           class='icon-rss js-tooltip'
-           title='{$lang.global.rss}'
-           alt='{$lang.global.rss}'
-           width='16' height='16' />
+      <span class='icon-rss js-tooltip'
+            title='{$lang.global.rss}'></span>
     </a>
   </p>
 {/strip}

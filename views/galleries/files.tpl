@@ -2,10 +2,8 @@
   {if $_SESSION.user.role >= 3}
     <p class='center'>
       <a href='/{$_REQUEST.controller}/{$_REQUEST.id}/createfile'>
-        <img src='{$_PATH.images}/candy.global/spacer.png'
-             class='icon-plus'
-             alt='{$lang.global.create.entry}'
-             width='16' height='16' />
+        <span class='icon-plus'
+              title='{$lang.global.create.entry}'></span>
         {$lang.galleries.files.title.create}
       </a>
     </p>
@@ -23,11 +21,8 @@
         </small>
         {if $_SESSION.user.role >= 3}
           <a href='/{$_REQUEST.controller}/{$_REQUEST.id}/update'>
-            <img src='{$_PATH.images}/candy.global/spacer.png'
-                 class='icon-pencil js-tooltip'
-                 alt='{$lang.global.update.update}'
-                 title='{$lang.global.update.update}'
-                 width='16' height='16' />
+            <span class='icon-pencil js-tooltip'
+                  title='{$lang.global.update.update}'></span>
           </a>
         {/if}
       </h1>
@@ -56,18 +51,12 @@
             {if $_SESSION.user.role >= 3}
               <p class='center'>
                 <a href='{$f.url_update}'>
-                  <img src='{$_PATH.images}/candy.global/spacer.png'
-                       class='icon-pencil js-tooltip'
-                       alt='{$lang.global.update.update}'
-                       title='{$lang.global.update.update}'
-                       width='16' height='16' />
+                  <span class='icon-pencil js-tooltip'
+                        title='{$lang.global.update.update}'></span>
                 </a>
                 <a href='#' onclick="confirmDestroy('{$f.url_destroy}')">
-                  <img src='{$_PATH.images}/candy.global/spacer.png'
-                       class='icon-trash js-tooltip'
-                       alt='{$lang.global.destroy.destroy}'
-                       title='{$lang.global.destroy.destroy}'
-                       width='16' height='16' />
+                  <span class='icon-pencil js-tooltip'
+                        title='{$lang.global.destroy.destroy}'></span>
                 </a>
               </p>
             {/if}
@@ -107,8 +96,11 @@
         </script>
       {/if}
       <p class='center'>
-        <a href='/rss/{$_REQUEST.controller}/{$_REQUEST.id}' class='js-tooltip' title='{$lang.global.rss}'>
-          <img src='{$_PATH.images}/candy.global/spacer.png' class='icon-rss' alt='{$lang.global.rss}' width='16' height='16' />
+        <a href='/rss/{$_REQUEST.controller}/{$_REQUEST.id}'
+           class='js-tooltip'
+           title='{$lang.global.rss}'>
+          <span class='icon-rss js-tooltip'
+                title='{$lang.global.rss}'></span>
         </a>
       </p>
     {/if}
