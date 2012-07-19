@@ -22,6 +22,9 @@
 @import "../plugins/jquery.socialshareprivacy.less";
 @import "candy.less";
 
+/* Include this file if you want your custom icons */
+@import "candy.icons.less";
+
 /* Bootstrap fixes */
 // No margin at BBCode images
 figure.image {
@@ -45,6 +48,12 @@ body {
   padding-top:60px;
 }
 
+// Remove padding when displaying the collapsable nav
+@media (max-width: 979px) {
+  body {
+    padding-top:0px;
+  }
+}
 // Remove outlines on Firefox and Opera
 a:active, a:link {
   outline:none;
