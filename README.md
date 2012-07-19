@@ -1,7 +1,8 @@
 CandyCMS Version 2.2
 ========================================================================================================================
 
-> Note that if you check out dev-master, your application might be incompatible with previous versions!
+> Note that if you check out dev-master, your application might be incompatible with previous versions! Stick to
+> the tagged ones!
 
 What is CandyCMS?
 ------------------------------------------------------------------------------------------------------------------------
