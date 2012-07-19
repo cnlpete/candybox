@@ -129,23 +129,6 @@ class I18n {
       }
     }
 
-    # Load the extension language files and merge them
-    if (EXTENSION_CHECK) {
-      $sExtensionLanguagePath = PATH_STANDARD . '/app/extensions/languages/';
-      $oDir = opendir($sExtensionLanguagePath);
-
-      while ($sFile = readdir($oDir)) {
-        if ($sFile == '.' || $sFile == '..')
-          continue;
-
-        $aExtensionLang = file_exists($sExtensionLanguagePath . $sFile . '/' . $sLanguageFile) ?
-                \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sExtensionLanguagePath . $sFile . '/' . $sLanguageFile)) :
-                \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sExtensionLanguagePath . $sFile . '/en.yml'));
-
-        Helper::recursiveOnewayArrayReplace(self::$_aLang[$sLanguage], $aExtensionLang);
-      }
-    }
-
     # Merge all that with the users custom language file
     Helper::recursiveOnewayArrayReplace(I18n::$_aLang,
             \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sCustomLanguageFile)));
