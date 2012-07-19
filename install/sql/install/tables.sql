@@ -115,6 +115,24 @@ CREATE TABLE `%SQL_PREFIX%logs` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
+
+DROP TABLE IF EXISTS `%SQL_PREFIX%mails`;
+
+CREATE TABLE `%SQL_PREFIX%mails` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `date` datetime NOT NULL,
+  `ip` varchar(39) DEFAULT NULL,
+  `from_address` varchar(32) DEFAULT NULL,
+  `from_name` varchar(32) DEFAULT NULL,
+  `to_address` varchar(32) DEFAULT NULL,
+  `to_name` varchar(32) DEFAULT NULL,
+  `subject` varchar(128) NOT NULL,
+  `message` text NOT NULL,
+  `error_message` text DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `%SQL_PREFIX%migrations`;
 
 CREATE TABLE `%SQL_PREFIX%migrations` (
@@ -154,21 +172,4 @@ CREATE TABLE `%SQL_PREFIX%users` (
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `api_token` (`api_token`),
   KEY `name` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `%SQL_PREFIX%mails`;
-
-CREATE TABLE `%SQL_PREFIX%mails` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `date` datetime NOT NULL,
-  `ip` varchar(39) DEFAULT NULL,
-  `from_address` varchar(32) DEFAULT NULL,
-  `from_name` varchar(32) DEFAULT NULL,
-  `to_address` varchar(32) DEFAULT NULL,
-  `to_name` varchar(32) DEFAULT NULL,
-  `subject` varchar(128) NOT NULL,
-  `message` text NOT NULL,
-  `error_message` text DEFAULT NULL,
-  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
