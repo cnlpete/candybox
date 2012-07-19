@@ -273,11 +273,11 @@ class Index {
     $aBrowserLanguage = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
     $sBrowserLanguage = (string) substr($aBrowserLanguage[0], 0, 2);
 
-      # We got a language request? This si either done via putting ?mylanguage=en or via cookie Let's switch the language!
-    if (isset($aRequest['mylanguage']) &&
-        file_exists(PATH_STANDARD . '/app/languages/' . strtolower((string) $aRequest['mylanguage']) . '.yml')) {
-      $sLanguage = strtolower((string) $aRequest['mylanguage']);
-      setcookie('mylanguage', (string) $this->_aRequest['mylanguage'], time() + 2592000, '/');
+    # We got a language request? This is either done via putting ?mylanguage=en or via cookie Let's switch the language!
+    if (isset($aRequest['language']) && !isset($this->_aRequest['blogs']) &&
+        file_exists(PATH_STANDARD . '/app/languages/' . strtolower((string) $aRequest['language']) . '.yml')) {
+      $sLanguage = strtolower((string) $aRequest['language']);
+      setcookie('language', (string) $this->_aRequest['language'], time() + 2592000, '/');
     }
     elseif (file_exists(PATH_STANDARD . '/app/languages/' . strtolower($sBrowserLanguage) . '.yml'))
       $sLanguage = $sBrowserLanguage;
@@ -325,7 +325,7 @@ class Index {
       define('WEBSITE_LOCALE', $sLocale);
 
     setlocale(LC_ALL, $sLocale);
-    new I18n($sLanguage, $this->_aSession);
+    new I18n($sLanguage, $this->_aSession, $this->_aPlugins);
 
     return $sLocale;
   }
