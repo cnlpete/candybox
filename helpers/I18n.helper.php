@@ -127,10 +127,11 @@ class I18n {
     # Load the core language file
     if (file_exists($sCoreLanguageFile))
       self::$_aLang[$sLanguage] = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sCoreLanguageFile));
+
     else
-      # we also allow for the user to create custom languages, everything he does not overwrite, will be english
+    # We also allow the user to create custom languages, everything he does not overwrite, will be english
       self::$_aLang[$sLanguage] = \Symfony\Component\Yaml\Yaml::parse(
-              file_get_contents(PATH_STANDARD . '/vendor/candyCMS/core/languages/en.yml'));
+                      file_get_contents(PATH_STANDARD . '/vendor/candyCMS/core/languages/en.yml'));
 
     # Load the plugin language files and merge them
     $sPluginPath = PATH_STANDARD . '/vendor/candyCMS/plugins/';

@@ -273,20 +273,25 @@ class Index {
     $aBrowserLanguage = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
     $sBrowserLanguage = (string) substr($aBrowserLanguage[0], 0, 2);
 
-    # We got a language request? This is either done via putting ?mylanguage=en or via cookie Let's switch the language!
+    # We got a language request? This is either done via putting ?language=en to an URL or via cookie
+    # Get the request...
     if (isset($aRequest['language']) && !isset($this->_aRequest['blogs']) &&
         file_exists(PATH_STANDARD . '/app/languages/' . strtolower((string) $aRequest['language']) . '.yml')) {
       $sLanguage = strtolower((string) $aRequest['language']);
       setcookie('default_language', (string) $sLanguage, time() + 2592000, '/');
     }
+
+    # ...or use cookie...
     elseif (isset($aRequest['default_language']) &&
         file_exists(PATH_STANDARD . '/app/languages/' . strtolower((string) $aRequest['default_language']) . '.yml')) {
       $sLanguage = strtolower((string) $aRequest['default_language']);
-      setcookie('default_language', (string) $sLanguage, time() + 2592000, '/');
     }
+
+    # ...or browsers default language...
     elseif (file_exists(PATH_STANDARD . '/app/languages/' . strtolower($sBrowserLanguage) . '.yml'))
       $sLanguage = $sBrowserLanguage;
 
+    # ...or fall back to default language.
     else
       $sLanguage = strtolower(DEFAULT_LANGUAGE);
 
