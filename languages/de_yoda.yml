@@ -1,3 +1,8 @@
+website:
+  description: Trage deine Webseitenbeschreibung hier ein.
+  keywords: Keyword1, Keyword2, Keyword3
+  terms: Verfasse die Nutzungsbedingungen für das Benutzen deiner Webseite.
+
 global:
   about: Über
   action: Aktion

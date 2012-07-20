@@ -1,3 +1,8 @@
+website:
+  description: Enter your website description here.
+  keywords: Keyword1, Keyword2, Keyword3
+  terms: Write down the conditions, the users must accept in order to use your website.
+
 global:
   about: About
   action: Action
