@@ -2779,7 +2779,7 @@ a:active, a:link { outline:none; }
 th.headerSortUp, th.headerSortDown { background-color:#eee; }
 th:hover, th:hover { cursor:pointer; }
 .tags a:first-child, h1 small, h1 img, h2 img, #searches .btn { margin-left:5px; }
-p.center span, .btn { margin-right:5px; }
+p.center i, .btn { margin-right:5px; }
 #create_mail { min-width:600px; }
 .summary { font-weight:bold; }
 #blogs .blogs { margin-bottom:50px; }
