@@ -329,7 +329,7 @@ class Index {
     }
 
     if (!defined('WEBSITE_LANGUAGE'))
-      define('WEBSITE_LANGUAGE', $sLanguage);
+      define('WEBSITE_LANGUAGE', substr($sLanguage, 0, 2));
 
     if (!defined('WEBSITE_LOCALE'))
       define('WEBSITE_LOCALE', $sLocale);

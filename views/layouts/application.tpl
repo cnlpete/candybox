@@ -16,7 +16,6 @@
         <meta name='keywords' content='{$_WEBSITE.meta.keywords}'/>
       {/if}
 
-
       {* Provide more details for specific entry. *}
       {if isset($_REQUEST.id)}
         <meta property='og:description' content='{$_WEBSITE.meta.og.description}'/>
