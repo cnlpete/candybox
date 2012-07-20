@@ -106,7 +106,7 @@
     {/if}
   {/if}
   <script src='{$_PATH.js}/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
-  <script src='{$_PATH.js}/plugins/jquery.fancybox-thumbs{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
+  <script src='{$_PATH.js}/core/jquery.fancybox-thumbs{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
   <script type='text/javascript'>
     $(document).ready(function(){
       $('.js-fancybox').fancybox({

@@ -221,6 +221,7 @@ class SmartySingleton extends Smarty {
 
     return $aPaths + array(
         'public'    => WEBSITE_CDN,
+        'plugins'   => WEBSITE_URL . '/vendor/candyCMS/plugins',
         'template'  => WEBSITE_CDN . '/templates/' . PATH_TEMPLATE,
         'upload'    => Helper::removeSlash(PATH_UPLOAD));
   }
