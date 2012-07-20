@@ -2,8 +2,8 @@
   {if $_SESSION.user.role >= 3}
     <p class='center'>
       <a href='/{$_REQUEST.controller}/create'>
-        <span class='icon-plus'
-              title='{$lang.global.create.entry}'></span>
+        <i class='icon-plus'
+           title='{$lang.global.create.entry}'></i>
         {$lang.global.create.entry}
       </a>
     </p>
@@ -72,8 +72,8 @@
             </td>
             <td>
               <a href="#" onclick="confirmDestroy('{$f.url_destroy}')">
-                <span class='icon-trash js-tooltip'
-                      title='{$lang.global.destroy.destroy}'></span>
+                <i class='icon-trash js-tooltip'
+                   title='{$lang.global.destroy.destroy}'></i>
               </a>
             </td>
           </tr>

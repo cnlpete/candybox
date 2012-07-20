@@ -48,8 +48,8 @@
         </td>
         <td class='center'>
           <a href="#" onclick="confirmDestroy('{$l.url_destroy}')">
-            <span class='icon-pencil js-tooltip'
-                  title='{$lang.global.destroy.destroy}'></span>
+            <i class='icon-pencil js-tooltip'
+               title='{$lang.global.destroy.destroy}'></i>
           </a>
         </td>
       </tr>
