@@ -55,7 +55,7 @@ final class Bbcode {
     $sStr = preg_replace('#\[anchor:(.*)\]#Uis', '<a name="\1"></a>', $sStr);
 
     # Load specific icon
-    $sStr = preg_replace('#\[icon:(.*)\]#Uis', '<span class="icon-\1"></span>', $sStr);
+    $sStr = preg_replace('#\[icon:(.*)\]#Uis', '<i class="icon-\1"></i>', $sStr);
 
     # Insert uploaded image
     $sStr = preg_replace('#\[img:(.*)\]#Uis', '<img src="{$_PATH.images}/\1" alt="\1" style="vertical-align:baseline" />', $sStr);
