@@ -29,6 +29,12 @@
             {/if}
           </h2>
           <p>
+            {if $_SESSION.user.role >= 3}
+              <img src='{$_PATH.images}/candy.flags/{$b.language}.png'
+                   alt='{$b.language}'
+                   title='{$b.language}' />
+              &nbsp;
+            {/if}
             <time datetime='{$b.date.w3c}' class='js-timeago'>
               {$b.date.raw|date_format:$lang.global.time.format.datetime}
             </time>
