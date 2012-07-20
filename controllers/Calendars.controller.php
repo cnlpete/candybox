@@ -27,8 +27,8 @@ class Calendars extends Main {
   protected function _show() {
     # Show single .ics file
     return $this->_iId ?
-            $this->ics($this->_iId) :
-            $this->overview();
+            $this->_ics($this->_iId) :
+            $this->_overview();
   }
 
   /**
@@ -39,19 +39,19 @@ class Calendars extends Main {
    *
    */
   public function archive() {
-    return $this->overview();
+    return $this->_overview();
   }
 
   /**
    * Show single event as ics file.
    * This needs to be specified as ajax, since there should be no surrounding templates.
    *
-   * @access public
+   * @access protected
    * @param integer $iId ID to show
    * @return string ICS-File
    *
    */
-  public function ics($iId) {
+  protected function _ics($iId) {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'ics');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'ics');
     $this->oSmarty->setTemplateDir($sTemplateDir);
@@ -71,15 +71,15 @@ class Calendars extends Main {
   }
 
   /**
-   * Show the overview
+   * Show the overview.
    *
-   * @access public
+   * @access protected
    * @return string HTML content
    *
    */
-  public function overview() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+  protected function _overview() {
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
+    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if ($this->_iId) {
@@ -94,7 +94,7 @@ class Calendars extends Main {
   }
 
   /**
-   * show the overview
+   * Show the iCalFeed.
    *
    * @access public
    * @return string HTML content

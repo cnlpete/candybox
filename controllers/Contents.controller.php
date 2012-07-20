@@ -18,49 +18,52 @@ use CandyCMS\Core\Helpers\I18n;
 class Contents extends Main {
 
   /**
-   * Show content entry or content overview (depends on a given ID or not).
-   *
-   * Caching is diabled due to needed title, keyword and description information.
+   * Show content page.
    *
    * @access protected
    * @return string HTML content
-   * @see /vendor/candyCMS/core/controllers/Main.controller.php for setTitle modifications.
    *
    */
   protected function _show() {
-    if ($this->_iId) {
-      $sTemplateDir  = Helper::getTemplateDir($this->_sController, 'show');
-      $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'show');
-      $this->oSmarty->setTemplateDir($sTemplateDir);
+    $sTemplateDir  = Helper::getTemplateDir($this->_sController, 'show');
+    $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'show');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
-      $aData = $this->_oModel->getId($this->_iId);
+    $aData = $this->_oModel->getId($this->_iId);
 
-      if (!isset($aData) || !$aData[$this->_iId]['id'])
-        return Helper::redirectTo('/errors/404');
+    if (!isset($aData) || !$aData[$this->_iId]['id'])
+      return Helper::redirectTo('/errors/404');
 
-      $this->setDescription($aData[$this->_iId]['teaser']);
-      $this->setKeywords($aData[$this->_iId]['keywords']);
-      $this->setTitle($this->_removeHighlight($aData[$this->_iId]['title']));
+    $this->setDescription($aData[$this->_iId]['teaser']);
+    $this->setKeywords($aData[$this->_iId]['keywords']);
+    $this->setTitle($this->_removeHighlight($aData[$this->_iId]['title']));
 
-      $this->oSmarty->assign('contents', $aData);
+    $this->oSmarty->assign('contents', $aData);
 
-      return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+  }
+
+  /**
+   * Show content overview.
+   *
+   * @access protected
+   * @return string HTML content
+   *
+   */
+  protected function _overview() {
+    $sTemplateDir  = Helper::getTemplateDir($this->_sController, 'overview');
+    $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'overview');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
+
+    $this->setTitle(I18n::get('global.manager.content'));
+
+    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+      $this->oSmarty->assign('contents', $this->_oModel->getOverview());
+      $this->oSmarty->assign('_pages_',
+                $this->_oModel->oPagination->showPages('/' . $this->_sController));
     }
-    else {
-      $sTemplateDir  = Helper::getTemplateDir($this->_sController, 'overview');
-      $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'overview');
-      $this->oSmarty->setTemplateDir($sTemplateDir);
 
-      $this->setTitle(I18n::get('global.manager.content'));
-
-      if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-        $this->oSmarty->assign('contents', $this->_oModel->getOverview());
-        $this->oSmarty->assign('_pages_',
-                  $this->_oModel->oPagination->showPages('/' . $this->_sController));
-      }
-
-      return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
-    }
+    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
   /**

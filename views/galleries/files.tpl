@@ -96,7 +96,7 @@
         </script>
       {/if}
       <p class='center'>
-        <a href='/rss/{$_REQUEST.controller}/{$_REQUEST.id}'
+        <a href='{$gallery_url}.rss'
            class='js-tooltip'
            title='{$lang.global.rss}'>
           <i class='icon-rss js-tooltip'

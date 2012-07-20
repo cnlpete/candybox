@@ -20,51 +20,57 @@ use CandyCMS\Plugins\Recaptcha;
 class Users extends Main {
 
   /**
-   * Show user or user overview.
+   * Show user.
    *
    * @access protected
    * @return string HTML content
    *
    */
   protected function _show() {
-    if ($this->_iId) {
-      $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
-      $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
+    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
+
+    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+      $aData = $this->_oModel->getId($this->_iId);
+
+      if (!isset($aData) || !$aData[1]['id'])
+        return Helper::redirectTo('/errors/404');
+
+      $this->oSmarty->assign('user', $aData);
+
+      $this->setTitle($aData[1]['full_name']);
+      $this->setDescription(I18n::get('users.description.show', $aData[1]['full_name']));
+    }
+
+    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+  }
+
+  /**
+   * Show user overview.
+   *
+   * @access protected
+   * @return string HTML content
+   *
+   */
+  protected function _overview() {
+    if ($this->_aSession['user']['role'] < 3)
+      return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
+
+    else {
+      $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
+      $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
       $this->oSmarty->setTemplateDir($sTemplateDir);
 
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-        $aData = $this->_oModel->getId($this->_iId);
+        $this->oSmarty->assign('user', $this->_oModel->getOverview());
 
-       if (!isset($aData) || !$aData[1]['id'])
-          return Helper::redirectTo('/errors/404');
-
-        $this->oSmarty->assign('user', $aData);
-
-        $this->setTitle($aData[1]['full_name']);
-        $this->setDescription(I18n::get('users.description.show', $aData[1]['full_name']));
+        $this->oSmarty->assign('_pages_',
+                $this->_oModel->oPagination->showPages('/' . $this->_sController));
       }
 
+      $this->setTitle(I18n::get('users.title.overview'));
       return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
-    }
-    else {
-      if ($this->_aSession['user']['role'] < 3)
-        return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
-
-      else {
-        $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
-        $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
-        $this->oSmarty->setTemplateDir($sTemplateDir);
-
-        if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-          $this->oSmarty->assign('user', $this->_oModel->getOverview());
-
-          $this->oSmarty->assign('_pages_',
-                  $this->_oModel->oPagination->showPages('/' . $this->_sController));
-        }
-
-        $this->setTitle(I18n::get('users.title.overview'));
-        return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
-      }
     }
   }
 

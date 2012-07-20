@@ -65,6 +65,24 @@ class Blogs extends Main {
   }
 
   /**
+   * Show blog as RSS.
+   *
+   * @access protected
+   * @return string XML (no real return, exits before)
+   *
+   */
+  protected function _rss() {
+    $sTemplateDir  = Helper::getTemplateDir($this->_aRequest['controller'], 'rss');
+    $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'rss');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
+
+    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
+      $this->oSmarty->assign('data', $this->_oModel->getOverview());
+
+    exit($this->oSmarty->fetch($sTemplateFile, UNIQUE_ID));
+  }
+
+  /**
    * Return the blog meta description and remove highlighted text if needed.
    *
    * @access private

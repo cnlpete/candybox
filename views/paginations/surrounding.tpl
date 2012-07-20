@@ -12,7 +12,7 @@
     {/if}
   </ul>
   <p class='center'>
-    <a href='/rss/{$_PAGE.controller}'>
+    <a href='/{$_PAGE.controller}.rss'>
       <i class='icon-rss js-tooltip'
          title='{$lang.global.rss}'></i>
     </a>

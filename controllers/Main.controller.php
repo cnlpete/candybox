@@ -430,25 +430,42 @@ abstract class Main {
     $this->oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
     if (isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'])
-      return $this->_showJSON();
+      return $this->_json();
 
     elseif (isset($this->_aRequest['type']) && 'xml' == $this->_aRequest['type'])
-      return $this->_showXML();
+      return $this->_xml();
 
-    else
-      return $this->_show();
+    elseif (isset($this->_aRequest['type']) && 'rss' == $this->_aRequest['type'])
+      return $this->_rss();
+
+    else {
+      return	$this->_iId ?
+              $this->_show() :
+              $this->_overview();
+    }
   }
 
   /**
    * Just a backup method to show an entry.
    *
    * @access protected
-   * @return string XML
+   * @return string HTML
    *
    */
   protected function _show() {
     AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_show()');
     return Helper::redirectTo('/errors/404');
+  }
+
+  /**
+   * Just a backup method to show an overview and stay compatible.
+   *
+   * @access protected
+   * @return string HTML
+   *
+   */
+  protected function _overview() {
+    return $this->_show();
   }
 
   /**
@@ -458,8 +475,8 @@ abstract class Main {
    * @return string XML
    *
    */
-  protected function _showXML() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_showXML()');
+  protected function _xml() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->xml()');
     return Helper::redirectTo('/errors/404');
   }
 
@@ -470,9 +487,21 @@ abstract class Main {
    * @return string json
    *
    */
-  protected function _showJSON() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_showJSON()');
+  protected function _json() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->json()');
     exit(json_encode(array('error' => 'There is no JSON handling method.')));
+  }
+
+  /**
+   * Just a backup method to show an entry as RSS.
+   *
+   * @access protected
+   * @return string json
+   *
+   */
+  protected function _rss() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->rss()');
+    return Helper::redirectTo('/errors/404');
   }
 
   /**

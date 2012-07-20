@@ -20,43 +20,49 @@ use CandyCMS\Core\Helpers\Upload;
 class Downloads extends Main {
 
   /**
-   * Download entry or show download overview (depends on a given ID or not).
+   * Provide download.
    *
    * @access protected
    * @return string HTML content
    *
    */
   protected function _show() {
-    if ($this->_iId) {
-      $sFile = $this->_oModel->getFileName($this->_iId);
+    $sFile = $this->_oModel->getFileName($this->_iId);
 
-      # if file not found, redirect user to overview
-      if (!$sFile)
-        return Helper::redirectTo ('/errors/404');
+    # If file not found, redirect user to overview
+    if (!$sFile)
+      return Helper::redirectTo ('/errors/404');
 
-      # Update download count
-      $this->_oModel->updateDownloadCount($this->_iId);
+    # Update download count
+    $this->_oModel->updateDownloadCount($this->_iId);
 
-      # Get mime type
-      if (function_exists('finfo_open'))
-        header('Content-type: ' . finfo_file(
-                finfo_open(FILEINFO_MIME_TYPE),
-                Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sFile)));
+    # Get mime type
+    if (function_exists('finfo_open'))
+      header('Content-type: ' . finfo_file(
+              finfo_open(FILEINFO_MIME_TYPE),
+              Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sFile)));
 
-      # Send file directly
-      header('Content-Disposition: attachment; filename="' . $sFile . '"');
-      exit(readfile(Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sFile)));
-    }
-    else {
-      $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
-      $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
-      $this->oSmarty->setTemplateDir($sTemplateDir);
+    # Send file directly
+    header('Content-Disposition: attachment; filename="' . $sFile . '"');
+    exit(readfile(Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sFile)));
+  }
 
-      if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
-        $this->oSmarty->assign('downloads', $this->_oModel->getOverview());
+  /**
+   * Show download overview.
+   *
+   * @access protected
+   * @return string HTML content
+   *
+   */
+  protected function _overview() {
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
+    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
 
-      return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
-    }
+    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
+      $this->oSmarty->assign('downloads', $this->_oModel->getOverview());
+
+    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
   /**

@@ -20,11 +20,11 @@ class Sitemaps extends Main {
   /**
    * Show the sitemap as XML.
    *
-   * @access public
+   * @access protected
    * @return string XML content
    *
    */
-  public function xml() {
+  protected function _xml() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'xml');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'xml');
     $this->oSmarty->setTemplateDir($sTemplateDir);
@@ -33,7 +33,7 @@ class Sitemaps extends Main {
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
       $this->oSmarty->assign('_website_landing_page_', WEBSITE_URL . '/' . WEBSITE_LANDING_PAGE);
-      $this->_getSitemap();
+      $this->_getSitemapData();
     }
 
     exit($this->oSmarty->display($sTemplateFile, UNIQUE_ID));
@@ -52,7 +52,7 @@ class Sitemaps extends Main {
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
-      $this->_getSitemap();
+      $this->_getSitemapData();
 
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
@@ -63,7 +63,7 @@ class Sitemaps extends Main {
    * @access protected
    *
    */
-  protected function _getSitemap() {
+  protected function _getSitemapData() {
     $sModel     = $this->__autoload('Blogs', true);
     $oBlogs     = new $sModel($this->_aRequest, $this->_aSession);
 

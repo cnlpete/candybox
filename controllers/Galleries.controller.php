@@ -29,18 +29,18 @@ class Galleries extends Main {
    */
   protected function _show() {
 		return	$this->_iId && !isset($this->_aRequest['album_id']) ?
-						$this->album() :
-						$this->overview();
+						$this->_albums() :
+						$this->_files();
 	}
 
   /**
    * Show overview of albums.
    *
-   * @access public
+   * @access protected
    * @return string HTML content
    *
    */
-  public function overview() {
+  protected function _files() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'albums');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'albums');
     $this->oSmarty->setTemplateDir($sTemplateDir);
@@ -56,11 +56,11 @@ class Galleries extends Main {
   /**
    * Show overview of images in one album.
    *
-   * @access public
+   * @access protected
    * @return string HTML content
    *
    */
-  public function album() {
+  protected function _albums() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'files');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'files');
     $this->oSmarty->setTemplateDir($sTemplateDir);
@@ -76,11 +76,37 @@ class Galleries extends Main {
 
       $this->oSmarty->assign('files', $aData);
       $this->oSmarty->assign('file_no', count($aData));
+
+      # @todo into array
       $this->oSmarty->assign('gallery_name', $sAlbumData['title']);
       $this->oSmarty->assign('gallery_content', $sAlbumData['content']);
+      $this->oSmarty->assign('gallery_url', WEBSITE_URL . '/galleries/' . $this->_iId);
     }
 
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+  }
+
+  /**
+   * Show gallery album as RSS.
+   *
+   * @access protected
+   * @return string XML (no real return, exits before)
+   *
+   */
+  protected function _rss() {
+    if (!$this->_iId)
+      Helper::redirectTo('/errors/404');
+
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'rss');
+    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'rss');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
+
+    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+      $aData  = $this->_oModel->getId($this->_iId, false, true);
+      $this->oSmarty->assign('data', $aData[$this->_iId]);
+    }
+
+    exit($this->oSmarty->fetch($sTemplateFile, UNIQUE_ID));
   }
 
   /**
@@ -115,7 +141,7 @@ class Galleries extends Main {
         $sPath  = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $iId);
 
         # Create missing thumb folders.
-        foreach(array('32', 'thumbnail', 'popup', 'original') as $sFolder) {
+        foreach (array('32', 'thumbnail', 'popup', 'original') as $sFolder) {
           if (!is_dir($sPath . '/' . $sFolder))
             mkdir($sPath . '/' . $sFolder, 0755, true);
         }
