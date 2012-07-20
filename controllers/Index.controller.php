@@ -277,7 +277,12 @@ class Index {
     if (isset($aRequest['language']) && !isset($this->_aRequest['blogs']) &&
         file_exists(PATH_STANDARD . '/app/languages/' . strtolower((string) $aRequest['language']) . '.yml')) {
       $sLanguage = strtolower((string) $aRequest['language']);
-      setcookie('language', (string) $this->_aRequest['language'], time() + 2592000, '/');
+      setcookie('default_language', (string) $sLanguage, time() + 2592000, '/');
+    }
+    elseif (isset($aRequest['default_language']) &&
+        file_exists(PATH_STANDARD . '/app/languages/' . strtolower((string) $aRequest['default_language']) . '.yml')) {
+      $sLanguage = strtolower((string) $aRequest['default_language']);
+      setcookie('default_language', (string) $sLanguage, time() + 2592000, '/');
     }
     elseif (file_exists(PATH_STANDARD . '/app/languages/' . strtolower($sBrowserLanguage) . '.yml'))
       $sLanguage = $sBrowserLanguage;
