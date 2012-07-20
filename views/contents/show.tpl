@@ -9,8 +9,8 @@
           {$c.title}
           {if $_SESSION.user.role >= 3}
             <a href='{$c.url_update}'>
-              <span class='icon-pencil js-tooltip'
-                    title='{$lang.global.update.update}'></span>
+              <i class='icon-pencil js-tooltip'
+                 title='{$lang.global.update.update}'></i>
             </a>
           {/if}
         </h1>

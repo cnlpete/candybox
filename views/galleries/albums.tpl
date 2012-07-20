@@ -2,8 +2,8 @@
   {if $_SESSION.user.role >= 3}
     <p class='center'>
       <a href='/{$_REQUEST.controller}/create'>
-        <span class='icon-plus'
-              title='{$lang.galleries.albums.title.create}'></span>
+        <i class='icon-plus'
+           title='{$lang.galleries.albums.title.create}'></i>
         {$lang.galleries.albums.title.create}
       </a>
     </p>
@@ -23,12 +23,12 @@
             <a href='{$a.url}'>{$a.title}</a>
             {if $_SESSION.user.role >= 3}
               <a href='{$a.url_createfile}'>
-                <span class='icon-plus js-tooltip'
-                      title='{$lang.galleries.files.title.create}'></span>
+                <i class='icon-plus js-tooltip'
+                   title='{$lang.galleries.files.title.create}'></i>
               </a>
               <a href='{$a.url_update}'>
-                <span class='icon-pencil js-tooltip'
-                      title='{$lang.global.update.update}'></span>
+                <i class='icon-pencil js-tooltip'
+                   title='{$lang.global.update.update}'></i>
               </a>
             {/if}
           </h2>

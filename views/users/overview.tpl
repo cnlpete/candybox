@@ -2,8 +2,8 @@
   {if $_SESSION.user.role == 4}
     <p class='center'>
       <a href='/{$_REQUEST.controller}/create'>
-        <span class='icon-plus'
-              title='{$lang.users.title.create}'></span>
+        <i class='icon-plus'
+           title='{$lang.users.title.create}'></i>
         {$lang.users.title.create}
       </a>
     </p>
@@ -70,19 +70,19 @@
           {/if}
         </td>
         <td class='center'>
-          <span class='icon-{if $u.receive_newsletter == 1}ok{else}remove{/if} js-tooltip'
-                title='{if $u.receive_newsletter == 1}✔{else}✖{/if}'></span>
+          <i class='icon-{if $u.receive_newsletter == 1}ok{else}remove{/if} js-tooltip'
+             title='{if $u.receive_newsletter == 1}✔{else}✖{/if}'></i>
         </td>
         {if $_SESSION.user.role == 4}
           <td class='center'>
             <a href='{$u.url_update}'>
-              <span class='icon-pencil js-tooltip'
-                    title='{$lang.global.update.update}'></span>
+              <i class='icon-pencil js-tooltip'
+                 title='{$lang.global.update.update}'></i>
             </a>
             &nbsp;
             <a href='#' onclick="confirmDestroy('{$u.url_destroy}')">
-              <span class='icon-trash js-tooltip'
-                    title='{$lang.global.destroy.destroy}'></span>
+              <i class='icon-trash js-tooltip'
+                 title='{$lang.global.destroy.destroy}'></i>
             </a>
           </td>
         {/if}

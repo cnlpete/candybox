@@ -13,8 +13,8 @@
   </ul>
   <p class='center'>
     <a href='/rss/{$_PAGE.controller}'>
-      <span class='icon-rss js-tooltip'
-            title='{$lang.global.rss}'></span>
+      <i class='icon-rss js-tooltip'
+         title='{$lang.global.rss}'></i>
     </a>
   </p>
 {/strip}

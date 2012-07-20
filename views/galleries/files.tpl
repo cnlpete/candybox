@@ -2,8 +2,8 @@
   {if $_SESSION.user.role >= 3}
     <p class='center'>
       <a href='/{$_REQUEST.controller}/{$_REQUEST.id}/createfile'>
-        <span class='icon-plus'
-              title='{$lang.global.create.entry}'></span>
+        <i class='icon-plus'
+           title='{$lang.global.create.entry}'></i>
         {$lang.galleries.files.title.create}
       </a>
     </p>
@@ -21,8 +21,8 @@
         </small>
         {if $_SESSION.user.role >= 3}
           <a href='/{$_REQUEST.controller}/{$_REQUEST.id}/update'>
-            <span class='icon-pencil js-tooltip'
-                  title='{$lang.global.update.update}'></span>
+            <i class='icon-pencil js-tooltip'
+               title='{$lang.global.update.update}'></i>
           </a>
         {/if}
       </h1>
@@ -51,12 +51,12 @@
             {if $_SESSION.user.role >= 3}
               <p class='center'>
                 <a href='{$f.url_update}'>
-                  <span class='icon-pencil js-tooltip'
-                        title='{$lang.global.update.update}'></span>
+                  <i class='icon-pencil js-tooltip'
+                     title='{$lang.global.update.update}'></i>
                 </a>
                 <a href='#' onclick="confirmDestroy('{$f.url_destroy}')">
-                  <span class='icon-trash js-tooltip'
-                        title='{$lang.global.destroy.destroy}'></span>
+                  <i class='icon-trash js-tooltip'
+                     title='{$lang.global.destroy.destroy}'></i>
                 </a>
               </p>
             {/if}
@@ -99,8 +99,8 @@
         <a href='/rss/{$_REQUEST.controller}/{$_REQUEST.id}'
            class='js-tooltip'
            title='{$lang.global.rss}'>
-          <span class='icon-rss js-tooltip'
-                title='{$lang.global.rss}'></span>
+          <i class='icon-rss js-tooltip'
+             title='{$lang.global.rss}'></i>
         </a>
       </p>
     {/if}

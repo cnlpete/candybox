@@ -5,8 +5,8 @@
         {$u.full_name}
         {if $_SESSION.user.role == 4 || $u.id == $_SESSION.user.id}
           <a href='{$u.url_update}'>
-            <span class='icon-pencil js-tooltip'
-                  title='{$lang.global.update.update}'></span>
+            <i class='icon-pencil js-tooltip'
+               title='{$lang.global.update.update}'></i>
           </a>
         {/if}
       </h1>

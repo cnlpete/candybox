@@ -2,8 +2,8 @@
   {if $_SESSION.user.role >= 3}
     <p class='center'>
       <a href='/{$_REQUEST.controller}/create'>
-        <span class='icon-plus'
-              title='{$lang.global.create.entry}'></span>
+        <i class='icon-plus'
+           title='{$lang.global.create.entry}'></i>
         {$lang.global.create.entry}
       </a>
     </p>
@@ -19,8 +19,8 @@
       {else}
         &nbsp;
         <a id='test-icalfeedlink' href='/{$_REQUEST.controller}/icalfeed'>
-          <span class='icon-calendar js-tooltip'
-                title='{$lang.calendars.info.icsfeed}'></span>
+          <i class='icon-calendar js-tooltip'
+             title='{$lang.calendars.info.icsfeed}'></i>
         </a>
       {/if}
     </h1>
@@ -82,19 +82,19 @@
               </td>
               <td class='center'>
                 <a href='{$d.url}'>
-                  <span class='icon-calendar js-tooltip'
-                        title='{$lang.calendars.info.ics}'></span>
+                  <i class='icon-calendar js-tooltip'
+                     title='{$lang.calendars.info.ics}'></i>
                 </a>
                 {if $_SESSION.user.role >= 3}
                   &nbsp;
                   <a href='/{$_REQUEST.controller}/{$d.id}/update'>
-                    <span class='icon-pencil js-tooltip'
-                          title='{$lang.global.update.update}'></span>
+                    <i class='icon-pencil js-tooltip'
+                       title='{$lang.global.update.update}'></i>
                   </a>
                   &nbsp;
                   <a href="#" onclick="confirmDestroy('/{$_REQUEST.controller}/{$d.id}/destroy')">
-                    <span class='icon-trash js-tooltip'
-                        title='{$lang.global.destroy.destroy}'></span>
+                    <i class='icon-trash js-tooltip'
+                       title='{$lang.global.destroy.destroy}'></i>
                   </a>
                 {/if}
               </td>
