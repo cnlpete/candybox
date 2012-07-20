@@ -23,14 +23,15 @@ class Galleries extends Main {
   /**
    * Show image, gallery album or overview (depends on a given ID and album_id).
    *
-   * @access protected
+   * @access public
    * @return string HTML content
    *
    */
-  protected function _show() {
-		return	$this->_iId && !isset($this->_aRequest['album_id']) ?
-						$this->_albums() :
-						$this->_files();
+  public function show() {
+    $sType    = isset($this->_aRequest['type']) ? strtoupper($this->_aRequest['type']) : '';
+    $sMethod  = $this->_iId && !isset($this->_aRequest['album_id']) ? '_files' . $sType : '_albums' . $sType;
+
+    return $this->$sMethod();
 	}
 
   /**
@@ -40,7 +41,7 @@ class Galleries extends Main {
    * @return string HTML content
    *
    */
-  protected function _files() {
+  protected function _albums() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'albums');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'albums');
     $this->oSmarty->setTemplateDir($sTemplateDir);
@@ -60,7 +61,7 @@ class Galleries extends Main {
    * @return string HTML content
    *
    */
-  protected function _albums() {
+  protected function _files() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'files');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'files');
     $this->oSmarty->setTemplateDir($sTemplateDir);
@@ -93,12 +94,12 @@ class Galleries extends Main {
    * @return string XML (no real return, exits before)
    *
    */
-  protected function _rss() {
+  protected function _filesRSS() {
     if (!$this->_iId)
       Helper::redirectTo('/errors/404');
 
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'rss');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'rss');
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'filesRSS');
+    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'filesRSS');
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {

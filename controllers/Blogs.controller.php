@@ -25,7 +25,7 @@ class Blogs extends Main {
    *
    */
   protected function _show() {
-    $sTemplateDir  = Helper::getTemplateDir($this->_aRequest['controller'], 'show');
+    $sTemplateDir  = Helper::getTemplateDir($this->_sController, 'show');
     $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'show');
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
@@ -71,9 +71,9 @@ class Blogs extends Main {
    * @return string XML (no real return, exits before)
    *
    */
-  protected function _rss() {
-    $sTemplateDir  = Helper::getTemplateDir($this->_aRequest['controller'], 'rss');
-    $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'rss');
+  protected function _overviewRSS() {
+    $sTemplateDir  = Helper::getTemplateDir($this->_sController, 'overviewRSS');
+    $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'overviewRSS');
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))

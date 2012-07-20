@@ -429,20 +429,10 @@ abstract class Main {
   public function show() {
     $this->oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
-    if (isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'])
-      return $this->_json();
+    $sType    = isset($this->_aRequest['type']) ? strtoupper($this->_aRequest['type']) : '';
+    $sMethod  = $this->_iId ? '_show' . $sType : '_overview' . $sType;
 
-    elseif (isset($this->_aRequest['type']) && 'xml' == $this->_aRequest['type'])
-      return $this->_xml();
-
-    elseif (isset($this->_aRequest['type']) && 'rss' == $this->_aRequest['type'])
-      return $this->_rss();
-
-    else {
-      return	$this->_iId ?
-              $this->_show() :
-              $this->_overview();
-    }
+    return $this->$sMethod();
   }
 
   /**
@@ -475,8 +465,20 @@ abstract class Main {
    * @return string XML
    *
    */
-  protected function _xml() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->xml()');
+  protected function _showXML() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_showXML()');
+    return Helper::redirectTo('/errors/404');
+  }
+
+  /**
+   * Just a backup method to show an overview as XML.
+   *
+   * @access protected
+   * @return string XML
+   *
+   */
+  protected function _overviewXML() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_overviewXML()');
     return Helper::redirectTo('/errors/404');
   }
 
@@ -487,8 +489,20 @@ abstract class Main {
    * @return string json
    *
    */
-  protected function _json() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->json()');
+  protected function _showJSON() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_showJSON()');
+    exit(json_encode(array('error' => 'There is no JSON handling method.')));
+  }
+
+  /**
+   * Just a backup method to show an overview as JSON.
+   *
+   * @access protected
+   * @return string json
+   *
+   */
+  protected function _overviewJSON() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_overviewJSON()');
     exit(json_encode(array('error' => 'There is no JSON handling method.')));
   }
 
@@ -499,8 +513,20 @@ abstract class Main {
    * @return string json
    *
    */
-  protected function _rss() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->rss()');
+  protected function _showRSS() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_showRSS()');
+    return Helper::redirectTo('/errors/404');
+  }
+
+  /**
+   * Just a backup method to show an overview as RSS.
+   *
+   * @access protected
+   * @return string json
+   *
+   */
+  protected function _overviewRSS() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_overviewRSS()');
     return Helper::redirectTo('/errors/404');
   }
 
