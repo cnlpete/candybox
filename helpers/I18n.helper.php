@@ -47,6 +47,16 @@ class I18n {
   private static $_sLanguage = null;
 
   /**
+  *
+  * Holds the user specified plugins
+  *
+  * @var static
+  * @access private
+  *
+  */
+  private static $_aPlugins = null;
+
+  /**
    * Read the language yaml and save information into session due to fast access.
    *
    * @access public
@@ -59,7 +69,9 @@ class I18n {
     if ($aSession)
       $this->_aSession = $aSession;
 
-    I18n::$_oObject = $this;
+    self::$_oObject = $this;
+
+    self::$_aPlugins = $aPlugins;
 
     # first call
     if (!isset(I18n::$_aLang) || WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test') {
@@ -82,7 +94,7 @@ class I18n {
         self::$_aLang = & $aSession['lang'];
 
       # load the default language
-      self::load($sLanguage, $aPlugins);
+      self::load($sLanguage);
     }
   }
 
@@ -92,11 +104,10 @@ class I18n {
    *
    * @access public
    * @param string $sLanguage the language to load
-   * @param array $aPlugins plugins to load language files from
    * @return boolean whether language could be loaded
    *
    */
-  public static function load($sLanguage, $aPlugins = array()) {
+  public static function load($sLanguage) {
     # Already loaded?
     if (isset(I18n::$_aLang[$sLanguage])) {
       self::$_sLanguage = $sLanguage;
@@ -119,7 +130,7 @@ class I18n {
     # Load the plugin language files and merge them
     $sPluginPath = PATH_STANDARD . '/vendor/candyCMS/plugins/';
 
-    foreach ($aPlugins as $sPlugin) {
+    foreach (self::$_aPlugins as $sPlugin) {
       if (file_exists($sPluginPath . $sPlugin . '/languages')) {
         $aPluginLang = file_exists($sPluginPath . $sPlugin . '/languages/' . $sLanguageFile) ?
                 \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sPluginPath . $sPlugin . '/languages/' . $sLanguageFile)) :
