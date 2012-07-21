@@ -33,7 +33,7 @@
       {/if}
 
       {* Basic stuff *}
-      <link href='/rss' rel='alternate' type='application/rss+xml' title='RSS'/>
+      <link href='/blogs.rss' rel='alternate' type='application/rss+xml' title='RSS'/>
       <link href='{$_PATH.public}/favicon.ico' rel='shortcut icon' type='image/x-icon'/>
 
       {* Include jQuery and its components *}
