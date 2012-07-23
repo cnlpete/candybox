@@ -183,6 +183,7 @@
             </section>
           </div>
           <div class='span4'>
+            <!-- plugin:languagechooser -->
             <h3>{$lang.global.headlines}</h3>
             <!-- plugin:headlines -->
             <h3>{$lang.global.archive}</h3>
