@@ -113,7 +113,7 @@ define('ALLOW_EXTENSIONS', false);
 # Tell the allowed plugins seperated by comma.
 # DEFAULT: 'Bbcode,FormatTimestamp,Headlines,Archive,TinyMCE'
 # OTHER OFFICIALLY SUPPORTED PLUGINS: Facebook, Cronjob, Piwik, Analytics,
-# TagCloud, AddThis, SocialSharePrivacy
+# TagCloud, AddThis, SocialSharePrivacy, LanguageChooser
 define('ALLOW_PLUGINS', 'Bbcode,FormatTimestamp,Headlines,Archive,TinyMCE');
 
 # ------------------------------------------------------------------------------
