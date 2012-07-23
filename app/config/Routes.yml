@@ -12,7 +12,7 @@
 "searches/(:any)": controller=searches&search=$1
 "sessions/(password|verification|destroy)": controller=sessions&action=$1
 "sites/(:alnum)": controller=sites&site=$1
-"sitemap.xml": controller=sitemaps&type=xml&action=xml
+"sitemap.xml": controller=sitemaps&type=xml
 "users/(:num)/token": controller=users&action=token&id=$1
 "users/(:alnum)/verification": controller=users&action=verification&code=$1
 "users/(:num)/(:alpha)": controller=users&action=$2&id=$1
@@ -26,11 +26,11 @@
 
 # Magic rule
 "(:alpha)/(:num)": controller=$1&id=$2&page=1
-"(:alpha)/(:num).(xml|json)": controller=$1&id=$2&type=$3&page=1
+"(:alpha)/(:num).(xml|json|rss)": controller=$1&id=$2&type=$3&page=1
 "(:alpha)/(:num)/(:any)": controller=$1&id=$2&seo_title=$3&page=1
 "(:alpha)/(:alpha).(xml|json)": controller=$1&action=$2&type=$3
 "(:alpha)/(update|destroy)": controller=errors&action=show
-"(:alpha).(xml|json)": controller=$1&type=$2
+"(:alpha).(xml|json|rss)": controller=$1&type=$2
 
 # Fixes
 "blogs/(:any)/page/(:num)": controller=blogs&search=$1&page=$2
