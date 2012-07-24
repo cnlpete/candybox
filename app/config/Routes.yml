@@ -8,7 +8,6 @@
 "language/(:alpha)": language=$1
 "mails/(:num)/(create|resend)": controller=mails&action=$2&id=$1
 "medias/(:any)/destroy": controller=medias&action=destroy&file=$1
-"rss/(:alpha)(/(:num))?": controller=rss&section=$1&id=$3
 "searches/(:any)": controller=searches&search=$1
 "sessions/(password|verification|destroy)": controller=sessions&action=$1
 "sites/(:alnum)": controller=sites&site=$1
@@ -28,7 +27,7 @@
 "(:alpha)/(:num)": controller=$1&id=$2&page=1
 "(:alpha)/(:num).(xml|json|rss)": controller=$1&id=$2&type=$3&page=1
 "(:alpha)/(:num)/(:any)": controller=$1&id=$2&seo_title=$3&page=1
-"(:alpha)/(:alpha).(xml|json)": controller=$1&action=$2&type=$3
+"(:alpha)/(:alpha).(xml|json|rss)": controller=$1&action=$2&type=$3
 "(:alpha)/(update|destroy)": controller=errors&action=show
 "(:alpha).(xml|json|rss)": controller=$1&type=$2
 
