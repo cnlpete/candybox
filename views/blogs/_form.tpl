@@ -111,7 +111,11 @@
                 class='span4'
                 id='input-language'>
           {foreach $languages as $l}
-            <option value='{$l}' {if $l == $WEBSITE_LANGUAGE}selected='selected'{/if}>{$l}</option>
+            {if $_REQUEST.action == 'create'}
+              <option value='{$l}' {if $l == $WEBSITE_LANGUAGE}selected='selected'{/if}>{$l}</option>
+            {else}
+              <option value='{$l}' {if $l == $language}selected='selected'{/if}>{$l}</option>
+            {/if}
           {/foreach}
         </select>
       </div>
