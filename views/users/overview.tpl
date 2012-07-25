@@ -96,7 +96,7 @@
   <script type='text/javascript'>
     {if $_AUTOLOAD_.enabled}
       $(document).ready(function(){
-        enableInfiniteScroll('table', 'table tbody tr', {$_AUTOLOAD_.times});
+        enableInfiniteScroll('table', 'table tbody tr', {$_AUTOLOAD_.times}, '{$_PATH.images}');
       });
     {/if}
 

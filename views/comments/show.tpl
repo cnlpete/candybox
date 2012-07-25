@@ -71,7 +71,7 @@
       <script src='{$_PATH.js}/core/jquery.infiniteScroll{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
       <script type="text/javascript">
         $(document).ready(function(){
-          enableInfiniteScroll('#js-commments', '#js-commments article', {$_AUTOLOAD_.times});
+          enableInfiniteScroll('#js-commments', '#js-commments article', {$_AUTOLOAD_.times}, '{$_PATH.images}');
         });
       </script>
     {/if}
