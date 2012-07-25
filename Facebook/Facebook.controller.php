@@ -23,7 +23,7 @@ use Facebook;
 final class FacebookCMS extends Facebook {
 
   /**
-   * Identifier for Template Replacements
+   * Identifier for template replacements.
    *
    * @var contant
    *
@@ -40,28 +40,25 @@ final class FacebookCMS extends Facebook {
    *
    */
   public final function getUserData($sKey = '') {
-    if ($this->getAccessToken()) {
-      try {
-        $iUid = $this->getUser();
-        $aApiCall = array(
-            'method'  => 'users.getinfo',
-            'uids'    => $iUid,
-            'fields'  => 'uid, first_name, last_name, profile_url, pic, pic_square_with_logo, locale, email, website'
-        );
+    try {
+      $aApiCall = array(
+          'method'  => 'users.getinfo',
+          'uids'    => $this->getUser(),
+          'fields'  => 'uid, first_name, last_name, profile_url, pic, pic_square_with_logo, locale, email, website'
+      );
 
-        $aData = $this->api($aApiCall);
-        return !empty($sKey) ? $aData[$sKey] : $aData;
-      }
-      catch (AdvancedException $e) {
-        AdvancedException::reportBoth($e->getMessage());
-        exit('Error');
-      }
+      $aData = $this->api($aApiCall);
+      return !empty($sKey) ? $aData[$sKey] : $aData;
+    }
+    catch (AdvancedException $e) {
+      AdvancedException::reportBoth($e->getMessage());
+      exit('Error: Cannot use Facebook API.');
     }
   }
 
   /**
    *
-   * Get the Facebook avatar Info for all given Uids, load from cache, if cache is specified
+   * Get the Facebook avatar info for all given UIDs, load from cache, if cache is specified
    *
    * @final
    * @access public
@@ -88,22 +85,20 @@ final class FacebookCMS extends Facebook {
             'fields' => 'pic_square_with_logo, profile_url'
         );
 
-        $aFacebookAvatars = $this->api($aApiCall);
-
         # we read the response and add to the cache
-        foreach ($aFacebookAvatars as $aFacebookAvatar) {
+        foreach ($this->api($aApiCall) as $aFacebookAvatar) {
           $sUid = $aFacebookAvatar['uid'];
+
           $aFacebookAvatarCache[$sUid]['pic_square_with_logo'] = $aFacebookAvatar['pic_square_with_logo'];
           $aFacebookAvatarCache[$sUid]['profile_url']          = $aFacebookAvatar['profile_url'];
         }
       }
 
-      #we return the cache
       return $aFacebookAvatarCache;
     }
     catch (AdvancedException $e) {
       AdvancedException::reportBoth($e->getMessage());
-      exit('Error');
+      exit('Error: Cannot create Facebook avatar images.');
     }
   }
 
