@@ -84,7 +84,7 @@ class Mails extends Main {
 
     return isset($this->_aRequest[$this->_sController]) ?
             $this->_create($bShowCaptcha) :
-            $this->_showCreateMailTemplate();
+            $this->_showCreateTemplate();
   }
 
   /**
@@ -97,7 +97,7 @@ class Mails extends Main {
    * @todo rename to _show?
    *
    */
-  protected function _showCreateMailTemplate() {
+  protected function _showCreateTemplate() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'create');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'create');
     $this->oSmarty->setTemplateDir($sTemplateDir);
@@ -145,7 +145,7 @@ class Mails extends Main {
         $this->_aError['captcha'] = I18n::get('error.captcha.incorrect');
 
     if (isset($this->_aError))
-      return $this->_showCreateMailTemplate();
+      return $this->_showCreateTemplate();
 
     else {
       # Select user name and surname

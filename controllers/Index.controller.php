@@ -489,7 +489,7 @@ class Index {
     if ($this->_aSession['user']['id'] == 0) {
       $oFacebook = $this->getFacebookExtension();
 
-      if ($oFacebook == true)
+      if ($oFacebook)
         $aFacebookData = $oFacebook->getUserData();
 
       # Override empty data with facebook data

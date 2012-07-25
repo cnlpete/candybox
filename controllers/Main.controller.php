@@ -18,7 +18,6 @@ use CandyCMS\Core\Helpers\Helper;
 use CandyCMS\Core\Helpers\I18n;
 use CandyCMS\Core\Helpers\SmartySingleton;
 use candyCMS\plugins\Bbcode;
-use candyCMS\plugins\FacebookCMS;
 use MCAPI;
 
 require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Helper.helper.php';

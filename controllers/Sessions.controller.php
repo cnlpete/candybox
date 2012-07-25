@@ -255,16 +255,16 @@ class Sessions extends Main {
   public function destroy() {
     # Facebook logout
     if ($this->_aSession['user']['role'] == 2) {
-      $this->_aSession['facebook']->destroySession();
-      unset($this->_aSession['user']);
 
-      return Helper::successMessage(I18n::get('success.session.destroy'),
-              $this->_aSession['facebook']->getLogoutUrl(array('next' => WEBSITE_URL . '/')));
+      $sRedirectTo = $this->_aSession['facebook']->getLogoutUrl(array('next' => WEBSITE_URL . '/'));
+
+      unset($this->_aSession);
+      return Helper::successMessage(I18n::get('success.session.destroy'), $sRedirectTo);
     }
 
     # Standard member
     elseif ($this->_aSession['user']['role'] > 0 && $this->_oModel->destroy(session_id()) === true) {
-      unset($this->_aSession['user']);
+      unset($this->_aSession);
       return Helper::successMessage(I18n::get('success.session.destroy'), '/');
     }
 
