@@ -68,6 +68,10 @@ else {
 # Define current url
 define('CURRENT_URL', isset($_SERVER['REQUEST_URI']) ? WEBSITE_URL . $_SERVER['REQUEST_URI'] : WEBSITE_URL);
 
+# Reload page when redirected
+if (preg_match('/\?reload=1/', CURRENT_URL))
+  exit(header('Location:' . str_replace('?reload=1', '', CURRENT_URL)));
+
 # Start user session.
 @session_start();
 

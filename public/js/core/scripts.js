@@ -107,13 +107,13 @@ function checkFileSize(fileInput, iMaxFileSize, sMessage) {
 }
 
 var iCounter = 0;
-function enableInfiniteScroll(selector, itemselector, repeatTimes) {
+function enableInfiniteScroll(selector, itemselector, repeatTimes, pathImages) {
   $(selector).infinitescroll({
     navSelector   : 'div.pagination',
     nextSelector  : 'div.pagination a:first',
     itemSelector  : itemselector,
     loading       : { msgText : '',
-      img         : '{$_PATH.images}/candy.global/loading.gif',
+      img         : pathImages + '/candy.global/loading.gif',
       finishedMsg : '',
       selector    : 'div.js-pagination',
       finished    : function(opts){
