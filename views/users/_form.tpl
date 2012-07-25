@@ -46,7 +46,7 @@
             <input class='span4 required'
                    name='{$_REQUEST.controller}[name]'
                    value="{$name}"
-                   type='name'
+                   type='text'
                    id='input-name'
                    required />
             {if isset($error.name)}
