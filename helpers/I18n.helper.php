@@ -69,9 +69,8 @@ class I18n {
     if ($aSession)
       $this->_aSession = $aSession;
 
-    self::$_oObject = $this;
-
-    self::$_aPlugins = $aPlugins;
+    self::$_oObject   = $this;
+    self::$_aPlugins  = $aPlugins;
 
     # first call
     if (!isset(I18n::$_aLang) || WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test') {
@@ -147,7 +146,7 @@ class I18n {
     }
 
     # Merge all that with the users custom language file
-    Helper::recursiveOnewayArrayReplace(I18n::$_aLang,
+    Helper::recursiveOnewayArrayReplace(self::$_aLang[$sLanguage],
             \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sCustomLanguageFile)));
 
     self::$_sLanguage = $sLanguage;

@@ -10,20 +10,20 @@
 
       <meta http-equiv='content-type' content='text/html;charset=utf-8'/>
       <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
-      <meta name='description' content='{$_WEBSITE.meta.description}'/>
-      <meta name='dc.title' content='{$_WEBSITE.title}'/>
+      <meta name='description' content="{$_WEBSITE.meta.description}"/>
+      <meta name='dc.title' content="{$_WEBSITE.title}"/>
       {if $_WEBSITE.meta.keywords}
-        <meta name='keywords' content='{$_WEBSITE.meta.keywords}'/>
+        <meta name='keywords' content="{$_WEBSITE.meta.keywords}"/>
       {/if}
 
       {* Provide more details for specific entry. *}
       {if isset($_REQUEST.id)}
-        <meta property='og:description' content='{$_WEBSITE.meta.og.description}'/>
-        <meta property='og:site_name' content='{$_WEBSITE.meta.og.site_name}'/>
-        <meta property='og:title' content='{$_WEBSITE.meta.og.title}'/>
-        <meta property='og:url' content='{$_WEBSITE.meta.og.url}'/>
-        <meta itemprop='name' content='{$_WEBSITE.meta.og.title}'>
-        <meta itemprop='description' content='{$_WEBSITE.meta.og.description}'>
+        <meta property='og:description' content="{$_WEBSITE.meta.og.description}"/>
+        <meta property='og:site_name' content="{$_WEBSITE.meta.og.site_name}"/>
+        <meta property='og:title' content="{$_WEBSITE.meta.og.title}"/>
+        <meta property='og:url' content="{$_WEBSITE.meta.og.url}"/>
+        <meta itemprop='name' content="{$_WEBSITE.meta.og.title}">
+        <meta itemprop='description' content="{$_WEBSITE.meta.og.description}">
       {/if}
 
       {* If we want to use a facebook plugin, provide tracking data. *}
