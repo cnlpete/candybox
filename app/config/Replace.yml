@@ -1,0 +1,11 @@
+# NOTE THAT YOU MIGHT BREAK LINKS WHEN YOU DON'T KNOW EXACTLY WHAT YOU ARE DOING!
+#
+# Define, which words and parts should be replaced. Enable the "Replace" plugin
+# in your Candy.inc.php to make this work.
+#
+# EXAMPLES:
+# foo : bar // foo becomes bar
+# "foo " : "bar " // foo becomes only bar, when there are spaces after foo
+# "foo " : "<a href='bar'>bar</a>" // foo becomes bar, when there are spaces after foo
+# " foo " : " bar " // foo becomes bar, when surrounded by words
+# "<!-- ad:banner -->" : "<img src='url' /> // replaces comment with HTML
