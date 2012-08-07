@@ -61,7 +61,7 @@ class I18n {
    *
    * @access public
    * @param string $sLanguage language to load
-   * @param array $aSession the session object, if given save the translations in S_SESSION['lang']
+   * @param array $aSession the session object, if given save the translations in $_SESSION['lang']
    * @param array $aPlugins plugins to load
    *
    */

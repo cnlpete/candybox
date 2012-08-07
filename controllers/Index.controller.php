@@ -590,7 +590,7 @@ class Index {
   }
 
   /**
-   * Get plugin placeholders, Render needed Plugins and Replace Placeholders.
+   * Get plugin placeholders, render needed plugins and replace placeholders.
    * This is done at the end of execution for performance reasons.
    *
    * @access private
@@ -614,11 +614,15 @@ class Index {
       if (class_exists($sPluginNamespace)) {
 				$oPlugin = $sPlugin == 'Recaptcha' ?
 								$sPluginNamespace::getInstance() :
-								new $sPluginNamespace();
+								new $sPluginNamespace($sCachedHTML);
 
-        if (preg_match('/<!-- plugin:' . strtolower($oPlugin::IDENTIFIER) . ' -->/', $sCachedHTML))
+        if (preg_match('/<!-- plugin:' . strtolower($oPlugin::IDENTIFIER) . ' -->/', $sCachedHTML) &&
+                $sPlugin !== 'Replace')
           $sCachedHTML = str_replace('<!-- plugin:' . strtolower($oPlugin::IDENTIFIER) . ' -->',
                   $oPlugin->show($this->_aRequest, $this->_aSession), $sCachedHTML);
+
+        elseif($sPlugin == 'Replace')
+          $sCachedHTML = $oPlugin->replace($this->_aRequest, $this->_aSession, $sCachedHTML);
       }
     }
 
