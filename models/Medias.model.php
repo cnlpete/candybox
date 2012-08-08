@@ -66,6 +66,7 @@ class Medias extends Main {
         'size'  => Helper::getFileSize($sPath),
         'type'  => $sFileType,
         'dim'   => $aImgDim,
+        'url'   => Helper::addSlash(PATH_UPLOAD) . '/' . $this->_sController . '/' . $sFile,
         'url_destroy' => '/' . $this->_sController . '/' . $sFile . '/destroy'
       );
     }
