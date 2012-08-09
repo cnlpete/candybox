@@ -399,7 +399,7 @@ class Helper {
    */
   public static function formatOutput($sStr, $sHighlight = '') {
     if ($sHighlight)
-      $sStr = str_ireplace($sHighlight, '<mark>' . $sHighlight . '</mark>', $sStr);
+      $sStr = str_ireplace(urldecode($sHighlight), '<mark>' . urldecode($sHighlight) . '</mark>', $sStr);
 
     if (class_exists('\CandyCMS\Plugins\Bbcode') == true) {
       $oBbcode = new Bbcode();

@@ -22,7 +22,7 @@ class Searches extends Main {
    *
    * @var string
    * @access protected
-   * 
+   *
    */
   protected $_sSearch;
 
@@ -40,16 +40,17 @@ class Searches extends Main {
 
     else {
       if (substr(CURRENT_URL, -strlen($this->_sController)) == $this->_sController)
-        return Helper::redirectTo ('/' . $this->_sController . '/' . $this->_aRequest[$this->_sController]['search']);
+        return Helper::redirectTo ('/' . $this->_sController . '/' .
+                urlencode($this->_aRequest[$this->_sController]['search']));
 
       $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
       $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
       $this->oSmarty->setTemplateDir($sTemplateDir);
 
-      $sString = Helper::formatInput($this->_aRequest['search']);
+      $sString = Helper::formatInput(urldecode($this->_aRequest['search']));
 
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-        $this->oSmarty->assign('string', $sString);
+        $this->oSmarty->assign('string', urlencode($sString));
         $this->oSmarty->assign('tables', $this->_oModel->getData($sString,
                     array('blogs', 'contents', 'downloads', 'gallery_albums')));
 
