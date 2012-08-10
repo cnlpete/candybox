@@ -616,13 +616,14 @@ class Index {
 								$sPluginNamespace::getInstance() :
 								new $sPluginNamespace($sCachedHTML);
 
-        if (preg_match('/<!-- plugin:' . strtolower($oPlugin::IDENTIFIER) . ' -->/', $sCachedHTML) &&
+        # Bugfix: Only replace text at show actions, because of conflicts with links to be replaced.
+        if($sPlugin == 'Replace' && !isset($this->_aRequest['action']))
+          $sCachedHTML = $oPlugin->replace($this->_aRequest, $this->_aSession, $sCachedHTML);
+
+        elseif (preg_match('/<!-- plugin:' . strtolower($oPlugin::IDENTIFIER) . ' -->/', $sCachedHTML) &&
                 $sPlugin !== 'Replace')
           $sCachedHTML = str_replace('<!-- plugin:' . strtolower($oPlugin::IDENTIFIER) . ' -->',
                   $oPlugin->show($this->_aRequest, $this->_aSession), $sCachedHTML);
-
-        elseif($sPlugin == 'Replace')
-          $sCachedHTML = $oPlugin->replace($this->_aRequest, $this->_aSession, $sCachedHTML);
       }
     }
 
