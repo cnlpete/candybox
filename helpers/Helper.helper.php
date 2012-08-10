@@ -14,7 +14,6 @@ namespace CandyCMS\Core\Helpers;
 
 use CandyCMS\Core\Controllers\Main;
 use CandyCMS\Core\Helpers\AdvancedException;
-use CandyCMS\Plugins\Bbcode;
 use PDO;
 
 class Helper {
@@ -393,17 +392,23 @@ class Helper {
    * @access public
    * @param string $sStr string to format
    * @param string $sHighlight string to highlight
+   * @param boolean $bUseMarkdown use markdown on this field?
    * @return string $sStr formatted string
    * @see vendor/candyCMS/core/Bbcode/Bbcode.controller.php
    *
    */
-  public static function formatOutput($sStr, $sHighlight = '') {
+  public static function formatOutput($sStr, $sHighlight = '', $bUseMarkdown = false) {
     if ($sHighlight)
       $sStr = str_ireplace(urldecode($sHighlight), '<mark>' . urldecode($sHighlight) . '</mark>', $sStr);
 
-    if (class_exists('\CandyCMS\Plugins\Bbcode') == true) {
-      $oBbcode = new Bbcode();
-      return $oBbcode->getFormatedText($sStr);
+    if (class_exists('\CandyCMS\Plugins\Bbcode')) {
+      $oBbcode = new \CandyCMS\Plugins\Bbcode();
+      $sStr = $oBbcode->getFormatedText($sStr);
+    }
+
+    if(!class_exists('\CandyCMS\Plugins\TinyMCE') && $bUseMarkdown) {
+      $oMarkdown = new \dflydev\markdown\MarkdownParser();
+      $sStr = $oMarkdown->transformMarkdown($sStr);
     }
 
     return $sStr;
