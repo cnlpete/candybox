@@ -111,6 +111,7 @@ define('ALLOW_EXTENSIONS', false);
 # ------------------------------------------------------------------------------
 
 # Tell the allowed plugins seperated by comma.
+# If you disable TinyMCE, Markdown is used.
 # DEFAULT: 'Bbcode,FormatTimestamp,Headlines,Archive,TinyMCE'
 # OTHER OFFICIALLY SUPPORTED PLUGINS: Facebook, Cronjob, Piwik, Analytics,
 # TagCloud, AddThis, SocialSharePrivacy, LanguageChooser, Replace

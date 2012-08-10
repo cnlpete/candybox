@@ -4,22 +4,6 @@
       {
         "type": "package",
         "package": {
-          "name": "smarty/smarty",
-          "version": "3.1.11",
-          "dist": {
-            "url": "http://www.smarty.net/files/Smarty-3.1.11.zip",
-            "type": "zip"
-          },
-          "source": {
-            "url": "http://smarty-php.googlecode.com/svn/",
-            "type": "svn",
-            "reference": "tags/Smarty_3_1_11/distribution/"
-          }
-        }
-      },
-      {
-        "type": "package",
-        "package": {
           "name": "recaptcha/recaptcha",
           "version": "1.11",
           "dist": {
@@ -84,12 +68,14 @@
     "phpmailer/phpmailer": "5.2.1",
     "smushit/smushit": "0.*",
     "recaptcha/recaptcha": "1.11",
-    "smarty/smarty": "3.1.*",
+    "smarty/smarty": "dev-trunk",
     "symfony/yaml": "dev-master",
     "facebook/php-sdk": "dev-master",
     "leafo/lessphp": "0.3.5",
     "mailchimp/mcapi": "1.3.1",
-    "simonhamp/routes": "dev-master"
+    "simonhamp/routes": "dev-master",
+    "dflydev/markdown" : "dev-master"
+
   },
 
   "require-dev" : {
