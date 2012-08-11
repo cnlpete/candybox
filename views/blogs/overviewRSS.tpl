@@ -5,7 +5,7 @@
   <channel>
     <title>{$WEBSITE_NAME}</title>
     <description>{$lang.website.description}</description>
-    <language>{$WEBSITE_LOCALE}</language>
+    <language>{$WEBSITE_LANGUAGE}</language>
     <link>{$WEBSITE_URL}</link>
     <copyright>{$WEBSITE_NAME}</copyright>
     <pubDate>{if $WEBSITE_MODE !== 'test'}{$smarty.now|date_format:'%a, %d %b %Y %H:%M:%S %z'}{/if}</pubDate>
@@ -18,10 +18,13 @@
           <description>
             <![CDATA[
               {if $d.teaser}
-                {$d.teaser}
-              {else}
-                {$d.content}
+                <p>
+                  <strong>
+                    {$d.teaser}
+                  </strong>
+                </p>
               {/if}
+              {$d.content}
             ]]>
           </description>
         {/if}

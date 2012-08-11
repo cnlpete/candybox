@@ -5,7 +5,7 @@
   <channel>
     <title>{$WEBSITE_NAME} - {$data.title}</title>
     <description>{$data.content}</description>
-    <language>{$WEBSITE_LOCALE}</language>
+    <language>{$WEBSITE_LANGUAGE}</language>
     <link>{$data.url}</link>
     <copyright>{$data.author.full_name}</copyright>
     <pubDate>{if $WEBSITE_MODE !== 'test'}{$smarty.now|date_format:'%a, %d %b %Y %H:%M:%S %z'}{/if}</pubDate>
