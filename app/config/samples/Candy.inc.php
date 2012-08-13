@@ -208,17 +208,22 @@ define('LIMIT_COMMENTS', 10);
 # DEFAULT: 10
 define('LIMIT_ALBUMS', 10);
 
-# Sorting Order of Comments
+# Sorting order of comments.
 # OPTIONS: ASC,DESC
-# DEFAULT: ASC
-define('COMMENTS_SORTING', 'ASC');
+# DEFAULT: ASC (oldest last)
+define('SORTING_COMMENTS', 'ASC');
 
-# Automatically load next Page when scrolling down
+# Sorting order of album images.
+# OPTIONS: ASC,DESC
+# DEFAULT: ASC (oldest last)
+define('SORTING_GALLERY_FILES', 'DESC');
+
+# Automatically load next page when scrolling down.
 # OPTIONS: true,false
 # DEFAULT: true
 define('AUTOLOAD', true);
 
-# Stop Loading of next pages after x Times
+# Stop loading of next pages after x times.
 # DEFAULT: 3
 define('AUTOLOAD_TIMES', 3);
 
