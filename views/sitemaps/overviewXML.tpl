@@ -40,28 +40,34 @@
     <priority>0.1</priority>
     <changefreq>never</changefreq>
   </url>
-  {foreach $blogs as $b}
-    <url>
-      <loc>{$b.url}</loc>
-      <priority>{$b.priority}</priority>
-      <changefreq>{$b.changefreq}</changefreq>
-      <lastmod>{$b.date.w3c_date}</lastmod>
-    </url>
-  {/foreach}
-  {foreach $contents as $c}
-    <url>
-      <loc>{$c.url}</loc>
-      <priority>{$c.priority}</priority>
-      <changefreq>{$c.changefreq}</changefreq>
-      <lastmod>{$c.date.w3c_date}</lastmod>
-    </url>
-  {/foreach}
-  {foreach $galleries as $g}
-    <url>
-      <loc>{$g.url}</loc>
-      <priority>{$g.priority}</priority>
-      <changefreq>{$g.changefreq}</changefreq>
-      <lastmod>{$g.date.w3c_date}</lastmod>
-    </url>
-  {/foreach}
+  {if $blogs}
+    {foreach $blogs as $b}
+      <url>
+        <loc>{$b.url}</loc>
+        <priority>{$b.priority}</priority>
+        <changefreq>{$b.changefreq}</changefreq>
+        <lastmod>{$b.date.w3c_date}</lastmod>
+      </url>
+    {/foreach}
+  {/if}
+  {if $contents}
+    {foreach $contents as $c}
+      <url>
+        <loc>{$c.url}</loc>
+        <priority>{$c.priority}</priority>
+        <changefreq>{$c.changefreq}</changefreq>
+        <lastmod>{$c.date.w3c_date}</lastmod>
+      </url>
+    {/foreach}
+  {/if}
+  {if $galleries}
+    {foreach $galleries as $g}
+      <url>
+        <loc>{$g.url}</loc>
+        <priority>{$g.priority}</priority>
+        <changefreq>{$g.changefreq}</changefreq>
+        <lastmod>{$g.date.w3c_date}</lastmod>
+      </url>
+    {/foreach}
+  {/if}
 </urlset>
