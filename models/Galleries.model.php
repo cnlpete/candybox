@@ -40,6 +40,10 @@ class Galleries extends Main {
    */
   public function getId($iId, $bUpdate = false, $bAdvancedImageInformation = false) {
     try {
+      $sOrder = defined('SORTING_GALLERY_FILES') && (SORTING_COMMENTS == 'ASC' || SORTING_COMMENTS == 'DESC') ?
+              SORTING_GALLERY_FILES :
+              'ASC';
+
       $oQuery = $this->_oDb->prepare("SELECT
                                       a.*,
                                       UNIX_TIMESTAMP(a.date) as date,
@@ -63,7 +67,7 @@ class Galleries extends Main {
                                     GROUP BY
                                       a.id
                                     ORDER BY
-                                      a.id DESC");
+                                      a.id " . $sOrder);
 
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
       $oQuery->execute();
@@ -197,6 +201,11 @@ class Galleries extends Main {
       unset($this->_aThumbs);
 
     try {
+
+      $sOrder = defined('SORTING_GALLERY_FILES') && (SORTING_COMMENTS == 'ASC' || SORTING_COMMENTS == 'DESC') ?
+              SORTING_GALLERY_FILES :
+              'ASC';
+
       $oQuery = $this->_oDb->prepare("SELECT
                                         f.*,
                                         UNIX_TIMESTAMP(f.date) as date,
@@ -213,8 +222,8 @@ class Galleries extends Main {
                                       WHERE
                                         f.album_id= :album_id
                                       ORDER BY
-                                        f.position ASC,
-                                        f.date ASC");
+                                        f.position " . $sOrder . ",
+                                        f.date " . $sOrder);
 
       $oQuery->bindParam('album_id', $iId, PDO::PARAM_INT);
       $oQuery->execute();

@@ -552,6 +552,7 @@ class Helper {
   /**
    * Recursively replace one array with values from a second array.
    *
+   * @static
    * @access public
    * @param array $aAr1 this is the target array
    * @param array $aAr2 all values from $aAr1 will be replaced with values from this array

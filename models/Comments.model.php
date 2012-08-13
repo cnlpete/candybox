@@ -35,8 +35,8 @@ class Comments extends Main {
     $this->oPagination = new Pagination($this->_aRequest, $iEntries, $iLimit);
 
     try {
-      $sOrder = defined('COMMENTS_SORTING') && (COMMENTS_SORTING == 'ASC' || COMMENTS_SORTING == 'DESC') ?
-              COMMENTS_SORTING :
+      $sOrder = defined('SORTING_COMMENTS') && (SORTING_COMMENTS == 'ASC' || SORTING_COMMENTS == 'DESC') ?
+              SORTING_COMMENTS :
               'ASC';
       $sLimit = $iLimit === -1 ? '' : 'LIMIT ' . $this->oPagination->getOffset() . ', ' . $this->oPagination->getLimit();
 

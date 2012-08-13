@@ -114,7 +114,6 @@ class SmartySingleton extends Smarty {
     $this->assign('MOBILE_DEVICE', MOBILE_DEVICE);
     $this->assign('THUMB_DEFAULT_X', THUMB_DEFAULT_X);
     $this->assign('VERSION', VERSION);
-    $this->assign('WEBSITE_COMPRESS_FILES', WEBSITE_COMPRESS_FILES);
     $this->assign('WEBSITE_LOCALE', WEBSITE_LOCALE);
     $this->assign('WEBSITE_MODE', WEBSITE_MODE);
     $this->assign('WEBSITE_NAME', WEBSITE_NAME);
