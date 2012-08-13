@@ -2,7 +2,7 @@
   {foreach $contents as $c}
     <article class='contents'>
       <header class='page-header'>
-        <h1>
+        <h1 itemprop='headline'>
           {if $c.published == false}
             {$lang.global.not_published}:&nbsp;
           {/if}

@@ -20,18 +20,24 @@
                   height='40'
                   alt='{$c.author.name}' />
               {if $c.author.id > 0}
-                <a href='{$c.author.url}' rel='author'>
+                <a href='{$c.author.url}'
+                   rel='author'
+                   itemprop='creator'>
                   {$c.author.full_name}
                 </a>
               {elseif $c.author.full_name}
-                {$c.author.full_name}
+                <span itemprop='creator'>
+                  {$c.author.full_name}
+                </span>
               {else}
-                <em style='text-decoration:line-through'>
+                <em style='text-decoration:line-through' itemprop='creator'>
                   {$lang.global.deleted_user}
                 </em>
               {/if}
               <br />
-              <time datetime='{$c.date.w3c}' class='js-timeago'>
+              <time datetime='{$c.date.w3c}'
+                    class='js-timeago'
+                    itemprop='dateCreated'>
                 {$c.date.raw|date_format:$lang.global.time.format.datetime}
               </time>
             </header>

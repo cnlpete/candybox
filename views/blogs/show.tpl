@@ -13,78 +13,89 @@
       <h4>{$lang.error.missing.entries}</h4>
     </div>
   {else}
-    {foreach $blogs as $b}
-      <article class='blogs'>
-        <header class='page-header'>
-          <h2>
-            {if $b.published == false}
-              {$lang.global.not_published}:&nbsp;
-            {/if}
-            <a href='{$b.url}'>{$b.title}</a>
-            {if $_SESSION.user.role >= 3}
-              <a href='{$b.url_update}'>
-                <i class='icon-pencil js-tooltip'
-                   title='{$lang.global.update.update}'></i>
-              </a>
-            {/if}
-          </h2>
-          <p>
-            {if $_SESSION.user.role >= 3}
-              <img src='{$_PATH.images}/candy.flags/{$b.language}.png'
-                   alt='{$b.language}'
-                   title='{$b.language}' />
-              &nbsp;
-            {/if}
-            <time datetime='{$b.date.w3c}' class='js-timeago'>
-              {$b.date.raw|date_format:$lang.global.time.format.datetime}
-            </time>
-            &nbsp;
-            {$lang.global.by}
-            &nbsp;
-            <a href='{$b.author.url}' rel='author'>{$b.author.full_name}</a>
-            {if $b.date_modified.raw}
-              &nbsp;
-              - {$lang.global.last_update}: <time datetime='{$b.date_modified.w3c}' class='js-timeago'>
-                {$b.date_modified.raw|date_format:$lang.global.time.format.datetime}
-              </time>
-            {/if}
-          </p>
-        </header>
-        {if $b.teaser}
-          <p class='summary'>
-            {$b.teaser}
-          </p>
-        {/if}
-        {$b.content}
-        <footer class='row'>
-          <div class='span4 tags'>
-            {if $b.tags|@count > 0}
-              {$lang.global.tags.tags}:
-              {foreach $b.tags as $t}
-                <a class='js-tooltip' title='{$lang.global.tags.info}: {$t}' href='/{$_REQUEST.controller}/{$t}'>
-                  {$t}
+    <div itemscope itemtype="http://schema.org/Blog">
+      {foreach $blogs as $b}
+        <article class='blogs' itemprop='blogPost'>
+          <header class='page-header'>
+            <h2 itemprop='headline'>
+              {if $b.published == false}
+                {$lang.global.not_published}:&nbsp;
+              {/if}
+              <a href='{$b.url}'>{$b.title}</a>
+              {if $_SESSION.user.role >= 3}
+                <a href='{$b.url_update}'>
+                  <i class='icon-pencil js-tooltip'
+                    title='{$lang.global.update.update}'></i>
                 </a>
-                {if !$t@last}, {/if}
-              {/foreach}
-            {else}
+              {/if}
+            </h2>
+            <p>
+              {if $_SESSION.user.role >= 3}
+                <img src='{$_PATH.images}/candy.flags/{$b.language}.png'
+                    alt='{$b.language}'
+                    title='{$b.language}' />
+                &nbsp;
+              {/if}
+              <time datetime='{$b.date.w3c}'
+                    class='js-timeago'
+                    itemprop='dateCreated'>
+                {$b.date.raw|date_format:$lang.global.time.format.datetime}
+              </time>
               &nbsp;
+              {$lang.global.by}
+              &nbsp;
+              <a href='{$b.author.url}' rel='author' itemprop='author'>{$b.author.full_name}</a>
+              {if $b.date_modified.raw}
+                &nbsp;
+                - {$lang.global.last_update}:
+                &nbsp;
+                <time datetime='{$b.date_modified.w3c}'
+                      class='js-timeago'
+                      itemprop='dateModified'>
+                  {$b.date_modified.raw|date_format:$lang.global.time.format.datetime}
+                </time>
+              {/if}
+            </p>
+          </header>
+          <div itemprop='text'>
+            {if $b.teaser}
+              <p class='summary'>
+                {$b.teaser}
+              </p>
             {/if}
+            {$b.content}
           </div>
-          <div class='span4 comments right'>
-            <a href='{$b.url}#comments'>
-              {$b.comment_sum} {$lang.global.comments}
-            </a>
-          </div>
-          {if isset($_REQUEST.id)}
-            <div class='span8'>
-              <hr />
-              <!-- plugin:addthis -->
-              <!-- plugin:socialshareprivacy -->
+          <footer class='row'>
+            <div class='span4 tags'>
+              {if $b.tags|@count > 0}
+                {$lang.global.tags.tags}:
+                {foreach $b.tags as $t}
+                  <a class='js-tooltip' title='{$lang.global.tags.info}: {$t}' href='/{$_REQUEST.controller}/{$t}'>
+                    {$t}
+                  </a>
+                  {if !$t@last}, {/if}
+                {/foreach}
+              {else}
+                &nbsp;
+              {/if}
             </div>
-          {/if}
-        </footer>
-      </article>
-    {/foreach}
+            <div class='span4 comments right'>
+              <a href='{$b.url}#comments'
+                itemprop='discussionUrl'>
+                {$b.comment_sum} {$lang.global.comments}
+              </a>
+            </div>
+            {if isset($_REQUEST.id)}
+              <div class='span8'>
+                <hr />
+                <!-- plugin:addthis -->
+                <!-- plugin:socialshareprivacy -->
+              </div>
+            {/if}
+          </footer>
+        </article>
+      {/foreach}
+    </div>
     {* Show comments only if we got a entry *}
     {if isset($b.id)}
       {$_blog_footer_}

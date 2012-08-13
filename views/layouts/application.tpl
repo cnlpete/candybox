@@ -52,7 +52,7 @@
     <!--[if lt IE 7]><body class='ie6'><![endif]-->
     <!--[if IE 7]><body class='ie7'><![endif]-->
     <!--[if IE 8]><body class='ie8'><![endif]-->
-    <!--[if gt IE 8]><!--><body><!--<![endif]-->
+    <!--[if gt IE 8]><!--><body itemscope itemtype='http://schema.org/WebPage'><!--<![endif]-->
 
       {* Top navigation *}
       <nav class='navbar navbar-fixed-top'>
@@ -176,7 +176,7 @@
                 {$_WEBSITE.update}
               </div>
             {/if}
-            <section id='{$_REQUEST.controller}'>
+            <section id='{$_REQUEST.controller}' itemprop='mainContentOfPage'>
               {$_WEBSITE.content}
             </section>
           </div>
