@@ -60,6 +60,9 @@ class Searches extends Main {
         $this->oQuery->execute();
         $aResult = $this->oQuery->fetchAll(PDO::FETCH_ASSOC);
 
+        if (count($aResult) == 0)
+          continue;
+
         # Build table names and order them
         if ($sTable == 'gallery_albums') {
           $this->_aData[$sTable]['controller'] = 'galleries';
