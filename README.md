@@ -1,4 +1,4 @@
-CandyCMS Version 2.2
+CandyCMS Version 2.1.5
 ========================================================================================================================
 
 > Note that if you check out dev-master, your application might be incompatible with previous versions! Stick to
