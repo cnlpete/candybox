@@ -138,6 +138,7 @@ abstract class Main {
    * @static
    * @access public
    * @return object PDO
+   * @todo test Postgre connection
    *
    */
   public static function connectToDatabase() {
@@ -148,11 +149,17 @@ abstract class Main {
 								SQL_DB :
 								SQL_DB . '_' . WEBSITE_MODE;
 
+        # Postgre
+        if($sSQLType == 'pgsql')
+          self::$_oDbStatic = new PDO($sSQLType . ':host=' . SQL_HOST . ';port=' . SQL_PORT . ';dbname=' . $sDatabase . ';user=' . SQL_USER . ';password=' . SQL_PASSWORD,
+                          array(PDO::ATTR_PERSISTENT => true));
 
-        self::$_oDbStatic = new PDO($sSQLType . ':host=' . SQL_HOST . ';port=' . SQL_PORT . ';dbname=' . $sDatabase,
-                        SQL_USER,
-                        SQL_PASSWORD,
-                        array(PDO::ATTR_PERSISTENT => true));
+        # MySQL
+        else
+          self::$_oDbStatic = new PDO($sSQLType . ':host=' . SQL_HOST . ';port=' . SQL_PORT . ';dbname=' . $sDatabase,
+                          SQL_USER,
+                          SQL_PASSWORD,
+                          array(PDO::ATTR_PERSISTENT => true));
 
         self::$_oDbStatic->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       }
