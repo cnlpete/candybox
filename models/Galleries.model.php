@@ -40,7 +40,7 @@ class Galleries extends Main {
    */
   public function getId($iId, $bUpdate = false, $bAdvancedImageInformation = false) {
     try {
-      $sOrder = defined('SORTING_GALLERY_FILES') && (SORTING_COMMENTS == 'ASC' || SORTING_COMMENTS == 'DESC') ?
+      $sOrder = defined('SORTING_GALLERY_FILES') && (SORTING_GALLERY_FILES == 'ASC' || SORTING_GALLERY_FILES == 'DESC') ?
               SORTING_GALLERY_FILES :
               'ASC';
 
@@ -202,7 +202,7 @@ class Galleries extends Main {
 
     try {
 
-      $sOrder = defined('SORTING_GALLERY_FILES') && (SORTING_COMMENTS == 'ASC' || SORTING_COMMENTS == 'DESC') ?
+      $sOrder = defined('SORTING_GALLERY_FILES') && (SORTING_GALLERY_FILES == 'ASC' || SORTING_GALLERY_FILES == 'DESC') ?
               SORTING_GALLERY_FILES :
               'ASC';
 
