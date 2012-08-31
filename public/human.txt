@@ -1,12 +1,8 @@
 /* CandyCMS */
 Name: CandyCMS
 Author: Marco Raddatz
+Company: empuxa GmbH
 URL: http://www.candycms.com
 
 /* THANKS */
-Name: name or url
-
-/* SITE */
-Last update:
-Standards: HTML5, CSS3,..
-Components: Modernizr, jQuery, etc.
+Name: Hauke Schade and Dennis Lizarzaburu for contributing.
