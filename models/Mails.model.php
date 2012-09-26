@@ -239,7 +239,7 @@ class Mails extends Main {
         $oQuery->bindParam('error_message', $sErrorMessage, PDO::PARAM_STR);
 
         foreach ($aData as $sKey => $sValue)
-          $oQuery->bindParam($sKey, isset($sValue) ? $sValue : '', PDO::PARAM_STR);
+          $oQuery->bindValue($sKey, isset($sValue) ? $sValue : '', PDO::PARAM_STR);
 
         $oQuery->execute();
         parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
