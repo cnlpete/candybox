@@ -76,8 +76,12 @@ class Blogs extends Main {
     $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'overviewRSS');
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
-      $this->oSmarty->assign('data', $this->_oModel->getOverview());
+    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+      $this->_aData = isset($this->_aRequest['search']) && $this->_aRequest['search'] ?
+          $this->_oModel->getOverviewByTag() :
+          $this->_oModel->getOverview();
+      $this->oSmarty->assign('data', $this->_aData);
+    }
 
     exit($this->oSmarty->fetch($sTemplateFile, UNIQUE_ID));
   }
