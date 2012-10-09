@@ -69,7 +69,7 @@
                 class='btn btn-primary'
                 value='{$lang.galleries.files.update.order}' />
         </div>
-        <script src='{$_PATH.js}/core/jquery.ui.1.8.20.custom{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
+        <script src='{$_PATH.js}/core/jquery.ui.1.9.0.custom{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
         <script type='text/javascript'>
           $(document).ready(function(){
             $('.thumbnails').sortable({

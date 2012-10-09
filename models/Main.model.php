@@ -249,7 +249,7 @@ abstract class Main {
 
     foreach (array('content', 'teaser', 'title') as $sColumn)
       $aData[$sColumn] = isset($aData[$sColumn]) ?
-              Helper::formatOutput($aData[$sColumn], '', $sColumn == 'content' ? true : false) :
+              Helper::formatOutput($aData[$sColumn], '', $sColumn == 'content' && $sController !== 'galleries' ? true : false) :
               '';
 
     # Bugfix: Set types
