@@ -1,13 +1,13 @@
 /*
-	--------------------------------
-	Infinite Scroll
-	--------------------------------
-	+ https://github.com/paulirish/infinite-scroll
-	+ version 2.0b2.120311
-	+ Copyright 2011 Paul Irish & Luke Shumard
-	+ Licensed under the MIT license
+   --------------------------------
+   Infinite Scroll
+   --------------------------------
+   + https://github.com/paulirish/infinite-scroll
+   + version 2.0b2.120519
+   + Copyright 2011/12 Paul Irish & Luke Shumard
+   + Licensed under the MIT license
 
-	+ Documentation: http://infinite-scroll.com/
+   + Documentation: http://infinite-scroll.com/
 
 */
 
@@ -67,10 +67,10 @@
   $.infinitescroll.prototype = {
 
     /*
-        ----------------------------
-        Private methods
-        ----------------------------
-        */
+            ----------------------------
+            Private methods
+            ----------------------------
+            */
 
     // Bind or unbind from scroll
     _binding: function infscr_binding(binding) {
@@ -136,7 +136,7 @@
       opts.loading.selector = opts.loading.selector || opts.contentSelector;
 
       // Define loading.msg
-      opts.loading.msg = $('<div id="infscr-loading"><img alt="Loading..." src="' + opts.loading.img + '" /><div>' + opts.loading.msgText + '</div></div>');
+      opts.loading.msg = opts.loading.msg || $('<div id="infscr-loading"><img alt="Loading..." src="' + opts.loading.img + '" /><div>' + opts.loading.msgText + '</div></div>');
 
       // Preload loading.img
       (new Image()).src = opts.loading.img;
@@ -291,7 +291,7 @@
           if (opts.dataType == 'html') {
             data = '<div>' + data + '</div>';
             data = $(data).find(opts.itemSelector);
-          };
+          }
 
           break;
 
@@ -458,10 +458,10 @@
     },
 
     /*
-        ----------------------------
-        Public methods
-        ----------------------------
-        */
+            ----------------------------
+            Public methods
+            ----------------------------
+            */
 
     // Bind to scroll
     bind: function infscr_bind() {
@@ -507,7 +507,7 @@
 
         desturl = path.join(opts.state.currPage);
 
-        method = (opts.dataType == 'html' || opts.dataType == 'json') ? opts.dataType : 'html+callback';
+        method = (opts.dataType == 'html' || opts.dataType == 'json' ) ? opts.dataType : 'html+callback';
         if (opts.appendCallback && opts.dataType == 'html') method += '+callback'
 
         switch (method) {
@@ -522,8 +522,6 @@
             break;
 
           case 'html':
-          case 'json':
-
             instance._debug('Using ' + (method.toUpperCase()) + ' via $.ajax() method');
             $.ajax({
               // params
@@ -532,6 +530,37 @@
               complete: function infscr_ajax_callback(jqXHR, textStatus) {
                 condition = (typeof (jqXHR.isResolved) !== 'undefined') ? (jqXHR.isResolved()) : (textStatus === "success" || textStatus === "notmodified");
                 (condition) ? instance._loadcallback(box, jqXHR.responseText) : instance._error('end');
+              }
+            });
+
+            break;
+          case 'json':
+            instance._debug('Using ' + (method.toUpperCase()) + ' via $.ajax() method');
+            $.ajax({
+              dataType: 'json',
+              type: 'GET',
+              url: desturl,
+              success: function(data, textStatus, jqXHR) {
+                condition = (typeof (jqXHR.isResolved) !== 'undefined') ? (jqXHR.isResolved()) : (textStatus === "success" || textStatus === "notmodified");
+                if(opts.appendCallback) {
+                  // if appendCallback is true, you must defined template in options.
+                  // note that data passed into _loadcallback is already an html (after processed in opts.template(data)).
+                  if(opts.template != undefined) {
+                    var theData = opts.template(data);
+                    box.append(theData);
+                    (condition) ? instance._loadcallback(box, theData) : instance._error('end');
+                  } else {
+                    instance._debug("template must be defined.");
+                    instance._error('end');
+                  }
+                } else {
+                  // if appendCallback is false, we will pass in the JSON object. you should handle it yourself in your callback.
+                  (condition) ? instance._loadcallback(box, data) : instance._error('end');
+                }
+              },
+              error: function(jqXHR, textStatus, errorThrown) {
+                instance._debug("JSON ajax request failed.");
+                instance._error('end');
               }
             });
 
@@ -600,22 +629,22 @@
 
 
   /*
-    ----------------------------
-    Infinite Scroll function
-    ----------------------------
+        ----------------------------
+        Infinite Scroll function
+        ----------------------------
 
-    Borrowed logic from the following...
+        Borrowed logic from the following...
 
-    jQuery UI
-    - https://github.com/jquery/jquery-ui/blob/master/ui/jquery.ui.widget.js
+        jQuery UI
+        - https://github.com/jquery/jquery-ui/blob/master/ui/jquery.ui.widget.js
 
-    jCarousel
-    - https://github.com/jsor/jcarousel/blob/master/lib/jquery.jcarousel.js
+        jCarousel
+        - https://github.com/jsor/jcarousel/blob/master/lib/jquery.jcarousel.js
 
-    Masonry
-    - https://github.com/desandro/masonry/blob/master/jquery.masonry.js
+        Masonry
+        - https://github.com/desandro/masonry/blob/master/jquery.masonry.js
 
-    */
+*/
 
   $.fn.infinitescroll = function infscr_init(options, callback) {
 
@@ -687,11 +716,11 @@
 
 
   /*
-    * smartscroll: debounced scroll event for jQuery *
-    * https://github.com/lukeshumard/smartscroll
-    * Based on smartresize by @louis_remi: https://github.com/lrbabe/jquery.smartresize.js *
-    * Copyright 2011 Louis-Remi & Luke Shumard * Licensed under the MIT license. *
-    */
+     * smartscroll: debounced scroll event for jQuery *
+     * https://github.com/lukeshumard/smartscroll
+     * Based on smartresize by @louis_remi: https://github.com/lrbabe/jquery.smartresize.js *
+     * Copyright 2011 Louis-Remi & Luke Shumard * Licensed under the MIT license. *
+     */
 
   var event = $.event,
   scrollTimeout;
