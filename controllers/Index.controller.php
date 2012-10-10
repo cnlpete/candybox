@@ -288,7 +288,7 @@ class Index {
     }
 
     # ...or browsers default language...
-    elseif (file_exists(PATH_STANDARD . '/app/languages/' . strtolower($sBrowserLanguage) . '.yml'))
+    elseif (file_exists(PATH_STANDARD . '/app/languages/' . strtolower($sBrowserLanguage) . '.yml') && WEBSITE_MODE !== 'test')
       $sLanguage = $sBrowserLanguage;
 
     # ...or fall back to default language.

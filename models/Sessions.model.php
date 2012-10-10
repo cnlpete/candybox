@@ -60,7 +60,7 @@ class Sessions extends Main {
       return $mData ? parent::_formatForUserOutput($mData) : $mData;
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth('0072 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
       exit('SQL error.');
     }
   }
@@ -106,10 +106,10 @@ class Sessions extends Main {
           $this->_oDb->rollBack();
         }
         catch (\Exception $e) {
-          AdvancedException::reportBoth('0073 - ' . $e->getMessage());
+          AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
         }
 
-        AdvancedException::reportBoth('0074 - ' . $p->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
         exit('SQL error.');
       }
     }
@@ -172,10 +172,10 @@ class Sessions extends Main {
         parent::$_oDbStatic->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth('0075 - ' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth('0076 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
       exit('SQL error.');
     }
   }

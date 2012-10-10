@@ -33,7 +33,7 @@ class Logs extends Main {
       $iResult = $oQuery->fetchColumn();
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth('0105 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -67,7 +67,7 @@ class Logs extends Main {
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth('0066 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -145,10 +145,10 @@ class Logs extends Main {
         parent::$_oDbStatic->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth('0067 - ' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth('0068 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
       exit('SQL error.');
     }
   }
@@ -189,10 +189,10 @@ class Logs extends Main {
         parent::$_oDbStatic->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth('0110 - ' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth('0111 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
       exit('SQL error.');
     }
   }
@@ -223,6 +223,7 @@ class Logs extends Main {
 
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
       $oQuery->bindParam('result_flag', $bResultFlag, PDO::PARAM_BOOL);
+
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
@@ -230,10 +231,10 @@ class Logs extends Main {
         parent::$_oDbStatic->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth('0114 - ' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth('0115 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
       exit('SQL error.');
     }
   }

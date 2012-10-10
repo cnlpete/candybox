@@ -145,7 +145,7 @@ class Calendars extends Main {
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth('0011 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -202,7 +202,7 @@ class Calendars extends Main {
       $aRow = $oQuery->fetch(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth('0012 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -272,10 +272,10 @@ class Calendars extends Main {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth('0013 - ' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth('0014 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
       exit('SQL error.');
     }
   }
@@ -323,10 +323,10 @@ class Calendars extends Main {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth('0015 - ' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth('0016 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
       exit('SQL error.');
     }
   }

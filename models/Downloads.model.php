@@ -50,7 +50,7 @@ class Downloads extends Main {
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth('0032 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -104,7 +104,7 @@ class Downloads extends Main {
       $aRow = $oQuery->fetch(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth('0033 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -141,7 +141,7 @@ class Downloads extends Main {
       return $aResult['file'];
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth('0101 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
       exit('SQL error.');
     }
   }
@@ -203,10 +203,10 @@ class Downloads extends Main {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth('0034 - ' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth('0035 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
       exit('SQL error.');
     }
   }
@@ -254,10 +254,10 @@ class Downloads extends Main {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth('0036 - ' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth('0037 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
       exit('SQL error.');
     }
   }
@@ -311,10 +311,10 @@ class Downloads extends Main {
         parent::$_oDbStatic->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth('0040 - ' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth('0041 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
       exit('SQL error.');
     }
   }

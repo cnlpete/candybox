@@ -91,7 +91,7 @@ class Searches extends Main {
         $this->_aData[$sTable]['entries'] = $iEntries;
       }
       catch (\PDOException $p) {
-        AdvancedException::reportBoth('0071 - ' . $p->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
         exit('SQL error.');
       }
     }

@@ -48,7 +48,7 @@ class Mails extends Main {
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth('0118 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -158,7 +158,7 @@ class Mails extends Main {
       $aResult = $oQuery->fetch(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth('0119 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -249,10 +249,10 @@ class Mails extends Main {
           $this->_oDb->rollBack();
         }
         catch (\Exception $e) {
-          AdvancedException::reportBoth('0116 - ' . $e->getMessage());
+          AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
         }
 
-        AdvancedException::reportBoth('0117 - ' . $p->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
         exit('SQL error.');
       }
     }
