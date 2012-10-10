@@ -374,7 +374,7 @@ class Install extends Index {
       fclose($oFo);
     }
     catch (\AdvancedException $e) {
-      \Core\Helpers\AdvancedException::reportBoth($e->getMessage());
+      \Core\Helpers\AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
     }
 
     return $bResult ? true : false;
@@ -392,7 +392,7 @@ class Install extends Index {
       $bResult = MigrationScript::run(\CandyCMS\Core\Models\Main::connectToDatabase());
     }
     catch (\AdvancedException $e) {
-      \Core\Helpers\AdvancedException::reportBoth($e->getMessage());
+      \Core\Helpers\AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
     }
 
     return $bResult ? true : false;
