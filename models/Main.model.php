@@ -164,7 +164,7 @@ abstract class Main {
         self::$_oDbStatic->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       }
       catch (PDOException $p) {
-        AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
         exit('SQL error.');
       }
     }
@@ -453,10 +453,10 @@ abstract class Main {
         parent::$_oDbStatic->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
   }
@@ -535,10 +535,10 @@ abstract class Main {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
   }

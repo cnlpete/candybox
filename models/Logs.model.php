@@ -33,7 +33,7 @@ class Logs extends Main {
       $iResult = $oQuery->fetchColumn();
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -67,7 +67,7 @@ class Logs extends Main {
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -145,10 +145,10 @@ class Logs extends Main {
         parent::$_oDbStatic->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
   }
@@ -189,10 +189,10 @@ class Logs extends Main {
         parent::$_oDbStatic->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
   }
@@ -231,10 +231,10 @@ class Logs extends Main {
         parent::$_oDbStatic->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
   }

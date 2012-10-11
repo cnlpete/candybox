@@ -67,7 +67,7 @@ class Comments extends Main {
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -188,10 +188,10 @@ class Comments extends Main {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
   }
@@ -225,7 +225,7 @@ class Comments extends Main {
       return (int) $aResult['parent_id'];
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
   }

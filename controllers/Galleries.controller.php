@@ -274,7 +274,7 @@ class Galleries extends Main {
                         '/' . $this->_iId . '/createfile');
       }
       catch (AdvancedException $e) {
-        AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
         return Helper::errorMessage($e->getMessage(), '/' . $this->_sController .
                       '/' . $this->_iId . '/createfile');
       }

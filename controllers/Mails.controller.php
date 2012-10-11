@@ -33,7 +33,7 @@ class Mails extends Main {
               Helper::redirectTo('/' . $this->_aRequest['controller'] . '/create');
     }
     else
-      return $this->_show();
+      return $this->_overview();
   }
 
   /**
@@ -43,9 +43,9 @@ class Mails extends Main {
    * @return string HTML content
    *
    */
-  protected function _show() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+  protected function _overview() {
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
+    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))

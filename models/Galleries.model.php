@@ -75,7 +75,7 @@ class Galleries extends Main {
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -122,7 +122,7 @@ class Galleries extends Main {
       $iResult = $oQuery->fetchColumn();
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -162,7 +162,7 @@ class Galleries extends Main {
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -231,7 +231,7 @@ class Galleries extends Main {
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -306,7 +306,7 @@ class Galleries extends Main {
       $aResult = $oQuery->fetch(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -352,7 +352,7 @@ class Galleries extends Main {
       return $aData;
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
   }
@@ -396,10 +396,10 @@ class Galleries extends Main {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
   }
@@ -437,10 +437,10 @@ class Galleries extends Main {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
   }
@@ -471,7 +471,7 @@ class Galleries extends Main {
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -500,10 +500,10 @@ class Galleries extends Main {
           $this->_oDb->rollBack();
         }
         catch (\Exception $e) {
-          AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
+          AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
         }
 
-        AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
         exit('SQL error.');
       }
 
@@ -528,10 +528,10 @@ class Galleries extends Main {
           $this->_oDb->rollBack();
         }
         catch (\Exception $e) {
-          AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
+          AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
         }
 
-        AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
         exit('SQL error.');
       }
     }
@@ -589,10 +589,10 @@ class Galleries extends Main {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
   }
@@ -629,10 +629,10 @@ class Galleries extends Main {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
   }
@@ -661,7 +661,7 @@ class Galleries extends Main {
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -692,10 +692,10 @@ class Galleries extends Main {
           $this->_oDb->rollBack();
         }
         catch (\Exception $e) {
-          AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
+          AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
         }
 
-        AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
         exit('SQL error.');
       }
     }
@@ -733,7 +733,7 @@ class Galleries extends Main {
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
   }

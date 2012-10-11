@@ -48,7 +48,7 @@ class Mails extends Main {
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -96,16 +96,16 @@ class Mails extends Main {
     require_once 'vendor/phpmailer/phpmailer/class.phpmailer.php';
     $oMail = new \PHPMailer(true);
 
-    if (SMTP_ENABLE === true) {
+    if (SMTP_ENABLE === true || WEBSITE_MODE == 'test') {
       $oMail->IsSMTP();
 
       $oMail->SMTPAuth  = defined('SMTP_USE_AUTH') ? SMTP_USE_AUTH === true : true;
-      $oMail->SMTPDebug = WEBSITE_MODE == 'development' ? 1 : 0;
+      $oMail->SMTPDebug = WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test' ? 1 : 0;
 
-      $oMail->Host      = SMTP_HOST;
-      $oMail->Port      = SMTP_PORT;
-      $oMail->Username  = SMTP_USER;
-      $oMail->Password  = SMTP_PASSWORD;
+      $oMail->Host      = defined('SMTP_HOST') ? SMTP_HOST : 'localhost';
+      $oMail->Port      = defined('SMTP_POST') ? SMTP_PORT : '1025';
+      $oMail->Username  = defined('SMTP_USER') ? SMTP_USER : '';
+      $oMail->Password  = defined('SMTP_PASSWORD') ? SMTP_PASSWORD : '';
     }
     else
       $oMail->IsMail();
@@ -158,7 +158,7 @@ class Mails extends Main {
       $aResult = $oQuery->fetch(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -203,11 +203,11 @@ class Mails extends Main {
       $bReturn = $this->_send($aData);
     }
     catch (\phpmailerException $e) {
-      AdvancedException::writeLog($e->errorMessage());
+      AdvancedException::writeLog(__METHOD__ . ' - '. $e->errorMessage());
       $sErrorMessage = $e->errorMessage();
     }
 
-    if (!$bReturn && $bSaveMail && defined('USE_MAIL_QUEUE') && USE_MAIL_QUEUE == true) {
+    if ((!$bReturn && $bSaveMail && defined('USE_MAIL_QUEUE') && USE_MAIL_QUEUE == true) || WEBSITE_MODE == 'test') {
       try {
         $oQuery = $this->_oDb->prepare("INSERT INTO
                                           " . SQL_PREFIX . "mails
@@ -251,10 +251,10 @@ class Mails extends Main {
           $this->_oDb->rollBack();
         }
         catch (\Exception $e) {
-          AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
+          AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
         }
 
-        AdvancedException::reportBoth(__METHOD__ . ':' . $p->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
         exit('SQL error.');
       }
     }
