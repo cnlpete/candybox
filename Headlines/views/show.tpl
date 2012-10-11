@@ -3,7 +3,7 @@
     <ul>
       {foreach from=$data item=d}
         <li>
-          <a href='{$d.url}' title='{$d.teaser}' class='js-tooltip'>
+          <a href="{$d.url}" title="{$d.teaser}" class='js-tooltip'>
             {$d.title}
           </a>
         </li>

@@ -120,7 +120,7 @@ final class Cronjob {
     }
     catch (AdvancedException $e) {
       $this->_oDB->rollBack();
-      AdvancedException::reportBoth('0109 - ' . $e->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
       exit('SQL error.');
     }
 
@@ -134,7 +134,7 @@ final class Cronjob {
     }
     catch (AdvancedException $e) {
       $this->_oDB->rollBack();
-      AdvancedException::reportBoth('0109 - ' . $e->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
       exit('SQL error.');
     }
   }
@@ -210,7 +210,7 @@ EOD;
       }
     }
     catch (AdvancedException $e) {
-      AdvancedException::reportBoth('0108 - ' . $e->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
       exit('SQL error.');
     }
 
@@ -234,7 +234,7 @@ EOD;
       $sFileText .= $iRows + 1;
     }
     catch (AdvancedException $e) {
-      AdvancedException::reportBoth('0109 - ' . $e->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
       exit('SQL error.');
     }
 
@@ -343,13 +343,13 @@ EOD;
           $this->_backupTableData($aTable[0], $sFileText, $iColumns);
         }
         catch (AdvancedException $e) {
-          AdvancedException::reportBoth('0110 - ' . $e->getMessage());
+          AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
           continue;
         }
       }
     }
     catch (AdvancedException $e) {
-      AdvancedException::reportBoth('0111 - ' . $e->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
       exit('SQL error.');
     }
 

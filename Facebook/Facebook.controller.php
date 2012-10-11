@@ -51,7 +51,7 @@ final class FacebookCMS extends Facebook {
       return !empty($sKey) ? $aData[$sKey] : $aData;
     }
     catch (AdvancedException $e) {
-      AdvancedException::reportBoth($e->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
       exit('Error: Cannot use Facebook API.');
     }
   }
@@ -97,7 +97,7 @@ final class FacebookCMS extends Facebook {
       return $aFacebookAvatarCache;
     }
     catch (AdvancedException $e) {
-      AdvancedException::reportBoth($e->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
       exit('Error: Cannot create Facebook avatar images.');
     }
   }
