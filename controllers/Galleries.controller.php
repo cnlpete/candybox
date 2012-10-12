@@ -104,7 +104,7 @@ class Galleries extends Main {
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
       $aData  = $this->_oModel->getId($this->_iId, false, true);
-      $this->oSmarty->assign('data', $aData[$this->_iId]);
+      $this->oSmarty->assign('data', $aData);
     }
 
     exit($this->oSmarty->fetch($sTemplateFile, UNIQUE_ID));
@@ -339,32 +339,32 @@ class Galleries extends Main {
   /**
    * Update the positions of all files of a gallery.
    *
-   * Calls _updateFilePositions if data is given, otherwise returns false.
+   * Calls _updateOrder if data is given, otherwise returns false.
    *
    * @access public
    * @return boolean returned status of model action (boolean).
    *
    */
-  public function updateFilePositions() {
+  public function updateOrder() {
     return $this->_aSession['user']['role'] < 3 ?
             false :
-            exit(json_encode($this->_updateFilePositions()));
+            exit(json_encode($this->_updateOrder()));
   }
 
   /**
    * Update a gallery entry.
    *
-   * Activate model, Update data in the database and redirect afterwards.
+   * Activate model, update data in the database and redirect afterwards.
    *
    * @access protected
    * @return boolean status of action
    *
    */
-  protected function _updateFilePositions() {
-    if (!$this->_aRequest['galleryfiles'])
+  protected function _updateOrder() {
+    if (!$this->_aRequest['files'])
       return false;
 
-    $bReturn = $this->_oModel->updateFilePositions($this->_iId) == true;
+    $bReturn = $this->_oModel->updateOrder($this->_iId) == true;
 
     Logs::insert( $this->_sController,
                   $this->_aRequest['action'],
