@@ -48,7 +48,7 @@ class Mails extends Main {
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth('0118 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -86,26 +86,26 @@ class Mails extends Main {
    * Send the mail.
    *
    * @access protected
-   * @param array $aData array with information for subject, message, name of receipient, email of receipient,
+   * @param array $aMail array with information for subject, message, name of receipient, email of receipient,
    * name of reply to, email of reply to and attachement path
    * @return boolean whether phpmailers returned true or false
    * @see vendor/phpmailer/phpmailer/class.phpmailer.php
    *
    */
-  protected function _send($aData) {
+  protected function _send($aMail) {
     require_once 'vendor/phpmailer/phpmailer/class.phpmailer.php';
     $oMail = new \PHPMailer(true);
 
-    if (SMTP_ENABLE === true) {
+    if (SMTP_ENABLE === true || WEBSITE_MODE == 'test') {
       $oMail->IsSMTP();
 
       $oMail->SMTPAuth  = defined('SMTP_USE_AUTH') ? SMTP_USE_AUTH === true : true;
-      $oMail->SMTPDebug = WEBSITE_MODE == 'development' ? 1 : 0;
+      $oMail->SMTPDebug = WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test' ? 1 : 0;
 
-      $oMail->Host      = SMTP_HOST;
-      $oMail->Port      = SMTP_PORT;
-      $oMail->Username  = SMTP_USER;
-      $oMail->Password  = SMTP_PASSWORD;
+      $oMail->Host      = defined('SMTP_HOST') ? SMTP_HOST : 'localhost';
+      $oMail->Port      = defined('SMTP_POST') ? SMTP_PORT : '1025';
+      $oMail->Username  = defined('SMTP_USER') ? SMTP_USER : '';
+      $oMail->Password  = defined('SMTP_PASSWORD') ? SMTP_PASSWORD : '';
     }
     else
       $oMail->IsMail();
@@ -113,22 +113,22 @@ class Mails extends Main {
     $oMail->CharSet = 'utf-8';
 
     $oMail->SetFrom(
-            isset($aData['from_address']) ? $aData['from_address'] : WEBSITE_MAIL_NOREPLY,
-            isset($aData['from_name']) ? $aData['from_name'] : WEBSITE_NAME);
+            isset($aMail['from_address']) ? $aMail['from_address'] : WEBSITE_MAIL_NOREPLY,
+            isset($aMail['from_name']) ? $aMail['from_name'] : WEBSITE_NAME);
 
     $oMail->AddReplyTo(
-            isset($aData['from_address']) ? $aData['from_address'] : WEBSITE_MAIL_NOREPLY,
-            isset($aData['from_name']) ? $aData['from_name'] : '');
+            isset($aMail['from_address']) ? $aMail['from_address'] : WEBSITE_MAIL_NOREPLY,
+            isset($aMail['from_name']) ? $aMail['from_name'] : '');
 
     $oMail->AddAddress(
-            isset($aData['to_address']) ? $aData['to_address'] : '',
-            isset($aData['to_name']) ? $aData['to_name'] : '');
+            isset($aMail['to_address']) ? $aMail['to_address'] : '',
+            isset($aMail['to_name']) ? $aMail['to_name'] : '');
 
-    $oMail->Subject = isset($aData['subject']) ? $aData['subject'] : '';
-    $oMail->MsgHTML(nl2br(isset($aData['message']) ? $aData['message'] : ''));
+    $oMail->Subject = isset($aMail['subject']) ? $aMail['subject'] : '';
+    $oMail->MsgHTML(nl2br(isset($aMail['message']) ? $aMail['message'] : ''));
 
-    if (isset($aData['attachement']))
-      $oMail->AddAttachment($aData['attachement']);
+    if (isset($aMail['attachement']))
+      $oMail->AddAttachment($aMail['attachement']);
 
     return $oMail->Send();
   }
@@ -158,7 +158,7 @@ class Mails extends Main {
       $aResult = $oQuery->fetch(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth('0119 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -181,7 +181,7 @@ class Mails extends Main {
    * Create a new mail, store it to database on failure
    *
    * @access public
-   * @param array $aData array with information for subject, message, name of receipient, email of receipient,
+   * @param array $aMail array with information for subject, message, name of receipient, email of receipient,
    * name of reply to, email of reply to and attachement path
    * @param bool $bSaveMail whehter the mail queue should be used on failure
    * @return boolean the status of the action
@@ -189,25 +189,30 @@ class Mails extends Main {
    * @todo log entry
    *
    */
-  public function create($aData, $bSaveMail = true) {
-    $aData['message'] = str_replace('%NOREPLY', I18n::get('mails.body.no_reply'), $aData['message']);
-    $aData['message'] = str_replace('%SIGNATURE', I18n::get('mails.body.signature'), $aData['message']);
+  public function create($aMail, $bSaveMail = true) {
+    $aMail['message'] = str_replace('%NOREPLY', I18n::get('mails.body.no_reply'), $aMail['message']);
+    $aMail['message'] = str_replace('%SIGNATURE', I18n::get('mails.body.signature'), $aMail['message']);
 
-    $aData['message'] = $this->_replaceNameAndUrl($aData['message']);
-    $aData['subject'] = $this->_replaceNameAndUrl($aData['subject']);
+    $aMail['message'] = $this->_replaceNameAndUrl($aMail['message']);
+    $aMail['subject'] = $this->_replaceNameAndUrl($aMail['subject']);
+
+    # Bugfix: Fix all the missing email parts to avoid SQL errors
+    $aMail['to_name']       = isset($aMail['to_name']) ? $aMail['to_name'] : '';
+    $aMail['from_address']  = isset($aMail['from_address']) ? $aMail['from_address'] : WEBSITE_MAIL_NOREPLY;
+    $aMail['from_name']     = isset($aMail['from_name']) ? $aMail['from_name'] : WEBSITE_NAME;
 
     $sErrorMessage  = '';
     $bReturn        = false;
 
     try {
-      $bReturn = $this->_send($aData);
+      $bReturn = $this->_send($aMail);
     }
     catch (\phpmailerException $e) {
-      AdvancedException::writeLog($e->errorMessage());
+      AdvancedException::writeLog(__METHOD__ . ' - '. $e->errorMessage());
       $sErrorMessage = $e->errorMessage();
     }
 
-    if (!$bReturn && $bSaveMail && defined('USE_MAIL_QUEUE') && USE_MAIL_QUEUE == true) {
+    if ((!$bReturn && $bSaveMail && defined('USE_MAIL_QUEUE') && USE_MAIL_QUEUE == true) || WEBSITE_MODE == 'test') {
       try {
         $oQuery = $this->_oDb->prepare("INSERT INTO
                                           " . SQL_PREFIX . "mails
@@ -238,8 +243,10 @@ class Mails extends Main {
         $oQuery->bindParam('ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
         $oQuery->bindParam('error_message', $sErrorMessage, PDO::PARAM_STR);
 
-        foreach ($aData as $sKey => $sValue)
-          $oQuery->bindValue($sKey, isset($sValue) ? $sValue : '', PDO::PARAM_STR);
+        foreach ($aMail as $sKey => $sValue) {
+          $sValue = isset($sValue) ? $sValue : '';
+          $oQuery->bindParam($sKey, $sValue, PDO::PARAM_STR);
+        }
 
         $oQuery->execute();
         parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
@@ -249,10 +256,10 @@ class Mails extends Main {
           $this->_oDb->rollBack();
         }
         catch (\Exception $e) {
-          AdvancedException::reportBoth('0116 - ' . $e->getMessage());
+          AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
         }
 
-        AdvancedException::reportBoth('0117 - ' . $p->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
         exit('SQL error.');
       }
     }

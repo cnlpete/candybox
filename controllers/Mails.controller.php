@@ -33,7 +33,7 @@ class Mails extends Main {
               Helper::redirectTo('/' . $this->_aRequest['controller'] . '/create');
     }
     else
-      return $this->_show();
+      return $this->_overview();
   }
 
   /**
@@ -43,9 +43,9 @@ class Mails extends Main {
    * @return string HTML content
    *
    */
-  protected function _show() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+  protected function _overview() {
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
+    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
@@ -157,22 +157,22 @@ class Mails extends Main {
       if (!$aRow && $this->_iId)
         return Helper::redirectTo('/errors/404');
 
-      $aData['from_name']   = isset($this->_aSession['user']['name']) ?
+      $aMail['from_name']   = isset($this->_aSession['user']['name']) ?
               $this->_aSession['user']['name'] :
               I18n::get('global.system');
 
-      $aData['subject']     = isset($this->_aRequest[$this->_sController]['subject']) &&
+      $aMail['subject']     = isset($this->_aRequest[$this->_sController]['subject']) &&
               $this->_aRequest[$this->_sController]['subject'] ?
               Helper::formatInput($this->_aRequest[$this->_sController]['subject']) :
-              I18n::get('mails.subject.by', $aData['from_name']);
+              I18n::get('mails.subject.by', $aMail['from_name']);
 
-      $aData['message']     = Helper::formatInput($this->_aRequest[$this->_sController]['content']);
-      $aData['to_name']     = isset($aRow['name']) ? $aRow['name'] : '';
-      $aData['to_address']  = isset($aRow['email']) ? $aRow['email'] : WEBSITE_MAIL;
-      $aData['from_name']   = isset($this->_aSession['user']['name']) ? $this->_aSession['user']['name'] : '';
-      $aData['from_address']= Helper::formatInput($this->_aRequest[$this->_sController]['email']);
+      $aMail['message']     = Helper::formatInput($this->_aRequest[$this->_sController]['content']);
+      $aMail['to_name']     = isset($aRow['name']) ? $aRow['name'] : '';
+      $aMail['to_address']  = isset($aRow['email']) ? $aRow['email'] : WEBSITE_MAIL;
+      $aMail['from_name']   = isset($this->_aSession['user']['name']) ? $this->_aSession['user']['name'] : '';
+      $aMail['from_address']= Helper::formatInput($this->_aRequest[$this->_sController]['email']);
 
-      $bStatus = $this->_oModel->create($aData);
+      $bStatus = $this->_oModel->create($aMail);
 
       Logs::insert( $this->_aRequest['controller'],
                     'create',

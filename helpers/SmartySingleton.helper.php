@@ -214,7 +214,7 @@ class SmartySingleton extends Smarty {
         }
       }
       catch (AdvancedException $e) {
-        AdvancedException::reportBoth($e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
     }
 

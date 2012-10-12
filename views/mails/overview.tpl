@@ -47,7 +47,7 @@
           </td>
           <td class='center'>
             <a href='#' onclick="resendMail(this, {$m.id})">
-              <i class='icon-mail js-tooltip'
+              <i class='icon-mail'
                  title='{$lang.global.email.send}'></i>
             </a>
           </td>

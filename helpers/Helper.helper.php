@@ -289,7 +289,7 @@ class Helper {
       }
     }
     catch (AdvancedException $e) {
-      AdvancedException::reportBoth($e->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
     }
   }
 
@@ -314,7 +314,7 @@ class Helper {
         return $sFile . '.tpl';
     }
     catch (AdvancedException $e) {
-      AdvancedException::reportBoth($e->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       exit($e->getMessage());
     }
   }
@@ -345,7 +345,7 @@ class Helper {
       }
     }
     catch (AdvancedException $e) {
-      AdvancedException::reportBoth($e->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
     }
   }
 
@@ -368,7 +368,7 @@ class Helper {
         $sStr = htmlspecialchars($sStr);
     }
     catch (AdvancedException $e) {
-      AdvancedException::reportBoth($e->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       exit($e->getMessage());
     }
 
@@ -434,7 +434,7 @@ class Helper {
       return (int) $aRow['id'];
     }
     catch (AdvancedException $e) {
-      AdvancedException::reportBoth('0104 - ' . $e->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       exit('SQL error.');
     }
   }

@@ -24,7 +24,7 @@ class Sessions extends Main {
    *
    * @static
    * @access public
-   * @return array $aResult user data
+   * @return array | boolean $aData with user data or false
    * @see vendor/candyCMS/core/controllers/Index.controller.php
    *
    */
@@ -56,11 +56,11 @@ class Sessions extends Main {
       if ($bReturn == false)
         self::destroy();
 
-      $mData = $oQuery->fetch(PDO::FETCH_ASSOC);
-      return $mData ? parent::_formatForUserOutput($mData) : $mData;
+      $aData = $oQuery->fetch(PDO::FETCH_ASSOC);
+      return $aData ? parent::_formatForUserOutput($aData) : false;
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth('0072 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
   }
@@ -106,10 +106,10 @@ class Sessions extends Main {
           $this->_oDb->rollBack();
         }
         catch (\Exception $e) {
-          AdvancedException::reportBoth('0073 - ' . $e->getMessage());
+          AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
         }
 
-        AdvancedException::reportBoth('0074 - ' . $p->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
         exit('SQL error.');
       }
     }
@@ -125,7 +125,7 @@ class Sessions extends Main {
    * @return boolean status of query
    *
    */
-  public function resendPassword($sPassword = '') {
+  public function resendPassword($sPassword) {
     $sModel = $this->__autoload('Users');
     return $sModel::setPassword($this->_aRequest[$this->_sController]['email'], $sPassword);
   }
@@ -172,10 +172,10 @@ class Sessions extends Main {
         parent::$_oDbStatic->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth('0075 - ' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth('0076 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
   }

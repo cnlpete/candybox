@@ -32,7 +32,7 @@ class Galleries extends Main {
     $sMethod  = $this->_iId && !isset($this->_aRequest['album_id']) ? '_files' . $sType : '_albums' . $sType;
 
     return $this->$sMethod();
-	}
+  }
 
   /**
    * Show overview of albums.
@@ -274,7 +274,7 @@ class Galleries extends Main {
                         '/' . $this->_iId . '/createfile');
       }
       catch (AdvancedException $e) {
-        AdvancedException::reportBoth($e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
         return Helper::errorMessage($e->getMessage(), '/' . $this->_sController .
                       '/' . $this->_iId . '/createfile');
       }
@@ -424,7 +424,7 @@ class Galleries extends Main {
     else
       return Helper::errorMessage(I18n::get('error.sql'), '/' . $this->_sController . '/' .
               $aDetails['album_id']);
-}
+  }
 
   /**
    * Update an album.

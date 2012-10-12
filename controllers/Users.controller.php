@@ -301,14 +301,14 @@ class Users extends Main {
           $sModel = $this->__autoload('Mails', true);
           $oMails = new $sModel($this->_aRequest, $this->_aSession);
 
-          $aData['to_address']  = Helper::formatInput($this->_aRequest[$this->_sController]['email']);
-          $aData['to_name']     = Helper::formatInput($this->_aRequest[$this->_sController]['name']);
-          $aData['subject']     = I18n::get('users.mail.subject');
-          $aData['message']     = I18n::get('users.mail.body',
+          $aMail['to_address']  = Helper::formatInput($this->_aRequest[$this->_sController]['email']);
+          $aMail['to_name']     = Helper::formatInput($this->_aRequest[$this->_sController]['name']);
+          $aMail['subject']     = I18n::get('users.mail.subject');
+          $aMail['message']     = I18n::get('users.mail.body',
                   Helper::formatInput($this->_aRequest[$this->_sController]['name']),
                   Helper::createLinkTo('users/' . $iVerificationCode . '/verification'));
 
-          $oMails->create($aData);
+          $oMails->create($aMail);
         }
 
         return $this->_aSession['user']['role'] == 4 ?
