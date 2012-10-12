@@ -152,7 +152,7 @@ class Users extends Main {
       $oQuery->bindParam(':password', $sPassword, PDO::PARAM_STR);
       $oQuery->bindParam(':email', Helper::formatInput($sEmail), PDO::PARAM_STR);
 
-      return ($oQuery->execute() && $oQuery->rowCount() == 1);
+      return $oQuery->execute();
     }
     catch (\PDOException $p) {
       try {

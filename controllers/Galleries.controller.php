@@ -32,7 +32,7 @@ class Galleries extends Main {
     $sMethod  = $this->_iId && !isset($this->_aRequest['album_id']) ? '_files' . $sType : '_albums' . $sType;
 
     return $this->$sMethod();
-	}
+  }
 
   /**
    * Show overview of albums.
@@ -424,7 +424,7 @@ class Galleries extends Main {
     else
       return Helper::errorMessage(I18n::get('error.sql'), '/' . $this->_sController . '/' .
               $aDetails['album_id']);
-}
+  }
 
   /**
    * Update an album.

@@ -517,29 +517,35 @@ abstract class Main {
    *
    */
   public function destroy($iId, $sController = '') {
-    $sController = $sController ? (string) $sController : (string) $this->_sController;
+    # This is needed for testing the media model
+    if ($iId == '0')
+      return false;
 
-    try {
-      $oQuery = $this->_oDb->prepare("DELETE FROM
-                                        " . SQL_PREFIX . $sController . "
-                                      WHERE
-                                        id = :id
-                                      LIMIT
-                                        1");
+    else {
+      $sController = $sController ? (string) $sController : (string) $this->_sController;
 
-      $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
-      return $oQuery->execute();
-    }
-    catch (\PDOException $p) {
       try {
-        $this->_oDb->rollBack();
-      }
-      catch (\Exception $e) {
-        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
-      }
+        $oQuery = $this->_oDb->prepare("DELETE FROM
+                                          " . SQL_PREFIX . $sController . "
+                                        WHERE
+                                          id = :id
+                                        LIMIT
+                                          1");
 
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
+        $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
+        return $oQuery->execute();
+      }
+      catch (\PDOException $p) {
+        try {
+          $this->_oDb->rollBack();
+        }
+        catch (\Exception $e) {
+          AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
+        }
+
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
+        exit('SQL error.');
+      }
     }
   }
 }
