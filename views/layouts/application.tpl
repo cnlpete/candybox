@@ -34,6 +34,9 @@
 
       {* Basic stuff *}
       <link href='/blogs.rss' rel='alternate' type='application/rss+xml' title='RSS'/>
+      {if isset($_REQUEST.search)}
+        <link href='/blogs/{$_REQUEST.search}.rss' rel='alternate' type='application/rss+xml' title='{$_REQUEST.search} RSS'/>
+      {/if}
       <link href='{$_PATH.public}/favicon.ico' rel='shortcut icon' type='image/x-icon'/>
 
       {* Include jQuery and its components *}
