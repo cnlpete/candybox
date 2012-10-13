@@ -78,9 +78,7 @@ class Users extends Main {
       $oQuery->execute();
 
       $aResult = $oQuery->fetch(PDO::FETCH_ASSOC);
-
-      if (isset($aResult['email']) && !empty($aResult['email']))
-        return true;
+      return isset($aResult['email']) && !empty($aResult['email']) ? true : false;
     }
     catch (AdvancedException $e) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
@@ -281,7 +279,7 @@ class Users extends Main {
       $this->_aData = $this->_formatForUpdate($aRow);
 
     else {
-      $this->_aData[1] = $this->_formatForUserOutput(
+      $this->_aData = $this->_formatForUserOutput(
               $aRow,
               array('id', 'role'),
               array('use_gravatar', 'receive_newsletter'));
@@ -553,6 +551,8 @@ class Users extends Main {
         exit('SQL error.');
       }
     }
+    else
+      return false;
   }
 
   /**

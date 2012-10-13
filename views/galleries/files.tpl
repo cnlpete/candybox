@@ -37,7 +37,7 @@
     {else}
       <ul class='thumbnails'>
         {foreach $files as $f}
-          <li id='galleryfiles-{$f.id}'>
+          <li id='files-{$f.id}'>
             <a href='{$f.url_popup}'
                class='thumbnail js-fancybox fancybox-thumb'
                rel='fancybox-thumb'
@@ -81,11 +81,9 @@
             $('#js-update-order').click(function() {
               $(this).val(lang.loading).attr('disabled', 'disabled');
               var order = $('.thumbnails').sortable('serialize');
-              $.post('/{$_REQUEST.controller}/{$_REQUEST.id}/updatefilepositions', order, function(data) {
+              $.post('/{$_REQUEST.controller}/{$_REQUEST.id}/updateorder', order, function(data) {
                 if(data == true) {
-                  $('#js-update-order').parent().fadeOut(function() {
-                    $('#js-update-order').val('{$lang.galleries.files.update.order}').removeAttr('disabled');
-                  });
+                  $('#js-update-order').parent().fadeOut();
                 }
                 else {
                   $('#js-update-order').val('{$lang.galleries.files.update.order}').removeAttr('disabled');

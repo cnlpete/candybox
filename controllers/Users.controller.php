@@ -34,13 +34,13 @@ class Users extends Main {
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
       $aData = $this->_oModel->getId($this->_iId);
 
-      if (!isset($aData) || !$aData[1]['id'])
+      if (!isset($aData) || !$aData['id'])
         return Helper::redirectTo('/errors/404');
 
       $this->oSmarty->assign('user', $aData);
 
-      $this->setTitle($aData[1]['full_name']);
-      $this->setDescription(I18n::get('users.description.show', $aData[1]['full_name']));
+      $this->setTitle($aData['full_name']);
+      $this->setDescription(I18n::get('users.description.show', $aData['full_name']));
     }
 
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);

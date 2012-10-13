@@ -127,27 +127,22 @@ class Contents extends Main {
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
       $oQuery->execute();
 
-      # Bugfix: Give array to template to enable a loop.
-      $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
+      $aResult = $oQuery->fetch(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
 
-    foreach ($aResult as $aRow) {
-      if ($bUpdate === true)
-        $this->_aData = $this->_formatForUpdate($aRow);
+    if ($bUpdate === true)
+      $this->_aData = $this->_formatForUpdate($aRow);
 
-      else {
-        $iId = $aRow['id'];
-
-        $this->_aData[$iId] = $this->_formatForOutput(
-                $aRow,
-                array('id', 'uid', 'author_id'),
-                array('published'),
-                'contents');
-      }
+    else {
+      $this->_aData = $this->_formatForOutput(
+              $aResult,
+              array('id', 'uid', 'author_id'),
+              array('published'),
+              'contents');
     }
 
     return $this->_aData;

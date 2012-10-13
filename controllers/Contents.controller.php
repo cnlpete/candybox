@@ -31,12 +31,13 @@ class Contents extends Main {
 
     $aData = $this->_oModel->getId($this->_iId);
 
-    if (!isset($aData) || !$aData[$this->_iId]['id'])
+    if (!isset($aData) || !$aData['id'])
       return Helper::redirectTo('/errors/404');
 
-    $this->setDescription($aData[$this->_iId]['teaser']);
-    $this->setKeywords($aData[$this->_iId]['keywords']);
-    $this->setTitle($this->_removeHighlight($aData[$this->_iId]['title']));
+
+    $this->setDescription($aData['teaser']);
+    $this->setKeywords($aData['keywords']);
+    $this->setTitle($this->_removeHighlight($aData['title']));
 
     $this->oSmarty->assign('contents', $aData);
 

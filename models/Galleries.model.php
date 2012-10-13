@@ -72,7 +72,7 @@ class Galleries extends Main {
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
       $oQuery->execute();
 
-      $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
+      $aRow = $oQuery->fetch(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
@@ -84,22 +84,18 @@ class Galleries extends Main {
       $this->_aData = $this->_formatForUpdate($aResult[0]);
 
     else {
-      foreach ($aResult as $aRow) {
-        $iId = $aRow['id'];
+      # Need to specify 'galleries' because this might be called for RSS feed generation
+      $this->_aData = $this->_formatForOutput(
+              $aRow,
+              array('id', 'user_id', 'files_sum'),
+              null,
+              'galleries');
 
-        # need to specify 'galleries' because this might be called for rss feed generation
-        $this->_aData[$iId] = $this->_formatForOutput(
-                $aRow,
-                array('id', 'user_id', 'files_sum'),
-                null,
-                'galleries');
+      $this->_aData['files'] = $aRow['files_sum'] > 0 ?
+              $this->getThumbnails($aRow['id'], $bAdvancedImageInformation) :
+              '';
 
-        $this->_aData[$iId]['files'] = $aRow['files_sum'] > 0 ?
-                $this->getThumbnails($aRow['id'], $bAdvancedImageInformation) :
-                '';
-
-        $this->_aData[$iId]['url_createfile'] = $this->_aData[$iId]['url_clean'] . '/createfile';
-      }
+      $this->_aData['url_createfile'] = $this->_aData['url_clean'] . '/createfile';
     }
 
     return $this->_aData;
@@ -196,12 +192,11 @@ class Galleries extends Main {
    *
    */
   public function getThumbnails($iId, $bAdvancedImageInformation = false) {
-    # Clear existing array (fix, when we got no images at a gallery
+    # Clear existing array (fix, when we got no images at a gallery)
     if (!empty($this->_aThumbs))
       unset($this->_aThumbs);
 
     try {
-
       $sOrder = defined('SORTING_GALLERY_FILES') && (SORTING_GALLERY_FILES == 'ASC' || SORTING_GALLERY_FILES == 'DESC') ?
               SORTING_GALLERY_FILES :
               'ASC';
@@ -709,13 +704,13 @@ class Galleries extends Main {
    * @return boolean status of query
    *
    */
-  public function updateFilePositions($iAlbumId) {
-    $iAlbumId = (int)$iAlbumId;
-    $sSQL = '';
+  public function updateOrder($iAlbumId) {
+    $iAlbumId = (int) $iAlbumId;
+    $sSQL     = '';
 
-    foreach ($this->_aRequest['galleryfiles'] as $iKey => $iValue) {
-      $iKey   = (int)$iKey;
-      $iValue = (int)$iValue;
+    foreach ($this->_aRequest['files'] as $iKey => $iValue) {
+      $iKey   = (int) $iKey;
+      $iValue = (int) $iValue;
 
       $sSQL .= "UPDATE
                   " . SQL_PREFIX . "gallery_files
