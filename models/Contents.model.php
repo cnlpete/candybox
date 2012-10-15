@@ -135,7 +135,7 @@ class Contents extends Main {
     }
 
     if ($bUpdate === true)
-      $this->_aData = $this->_formatForUpdate($aRow);
+      $this->_aData = $this->_formatForUpdate($aResult);
 
     else {
       $this->_aData = $this->_formatForOutput(

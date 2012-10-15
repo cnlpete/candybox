@@ -34,7 +34,6 @@ class Contents extends Main {
     if (!isset($aData) || !$aData['id'])
       return Helper::redirectTo('/errors/404');
 
-
     $this->setDescription($aData['teaser']);
     $this->setKeywords($aData['keywords']);
     $this->setTitle($this->_removeHighlight($aData['title']));

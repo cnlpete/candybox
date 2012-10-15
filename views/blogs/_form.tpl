@@ -95,7 +95,7 @@
         <textarea name='{$_REQUEST.controller}[content]'
                   class='js-tinymce required span5'
                   id='input-content'
-                  rows='6'>{$content}</textarea>
+                  rows='10'>{$content}</textarea>
         {if isset($error.content)}
           <span class='help-inline'>{$error.content}</span>
         {/if}
