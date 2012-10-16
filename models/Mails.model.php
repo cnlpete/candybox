@@ -121,10 +121,10 @@ class Mails extends Main {
             isset($aMail['from_name']) ? $aMail['from_name'] : '');
 
     $oMail->AddAddress(
-            isset($aMail['to_address']) ? $aMail['to_address'] : '',
-            isset($aMail['to_name']) ? $aMail['to_name'] : '');
+            isset($aMail['to_address']) ? $aMail['to_address'] : WEBSITE_MAIL,
+            isset($aMail['to_name']) ? $aMail['to_name'] : WEBSITE_NAME);
 
-    $oMail->Subject = isset($aMail['subject']) ? $aMail['subject'] : '';
+    $oMail->Subject = isset($aMail['subject']) ? $aMail['subject'] : I18n::get('mails.subject.by', 'System');
     $oMail->MsgHTML(nl2br(isset($aMail['message']) ? $aMail['message'] : ''));
 
     if (isset($aMail['attachement']))
