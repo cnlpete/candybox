@@ -37,7 +37,7 @@ class Contents extends Main {
       $iResult = $oQuery->fetchColumn();
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth('0105 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -73,7 +73,7 @@ class Contents extends Main {
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth('0024 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -127,27 +127,22 @@ class Contents extends Main {
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
       $oQuery->execute();
 
-      # Bugfix: Give array to template to enable a loop.
-      $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
+      $aResult = $oQuery->fetch(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth('0025 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
 
-    foreach ($aResult as $aRow) {
-      if ($bUpdate === true)
-        $this->_aData = $this->_formatForUpdate($aRow);
+    if ($bUpdate === true)
+      $this->_aData = $this->_formatForUpdate($aResult);
 
-      else {
-        $iId = $aRow['id'];
-
-        $this->_aData[$iId] = $this->_formatForOutput(
-                $aRow,
-                array('id', 'uid', 'author_id'),
-                array('published'),
-                'contents');
-      }
+    else {
+      $this->_aData = $this->_formatForOutput(
+              $aResult,
+              array('id', 'uid', 'author_id'),
+              array('published'),
+              'contents');
     }
 
     return $this->_aData;
@@ -210,10 +205,10 @@ class Contents extends Main {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth('0026 - ' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth('0027 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
   }
@@ -269,10 +264,10 @@ class Contents extends Main {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth('0028 - ' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth('0029 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
   }

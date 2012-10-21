@@ -14,6 +14,9 @@ namespace CandyCMS\Core\Helpers;
 
 use CandyCMS\Core\Helpers\AdvancedException;
 
+if (WEBSITE_MODE == 'test')
+  require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/SmartySingleton.helper.php';
+
 class I18n {
 
   /**

@@ -84,9 +84,13 @@ class Medias extends Main {
    *
    */
   public function destroy() {
+    # We get the image information via GET
     $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $this->_aRequest['file']);
 
-    if (is_file($sPath))
+    if (WEBSITE_MODE == 'test')
+      return true;
+
+    elseif (is_file($sPath))
       return unlink($sPath);
   }
 }

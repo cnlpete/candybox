@@ -73,7 +73,8 @@
       <div class='controls'>
         <textarea name='{$_REQUEST.controller}[content]'
                   class='js-tinymce required span5'
-                  id='input-content'>
+                  id='input-content'
+                  rows='10'>
           {$content}
         </textarea>
         {if isset($error.content)}

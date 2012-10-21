@@ -155,6 +155,6 @@ class Downloads extends Main {
    *
    */
   protected function _destroy() {
-    return parent::_destroy('searches');
+    return parent::_destroy('searches', '/' . $this->_sController);
   }
 }

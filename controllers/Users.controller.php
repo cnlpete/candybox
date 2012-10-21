@@ -34,13 +34,13 @@ class Users extends Main {
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
       $aData = $this->_oModel->getId($this->_iId);
 
-      if (!isset($aData) || !$aData[1]['id'])
+      if (!isset($aData) || !$aData['id'])
         return Helper::redirectTo('/errors/404');
 
       $this->oSmarty->assign('user', $aData);
 
-      $this->setTitle($aData[1]['full_name']);
-      $this->setDescription(I18n::get('users.description.show', $aData[1]['full_name']));
+      $this->setTitle($aData['full_name']);
+      $this->setDescription(I18n::get('users.description.show', $aData['full_name']));
     }
 
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
@@ -301,14 +301,14 @@ class Users extends Main {
           $sModel = $this->__autoload('Mails', true);
           $oMails = new $sModel($this->_aRequest, $this->_aSession);
 
-          $aData['to_address']  = Helper::formatInput($this->_aRequest[$this->_sController]['email']);
-          $aData['to_name']     = Helper::formatInput($this->_aRequest[$this->_sController]['name']);
-          $aData['subject']     = I18n::get('users.mail.subject');
-          $aData['message']     = I18n::get('users.mail.body',
+          $aMail['to_address']  = Helper::formatInput($this->_aRequest[$this->_sController]['email']);
+          $aMail['to_name']     = Helper::formatInput($this->_aRequest[$this->_sController]['name']);
+          $aMail['subject']     = I18n::get('users.mail.subject');
+          $aMail['message']     = I18n::get('users.mail.body',
                   Helper::formatInput($this->_aRequest[$this->_sController]['name']),
                   Helper::createLinkTo('users/' . $iVerificationCode . '/verification'));
 
-          $oMails->create($aData);
+          $oMails->create($aMail);
         }
 
         return $this->_aSession['user']['role'] == 4 ?

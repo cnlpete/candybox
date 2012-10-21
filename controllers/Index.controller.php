@@ -183,8 +183,6 @@ class Index {
     }
   }
 
-
-
   /**
    * Read the routes from Routes.yml and set request params.
    *
@@ -238,16 +236,16 @@ class Index {
     # Show files from public folder (robots.txt, human.txt and favicon.ico)
     if (preg_match('/\.txt/', $sURI) || preg_match('/\.ico/', $sURI) && !isset($this->_aRequest['action'])) {
 			$sFileTemplate	= Helper::removeSlash(WEBSITE_CDN) . '/templates/' . PATH_TEMPLATE . '/' . $sURI;
-			$sFileRoot			= Helper::removeSlash(WEBSITE_CDN) . '/' . $sURI;
+			$sFileRoot      = Helper::removeSlash(WEBSITE_CDN) . '/' . $sURI;
 
-			if (PATH_TEMPLATE && file_exists($sFileTemplate))
-				exit(file_get_contents($sFileTemplate));
+      if (PATH_TEMPLATE && file_exists($sFileTemplate))
+        exit(file_get_contents($sFileTemplate));
 
-			elseif (file_exists($sFileRoot))
-				exit(file_get_contents($sFileRoot));
+      elseif (file_exists($sFileRoot))
+        exit(file_get_contents($sFileRoot));
 
-			else
-				return Helper::redirectTo('/errors/404');
+      else
+        return Helper::redirectTo('/errors/404');
 		}
 
     return $this->_aRequest;
@@ -288,7 +286,7 @@ class Index {
     }
 
     # ...or browsers default language...
-    elseif (file_exists(PATH_STANDARD . '/app/languages/' . strtolower($sBrowserLanguage) . '.yml'))
+    elseif (file_exists(PATH_STANDARD . '/app/languages/' . strtolower($sBrowserLanguage) . '.yml') && WEBSITE_MODE !== 'test')
       $sLanguage = $sBrowserLanguage;
 
     # ...or fall back to default language.

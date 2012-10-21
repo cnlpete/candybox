@@ -137,11 +137,11 @@ class Sessions extends Main {
       $sModel = $this->__autoload('Mails', true);
       $oMails = new $sModel($this->_aRequest, $this->_aSession);
 
-      $aData['to_address']  = Helper::formatInput($this->_aRequest[$this->_sController]['email']);
-      $aData['subject']     = I18n::get('sessions.password.mail.subject');
-      $aData['message']     = I18n::get('sessions.password.mail.body', $sNewPasswordClean);
+      $aMail['to_address']  = Helper::formatInput($this->_aRequest[$this->_sController]['email']);
+      $aMail['subject']     = I18n::get('sessions.password.mail.subject');
+      $aMail['message']     = I18n::get('sessions.password.mail.body', $sNewPasswordClean);
 
-      return $oMails->create($aData) === true ?
+      return $oMails->create($aMail) === true ?
               Helper::successMessage(I18n::get('success.mail.create'), $sRedirect) :
               Helper::errorMessage(I18n::get('error.mail.create'), $sRedirect);
     }
@@ -199,13 +199,13 @@ class Sessions extends Main {
       $sModel = $this->__autoload('Mails', true);
       $oMails = new $sModel($this->_aRequest, $this->_aSession);
 
-      $aData['to_address']  = Helper::formatInput($this->_aRequest[$this->_sController]['email']);
-      $aData['subject']     = I18n::get('sessions.verification.mail.subject');
-      $aData['message']     = I18n::get('sessions.verification.mail.body',
+      $aMail['to_address']  = Helper::formatInput($this->_aRequest[$this->_sController]['email']);
+      $aMail['subject']     = I18n::get('sessions.verification.mail.subject');
+      $aMail['message']     = I18n::get('sessions.verification.mail.body',
                       $aData['name'],
                       Helper::createLinkTo('users/' . $aData['verification_code'] . '/verification'));
 
-      return $oMails->create($aData) === true ?
+      return $oMails->create($aMail) === true ?
               Helper::successMessage(I18n::get('success.mail.create'), $sRedirect) :
               Helper::errorMessage(I18n::get('error.mail.create'), $sRedirect);
     }

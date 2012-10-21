@@ -34,15 +34,18 @@
 
       {* Basic stuff *}
       <link href='/blogs.rss' rel='alternate' type='application/rss+xml' title='RSS'/>
+      {if isset($_REQUEST.search)}
+        <link href='/blogs/{$_REQUEST.search}.rss' rel='alternate' type='application/rss+xml' title='{$_REQUEST.search} RSS'/>
+      {/if}
       <link href='{$_PATH.public}/favicon.ico' rel='shortcut icon' type='image/x-icon'/>
 
       {* Include jQuery and its components *}
-      <script type='text/javascript' src='http://code.jquery.com/jquery-1.7.1{$_SYSTEM.compress_files_suffix}.js'></script>
+      <script type='text/javascript' src='http://code.jquery.com/jquery-1.8.2{$_SYSTEM.compress_files_suffix}.js'></script>
 
       {* Fallback if CDN is not available. Also include language parts. *}
       <script type='text/javascript'>
         if (typeof jQuery == 'undefined')
-          document.write(unescape("%3Cscript src='{$_PATH.js}/core/jquery.1.7.1{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'%3E%3C/script%3E"));
+          document.write(unescape("%3Cscript src='{$_PATH.js}/core/jquery.1.8.2{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'%3E%3C/script%3E"));
 
         var lang = {$_SYSTEM.json_language};
       </script>
@@ -55,7 +58,7 @@
     <!--[if gt IE 8]><!--><body itemscope itemtype='http://schema.org/WebPage'><!--<![endif]-->
 
       {* Top navigation *}
-      <nav class='navbar navbar-fixed-top'>
+      <nav class='navbar navbar-inverse navbar-fixed-top'>
         <div class='navbar-inner'>
           <div class='container'>
             <a href='/' class='brand' title='{$WEBSITE_NAME}'>
@@ -63,11 +66,6 @@
               {if $WEBSITE_MODE !== 'production'}
                 &nbsp;- {$WEBSITE_MODE|upper}
               {/if}
-            </a>
-            <a class='btn btn-navbar' data-toggle='collapse' data-target='.nav-collapse'>
-              <span class='icon-bar'></span>
-              <span class='icon-bar'></span>
-              <span class='icon-bar'></span>
             </a>
             <div class='nav-collapse'>
               <ul class='nav'>
@@ -198,7 +196,6 @@
       {* Add bootstrap support *}
       <script type='text/javascript' src='{$_PATH.js}/core/jquery.bootstrap.dropdown{$_SYSTEM.compress_files_suffix}.js'></script>
       <script type='text/javascript' src='{$_PATH.js}/core/jquery.bootstrap.tooltip{$_SYSTEM.compress_files_suffix}.js'></script>
-      <script type='text/javascript' src='{$_PATH.js}/core/jquery.bootstrap.collapse{$_SYSTEM.compress_files_suffix}.js'></script>
 
       {* Own JS and plugins *}
       <script type='text/javascript' src='{$_PATH.js}/core/scripts{$_SYSTEM.compress_files_suffix}.js'></script>

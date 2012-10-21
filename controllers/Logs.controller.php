@@ -140,4 +140,16 @@ class Logs extends Main {
 
     return $bReturn;
   }
+
+  /**
+   * Write information to text file
+   *
+   * @static
+   * @access public
+   * @param string $message
+   *
+   */
+  public static function write($sMessage) {
+    return \CandyCMS\Core\Helpers\AdvancedException::writeLog($sMessage);
+  }
 }

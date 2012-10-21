@@ -3,7 +3,7 @@
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>{$WEBSITE_NAME}</title>
+    <title>{$_WEBSITE.title} - {$WEBSITE_NAME}</title>
     <description>{$lang.website.description}</description>
     <language>{$WEBSITE_LANGUAGE}</language>
     <link>{$WEBSITE_URL}</link>

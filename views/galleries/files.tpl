@@ -37,7 +37,7 @@
     {else}
       <ul class='thumbnails'>
         {foreach $files as $f}
-          <li id='galleryfiles-{$f.id}'>
+          <li id='files-{$f.id}'>
             <a href='{$f.url_popup}'
                class='thumbnail js-fancybox fancybox-thumb'
                rel='fancybox-thumb'
@@ -69,7 +69,7 @@
                 class='btn btn-primary'
                 value='{$lang.galleries.files.update.order}' />
         </div>
-        <script src='{$_PATH.js}/core/jquery.ui.1.8.20.custom{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
+        <script src='{$_PATH.js}/core/jquery.ui.1.9.0.custom{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
         <script type='text/javascript'>
           $(document).ready(function(){
             $('.thumbnails').sortable({
@@ -81,11 +81,9 @@
             $('#js-update-order').click(function() {
               $(this).val(lang.loading).attr('disabled', 'disabled');
               var order = $('.thumbnails').sortable('serialize');
-              $.post('/{$_REQUEST.controller}/{$_REQUEST.id}/updatefilepositions', order, function(data) {
+              $.post('/{$_REQUEST.controller}/{$_REQUEST.id}/updateorder', order, function(data) {
                 if(data == true) {
-                  $('#js-update-order').parent().fadeOut(function() {
-                    $('#js-update-order').val('{$lang.galleries.files.update.order}').removeAttr('disabled');
-                  });
+                  $('#js-update-order').parent().fadeOut();
                 }
                 else {
                   $('#js-update-order').val('{$lang.galleries.files.update.order}').removeAttr('disabled');

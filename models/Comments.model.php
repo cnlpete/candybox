@@ -67,7 +67,7 @@ class Comments extends Main {
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth('0019 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
 
@@ -85,7 +85,7 @@ class Comments extends Main {
     }
 
     # We crawl the facebook avatars
-    if (PLUGIN_FACEBOOK_APP_ID && class_exists('\CandyCMS\Plugins\FacebookCMS'))
+    if (defined('PLUGIN_FACEBOOK_APP_ID') && class_exists('\CandyCMS\Plugins\FacebookCMS'))
       $this->_getFacebookAvatars($aResult);
 
     # Get comment number
@@ -188,10 +188,10 @@ class Comments extends Main {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
-        AdvancedException::reportBoth('0020 - ' . $e->getMessage());
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth('0021 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
   }
@@ -225,7 +225,7 @@ class Comments extends Main {
       return (int) $aResult['parent_id'];
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth('0103 - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
   }
