@@ -166,7 +166,7 @@ CREATE TABLE `%SQL_PREFIX%users` (
   `use_gravatar` tinyint(1) DEFAULT '0',
   `role` tinyint(1) NOT NULL DEFAULT '1',
   `date` datetime NOT NULL,
-  `verification_code` varchar(12) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `verification_code` varchar(12) COLLATE utf8_unicode_ci NOT NULL,
   `api_token` varchar(32)  NOT NULL  DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
