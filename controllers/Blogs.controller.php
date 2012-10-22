@@ -80,10 +80,9 @@ class Blogs extends Main {
       $this->_aData = isset($this->_aRequest['search']) && $this->_aRequest['search'] ?
           $this->_oModel->getOverviewByTag() :
           $this->_oModel->getOverview();
-      $this->oSmarty->assign('data', $this->_aData);
 
-      $aWebsite['title']    = $this->_setBlogsTitle();
-      $this->oSmarty->assign('_WEBSITE', $aWebsite);
+      $this->oSmarty->assign('data', $this->_aData);
+      $this->oSmarty->assign('_WEBSITE', array('title' => $this->_setBlogsTitle()));
     }
 
     exit($this->oSmarty->fetch($sTemplateFile, UNIQUE_ID));
