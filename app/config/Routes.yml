@@ -15,6 +15,7 @@
 "users/(:num)/token": controller=users&action=token&id=$1
 "users/(:alnum)/verification": controller=users&action=verification&code=$1
 "users/(:num)/(:alpha)": controller=users&action=$2&id=$1
+"blogs/(:any).(xml|json|rss)": controller=blogs&search=$1&type=$2
 
 # Shared behaviour
 "(:alpha)/?": controller=$1&page=1
