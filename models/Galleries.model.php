@@ -81,7 +81,7 @@ class Galleries extends Main {
 
     # Update a single entry. Fix it with 0 o
     if ($bUpdate === true)
-      $this->_aData = $this->_formatForUpdate($aResult[0]);
+      $this->_aData = $this->_formatForUpdate($aRow);
 
     else {
       # Need to specify 'galleries' because this might be called for RSS feed generation

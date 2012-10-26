@@ -127,7 +127,7 @@ class Contents extends Main {
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
       $oQuery->execute();
 
-      $aResult = $oQuery->fetch(PDO::FETCH_ASSOC);
+      $aRow = $oQuery->fetch(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
@@ -135,11 +135,11 @@ class Contents extends Main {
     }
 
     if ($bUpdate === true)
-      $this->_aData = $this->_formatForUpdate($aResult);
+      $this->_aData = $this->_formatForUpdate($aRow);
 
     else {
       $this->_aData = $this->_formatForOutput(
-              $aResult,
+              $aRow,
               array('id', 'uid', 'author_id'),
               array('published'),
               'contents');

@@ -206,7 +206,6 @@ class Calendars extends Main {
       exit('SQL error.');
     }
 
-    $this->_aData = array();
     if ($bUpdate === true) {
       $this->_aData = $this->_formatForUpdate($aRow);
       $this->_aData['start_date'] = date('Y-m-d', $this->_aData['start_date']);

@@ -268,7 +268,7 @@ class Users extends Main {
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
       $oQuery->execute();
 
-      $aResult = $oQuery->fetch(PDO::FETCH_ASSOC);
+      $aRow = $oQuery->fetch(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
@@ -276,11 +276,11 @@ class Users extends Main {
     }
 
     if ($bUpdate === true)
-      $this->_aData = $this->_formatForUpdate($aResult);
+      $this->_aData = $this->_formatForUpdate($aRow);
 
     else {
       $this->_aData = $this->_formatForUserOutput(
-              $aResult,
+              $aRow,
               array('id', 'role'),
               array('use_gravatar', 'receive_newsletter'));
 
