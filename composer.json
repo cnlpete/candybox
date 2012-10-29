@@ -79,6 +79,17 @@
   },
 
   "require-dev" : {
-    "candyCMS/tests" : "dev-master"
-  }
+    "candyCMS/core": "dev-master",
+    "candyCMS/plugins": "dev-master",
+    "candyCMS/tests" : "dev-master",
+    "smushit/smushit": "dev-master",
+    "symfony/yaml": "dev-master",
+    "facebook/php-sdk": "dev-master",
+    "leafo/lessphp": "dev-master",
+    "mailchimp/mcapi": "dev-master",
+    "simonhamp/routes": "dev-master",
+    "dflydev/markdown" : "dev-master"
+  },
+
+  "minimum-stability": "dev"
 }
