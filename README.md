@@ -1,13 +1,13 @@
-CandyCMS Version 2.1.5
+candyCMS Version 2.1.6
 ========================================================================================================================
 
 > Note that if you check out dev-master, your application might be incompatible with previous versions! Stick to
 > the tagged ones!
 
-What is CandyCMS?
+What is candyCMS?
 ------------------------------------------------------------------------------------------------------------------------
 
-CandyCMS is a modern PHP CMS with its main focus on usability, speed and security.
+candyCMS is a modern PHP CMS with its main focus on usability, speed and security.
 
 It provides...
 
@@ -24,7 +24,7 @@ It provides...
 - and many more!
 
 
-Additional reasons, why CandyCMS might be interesting for you
+Additional reasons, why candyCMS might be interesting for you
 ------------------------------------------------------------------------------------------------------------------------
 - easy internationalization and localization via YAML
 - WYSIWYG-Editor ([TinyMCE](http://tinymce.moxiecode.com/)) and support of [BB-Code](https://github.com/marcoraddatz/candyCMS/wiki/BBCode)
@@ -62,10 +62,10 @@ Setup
 
 Update
 ------------------------------------------------------------------------------------------------------------------------
-To upgrade CandyCMS, read the release notes first. If no specific information are given,
+To upgrade candyCMS, read the release notes first. If no specific information are given,
 upload following folders and dirs after using the Composer (`php composer.phar update`):
 "index.php", "composer.json" and "install". You might also update all javascript files under "public/js". Make
-sure, the links in your views are still correct!
+sure, the links in your views are still correct! Sorry for not providing more release information.
 
 
 Credits
@@ -76,5 +76,5 @@ built many impressive features.
 
 License
 ------------------------------------------------------------------------------------------------------------------------
-CandyCMS is licensed under MIT license. All of its components should be Open Source and free to use, too.
+candyCMS is licensed under MIT license. All of its components should be Open Source and free to use, too.
 Note that [fancyBox](http://fancyapps.com/fancybox/) needs a license for commercial projects.
