@@ -1,9 +1,9 @@
 {strip}
   <div class='page-header'>
     <h1>
-      {$users.full_name}
-      {if $_SESSION.user.role == 4 || $users.id == $_SESSION.user.id}
-        <a href='{$users.url_update}'>
+      {$user.full_name}
+      {if $_SESSION.user.role == 4 || $user.id == $_SESSION.user.id}
+        <a href='{$user.url_update}'>
           <i class='icon-pencil js-tooltip'
               title='{$lang.global.update.update}'></i>
         </a>
@@ -16,8 +16,8 @@
         {$lang.users.label.registered_since}
       </td>
       <td>
-        <time datetime='{$users.date.w3c}' class='js-timeago'>
-          {$users.date.raw|date_format:$lang.global.time.format.date}
+        <time datetime='{$user.date.w3c}' class='js-timeago'>
+          {$user.date.raw|date_format:$lang.global.time.format.date}
         </time>
       </td>
       <td rowspan='4'>
@@ -25,11 +25,11 @@
         {* List as a fix to fit width *}
         <ul class='thumbnails'>
           <li>
-            <a href='{$users.avatar_popup}'
+            <a href='{$user.avatar_popup}'
                 class='thumbnail js-fancybox'
-                title='{$users.full_name}'>
-              <img alt='{$users.full_name}'
-                    src='{$users.avatar_100}'
+                title='{$user.full_name}'>
+              <img alt='{$user.full_name}'
+                    src='{$user.avatar_100}'
                     width='100' />
             </a>
           </li>
@@ -41,17 +41,17 @@
         {$lang.users.label.last_login}
       </td>
       <td>
-        <time datetime='{$users.last_login.w3c}' class='js-timeago'>
-          {$users.last_login.raw|date_format:$lang.global.time.format.date}
+        <time datetime='{$user.last_login.w3c}' class='js-timeago'>
+          {$user.last_login.raw|date_format:$lang.global.time.format.date}
         </time>
       </td>
     </tr>
     <tr>
       <td>
-        {$lang.users.label.content.show|replace:'%s':$users.name}
+        {$lang.users.label.content.show|replace:'%s':$user.name}
       </td>
       <td>
-        {$users.content}
+        {$user.content}
       </td>
     </tr>
     <tr>
@@ -60,7 +60,7 @@
       </td>
       <td>
         <a href='/mails/{$_REQUEST.id}/create'>
-          {$lang.users.contact_via_email|replace:'%s':$users.name}
+          {$lang.users.contact_via_email|replace:'%s':$user.name}
         </a>
       </td>
     </tr>

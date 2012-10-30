@@ -220,6 +220,7 @@ abstract class Main {
   protected static function _formatDates(&$aData, $sKey = 'date') {
     if (isset($aData[$sKey])) {
       $iTimeStamp = (int) $aData[$sKey];
+
       $aDateData = Array(
         'raw'       => $iTimeStamp,
         'rss'       => date('D, d M Y H:i:s O', $iTimeStamp),
