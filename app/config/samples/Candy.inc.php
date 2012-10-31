@@ -59,7 +59,7 @@ define('SMTP_USE_AUTH', true);
 
 # ------------------------------------------------------------------------------
 
-# Define the ABSOLUTE path of your website.
+# Define the ABSOLUTE path of your website without slash at the end.
 # EXAMPLE: http://www.google.com
 define('WEBSITE_URL', 'http://domain.tld');
 
