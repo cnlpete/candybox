@@ -1,13 +1,12 @@
 candyCMS Version 2.1.7
 ========================================================================================================================
 
-> Note that if you check out dev-master, your application might be incompatible with previous versions! Stick to
-> the tagged ones!
-
 What is candyCMS?
 ------------------------------------------------------------------------------------------------------------------------
 
-candyCMS is a modern PHP CMS with its main focus on usability, speed and security.
+candyCMS is a modern PHP CMS with its main focus on usability, speed and security. It is designed to create new
+websites incredibly fast if you know HTML well. It is not designed to be installed by people who know web technologies
+only barely.
 
 It provides...
 
@@ -26,10 +25,10 @@ It provides...
 
 Additional reasons, why candyCMS might be interesting for you
 ------------------------------------------------------------------------------------------------------------------------
-- easy internationalization and localization via YAML
-- WYSIWYG-Editor ([TinyMCE](http://tinymce.moxiecode.com/)) and support of [BB-Code](https://github.com/marcoraddatz/candyCMS/wiki/BBCode)
-- uses the [Smarty template engine](http://smarty.org) and lots of HTML5
-- supports [reCAPTCHA](http://recaptcha.org)
+- easy internationalization and localization via YAML and automatic language detection
+- WYSIWYG-Editor ([TinyMCE](http://tinymce.moxiecode.com/)) and support of [BB-Code](https://github.com/marcoraddatz/candyCMS/wiki/BBCode) via Plugins. Also parses Markdown files direclty from the start.
+- uses the [Smarty template engine](http://smarty.org) and lots of HTML5 to make life easier
+- supports [reCAPTCHA](http://recaptcha.org) (as a Plugin)
 - completely object oriented and use of MVC
 - easy to extend
 - supports templates
@@ -38,14 +37,14 @@ Additional reasons, why candyCMS might be interesting for you
 - supports CDNs
 - easy to update or migrate
 - SEO optimized (sitemap.xml and basic stuff)
-- 2click social share privacy and addThis to make sharing easy
+- 2click social share privacy and addThis to make sharing easy (as Plugins)
 - Tests for the whole core functions
-- many plugins
+- many plugins and many other features
 
 
 Requirements
 ------------------------------------------------------------------------------------------------------------------------
-- at least PHP 5.1 & PDO supported database (PHP 5.3 recommended)
+- at least PHP 5.3 & PDO supported database
 - Imagemagick, GD2 and mod_rewrite
 - an account at http://recaptcha.org to use captchas
 - an account at http://mailchimp.com to use the newsletter management
@@ -56,15 +55,15 @@ Setup
 ------------------------------------------------------------------------------------------------------------------------
 1. Download and install Composer ( http://getcomposer.org ): `curl -s http://getcomposer.org/installer | php`.
 2. Install the vendor packages afterwards: `php composer.phar install`.
-3. Configure your website settings at "app/config/Candy.inc.php", upload all files.
+3. Configure your website settings at "app/config/Candy.inc.php" and start uploading all files.
 4. Execute the "/install/index.php" file.
-5. Follow the instructions and make sure, you delete the install dir after installation.
+5. Follow the instructions and make sure, you delete the install folder after installation.
 
 Update
 ------------------------------------------------------------------------------------------------------------------------
-To upgrade candyCMS, read the release notes first. If no specific information are given,
-upload following folders and dirs after using the Composer (`php composer.phar update`):
-"index.php", "composer.json" and "install". You might also update all javascript files under "public/js". Make
+To upgrade candyCMS, read the release notes (if provided) first. If no specific information are given,
+upload following folders and files after using the Composer (`php composer.phar update`):
+"index.php", "composer.json" and "install". You might also need to update all javascript files under "public/js". Make
 sure, the links in your views are still correct! Sorry for not providing more release information.
 
 
