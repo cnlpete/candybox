@@ -10,35 +10,42 @@ only barely.
 
 It provides...
 
-- a blog that supports tags, comments, RSS and full social media integration (as a plugin)
-- content pages
+- a blog that supports tags, comments, RSS and full social media integration (via plugin
+- basic content pages
 - a gallery with multiple file upload (based on HTML5) and Media RSS
 - a calendar with the option to download iCalendar events
 - a download section
-- easy and simple user management
 - file management
-- newsletter management (uses [Mailchimp API](http://mailchimp.com))
-- a full log system
+- a newsletter
+- easy and simple user management
+- full logs of all actions
 - Plugins to extend the functionality to your needs
-- and many more!
+
+... and uses...
+- [Twitter Bootstrap](http://mailchimp.com) for its basic design
+- [Smarty](http://smarty.org) as template engine
+- [Mailchimp](http://mailchimp.com) for newsletter managing
+- [reCAPTCHA](http://recaptcha.org) to protect spam (as plugin)
+- [TinyMCE](http://tinymce.moxiecode.com/) as WYSIWYG editor (as plugin)
+- [BB-Code](https://github.com/marcoraddatz/candyCMS/wiki/BBCode) and [Markdown](http://daringfireball.net/projects/markdown/) to make editing easy
+- [SmushIt](http://www.smushit.com/ysmush.it/) to compress images on the fly
+- [Facebook](http://facebook.com/) and [Gravatar](http://gravatar.com/) to display user images
+- [Composer](http://getcomposer.org/) to keep the software up to date
+- [2click social share privacy](http://www.heise.de/extras/socialshareprivacy/) and [AddThis](http://www.addthis.com/) for social communication (as plugins)
+- [Google Analytics](http://www.google.com/analytics/) or / and [Piwik](http://de.piwik.org/) to track your website
 
 
 Additional reasons, why candyCMS might be interesting for you
 ------------------------------------------------------------------------------------------------------------------------
 - easy internationalization and localization via YAML and automatic language detection
-- WYSIWYG-Editor ([TinyMCE](http://tinymce.moxiecode.com/)) and support of [BB-Code](https://github.com/marcoraddatz/candyCMS/wiki/BBCode) via Plugins. Also parses Markdown files direclty from the start.
-- uses the [Smarty template engine](http://smarty.org) and lots of HTML5 to make life easier
-- supports [reCAPTCHA](http://recaptcha.org) (as a Plugin)
+- best use of HTML5 to make life easier
 - completely object oriented and use of MVC
 - easy to extend
-- supports templates
+- supports different templates
 - clean URLs due to mod_rewrite
-- full Facebook integration
 - supports CDNs
 - easy to update or migrate
 - SEO optimized (sitemap.xml and basic stuff)
-- 2click social share privacy and addThis to make sharing easy (as Plugins)
-- Tests for the whole core functions
 - many plugins and many other features
 
 
