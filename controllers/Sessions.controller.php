@@ -192,18 +192,18 @@ class Sessions extends Main {
     if (isset($this->_aError))
       return $this->_showCreateResendActionsTemplate($bShowCaptcha);
 
-    $aData = $this->_oModel->resendVerification();
+    $mData = $this->_oModel->resendVerification();
     $sRedirect = '/' . $this->_sController . '/create';
 
-    if (is_array($aData) && !empty($aData)) {
+    if (is_array($mData) && !empty($mData)) {
       $sModel = $this->__autoload('Mails', true);
       $oMails = new $sModel($this->_aRequest, $this->_aSession);
 
       $aMail['to_address']  = Helper::formatInput($this->_aRequest[$this->_sController]['email']);
       $aMail['subject']     = I18n::get('sessions.verification.mail.subject');
       $aMail['message']     = I18n::get('sessions.verification.mail.body',
-                      $aData['name'],
-                      Helper::createLinkTo('users/' . $aData['verification_code'] . '/verification'));
+                      $mData['name'],
+                      Helper::createLinkTo('users/' . $mData['verification_code'] . '/verification'));
 
       return $oMails->create($aMail) === true ?
               Helper::successMessage(I18n::get('success.mail.create'), $sRedirect) :

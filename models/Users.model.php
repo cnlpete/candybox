@@ -92,7 +92,7 @@ class Users extends Main {
    * @static
    * @access public
    * @param string $sEmail email address to search user from.
-   * @return array user data.
+   * @return array|boolean user data or false.
    * @see vendor/candyCMS/core/models/Session.model.php
    *
    */
@@ -114,7 +114,8 @@ class Users extends Main {
       $oQuery->bindParam(':email', Helper::formatInput($sEmail), PDO::PARAM_STR);
       $oQuery->execute();
 
-      return $oQuery->fetch(PDO::FETCH_ASSOC);
+      $aRow = $oQuery->fetch(PDO::FETCH_ASSOC);
+      return is_array($aRow) ? $aRow : false;
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());

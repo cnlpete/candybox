@@ -139,9 +139,9 @@ class Sessions extends Main {
    */
   public function resendVerification() {
     $sModel = $this->__autoload('Users');
-    $aData  = $sModel::getVerificationData($this->_aRequest[$this->_sController]['email']);
+    $mData  = $sModel::getVerificationData($this->_aRequest[$this->_sController]['email']);
 
-    return empty($aData['verification_code']) ? false : $aData;
+    return is_array($mData) ? $mData : false;
   }
 
   /**

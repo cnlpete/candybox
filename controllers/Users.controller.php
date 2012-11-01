@@ -325,7 +325,6 @@ class Users extends Main {
    *
    * @access protected
    * @return string HTML content
-	 * @todo does this work with captcha?
    *
    */
   protected function _showCreateUserTemplate() {

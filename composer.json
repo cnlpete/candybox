@@ -1,5 +1,5 @@
 {
-  "name": "candyCMS/core",
+  "name": "candycms/core",
   "type": "library",
   "description": "Core elements for candyCMS.",
   "keywords": ["php", "candy", "cms"],
@@ -8,11 +8,6 @@
 
   "require": {
     "php": ">=5.3.0"
-  },
-
-  "suggest": {
-    "candyCMS/plugins": "Enhances core functionality.",
-    "candyCMS/tests": "Tests for all core modules."
   },
 
   "authors": [
