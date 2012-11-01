@@ -75,5 +75,10 @@
     "mailchimp/mcapi": "1.3",
     "simonhamp/routes": "1.0",
     "dflydev/markdown" : "1.0.2"
+  },
+
+  "require-dev": {
+    "candyCMS/test": "dev-master",
+    "candyCMS/documentation": "dev-master"
   }
 }
