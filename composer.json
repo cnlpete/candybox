@@ -80,5 +80,7 @@
   "require-dev": {
     "candycms/test": "dev-phpunit",
     "candycms/documentation": "dev-master"
-  }
+  },
+
+  "minimum-stability": "dev"
 }
