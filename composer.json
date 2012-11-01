@@ -63,8 +63,8 @@
     ],
 
   "require": {
-    "candyCMS/core": "2.1.7",
-    "candyCMS/plugins": "2.1.7",
+    "candycms/core": "2.1.7",
+    "candycms/plugins": "2.1.7",
     "phpmailer/phpmailer": "5.2.1",
     "smushit/smushit": "1.0",
     "recaptcha/recaptcha": "1.11",
@@ -78,7 +78,7 @@
   },
 
   "require-dev": {
-    "candyCMS/test": "dev-master",
-    "candyCMS/documentation": "dev-master"
+    "candycms/test": "dev-phpunit",
+    "candycms/documentation": "dev-master"
   }
 }
