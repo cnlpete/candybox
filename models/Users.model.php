@@ -285,7 +285,7 @@ class Users extends Main {
               array('id', 'role'),
               array('use_gravatar', 'receive_newsletter'));
 
-      $this->_formatDates($this->_aData[1], 'last_login');
+      $this->_formatDates($this->_aData, 'last_login');
     }
 
     return $this->_aData;
