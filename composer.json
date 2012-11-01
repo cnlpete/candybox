@@ -1,5 +1,5 @@
 {
-  "name": "candyCMS/plugins",
+  "name": "candycms/plugins",
   "type": "library",
   "description": "Plugins for candyCMS.",
   "keywords": ["php", "candy", "cms"],
