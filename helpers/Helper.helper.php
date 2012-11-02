@@ -556,7 +556,7 @@ class Helper {
    * @access public
    * @param array $aAr1 this is the target array
    * @param array $aAr2 all values from $aAr1 will be replaced with values from this array
-   * @todo test
+   * @return array updated data
    *
    */
   public static function recursiveOnewayArrayReplace(&$aAr1, &$aAr2) {
@@ -568,5 +568,7 @@ class Helper {
           $aAr1[$sKey] = $aAr2[$sKey];
       }
     }
+
+    return $aAr1;
   }
 }

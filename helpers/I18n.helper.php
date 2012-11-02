@@ -193,8 +193,8 @@ class I18n {
    *
    */
   public static function get($sLanguagePart) {
-    if (isset( I18n::$_aLang[self::$_sLanguage])) {
-      $mTemp =  I18n::$_aLang[self::$_sLanguage];
+    if (isset(I18n::$_aLang[self::$_sLanguage])) {
+      $mTemp = I18n::$_aLang[self::$_sLanguage];
       foreach (explode('.', $sLanguagePart) as $sPart) {
         if (!is_string($mTemp)) {
           if (array_key_exists($sPart, $mTemp)) {
@@ -212,12 +212,7 @@ class I18n {
         $mTemp = vsprintf($mTemp, $aArgs);
       }
 
-      try {
-        return is_string($mTemp) ? (string) $mTemp : '';
-      }
-      catch (AdvancedException $e) {
-        die('No such translation: ' . $e->getMessage());
-      }
+      return is_string($mTemp) ? (string) $mTemp : '### MISSING TRANSLATION: "' . $sLanguagePart . '" ###';
     }
   }
 
@@ -227,6 +222,7 @@ class I18n {
    * @static
    * @param string $sLanguage language part we want to unload. Unload all if not set
    * @access public
+   * @return NULL
    *
    */
   public static function unsetLanguage($sLanguage = '') {
@@ -234,11 +230,15 @@ class I18n {
       self::$_aLang = null;
       if (self::$_oObject != null)
         unset(self::$_oObject->_aSession['lang']);
+
+      return self::$_oObject->_aSession['lang'];
     }
     else {
       self::$_aLang[$sLanguage] = null;
       if (self::$_oObject != null)
         unset(self::$_oObject->_aSession['lang'][$sLanguage]);
+
+      return self::$_oObject->_aSession['lang'][$sLanguage];
     }
   }
 }

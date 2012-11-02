@@ -126,25 +126,33 @@ class Users extends Main {
    *
    * @access public
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
+   * @todo test
    *
    */
   public function avatar() {
-    return isset($this->_aRequest[$this->_sController]) ?
-            $this->_avatar() :
-            $this->_showFormTemplate();
+    if ($this->_aSession['user']['id'] == 0)
+      return Helper::errorMessage(I18n::get('error.session.create_first'), '/sessions/create');
+
+    elseif ($this->_aSession['user']['id'] !== $this->_iId && $this->_aSession['user']['role'] < 4)
+      return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
+
+    else
+      return isset($this->_aRequest[$this->_sController]) ?
+              $this->_updateAvatar() :
+              $this->_showFormTemplate();
   }
 
   /**
    * Upload user profile image.
    *
-   * Check for required Fields, show Form if Fields are missing,
-   * otherwise upload new Avatar, unset Gravatar on success and redirect to user Profile
+   * Check for required fields, show form if fields are missing,
+   * otherwise upload new avatar, unset Gravatar on success and redirect to user profile
    *
    * @access protected
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  public function _avatar() {
+  public function _updateAvatar() {
     $this->_setError('terms', I18n::get('error.file.upload'));
     $this->_setError('image');
 
@@ -180,9 +188,16 @@ class Users extends Main {
    *
    */
   public function password() {
-    return isset($this->_aRequest[$this->_sController]) ?
-            $this->_password() :
-            $this->_showFormTemplate();
+    if ($this->_aSession['user']['id'] == 0)
+      return Helper::errorMessage(I18n::get('error.session.create_first'), '/sessions/create');
+
+    elseif ($this->_aSession['user']['id'] !== $this->_iId && $this->_aSession['user']['role'] < 4)
+      return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
+
+    else
+      return isset($this->_aRequest[$this->_sController]) ?
+              $this->_updatePassword() :
+              $this->_showFormTemplate();
   }
 
   /**
@@ -195,7 +210,7 @@ class Users extends Main {
    * @return string HTML content
    *
    */
-  protected function _password() {
+  protected function _updatePassword() {
     # Check if old password is set
     $this->_setError('password_old', I18n::get('error.user.update.password.old.empty'));
 
@@ -239,7 +254,7 @@ class Users extends Main {
    */
   public function create() {
     # Logged in users should not have a recaptcha field since we can assume that these are real humans.
-    $bShowCaptcha = class_exists('\CandyCMS\Plugins\Recaptcha') ?
+    $bShowCaptcha = class_exists('\CandyCMS\Plugins\Recaptcha') && WEBSITE_MODE !== 'test' ?
             $this->_aSession['user']['role'] == 0 && SHOW_CAPTCHA :
             false;
 
@@ -364,8 +379,6 @@ class Users extends Main {
    *
    */
   public function update() {
-
-
     if ($this->_aSession['user']['id'] == 0)
       return Helper::errorMessage(I18n::get('error.session.create_first'), '/sessions/create');
 

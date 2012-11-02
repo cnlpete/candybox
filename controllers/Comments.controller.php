@@ -96,7 +96,7 @@ class Comments extends Main {
    *
    */
   public function create() {
-    $bShowCaptcha = class_exists('CandyCMS\Plugins\Recaptcha') ?
+    $bShowCaptcha = class_exists('CandyCMS\Plugins\Recaptcha') && WEBSITE_MODE !== 'test' ?
                       $this->_aSession['user']['role'] == 0 && SHOW_CAPTCHA :
                       false;
 

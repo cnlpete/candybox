@@ -95,12 +95,16 @@ class Dispatcher {
    * Handle the pre-defined actions.
    *
    * @access public
+   * @return 
    *
    */
   public function getAction() {
-    $sAction = isset($this->_aRequest['action']) ?
-            strtolower((string) $this->_aRequest['action']) : 'show';
+    $sMethod = isset($this->_aRequest['action']) ?
+            strtolower((string) $this->_aRequest['action']) :
+            'show';
 
-    $this->oController->setContent($this->oController->$sAction());
+    return method_exists($this->oController, $sMethod) ?
+            $this->oController->setContent($this->oController->$sMethod()) :
+            Helper::redirectTo('/errors/404');
   }
 }

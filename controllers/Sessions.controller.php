@@ -102,7 +102,9 @@ class Sessions extends Main {
       $this->setTitle(I18n::get('sessions.password.title'));
       $this->setDescription(I18n::get('sessions.password.description'));
 
-      $bShowCaptcha = class_exists('\CandyCMS\Plugins\Recaptcha') ? SHOW_CAPTCHA : false;
+      $bShowCaptcha = class_exists('\CandyCMS\Plugins\Recaptcha') && WEBSITE_MODE !== 'test' ?
+              SHOW_CAPTCHA :
+              false;
 
       return isset($this->_aRequest[$this->_sController]['email']) ?
               $this->_password($bShowCaptcha) :
@@ -164,7 +166,9 @@ class Sessions extends Main {
       $this->setTitle(I18n::get('sessions.verification.title'));
       $this->setDescription(I18n::get('sessions.verification.description'));
 
-      $bShowCaptcha = class_exists('\CandyCMS\Plugins\Recaptcha') ? SHOW_CAPTCHA : false;
+      $bShowCaptcha = class_exists('\CandyCMS\Plugins\Recaptcha') && WEBSITE_MODE !== 'test' ?
+              SHOW_CAPTCHA :
+              false;
 
       return isset($this->_aRequest[$this->_sController]['email']) ?
               $this->_verification($bShowCaptcha) :
