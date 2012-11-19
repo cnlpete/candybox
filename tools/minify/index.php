@@ -11,7 +11,6 @@
  */
 
 function search($sPath, $sType) {
-  $sHtml = '';
   $sPath = $sPath . '/' . $sType;
   $sFileContent = '';
 
@@ -27,7 +26,8 @@ function search($sPath, $sType) {
       # Get into subfolder
       $sPathFile = $sPath . '/' . $sDir;
       $oPathFile = opendir($sPathFile);
-      $sHtml .= '<h1>' . $sPathFile . '</h1>';
+      echo "\n\n";
+      echo 'Compressing files in ' . $sPathFile . "\n";
 
       # Get files
       while ($sFile = readdir($oPathFile)) {
@@ -38,10 +38,11 @@ function search($sPath, $sType) {
         $sFileUrlMin  = $sPathFile . '/' . substr($sFile, 0, strlen($sFile) - (strlen($sType) + 1)) . '.min.' . $sType;
 
         # Delete existing minified files
-        if (file_exists($sFileUrlMin))
+        if (file_exists($sFileUrlMin)) {
           unlink($sFileUrlMin);
+        }
 
-        $sHtml .= compress($sType, $sFileUrl, $sFileUrlMin);
+        echo compress($sType, $sFileUrl, $sFileUrlMin);
       }
 
       closedir($oPathFile);
@@ -51,22 +52,21 @@ function search($sPath, $sType) {
     }
 
     closedir($oPathDir);
-    echo $sHtml;
   }
 }
 
 function compress($sType, $sFileUrl, $sFileUrlMin) {
   $sCmd = 'java -jar ' . __DIR__ . '/build/yuicompressor-2.4.7.jar --type ' . $sType . ' --charset UTF-8 ' . $sFileUrl . ' -o ' . $sFileUrlMin;
   exec($sCmd);
-  return $sCmd . '<br />';
+  return '.';
 }
 
 # Standard paths
-search($_SERVER['DOCUMENT_ROOT'] . '/public', 'js');
-search($_SERVER['DOCUMENT_ROOT'] . '/public', 'css', true);
+search(__DIR__ . '/../../public', 'js');
+search(__DIR__ . '/../../public', 'css', true);
 
 # Templates
-$sPath = $_SERVER['DOCUMENT_ROOT'] . '/public/templates';
+$sPath = __DIR__ . '/../../public/templates';
 $oPathDir = opendir($sPath);
 while ($sDir = readdir($oPathDir)) {
   if (substr($sDir, 0, 1) == '.')
