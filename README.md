@@ -65,6 +65,8 @@ Setup
 3. Configure your website settings at "app/config/Candy.inc.php" and start uploading all files.
 4. Execute the "/install/index.php" file.
 5. Follow the instructions and make sure, you delete the install folder after installation.
+6. If you want to use compressed CSS and JS, make sure the template folders are writeable (775) and start the compressor
+via console: `php tools/minify/index.php`. This will compress the actual JS and CSS rendered by your DEVELOPMENT enviroment.
 
 Update
 ------------------------------------------------------------------------------------------------------------------------
