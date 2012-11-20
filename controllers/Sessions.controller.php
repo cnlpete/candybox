@@ -132,7 +132,7 @@ class Sessions extends Main {
       return $this->_showCreateResendActionsTemplate($bShowCaptcha);
 
     $sNewPasswordClean = Helper::createRandomChar(10, true);
-    $bReturn = $this->_oModel->resendPassword(md5(RANDOM_HASH . $sNewPasswordClean));
+    $bReturn = $this->_oModel->password(md5(RANDOM_HASH . $sNewPasswordClean));
     $sRedirect = '/' . $this->_sController . '/create';
 
     if ($bReturn == true) {
@@ -196,7 +196,7 @@ class Sessions extends Main {
     if (isset($this->_aError))
       return $this->_showCreateResendActionsTemplate($bShowCaptcha);
 
-    $mData = $this->_oModel->resendVerification();
+    $mData = $this->_oModel->verification();
     $sRedirect = '/' . $this->_sController . '/create';
 
     if (is_array($mData) && !empty($mData)) {

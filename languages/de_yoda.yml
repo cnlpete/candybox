@@ -19,6 +19,7 @@ global:
   by: von
   category: Kategorie
   calendar: Kalender
+  cancel: Abbrechen
   captcha: Captcha
   close: Schließen
   comments: Kommentare
@@ -142,8 +143,9 @@ global:
     update: Bearbeiten
   upload:
     at: Datum des Hochladens
-    upload: Upload
     maxsize: 'Maximale Dateigröße: %s'
+    status: Uploadstatus
+    upload: Upload
   user:
     role: Userrecht
     roles:

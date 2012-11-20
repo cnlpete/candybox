@@ -125,7 +125,7 @@ class Sessions extends Main {
    * @return boolean status of query
    *
    */
-  public function resendPassword($sPassword) {
+  public function password($sPassword) {
     $sModel = $this->__autoload('Users');
     return $sModel::setPassword($this->_aRequest[$this->_sController]['email'], $sPassword);
   }
@@ -137,7 +137,7 @@ class Sessions extends Main {
    * @return boolean|array status of query or user array
    *
    */
-  public function resendVerification() {
+  public function verification() {
     $sModel = $this->__autoload('Users');
     $mData  = $sModel::getVerificationData($this->_aRequest[$this->_sController]['email']);
 

@@ -61,11 +61,23 @@ class Medias extends Main {
                     $this->_aSession['user']['id'],
                     '', '', $bAllTrue);
 
-      if ($bAllTrue) {
+      # Return JSON information for upload bar
+      if (isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type']) {
+        $sType = $_SESSION['upload']['type'];
+
+        exit(json_encode(array(
+                    'name' => $_SESSION['upload']['name'],
+                    'type' => $sType,
+                    'dataUrl' => 'data:' . $sType . ';base64,' .
+                    base64_encode(file_get_contents($_SESSION['upload']['tmp_name'])))));
+      }
+
+      # Return to website
+      elseif ($bAllTrue) {
         # Clear the cache
         $this->oSmarty->clearCacheForController($this->_sController);
 
-        Helper::successMessage(I18n::get('success.file.upload'), '/' . $this->_sController);
+        Helper::successMessage(I18n::get('success.file.upload'), '/' . $this->_sController . '/create');
       }
       else
         Helper::errorMessage(I18n::get('error.file.upload'), '/' . $this->_sController);

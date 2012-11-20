@@ -231,10 +231,7 @@
 
     {* Avatar *}
     <div class="tab-pane{if $_REQUEST['action'] == 'avatar'} active{/if}" id='user-image'>
-      <form enctype='multipart/form-data'
-            method='post'
-            action='/{$_REQUEST.controller}/{$uid}/avatar'
-            class='form-horizontal'>
+      <div class='form-horizontal'>
         <div class='control-group{if isset($error.image)} alert alert-error{/if}'>
           {if $standard_avatar_popup !== $gravatar_avatar_popup}
             <div class='pull-right'>
@@ -252,7 +249,6 @@
             {$lang.users.label.image.choose}
           </label>
           <div class='controls'>
-            {* @todo: Rename file *}
             <input type='file'
                    name='image'
                    id='input-image'
@@ -294,8 +290,22 @@
             {/if}
           </div>
         </div>
+        <div class='control-group hide' id='js-progress'>
+          <label class='control-label'>
+            {$lang.global.upload.status}
+          </label>
+          <div class='controls'>
+            <div class='progress progress-success progress-striped active'
+                role='progressbar'
+                aria-valuemin='0'
+                aria-valuemax='100'>
+              <div id='js-progress_bar' class='bar'></div>
+            </div>
+          </div>
+        </div>
         <div class='form-actions'>
           <input type='submit'
+                 id='input-submit_avatar'
                  class='btn btn-primary'
                  value='{$lang.users.title.image}' />
           <input type='reset'
@@ -305,7 +315,7 @@
                  name='MAX_FILE_SIZE'
                  value='409600' />
         </div>
-      </form>
+      </div>
     </div>
 
   {* Destroy account *}
@@ -353,10 +363,43 @@
     });
 
     $('#input-image').change(function() {
-      checkFileSize($(this),
-        {$_SYSTEM.maximumUploadSize.raw},
-        '{$_SYSTEM.maximumUploadSize.mb|string_format: $lang.error.file.size}');
+      checkFileSize($(this), {$_SYSTEM.maximumUploadSize.raw}, '{$_SYSTEM.maximumUploadSize.mb|string_format: $lang.error.file.size}');
+      prepareForUpload();
     });
+
+    $("#input-submit_avatar").click(function() {
+      upload(this, '/{$_REQUEST.controller}/{$uid}/avatar', '#input-image');
+    });
+
+    function prepareForUpload() {
+      $('#js-progress').fadeIn();
+    };
+
+    function upload(e, url, inputId) {
+      $(e).attr('disabled');
+
+      var file = document.querySelector(inputId).files[0];
+      var fd = new FormData();
+      fd.append("file", file);
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', url, true);
+
+      xhr.upload.onprogress = function(e) {
+        if (e.lengthComputable) {
+          var percentComplete = (e.loaded / e.total) * 100;
+          $('#js-progress_bar').css('width', percentComplete + '%');
+        }
+      };
+
+      xhr.onload = function() {
+        $('#js-progress').fadeOut();
+        $(e).removeAttr('disabled');
+      };
+
+      xhr.send(fd);
+    }
+
 
     $('.js-fancybox').fancybox();
   </script>
