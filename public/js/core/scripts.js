@@ -152,3 +152,62 @@ if ($('.js-tooltip').length)
 
 if ($('p.error').length)
   $('p.error').tooltip();
+
+/* AJAX image upload*/
+function prepareForUpload() {
+  $('#js-progress_bar').css('width', '0%');
+  $('#js-progress').fadeIn();
+};
+
+function upload(e, url, inputId, dependencyId) {
+  // Disable upload button
+  $(e).attr('disabled');
+
+  var file = document.querySelector('#input-' + inputId).files[0];
+  var fd = new FormData();
+  fd.append("file", file);
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', url, true);
+
+  xhr.upload.onprogress = function(e) {
+    if (e.lengthComputable) {
+      var percentComplete = (e.loaded / e.total) * 100;
+      $('#js-progress_bar').css('width', percentComplete + '%');
+    }
+  };
+
+  xhr.onload = function() {
+    $('#js-progress').fadeOut();
+    $(e).removeAttr('disabled');
+
+    var aJson = JSON.parse(this.response);
+
+    if(aJson.success == true) {
+      if($('#js-avatar_thumb'))
+        $('#js-avatar_thumb').attr('src', aJson.dataUrl);
+
+      if($('#js-avatar_link'))
+        $('#js-avatar_link').attr('href', aJson.fileUrl);
+    }
+    else {
+      console.log(aJson);
+
+      if(aJson.errors[dependencyId]) {
+        $('#input-' + dependencyId).parents().eq(2).addClass('alert alert-error');
+        $('#input-' + dependencyId).parents().eq(1).append("<span class='help-inline'>" + aJson.errors[dependencyId] + "</span>");
+      }
+
+      if(aJson.errors[inputId]) {
+        $('#input-' + inputId).parents().eq(1).addClass('alert alert-error');
+        $('#input-' + inputId).parent().append("<span class='help-inline'>" + aJson.errors[inputId] + "</span>");
+      }
+    }
+  };
+
+  xhr.send(fd);
+}
+
+function uploadError() {
+
+}

@@ -14,6 +14,7 @@
 "sites/(:alnum)": controller=sites&site=$1
 "sitemap.xml": controller=sitemaps&type=xml
 "users/(:num)/token": controller=users&action=token&id=$1
+"users/(:num)/(:alpha).(xml|json|rss)": controller=users&id=$1&action=$2&type=$3
 "users/(:alnum)/verification": controller=users&action=verification&code=$1
 "users/(:num)/(:alpha)": controller=users&action=$2&id=$1
 
