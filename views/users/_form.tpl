@@ -236,12 +236,14 @@
           {if $standard_avatar_popup !== $gravatar_avatar_popup}
             <div class='pull-right'>
               <a href='{$standard_avatar_popup}'
-                class='thumbnail js-fancybox'
-                title='{$full_name}'>
+                 id='js-avatar_link'
+                 class='thumbnail js-fancybox'
+                 title='{$full_name}'>
                 <img alt='{$name} {$surname}'
                      src='{$standard_avatar_64}'
                      width='64'
-                     height='64' />
+                     height='64'
+                     id='js-avatar_thumb'/>
               </a>
             </div>
           {/if}
@@ -270,7 +272,7 @@
             </span>
           </div>
         </div>
-        <div class='control-group{if isset($error.terms)} alert alert-error{/if}'>
+        <div class='control-group'>
           <label for='input-terms' class='control-label'>
             {$lang.global.terms.terms} <span title='{$lang.global.required}'>*</span>
           </label>
@@ -283,11 +285,6 @@
                      value='1' />
                 {$lang.users.label.image.terms}
             </label>
-            {if isset($error.terms)}
-              <span class='help-inline'>
-                {$error.terms}
-              </span>
-            {/if}
           </div>
         </div>
         <div class='control-group hide' id='js-progress'>
@@ -368,38 +365,8 @@
     });
 
     $("#input-submit_avatar").click(function() {
-      upload(this, '/{$_REQUEST.controller}/{$uid}/avatar', '#input-image');
+      upload(this, '/{$_REQUEST.controller}/{$uid}/avatar.json', 'image', 'terms');
     });
-
-    function prepareForUpload() {
-      $('#js-progress').fadeIn();
-    };
-
-    function upload(e, url, inputId) {
-      $(e).attr('disabled');
-
-      var file = document.querySelector(inputId).files[0];
-      var fd = new FormData();
-      fd.append("file", file);
-
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', url, true);
-
-      xhr.upload.onprogress = function(e) {
-        if (e.lengthComputable) {
-          var percentComplete = (e.loaded / e.total) * 100;
-          $('#js-progress_bar').css('width', percentComplete + '%');
-        }
-      };
-
-      xhr.onload = function() {
-        $('#js-progress').fadeOut();
-        $(e).removeAttr('disabled');
-      };
-
-      xhr.send(fd);
-    }
-
 
     $('.js-fancybox').fancybox();
   </script>

@@ -137,7 +137,7 @@ class Users extends Main {
       return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
 
     else
-      return isset($this->_aRequest[$this->_sController]) ?
+      return isset($this->_aRequest[$this->_sController]) || $this->_aRequest['type'] == 'json' ?
               $this->_updateAvatar() :
               $this->_showFormTemplate();
   }
@@ -153,7 +153,7 @@ class Users extends Main {
    *
    */
   public function _updateAvatar() {
-    $this->_setError('terms', I18n::get('error.file.upload'));
+    $this->_setError('terms', I18n::get('error.form.missing.terms'));
     $this->_setError('image');
 
     require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
@@ -161,13 +161,31 @@ class Users extends Main {
 
     try {
       if (isset($this->_aError))
-        return $this->_showFormTemplate();
+        exit(json_encode(array(
+            'success' => false,
+            'errors' => $this->_aError
+              )));
 
       elseif ($oUpload->uploadAvatarFile(false) === true) {
         $this->_oModel->updateGravatar($this->_iId);
 
-        return Helper::successMessage(I18n::get('success.upload'), '/' .
-                $this->_sController . '/' . $this->_iId);
+        if (isset($this->_aRequest['type']) && $this->_aRequest['type'] == 'json') {
+          $aFileName = $oUpload->getIds();
+
+          exit(json_encode(array(
+              'success' => true,
+              'fileUrl' => 'data:' . $_SESSION['upload']['type'] . ';base64,' .
+                    base64_encode(file_get_contents(PATH_UPLOAD . '/users/popup/' . $aFileName[0])),
+
+              'dataUrl' => 'data:' . $_SESSION['upload']['type'] . ';base64,' .
+                    base64_encode(file_get_contents(PATH_UPLOAD . '/users/64/' . $aFileName[0]))
+
+              )));
+        }
+
+        else
+          return Helper::successMessage(I18n::get('success.upload'), '/' .
+                          $this->_sController . '/' . $this->_iId);
       }
 
       else

@@ -302,14 +302,13 @@ class Upload {
    *
    */
   public function getIds($bWithExtension = true) {
-    if ($bWithExtension) {
-      for ($iI = 0; $iI < count($this->_sFileNames); $iI++)
+    for ($iI = 0; $iI < count($this->_sFileNames); $iI++)
+      if ($bWithExtension)
         $aReturn[$iI] = $this->_sFileNames[$iI] . '.' . $this->_sFileExtensions[$iI];
 
-      return isset($aReturn) ? $aReturn : array();
-    }
+      else
+        $aReturn[$iI] = $this->_sFileNames[$iI];
 
-    else
-      return $this->_sFileNames;
+    return isset($aReturn) ? $aReturn : array();
   }
 }
