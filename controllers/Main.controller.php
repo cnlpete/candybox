@@ -391,18 +391,32 @@ abstract class Main {
    */
   protected function _setError($sField, $sMessage = '') {
     if ($sField == 'file' || $sField == 'image') {
-      if (!isset($this->_aFile[$sField]) || empty($this->_aFile[$sField]['name']))
+      # AJAX files uploads
+      if (isset($this->_aRequest['type']) && $this->_aRequest['type'] == 'json' && empty($this->_aFile))
+        exit(json_encode(array(
+                    'success' => false,
+                    'error'   => array($sField => $sMessage ? $sMessage : I18n::get('error.form.missing.file')),
+                    'debug'   => WEBSITE_MODE == 'development' ? $this->_aFile : ''
+                )));
+
+      # Normal file uploads
+      elseif (!isset($this->_aFile[$sField]) || empty($this->_aFile[$sField]['name']))
         $this->_aError[$sField] = $sMessage ?
                 $sMessage :
                 I18n::get('error.form.missing.file');
-
-//      if (!isset($this->_aFile[$this->_sController]['name'][$sField]))
-//        $this->_aError[$sField] = $sMessage ?
-//                $sMessage :
-//                I18n::get('error.form.missing.file');
     }
 
     else {
+      # AJAX inputs
+      if (isset($this->_aRequest['type']) && $this->_aRequest['type'] == 'json' &&
+              (!isset($this->_aRequest[$sField]) || empty($this->_aRequest[$sField])))
+        exit(json_encode(array(
+                    'success' => false,
+                    'error'   => array($sField => $sMessage ? $sMessage : I18n::get('error.form.missing.' . strtolower($sField))),
+                    'debug'   => WEBSITE_MODE == 'development' ? $this->_aRequest : ''
+                )));
+
+      # Normal inputs
       if (!isset($this->_aRequest[$this->_sController][$sField]) || empty($this->_aRequest[$this->_sController][$sField]))
           $sError = I18n::get('error.form.missing.' . strtolower($sField)) ?
                 I18n::get('error.form.missing.' . strtolower($sField)) :

@@ -160,13 +160,7 @@ class Users extends Main {
     $oUpload = new Upload($this->_aRequest, $this->_aSession, $this->_aFile);
 
     try {
-      if (isset($this->_aError))
-        exit(json_encode(array(
-            'success' => false,
-            'errors' => $this->_aError
-              )));
-
-      elseif ($oUpload->uploadAvatarFile(false) === true) {
+      if ($oUpload->uploadAvatarFile(false) === true) {
         $this->_oModel->updateGravatar($this->_iId);
 
         if (isset($this->_aRequest['type']) && $this->_aRequest['type'] == 'json') {
