@@ -112,7 +112,7 @@ function enableInfiniteScroll(selector, itemselector, repeatTimes, pathImages) {
     navSelector   : 'div.pagination',
     nextSelector  : 'div.pagination a:first',
     itemSelector  : itemselector,
-    loading       : { msgText : '',
+    loading       : {msgText : '',
       img         : pathImages + '/candy.global/loading.gif',
       finishedMsg : '',
       selector    : 'div.js-pagination',
@@ -165,7 +165,17 @@ function upload(e, url, inputId, dependencyId) {
 
   var file = document.querySelector('#input-' + inputId).files[0];
   var fd = new FormData();
-  fd.append("file", file);
+  fd.append('file', file);
+
+  if(dependencyId !== '') {
+    $('#input-' + dependencyId).click(function() {
+      $(this).parents().eq(2).removeClass('alert alert-error');
+      $('.help-inline').remove();
+    });
+
+    if($('#input-' + dependencyId).is(':checkbox'))
+      fd.append(dependencyId, $('#input-' + dependencyId).attr('checked'));
+  }
 
   var xhr = new XMLHttpRequest();
   xhr.open('POST', url, true);
@@ -189,18 +199,20 @@ function upload(e, url, inputId, dependencyId) {
 
       if($('#js-avatar_link'))
         $('#js-avatar_link').attr('href', aJson.fileUrl);
+
+      $('.control-group').removeClass('alert alert-error');
     }
     else {
       console.log(aJson);
 
-      if(aJson.errors[dependencyId]) {
+      if(aJson.error[dependencyId]) {
         $('#input-' + dependencyId).parents().eq(2).addClass('alert alert-error');
-        $('#input-' + dependencyId).parents().eq(1).append("<span class='help-inline'>" + aJson.errors[dependencyId] + "</span>");
+        $('#input-' + dependencyId).parents().eq(1).append("<span class='help-inline'>" + aJson.error[dependencyId] + "</span>");
       }
 
-      if(aJson.errors[inputId]) {
+      if(aJson.error[inputId]) {
         $('#input-' + inputId).parents().eq(1).addClass('alert alert-error');
-        $('#input-' + inputId).parent().append("<span class='help-inline'>" + aJson.errors[inputId] + "</span>");
+        $('#input-' + inputId).next().html(aJson.error[inputId]);
       }
     }
   };
