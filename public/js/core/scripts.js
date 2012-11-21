@@ -132,7 +132,7 @@ function enableInfiniteScroll(selector, itemselector, repeatTimes, pathImages) {
 }
 
 /* Show success and error messages */
-if($('#js-flash_success, #js-flash_error, #js-flash_warning').length > 0) {
+if($('#js-flash_success, #js-flash_error, #js-flash_warning').length) {
   show('#js-flash_message');
 }
 
@@ -193,10 +193,10 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
     console.log(aJson);
 
     if(aJson.success == true) {
-      if($('#js-avatar_thumb'))
+      if($('#js-avatar_thumb').length)
         $('#js-avatar_thumb').attr('src', aJson.dataUrl);
 
-      if($('#js-avatar_link'))
+      if($('#js-avatar_link').length)
         $('#js-avatar_link').attr('href', aJson.fileUrl);
 
       $('#medias .form-horizontal').toggle();
@@ -206,8 +206,8 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
 
       showFlashMessage('success', lang.upload_successful);
 
-      if($(reloadUrl).length > 0)
-        $('#' + controller).delay('5000').load(reloadUrl + '?ajax=1');
+      if(reloadUrl == true)
+        setTimeout(function() {location.reload()}, 3000);
     }
     else {
       if(aJson.error[dependencyId]) {
