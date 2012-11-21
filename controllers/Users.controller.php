@@ -165,14 +165,15 @@ class Users extends Main {
 
         if (isset($this->_aRequest['type']) && $this->_aRequest['type'] == 'json') {
           $aFileName = $oUpload->getIds();
+          $aFileInfo = $oUpload->getFileInformation();
 
           exit(json_encode(array(
               'success' => true,
               'debug'   => WEBSITE_MODE == 'development' ? $this->_aRequest : '',
-              'fileUrl' => 'data:' . $_SESSION['upload']['type'] . ';base64,' .
+              'fileUrl' => 'data:' . $aFileInfo['type'] . ';base64,' .
                     base64_encode(file_get_contents(PATH_UPLOAD . '/users/popup/' . $aFileName[0])),
 
-              'dataUrl' => 'data:' . $_SESSION['upload']['type'] . ';base64,' .
+              'dataUrl' => 'data:' . $aFileInfo['type'] . ';base64,' .
                     base64_encode(file_get_contents(PATH_UPLOAD . '/users/64/' . $aFileName[0]))
 
               )));

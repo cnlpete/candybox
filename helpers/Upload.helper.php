@@ -117,6 +117,19 @@ class Upload {
   }
 
   /**
+   *
+   * Return file information for AJAX uploading purposes.
+   *
+   * @access public
+   * @return array file information
+   *
+   */
+  public function getFileInformation() {
+    $sType = isset($this->_aFile['image']) ? 'image' : 'file';
+    return $this->_aFile[$sType];
+  }
+
+  /**
    * Rename files (if chosen) and upload them afterwards to predefined folder.
    *
    * @access public
@@ -124,16 +137,12 @@ class Upload {
    * @param boolean $bFilenameHashes whether a hash should be used as the filename
    * @see vendor/candyCMS/core/controllers/Medias.controller.php
    * @return array(boolean) status of uploads.
-   * @todo remove $_SESSION
    *
    */
   public function uploadFiles($sFolder = 'medias', $bFilenameHashes = false) {
     $sType = isset($this->_aFile['image']) ? 'image' : 'file';
 
     if (isset($this->_aFile[$sType]) && !empty($this->_aFile[$sType]['name'][0])) {
-      # For uploading purposes
-      $_SESSION['upload'] = $this->_aFile[$sType];
-
       $bIsArray = is_array($this->_aFile[$sType]['name']);
       $iFileCount = $bIsArray ? count($this->_aFile[$sType]['name']) : 1;
 
