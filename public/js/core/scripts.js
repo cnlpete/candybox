@@ -158,9 +158,12 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
   // Disable upload button
   $(e).attr('disabled');
 
-  var file = document.querySelector('#input-' + inputId).files[0];
+  var files = document.querySelector('#input-' + inputId).files;
   var fd = new FormData();
-  fd.append('file', file);
+
+  for (var i = 0, fileObject; fileObject = files[i]; ++i) {
+    fd.append('file[' + i + ']', fileObject);
+  }
 
   if(dependencyId !== '') {
     $('#input-' + dependencyId).click(function() {
@@ -190,22 +193,29 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
     $(e).removeAttr('disabled');
 
     var aJson = JSON.parse(this.response);
-    console.log(aJson);
+    //console.log(aJson);
 
     if(aJson.success == true) {
-      if($('#js-avatar_thumb').length)
-        $('#js-avatar_thumb').attr('src', aJson.dataUrl);
-
-      if($('#js-avatar_link').length)
-        $('#js-avatar_link').attr('href', aJson.fileUrl);
-
-      $('#medias .form-horizontal').toggle();
+      // Clear existing data
       $('.control-group').removeClass('alert alert-error');
       $('#input-' + inputId).val('');
       $('#input-' + dependencyId).val('');
 
-      showFlashMessage('success', lang.upload_successful);
+      var message = lang.upload_successful;
 
+      if(controller == 'medias') {
+        message = message + ' ' + lang.reloading;
+        $('#medias .form-horizontal').toggle();
+      }
+
+      if(controller == 'users') {
+        $('#js-avatar_thumb').attr('src', aJson.dataUrl);
+        $('#js-avatar_link').attr('href', aJson.fileUrl);
+      }
+
+      showFlashMessage('success', message);
+
+      // Reload to easily show images
       if(reloadUrl == true)
         setTimeout(function() {location.reload()}, 3000);
     }
