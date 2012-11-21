@@ -3973,6 +3973,9 @@ div.capty-caption {
 #infscr-loading {
   text-align: center;
 }
+#js-flash_message {
+  display: none;
+}
 [class^="icon-"],
 [class*=" icon-"] {
   display: inline-block;
@@ -4178,4 +4181,7 @@ h2 [class*=" icon-"] {
 }
 .progress {
   height: 25px;
+}
+.checkbox input[type="checkbox"] {
+  margin-top: -2px;
 }

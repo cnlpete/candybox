@@ -1,5 +1,5 @@
 function show(sDivId) {
-  $(sDivId).slideDown();
+  $(sDivId).show();
 
   if($('#js-flash_success') || $('#js-flash_error')) {
     hide(sDivId, 10000);
@@ -51,12 +51,6 @@ function stripNoAlphaChars(sValue) {
 }
 
 function confirmDestroy(sUrl) {
-  if(typeof lang == 'undefined') {
-    var lang = {
-      'confirm_destroy' : 'Do you really want to destroy this entry?'
-    };
-  }
-
   if( confirm(lang.confirm_destroy) )
     parent.location.href = sUrl;
 }
@@ -138,7 +132,7 @@ function enableInfiniteScroll(selector, itemselector, repeatTimes, pathImages) {
 }
 
 /* Show success and error messages */
-if($('#js-flash_success, #js-flash_error, #js-flash_warning').length) {
+if($('#js-flash_success, #js-flash_error, #js-flash_warning').length > 0) {
   show('#js-flash_message');
 }
 
@@ -156,10 +150,11 @@ if ($('p.error').length)
 /* AJAX image upload*/
 function prepareForUpload() {
   $('#js-progress_bar').css('width', '0%');
-  $('#js-progress').fadeIn();
+  $('#js-progress').toggle();
 };
 
-function upload(e, url, inputId, dependencyId) {
+/* @todo: show flash message */
+function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
   // Disable upload button
   $(e).attr('disabled');
 
@@ -175,6 +170,9 @@ function upload(e, url, inputId, dependencyId) {
 
     if($('#input-' + dependencyId).is(':checkbox'))
       fd.append(dependencyId, $('#input-' + dependencyId).attr('checked'));
+
+    else
+      fd.append(controller + '[' + dependencyId + ']', $('#input-' + dependencyId).val());
   }
 
   var xhr = new XMLHttpRequest();
@@ -188,10 +186,11 @@ function upload(e, url, inputId, dependencyId) {
   };
 
   xhr.onload = function() {
-    $('#js-progress').fadeOut();
+    $('#js-progress').toggle();
     $(e).removeAttr('disabled');
 
     var aJson = JSON.parse(this.response);
+    console.log(aJson);
 
     if(aJson.success == true) {
       if($('#js-avatar_thumb'))
@@ -200,11 +199,17 @@ function upload(e, url, inputId, dependencyId) {
       if($('#js-avatar_link'))
         $('#js-avatar_link').attr('href', aJson.fileUrl);
 
+      $('#medias .form-horizontal').toggle();
       $('.control-group').removeClass('alert alert-error');
+      $('#input-' + inputId).val('');
+      $('#input-' + dependencyId).val('');
+
+      showFlashMessage('success', lang.upload_successful);
+
+      if($(reloadUrl).length > 0)
+        $('#' + controller).delay('5000').load(reloadUrl + '?ajax=1');
     }
     else {
-      console.log(aJson);
-
       if(aJson.error[dependencyId]) {
         $('#input-' + dependencyId).parents().eq(2).addClass('alert alert-error');
         $('#input-' + dependencyId).parents().eq(1).append("<span class='help-inline'>" + aJson.error[dependencyId] + "</span>");
@@ -214,12 +219,17 @@ function upload(e, url, inputId, dependencyId) {
         $('#input-' + inputId).parents().eq(1).addClass('alert alert-error');
         $('#input-' + inputId).next().html(aJson.error[inputId]);
       }
+
+      showFlashMessage('error', lang.upload_error);
     }
   };
 
   xhr.send(fd);
 }
 
-function uploadError() {
-
+function showFlashMessage(sStatus, sMessage) {
+  $('#js-flash_message').show().children().attr('id', 'js-flash_' + sStatus).attr('class', 'alert alert-' + sStatus);
+  $('#js-flash_' + sStatus + ' a').remove();
+  $('#js-flash_' + sStatus + ' p').html(sMessage);
+  $('#js-flash_message').delay('10000').slideUp();
 }
