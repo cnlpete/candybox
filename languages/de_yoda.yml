@@ -164,6 +164,8 @@ global:
 javascript:
   loading: Lade...
   confirm_destroy: Diesen Eintrag oder diese Datei wirklich löschen, du willst? Diese Aktion nicht rückgängig machen, du kannst!
+  upload_successful: Die Datei wurde erfolgreich hochgeladen.
+  upload_error: Es gab einen Fehler beim Upload.
 
 success:
   create: Der Eintrag erfolgreich hinzugefügt, wurde!

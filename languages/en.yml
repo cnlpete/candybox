@@ -164,6 +164,8 @@ global:
 javascript:
   loading: Loading...
   confirm_destroy: Are you sure to delete this file or entry? This cannot be undone.
+  upload_successful: File successfully uploaded.
+  upload_error: There was an error while uploading.
 
 success:
   create: Entry has been created!

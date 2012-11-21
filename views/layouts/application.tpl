@@ -159,7 +159,6 @@
       <div class='container'>
         <div class='row'>
           <div class='span8'>
-            {if isset($_FLASH.message) && !empty($_FLASH.message)}
               <div id='js-flash_message'>
                 <div class='alert alert-{$_FLASH.type}' id='js-flash_{$_FLASH.type}'>
                   <a class='close' href='#'>×</a>
@@ -169,7 +168,6 @@
                   </p>
                 </div>
               </div>
-            {/if}
             {if isset($_WEBSITE.update) &&! empty($_WEBSITE.update)}
               <div class='alert alert-warning'>
                 {$_WEBSITE.update}
