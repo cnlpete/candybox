@@ -209,7 +209,7 @@ class Galleries extends Main {
    *
    */
   public function createFile() {
-    $this->setTitle(I18n::get('gallery.files.title.create'));
+    $this->setTitle(I18n::get('galleries.files.title.create'));
 
     if ($this->_aSession['user']['role'] < 3)
       return Helper::errorMessage(I18n::get('error.missing.permission'));
@@ -291,7 +291,7 @@ class Galleries extends Main {
    *
    */
   public function updateFile() {
-    $this->setTitle(I18n::get('gallery.files.title.update'));
+    $this->setTitle(I18n::get('galleries.files.title.update'));
 
     if ($this->_aSession['user']['role'] < 3)
       return Helper::errorMessage(I18n::get('error.missing.permission'), '/' . $this->_sController);

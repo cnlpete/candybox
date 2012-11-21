@@ -26,6 +26,13 @@ class SmartySingleton extends Smarty {
 
   /**
    *
+   * @access private
+   *
+   */
+  private $_aRequest;
+
+  /**
+   *
    * @var static
    * @access private
    *
@@ -57,6 +64,7 @@ class SmartySingleton extends Smarty {
    *
    */
   public function setRequestAndSession(&$aRequest = null, &$aSession = null) {
+    $this->_aRequest = $aRequest;
     $this->assignByRef('_REQUEST', $aRequest);
     $this->assignByRef('_SESSION', $aSession);
   }
@@ -200,7 +208,7 @@ class SmartySingleton extends Smarty {
     }
 
     # Compile CSS when in development mode and clearing the cache
-    if (WEBSITE_MODE == 'development') {
+    if (WEBSITE_MODE == 'development' && !isset($this->_aRequest['type']) && !isset($this->_aRequest['ajax'])) {
       try {
         if (MOBILE === true && file_exists(Helper::removeSlash($aPaths['less'] . '/mobile/application.less'))) {
           @unlink(Helper::removeSlash($aPaths['css'] . '/mobile/application.css'));

@@ -164,7 +164,7 @@ global:
 javascript:
   loading: Loading...
   confirm_destroy: Are you sure to delete this file or entry? This cannot be undone.
-  upload_successful: File successfully uploaded.
+  upload_successful: File successfully uploaded. Please wait until the page has reloaded.
   upload_error: There was an error while uploading.
 
 success:
@@ -434,4 +434,5 @@ users:
     overview: User Overview
     password: Change Password
     personal_data: Personal data
+    profile: My Profile
     update: Update profile

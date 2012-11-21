@@ -212,6 +212,7 @@ class I18n {
         $mTemp = vsprintf($mTemp, $aArgs);
       }
 
+      AdvancedException::writeLog('MISSING TRANSLATION: "' . $sLanguagePart);
       return is_string($mTemp) ? (string) $mTemp : '### MISSING TRANSLATION: "' . $sLanguagePart . '" ###';
     }
   }

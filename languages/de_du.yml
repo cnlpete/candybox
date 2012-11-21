@@ -164,7 +164,7 @@ global:
 javascript:
   loading: Lade...
   confirm_destroy: Möchtest du diesen Eintrag oder diese Datei wirklich löschen? Diese Aktion ist nicht rückgängig zu machen!
-  upload_successful: Die Datei wurde erfolgreich hochgeladen.
+  upload_successful: Upload erfolgreich. Bitte warte einen Augenblick bis die Seite neu geladen wurde.
   upload_error: Es gab einen Fehler beim Upload.
 
 success:
@@ -434,4 +434,5 @@ users:
     overview: Benutzerübersicht
     password: Passwort ändern
     personal_data: Persönliche Daten
+    profile: Mein Profil
     update: Einstellungen bearbeiten

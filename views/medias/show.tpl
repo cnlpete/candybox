@@ -80,11 +80,13 @@
       </tbody>
     </table>
   {/if}
-  <script src='{$_PATH.js}/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
+  <script type='text/javascript' src='{$_PATH.js}/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.tablesorter{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type="text/javascript">
     $(document).ready(function(){
-      $(".js-fancybox").fancybox({ nextEffect : 'fade', prevEffect : 'fade' });
+      $(".js-fancybox").fancybox({
+        nextEffect : 'fade',
+        prevEffect : 'fade' });
 
       $('table').tablesorter();
 

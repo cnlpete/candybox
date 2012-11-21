@@ -31,6 +31,11 @@
           </a>
         </li>
       {/if}
+      <li class='pull-right'>
+        <a href='/users/{$_REQUEST.id}'>
+          {$lang.users.title.profile}
+        </a>
+      </li>
     </ul>
   </div>
   <div class='tab-content'>
@@ -365,7 +370,7 @@
     });
 
     $('#input-submit_avatar').click(function() {
-      upload(this, '/{$_REQUEST.controller}/{$uid}/avatar.json', '{$_REQUEST.controller}', 'image', 'terms');
+      upload(this, '/{$_REQUEST.controller}/{$uid}/avatar.json', '{$_REQUEST.controller}', 'image', 'terms', false);
     });
 
     $('.js-fancybox').fancybox();
