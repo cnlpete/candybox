@@ -364,8 +364,8 @@
       prepareForUpload();
     });
 
-    $("#input-submit_avatar").click(function() {
-      upload(this, '/{$_REQUEST.controller}/{$uid}/avatar.json', 'image', 'terms');
+    $('#input-submit_avatar').click(function() {
+      upload(this, '/{$_REQUEST.controller}/{$uid}/avatar.json', '{$_REQUEST.controller}', 'image', 'terms');
     });
 
     $('.js-fancybox').fancybox();

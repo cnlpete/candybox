@@ -29,62 +29,55 @@ class Medias extends Main {
    *
    */
   protected function _create() {
-    if (isset($this->_aRequest[$this->_sController])) {
-      require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
+    $this->_setError('file');
 
-      $oUpload = new Upload($this->_aRequest, $this->_aSession, $this->_aFile);
-      $sFolder = isset($this->_aRequest['folder']) ?
-              Helper::formatInput($this->_aRequest['folder']) :
-              $this->_sController;
+    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
+    $oUpload = new Upload($this->_aRequest, $this->_aSession, $this->_aFile);
 
+    $sFolder = isset($this->_aRequest['folder']) ?
+            Helper::formatInput($this->_aRequest['folder']) :
+            $this->_sController;
+    try {
       if (!is_dir($sFolder))
-        mkdir(Helper::removeSlash(PATH_UPLOAD . '/' . $sFolder, 0777));
+        mkdir(Helper::removeSlash(PATH_UPLOAD . '/' . $sFolder, 0775));
 
-      try {
-        $aReturn = $oUpload->uploadFiles($sFolder);
-      }
-      catch (\Exception $e) {
-        return Helper::errorMessage($e->getMessage(), '/' . $this->_sController . '/create');
-      }
+      $aReturn = $oUpload->uploadFiles($sFolder);
+    }
+    catch (\Exception $e) {
+      return Helper::errorMessage($e->getMessage(), '/' . $this->_sController . '/create');
+    }
 
-      $iCount   = count($aReturn);
-      $bAllTrue = true;
+    $iCount   = count($aReturn);
+    $bAllTrue = true;
 
-      for ($iI = 0; $iI < $iCount; $iI++) {
-        if ($aReturn[$iI] === false)
-          $bAllTrue = false;
-      }
+    for ($iI = 0; $iI < $iCount; $iI++) {
+      if ($aReturn[$iI] === false)
+        $bAllTrue = false;
+    }
 
-      Logs::insert( $this->_sController,
-                    $this->_aRequest['action'],
-                    0,
-                    $this->_aSession['user']['id'],
-                    '', '', $bAllTrue);
+    Logs::insert( $this->_sController,
+                  $this->_aRequest['action'],
+                  0,
+                  $this->_aSession['user']['id'],
+                  '', '', $bAllTrue);
+
+    # Return to website
+    if ($bAllTrue) {
+      $this->oSmarty->clearCacheForController($this->_sController);
 
       # Return JSON information for upload bar
-      if (isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type']) {
-        $sType = $_SESSION['upload']['type'];
-
+      if (isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'])
         exit(json_encode(array(
-                    'name' => $_SESSION['upload']['name'],
-                    'type' => $sType,
-                    'dataUrl' => 'data:' . $sType . ';base64,' .
-                    base64_encode(file_get_contents($_SESSION['upload']['tmp_name'])))));
-      }
+                    'success' => true,
+                    'debug'   => WEBSITE_MODE == 'development' ? $this->_aRequest : ''
+                )));
 
-      # Return to website
-      elseif ($bAllTrue) {
-        # Clear the cache
-        $this->oSmarty->clearCacheForController($this->_sController);
-
-        Helper::successMessage(I18n::get('success.file.upload'), '/' . $this->_sController . '/create');
-      }
-      else
-        Helper::errorMessage(I18n::get('error.file.upload'), '/' . $this->_sController);
-
+      return Helper::successMessage(I18n::get('success.file.upload'),
+              '/' . $this->_sController);
     }
     else
-      return $this->_showFormTemplate();
+      return Helper::errorMessage(I18n::get('error.file.upload'),
+              '/' . $this->_sController);
   }
 
   /**

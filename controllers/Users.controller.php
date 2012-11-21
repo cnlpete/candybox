@@ -168,6 +168,7 @@ class Users extends Main {
 
           exit(json_encode(array(
               'success' => true,
+              'debug'   => WEBSITE_MODE == 'development' ? $this->_aRequest : '',
               'fileUrl' => 'data:' . $_SESSION['upload']['type'] . ';base64,' .
                     base64_encode(file_get_contents(PATH_UPLOAD . '/users/popup/' . $aFileName[0])),
 

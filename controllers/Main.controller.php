@@ -387,6 +387,7 @@ abstract class Main {
    * @param string $sField field to be checked
    * @param string $sMessage error to be displayed
    * @return object $this due to method chaining
+   * @todo extend tests for JSON requests
    *
    */
   protected function _setError($sField, $sMessage = '') {
@@ -560,7 +561,10 @@ abstract class Main {
       return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
 
     else
-      return isset($this->_aRequest[$this->_sController]) ? $this->_create() : $this->_showFormTemplate();
+      return isset($this->_aRequest[$this->_sController]) ||
+              isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'] ?
+              $this->_create() :
+              $this->_showFormTemplate();
   }
 
   /**
