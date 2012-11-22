@@ -208,7 +208,7 @@ class SmartySingleton extends Smarty {
     }
 
     # Compile CSS when in development mode and clearing the cache
-    if (WEBSITE_MODE == 'development' && !isset($this->_aRequest['type']) && !isset($this->_aRequest['ajax'])) {
+    if (WEBSITE_MODE == 'development' && !isset($this->_aRequest['type'])) {
       try {
         if (MOBILE === true && file_exists(Helper::removeSlash($aPaths['less'] . '/mobile/application.less'))) {
           @unlink(Helper::removeSlash($aPaths['css'] . '/mobile/application.css'));

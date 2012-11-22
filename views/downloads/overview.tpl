@@ -30,7 +30,7 @@
         </thead>
         <tbody>
         {foreach $d.files as $f}
-          <tr>
+          <tr id='row_{$f.id}'>
             <td class='center'>
               <img src='{$_PATH.images}/candy.files/{$f.extension}.png'
                   width='32' height='32' alt='{$f.extension}' />
@@ -61,10 +61,9 @@
                      title='{$lang.global.update.update}'></i>
                 </a>
                 &nbsp;
-                <a href="#" onclick="confirmDestroy('{$f.url_destroy}')">
-                  <i class='icon-trash js-tooltip'
-                     title='{$lang.global.destroy.destroy}'></i>
-                </a>
+                <i class='icon-trash js-tooltip'
+                  onclick="confirmDestroy('{$f.url_destroy}', 'row_{$f.id}')"
+                  title='{$lang.global.destroy.destroy}'></i>
               {else}
                 <a href='{$f.url}'>
                   <i class='icon-download js-tooltip'
@@ -78,6 +77,7 @@
       </table>
     {/foreach}
   {/if}
+  <script type='text/javascript' src='{$_PATH.js}/core/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.tablesorter{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript'>
     $('table').tablesorter();

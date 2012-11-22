@@ -546,7 +546,7 @@ class Index {
     $oDispatcher->getAction();
 
     # Minimal settings for AJAX-request
-    if (isset($this->_aRequest['ajax']) && true == $this->_aRequest['ajax'])
+    if (isset($this->_aRequest['type']) && 'ajax' == $this->_aRequest['type'])
       $sCachedHTML = $oDispatcher->oController->getContent();
 
     # HTML with template

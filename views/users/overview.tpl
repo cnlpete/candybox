@@ -26,7 +26,7 @@
       </tr>
     </thead>
     {foreach $user as $u}
-      <tr>
+      <tr id='row_{$u.id}'>
         <td>{$u.id}</td>
         <td>
           <a href='{$u.avatar_popup}' class='thumbnail js-fancybox'
@@ -80,19 +80,19 @@
                  title='{$lang.global.update.update}'></i>
             </a>
             &nbsp;
-            <a href='#' onclick="confirmDestroy('{$u.url_destroy}')">
-              <i class='icon-trash js-tooltip'
-                 title='{$lang.global.destroy.destroy}'></i>
-            </a>
+            <i class='icon-trash js-tooltip'
+               onclick="confirmDestroy('{$u.url_destroy}', 'row_{$u.id}')"
+               title='{$lang.global.destroy.destroy}'></i>
           </td>
         {/if}
       </tr>
     {/foreach}
   </table>
   {$_pages_}
+  <script type='text/javascript' src='{$_PATH.js}/core/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.tablesorter{$_SYSTEM.compress_files_suffix}.js'></script>
-  <script src='{$_PATH.js}/core/jquery.infiniteScroll{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
+  <script type='text/javascript' src='{$_PATH.js}/core/jquery.infiniteScroll{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript'>
     {if $_AUTOLOAD_.enabled}
       $(document).ready(function(){

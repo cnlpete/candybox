@@ -37,7 +37,7 @@
     {else}
       <ul class='thumbnails'>
         {foreach $files as $f}
-          <li id='files-{$f.id}'>
+          <li id='file_{$f.id}'>
             <a href='{$f.url_popup}'
                class='thumbnail js-fancybox fancybox-thumb'
                rel='fancybox-thumb'
@@ -54,11 +54,10 @@
                   <i class='icon-pencil js-tooltip'
                      title='{$lang.global.update.update}'></i>
                 </a>
-                <a href='#' onclick="confirmDestroy('{$f.url_destroy}')">
-                  <i class='icon-trash js-tooltip'
-                     title='{$lang.global.destroy.destroy}'></i>
-                </a>
-              </p>
+                <i class='icon-trash js-tooltip'
+                  onclick="confirmDestroy('{$f.url_destroy}', 'file_{$f.id}')"
+                  title='{$lang.global.destroy.destroy}'></i>
+                  </p>
             {/if}
           </li>
         {/foreach}
@@ -69,7 +68,6 @@
                 class='btn btn-primary'
                 value='{$lang.galleries.files.update.order}' />
         </div>
-        <script src='{$_PATH.js}/core/jquery.ui.1.9.0.custom{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
         <script type='text/javascript'>
           $(document).ready(function(){
             $('.thumbnails').sortable({
@@ -103,8 +101,9 @@
       </p>
     {/if}
   {/if}
-  <script src='{$_PATH.js}/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
-  <script src='{$_PATH.js}/core/jquery.fancybox-thumbs{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
+  <script type='text/javascript' src='{$_PATH.js}/core/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
+  <script type='text/javascript' src='{$_PATH.js}/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js'></script>
+  <script type='text/javascript' src='{$_PATH.js}/core/jquery.fancybox-thumbs{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript'>
     $(document).ready(function(){
       $('.js-fancybox').fancybox({

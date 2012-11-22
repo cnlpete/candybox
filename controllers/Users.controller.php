@@ -137,7 +137,8 @@ class Users extends Main {
       return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
 
     else
-      return isset($this->_aRequest[$this->_sController]) || $this->_aRequest['type'] == 'json' ?
+      return isset($this->_aRequest[$this->_sController]) ||
+              isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'] ?
               $this->_updateAvatar() :
               $this->_showFormTemplate();
   }
@@ -150,6 +151,7 @@ class Users extends Main {
    *
    * @access protected
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
+   * @todo success message into helpers method
    *
    */
   public function _updateAvatar() {
@@ -163,25 +165,21 @@ class Users extends Main {
       if ($oUpload->uploadAvatarFile(false) === true) {
         $this->_oModel->updateGravatar($this->_iId);
 
-        if (isset($this->_aRequest['type']) && $this->_aRequest['type'] == 'json') {
-          $aFileName = $oUpload->getIds();
-          $aFileInfo = $oUpload->getFileInformation();
+        $aFileName = $oUpload->getIds();
+        $aFileInfo = $oUpload->getFileInformation();
 
-          exit(json_encode(array(
-              'success' => true,
-              'debug'   => WEBSITE_MODE == 'development' ? $this->_aRequest : '',
-              'fileUrl' => 'data:' . $aFileInfo['type'] . ';base64,' .
-                    base64_encode(file_get_contents(PATH_UPLOAD . '/users/popup/' . $aFileName[0])),
+        # We will get off here and return a custom success message to add additional information easily.
+        # @todo put into Helpers method
+        exit(json_encode(array(
+            'success' => true,
+            'debug'   => WEBSITE_MODE == 'development' ? $this->_aRequest : '',
+            'fileUrl' => 'data:' . $aFileInfo['type'] . ';base64,' .
+                  base64_encode(file_get_contents(PATH_UPLOAD . '/users/popup/' . $aFileName[0])),
 
-              'dataUrl' => 'data:' . $aFileInfo['type'] . ';base64,' .
-                    base64_encode(file_get_contents(PATH_UPLOAD . '/users/64/' . $aFileName[0]))
+            'dataUrl' => 'data:' . $aFileInfo['type'] . ';base64,' .
+                  base64_encode(file_get_contents(PATH_UPLOAD . '/users/64/' . $aFileName[0]))
 
-              )));
-        }
-
-        else
-          return Helper::successMessage(I18n::get('success.upload'), '/' .
-                          $this->_sController . '/' . $this->_iId);
+            )));
       }
 
       else
@@ -454,10 +452,10 @@ class Users extends Main {
    *
    */
   public function destroy() {
-    return (isset($this->_aRequest[$this->_sController]) && $this->_aSession['user']['id'] == $this->_iId) ||
+    return ( (isset($this->_aRequest[$this->_sController]) && $this->_aSession['user']['id'] == $this->_iId)) ||
             $this->_aSession['user']['role'] == 4 ?
             $this->_destroy() :
-            Helper::errorMessage(I18n::get('error.missing.permission'), '/');
+            Helper::errorMessage(I18n::get('error.missing.permission'), '/', $this->_aRequest);
   }
 
   /**
@@ -490,7 +488,7 @@ class Users extends Main {
 
     # No admin and not the active user
     else
-      return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
+      return Helper::errorMessage(I18n::get('error.missing.permission'), '/', $this->_aRequest);
 
     if ($bCorrectPassword === true) {
       $bReturn = $this->_oModel->destroy($this->_iId) === true;
@@ -510,13 +508,13 @@ class Users extends Main {
         # Destroy profile image
         Upload::destroyAvatarFiles($this->_iId);
 
-        return Helper::successMessage(I18n::get('success.destroy'), $sSuccessRedirectUrl);
+        return Helper::successMessage(I18n::get('success.destroy'), $sSuccessRedirectUrl, $this->_aRequest);
       }
       else
-        return Helper::errorMessage(I18n::get('error.sql'), $sFailureRedirectUrl);
+        return Helper::errorMessage(I18n::get('error.sql'), $sFailureRedirectUrl, $this->_aRequest);
     }
     else
-      return Helper::errorMessage(I18n::get('error.user.destroy.password'), $sFailureRedirectUrl);
+      return Helper::errorMessage(I18n::get('error.user.destroy.password'), $sFailureRedirectUrl, $this->_aRequest);
   }
 
   /**
@@ -547,7 +545,7 @@ class Users extends Main {
    * Get the API token of a user.
    *
    * @access public
-   * @return string token or null
+   * @return string JSON token or null
    *
    */
   public function token() {

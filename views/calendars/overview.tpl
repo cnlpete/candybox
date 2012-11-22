@@ -60,7 +60,7 @@
           </thead>
           <tbody>
             {foreach $c.dates as $d}
-              <tr>
+              <tr id='row_{$d.id}'>
                 <td>
                   <time datetime='{$d.start_date.w3c_date}' class='js-timeago' itemprop='startDate'>
                     {$d.start_date.raw|date_format:$lang.global.time.format.date}
@@ -90,15 +90,13 @@
                   </a>
                   {if $_SESSION.user.role >= 3}
                     &nbsp;
-                    <a href='/{$_REQUEST.controller}/{$d.id}/update'>
+                    <a href='{$d.url_update}'>
                       <i class='icon-pencil js-tooltip'
                         title='{$lang.global.update.update}'></i>
                     </a>
-                    &nbsp;
-                    <a href="#" onclick="confirmDestroy('/{$_REQUEST.controller}/{$d.id}/destroy')">
-                      <i class='icon-trash js-tooltip'
-                        title='{$lang.global.destroy.destroy}'></i>
-                    </a>
+                    <i class='icon-trash js-tooltip'
+                      onclick="confirmDestroy('{$d.url_destroy}', 'row_{$d.id}')"
+                      title='{$lang.global.destroy.destroy}'></i>
                   {/if}
                 </td>
               </tr>
@@ -115,6 +113,7 @@
       </a>
     </p>
   {/if}
+  <script type='text/javascript' src='{$_PATH.js}/core/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.tablesorter{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript'>
     $('table').tablesorter();

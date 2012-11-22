@@ -326,7 +326,7 @@ abstract class Main {
         $this->setTitle(I18n::get('error.' . $this->_aRequest['id'] . '.title'));
 
       else
-        $this->setTitle(I18n::get('global.' . strtolower(Helper::singleize($this->_sController))));
+        $this->setTitle(I18n::get('global.' . strtolower($this->_sController)));
     }
 
     return $this->_sTitle;
@@ -443,7 +443,10 @@ abstract class Main {
   public function show() {
     $this->oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
-    $sType    = isset($this->_aRequest['type']) ? strtoupper($this->_aRequest['type']) : '';
+    $sType = isset($this->_aRequest['type']) && 'ajax' !== $this->_aRequest['type'] ?
+            strtoupper($this->_aRequest['type']) :
+            '';
+
     $sMethod  = $this->_iId ? '_show' . $sType : '_overview' . $sType;
 
     return $this->$sMethod();
@@ -505,7 +508,10 @@ abstract class Main {
    */
   protected function _showJSON() {
     AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_showJSON()');
-    exit(json_encode(array('error' => 'There is no JSON handling method.')));
+    exit(json_encode(array(
+                'success' => false,
+                'error'   => 'There is no JSON handling method.',
+            )));
   }
 
   /**
@@ -517,7 +523,10 @@ abstract class Main {
    */
   protected function _overviewJSON() {
     AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_overviewJSON()');
-    exit(json_encode(array('error' => 'There is no JSON handling method.')));
+    exit(json_encode(array(
+                'success' => false,
+                'error'   => 'There is no JSON handling method.',
+            )));
   }
 
   /**
@@ -582,7 +591,10 @@ abstract class Main {
       return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
 
     else
-      return isset($this->_aRequest[$this->_sController]) ? $this->_update() : $this->_showFormTemplate();
+      return isset($this->_aRequest[$this->_sController]) ||
+              isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'] ?
+              $this->_update() :
+              $this->_showFormTemplate();
   }
 
   /**
@@ -780,11 +792,17 @@ abstract class Main {
       if ($mAdditionalCaches)
         $this->_clearCaches($mAdditionalCaches);
 
-      return Helper::successMessage(I18n::get('success.destroy'), $sRedirectURL);
+      return Helper::successMessage(
+              I18n::get('success.destroy'),
+              $sRedirectURL,
+              isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'] ? $this->_aRequest : '');
     }
 
     else
-      return Helper::errorMessage(I18n::get('error.sql'), $sRedirectURL);
+      return Helper::errorMessage(
+              I18n::get('error.sql'),
+              $sRedirectURL,
+              isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'] ? $this->_aRequest : '');
   }
 
   /**

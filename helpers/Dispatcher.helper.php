@@ -79,11 +79,11 @@ class Dispatcher {
               file_exists(PATH_STANDARD . '/vendor/candyCMS/core/controllers/' . Helper::pluralize($sController) . '.controller.php')) {
         $sUrl = str_replace(strtolower($sController), strtolower(Helper::pluralize($sController)), $_SERVER['REQUEST_URI']);
 
-        Helper::warningMessage(I18n::get('error.302.info', $sUrl), $sUrl);
+        return Helper::warningMessage(I18n::get('error.302.info', $sUrl), $sUrl);
       }
       else {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
-        Helper::redirectTo('/errors/404');
+        return Helper::redirectTo('/errors/404');
       }
     }
 
@@ -95,7 +95,7 @@ class Dispatcher {
    * Handle the pre-defined actions.
    *
    * @access public
-   * @return 
+   * @return
    *
    */
   public function getAction() {

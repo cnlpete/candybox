@@ -19,6 +19,7 @@ global:
   by: von
   category: Kategorie
   calendar: Kalender
+  calendars: Kalender
   cancel: Abbrechen
   captcha: Captcha
   close: Schließen
@@ -114,6 +115,7 @@ global:
   settings: Einstellungen
   share: Teilen
   sitemap: Sitemap
+  sitemaps: Sitemap
   size: Größe
   submit: Absenden
   subject: Betreff
@@ -164,7 +166,8 @@ global:
 javascript:
   loading: Lade...
   confirm_destroy: Möchten Sie diesen Eintrag oder diese Datei wirklich löschen? Diese Aktion ist nicht rückgängig zu machen!
-  upload_successful: Upload erfolgreich. Bitte warten Sie einen Augenblick bis die Seite neu geladen wurde.
+  reloading: Bitte warten Sie einen Moment. Die Seite wird neu geladen.
+  upload_successful: Upload erfolgreich.
   upload_error: Es gab einen Fehler beim Upload.
 
 success:

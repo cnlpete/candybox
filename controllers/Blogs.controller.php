@@ -47,6 +47,7 @@ class Blogs extends Main {
     }
 
     else {
+      # Get tags
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
         $this->_aData = isset($this->_aRequest['search']) && $this->_aRequest['search'] ?
                 $this->_oModel->getOverviewByTag() :

@@ -25,7 +25,7 @@
       </tr>
     </thead>
     {foreach $contents as $c}
-      <tr>
+      <tr id='row_{$c.id}'>
         <td>{$c.id}</td>
         <td>
           <a href='{$c.url}'>
@@ -53,18 +53,18 @@
                  title='{$lang.global.update.update}'></i>
             </a>
             &nbsp;
-            <a href='#' onclick="confirmDestroy('{$c.url_destroy}')">
-              <i class='icon-trash js-tooltip'
-                 title='{$lang.global.destroy.destroy}'></i>
-            </a>
+            <i class='icon-trash js-tooltip'
+               onclick="confirmDestroy('{$c.url_destroy}', 'row_{$c.id}')"
+               title='{$lang.global.destroy.destroy}'></i>
           </td>
         {/if}
       </tr>
     {/foreach}
   </table>
   {$_pages_}
+  <script type='text/javascript' src='{$_PATH.js}/core/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.tablesorter{$_SYSTEM.compress_files_suffix}.js'></script>
-  <script src='{$_PATH.js}/core/jquery.infiniteScroll{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
+  <script type='text/javascript' src='{$_PATH.js}/core/jquery.infiniteScroll{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript'>
     {if $_AUTOLOAD_.enabled}
       $(document).ready(function(){

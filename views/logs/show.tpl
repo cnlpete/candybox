@@ -15,13 +15,17 @@
     </thead>
     {foreach $logs as $l}
       {if $l.action_name == 'create' || $l.action_name == 'createfile'}
-        <tr class='result-{if $l.result}success{else}error{/if}' style='color:green;'>
+        <tr id='row_{$l.id}'
+            class='result-{if $l.result}success{else}error{/if}' style='color:green;'>
       {elseif $l.action_name == 'update' || $l.action_name == 'updatefile'}
-        <tr class='result-{if $l.result}success{else}error{/if}' style='color:blue;'>
+        <tr id='row_{$l.id}'
+            class='result-{if $l.result}success{else}error{/if}' style='color:blue;'>
       {elseif $l.action_name == 'destroy' || $l.action_name == 'destroyfile'}
-        <tr class='result-{if $l.result}success{else}error{/if}' style='color:red;'>
+        <tr id='row_{$l.id}'
+            class='result-{if $l.result}success{else}error{/if}' style='color:red;'>
       {else}
-        <tr class='result-{if $l.result}success{else}error{/if}'>
+        <tr id='row_{$l.id}'
+            class='result-{if $l.result}success{else}error{/if}'>
       {/if}
         <td class='left'>
           <a href='{$l.author.url}'>{$l.author.full_name}</a>
@@ -47,17 +51,17 @@
           {/if}
         </td>
         <td class='center'>
-          <a href="#" onclick="confirmDestroy('{$l.url_destroy}')">
-            <i class='icon-remove js-tooltip'
-               title='{$lang.global.destroy.destroy}'></i>
-          </a>
+          <i class='icon-trash js-tooltip'
+             onclick="confirmDestroy('{$l.url_destroy}', 'row_{$l.id}')"
+             title='{$lang.global.destroy.destroy}'></i>
         </td>
       </tr>
     {/foreach}
   </table>
   {$_pages_}
+  <script type='text/javascript' src='{$_PATH.js}/core/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
+  <script type='text/javascript' src='{$_PATH.js}/core/jquery.infiniteScroll{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.tablesorter{$_SYSTEM.compress_files_suffix}.js'></script>
-  <script src='{$_PATH.js}/core/jquery.infiniteScroll{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
   <script type='text/javascript'>
     {if $_AUTOLOAD_.enabled}
       $(document).ready(function(){

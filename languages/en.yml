@@ -19,6 +19,7 @@ global:
   by: by
   category: Category
   calendar: Calendar
+  calendars: Calendars
   cancel: Abbrechen
   captcha: Captcha
   close: Close
@@ -114,6 +115,7 @@ global:
   settings: Settings
   share: Share
   sitemap: Sitemap
+  sitemaps: Sitemaps
   size: Size
   submit: Submit
   subject: Subject
@@ -164,7 +166,8 @@ global:
 javascript:
   loading: Loading...
   confirm_destroy: Are you sure to delete this file or entry? This cannot be undone.
-  upload_successful: File successfully uploaded. Please wait until the page has reloaded.
+  reloading: Please wait until the page has reloaded.
+  upload_successful: File successfully uploaded.
   upload_error: There was an error while uploading.
 
 success:

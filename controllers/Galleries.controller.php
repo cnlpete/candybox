@@ -177,7 +177,7 @@ class Galleries extends Main {
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form_file');
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
-    if ($this->_iId) {
+    if ($this->_iId && $this->_aRequest['action'] == 'create') {
       $aData = $this->_oModel->getFileData($this->_iId);
 
       foreach ($aData as $sColumn => $sData)

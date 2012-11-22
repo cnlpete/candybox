@@ -65,19 +65,12 @@ class Medias extends Main {
     if ($bAllTrue) {
       $this->oSmarty->clearCacheForController($this->_sController);
 
-      # Return JSON information for upload bar
-      if (isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'])
-        exit(json_encode(array(
-                    'success' => true,
-                    'debug'   => WEBSITE_MODE == 'development' ? $this->_aRequest : ''
-                )));
-
       return Helper::successMessage(I18n::get('success.file.upload'),
-              '/' . $this->_sController);
+              '/' . $this->_sController, $this->_aFile);
     }
     else
       return Helper::errorMessage(I18n::get('error.file.upload'),
-              '/' . $this->_sController);
+              '/' . $this->_sController, $this->_aFile);
   }
 
   /**

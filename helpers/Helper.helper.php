@@ -25,17 +25,28 @@ class Helper {
    * @access public
    * @param string $sMessage message to provide
    * @param string $sRedirectTo site to redirect to
+   * @param array $aData data for ajax request
    * @return boolean true
    * @todo store in main session object
+   * @todo extend tests
    *
    */
-  public static function successMessage($sMessage, $sRedirectTo = '') {
-    $_SESSION['flash_message'] = array(
-        'type'    => 'success',
-        'message' => $sMessage,
-        'headline'=> '');
+  public static function successMessage($sMessage, $sRedirectTo = '', $aData = '') {
+    # This is supposed to be an AJAX request, so we will return JSON
+    if (!empty($aData)) {
+        exit(json_encode(array(
+                  'success' => true,
+                  'debug'   => WEBSITE_MODE == 'development' ? $aData : '',
+                  'redirectURL' => $sRedirectTo
+              )));
+    } else {
+      $_SESSION['flash_message'] = array(
+          'type'      => 'success',
+          'message'   => $sMessage,
+          'headline'  => '');
 
-    return $sRedirectTo ? Helper::redirectTo ($sRedirectTo) : true;
+      return $sRedirectTo ? Helper::redirectTo ($sRedirectTo) : true;
+    }
   }
 
   /**
@@ -45,17 +56,28 @@ class Helper {
    * @access public
    * @param string $sMessage message to provide
    * @param string $sRedirectTo site to redirect to
+   * @param array $aData data for ajax request
    * @return boolean false
    * @todo store in main session object
+   * @todo extend tests
    *
    */
-  public static function warningMessage($sMessage, $sRedirectTo = '') {
-    $_SESSION['flash_message'] = array(
-        'type'    => 'warning',
-        'message' => $sMessage,
-        'headline'=> I18n::get('error.warning'));
+  public static function warningMessage($sMessage, $sRedirectTo = '', $aData = '') {
+    # This is supposed to be an AJAX request, so we will return JSON
+    if (!empty($aData)) {
+        exit(json_encode(array(
+                  'success' => true,
+                  'debug' => WEBSITE_MODE == 'development' ? $aData : '',
+                  'redirectURL' => $sRedirectTo
+              )));
+    } else {
+      $_SESSION['flash_message'] = array(
+          'type'    => 'warning',
+          'message' => $sMessage,
+          'headline'=> I18n::get('error.warning'));
 
-    return $sRedirectTo ? Helper::redirectTo ($sRedirectTo) : false;
+      return $sRedirectTo ? Helper::redirectTo ($sRedirectTo) : false;
+    }
   }
 
   /**

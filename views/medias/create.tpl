@@ -14,12 +14,11 @@
         </small>
       </label>
       <div class='controls'>
-        {* @todo Rename file *}
         <input type='file'
-              name='file'
-              id='input-file'
-              class='span4 required'
-              required />
+               name='file[]'
+               id='input-file'
+               class='span4 required'
+               multiple required />
         <span class='help-block'>
           {$lang.medias.info.upload}
         </span>
@@ -51,9 +50,10 @@
       </div>
     </div>
     <div class='form-actions'>
-      <input type='submit'
-            class='btn btn-primary'
-            value='{$lang.medias.title.create}' />
+      <input type='button'
+             id='js_submit_media'
+             class='btn btn-primary'
+             value='{$lang.medias.title.create}' />
     </div>
   </div>
   <script type="text/javascript">
@@ -63,7 +63,7 @@
         prepareForUpload();
       });
 
-      $("input[type='submit']").click(function() {
+      $("#js_submit_media").click(function() {
         upload(this, '/{$_REQUEST.controller}/create.json', '{$_REQUEST.controller}', 'file', 'rename', true);
       });
     });
