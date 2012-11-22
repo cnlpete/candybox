@@ -37,6 +37,11 @@ function quote(sName, sDivId) {
   return false;
 }
 
+/**
+ *
+ *
+ *
+ */
 function stripNoAlphaChars(sValue) {
   sValue = sValue.replace(/ /g, "_");
   sValue = sValue.replace(/Ä/g, "Ae");
@@ -50,14 +55,38 @@ function stripNoAlphaChars(sValue) {
   return sValue;
 }
 
-function confirmDestroy(sUrl) {
-  if( confirm(lang.confirm_destroy) )
-    parent.location.href = sUrl;
+/**
+ * Confirm that user really wants to destroy an entry.
+ *
+ * @param string sUrl URL to delete data from
+ * @param string sDivId DIV to animate. If sDivId is set this will be an AJAX call.
+ *
+ */
+function confirmDestroy(sUrl, sDivId) {
+  if( confirm(lang.confirm_destroy) ) {
+    if($('#' + sDivId).length) {
+      $('#' + sDivId).effect("highlight", {
+        mode: 'hide'
+      }, 2000);
+
+      $.post(sUrl + '.json');
+    }
+    else {
+      parent.location.href = sUrl;
+    }
+  }
 }
 
-function countCharLength(sDiv, iLen) {
-  var iLength = iLen - $(sDiv).val().length;
-  $(sDiv).next().html(iLength);
+/**
+ * Count the length of content.
+ *
+ * @param string sDivId DIV to get data from
+ * @param integer iLen maximum length
+ *
+ */
+function countCharLength(sDivId, iLen) {
+  var iLength = iLen - $(sDivId).val().length;
+  $(sDivId).next().html(iLength);
 }
 
 /* calculate the totalUploadSize */
@@ -100,6 +129,10 @@ function checkFileSize(fileInput, iMaxFileSize, sMessage) {
   }
 }
 
+/**
+ *
+ *
+ */
 var iCounter = 0;
 function enableInfiniteScroll(selector, itemselector, repeatTimes, pathImages) {
   $(selector).infinitescroll({

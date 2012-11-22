@@ -4009,9 +4009,6 @@ div.capty-caption {
 .icon-plus {
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJvSURBVDjLpZPrS5NhGIf9W7YvBYOkhlkoqCklWChv2WyKik7blnNris72bi6dus0DLZ0TDxW1odtopDs4D8MDZuLU0kXq61CijSIIasOvv94VTUfLiB74fXngup7nvrnvJABJ/5PfLnTTdcwOj4RsdYmo5glBWP6iOtzwvIKSWstI0Wgx80SBblpKtE9KQs/We7EaWoT/8wbWP61gMmCH0lMDvokT4j25TiQU/ITFkek9Ow6+7WH2gwsmahCPdwyw75uw9HEO2gUZSkfyI9zBPCJOoJ2SMmg46N61YO/rNoa39Xi41oFuXysMfh36/Fp0b7bAfWAH6RGi0HglWNCbzYgJaFjRv6zGuy+b9It96N3SQvNKiV9HvSaDfFEIxXItnPs23BzJQd6DDEVM0OKsoVwBG/1VMzpXVWhbkUM2K4oJBDYuGmbKIJ0qxsAbHfRLzbjcnUbFBIpx/qH3vQv9b3U03IQ/HfFkERTzfFj8w8jSpR7GBE123uFEYAzaDRIqX/2JAtJbDat/COkd7CNBva2cMvq0MGxp0PRSCPF8BXjWG3FgNHc9XPT71Ojy3sMFdfJRCeKxEsVtKwFHwALZfCUk3tIfNR8XiJwc1LmL4dg141JPKtj3WUdNFJqLGFVPC4OkR4BxajTWsChY64wmCnMxsWPCHcutKBxMVp5mxA1S+aMComToaqTRUQknLTH62kHOVEE+VQnjahscNCy0cMBWsSI0TCQcZc5ALkEYckL5A5noWSBhfm2AecMAjbcRWV0pUTh0HE64TNf0mczcnnQyu/MilaFJCae1nw2fbz1DnVOxyGTlKeZft/Ff8x1BRssfACjTwQAAAABJRU5ErkJggg%3D%3D);
 }
-.icon-remove {
-  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAIhSURBVDjLlZPrThNRFIWJicmJz6BWiYbIkYDEG0JbBiitDQgm0PuFXqSAtKXtpE2hNuoPTXwSnwtExd6w0pl2OtPlrphKLSXhx07OZM769qy19wwAGLhM1ddC184+d18QMzoq3lfsD3LZ7Y3XbE5DL6Atzuyilc5Ciyd7IHVfgNcDYTQ2tvDr5crn6uLSvX+Av2Lk36FFpSVENDe3OxDZu8apO5rROJDLo30+Nlvj5RnTlVNAKs1aCVFr7b4BPn6Cls21AWgEQlz2+Dl1h7IdA+i97A/geP65WhbmrnZZ0GIJpr6OqZqYAd5/gJpKox4Mg7pD2YoC2b0/54rJQuJZdm6Izcgma4TW1WZ0h+y8BfbyJMwBmSxkjw+VObNanp5h/adwGhaTXF4NWbLj9gEONyCmUZmd10pGgf1/vwcgOT3tUQE0DdicwIod2EmSbwsKE1P8QoDkcHPJ5YESjgBJkYQpIEZ2KEB51Y6y3ojvY+P8XEDN7uKS0w0ltA7QGCWHCxSWWpwyaCeLy0BkA7UXyyg8fIzDoWHeBaDN4tQdSvAVdU1Aok+nsNTipIEVnkywo/FHatVkBoIhnFisOBoZxcGtQd4B0GYJNZsDSiAEadUBCkstPtN3Avs2Msa+Dt9XfxoFSNYF/Bh9gP0bOqHLAm2WUF1YQskwrVFYPWkf3h1iXwbvqGfFPSGW9Eah8HSS9fuZDnS32f71m8KFY7xs/QZyu6TH2+2+FAAAAABJRU5ErkJggg%3D%3D);
-}
 .icon-rss {
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAm1JREFUeNqUk09IVEEcx78z896+3ae1mCBplFsKUQYLGqEHO3SQgg5eEsK8iF2C0IsQHTp09xSE2T0CK5eOgQcPQodQpIRC0N0i09BV1911d9/8aWaebgh12Afz+M2b3+f7+/54vyErD7uSnk9TkShJoIanUlLpclH2k8x419rpvv6Ec6ajFh785zI2PqTSjhtFgvBdVBZeQRYr9pC4DKzeA6H0vwLEb4bnk4TjMAW1tQyxnUPd6Lw9FL++gac/gS+/A6W7oO4/hIpZUCJBpdACvAxIWT1jzRfh9QzCH3kLcmkYPFuAEuL40oxhyfrjpDp14SREPoAoBGDnukAa2+F1D4I2tFQdHUw/gFsXHDORXc1pB6ay4FABR+zuJFjbdaj9DeSf3UZ57kXVUezOc/C9ks09WoYNW9AaSik456+G1gcm4A9NobL0HsWZJ1URp2cUsmJakJYxLFVahVDXJpXmXoJnFmxsxOrvv4bcWtFOpuw3Iy6dJk1yy6jQgZYiETieVl6aQnlmDAdvxqHKBZDYCURvPkKwOA2Z27Qi7rVh7UBZxrBUmA2NQLE4nBtPER2YBPXrUZmdCJ2cTcK90gfxdTbct3bqV9wyImwhFCB+g068BdZyWVe5B/X7M+T26mE73VD5dRvTxlbtLBQwbNgC01PHHKjC1uGg56B2M0B+8xDS16S4+XcKvTrLGJZ8GWlXie5O0Px3sKY2XS4Kmc1A7eh9W28VUgd7YWUTl/bB9dSvfVwELXGW3vmxDhHXMInq/6srxlvBEr02PlokEq/GgXBhmDKnaTI/1JF0SZByiKzpOnNF04Fy+/8IMAAaDy2IPJM/RAAAAABJRU5ErkJggg%3D%3D);
 }
@@ -4053,7 +4050,8 @@ th.headerSortDown {
   background-color: #eee;
 }
 th:hover,
-th:hover {
+th:hover,
+i.icon-trash:hover {
   cursor: pointer;
 }
 .tags a:first-child,
@@ -4155,12 +4153,14 @@ form label small {
   font-size: 80%;
 }
 table tr.result-error {
-  background-color: #ee5f5b;
-  background-image: -webkit-gradient(linear,0 100%,100% 0,color-stop(.25,rgba(255,255,255,0.15)),color-stop(.25,transparent),color-stop(.5,transparent),color-stop(.5,rgba(255,255,255,0.15)),color-stop(.75,rgba(255,255,255,0.15)),color-stop(.75,transparent),to(transparent));
-  background-image: -webkit-linear-gradient(45deg,rgba(255,255,255,0.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,0.15) 50%,rgba(255,255,255,0.15) 75%,transparent 75%,transparent);
-  background-image: -moz-linear-gradient(45deg,rgba(255,255,255,0.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,0.15) 50%,rgba(255,255,255,0.15) 75%,transparent 75%,transparent);
-  background-image: -o-linear-gradient(45deg,rgba(255,255,255,0.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,0.15) 50%,rgba(255,255,255,0.15) 75%,transparent 75%,transparent);
-  background-image: linear-gradient(45deg,rgba(255,255,255,0.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,0.15) 50%,rgba(255,255,255,0.15) 75%,transparent 75%,transparent);
+  background-color: #ff727b;
+  background-image: -moz-linear-gradient(top,#FF878F,#FF525D);
+  background-image: -webkit-gradient(linear,0 0,0 100%,from(#FF878F),to(#FF525D));
+  background-image: -webkit-linear-gradient(top,#FF878F,#FF525D);
+  background-image: -o-linear-gradient(top,#FF878F,#FF525D);
+  background-image: linear-gradient(to bottom,#FF878F,#FF525D);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffff878f', endColorstr='#ffff525d', GradientType=0);
   -webkit-background-size: 40px 40px;
   -moz-background-size: 40px 40px;
   -o-background-size: 40px 40px;
