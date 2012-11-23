@@ -1,7 +1,7 @@
 {strip}
   {if $_SESSION.user.role >= 3}
     <p class='center'>
-      <a href='/{$_REQUEST.controller}/create'>
+      <a href='#'>
         <i class='icon-plus'
            title='{$lang.global.create.entry}'></i>
         {$lang.global.create.entry}
@@ -80,6 +80,9 @@
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.tablesorter{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript'>
-    $('table').tablesorter();
+    $(document).ready(function(){
+      $('table').tablesorter();
+      showAjaxUpload('js-download_upload', '{$_REQUEST.controller}');
+    });
   </script>
 {/strip}

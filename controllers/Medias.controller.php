@@ -44,7 +44,9 @@ class Medias extends Main {
       $aReturn = $oUpload->uploadFiles($sFolder);
     }
     catch (\Exception $e) {
-      return Helper::errorMessage($e->getMessage(), '/' . $this->_sController . '/create');
+      return Helper::errorMessage($e->getMessage(),
+              '/' . $this->_sController . '/create',
+              $this->_aFile);
     }
 
     $iCount   = count($aReturn);

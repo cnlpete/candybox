@@ -1,13 +1,10 @@
 {strip}
-  <div class='page-header'>
-    <h1>{$lang.global.download}</h1>
-  </div>
   {if $_REQUEST.action == 'create'}
-    <form method='post'
-          class='form-horizontal'
-          enctype='multipart/form-data'
-          action='/{$_REQUEST.controller}/{$_REQUEST.action}'>
+    <div class='form-horizontal'>
   {elseif $_REQUEST.action == 'update'}
+    <div class='page-header'>
+      <h1>{$lang.downloads.title.update}</h1>
+    </div>
     <form method='post'
           class='form-horizontal'
           enctype='multipart/form-data'
@@ -109,9 +106,23 @@
         </div>
       </div>
     {/if}
+    <div class='control-group hide' id='js-progress'>
+      <label class='control-label'>
+        {$lang.global.upload.status}
+      </label>
+      <div class='controls'>
+        <div class='progress progress-success progress-striped active'
+            role='progressbar'
+            aria-valuemin='0'
+            aria-valuemax='100'>
+          <div id='js-progress_bar' class='bar'></div>
+        </div>
+      </div>
+    </div>
     <div class='form-actions'>
       {if $_REQUEST.action == 'create'}
-        <input type='submit'
+        <input type='button'
+               id='js-submit_download'
                class='btn btn-primary'
                value='{$lang.global.create.create}' />
       {elseif $_REQUEST.action == 'update'}
@@ -127,24 +138,26 @@
                value='{$lang.global.reset}' />
       {/if}
     </div>
-  </form>
+  {if $_REQUEST.action == 'create'}
+    </div>
+  {else}
+    </form>
+  {/if}
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.bootstrap.typeahead{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript'>
-    $('#input-title').bind('keyup', function() {
-      countCharLength(this, 128);
-    });
+    $(document).ready(function(){
+      $('#input-title').bind('keyup', function() {
+        countCharLength(this, 128);
+      });
 
-    $("input[type='submit']").click(function() {
-      $(this).hide();
-      $("input[type='button']").hide();
-      $("input[type='reset']").hide();
-      $('.form-actions').append("<img src='{$_PATH.images}/candy.global/loading.gif' alt='" + lang.loading + "' />");
-    });
+      $('#input-file').change(function() {
+        checkFileSize($(this), {$_SYSTEM.maximumUploadSize.raw}, '{$_SYSTEM.maximumUploadSize.mb|string_format: $lang.error.file.size}');
+        prepareForUpload();
+      });
 
-    $('#input-file').change(function() {
-      checkFileSize($(this),
-        {$_SYSTEM.maximumUploadSize.raw},
-        '{$_SYSTEM.maximumUploadSize.mb|string_format: $lang.error.file.size}');
+      $('#js-submit_download').click(function() {
+        upload(this, '/{$_REQUEST.controller}/create.json', '{$_REQUEST.controller}', 'file', 'title', true);
+      });
     });
   </script>
 {/strip}

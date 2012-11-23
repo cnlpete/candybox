@@ -410,7 +410,7 @@ abstract class Main {
     else {
       # AJAX inputs
       if (isset($this->_aRequest['type']) && $this->_aRequest['type'] == 'json' &&
-              (!isset($this->_aRequest[$sField]) || empty($this->_aRequest[$sField])))
+              !isset($this->_aRequest[$this->_sController][$sField]) || empty($this->_aRequest[$this->_sController][$sField]))
         exit(json_encode(array(
                     'success' => false,
                     'error'   => array($sField => $sMessage ? $sMessage : I18n::get('error.form.missing.' . strtolower($sField))),

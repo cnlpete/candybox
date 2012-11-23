@@ -109,7 +109,9 @@ class Downloads extends Main {
         $aReturnValues = $oUploadFile->uploadFiles('downloads');
       }
       catch (\Exception $e) {
-        return Helper::errorMessage($e->getMessage(), '/' . $this->_sController . '/create');
+        return Helper::errorMessage($e->getMessage(),
+                '/' . $this->_sController . '/create',
+                $this->_aFile);
       }
 
       # Fileupload was successfull, so we can clear cache and insert into db.
@@ -126,13 +128,19 @@ class Downloads extends Main {
                         $this->_oModel->getLastInsertId($this->_sController),
                         $this->_aSession['user']['id']);
 
-          return Helper::successMessage(I18n::get('success.create'), '/' . $this->_sController);
+          return Helper::successMessage(I18n::get('success.create'),
+                  '/' . $this->_sController,
+                  $this->_aFile);
         }
         else
-          return Helper::errorMessage(I18n::get('error.sql'), '/' . $this->_sController);
+          return Helper::errorMessage(I18n::get('error.sql'),
+                  '/' . $this->_sController,
+                  $this->_aFile);
       }
       else
-        return Helper::errorMessage(I18n::get('error.missing.file'), '/' . $this->_sController);
+        return Helper::errorMessage(I18n::get('error.missing.file'),
+                '/' . $this->_sController,
+                $this->_aFile);
     }
   }
 

@@ -89,16 +89,7 @@
         prevEffect : 'fade' });
 
       $('table').tablesorter();
-
-      $('p.center ').click(function(e) {
-        if($('#js-media_upload').length == 0) {
-          $('.page-header').after("<div id='js-media_upload'></div>");
-          $('#js-media_upload').load('/{$_REQUEST.controller}/create.ajax');
-        }
-        else {
-          $('.form-horizontal').toggle();
-        }
-      });
+      showAjaxUpload('js-media_upload', '{$_REQUEST.controller}');
     });
   </script>
 {/strip}

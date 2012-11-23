@@ -307,7 +307,7 @@
       </div>
       <div class='form-actions'>
         <input type='button'
-                id='input-submit_avatar'
+                id='js-submit_avatar'
                 class='btn btn-primary'
                 value='{$lang.users.title.image}' />
         <input type='reset'
@@ -369,7 +369,7 @@
       prepareForUpload();
     });
 
-    $('#input-submit_avatar').click(function() {
+    $('#js-submit_avatar').click(function() {
       upload(this, '/{$_REQUEST.controller}/{$uid}/avatar.json', '{$_REQUEST.controller}', 'image', 'terms', false);
     });
 

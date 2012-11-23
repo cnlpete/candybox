@@ -51,7 +51,7 @@
     </div>
     <div class='form-actions'>
       <input type='button'
-             id='js_submit_media'
+             id='js-submit_media'
              class='btn btn-primary'
              value='{$lang.medias.title.create}' />
     </div>
@@ -63,7 +63,7 @@
         prepareForUpload();
       });
 
-      $("#js_submit_media").click(function() {
+      $('#js-submit_media').click(function() {
         upload(this, '/{$_REQUEST.controller}/create.json', '{$_REQUEST.controller}', 'file', 'rename', true);
       });
     });
