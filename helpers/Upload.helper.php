@@ -146,9 +146,9 @@ class Upload {
       $bIsArray = is_array($this->_aFile[$sType]['name']);
       $iFileCount = $bIsArray ? count($this->_aFile[$sType]['name']) : 1;
 
-      // stores the total size of files to upload in bytes
+      # Stores the total size of files to upload in bytes
       if ($this->getFileSize() > self::getUploadLimit()) {
-        throw new \Exception(I18n::get('error.file.size', self::getUploadLimit(false) . 'MB'));
+        throw new AdvancedException(I18n::get('error.file.size', self::getUploadLimit(false) . 'MB'));
       }
 
       $bReturn = array();
@@ -200,7 +200,7 @@ class Upload {
             $this->_aRequest[$this->_sController]['cut'];
 
     if ($this->getFileSize() > self::getUploadLimit())
-      throw new \Exception(I18n::get('error.file.size', self::getUploadLimit(false) . 'MB'));
+      throw new AdvancedException(I18n::get('error.file.size', self::getUploadLimit(false) . 'MB'));
 
     else {
       $sUploadFolder = 'galleries/' . (int) $this->_aRequest['id'];
@@ -222,7 +222,7 @@ class Upload {
             $oImage->resizeDefault(THUMB_DEFAULT_X, THUMB_DEFAULT_Y, 'thumbnail');
 
           else
-            throw new Exception('No resizing information!');
+            throw new AdvancedException('No resizing information!');
 
           $oImage->resizeDefault(POPUP_DEFAULT_X, POPUP_DEFAULT_Y, 'popup');
           $oImage->resizeAndCut('32');

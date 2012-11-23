@@ -214,7 +214,8 @@ class Galleries extends Main {
     if ($this->_aSession['user']['role'] < 3)
       return Helper::errorMessage(I18n::get('error.missing.permission'));
 
-    return isset($this->_aRequest[$this->_sController]) ?
+    return isset($this->_aRequest[$this->_sController]) ||
+            isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'] ?
             $this->_createFile() :
             $this->_showFormFileTemplate();
   }
@@ -230,10 +231,10 @@ class Galleries extends Main {
    *
    */
   protected function _createFile() {
-    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
-
     $this->_setError('cut');
     $this->_setError('file');
+
+    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
 
     if ($this->_aError)
       return $this->_showFormFileTemplate();
@@ -266,17 +267,20 @@ class Galleries extends Main {
           $this->oSmarty->clearCacheForController($this->_sController);
           $this->oSmarty->clearCacheForController('rss');
 
-          return Helper::successMessage(I18n::get('success.file.upload'), '/' . $this->_sController .
-                          '/' . $this->_iId);
+          return Helper::successMessage(I18n::get('success.file.upload'),
+                  '/' . $this->_sController . '/' . $this->_iId,
+                  $this->_aRequest);
         }
         else
-          return Helper::errorMessage(I18n::get('error.file.upload'), '/' . $this->_sController .
-                        '/' . $this->_iId . '/createfile');
+          return Helper::errorMessage(I18n::get('error.file.upload'),
+                  '/' . $this->_sController . '/' . $this->_iId . '/createfile',
+                  $this->_aRequest);
       }
       catch (AdvancedException $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
-        return Helper::errorMessage($e->getMessage(), '/' . $this->_sController .
-                      '/' . $this->_iId . '/createfile');
+        return Helper::errorMessage($e->getMessage(),
+                '/' . $this->_sController . '/' . $this->_iId . '/createfile',
+                $this->_aRequest);
       }
     }
   }
