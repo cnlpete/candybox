@@ -164,29 +164,21 @@ function enableInfiniteScroll(selector, itemselector, repeatTimes, pathImages) {
   });
 }
 
-/* Show success and error messages */
-if($('#js-flash_success, #js-flash_error, #js-flash_warning').length) {
-  show('#js-flash_message');
-}
-
-$('#js-flash_success, #js-flash_error, #js-flash_warning').click(function() {
-  hide(this, 0);
-});
-
-/* Show tooltips */
-if ($('.js-tooltip').length)
-  $('.js-tooltip').tooltip();
-
-if ($('p.error').length)
-  $('p.error').tooltip();
-
-/* AJAX image upload*/
+/**
+ *
+ *
+ *
+ */
 function prepareForUpload() {
   $('#js-progress_bar').css('width', '0%');
   $('#js-progress').toggle();
 };
 
-/* @todo: show flash message */
+/**
+ *
+ *
+ *
+ */
 function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
   // Remove old error messages and helping texts
   $('.control-group').removeClass('alert alert-error');
@@ -213,6 +205,9 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
     // Additional information fields
     if(controller == 'downloads') {
       fd.append(controller + '[category]', $('#input-category').val());
+      fd.append(controller + '[content]', $('#input-content').val());
+    } else if(controller == 'galleries') {
+      fd.append(controller + '[cut]', $("input[name='" + controller + "[cut]']:checked").val());
       fd.append(controller + '[content]', $('#input-content').val());
     }
   }
@@ -245,7 +240,7 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
         $('#js-avatar_link').attr('href', aJson.fileUrl);
       }
       else if(controller == 'galleries') {
-        
+
       }
 
       // Clear existing data
@@ -256,8 +251,8 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
       showFlashMessage('success', message);
 
       // Reload to easily show images
-      if(reloadUrl == true)
-        setTimeout(function() {location.reload()}, 3000);
+//      if(reloadUrl == true)
+//        setTimeout(function() {location.reload()}, 3000);
     }
     else {
       $.each(aJson.error, function(index, value) {
@@ -291,3 +286,25 @@ function showFlashMessage(sStatus, sMessage) {
   $('#js-flash_' + sStatus + ' p').html(sMessage);
   $('#js-flash_message').delay('10000').slideUp();
 }
+
+
+/* Show success and error messages */
+if($('#js-flash_success, #js-flash_error, #js-flash_warning').length) {
+  show('#js-flash_message');
+}
+
+$('#js-flash_success, #js-flash_error, #js-flash_warning').click(function() {
+  hide(this, 0);
+});
+
+
+/**
+ *
+ *
+ *
+ */
+if ($('.js-tooltip').length)
+  $('.js-tooltip').tooltip();
+
+if ($('p.error').length)
+  $('p.error').tooltip();
