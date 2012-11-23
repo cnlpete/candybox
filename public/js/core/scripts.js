@@ -240,23 +240,24 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
         message = message + ' ' + lang.reloading;
         $('.form-horizontal').toggle();
       }
+      else if(controller == 'users') {
+        $('#js-avatar_thumb').attr('src', aJson.dataUrl);
+        $('#js-avatar_link').attr('href', aJson.fileUrl);
+      }
+      else if(controller == 'galleries') {
+        
+      }
 
       // Clear existing data
       $('.control-group').removeClass('alert alert-error');
       $('#input-' + inputId).val('');
       $('#input-' + dependencyId).val('');
 
-      if(controller == 'users') {
-        $('#js-avatar_thumb').attr('src', aJson.dataUrl);
-        $('#js-avatar_link').attr('href', aJson.fileUrl);
-      }
-
       showFlashMessage('success', message);
 
       // Reload to easily show images
       if(reloadUrl == true)
         setTimeout(function() {location.reload()}, 3000);
-
     }
     else {
       $.each(aJson.error, function(index, value) {
