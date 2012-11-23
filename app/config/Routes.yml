@@ -19,11 +19,11 @@
 # Shared behaviour
 "(:alpha)/?": controller=$1&page=1
 "(:alpha)/page/(:num)": controller=$1&page=$2
-"(:alpha)/(:num)/(update|destroy).?(json|xml)?": controller=$1&id=$2&action=$3&type=$4
+"(:alpha)/(:num)/(update|destroy)(.(json|xml))?": controller=$1&id=$2&action=$3&type=$5
 "(:alpha)/(:num)/(highlight|page)/(:any)": controller=$1&id=$2&$3=$4
 
 # Magic rule
-"(:alpha)/(:num).?(xml|json|rss|ajax)?": controller=$1&id=$2&type=$3&page=1
+"(:alpha)/(:num)(.(xml|json|rss|ajax))?": controller=$1&id=$2&type=$4&page=1
 "(:alpha)/(:num)/(:any)": controller=$1&id=$2&seo_title=$3&page=1
 "(:alpha)/(:alpha)(.(xml|json|rss|ajax))?": controller=$1&action=$2&type=$4
 "(:alpha).(xml|json|rss|ajax)": controller=$1&type=$2
