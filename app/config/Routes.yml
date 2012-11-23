@@ -2,19 +2,15 @@
 "/": blogs
 
 # Special behaviour
-"calendars/(:num)/archive": controller=calendars&action=archive&id=$1
-"calendars/(icalfeed|archive)": controller=calendars&action=$1
 "galleries/(:num)/(createfile|updatefile|destroyfile|updateorder)": controller=galleries&action=$2&id=$1
 "language/(:alpha)": language=$1
-"mails/(:num)/(create|resend)": controller=mails&action=$2&id=$1
 "medias/(:any)/destroy.(xml|json)": controller=medias&action=destroy&file=$1&type=2
 "searches/(:any)": controller=searches&search=$1
-"sessions/(password|verification|destroy)": controller=sessions&action=$1
+#"sessions/(password|verification|destroy)": controller=sessions&action=$1
 "sites/(:alnum)": controller=sites&site=$1
 "sitemap.xml": controller=sitemaps&type=xml
 "users/(:num)/token": controller=users&action=token&id=$1
 "users/(:alnum)/verification": controller=users&action=verification&code=$1
-"users/(:num)/(:alpha)": controller=users&action=$2&id=$1
 
 # Shared behaviour
 "(:alpha)/?": controller=$1&page=1
@@ -23,6 +19,7 @@
 "(:alpha)/(:num)/(highlight|page)/(:any)": controller=$1&id=$2&$3=$4
 
 # Magic rule
+"(:alpha)/(:num)/(:alpha)(.(xml|json|rss|ajax))?": controller=$1&id=$2&action=$3&type=$5&page=1
 "(:alpha)/(:num)(.(xml|json|rss|ajax))?": controller=$1&id=$2&type=$4&page=1
 "(:alpha)/(:num)/(:any)": controller=$1&id=$2&seo_title=$3&page=1
 "(:alpha)/(:alpha)(.(xml|json|rss|ajax))?": controller=$1&action=$2&type=$4

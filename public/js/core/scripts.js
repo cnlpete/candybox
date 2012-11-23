@@ -188,8 +188,8 @@ function prepareForUpload() {
 
 /* @todo: show flash message */
 function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
-  // Disable upload button
-  $(e).attr('disabled');
+  // Remove old error messages and helping texts
+  $('.control-group').removeClass('alert alert-error');
 
   var files = document.querySelector('#input-' + inputId).files;
   var fd = new FormData();
@@ -198,17 +198,23 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
     fd.append('file[' + i + ']', fileObject);
   }
 
-  if(dependencyId !== '') {
+  if(dependencyId.length) {
     $('#input-' + dependencyId).click(function() {
-      $(this).parents().eq(2).removeClass('alert alert-error');
+      $(this).closest().removeClass('alert alert-error');
       $('.help-inline').remove();
     });
 
     if($('#input-' + dependencyId).is(':checkbox'))
-      fd.append(dependencyId, $('#input-' + dependencyId).attr('checked'));
+      fd.append(controller + '[' + dependencyId + ']', $('#input-' + dependencyId).attr('checked'));
 
     else
       fd.append(controller + '[' + dependencyId + ']', $('#input-' + dependencyId).val());
+
+    // Additional information fields
+    if(controller == 'downloads') {
+      fd.append(controller + '[category]', $('#input-category').val());
+      fd.append(controller + '[content]', $('#input-content').val());
+    }
   }
 
   var xhr = new XMLHttpRequest();
@@ -223,23 +229,22 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
 
   xhr.onload = function() {
     $('#js-progress').toggle();
-    $(e).removeAttr('disabled');
 
+    console.log(this.response);
     var aJson = JSON.parse(this.response);
-    //console.log(aJson);
 
     if(aJson.success == true) {
+      var message = lang.upload_successful;
+
+      if(controller == 'medias' || controller == 'downloads') {
+        message = message + ' ' + lang.reloading;
+        $('.form-horizontal').toggle();
+      }
+
       // Clear existing data
       $('.control-group').removeClass('alert alert-error');
       $('#input-' + inputId).val('');
       $('#input-' + dependencyId).val('');
-
-      var message = lang.upload_successful;
-
-      if(controller == 'medias') {
-        message = message + ' ' + lang.reloading;
-        $('#medias .form-horizontal').toggle();
-      }
 
       if(controller == 'users') {
         $('#js-avatar_thumb').attr('src', aJson.dataUrl);
@@ -251,23 +256,32 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
       // Reload to easily show images
       if(reloadUrl == true)
         setTimeout(function() {location.reload()}, 3000);
+
     }
     else {
-      if(aJson.error[dependencyId]) {
-        $('#input-' + dependencyId).parents().eq(2).addClass('alert alert-error');
-        $('#input-' + dependencyId).parents().eq(1).append("<span class='help-inline'>" + aJson.error[dependencyId] + "</span>");
-      }
-
-      if(aJson.error[inputId]) {
-        $('#input-' + inputId).parents().eq(1).addClass('alert alert-error');
-        $('#input-' + inputId).next().html(aJson.error[inputId]);
-      }
+      $.each(aJson.error, function(index, value) {
+        $('#input-' + index).closest('.control-group').addClass('alert alert-error');
+        $('#input-' + index).parent().append("<span class='help-inline'>" + value + "</span>");
+        $('#input-' + index).next().remove();
+      });
 
       showFlashMessage('error', lang.upload_error);
     }
   };
 
   xhr.send(fd);
+}
+
+function showAjaxUpload(sDivId, sController) {
+  $('p.center a').click(function(e) {
+    if($('#' + sDivId).length == 0) {
+      $('.page-header').after("<div id='" + sDivId + "'></div>");
+      $('#' + sDivId).load('/' + sController + '/create.ajax');
+    }
+    else {
+      $('.form-horizontal').toggle();
+    }
+  });
 }
 
 function showFlashMessage(sStatus, sMessage) {
