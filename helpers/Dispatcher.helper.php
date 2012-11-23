@@ -95,7 +95,7 @@ class Dispatcher {
    * Handle the pre-defined actions.
    *
    * @access public
-   * @return
+   * @return string HTML
    *
    */
   public function getAction() {

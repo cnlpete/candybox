@@ -710,10 +710,16 @@ abstract class Main {
         if ($mAdditionalCaches)
           $this->_clearCaches($mAdditionalCaches);
 
-        return Helper::successMessage(I18n::get('success.create'), $sRedirectURL);
+        return Helper::successMessage(
+                I18n::get('success.create'),
+                $sRedirectURL,
+                isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'] ? $this->_aRequest : '');
       }
       else
-        return Helper::errorMessage(I18n::get('error.sql.query'), $sRedirectURL);
+        return Helper::errorMessage(
+                I18n::get('error.sql'),
+                $sRedirectURL,
+                isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'] ? $this->_aRequest : '');
     }
   }
 
@@ -754,10 +760,16 @@ abstract class Main {
         if ($mAdditionalCaches)
           $this->_clearCaches($mAdditionalCaches);
 
-        return Helper::successMessage(I18n::get('success.update'), $sRedirectURL);
+        return Helper::successMessage(
+                I18n::get('success.update'),
+                $sRedirectURL,
+                isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'] ? $this->_aRequest : '');
       }
       else
-        return Helper::errorMessage(I18n::get('error.sql'), $sRedirectURL);
+        return Helper::errorMessage(
+                I18n::get('error.sql'),
+                $sRedirectURL,
+                isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'] ? $this->_aRequest : '');
     }
   }
 
