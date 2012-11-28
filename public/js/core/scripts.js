@@ -206,7 +206,8 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
     if(controller == 'downloads') {
       fd.append(controller + '[category]', $('#input-category').val());
       fd.append(controller + '[content]', $('#input-content').val());
-    } else if(controller == 'galleries') {
+    }
+    else if(controller == 'galleries') {
       fd.append(controller + '[cut]', $("input[name='" + controller + "[cut]']:checked").val());
       fd.append(controller + '[content]', $('#input-content').val());
     }
@@ -231,28 +232,21 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
     if(aJson.success == true) {
       var message = lang.upload_successful;
 
-      if(controller == 'medias' || controller == 'downloads') {
+      if(controller == 'medias' || controller == 'downloads' || controller == 'galleries') {
         message = message + ' ' + lang.reloading;
         $('.form-horizontal').toggle();
       }
       else if(controller == 'users') {
-        $('#js-avatar_thumb').attr('src', aJson.dataUrl);
-        $('#js-avatar_link').attr('href', aJson.fileUrl);
-      }
-      else if(controller == 'galleries') {
-
+        $('#js-avatar_thumb').attr('src', aJson.fileData.thumbnail);
+        $('#js-avatar_link').attr('href', aJson.fileData.popup);
       }
 
-      // Clear existing data
-      $('.control-group').removeClass('alert alert-error');
-      $('#input-' + inputId).val('');
-      $('#input-' + dependencyId).val('');
-
+      $('.control-group input').val('');
       showFlashMessage('success', message);
 
       // Reload to easily show images
-//      if(reloadUrl == true)
-//        setTimeout(function() {location.reload()}, 3000);
+      if(reloadUrl == true)
+        setTimeout(function() {location.reload()}, 3000);
     }
     else {
       $.each(aJson.error, function(index, value) {
@@ -268,11 +262,11 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
   xhr.send(fd);
 }
 
-function showAjaxUpload(sDivId, sController) {
-  $('p.center a').click(function(e) {
+function showAjaxUpload(sDivId, sController, sActionAndIdInformation) {
+  $('p.center a').click(function() {
     if($('#' + sDivId).length == 0) {
       $('.page-header').after("<div id='" + sDivId + "'></div>");
-      $('#' + sDivId).load('/' + sController + '/create.ajax');
+      $('#' + sDivId).load('/' + sController + '/' + sActionAndIdInformation + '.ajax');
     }
     else {
       $('.form-horizontal').toggle();
