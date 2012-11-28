@@ -171,15 +171,14 @@ class Users extends Main {
         # We will get off here and return a custom success message to add additional information easily.
         # @todo put into Helpers method
         exit(json_encode(array(
-            'success' => true,
-            'debug'   => WEBSITE_MODE == 'development' ? $this->_aRequest : '',
-            'fileUrl' => 'data:' . $aFileInfo['type'] . ';base64,' .
-                  base64_encode(file_get_contents(PATH_UPLOAD . '/users/popup/' . $aFileName[0])),
-
-            'dataUrl' => 'data:' . $aFileInfo['type'] . ';base64,' .
-                  base64_encode(file_get_contents(PATH_UPLOAD . '/users/64/' . $aFileName[0]))
-
-            )));
+                    'success'   => true,
+                    'debug'     => WEBSITE_MODE == 'development' ? $this->_aRequest : '',
+                    'fileData'  => array(
+                        'popup'     => 'data:' . $aFileInfo['type'] . ';base64,' .
+                        base64_encode(file_get_contents(PATH_UPLOAD . '/users/popup/' . $aFileName[0])),
+                        'thumbnail' => 'data:' . $aFileInfo['type'] . ';base64,' .
+                        base64_encode(file_get_contents(PATH_UPLOAD . '/users/64/' . $aFileName[0]))
+                    ))));
       }
 
       else

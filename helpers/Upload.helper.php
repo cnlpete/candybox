@@ -143,7 +143,7 @@ class Upload {
     $sType = isset($this->_aFile['image']) ? 'image' : 'file';
 
     if (isset($this->_aFile[$sType]) && !empty($this->_aFile[$sType]['name'][0])) {
-      $bIsArray = is_array($this->_aFile[$sType]['name']);
+      $bIsArray   = is_array($this->_aFile[$sType]['name']);
       $iFileCount = $bIsArray ? count($this->_aFile[$sType]['name']) : 1;
 
       # Stores the total size of files to upload in bytes
@@ -161,7 +161,8 @@ class Upload {
 
         # Remove extension, if there is one
         $iPos = strrpos($this->_sFileNames[$iI], '.');
-        if ($iPos) $this->_sFileNames[$iI] = substr($this->_sFileNames[$iI], 0, $iPos);
+        if ($iPos)
+          $this->_sFileNames[$iI] = substr($this->_sFileNames[$iI], 0, $iPos);
 
         # Rename the file, if a new name is specified
         if (isset($this->_aRequest[$this->_sController]['rename']) && !empty($this->_aRequest[$this->_sController]['rename']))
@@ -177,8 +178,8 @@ class Upload {
                                                     $this->_sFileNames[$iI] . '.' . $this->_sFileExtensions[$iI]);
 
         # Upload the file
-        $sTempFileName = $bIsArray ? $this->_aFile[$sType]['tmp_name'][$iI] : $this->_aFile[$sType]['tmp_name'];
-        $bReturn[$iI] = move_uploaded_file($sTempFileName, $this->aFilePaths[$iI]) ? true : false;
+        $sTempFileName  = $bIsArray ? $this->_aFile[$sType]['tmp_name'][$iI] : $this->_aFile[$sType]['tmp_name'];
+        $bReturn[$iI]   = move_uploaded_file($sTempFileName, $this->aFilePaths[$iI]) ? true : false;
       }
 
       return $bReturn;

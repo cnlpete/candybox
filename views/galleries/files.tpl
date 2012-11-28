@@ -1,7 +1,7 @@
 {strip}
   {if $_SESSION.user.role >= 3}
     <p class='center'>
-      <a href='/{$_REQUEST.controller}/{$_REQUEST.id}/createfile'>
+      <a href='#'>
         <i class='icon-plus'
            title='{$lang.global.create.entry}'></i>
         {$lang.galleries.files.title.create}
@@ -92,9 +92,7 @@
         </script>
       {/if}
       <p class='center'>
-        <a href='{$gallery_url}.rss'
-           class='js-tooltip'
-           title='{$lang.global.rss}'>
+        <a href='{$gallery_url}.rss'>
           <i class='icon-rss js-tooltip'
              title='{$lang.global.rss}'></i>
         </a>
@@ -116,6 +114,8 @@
           }
         }
       });
+
+      showAjaxUpload('js-gallery_upload', '{$_REQUEST.controller}', '{$_REQUEST.id}/createfile');
     });
   </script>
 {/strip}

@@ -103,6 +103,8 @@ class Dispatcher {
             strtolower((string) $this->_aRequest['action']) :
             'show';
 
+    # @todo REST
+
     return method_exists($this->oController, $sMethod) ?
             $this->oController->setContent($this->oController->$sMethod()) :
             Helper::redirectTo('/errors/404');

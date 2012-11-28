@@ -89,7 +89,7 @@
         prevEffect : 'fade' });
 
       $('table').tablesorter();
-      showAjaxUpload('js-media_upload', '{$_REQUEST.controller}');
+      showAjaxUpload('js-media_upload', '{$_REQUEST.controller}', 'create');
     });
   </script>
 {/strip}
