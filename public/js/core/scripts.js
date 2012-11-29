@@ -1,28 +1,3 @@
-function show(sDivId) {
-  $(sDivId).show();
-
-  if($('#js-flash_success') || $('#js-flash_error')) {
-    hide(sDivId, 10000);
-  }
-}
-
-/* Hide div */
-function hide(sDivId, iDelay) {
-  $(sDivId).delay(iDelay).slideUp();
-}
-
-/* ToggleOpacity */
-$.fn.toggleOpacity = function (t) {
-  if(t)
-    this.stop(true,true).animate({
-      opacity:1
-    });
-  else
-    this.stop(true,true).animate({
-      opacity:0.25
-    });
-}
-
 /* Quote comment */
 function quote(sName, sDivId) {
   var oTextField  = $('#js-create_commment_text');
@@ -89,7 +64,14 @@ function countCharLength(sDivId, iLen) {
   $(sDivId).next().html(iLength);
 }
 
-/* calculate the totalUploadSize */
+/**
+ *
+ * Calculate the total upload size of all files
+ *
+ * @param object fileInput object with all information
+ * @return integer total file size
+ *
+ */
 function getSizeOfFiles(fileInput) {
   if (typeof window.FileReader !== 'function' || !fileInput.files || !fileInput.files[0]) {
     return 0;
@@ -166,7 +148,7 @@ function enableInfiniteScroll(selector, itemselector, repeatTimes, pathImages) {
 
 /**
  *
- *
+ * Reset all upload information.
  *
  */
 function prepareForUpload() {
@@ -262,6 +244,13 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
   xhr.send(fd);
 }
 
+/**
+ *
+ * @param string sDivId DIV where information will be appended at
+ * @param string sController controller to work with
+ * @param string sActionAndIdInformation method or id/method to work with
+ *
+ */
 function showAjaxUpload(sDivId, sController, sActionAndIdInformation) {
   $('p.center a').click(function() {
     if($('#' + sDivId).length == 0) {
@@ -274,6 +263,12 @@ function showAjaxUpload(sDivId, sController, sActionAndIdInformation) {
   });
 }
 
+/**
+ *
+ * @param string sStatus status type (alert, success or warning)
+ * @param string sMessage message to display
+ *
+ */
 function showFlashMessage(sStatus, sMessage) {
   $('#js-flash_message').show().children().attr('id', 'js-flash_' + sStatus).attr('class', 'alert alert-' + sStatus);
   $('#js-flash_' + sStatus + ' a').remove();
@@ -281,6 +276,30 @@ function showFlashMessage(sStatus, sMessage) {
   $('#js-flash_message').delay('10000').slideUp();
 }
 
+function show(sDivId) {
+  $(sDivId).show();
+
+  if($('#js-flash_success') || $('#js-flash_error')) {
+    hide(sDivId, 10000);
+  }
+}
+
+/* Hide div */
+function hide(sDivId, iDelay) {
+  $(sDivId).delay(iDelay).slideUp();
+}
+
+/* ToggleOpacity */
+$.fn.toggleOpacity = function (t) {
+  if(t)
+    this.stop(true,true).animate({
+      opacity:1
+    });
+  else
+    this.stop(true,true).animate({
+      opacity:0.25
+    });
+}
 
 /* Show success and error messages */
 if($('#js-flash_success, #js-flash_error, #js-flash_warning').length) {
