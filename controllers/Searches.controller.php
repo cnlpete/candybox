@@ -34,20 +34,19 @@ class Searches extends Main {
    *
    */
   protected function _show() {
-    if (!( (isset($this->_aRequest['search']) && $this->_aRequest['search']) ||
-            (isset($this->_aRequest[$this->_sController]) && $this->_aRequest[$this->_sController]['search']) ))
+    # Bugfix: Use search via form or via URL
+    if (isset($this->_aRequest['search']))
+      $this->_aRequest[$this->_sController]['search'] =& $this->_aRequest['search'];
+
+    if (!isset($this->_aRequest[$this->_sController]['search']))
       return $this->_create();
 
     else {
-      if (substr(CURRENT_URL, -strlen($this->_sController)) == $this->_sController)
-        return Helper::redirectTo ('/' . $this->_sController . '/' .
-                urlencode($this->_aRequest[$this->_sController]['search']));
-
       $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
       $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
       $this->oSmarty->setTemplateDir($sTemplateDir);
 
-      $sString = Helper::formatInput(urldecode($this->_aRequest['search']));
+      $sString = Helper::formatInput(urldecode($this->_aRequest[$this->_sController]['search']));
 
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
         $this->oSmarty->assign('string', urlencode($sString));
@@ -63,7 +62,7 @@ class Searches extends Main {
   }
 
   /**
-   * show the search form, this is a create action since it creates a new search.
+   * Show the search form, this is a create action since it creates a new search.
    *
    * @access protected
    * @return string HTML content.

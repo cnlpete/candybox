@@ -1,5 +1,5 @@
 {strip}
-  <form method='post' class='form-horizontal'>
+  <form method='get' class='form-horizontal'>
     {if !$MOBILE}
       <div class='page-header'>
         <h1>{$lang.global.search}</h1>
@@ -13,7 +13,7 @@
         <input type='search'
                class='span4 focused'
                name='{$_REQUEST.controller}[search]'
-               id='input-search' 
+               id='input-search'
                autofocus required />
         <input type='submit'
                name='submit'
