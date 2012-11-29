@@ -47,7 +47,7 @@ function confirmDestroy(sUrl, sDivId) {
       $.post(sUrl + '.json?method=delete');
     }
     else {
-      parent.location.href = sUrl;
+      parent.location.href = sUrl + '?method=delete';
     }
   }
 }
