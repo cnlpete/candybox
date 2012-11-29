@@ -393,12 +393,14 @@ abstract class Main {
   protected function _setError($sField, $sMessage = '') {
     if ($sField == 'file' || $sField == 'image') {
       # AJAX files uploads
-      if (isset($this->_aRequest['type']) && $this->_aRequest['type'] == 'json' && empty($this->_aFile))
+      if (isset($this->_aRequest['type']) && $this->_aRequest['type'] == 'json' && empty($this->_aFile)) {
+        header('Content-Type: application/json');
         exit(json_encode(array(
                     'success' => false,
                     'error'   => array($sField => $sMessage ? $sMessage : I18n::get('error.form.missing.file')),
                     'debug'   => WEBSITE_MODE == 'development' ? $this->_aFile : ''
                 )));
+      }
 
       # Normal file uploads
       elseif (!isset($this->_aFile[$sField]) || empty($this->_aFile[$sField]['name']))
@@ -410,12 +412,14 @@ abstract class Main {
     else {
       # AJAX inputs
       if (isset($this->_aRequest['type']) && $this->_aRequest['type'] == 'json' &&
-              !isset($this->_aRequest[$this->_sController][$sField]) || empty($this->_aRequest[$this->_sController][$sField]))
+              !isset($this->_aRequest[$this->_sController][$sField]) || empty($this->_aRequest[$this->_sController][$sField])) {
+        header('Content-Type: application/json');
         exit(json_encode(array(
                     'success' => false,
                     'error'   => array($sField => $sMessage ? $sMessage : I18n::get('error.form.missing.' . strtolower($sField))),
                     'debug'   => WEBSITE_MODE == 'development' ? $this->_aRequest : ''
                 )));
+      }
 
       # Normal inputs
       if (!isset($this->_aRequest[$this->_sController][$sField]) || empty($this->_aRequest[$this->_sController][$sField]))
@@ -508,6 +512,7 @@ abstract class Main {
    */
   protected function _showJSON() {
     AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_showJSON()');
+    header('Content-Type: application/json');
     exit(json_encode(array(
                 'success' => false,
                 'error'   => 'There is no JSON handling method.',
@@ -523,6 +528,7 @@ abstract class Main {
    */
   protected function _overviewJSON() {
     AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_overviewJSON()');
+    header('Content-Type: application/json');
     exit(json_encode(array(
                 'success' => false,
                 'error'   => 'There is no JSON handling method.',

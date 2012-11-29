@@ -151,7 +151,6 @@ class Users extends Main {
    *
    * @access protected
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
-   * @todo success message into helpers method
    *
    */
   public function _updateAvatar() {
@@ -168,26 +167,27 @@ class Users extends Main {
         $aFileName = $oUpload->getIds();
         $aFileInfo = $oUpload->getFileInformation();
 
-        # We will get off here and return a custom success message to add additional information easily.
-        # @todo put into Helpers method
-        exit(json_encode(array(
-                    'success'   => true,
-                    'debug'     => WEBSITE_MODE == 'development' ? $this->_aRequest : '',
-                    'fileData'  => array(
-                        'popup'     => 'data:' . $aFileInfo['type'] . ';base64,' .
-                        base64_encode(file_get_contents(PATH_UPLOAD . '/users/popup/' . $aFileName[0])),
-                        'thumbnail' => 'data:' . $aFileInfo['type'] . ';base64,' .
-                        base64_encode(file_get_contents(PATH_UPLOAD . '/users/64/' . $aFileName[0]))
-                    ))));
+        $this->_aRequest['fileData'] = array(
+            'popup'     => 'data:' . $aFileInfo['type'] . ';base64,' .
+            base64_encode(file_get_contents(PATH_UPLOAD . '/users/popup/' . $aFileName[0])),
+            'thumbnail' => 'data:' . $aFileInfo['type'] . ';base64,' .
+            base64_encode(file_get_contents(PATH_UPLOAD . '/users/64/' . $aFileName[0]))
+        );
+
+        return Helper::successMessage(I18n::get('success.upload'),
+                '/' . $this->_sController . '/' . $this->_iId,
+                $this->_aRequest);
       }
 
       else
-        return Helper::errorMessage(I18n::get('error.file.upload'), '/' .
-                $this->_sController . '/' . $this->_iId . '/update');
+        return Helper::errorMessage(I18n::get('error.file.upload'),
+                '/' . $this->_sController . '/' . $this->_iId . '/update',
+                $this->_aRequest);
     }
     catch (\Exception $e) {
-      return Helper::errorMessage($e->getMessage(), '/' .
-                $this->_sController . '/' . $this->_iId . '/update');
+      return Helper::errorMessage($e->getMessage(),
+              '/' . $this->_sController . '/' . $this->_iId . '/update',
+                $this->_aRequest);
     }
   }
 
@@ -551,6 +551,7 @@ class Users extends Main {
     if (isset($this->_aRequest['email']) && isset($this->_aRequest['password']))
       $sToken = $this->_oModel->getToken();
 
+    header('Content-Type: application/json');
     exit(isset($sToken) && $sToken ?
 										json_encode(array('success' => true,	'error' => '', 'token' => $sToken)) :
 										json_encode(array('success' => false, 'error' => 'No matching results.', 'token' => '')));

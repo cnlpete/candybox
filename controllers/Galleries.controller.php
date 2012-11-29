@@ -269,21 +269,9 @@ class Galleries extends Main {
           $this->oSmarty->clearCacheForController($this->_sController);
           $this->oSmarty->clearCacheForController('rss');
 
-          # We will get off here and return a custom success message to add additional information easily.
-          # @todo put into Helpers method
-          exit(json_encode(array(
-                      'success'   => true,
-                      'debug'     => WEBSITE_MODE == 'development' ? $this->_aRequest : '',
-                      'fileData'  => array(
-                          'popup'     => 'data:' . $aFileInfo['type'] . ';base64,' .
-                          base64_encode(file_get_contents(PATH_UPLOAD . '/users/popup/' . $aFileName[0])),
-                          'thumbnail' => 'data:' . $aFileInfo['type'] . ';base64,' .
-                          base64_encode(file_get_contents(PATH_UPLOAD . '/users/64/' . $aFileName[0]))
-                      ))));
-
-//          return Helper::successMessage(I18n::get('success.file.upload'),
-//                  '/' . $this->_sController . '/' . $this->_iId,
-//                  $this->_aRequest);
+          return Helper::successMessage(I18n::get('success.file.upload'),
+                  '/' . $this->_sController . '/' . $this->_iId,
+                  $this->_aRequest);
         }
         else
           return Helper::errorMessage(I18n::get('error.file.upload'),
@@ -361,6 +349,7 @@ class Galleries extends Main {
    *
    * @access public
    * @return boolean returned status of model action (boolean).
+   * @todo header('Content-Type: application/json');
    *
    */
   public function updateOrder() {

@@ -323,7 +323,7 @@
   {* Destroy account *}
   {if $_SESSION.user.role < 4}
     <div class="tab-pane{if $_REQUEST['action'] == 'destroy'} active{/if}" id='user-destroy'>
-      {* @todo change to put *}
+      {* @todo change to DELETE *}
       <form method='post'
             action='/{$_REQUEST.controller}/{$uid}/destroy'
             class='form-horizontal'>
@@ -345,6 +345,9 @@
           <input type='submit'
                  class='btn btn-danger'
                  value='{$lang.users.label.account.destroy}' />
+          <input type='hidden'
+                 name='method'
+                 value='DELETE' />
         </div>
       </form>
     </div>

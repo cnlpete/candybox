@@ -38,7 +38,8 @@ class Helper {
         exit(json_encode(array(
                   'success' => true,
                   'debug'   => WEBSITE_MODE == 'development' ? $aData : '',
-                  'redirectURL' => $sRedirectTo
+                  'redirectURL' => $sRedirectTo,
+                  'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
               )));
     } else {
       $_SESSION['flash_message'] = array(
@@ -70,7 +71,8 @@ class Helper {
         exit(json_encode(array(
                   'success' => true,
                   'debug' => WEBSITE_MODE == 'development' ? $aData : '',
-                  'redirectURL' => $sRedirectTo
+                  'redirectURL' => $sRedirectTo,
+                  'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
               )));
     } else {
       $_SESSION['flash_message'] = array(
