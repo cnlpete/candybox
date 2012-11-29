@@ -44,7 +44,7 @@ function confirmDestroy(sUrl, sDivId) {
         mode: 'hide'
       }, 2000);
 
-      $.post(sUrl + '.json');
+      $.post(sUrl + '.json?method=delete');
     }
     else {
       parent.location.href = sUrl;
@@ -196,7 +196,7 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
   }
 
   var xhr = new XMLHttpRequest();
-  xhr.open('POST', url, true);
+  xhr.open('POST', '/' + url + '.json', true);
 
   xhr.upload.onprogress = function(e) {
     if (e.lengthComputable) {
