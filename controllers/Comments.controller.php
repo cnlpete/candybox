@@ -34,6 +34,20 @@ class Comments extends Main {
   }
 
   /**
+   *
+   * Avoid the use of "/comments".
+   *
+   * @access public
+   * @return string HTML
+   *
+   */
+  public function show() {
+    return $this->_sController == 'comments' ?
+            Helper::redirectTo('/errors/404') :
+            $this->_show();
+  }
+
+  /**
    * Show comment entries.
    *
    * @access protected
@@ -173,10 +187,14 @@ class Comments extends Main {
                     (int) $this->_aRequest['id'],
                     $this->_aSession['user']['id']);
 
-      return Helper::successMessage(I18n::get('success.destroy'), $sRedirect);
+      return Helper::successMessage(I18n::get('success.destroy'),
+              $sRedirect,
+              $this->_aRequest);
     }
     else
-      return Helper::errorMessage(I18n::get('error.sql'), $sRedirect);
+      return Helper::errorMessage(I18n::get('error.sql'),
+              $sRedirect,
+              $this->_aRequest);
   }
 
   /**

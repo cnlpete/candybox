@@ -6,6 +6,7 @@
     </h2>
   </div>
   <form method='post'
+        action='/comments'
         data-ajax='false'
         class='form-horizontal'>
     {if $_SESSION.user.role == 0 && $_SYSTEM.facebook_plugin == true}
@@ -20,7 +21,7 @@
       <div class='controls'>
         {if $_SESSION.user.name}
           <input type='text'
-                 name='{$_REQUEST.controller}[name]'
+                 name='comments[name]'
                  value="{$_SESSION.user.full_name}"
                  id='input-name'
                  class='disabled span4'
@@ -28,12 +29,12 @@
           {if $_SESSION.user.facebook_id}
             <input type='hidden'
                    value="{$_SESSION.user.facebook_id}"
-                   name='{$_REQUEST.controller}[facebook_id]' />
+                   name='comments[facebook_id]' />
           {/if}
         {else}
           <input type='text'
                  value="{if isset($name)}{$name}{/if}"
-                 name='{$_REQUEST.controller}[name]'
+                 name='comments[name]'
                  id='input-name'
                  class='required span4'
                  required />
@@ -51,13 +52,13 @@
       </label>
       <div class='controls'>
         {if $_SESSION.user.email}
-          <input type='text' id='input-email' class='disabled span4' name='{$_REQUEST.controller}[email]'
+          <input type='text' id='input-email' class='disabled span4' name='comments[email]'
                 value="{$_SESSION.user.email}" disabled />
         {else}
           <input type='email'
                  class='span4'
                  value="{if isset($email)}{$email}{/if}"
-                 name='{$_REQUEST.controller}[email]'
+                 name='comments[email]'
                  id='input-email' />
           {if isset($error.email)}
             <span class='help-inline'>
@@ -72,7 +73,7 @@
         {$lang.global.content} <span title='{$lang.global.required}'>*</span>
       </label>
       <div class='controls'>
-        <textarea name='{$_REQUEST.controller}[content]'
+        <textarea name='comments[content]'
                   id='js-create_commment_text'
                   rows='5'
                   class='required span4'
@@ -100,7 +101,10 @@
              class='btn' />
       <input type='hidden'
              value='{$_REQUEST.id}'
-             name='{$_REQUEST.controller}[parent_id]' />
+             name='comments[parent_id]' />
+      <input type='hidden'
+             value='{$_REQUEST.controller}'
+             name='comments[parent_controller]' />
     </div>
     {if $MOBILE}
       </div>

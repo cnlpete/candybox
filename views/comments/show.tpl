@@ -7,7 +7,7 @@
       </div>
       <div id='js-commments'>
         {foreach $comments as $c}
-          <article{if $c.author.id == $author_id} class='from_author'{/if}>
+          <article{if $c.author.id == $author_id} class='from_author'{/if} id='comment_{$c.id}'>
             <header>
               <a href='#{$c.id}'
                 name='{$c.id}'
@@ -62,10 +62,9 @@
               </a>
               {if $_SESSION.user.role >= 3}
                 &nbsp;
-                <a href="#" onclick="confirmDestroy('{$c.url_destroy}')">
-                  <i class='icon-trash js-tooltip'
-                     title='{$lang.global.destroy.destroy}'></i>
-                </a>
+                <i class='icon-trash js-tooltip'
+                    onclick="confirmDestroy('{$c.url_destroy}', 'comment_{$c.id}')"
+                    title='{$lang.global.destroy.destroy}'></i>
               {/if}
             </footer>
           </article>
@@ -73,8 +72,9 @@
       </div>
     </div>
     {$_pages_}
+    <script type='text/javascript' src='{$_PATH.js}/core/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
     {if $_AUTOLOAD_.enabled && isset($comments) && count($comments) > 0}
-      <script src='{$_PATH.js}/core/jquery.infiniteScroll{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
+      <script type='text/javascript' src='{$_PATH.js}/core/jquery.infiniteScroll{$_SYSTEM.compress_files_suffix}.js'></script>
       <script type="text/javascript">
         $(document).ready(function(){
           enableInfiniteScroll('#js-commments', '#js-commments article', {$_AUTOLOAD_.times}, '{$_PATH.images}');
