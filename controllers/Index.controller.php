@@ -230,6 +230,11 @@ class Index {
     if (!isset($this->_aRequest['controller']))
       $this->_aRequest['controller'] = WEBSITE_LANDING_PAGE;
 
+    # Set request method for rest services. This is actually FAKE REST
+    $this->_aRequest['method'] = isset($this->_aRequest['method']) ?
+            strtoupper((string) $this->_aRequest['method']) :
+            $_SERVER['REQUEST_METHOD'];
+
     # Show files from public folder (robots.txt, human.txt and favicon.ico)
     if (preg_match('/\.txt/', $sURI) || preg_match('/\.ico/', $sURI) && !isset($this->_aRequest['action'])) {
 			$sFileTemplate	= Helper::removeSlash(WEBSITE_CDN) . '/templates/' . PATH_TEMPLATE . '/' . $sURI;

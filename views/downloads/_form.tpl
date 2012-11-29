@@ -1,15 +1,10 @@
 {strip}
-  {if $_REQUEST.action == 'create'}
-    <div class='form-horizontal'>
-  {elseif $_REQUEST.action == 'update'}
+  {if $_REQUEST.action == 'update'}
     <div class='page-header'>
       <h1>{$lang.downloads.title.update}</h1>
     </div>
-    <form method='post'
-          class='form-horizontal'
-          enctype='multipart/form-data'
-          action='/{$_REQUEST.controller}/{$_REQUEST.id}/{$_REQUEST.action}'>
   {/if}
+  <form method='post' class='form-horizontal'>
     {if $_REQUEST.action == 'create'}
       <div class='control-group{if isset($error.file)} alert alert-error{/if}'>
         <label for='input-file' class='control-label'>
@@ -136,13 +131,12 @@
         <input type='reset'
                class='btn'
                value='{$lang.global.reset}' />
+        <input type='hidden'
+               name='method'
+               value='PUT' />
       {/if}
     </div>
-  {if $_REQUEST.action == 'create'}
-    </div>
-  {else}
-    </form>
-  {/if}
+  </form>
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.bootstrap.typeahead{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript'>
     $(document).ready(function(){
@@ -156,7 +150,7 @@
       });
 
       $('#js-submit_download').click(function() {
-        upload(this, '/{$_REQUEST.controller}/create.json', '{$_REQUEST.controller}', 'file', 'title', true);
+        upload(this, '{$_REQUEST.controller}', '{$_REQUEST.controller}', 'file', 'title', true);
       });
     });
   </script>

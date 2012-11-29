@@ -1,13 +1,5 @@
 {strip}
-  {if $_REQUEST.action == 'create'}
-    <form method='post'
-          class='form-horizontal'
-          action='/{$_REQUEST.controller}/{$_REQUEST.action}'>
-  {elseif $_REQUEST.action == 'update'}
-    <form method='post'
-          class='form-horizontal'
-          action='/{$_REQUEST.controller}/{$_REQUEST.id}/{$_REQUEST.action}'>
-  {/if}
+  <form method='post' class='form-horizontal'>
     <div class='page-header'>
       <h1>
         {if $_REQUEST.action == 'create'}
@@ -63,6 +55,9 @@
         <input type='reset'
                value='{$lang.global.reset}'
                class='btn' />
+        <input type='hidden'
+               name='method'
+               value='PUT' />
       {/if}
     </div>
   </form>

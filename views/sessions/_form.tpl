@@ -1,5 +1,5 @@
 {strip}
-  <form action='/{$_REQUEST.controller}/create'
+  <form action='/{$_REQUEST.controller}'
         method='post'
         data-ajax='false'
         class='form-horizontal'>

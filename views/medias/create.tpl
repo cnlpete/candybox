@@ -64,7 +64,7 @@
       });
 
       $('#js-submit_media').click(function() {
-        upload(this, '/{$_REQUEST.controller}/create.json', '{$_REQUEST.controller}', 'file', 'rename', true);
+        upload(this, '{$_REQUEST.controller}', '{$_REQUEST.controller}', 'file', 'rename', true);
       });
     });
   </script>

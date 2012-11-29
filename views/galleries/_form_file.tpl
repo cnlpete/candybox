@@ -1,17 +1,12 @@
 {strip}
-  {if $_REQUEST.action == 'createfile'}
-    <div class='form-horizontal'>
-  {elseif $_REQUEST.action == 'updatefile'}
+  {if $_REQUEST.action == 'updatefile'}
     <div class='page-header'>
       <h1>
         {$lang.galleries.files.title.update}
       </h1>
     </div>
-    <form method='post'
-          class='form-horizontal'
-          enctype='multipart/form-data'
-          action='/{$_REQUEST.controller}/{$_REQUEST.id}/{$_REQUEST.action}'>
   {/if}
+  <form method='post' class='form-horizontal'>
   {if $_REQUEST.action == 'createfile'}
     <div class='control-group{if isset($error.file)} alert alert-error{/if}'>
       <label for='input-file' class='control-label'>
@@ -95,22 +90,21 @@
              value='{$lang.galleries.files.title.create}' />
     {elseif $_REQUEST.action == 'updatefile'}
       <input type='submit'
-              class='btn btn-primary'
-              value='{$lang.galleries.files.title.update}' />
+             class='btn btn-primary'
+             value='{$lang.galleries.files.title.update}' />
       <input type='button'
-              value='{$lang.global.destroy.destroy}'
-              class='btn btn-danger'
-              onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroyfile')" />
+             value='{$lang.global.destroy.destroy}'
+             class='btn btn-danger'
+             onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroyfile')" />
       <input class='btn'
-              type='reset'
-              value='{$lang.global.reset}' />
+             type='reset'
+             value='{$lang.global.reset}' />
+      <input type='hidden'
+             name='method'
+             value='PUT' />
     {/if}
   </div>
-  {if $_REQUEST.action == 'createfile'}
-    </div>
-  {else}
-    </form>
-  {/if}
+  </form>
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript'>
     $(document).ready(function(){
@@ -124,7 +118,7 @@
       });
 
       $('#js-submit_files').click(function() {
-        upload(this, '/{$_REQUEST.controller}/{$_REQUEST.id}/createfile.json', '{$_REQUEST.controller}', 'file', 'cut', true);
+        upload(this, '{$_REQUEST.controller}/{$_REQUEST.id}/createfile', '{$_REQUEST.controller}', 'file', 'cut', true);
       });
     });
   </script>

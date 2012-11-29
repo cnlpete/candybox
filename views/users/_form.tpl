@@ -370,7 +370,7 @@
     });
 
     $('#js-submit_avatar').click(function() {
-      upload(this, '/{$_REQUEST.controller}/{$uid}/avatar.json', '{$_REQUEST.controller}', 'image', 'terms', false);
+      upload(this, '{$_REQUEST.controller}/{$uid}/avatar', '{$_REQUEST.controller}', 'image', 'terms', false);
     });
 
     $('.js-fancybox').fancybox();

@@ -2,15 +2,7 @@
   <div class='page-header'>
     <h1>{$lang.global.calendar}</h1>
   </div>
-  {if $_REQUEST.action == 'create'}
-    <form method='post'
-          class='form-horizontal'
-          action='/{$_REQUEST.controller}/{$_REQUEST.action}'>
-  {elseif $_REQUEST.action == 'update'}
-    <form method='post'
-          class='form-horizontal'
-          action='/{$_REQUEST.controller}/{$_REQUEST.id}/{$_REQUEST.action}'>
-  {/if}
+  <form method='post' class='form-horizontal'>
      <div class='control-group{if isset($error.title)} alert alert-error{/if}'>
       <label for='input-title' class='control-label'>
         {$lang.global.title} <span title='{$lang.global.required}'>*</span>
@@ -93,6 +85,9 @@
         <input class='btn'
                type='reset'
                value='{$lang.global.reset}' />
+        <input type='hidden'
+               name='method'
+               value='PUT' />
       {/if}
     </div>
   </form>

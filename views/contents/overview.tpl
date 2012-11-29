@@ -44,8 +44,8 @@
         </td>
         {if $_SESSION.user.role >= 3}
           <td class='center'>
-            <i class='icon-{if $c.published == true}ok{else}remove{/if} js-tooltip'
-               title='{if $c.published == true}✔{else}✖{/if}'></i>
+            <i class='icon-{if $c.published == true}ok{/if} js-tooltip'
+               title='{if $c.published == true}✔{/if}'></i>
           </td>
           <td>
             <a href='{$c.url_update}'>

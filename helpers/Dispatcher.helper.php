@@ -99,37 +99,40 @@ class Dispatcher {
    *
    */
   public function getAction() {
-    $sAction = isset($this->_aRequest['rest_type']) ?
-            strtoupper((string) $this->_aRequest['rest_type']) :
-            'GET';
-
-    switch ($sAction) {
-      case 'GET':
-
-        $sMethod = isset($this->_aRequest['action']) ?
-                strtolower((string) $this->_aRequest['action']) :
-                'show';
-
-        break;
+    switch (strtoupper($this->_aRequest['method'])) {
       case 'POST':
 
-        $sMethod = 'create';
+        $sAction = isset($this->_aRequest['action']) ?
+                strtolower((string) $this->_aRequest['action']) :
+                'create';
 
         break;
       case 'PUT':
 
-        $sMethod = 'update';
+        $sAction = isset($this->_aRequest['action']) ?
+                strtolower((string) $this->_aRequest['action']) :
+                'update';
 
         break;
       case 'DELETE':
 
-        $sMethod = 'delete';
+        $sAction = isset($this->_aRequest['action']) ?
+                strtolower((string) $this->_aRequest['action']) :
+                'destroy';
+
+        break;
+      default:
+      case 'GET':
+
+        $sAction = isset($this->_aRequest['action']) ?
+                strtolower((string) $this->_aRequest['action']) :
+                'show';
 
         break;
     }
 
-    return method_exists($this->oController, $sMethod) ?
-            $this->oController->setContent($this->oController->$sMethod()) :
+    return method_exists($this->oController, $sAction) ?
+            $this->oController->setContent($this->oController->$sAction()) :
             Helper::redirectTo('/errors/404');
   }
 }
