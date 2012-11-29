@@ -137,13 +137,13 @@ class Index {
 
         else
           require_once PATH_STANDARD . '/app/config/' . ucfirst($sConfig) . '.inc.php';
+
+        return true;
       }
       catch (AdvancedException $e) {
         die($e->getMessage());
       }
     }
-
-    return true;
   }
 
   /**
@@ -153,7 +153,7 @@ class Index {
    * @access public
    * @param string $sAllowedPlugins comma separated plugin names
    * @see app/config/Candy.inc.php
-   * @return boolean true if no errors occurred.
+   * @return array of plugins
    *
    */
   public static function getPlugins($sAllowedPlugins) {
@@ -203,7 +203,9 @@ class Index {
     if (!defined('WEBSITE_LANDING_PAGE'))
       define('WEBSITE_LANDING_PAGE', Routes::route('/'));
 
-    $sURI = isset($_SERVER['REQUEST_URI']) ? Helper::removeSlash($_SERVER['REQUEST_URI']) : '';
+    $sURI = isset($_SERVER['REQUEST_URI']) ?
+            Helper::removeSlash($_SERVER['REQUEST_URI']) :
+            '';
 
     if ( strpos( $sURI, '?' ) !== false ) {
       # Break the query string off and attach later
@@ -226,12 +228,7 @@ class Index {
     }
 
     if (!isset($this->_aRequest['controller']))
-      $this->_aRequest['controller'] = Routes::route('/');
-
-    # Fix route if we got something like "sitemaps/update"
-    elseif (isset($this->_aRequest['controller']) && 'errors' == $this->_aRequest['controller'] &&
-            isset($this->_aRequest['action']) && 'show' == $this->_aRequest['action'])
-      Helper::redirectTo('/errors/404');
+      $this->_aRequest['controller'] = WEBSITE_LANDING_PAGE;
 
     # Show files from public folder (robots.txt, human.txt and favicon.ico)
     if (preg_match('/\.txt/', $sURI) || preg_match('/\.ico/', $sURI) && !isset($this->_aRequest['action'])) {

@@ -82,7 +82,7 @@
   <script type='text/javascript'>
     $(document).ready(function(){
       $('table').tablesorter();
-      showAjaxUpload('js-download_upload', '{$_REQUEST.controller}');
+      showAjaxUpload('js-download_upload', '{$_REQUEST.controller}', 'create');
     });
   </script>
 {/strip}

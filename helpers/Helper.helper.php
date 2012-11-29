@@ -34,6 +34,7 @@ class Helper {
   public static function successMessage($sMessage, $sRedirectTo = '', $aData = '') {
     # This is supposed to be an AJAX request, so we will return JSON
     if (!empty($aData)) {
+        header('Content-Type: application/json');
         exit(json_encode(array(
                   'success' => true,
                   'debug'   => WEBSITE_MODE == 'development' ? $aData : '',
@@ -65,6 +66,7 @@ class Helper {
   public static function warningMessage($sMessage, $sRedirectTo = '', $aData = '') {
     # This is supposed to be an AJAX request, so we will return JSON
     if (!empty($aData)) {
+        header('Content-Type: application/json');
         exit(json_encode(array(
                   'success' => true,
                   'debug' => WEBSITE_MODE == 'development' ? $aData : '',

@@ -99,11 +99,34 @@ class Dispatcher {
    *
    */
   public function getAction() {
-    $sMethod = isset($this->_aRequest['action']) ?
-            strtolower((string) $this->_aRequest['action']) :
-            'show';
+    $sAction = isset($this->_aRequest['rest_type']) ?
+            strtoupper((string) $this->_aRequest['rest_type']) :
+            'GET';
 
-    # @todo REST
+    switch ($sAction) {
+      case 'GET':
+
+        $sMethod = isset($this->_aRequest['action']) ?
+                strtolower((string) $this->_aRequest['action']) :
+                'show';
+
+        break;
+      case 'POST':
+
+        $sMethod = 'create';
+
+        break;
+      case 'PUT':
+
+        $sMethod = 'update';
+
+        break;
+      case 'DELETE':
+
+        $sMethod = 'delete';
+
+        break;
+    }
 
     return method_exists($this->oController, $sMethod) ?
             $this->oController->setContent($this->oController->$sMethod()) :
