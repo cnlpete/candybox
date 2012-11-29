@@ -70,8 +70,8 @@
           {/if}
         </td>
         <td class='center'>
-          <i class='icon-{if $u.receive_newsletter == 1}ok{else}remove{/if} js-tooltip'
-             title='{if $u.receive_newsletter == 1}✔{else}✖{/if}'></i>
+          <i class='icon-{if $u.receive_newsletter == 1}ok{/if} js-tooltip'
+             title='{if $u.receive_newsletter == 1}✔{/if}'></i>
         </td>
         {if $_SESSION.user.role == 4}
           <td class='center'>

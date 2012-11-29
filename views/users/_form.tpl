@@ -161,6 +161,9 @@
         <input type='hidden'
                 value="{$email}"
                 name='{$_REQUEST.controller}[email]' />
+        <input type='hidden'
+               name='method'
+               value='PUT' />
       </div>
     </form>
   </div>
@@ -229,6 +232,9 @@
           <input type='reset'
                   class='btn'
                   value='{$lang.global.reset}' />
+          <input type='hidden'
+                 name='method'
+                 value='PUT' />
         </div>
       </form>
     </div>
