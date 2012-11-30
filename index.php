@@ -20,7 +20,7 @@ ini_set('zlib.output_compression', "On");
 ini_set('zlib.output_compression_level', 9);
 
 # Current version we are working with.
-define('VERSION', '20121031');
+define('VERSION', '20121130');
 
 # Define a standard path
 define('PATH_STANDARD', dirname(__FILE__));

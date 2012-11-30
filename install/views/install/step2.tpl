@@ -1,11 +1,11 @@
 <form action='?action=install&step=3' method='post'>
   <h2>
-    Set following dirs to <em>CHMOD 777 (recursive)</em>.
+    Set following dirs to <em>CHMOD 775 (recursive)</em>.
   </h2>
   <p>
-    You might have to use a FTP programm (like <a href='http://cyberduck.ch/'>Cyberduck</a>)
-    for that. If the folders were not created by the system, you have to create
-    them manually.
+    If the folders were not created by the system, you have to create
+    them manually by using a FTP programm (like <a href='http://cyberduck.ch/'>Cyberduck</a>)
+    for that.
   </p>
   <ul>
     {foreach $_folder_checks_ as $folder=>$check}

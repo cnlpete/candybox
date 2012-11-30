@@ -92,7 +92,7 @@ class Install extends Index {
     define('EXTENSION_CHECK', false);
     define('MOBILE', false);
     define('MOBILE_DEVICE', false);
-    define('VERSION', '20120613');
+    define('VERSION', '20121130');
   }
 
   /**
@@ -101,7 +101,7 @@ class Install extends Index {
    * @access private
    * @param array $aFolders array of Folders to create, can also contain subarrays
    * @param string $sPrefix prefix for folder creations, default: '/'
-   * @param string $iPermissions the permissions to create the folders with, default: 0775
+   * @param integer $iPermissions the permissions to create the folders with, default: 0775
    *
    */
   private function _createFoldersIfNotExistent($aFolders, $sPrefix = '/', $iPermissions = 0775) {
@@ -125,27 +125,27 @@ class Install extends Index {
    * @param array $aFolders array of Folders to check for, can also contain subarrays
    * @param array $aReturn array of bool return values for smarty
    * @param string $sPrefix prefix for assigns and checks, default: '/'
-   * @param string $sPermissions the permissions to create the folders with, default: '0775'
+   * @param integer $iPermissions the permissions to create the folders with, default: '0775'
    * @return boolean status of folders
    *
    */
-  private function _checkFoldersAndAssign($aFolders, &$aReturn, $sPrefix = '/', $sPermissions = '0775') {
+  private function _checkFoldersAndAssign($aFolders, &$aReturn, $sPrefix = '/', $iPermissions = '0775') {
     $bReturn = true;
 
     foreach ($aFolders as $sKey => $mFolder) {
       # check multiple folders
       if (is_array($mFolder)) {
         # check root folder
-        $bReturnSub = $this->_checkFoldersAndAssign(array($sKey), $aReturn, $sPrefix, $sPermissions);
+        $bReturnSub = $this->_checkFoldersAndAssign(array($sKey), $aReturn, $sPrefix, $iPermissions);
         # and check all subfolders
-        $bReturnRoot = $this->_checkFoldersAndAssign($mFolder, $aReturn, $sPrefix . $sKey . '/', $sPermissions);
+        $bReturnRoot = $this->_checkFoldersAndAssign($mFolder, $aReturn, $sPrefix . $sKey . '/', $iPermissions);
 
         $bReturn = $bReturn && $bReturnRoot && $bReturnSub;
       }
 
       # check single Folder
       else {
-        $aReturn[$sPrefix . $mFolder] = substr(decoct(fileperms(PATH_STANDARD . $sPrefix . $mFolder)), 1) == $sPermissions;
+        $aReturn[$sPrefix . $mFolder] = substr(decoct(fileperms(PATH_STANDARD . $sPrefix . $mFolder)), 1) == $iPermissions;
         $bReturn = $bReturn && $aReturn[$sPrefix . $mFolder];
       }
     }
@@ -219,7 +219,7 @@ class Install extends Index {
 
       case '3':
 
-        $sUrl = PATH_STANDARD . '/install/sql/install/tables.sql';
+        $sUrl = PATH_STANDARD . '/install/installation/tables.sql';
         $bHasErrors = true;
 
         if (file_exists($sUrl)) {
@@ -333,7 +333,7 @@ class Install extends Index {
     while ($sFile = readdir($oDir)) {
       $bAlreadyMigrated = isset($aAlreadyMigrated[$sFile]);
 
-      if (substr($sFile, 0, 1) == '.' || $bAlreadyMigrated == true)
+      if (substr($sFile, 0, 1) == '.' || $bAlreadyMigrated == true || substr($sFile, 0, 8) <= VERSION)
         continue;
 
       else {

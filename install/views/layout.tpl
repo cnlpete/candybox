@@ -17,16 +17,16 @@
     <title>{$title}</title>
   </head>
   <body>
-    <nav class="navbar navbar-fixed-top">
+    <nav class='navbar navbar-fixed-top'>
       <div class='navbar-inner'>
         <div class='container'>
-          <span class="brand">
+          <a href='/install' class='brand'>
             CandyCMS - Installation and migration assistant
-          </span>
+          </a>
         </div>
       </div>
     </nav>
-    <div class="container">
+    <div class='container'>
       <div class='page-header'>
         <h1>
           {$title}

@@ -11,7 +11,7 @@
   {else}
     <div class='alert alert-success'>
       <h4 class='alert-heading'>
-        Database creation was successfull.
+        Database creation was successful.
       </h4>
     </div>
     <div class='form-actions right'>
