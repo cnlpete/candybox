@@ -1,6 +1,6 @@
 <form action='?action=install&step=3' method='post'>
   <h2>
-    Set following dirs to <em>CHMOD 775 (recursive)</em>.
+    Set following dirs to <em>CHMOD 777 (recursive)</em>.
   </h2>
   <p>
     If the folders were not created by the system, you have to create
