@@ -166,7 +166,7 @@ CREATE TABLE `%SQL_PREFIX%users` (
   `receive_newsletter` tinyint(1) NOT NULL DEFAULT '1',
   `use_gravatar` tinyint(1) DEFAULT '0',
   `role` tinyint(1) NOT NULL DEFAULT '1',
-  `registration_ip` varchar(15) NOT NULL DEFAULT '',
+  `registration_ip` varchar(15) NULL DEFAULT '',
   `date` datetime NOT NULL,
   `verification_code` varchar(12) COLLATE utf8_unicode_ci NOT NULL,
   `verification_date` datetime NOT NULL,
