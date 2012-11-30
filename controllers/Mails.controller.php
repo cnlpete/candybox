@@ -60,6 +60,7 @@ class Mails extends Main {
    *
    * @access public
    * @return string HTML content
+   * @todo optimize JSON
    *
    */
   public function resend() {

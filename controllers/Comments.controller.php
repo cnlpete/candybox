@@ -76,7 +76,7 @@ class Comments extends Main {
       $this->oSmarty->assign('_pages_', $this->_oModel->oPagination->showPages('/blogs/' . $this->_iId));
     }
 
-    # we can leave caching on, the form itself will turn caching off, but that is a different template
+    # We can leave caching on, the form itself will turn caching off, but that is a different template
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID) . $this->create();
   }
 

@@ -71,6 +71,7 @@ class Sessions extends Main {
    * @access public
    * @param array $aUser optional user data.
    * @return boolean status of login
+   * @todo put logic into controller
    *
    */
   public function create($aUser = '') {

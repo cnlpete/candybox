@@ -311,7 +311,8 @@ class Users extends Main {
                                           date,
                                           role,
                                           verification_code,
-                                          api_token)
+                                          api_token,
+                                          registration_ip)
                                       VALUES
                                         ( :name,
                                           :surname,
@@ -320,13 +321,15 @@ class Users extends Main {
                                           NOW(),
                                           :role,
                                           :verification_code,
-                                          :api_token)");
+                                          :api_token,
+                                          :registration_ip)");
 
       $sApiToken = md5(RANDOM_HASH . $this->_aRequest[$this->_sController]['email']);
       $oQuery->bindParam('api_token', $sApiToken, PDO::PARAM_STR);
       $oQuery->bindParam('password', md5(RANDOM_HASH . $this->_aRequest[$this->_sController]['password']), PDO::PARAM_STR);
       $oQuery->bindParam('role', $iRole, PDO::PARAM_INT);
       $oQuery->bindParam('verification_code', $iVerificationCode, PDO::PARAM_STR);
+      $oQuery->bindParam('registration_ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
 
       foreach (array('name', 'surname', 'email') as $sInput)
         $oQuery->bindParam(
@@ -526,7 +529,7 @@ class Users extends Main {
                                         SET
                                           verification_code = '',
                                           receive_newsletter = '1',
-                                          date = NOW()
+                                          verification_date = NOW()
                                         WHERE
                                           id = :id");
 
