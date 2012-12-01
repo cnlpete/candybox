@@ -92,8 +92,11 @@ class Install extends Index {
     define('EXTENSION_CHECK', false);
     define('MOBILE', false);
     define('MOBILE_DEVICE', false);
-    define('VERSION', '20121130');
     define('WEBSITE_MODE', 'production');
+    define('PATH_STANDARD', dirname(__FILE__));
+
+    # Current version we are working with.
+    define('VERSION', file_get_contents(PATH_STANDARD . '/version.txt'));
   }
 
   /**
@@ -334,7 +337,10 @@ class Install extends Index {
     while ($sFile = readdir($oDir)) {
       $bAlreadyMigrated = isset($aAlreadyMigrated[$sFile]);
 
-      if (substr($sFile, 0, 1) == '.' || $bAlreadyMigrated == true || substr($sFile, 0, 8) <= VERSION)
+      if (substr($sFile, 0, 1) == '.' || $bAlreadyMigrated == true)
+        continue;
+
+      if (isset($this->_aRequest['show']) && 'version' == $this->_aRequest['show'] && substr($sFile, 0, 8) <= VERSION)
         continue;
 
       else {
@@ -357,7 +363,13 @@ class Install extends Index {
     sort($aFiles);
 
     $this->oSmarty->assign('files', $aFiles);
-    $this->oSmarty->assign('title', 'Migrations');
+
+    if(isset($this->_aRequest['show']) && 'all' == $this->_aRequest['show'])
+      $this->oSmarty->assign('title', 'Migrations for all versions');
+
+    else
+      $this->oSmarty->assign('title', 'Migrations for this version');
+
     $this->oSmarty->assign('content', $this->oSmarty->fetch('migrate/index.tpl'));
   }
 
@@ -450,7 +462,9 @@ class Install extends Index {
    */
   public function showMigration() {
     $this->getCronjob(true);
-    return isset($this->_aRequest['file']) ? $this->_doMigration($this->_aRequest['file']) : $this->_showMigrations();
+    return isset($this->_aRequest['file']) ?
+            $this->_doMigration($this->_aRequest['file']) :
+            $this->_showMigrations();
   }
 
   /**

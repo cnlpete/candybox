@@ -19,11 +19,11 @@ ini_set('arg_separator.output', '&amp;');
 ini_set('zlib.output_compression', "On");
 ini_set('zlib.output_compression_level', 9);
 
-# Current version we are working with.
-define('VERSION', '20121130');
-
 # Define a standard path
 define('PATH_STANDARD', dirname(__FILE__));
+
+# Current version we are working with.
+define('VERSION', file_get_contents(PATH_STANDARD . '/version.txt'));
 
 # Initialize software
 try {
