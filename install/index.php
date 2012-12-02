@@ -93,10 +93,6 @@ class Install extends Index {
     define('MOBILE', false);
     define('MOBILE_DEVICE', false);
     define('WEBSITE_MODE', 'production');
-    define('PATH_STANDARD', dirname(__FILE__));
-
-    # Current version we are working with.
-    define('VERSION', file_get_contents(PATH_STANDARD . '/version.txt'));
   }
 
   /**
@@ -340,7 +336,8 @@ class Install extends Index {
       if (substr($sFile, 0, 1) == '.' || $bAlreadyMigrated == true)
         continue;
 
-      if (isset($this->_aRequest['show']) && 'version' == $this->_aRequest['show'] && substr($sFile, 0, 8) <= VERSION)
+      if (isset($this->_aRequest['show']) && 'version' == $this->_aRequest['show'] &&
+              substr($sFile, 0, 8) <= (int) file_get_contents(PATH_STANDARD . '/version.txt'))
         continue;
 
       else {

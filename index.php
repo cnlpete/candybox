@@ -22,9 +22,6 @@ ini_set('zlib.output_compression_level', 9);
 # Define a standard path
 define('PATH_STANDARD', dirname(__FILE__));
 
-# Current version we are working with.
-define('VERSION', file_get_contents(PATH_STANDARD . '/version.txt'));
-
 # Initialize software
 try {
   require PATH_STANDARD . '/app/config/Candy.inc.php';
