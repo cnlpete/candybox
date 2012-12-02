@@ -410,7 +410,9 @@ class Index {
       $sVersionContent = @stream_get_contents($oFile);
       @fclose($oFile);
 
-      $sVersionContent = (int)$sVersionContent > (int)VERSION ? (int) $sVersionContent : '';
+      $sVersionContent = (int) $sVersionContent > (int) file_get_contents(PATH_STANDARD . '/version.txt') ?
+              (int) $sVersionContent :
+              '';
     }
 
     return isset($sVersionContent) && !empty($sVersionContent) ?
