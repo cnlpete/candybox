@@ -451,7 +451,9 @@ abstract class Main {
             strtoupper($this->_aRequest['type']) :
             '';
 
-    $sMethod  = $this->_iId ? '_show' . $sType : '_overview' . $sType;
+    $sMethod = $this->_iId || isset($this->_aRequest['site']) ?
+            '_show' . $sType :
+            '_overview' . $sType;
 
     return $this->$sMethod();
   }

@@ -114,8 +114,10 @@ global:
   section: Section
   settings: Settings
   share: Share
+  site: Site
   sitemap: Sitemap
   sitemaps: Sitemaps
+  sites: Sites
   size: Size
   submit: Submit
   subject: Subject
