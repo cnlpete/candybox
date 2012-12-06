@@ -6,7 +6,6 @@
 "language/(:alpha)": language=$1
 "medias/(:any)/destroy.(xml|json)": controller=medias&action=destroy&file=$1&type=2
 "searches/(:any)": controller=searches&search=$1
-#"sessions/(password|verification|destroy)": controller=sessions&action=$1
 "sites/(:alnum)": controller=sites&site=$1
 "sitemap.xml": controller=sitemaps&type=xml
 "users/(:num)/token": controller=users&action=token&id=$1
