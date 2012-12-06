@@ -50,6 +50,9 @@ class Sites extends Main {
    *
    */
   protected function _overview() {
+    # Set caching false for now
+    $this->oSmarty->setCaching(false);
+
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
     $this->oSmarty->setTemplateDir($sTemplateDir);
