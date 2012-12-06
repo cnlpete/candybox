@@ -32,11 +32,11 @@ class Sites extends Main {
   protected function _show() {
     $sSite = isset($this->_aRequest['site']) ? (string) $this->_aRequest['site'] : '';
 
-    if (!file_exists(PATH_STATIC_TEMPLATES . '/' . $sSite . '.tpl'))
+    if (!file_exists(PATH_STANDARD . '/' . PATH_STATIC_TEMPLATES . '/' . $sSite . '.tpl'))
       return Helper::redirectTo('/errors/404');
 
     $this->setTitle(ucfirst($sSite));
-    return $this->oSmarty->fetch(PATH_STATIC_TEMPLATES . '/' . $sSite . '.tpl');
+    return $this->oSmarty->fetch(PATH_STANDARD . '/' . PATH_STATIC_TEMPLATES . '/' . $sSite . '.tpl');
   }
 
   /**
