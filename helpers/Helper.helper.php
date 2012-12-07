@@ -278,23 +278,23 @@ class Helper {
    * @access public
    * @param string $sPath path of the file
    * @return int size of the file in byte
+   * @todo write test
    *
    */
   public static function getFileSize($sPath) {
     $iSize = @filesize( WEBSITE_MODE == 'test' ? $sPath : Helper::removeSlash($sPath) );
-    if ($iSize === false)
-      return -1;
-    else
-      return $iSize;
+
+    return $iSize === false ? -1 : $iSize;
   }
 
   /**
-   * pretty print a filesize
+   * Print a file size in a nice way.
    *
    * @static
    * @access public
    * @param int $iSize size of file in byte
    * @return string size of the file plus hardcoded ending
+   * @todo write test
    *
    */
   public static function fileSizeToString($iSize) {

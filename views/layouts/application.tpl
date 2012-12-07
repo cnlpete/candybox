@@ -185,8 +185,17 @@
             <!-- plugin:archive -->
             <h3>{$lang.global.tagcloud}</h3>
             <!-- plugin:tagcloud -->
+            <p>
+              <a href='http://ac.empuxa.com/tasks/submit/candycms'
+                 target='_blank'
+                 class='btn btn-danger'>
+                Report Bug
+              </a>
+            </p>
             {if $MOBILE_DEVICE == true}
-              <a href='/?mobile=1' ref='nofollow'>{$lang.global.view.mobile}</a>
+              <p>
+                <a href='/?mobile=1' ref='nofollow'>{$lang.global.view.mobile}</a>
+              </p>
             {/if}
           </div>
         </div>
