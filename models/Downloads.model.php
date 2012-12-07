@@ -58,13 +58,16 @@ class Downloads extends Main {
       $iId = $aRow['id'];
       $sCategory = $aRow['category'];
 
-      # Name category for overview
-      $this->_aData[$sCategory]['category'] = $sCategory;
+      $iSize = Helper::getFileSize(PATH_UPLOAD . '/' . $this->_sController . '/' . $aRow['file']);
 
-      # Files
-      $this->_aData[$sCategory]['files'][$iId] = $this->_formatForOutput($aRow, array('id', 'author_id', 'downloads', 'uid'));
-      $this->_aData[$sCategory]['files'][$iId]['size'] = Helper::getFileSize(PATH_UPLOAD . '/' .
-              $this->_sController . '/' . $aRow['file']);
+      if ($iSize != -1 || WEBSITE_MODE == 'test') {
+        # Name category for overview
+        $this->_aData[$sCategory]['category'] = $sCategory;
+
+        # Files
+        $this->_aData[$sCategory]['files'][$iId] = $this->_formatForOutput($aRow, array('id', 'author_id', 'downloads', 'uid'));
+        $this->_aData[$sCategory]['files'][$iId]['size'] = Helper::fileSizeToString($iSize);
+      }
     }
 
     return $this->_aData;
