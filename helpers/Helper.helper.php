@@ -69,7 +69,7 @@ class Helper {
     if (!empty($aData)) {
         header('Content-Type: application/json');
         exit(json_encode(array(
-                  'success' => true,
+                  'success' => false,
                   'debug' => WEBSITE_MODE == 'development' ? $aData : '',
                   'redirectURL' => $sRedirectTo,
                   'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
