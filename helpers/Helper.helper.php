@@ -69,7 +69,7 @@ class Helper {
     if (!empty($aData)) {
         header('Content-Type: application/json');
         exit(json_encode(array(
-                  'success' => true,
+                  'success' => false,
                   'debug' => WEBSITE_MODE == 'development' ? $aData : '',
                   'redirectURL' => $sRedirectTo,
                   'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
@@ -91,17 +91,28 @@ class Helper {
    * @access public
    * @param string $sMessage message to provide
    * @param string $sRedirectTo site to redirect to
+   * @param array $aData data for ajax request
    * @return boolean false
    * @todo store in main session object
    *
    */
-  public static function errorMessage($sMessage, $sRedirectTo = '') {
-    $_SESSION['flash_message'] = array(
-        'type'    => 'error',
-        'message' => $sMessage,
-        'headline'=> I18n::get('error.standard'));
+  public static function errorMessage($sMessage, $sRedirectTo = '', $aData = '') {
+    if (!empty($aData)) {
+        header('Content-Type: application/json');
+        exit(json_encode(array(
+                  'success' => false,
+                  'debug' => WEBSITE_MODE == 'development' ? $aData : '',
+                  'redirectURL' => $sRedirectTo,
+                  'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
+              )));
+    } else {
+      $_SESSION['flash_message'] = array(
+          'type'    => 'error',
+          'message' => $sMessage,
+          'headline'=> I18n::get('error.standard'));
 
-    return $sRedirectTo ? Helper::redirectTo ($sRedirectTo) : false;
+      return $sRedirectTo ? Helper::redirectTo ($sRedirectTo) : false;
+    }
   }
 
   /**
