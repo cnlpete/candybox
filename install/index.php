@@ -195,6 +195,7 @@ class Install extends Index {
             Helper::removeSlash(COMPILE_DIR),
             'app/logs',
             $sUpload => array(
+                'downloads',
                 'galleries',
                 'medias',
                 'temp' => array(
