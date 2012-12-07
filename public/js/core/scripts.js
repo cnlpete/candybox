@@ -231,11 +231,13 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
         setTimeout(function() {location.reload()}, 3000);
     }
     else {
-      $.each(aJson.error, function(index, value) {
-        $('#input-' + index).closest('.control-group').addClass('alert alert-error');
-        $('#input-' + index).parent().append("<span class='help-inline'>" + value + "</span>");
-        $('#input-' + index).next().remove();
-      });
+      if (aJson.error) {
+        $.each(aJson.error, function(index, value) {
+          $('#input-' + index).closest('.control-group').addClass('alert alert-error');
+          $('#input-' + index).parent().append("<span class='help-inline'>" + value + "</span>");
+          $('#input-' + index).next().remove();
+        });
+      }
 
       showFlashMessage('error', lang.upload_error);
     }
