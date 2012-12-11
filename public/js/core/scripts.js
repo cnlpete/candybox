@@ -57,10 +57,11 @@ function confirmDestroy(sUrl, sDivId) {
  *
  * @param string sDivId DIV to get data from
  * @param integer iLen maximum length
+ * @todo use them automatically
  *
  */
-function countCharLength(sDivId, iLen) {
-  var iLength = iLen - $(sDivId).val().length;
+function countCharLength(sDivId) {
+  var iLength = $(sDivId).attr('maxlength') - $(sDivId).val().length;
   $(sDivId).next().html(iLength);
 }
 
