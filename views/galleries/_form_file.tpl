@@ -65,6 +65,7 @@
               type='text'
               name='{$_REQUEST.controller}[content]'
               id='input-content'
+              maxlength='160'
               value="{$content}" />
       <span class='help-inline'></span>
     </div>
@@ -109,7 +110,7 @@
   <script type='text/javascript'>
     $(document).ready(function(){
       $('#input-content').bind('keyup', function() {
-        countCharLength(this, 160);
+        countCharLength(this);
       });
 
       $('#input-file').change(function() {
