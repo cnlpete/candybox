@@ -22,7 +22,7 @@ It provides...
 - Plugins to extend the functionality to your needs
 
 ... and uses...
-- [Twitter Bootstrap](http://mailchimp.com) for its basic design
+- [Twitter Bootstrap](http://twitter.github.com/bootstrap/) for its basic design
 - [Smarty](http://smarty.org) as template engine
 - [Mailchimp](http://mailchimp.com) for newsletter managing
 - [reCAPTCHA](http://recaptcha.org) to protect spam (as plugin)
