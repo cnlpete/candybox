@@ -708,7 +708,7 @@ class Galleries extends Main {
     $iAlbumId = (int) $iAlbumId;
     $sSQL     = '';
 
-    foreach ($this->_aRequest['files'] as $iKey => $iValue) {
+    foreach ($this->_aRequest['file'] as $iKey => $iValue) {
       $iKey   = (int) $iKey;
       $iValue = (int) $iValue;
 
