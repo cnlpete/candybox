@@ -259,7 +259,9 @@ class Sessions extends Main {
   public function destroy() {
     # Facebook logout
     if ($this->_aSession['user']['role'] == 2) {
-      $sRedirectTo = $this->_aSession['facebook']->getLogoutUrl(array('next' => WEBSITE_URL . '?reload=1'));
+      $sRedirectTo = $this->_aSession['facebook']->getLogoutUrl(
+              array('next' => WEBSITE_URL . '?reload=1')
+      );
 
       unset($this->_aSession);
       return Helper::successMessage(I18n::get('success.session.destroy'), $sRedirectTo);

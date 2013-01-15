@@ -488,7 +488,7 @@ class Index {
       $this->_aSession['user'] = & array_merge($this->_aSession['user'], $aUser);
 
     # Try to get facebook data
-    if ($this->_aSession['user']['id'] == 0) {
+    if ($this->_aSession['user']['role'] == 0) {
       $oFacebook = $this->getFacebookExtension();
 
       if ($oFacebook)
