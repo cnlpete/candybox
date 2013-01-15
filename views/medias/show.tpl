@@ -84,7 +84,7 @@
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.tablesorter{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type="text/javascript">
     $(document).ready(function(){
-      $(".js-fancybox").fancybox({
+      $('.js-fancybox').fancybox({
         nextEffect : 'fade',
         prevEffect : 'fade' });
 

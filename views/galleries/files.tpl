@@ -99,7 +99,9 @@
       </p>
     {/if}
   {/if}
-  {if $_SESSION.user.role < 3}
+  {if $_SESSION.user.role >= 3}
+    <script type='text/javascript' src='{$_PATH.js}/core/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
+  {else}
     <script type='text/javascript' src='{$_PATH.js}/core/jquery.masonry{$_SYSTEM.compress_files_suffix}.js'></script>
     <script type='text/javascript'>
       $(document).ready(function(){
@@ -109,7 +111,6 @@
       });
     </script>
   {/if}
-  <script type='text/javascript' src='{$_PATH.js}/core/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript' src='{$_PATH.js}/core/jquery.fancybox-thumbs{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript'>

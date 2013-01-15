@@ -41,7 +41,7 @@
       <link href='{$_PATH.public}/favicon.ico' rel='shortcut icon' type='image/x-icon'/>
 
       {* Include jQuery and its components *}
-      <script type='text/javascript' src='http://code.jquery.com/jquery{$_SYSTEM.compress_files_suffix}.js'></script>
+      <script type='text/javascript' src='http://code.jquery.com/jquery-1.8.2{$_SYSTEM.compress_files_suffix}.js'></script>
 
       {* Fallback if CDN is not available. Also include language parts. *}
       <script type='text/javascript'>
