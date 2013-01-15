@@ -60,8 +60,9 @@ function confirmDestroy(sUrl, sDivId) {
  *
  */
 function countCharLength(sDivId, iLen) {
-  var iLength = iLen - $(sDivId).val().length;
-  $(sDivId).next().html(iLength);
+  var jInput = $(sDivId);
+  var iLength = (iLen === undefined) ? jInput.attr('maxlength') : iLen;
+  $(sDivId).next().html(iLength - jInput.val().length);
 }
 
 /**
