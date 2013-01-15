@@ -60,9 +60,16 @@ function confirmDestroy(sUrl, sDivId) {
  * @todo use them automatically
  *
  */
+<<<<<<< HEAD
 function countCharLength(sDivId) {
   var iLength = $(sDivId).attr('maxlength') - $(sDivId).val().length;
   $(sDivId).next().html(iLength);
+=======
+function countCharLength(sDivId, iLen) {
+  var jInput = $(sDivId);
+  var iLength = (iLen === undefined) ? jInput.attr('maxlength') : iLen;
+  $(sDivId).next().html(iLength - jInput.val().length);
+>>>>>>> 732f37acb6d16d412be640b6a1eabba1f5cd3e8e
 }
 
 /**
