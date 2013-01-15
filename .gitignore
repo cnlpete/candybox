@@ -1,17 +1,15 @@
 *~
 .DS_Store
 nbproject/*
-app/backup/*
-app/compile/*
-app/cache/*
-app/config/*inc.php
+app/*
 upload/*
-app/logs/*
-app/backup/*
 public/templates/*
 !public/templates/sample
 .project
+app/*
 !/app/config/samples/
+!/app/tests
+!/app/extensions
 
 composer.lock
 composer.phar
