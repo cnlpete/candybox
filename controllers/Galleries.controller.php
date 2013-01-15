@@ -368,7 +368,7 @@ class Galleries extends Main {
    *
    */
   protected function _updateOrder() {
-    if (!$this->_aRequest['files'])
+    if (!$this->_aRequest['file'])
       return false;
 
     $bReturn = $this->_oModel->updateOrder($this->_iId) == true;
