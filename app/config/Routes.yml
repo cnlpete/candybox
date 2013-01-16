@@ -11,6 +11,10 @@
 "users/(:num)/token": controller=users&action=token&id=$1
 "users/(:alnum)/verification": controller=users&action=verification&code=$1
 
+# Fixes
+"blogs/(:alnum)(.(xml|json|rss|ajax))?": controller=blogs&search=$1&type=$3
+"blogs/(:any)/page/(:num)": controller=blogs&search=$1&page=$2
+
 # Shared behaviour
 "(:alpha)/?": controller=$1&page=1
 "(:alpha)/page/(:num)": controller=$1&page=$2
@@ -23,7 +27,3 @@
 "(:alpha)/(:num)/(:any)": controller=$1&id=$2&seo_title=$3&page=1
 "(:alpha)/(:alpha)(.(xml|json|rss|ajax))?": controller=$1&action=$2&type=$4
 "(:alpha).(xml|json|rss|ajax)": controller=$1&type=$2
-
-# Fixes
-"blogs/(:alnum)(.(xml|json|rss|ajax))?": controller=blogs&search=$1&type=$3
-"blogs/(:any)/page/(:num)": controller=blogs&search=$1&page=$2
