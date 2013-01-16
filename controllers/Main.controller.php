@@ -595,7 +595,10 @@ abstract class Main {
   public function update($iUserRole = 3) {
     $this->oSmarty->setCaching(false);
 
-    if ($this->_aSession['user']['role'] < $iUserRole)
+    if (!$this->_iId)
+      return Helper::redirectTo('/errors/404');
+
+    elseif ($this->_aSession['user']['role'] < $iUserRole)
       return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
 
     else
@@ -616,9 +619,13 @@ abstract class Main {
   public function destroy($iUserRole = 3) {
     $this->oSmarty->setCaching(false);
 
-    return $this->_aSession['user']['role'] < $iUserRole ?
-            Helper::errorMessage(I18n::get('error.missing.permission'), '/') :
-            $this->_destroy();
+    if (!$this->_iId)
+      return Helper::redirectTo('/errors/404');
+
+    else
+      return $this->_aSession['user']['role'] < $iUserRole ?
+              Helper::errorMessage(I18n::get('error.missing.permission'), '/') :
+              $this->_destroy();
   }
 
   /**

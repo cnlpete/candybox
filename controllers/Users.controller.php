@@ -451,10 +451,14 @@ class Users extends Main {
    *
    */
   public function destroy() {
-    return ( (isset($this->_aRequest[$this->_sController]) && $this->_aSession['user']['id'] == $this->_iId)) ||
-            $this->_aSession['user']['role'] == 4 ?
-            $this->_destroy() :
-            Helper::errorMessage(I18n::get('error.missing.permission'), '/', $this->_aRequest);
+    if (!$this->_iId)
+      return Helper::redirectTo('/errors/404');
+
+    else
+      return ( (isset($this->_aRequest[$this->_sController]) && $this->_aSession['user']['id'] == $this->_iId)) ||
+              $this->_aSession['user']['role'] == 4 ?
+              $this->_destroy() :
+              Helper::errorMessage(I18n::get('error.missing.permission'), '/', $this->_aRequest);
   }
 
   /**

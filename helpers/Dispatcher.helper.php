@@ -133,6 +133,6 @@ class Dispatcher {
 
     return method_exists($this->oController, $sAction) ?
             $this->oController->setContent($this->oController->$sAction()) :
-            Helper::redirectTo('/errors/404');
+            $this->oController->setContent($this->oController->show());
   }
 }
