@@ -1,8 +1,10 @@
 # Define the landing page
 "/": blogs
 
-# Special behaviour
-"galleries/(:num)/(createfile|updatefile|destroyfile|updateorder)": controller=galleries&action=$2&id=$1
+# Special behaviour (Second blog RegEx is a temporary bugfix)
+"blogs/(:any)/page/(:num)": controller=blogs&search=$1&page=$2
+"blogs/(:num)(.(xml|json|rss|ajax))?": controller=blogs&id=$1&type=$3&page=1
+"blogs/(:alnum(?<!create|update|destroy))(.(xml|json|rss|ajax))?": controller=blogs&search=$1&type=$3
 "language/(:alpha)": language=$1
 "medias/(:any)/destroy.(xml|json)": controller=medias&action=destroy&file=$1&type=2
 "searches/(:any)": controller=searches&search=$1
@@ -11,17 +13,11 @@
 "users/(:num)/token": controller=users&action=token&id=$1
 "users/(:alnum)/verification": controller=users&action=verification&code=$1
 
-# Fixes
-"blogs/(:alnum)(.(xml|json|rss|ajax))?": controller=blogs&search=$1&type=$3
-"blogs/(:any)/page/(:num)": controller=blogs&search=$1&page=$2
-
 # Shared behaviour
 "(:alpha)/?": controller=$1&page=1
 "(:alpha)/page/(:num)": controller=$1&page=$2
 "(:alpha)/(:num)/(update|destroy)(.(json|xml))?": controller=$1&id=$2&action=$3&type=$5
 "(:alpha)/(:num)/(highlight|page)/(:any)": controller=$1&id=$2&$3=$4
-
-# Magic rule
 "(:alpha)/(:num)/(:alpha)(.(xml|json|rss|ajax))?": controller=$1&id=$2&action=$3&type=$5&page=1
 "(:alpha)/(:num)(.(xml|json|rss|ajax))?": controller=$1&id=$2&type=$4&page=1
 "(:alpha)/(:num)/(:any)": controller=$1&id=$2&seo_title=$3&page=1
