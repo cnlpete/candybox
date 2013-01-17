@@ -30,13 +30,51 @@ class Sites extends Main {
    *
    */
   protected function _show() {
-    $sSite = isset($this->_aRequest['site']) ? (string) $this->_aRequest['site'] : '';
+    $sSite = isset($this->_aRequest['site']) ?
+            strtolower((string) $this->_aRequest['site']) :
+            '';
 
-    if (!file_exists(PATH_STATIC_TEMPLATES . '/' . $sSite . '.tpl'))
+    if (!file_exists(PATH_STANDARD . '/' . PATH_STATIC_TEMPLATES . '/' . $sSite . '.tpl'))
       return Helper::redirectTo('/errors/404');
 
     $this->setTitle(ucfirst($sSite));
-    return $this->oSmarty->fetch(PATH_STATIC_TEMPLATES . '/' . $sSite . '.tpl');
+    return $this->oSmarty->fetch(PATH_STANDARD . '/' . PATH_STATIC_TEMPLATES . '/' . $sSite . '.tpl');
+  }
+
+  /**
+   * Return an overview over all static pages.
+   *
+   * @access protected
+   * @return string HTML content
+   * @todo needs test
+   *
+   */
+  protected function _overview() {
+    # Set caching false for now
+    $this->oSmarty->setCaching(false);
+
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
+    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
+    $this->oSmarty->setTemplateDir($sTemplateDir);
+
+    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+      $aSites = array();
+      $oPathDir = opendir(PATH_STANDARD . '/' . PATH_STATIC_TEMPLATES);
+
+      while ($sSite = readdir($oPathDir)) {
+        if (substr($sSite, 0, 1) == '.')
+          continue;
+
+        $iLen = strlen($sSite);
+        $aSites[$sSite]['title']  = ucfirst(substr($sSite, 0, $iLen - 4));
+        $aSites[$sSite]['url']    = '/sites/' . $aSites[$sSite]['title'];
+      }
+
+      closedir($oPathDir);
+      $this->oSmarty->assign('sites', $aSites);
+    }
+
+    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
   /**

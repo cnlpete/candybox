@@ -33,14 +33,15 @@ class Helper {
    */
   public static function successMessage($sMessage, $sRedirectTo = '', $aData = '') {
     # This is supposed to be an AJAX request, so we will return JSON
-    if (!empty($aData)) {
-        header('Content-Type: application/json');
-        exit(json_encode(array(
-                  'success' => true,
-                  'debug'   => WEBSITE_MODE == 'development' ? $aData : '',
-                  'redirectURL' => $sRedirectTo,
-                  'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
-              )));
+    if (!empty($aData) && isset($aData['type']) && 'json' == $aData['type']) {
+      header('Content-Type: application/json');
+
+      exit(json_encode(array(
+                'success' => true,
+                'debug'   => WEBSITE_MODE == 'development' ? $aData : '',
+                'redirectURL' => $sRedirectTo,
+                'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
+            )));
     } else {
       $_SESSION['flash_message'] = array(
           'type'      => 'success',
@@ -66,13 +67,14 @@ class Helper {
    */
   public static function warningMessage($sMessage, $sRedirectTo = '', $aData = '') {
     # This is supposed to be an AJAX request, so we will return JSON
-    if (!empty($aData)) {
-        header('Content-Type: application/json');
-        exit(json_encode(array(
-                  'success' => true,
-                  'debug' => WEBSITE_MODE == 'development' ? $aData : '',
-                  'redirectURL' => $sRedirectTo,
-                  'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
+    if (!empty($aData) && isset($aData['type']) && 'json' == $aData['type']) {
+      header('Content-Type: application/json');
+
+      exit(json_encode(array(
+                'success' => false,
+                'debug' => WEBSITE_MODE == 'development' ? $aData : '',
+                'redirectURL' => $sRedirectTo,
+                'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
               )));
     } else {
       $_SESSION['flash_message'] = array(
@@ -91,17 +93,29 @@ class Helper {
    * @access public
    * @param string $sMessage message to provide
    * @param string $sRedirectTo site to redirect to
+   * @param array $aData data for ajax request
    * @return boolean false
    * @todo store in main session object
    *
    */
-  public static function errorMessage($sMessage, $sRedirectTo = '') {
-    $_SESSION['flash_message'] = array(
-        'type'    => 'error',
-        'message' => $sMessage,
-        'headline'=> I18n::get('error.standard'));
+  public static function errorMessage($sMessage, $sRedirectTo = '', $aData = '') {
+    if (!empty($aData) && isset($aData['type']) && 'json' == $aData['type']) {
+        header('Content-Type: application/json');
 
-    return $sRedirectTo ? Helper::redirectTo ($sRedirectTo) : false;
+        exit(json_encode(array(
+                  'success' => false,
+                  'debug' => WEBSITE_MODE == 'development' ? $aData : '',
+                  'redirectURL' => $sRedirectTo,
+                  'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
+              )));
+    } else {
+      $_SESSION['flash_message'] = array(
+          'type'    => 'error',
+          'message' => $sMessage,
+          'headline'=> I18n::get('error.standard'));
+
+      return $sRedirectTo ? Helper::redirectTo ($sRedirectTo) : false;
+    }
   }
 
   /**
@@ -266,12 +280,27 @@ class Helper {
    * @static
    * @access public
    * @param string $sPath path of the file
-   * @return string size of the file plus hardcoded ending
+   * @return int size of the file in byte
+   * @todo write test
    *
    */
   public static function getFileSize($sPath) {
     $iSize = @filesize( WEBSITE_MODE == 'test' ? $sPath : Helper::removeSlash($sPath) );
 
+    return $iSize === false ? -1 : $iSize;
+  }
+
+  /**
+   * Print a file size in a nice way.
+   *
+   * @static
+   * @access public
+   * @param int $iSize size of file in byte
+   * @return string size of the file plus hardcoded ending
+   * @todo write test
+   *
+   */
+  public static function fileSizeToString($iSize) {
     if ($iSize > 1024 && $iSize < 1048576)
       return round(($iSize / 1024), 2) . ' KB';
 

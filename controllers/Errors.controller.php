@@ -28,7 +28,13 @@ class Errors extends Main {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, $this->_iId);
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, $this->_iId);
 
-    if ($this->_iId == '404') {
+    if ($this->_iId == '401') {
+      header('HTTP/1.0 401 Authorization Required');
+    }
+    elseif ($this->_iId == '403') {
+      header('HTTP/1.0 403 Forbidden');
+    }
+    elseif ($this->_iId == '404') {
       header('Status: 404 Not Found');
       header('HTTP/1.0 404 Not Found');
     }

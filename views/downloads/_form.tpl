@@ -39,6 +39,7 @@
                name='{$_REQUEST.controller}[title]'
                id='input-title'
                value="{$title}"
+               maxlength='128'
                required />
         <span class='help-inline'>
           {if isset($error.title)}
@@ -141,7 +142,7 @@
   <script type='text/javascript'>
     $(document).ready(function(){
       $('#input-title').bind('keyup', function() {
-        countCharLength(this, 128);
+        countCharLength(this);
       });
 
       $('#input-file').change(function() {

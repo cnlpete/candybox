@@ -55,7 +55,7 @@ class Users extends Main {
    */
   protected function _overview() {
     if ($this->_aSession['user']['role'] < 3)
-      return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
+      return Helper::redirectTo('/errors/401');
 
     else {
       $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
@@ -134,7 +134,7 @@ class Users extends Main {
       return Helper::errorMessage(I18n::get('error.session.create_first'), '/sessions/create');
 
     elseif ($this->_aSession['user']['id'] !== $this->_iId && $this->_aSession['user']['role'] < 4)
-      return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
+      return Helper::redirectTo('/errors/401');
 
     else
       return isset($this->_aRequest[$this->_sController]) ||
@@ -203,7 +203,7 @@ class Users extends Main {
       return Helper::errorMessage(I18n::get('error.session.create_first'), '/sessions/create');
 
     elseif ($this->_aSession['user']['id'] !== $this->_iId && $this->_aSession['user']['role'] < 4)
-      return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
+      return Helper::redirectTo('/errors/401');
 
     else
       return isset($this->_aRequest[$this->_sController]) ?
@@ -270,7 +270,7 @@ class Users extends Main {
             false;
 
     if($this->_aSession['user']['role'] > 0 && $this->_aSession['user']['role'] < 4)
-      return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
+      return Helper::redirectTo('/errors/401');
 
     else
       return isset($this->_aRequest[$this->_sController]) ?
@@ -394,7 +394,7 @@ class Users extends Main {
       return Helper::errorMessage(I18n::get('error.session.create_first'), '/sessions/create');
 
     elseif ($this->_aSession['user']['id'] !== $this->_iId && $this->_aSession['user']['role'] < 4)
-      return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
+      return Helper::redirectTo('/errors/401');
 
     else
       return isset($this->_aRequest[$this->_sController]) ?
@@ -451,10 +451,14 @@ class Users extends Main {
    *
    */
   public function destroy() {
-    return ( (isset($this->_aRequest[$this->_sController]) && $this->_aSession['user']['id'] == $this->_iId)) ||
-            $this->_aSession['user']['role'] == 4 ?
-            $this->_destroy() :
-            Helper::errorMessage(I18n::get('error.missing.permission'), '/', $this->_aRequest);
+    if (!$this->_iId)
+      return Helper::redirectTo('/errors/403');
+
+    else
+      return ( (isset($this->_aRequest[$this->_sController]) && $this->_aSession['user']['id'] == $this->_iId)) ||
+              $this->_aSession['user']['role'] == 4 ?
+              $this->_destroy() :
+              Helper::errorMessage(I18n::get('error.401.title'), '/', $this->_aRequest);
   }
 
   /**
@@ -487,7 +491,7 @@ class Users extends Main {
 
     # No admin and not the active user
     else
-      return Helper::errorMessage(I18n::get('error.missing.permission'), '/', $this->_aRequest);
+      return Helper::errorMessage(I18n::get('error.401.title'), '/', $this->_aRequest);
 
     if ($bCorrectPassword === true) {
       $bReturn = $this->_oModel->destroy($this->_iId) === true;

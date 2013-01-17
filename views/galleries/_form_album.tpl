@@ -19,6 +19,7 @@
                id='input-title'
                class='required span4 focused'
                type='text'
+               maxlength='50'
                autofocus required />
         <span class='help-inline'>
           {if isset($error.title)}
@@ -36,6 +37,7 @@
                value="{$content}"
                id='input-content'
                type='text'
+               maxlength='160'
                class='span4' />
       </div>
     </div>
@@ -63,10 +65,10 @@
   </form>
   <script type='text/javascript'>
     $('#input-title').bind('keyup', function() {
-      countCharLength(this, 50);
+      countCharLength(this);
     });
     $('#input-content').bind('keyup', function() {
-      countCharLength(this, 160);
+      countCharLength(this);
     });
   </script>
 {/strip}

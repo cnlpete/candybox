@@ -114,8 +114,10 @@ global:
   section: Section
   settings: Settings
   share: Share
+  site: Site
   sitemap: Sitemap
   sitemaps: Sitemaps
+  sites: Sites
   size: Size
   submit: Submit
   subject: Subject
@@ -194,9 +196,15 @@ success:
 error:
   302:
     info: The requested URL has moved to %s.
+  401:
+    info: You don't have permission to proceed. Please <a href='/users/create'>register first</a> and <a href='/sessions/create'>log in</a>. You might also have insufficient rights.
+    title: Authentification required
+  403:
+    info: This action is forbidden by the system.
+    title: Forbidden action
   404:
     info: The requested URL was not found. Either you clicked on a faulty link, the page has been deleted or the URL has been entered incorrectly.
-    title: Error 404
+    title: Missing file
   file:
     destroy: This file could not be deleted!
     size: Your file is bigger than %s!
@@ -226,7 +234,6 @@ error:
     flash: Download flash to watch this video.
     file: File not available!
     files: No files have been uploaded.
-    permission: You do not have permission to proceed!
     template: This template is not available!
   passwords: Passwords do not match, please retype.
   session:

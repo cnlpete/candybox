@@ -104,7 +104,7 @@ class Medias extends Main {
     $this->oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
     return $this->_aSession['user']['role'] < 3 ?
-            Helper::errorMessage(I18n::get('error.missing.permission'), '/') :
+            Helper::redirectTo('/errors/401') :
             $this->_show();
   }
 

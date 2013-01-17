@@ -12,6 +12,7 @@
                type='text' name='{$_REQUEST.controller}[title]'
                id='input-title'
                value="{$title}"
+               maxlength='128'
                required autofocus />
         <span class='help-inline'>
           {if isset($error.title)}
@@ -93,7 +94,7 @@
   </form>
   <script type='text/javascript'>
     $('#input-title').bind('keyup', function() {
-      countCharLength(this, 128);
+      countCharLength(this);
     });
   </script>
 {/strip}

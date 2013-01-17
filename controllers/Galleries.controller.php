@@ -214,7 +214,7 @@ class Galleries extends Main {
     $this->setTitle(I18n::get('galleries.files.title.create'));
 
     if ($this->_aSession['user']['role'] < 3)
-      return Helper::errorMessage(I18n::get('error.missing.permission'));
+      return Helper::redirectTo('/errors/401');
 
     return isset($this->_aRequest[$this->_sController]) ||
             isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'] ?
@@ -300,7 +300,7 @@ class Galleries extends Main {
     $this->setTitle(I18n::get('galleries.files.title.update'));
 
     if ($this->_aSession['user']['role'] < 3)
-      return Helper::errorMessage(I18n::get('error.missing.permission'), '/' . $this->_sController);
+      return Helper::redirectTo('/errors/401');
 
     else
       return isset($this->_aRequest[$this->_sController]) ?
@@ -368,7 +368,7 @@ class Galleries extends Main {
    *
    */
   protected function _updateOrder() {
-    if (!$this->_aRequest['files'])
+    if (!$this->_aRequest['file'])
       return false;
 
     $bReturn = $this->_oModel->updateOrder($this->_iId) == true;
@@ -395,11 +395,8 @@ class Galleries extends Main {
    *
    */
   public function destroyFile() {
-    $aDetails = $this->_oModel->getFileData($this->_iId);
-
 		return $this->_aSession['user']['role'] < 3 ?
-						Helper::errorMessage(I18n::get('error.missing.permission'), '/' .
-										$this->_sController . '/' . $aDetails['album_id']) :
+						Helper::redirectTo('/errors/401') :
 						$this->_destroyFile();
   }
 

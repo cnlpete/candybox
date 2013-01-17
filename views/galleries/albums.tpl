@@ -22,10 +22,6 @@
           <h2>
             <a href='{$a.url}'>{$a.title}</a>
             {if $_SESSION.user.role >= 3}
-              <a href='{$a.url_createfile}'>
-                <i class='icon-plus js-tooltip'
-                   title='{$lang.galleries.files.title.create}'></i>
-              </a>
               <a href='{$a.url_update}'>
                 <i class='icon-pencil js-tooltip'
                    title='{$lang.global.update.update}'></i>

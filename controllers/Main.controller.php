@@ -451,7 +451,9 @@ abstract class Main {
             strtoupper($this->_aRequest['type']) :
             '';
 
-    $sMethod  = $this->_iId ? '_show' . $sType : '_overview' . $sType;
+    $sMethod = $this->_iId || isset($this->_aRequest['site']) ?
+            '_show' . $sType :
+            '_overview' . $sType;
 
     return $this->$sMethod();
   }
@@ -573,7 +575,7 @@ abstract class Main {
     $this->oSmarty->setCaching(false);
 
     if ($this->_aSession['user']['role'] < $iUserRole)
-      return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
+      return Helper::redirectTo('/errors/403');
 
     else
       return isset($this->_aRequest[$this->_sController]) ||
@@ -593,8 +595,11 @@ abstract class Main {
   public function update($iUserRole = 3) {
     $this->oSmarty->setCaching(false);
 
-    if ($this->_aSession['user']['role'] < $iUserRole)
-      return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
+    if (!$this->_iId)
+      return Helper::redirectTo('/errors/403');
+
+    elseif ($this->_aSession['user']['role'] < $iUserRole)
+      return Helper::redirectTo('/errors/401');
 
     else
       return isset($this->_aRequest[$this->_sController]) ||
@@ -614,9 +619,13 @@ abstract class Main {
   public function destroy($iUserRole = 3) {
     $this->oSmarty->setCaching(false);
 
-    return $this->_aSession['user']['role'] < $iUserRole ?
-            Helper::errorMessage(I18n::get('error.missing.permission'), '/') :
-            $this->_destroy();
+    if (!$this->_iId)
+      return Helper::redirectTo('/errors/403');
+
+    else
+      return $this->_aSession['user']['role'] < $iUserRole ?
+              Helper::redirectTo('/errors/401') :
+              $this->_destroy();
   }
 
   /**

@@ -63,7 +63,7 @@ class Medias extends Main {
         'date'  => Array(
             'raw' => filectime($sPath),
             'w3c' => date('Y-m-d\TH:i:sP', filectime($sPath))),
-        'size'  => Helper::getFileSize($sPath),
+        'size'  => Helper::fileSizeToString(Helper::getFileSize($sPath)),
         'type'  => $sFileType,
         'dim'   => $aImgDim,
         'url'   => Helper::addSlash(PATH_UPLOAD) . '/' . $this->_sController . '/' . $sFile,

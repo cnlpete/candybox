@@ -118,6 +118,7 @@
           <textarea name='{$_REQUEST.controller}[content]'
                     rows='6'
                     class='span4'
+                    maxlength='1000'
                     id='input-content'>
             {$content}
           </textarea>
@@ -370,7 +371,7 @@
     });
 
     $('#input-content').bind('keyup', function() {
-      countCharLength(this, 1000);
+      countCharLength(this);
     });
 
     $('#input-image').change(function() {

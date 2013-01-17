@@ -26,7 +26,7 @@ class Logs extends Main {
    */
   protected function _show() {
     if ($this->_aSession['user']['role'] < 4)
-      return Helper::errorMessage(I18n::get('error.missing.permission'), '/');
+      return Helper::redirectTo('/errors/401');
 
     else {
       $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');

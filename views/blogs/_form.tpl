@@ -19,6 +19,7 @@
                type='text'
                id='input-title'
                class='span4 required'
+               maxlength='128'
                required />
         <span class='help-inline'>
           {if isset($error.title)}
@@ -36,6 +37,7 @@
                value="{$teaser}"
                type='text'
                class='span4'
+               maxlength='180'
                id='input-teaser' />
         <span class='help-inline'></span>
         <p class='help-block'>
@@ -192,11 +194,11 @@
   {/if}
   <script type='text/javascript'>
     $('#input-title').bind('keyup', function() {
-      countCharLength(this, 128);
+      countCharLength(this);
     });
 
     $('#input-teaser').bind('keyup', function() {
-      countCharLength(this, 180);
+      countCharLength(this);
     });
   </script>
 {/strip}
