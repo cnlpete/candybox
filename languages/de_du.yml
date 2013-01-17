@@ -196,6 +196,12 @@ success:
 error:
   302:
     info: Die angeforderte URL ist neuerdings unter %s erreichbar.
+  401:
+    info: Du hast keine Berechtigung diese Aktion auszuführen. Bitte <a href='/users/create'>registriere</a> Dich zuerst und <a href='/sessions/create'>logge</a> dich dann ein. Ggf. könnten Dir für diese Aktion zudem Nutzerrechte fehlen.
+    title: Error 401 - Anmeldung erforderlich
+  403:
+    info: Diese Aktion wurde vom System untersagt.
+    title: Aktion verboten
   404:
     info: Die angeforderte URL wurde nicht gefunden. Entweder haben Sie auf einen fehlerhaften Link geklickt, die Seite wurde gelöscht oder die URL ist falsch eingegeben worden.
     title: Error 404 - URL nicht gefunden
@@ -228,7 +234,6 @@ error:
     flash: Downloade den Flashplayer, um dieses Video anzugucken!
     file: Datei nicht verfügbar.
     files: Es wurden noch keine Dateien hochgeladen.
-    permission: Du hast keine Berechtigung diese Aktion auszuführen!
     template: Es wurde keine passende Template gefunden!
   passwords: Bitte zwei identische Passwörter angeben!
   session:
