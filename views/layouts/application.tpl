@@ -159,15 +159,15 @@
       <div class='container'>
         <div class='row'>
           <div class='span8'>
-              <div id='js-flash_message'>
-                <div class='alert alert-{$_FLASH.type}' id='js-flash_{$_FLASH.type}'>
-                  <a class='close' href='#'>×</a>
-                  <h4 class='alert-heading'>{$_FLASH.headline}</h4>
-                  <p>
-                    {$_FLASH.message}
-                  </p>
-                </div>
+            <div id='js-flash_message'>
+              <div class='alert alert-{$_FLASH.type}' id='js-flash_{$_FLASH.type}'>
+                <a class='close' href='#'>×</a>
+                <h4 class='alert-heading'>{$_FLASH.headline}</h4>
+                <p>
+                  {$_FLASH.message}
+                </p>
               </div>
+            </div>
             {if isset($_WEBSITE.update) &&! empty($_WEBSITE.update)}
               <div class='alert alert-warning'>
                 {$_WEBSITE.update}

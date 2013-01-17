@@ -226,9 +226,9 @@ class SmartySingleton extends Smarty {
     }
 
     return $aPaths + array(
-        'core'      => WEBSITE_URL . '/vendor/candyCMS/core',
+        'core'      => '/vendor/candyCMS/core',
         'public'    => WEBSITE_CDN,
-        'plugins'   => WEBSITE_URL . '/vendor/candyCMS/plugins',
+        'plugins'   => '/vendor/candyCMS/plugins',
         'template'  => WEBSITE_CDN . '/templates/' . PATH_TEMPLATE,
         'upload'    => Helper::removeSlash(PATH_UPLOAD));
   }

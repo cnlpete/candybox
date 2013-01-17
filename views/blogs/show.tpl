@@ -79,8 +79,9 @@
                 &nbsp;
               {/if}
             </div>
-            <div class='span4 comments right'>
+            <div class='span4 comments'>
               <a href='{$b.url}#comments'
+                class=' pull-right'
                 itemprop='discussionUrl'>
                 {$b.comment_sum} {$lang.global.comments}
               </a>
