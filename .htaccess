@@ -1,13 +1,8 @@
 # Many rules are taken from
 # http://github.com/paulirish/html5-boilerplate/blob/master/.htaccess
 
-# Add PHP5 support
+# Add PHP5 support at all-inkl.com
 #AddHandler php53-cgi .php
-
-# Custom error pages
-ErrorDocument 404 /errors/404
-ErrorDocument 422 /errors/422
-ErrorDocument 500 /errors/500
 
 # Hide files for non script access
 <FilesMatch "\.(sql|gz|tpl|mob|ini|yml|php|log)$">
