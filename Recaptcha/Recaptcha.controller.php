@@ -10,11 +10,11 @@
  *
  */
 
-namespace CandyCMS\Plugins;
+namespace candyCMS\Plugins;
 
-use CandyCMS\Core\Helpers\Helper;
-use CandyCMS\Core\Helpers\SmartySingleton;
-use CandyCMS\Core\Helpers\I18n;
+use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\I18n;
 
 if (!defined('SHOW_CAPTCHA'))
   define('SHOW_CAPTCHA', MOBILE === false && WEBSITE_MODE !== 'test');

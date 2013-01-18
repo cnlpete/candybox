@@ -11,14 +11,14 @@
  *
  */
 
-namespace CandyCMS\Plugins;
+namespace candyCMS\Plugins;
 
-use CandyCMS\Core\Controllers\Logs;
-use CandyCMS\Core\Controllers\Mails;
-use CandyCMS\Core\Helpers\AdvancedException;
-use CandyCMS\Core\Helpers\Helper;
-use CandyCMS\Core\Helpers\I18n;
-use CandyCMS\Core\Models\Main;
+use candyCMS\Core\Controllers\Logs;
+use candyCMS\Core\Controllers\Mails;
+use candyCMS\Core\Helpers\AdvancedException;
+use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\I18n;
+use candyCMS\Core\Models\Main;
 use PDO;
 
 final class Cronjob {
@@ -371,7 +371,7 @@ EOD;
 
     # Send the backup via mail
     if (PLUGIN_CRONJOB_SEND_PER_MAIL === true) {
-      $sModel = \CandyCMS\Core\Controllers\Main::__autoload('Mails', true);
+      $sModel = \candyCMS\Core\Controllers\Main::__autoload('Mails', true);
       $oMails = new $sModel($this->_aRequest, $this->_aSession);
 
       $aData['subject']       = I18n::get('cronjob.mail.subject', $sBackupName);

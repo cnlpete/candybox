@@ -13,11 +13,11 @@
  *
  */
 
-namespace CandyCMS\Plugins;
+namespace candyCMS\Plugins;
 
-use CandyCMS\Core\Helpers\AdvancedException;
-use CandyCMS\Core\Helpers\Helper;
-use CandyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\AdvancedException;
+use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\SmartySingleton;
 use Facebook;
 
 final class FacebookCMS extends Facebook {

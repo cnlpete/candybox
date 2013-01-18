@@ -11,7 +11,7 @@
  *
  */
 
-namespace CandyCMS\Plugins;
+namespace candyCMS\Plugins;
 
 final class Replace {
 
