@@ -196,15 +196,4 @@ class Comments extends Main {
               $sRedirect,
               $this->_aRequest);
   }
-
-  /**
-   * There is no update action for the sitemaps controller
-   *
-   * @access public
-   *
-   */
-  public function update() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->update()');
-    return Helper::redirectTo('/errors/404');
-  }
 }

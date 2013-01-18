@@ -246,19 +246,6 @@ class Sessions extends Main {
   }
 
   /**
-   * There is no update action for the sessions controller.
-   *
-   * @access public
-   * @param integer $iUserRole required user right - actually not required. Just a bug fix for PHP strict mode
-   * @return HTML redirected 404 page
-   *
-   */
-  public function update($iUserRole = 0) {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->update()');
-    return Helper::redirectTo('/errors/404');
-  }
-
-  /**
    * Destroy user session.
    *
    * @access public

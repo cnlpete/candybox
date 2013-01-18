@@ -205,26 +205,4 @@ class Mails extends Main {
     $this->oSmarty->setCaching(\candyCMS\Core\Helpers\SmartySingleton::CACHING_LIFETIME_SAVED);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
-
-  /**
-   * There is no update Action for the mails Controller
-   *
-   * @access public
-   *
-   */
-  public function update() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->update()');
-    return Helper::redirectTo('/errors/404');
-  }
-
-  /**
-   * There is no destroy Action for the mails Controller
-   *
-   * @access public
-   *
-   */
-  public function destroy() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->destroy()');
-    return Helper::redirectTo('/errors/404');
-  }
 }

@@ -84,26 +84,4 @@ class Newsletters extends Main {
 
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
-
-  /**
-   * There is no update action for the newsletters controller.
-   *
-   * @access public
-   *
-   */
-  public function update() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->update()');
-    return Helper::redirectTo('/errors/404');
-  }
-
-  /**
-   * There is no destroy action for the newsletters controller.
-   *
-   * @access public
-   *
-   */
-  public function destroy() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->destroy()');
-    return Helper::redirectTo('/errors/404');
-  }
 }

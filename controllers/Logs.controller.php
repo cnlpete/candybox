@@ -77,30 +77,6 @@ class Logs extends Main {
   }
 
   /**
-   * There is no create action for the sitemaps controller.
-   *
-   * @access public
-   * @param integer $iUserRole required user right - actually not required. Just a bug fix for PHP strict mode
-   * @return HTML 404 error page
-   *
-   */
-  public function create($iUserRole = 0) {
-    return Helper::redirectTo('/errors/404');
-  }
-
-  /**
-   * There is no update action for the sitemaps controller.
-   *
-   * @access public
-   * @param integer $iUserRole required user right - actually not required. Just a bug fix for PHP strict mode
-   * @return HTML 404 error page
-   *
-   */
-  public function update($iUserRole = 0) {
-    return Helper::redirectTo('/errors/404');
-  }
-
-  /**
    * Update the Endtime of some LogEntry
    *
    * @static
