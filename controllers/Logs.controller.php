@@ -10,10 +10,10 @@
  *
  */
 
-namespace CandyCMS\Core\Controllers;
+namespace candyCMS\Core\Controllers;
 
-use CandyCMS\Core\Helpers\Helper;
-use CandyCMS\Core\Helpers\I18n;
+use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\I18n;
 
 class Logs extends Main {
 
@@ -71,7 +71,7 @@ class Logs extends Main {
             (bool) $bResultFlag);
 
     if ($bReturn)
-      \CandyCMS\Core\Helpers\SmartySingleton::getInstance()->clearCacheForController('logs');
+      \candyCMS\Core\Helpers\SmartySingleton::getInstance()->clearCacheForController('logs');
 
     return $bReturn;
   }
@@ -114,7 +114,7 @@ class Logs extends Main {
     $bReturn = $sModel::setEndTime($iLogsId, $iEndTime);
 
     if ($bReturn)
-      \CandyCMS\Core\Helpers\SmartySingleton::getInstance()->clearCacheForController('logs');
+      \candyCMS\Core\Helpers\SmartySingleton::getInstance()->clearCacheForController('logs');
 
     return $bReturn;
   }
@@ -136,7 +136,7 @@ class Logs extends Main {
     $bReturn = $sModel::setResultFlag($iLogsId, $bResultFlag);
 
     if ($bReturn)
-      \CandyCMS\Core\Helpers\SmartySingleton::getInstance()->clearCacheForController('logs');
+      \candyCMS\Core\Helpers\SmartySingleton::getInstance()->clearCacheForController('logs');
 
     return $bReturn;
   }
@@ -150,6 +150,6 @@ class Logs extends Main {
    *
    */
   public static function write($sMessage) {
-    return \CandyCMS\Core\Helpers\AdvancedException::writeLog($sMessage);
+    return \candyCMS\Core\Helpers\AdvancedException::writeLog($sMessage);
   }
 }

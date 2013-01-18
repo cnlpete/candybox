@@ -10,9 +10,9 @@
  *
  */
 
-namespace CandyCMS\Core\Helpers;
+namespace candyCMS\Core\Helpers;
 
-use CandyCMS\Core\Helpers\AdvancedException;
+use candyCMS\Core\Helpers\AdvancedException;
 
 class I18n {
 

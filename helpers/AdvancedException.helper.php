@@ -10,9 +10,9 @@
  *
  */
 
-namespace CandyCMS\Core\Helpers;
+namespace candyCMS\Core\Helpers;
 
-use CandyCMS\Core\Controllers\Mails;
+use candyCMS\Core\Controllers\Mails;
 
 class AdvancedException extends \Exception {
 
@@ -46,7 +46,7 @@ class AdvancedException extends \Exception {
   public static function sendAdminMail($sMessage) {
     $sMessage = date('Y-m-d Hi', time()) . ' - ' . $sMessage;
 
-    $sModel = \CandyCMS\Core\Controllers\Main::__autoload('Mails', true);
+    $sModel = \candyCMS\Core\Controllers\Main::__autoload('Mails', true);
     $oMails = new $sModel();
 
     return $oMails->create(array('subject' => 'Exception', 'message' => $sMessage), false);

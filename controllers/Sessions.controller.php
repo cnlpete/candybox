@@ -10,14 +10,14 @@
  *
  */
 
-namespace CandyCMS\Core\Controllers;
+namespace candyCMS\Core\Controllers;
 
-use CandyCMS\Core\Helpers\AdvancedException;
-use CandyCMS\Core\Controllers\Main;
-use CandyCMS\Core\Helpers\Helper;
-use CandyCMS\Core\Helpers\I18n;
-use CandyCMS\Plugins\FacebookCMS;
-use CandyCMS\Plugins\Recaptcha;
+use candyCMS\Core\Helpers\AdvancedException;
+use candyCMS\Core\Controllers\Main;
+use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\I18n;
+use candyCMS\Plugins\FacebookCMS;
+use candyCMS\Plugins\Recaptcha;
 
 class Sessions extends Main {
 
@@ -102,7 +102,7 @@ class Sessions extends Main {
       $this->setTitle(I18n::get('sessions.password.title'));
       $this->setDescription(I18n::get('sessions.password.description'));
 
-      $bShowCaptcha = class_exists('\CandyCMS\Plugins\Recaptcha') && WEBSITE_MODE !== 'test' ?
+      $bShowCaptcha = class_exists('\candyCMS\Plugins\Recaptcha') && WEBSITE_MODE !== 'test' ?
               SHOW_CAPTCHA :
               false;
 
@@ -166,7 +166,7 @@ class Sessions extends Main {
       $this->setTitle(I18n::get('sessions.verification.title'));
       $this->setDescription(I18n::get('sessions.verification.description'));
 
-      $bShowCaptcha = class_exists('\CandyCMS\Plugins\Recaptcha') && WEBSITE_MODE !== 'test' ?
+      $bShowCaptcha = class_exists('\candyCMS\Plugins\Recaptcha') && WEBSITE_MODE !== 'test' ?
               SHOW_CAPTCHA :
               false;
 

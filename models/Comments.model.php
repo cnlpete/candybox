@@ -10,12 +10,12 @@
  *
  */
 
-namespace CandyCMS\Core\Models;
+namespace candyCMS\Core\Models;
 
-use CandyCMS\Core\Helpers\AdvancedException;
-use CandyCMS\Core\Helpers\Helper;
-use CandyCMS\Core\Helpers\Pagination;
-use CandyCMS\Plugins\FacebookCMS;
+use candyCMS\Core\Helpers\AdvancedException;
+use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\Pagination;
+use candyCMS\Plugins\FacebookCMS;
 use PDO;
 
 class Comments extends Main {
@@ -85,7 +85,7 @@ class Comments extends Main {
     }
 
     # We crawl the facebook avatars
-    if (defined('PLUGIN_FACEBOOK_APP_ID') && class_exists('\CandyCMS\Plugins\FacebookCMS'))
+    if (defined('PLUGIN_FACEBOOK_APP_ID') && class_exists('\candyCMS\Plugins\FacebookCMS'))
       $this->_getFacebookAvatars($aResult);
 
     # Get comment number

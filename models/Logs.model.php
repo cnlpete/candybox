@@ -10,11 +10,11 @@
  *
  */
 
-namespace CandyCMS\Core\Models;
+namespace candyCMS\Core\Models;
 
-use CandyCMS\Core\Helpers\AdvancedException;
-use CandyCMS\Core\Helpers\Helper;
-use CandyCMS\Core\Helpers\Pagination;
+use candyCMS\Core\Helpers\AdvancedException;
+use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\Pagination;
 use PDO;
 
 class Logs extends Main {

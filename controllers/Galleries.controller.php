@@ -10,13 +10,13 @@
  *
  */
 
-namespace CandyCMS\Core\Controllers;
+namespace candyCMS\Core\Controllers;
 
-use CandyCMS\Core\Helpers\AdvancedException;
-use CandyCMS\Core\Helpers\Helper;
-use CandyCMS\Core\Helpers\I18n;
-use CandyCMS\Core\Helpers\Upload;
-use CandyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\AdvancedException;
+use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\I18n;
+use candyCMS\Core\Helpers\Upload;
+use candyCMS\Core\Helpers\SmartySingleton;
 
 class Galleries extends Main {
 

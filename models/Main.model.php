@@ -11,10 +11,10 @@
  *
  */
 
-namespace CandyCMS\Core\Models;
+namespace candyCMS\Core\Models;
 
-use CandyCMS\Core\Helpers\Helper;
-use CandyCMS\Core\Helpers\AdvancedException;
+use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\AdvancedException;
 use PDO;
 
 abstract class Main {
@@ -476,11 +476,11 @@ abstract class Main {
 
     if (EXTENSION_CHECK && file_exists(PATH_STANDARD . '/app/extensions/models/' . $sClass . '.model.php')) {
       require_once PATH_STANDARD . '/app/extensions/models/' . $sClass . '.model.php';
-      return '\CandyCMS\Models\\' . $sClass;
+      return '\candyCMS\Models\\' . $sClass;
     }
     elseif (file_exists(PATH_STANDARD . '/vendor/candyCMS/core/models/' . $sClass . '.model.php')) {
       require_once PATH_STANDARD . '/vendor/candyCMS/core/models/' . $sClass . '.model.php';
-      return '\CandyCMS\Core\Models\\' . $sClass;
+      return '\candyCMS\Core\Models\\' . $sClass;
     }
   }
 

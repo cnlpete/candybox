@@ -11,11 +11,11 @@
  *
  */
 
-namespace CandyCMS\Core\Controllers;
+namespace candyCMS\Core\Controllers;
 
-use CandyCMS\Core\Helpers\Helper;
-use CandyCMS\Core\Helpers\I18n;
-use CandyCMS\Core\Helpers\Upload;
+use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\I18n;
+use candyCMS\Core\Helpers\Upload;
 
 class Downloads extends Main {
 

@@ -10,12 +10,12 @@
  *
  */
 
-namespace CandyCMS\Core\Controllers;
+namespace candyCMS\Core\Controllers;
 
-use CandyCMS\Core\Helpers\AdvancedException;
-use CandyCMS\Core\Helpers\Helper;
-use CandyCMS\Core\Helpers\I18n;
-use CandyCMS\Plugins\Recaptcha;
+use candyCMS\Core\Helpers\AdvancedException;
+use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\I18n;
+use candyCMS\Plugins\Recaptcha;
 
 class Mails extends Main {
 
@@ -80,7 +80,7 @@ class Mails extends Main {
    *
    */
   public function create() {
-    $bShowCaptcha = class_exists('\CandyCMS\Plugins\Recaptcha') && WEBSITE_MODE !== 'test' ?
+    $bShowCaptcha = class_exists('\candyCMS\Plugins\Recaptcha') && WEBSITE_MODE !== 'test' ?
             $this->_aSession['user']['role'] == 0 && SHOW_CAPTCHA :
             false;
 
@@ -202,7 +202,7 @@ class Mails extends Main {
 
     $this->setTitle(I18n::get('mails.success_page.title'));
 
-    $this->oSmarty->setCaching(\CandyCMS\Core\Helpers\SmartySingleton::CACHING_LIFETIME_SAVED);
+    $this->oSmarty->setCaching(\candyCMS\Core\Helpers\SmartySingleton::CACHING_LIFETIME_SAVED);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 

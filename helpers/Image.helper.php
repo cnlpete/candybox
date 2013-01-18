@@ -10,9 +10,9 @@
  *
  */
 
-namespace CandyCMS\Core\Helpers;
+namespace candyCMS\Core\Helpers;
 
-use CandyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\Helper;
 
 class Image {
 

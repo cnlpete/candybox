@@ -10,10 +10,10 @@
  *
  */
 
-namespace CandyCMS\Core\Controllers;
+namespace candyCMS\Core\Controllers;
 
-use CandyCMS\Core\Helpers\Helper;
-use CandyCMS\Core\Helpers\I18n;
+use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\I18n;
 
 class Searches extends Main {
 
@@ -69,7 +69,7 @@ class Searches extends Main {
    *
    */
   protected function _create() {
-    $this->oSmarty->setCaching(\CandyCMS\Core\Helpers\SmartySingleton::CACHING_LIFETIME_SAVED);
+    $this->oSmarty->setCaching(\candyCMS\Core\Helpers\SmartySingleton::CACHING_LIFETIME_SAVED);
     return $this->_formTemplate();
   }
 

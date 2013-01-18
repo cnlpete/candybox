@@ -10,12 +10,12 @@
  *
  */
 
-namespace CandyCMS\Core\Controllers;
+namespace candyCMS\Core\Controllers;
 
-use CandyCMS\Core\Helpers\Helper;
-use CandyCMS\Core\Helpers\I18n;
-use CandyCMS\Core\Helpers\Upload;
-use CandyCMS\Plugins\Recaptcha;
+use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\I18n;
+use candyCMS\Core\Helpers\Upload;
+use candyCMS\Plugins\Recaptcha;
 
 class Users extends Main {
 
@@ -265,7 +265,7 @@ class Users extends Main {
    */
   public function create() {
     # Logged in users should not have a recaptcha field since we can assume that these are real humans.
-    $bShowCaptcha = class_exists('\CandyCMS\Plugins\Recaptcha') && WEBSITE_MODE !== 'test' ?
+    $bShowCaptcha = class_exists('\candyCMS\Plugins\Recaptcha') && WEBSITE_MODE !== 'test' ?
             $this->_aSession['user']['role'] == 0 && SHOW_CAPTCHA :
             false;
 

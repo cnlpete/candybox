@@ -10,10 +10,10 @@
  *
  */
 
-namespace CandyCMS\Core\Controllers;
+namespace candyCMS\Core\Controllers;
 
-use CandyCMS\Core\Helpers\Helper;
-use CandyCMS\Core\Helpers\I18n;
+use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\I18n;
 
 class Contents extends Main {
 

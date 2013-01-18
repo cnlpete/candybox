@@ -11,12 +11,12 @@
  *
  */
 
-namespace CandyCMS\Core\Controllers;
+namespace candyCMS\Core\Controllers;
 
-use CandyCMS\Core\Helpers\AdvancedException;
-use CandyCMS\Core\Helpers\Helper;
-use CandyCMS\Core\Helpers\I18n;
-use CandyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\AdvancedException;
+use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\I18n;
+use candyCMS\Core\Helpers\SmartySingleton;
 use candyCMS\plugins\Bbcode;
 use MCAPI;
 
@@ -195,16 +195,16 @@ abstract class Main {
     $sClass = (string) ucfirst(strtolower($sClass));
 
     if ($bModel === true)
-      return \CandyCMS\Core\Models\Main::__autoload($sClass);
+      return \candyCMS\Core\Models\Main::__autoload($sClass);
 
     else {
       if (EXTENSION_CHECK && file_exists(PATH_STANDARD . '/app/extensions/controllers/' . $sClass . '.controller.php')) {
         require_once PATH_STANDARD . '/app/extensions/controllers/' . $sClass . '.controller.php';
-        return '\CandyCMS\Controllers\\' . $sClass;
+        return '\candyCMS\Controllers\\' . $sClass;
       }
       else {
         require_once PATH_STANDARD . '/vendor/candyCMS/core/controllers/' . $sClass . '.controller.php';
-        return '\CandyCMS\Core\Controllers\\' . $sClass;
+        return '\candyCMS\Core\Controllers\\' . $sClass;
       }
     }
   }

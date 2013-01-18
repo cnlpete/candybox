@@ -10,10 +10,10 @@
  *
  */
 
-namespace CandyCMS\Core\Helpers;
+namespace candyCMS\Core\Helpers;
 
-use CandyCMS\Core\Controllers\Main;
-use CandyCMS\Core\Helpers\AdvancedException;
+use candyCMS\Core\Controllers\Main;
+use candyCMS\Core\Helpers\AdvancedException;
 use PDO;
 
 class Helper {
@@ -456,12 +456,12 @@ class Helper {
     if ($sHighlight)
       $sStr = str_ireplace(urldecode($sHighlight), '<mark>' . urldecode($sHighlight) . '</mark>', $sStr);
 
-    if (class_exists('\CandyCMS\Plugins\Bbcode')) {
-      $oBbcode = new \CandyCMS\Plugins\Bbcode();
+    if (class_exists('\candyCMS\Plugins\Bbcode')) {
+      $oBbcode = new \candyCMS\Plugins\Bbcode();
       $sStr = $oBbcode->getFormatedText($sStr);
     }
 
-    if(!class_exists('\CandyCMS\Plugins\TinyMCE') && $bUseMarkdown) {
+    if(!class_exists('\candyCMS\Plugins\TinyMCE') && $bUseMarkdown) {
       $oMarkdown = new \dflydev\markdown\MarkdownParser();
       $sStr = $oMarkdown->transformMarkdown($sStr);
     }

@@ -10,15 +10,15 @@
  *
  */
 
-namespace CandyCMS\Core\Controllers;
+namespace candyCMS\Core\Controllers;
 
-use CandyCMS\Core\Helpers\AdvancedException;
-use CandyCMS\Core\Helpers\Dispatcher;
-use CandyCMS\Core\Helpers\Helper;
-use CandyCMS\Core\Helpers\I18n;
-use CandyCMS\Core\Helpers\SmartySingleton;
-use CandyCMS\Plugins\Cronjob;
-use CandyCMS\Plugins\FacebookCMS;
+use candyCMS\Core\Helpers\AdvancedException;
+use candyCMS\Core\Helpers\Dispatcher;
+use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\I18n;
+use candyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Plugins\Cronjob;
+use candyCMS\Plugins\FacebookCMS;
 use Routes;
 
 require_once PATH_STANDARD . '/vendor/autoload.php';
@@ -370,7 +370,7 @@ class Index {
    *
    */
   public function getFacebookExtension() {
-    if (PLUGIN_FACEBOOK_APP_ID && class_exists('\CandyCMS\Plugins\FacebookCMS')) {
+    if (PLUGIN_FACEBOOK_APP_ID && class_exists('\candyCMS\Plugins\FacebookCMS')) {
       $this->_aSession['facebook'] = new FacebookCMS(array(
           'appId' => PLUGIN_FACEBOOK_APP_ID,
           'secret' => PLUGIN_FACEBOOK_SECRET,
@@ -464,11 +464,11 @@ class Index {
     if (isset($this->_aRequest['api_token']) && !empty($this->_aRequest['api_token'])) {
       if (EXTENSION_CHECK && file_exists(PATH_STANDARD . '/app/extensions/models/Users.model.php')) {
         require_once PATH_STANDARD . '/app/extensions/models/Users.model.php';
-        $aUser = \CandyCMS\Models\Users::getUserByToken(Helper::formatInput($this->_aRequest['api_token']));
+        $aUser = \candyCMS\Models\Users::getUserByToken(Helper::formatInput($this->_aRequest['api_token']));
       }
       else {
         require_once PATH_STANDARD . '/vendor/candyCMS/core/models/Users.model.php';
-        $aUser = \CandyCMS\Core\Models\Users::getUserByToken(Helper::formatInput($this->_aRequest['api_token']));
+        $aUser = \candyCMS\Core\Models\Users::getUserByToken(Helper::formatInput($this->_aRequest['api_token']));
       }
     }
 
@@ -476,11 +476,11 @@ class Index {
     else {
       if (EXTENSION_CHECK && file_exists(PATH_STANDARD . '/app/extensions/models/Sessions.model.php')) {
         require_once PATH_STANDARD . '/app/extensions/models/Sessions.model.php';
-        $aUser = \CandyCMS\Models\Sessions::getUserBySession();
+        $aUser = \candyCMS\Models\Sessions::getUserBySession();
       }
       else {
         require_once PATH_STANDARD . '/vendor/candyCMS/core/models/Sessions.model.php';
-        $aUser = \CandyCMS\Core\Models\Sessions::getUserBySession();
+        $aUser = \candyCMS\Core\Models\Sessions::getUserBySession();
       }
     }
 
@@ -580,7 +580,7 @@ class Index {
       $oSmarty->assign('_WEBSITE', $aWebsite);
 
       $oSmarty->setTemplateDir($sTemplateDir);
-      $oSmarty->setCaching(\CandyCMS\Core\Helpers\SmartySingleton::CACHING_OFF);
+      $oSmarty->setCaching(\candyCMS\Core\Helpers\SmartySingleton::CACHING_OFF);
       $sCachedHTML = $oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
 
@@ -611,7 +611,7 @@ class Index {
       if($sPlugin == 'Facebook')
         $sPlugin = 'FacebookCMS';
 
-      $sPluginNamespace = '\CandyCMS\Plugins\\' . $sPlugin;
+      $sPluginNamespace = '\candyCMS\Plugins\\' . $sPlugin;
 
       if (class_exists($sPluginNamespace)) {
 				$oPlugin = $sPlugin == 'Recaptcha' ?

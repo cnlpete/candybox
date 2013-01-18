@@ -10,7 +10,7 @@
  *
  */
 
-namespace CandyCMS\Core\Helpers;
+namespace candyCMS\Core\Helpers;
 
 use Smarty;
 use lessc;
@@ -106,7 +106,7 @@ class SmartySingleton extends Smarty {
       $this->setCacheLifetime(-1);
     }
 
-    $bUseFacebook = class_exists('\CandyCMS\Plugins\FacebookCMS') ? true : false;
+    $bUseFacebook = class_exists('\candyCMS\Plugins\FacebookCMS') ? true : false;
 
     if($bUseFacebook === true) {
        # Required for meta only
@@ -130,7 +130,7 @@ class SmartySingleton extends Smarty {
     $this->assign('_PATH', $this->getPaths());
     require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
 
-    $iMaximumUploadSize = \CandyCMS\Core\Helpers\Upload::getUploadLimit();
+    $iMaximumUploadSize = \candyCMS\Core\Helpers\Upload::getUploadLimit();
     $this->assign('_SYSTEM', array(
         'date'                  => date('Y-m-d'),
         'compress_files_suffix' => WEBSITE_COMPRESS_FILES === true ? '.min' : '',
