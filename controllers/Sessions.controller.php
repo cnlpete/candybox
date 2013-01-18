@@ -90,7 +90,7 @@ class Sessions extends Main {
                     (string) $this->_aRequest[$this->_sController]['email'] :
                     '');
 
-    $this->setTitle(I18n::get($sTitle . 'global.login'));
+    $this->setTitle(I18n::get($sTitle . '.login'));
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
