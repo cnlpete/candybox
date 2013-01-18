@@ -10,11 +10,11 @@
  *
  */
 
-namespace CandyCMS\Plugins;
+namespace candyCMS\Plugins;
 
-use CandyCMS\Core\Helpers\Helper;
-use CandyCMS\Core\Helpers\I18n;
-use CandyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\I18n;
+use candyCMS\Core\Helpers\SmartySingleton;
 
 final class Archive {
 
@@ -48,7 +48,7 @@ final class Archive {
             substr(md5($aSession['user']['role']), 0 , 10);
 
     if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
-      $sBlogsModel = \CandyCMS\Core\Models\Main::__autoload('Blogs');
+      $sBlogsModel = \candyCMS\Core\Models\Main::__autoload('Blogs');
       $oModel = new $sBlogsModel($aRequest, $aSession);
 
       $aMonthNames  = array();

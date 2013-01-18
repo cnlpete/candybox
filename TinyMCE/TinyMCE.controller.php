@@ -10,10 +10,10 @@
  *
  */
 
-namespace CandyCMS\Plugins;
+namespace candyCMS\Plugins;
 
-use CandyCMS\Core\Helpers\Helper;
-use CandyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\SmartySingleton;
 
 final class TinyMCE {
 
