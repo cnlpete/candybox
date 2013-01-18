@@ -568,7 +568,7 @@ class Galleries extends Main {
       $oQuery->bindParam('extension', $sExtension, PDO::PARAM_STR);
       $oQuery->bindParam('position', $iPosition, PDO::PARAM_INT);
 
-      $sContent = $this->_aRequest[$this->_sController]['content'];
+      $sContent = trim($this->_aRequest[$this->_sController]['content']);
       $iDate = time();
       if (\ImageMetadataParser::exifAvailable()) {
         $sLongFilename = PATH_UPLOAD . '/galleries/' . $this->_aRequest['id'] . '/original/' . $sFile;
@@ -576,8 +576,10 @@ class Galleries extends Main {
         $oImageMetadataParser->parseExif();
         $oImageMetadataParser->parseIPTC();
 
-        if ($oImageMetadataParser->hasTitle())
+        # update the image title, if it has one storred in exif or iptc
+        if ($sContent != '' && $oImageMetadataParser->hasTitle())
           $sContent = $oImageMetadataParser->getTitle();
+        # update the image date, if the exif date can be parsed
         if ($oImageMetadataParser->hasDateTime())
           $iDate = $oImageMetadataParser->getDateTime();
       }
