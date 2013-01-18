@@ -1,6 +1,6 @@
 <?php
 
-namespace CandyCMS;
+namespace candyCMS;
 
 class MigrationScript {
 

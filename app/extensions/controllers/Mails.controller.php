@@ -10,13 +10,13 @@
  *
  */
 
-namespace CandyCMS\Controllers;
+namespace candyCMS\Controllers;
 
-use CandyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\Helper;
 
 require_once PATH_STANDARD . '/vendor/candyCMS/core/controllers/Mails.controller.php';
 
-class Mails extends \CandyCMS\Core\Controllers\Mails {
+class Mails extends \candyCMS\Core\Controllers\Mails {
 
   /**
    * This method overrides the standard update method and is used for tests.

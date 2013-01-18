@@ -10,7 +10,7 @@
  *
  */
 
-namespace CandyCMS;
+namespace candyCMS;
 
 # Override separator due to W3C compatibility.
 ini_set('arg_separator.output', '&amp;');
@@ -103,7 +103,7 @@ define('CRAWLER', defined('CRAWLERS') ?
 define('EXTENSION_CHECK', ALLOW_EXTENSIONS === true || WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test');
 
 # @todo extension check
-$oIndex = new \CandyCMS\Core\Controllers\Index(array_merge($_GET, $_POST), $_SESSION, $_FILES, $_COOKIE);
+$oIndex = new \candyCMS\Core\Controllers\Index(array_merge($_GET, $_POST), $_SESSION, $_FILES, $_COOKIE);
 
 # Print out HTML
 echo $oIndex->show();

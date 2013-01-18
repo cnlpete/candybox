@@ -10,7 +10,7 @@
  *
  */
 
-namespace CandyCMS\Controllers;
+namespace candyCMS\Controllers;
 
 require_once dirname(__FILE__) . '/../../../vendor/candyCMS/tests/CandyControllerTestCase.php';
 require_once dirname(__FILE__) . '/../../extensions/controllers/Sample.controller.php';
@@ -18,7 +18,7 @@ require_once dirname(__FILE__) . '/../../extensions/controllers/Sample.controlle
 /**
  * Test class for Helper.
  */
-class SampleTest extends \CandyCMS\Core\Controllers\CandyControllerTestCase {
+class SampleTest extends \candyCMS\Core\Controllers\CandyControllerTestCase {
 
   /**
    * Sets up the fixture, for example, opens a network connection.

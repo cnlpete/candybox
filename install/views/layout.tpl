@@ -21,7 +21,7 @@
       <div class='navbar-inner'>
         <div class='container'>
           <a href='/install' class='brand'>
-            CandyCMS - Installation and migration assistant
+            candyCMS - Installation and migration assistant
           </a>
         </div>
       </div>

@@ -81,7 +81,7 @@ define('WEBSITE_COMPRESS_FILES', false);
 
 # Enter the full name of website. This is used for emails and RSS
 # NOTE: Also edit your website title and slogan in your language file of choice.
-define('WEBSITE_NAME', 'CandyCMS');
+define('WEBSITE_NAME', 'candyCMS');
 
 # ------------------------------------------------------------------------------
 

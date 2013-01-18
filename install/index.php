@@ -10,12 +10,12 @@
  *
  */
 
-namespace CandyCMS;
+namespace candyCMS;
 
-use CandyCMS\Core\Controllers\Index;
-use CandyCMS\Core\Helpers\Helper;
-use CandyCMS\Core\Helpers\SmartySingleton;
-use CandyCMS\Core\Helpers\I18n;
+use candyCMS\Core\Controllers\Index;
+use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\I18n;
 use PDO;
 
 define('PATH_STANDARD', dirname(__FILE__) . '/..');
@@ -231,7 +231,7 @@ class Install extends Index {
 
           # Create tables
           try {
-            $oDb = \CandyCMS\Core\Models\Main::connectToDatabase();
+            $oDb = \candyCMS\Core\Models\Main::connectToDatabase();
             $oDb->query($sData);
           }
           catch (\AdvancedException $e) {
@@ -261,7 +261,7 @@ class Install extends Index {
           }
 
           else {
-            $sUsers = \CandyCMS\Core\Models\Main::__autoload('Users');
+            $sUsers = \candyCMS\Core\Models\Main::__autoload('Users');
             $oUsers = new $sUsers($this->_aRequest, $this->_aSession);
 
             $bResult = $oUsers->create('', 4);
@@ -311,7 +311,7 @@ class Install extends Index {
     $sDir = PATH_STANDARD . '/install/migrations/';
     $oDir = opendir($sDir);
 
-    $oDb = \CandyCMS\Core\Models\Main::connectToDatabase();
+    $oDb = \candyCMS\Core\Models\Main::connectToDatabase();
     try {
       $oQuery = $oDb->prepare('SELECT file, date FROM ' . SQL_PREFIX . 'migrations');
       $bReturn = $oQuery->execute();
@@ -380,7 +380,7 @@ class Install extends Index {
     $oFo = fopen($sFileName, 'rb');
 
     try {
-      $oDb = \CandyCMS\Core\Models\Main::connectToDatabase();
+      $oDb = \candyCMS\Core\Models\Main::connectToDatabase();
       $bResult = $oDb->query(str_replace('%SQL_PREFIX%', SQL_PREFIX, @stream_get_contents($oFo)));
       fclose($oFo);
     }
@@ -400,7 +400,7 @@ class Install extends Index {
     require $sFileName;
 
     try {
-      $bResult = MigrationScript::run(\CandyCMS\Core\Models\Main::connectToDatabase());
+      $bResult = MigrationScript::run(\candyCMS\Core\Models\Main::connectToDatabase());
     }
     catch (\AdvancedException $e) {
       \Core\Helpers\AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
@@ -431,7 +431,7 @@ class Install extends Index {
     # Write migration into table
     if($bResult) {
       try {
-        $oDb = \CandyCMS\Core\Models\Main::connectToDatabase();
+        $oDb = \candyCMS\Core\Models\Main::connectToDatabase();
         $oQuery = $oDb->prepare(" INSERT INTO
                                     " . SQL_PREFIX . "migrations (file, date)
                                   VALUES
@@ -469,7 +469,7 @@ class Install extends Index {
    *
    * @param string $sField
    * @param string $sMessage
-   * @return object \CandyCMS\Install
+   * @return object \candyCMS\Install
    * @see /vendor/candyCMS/core/controllers/Main.controller.php - taken from there
    *
    */

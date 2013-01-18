@@ -10,13 +10,13 @@
  * 
  */
 
-namespace CandyCMS\Models;
+namespace candyCMS\Models;
 
-use CandyCMS\core\Helpers\AdvancedException;
-use CandyCMS\core\Helpers\Helper;
-use CandyCMS\core\Helpers\Page;
+use candyCMS\core\Helpers\AdvancedException;
+use candyCMS\core\Helpers\Helper;
+use candyCMS\core\Helpers\Page;
 use PDO;
 
-class Sample extends \CandyCMS\core\Models\Main {
+class Sample extends \candyCMS\core\Models\Main {
 
 }

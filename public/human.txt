@@ -1,5 +1,5 @@
-/* CandyCMS */
-Name: CandyCMS
+/* candyCMS */
+Name: candyCMS
 Author: Marco Raddatz
 Company: empuxa GmbH
 URL: http://www.candycms.com
