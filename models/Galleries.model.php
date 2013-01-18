@@ -558,7 +558,7 @@ class Galleries extends Main {
                                           :file,
                                           :extension,
                                           :content,
-                                          NOW(),
+                                          :date,
                                           :position)");
 
       $iPosition = (int) Helper::getLastEntry('gallery_files');
@@ -568,11 +568,21 @@ class Galleries extends Main {
       $oQuery->bindParam('extension', $sExtension, PDO::PARAM_STR);
       $oQuery->bindParam('position', $iPosition, PDO::PARAM_INT);
 
-      foreach (array('content') as $sInput)
-        $oQuery->bindParam(
-                $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
-                PDO::PARAM_STR);
+      $sContent = $this->_aRequest[$this->_sController]['content'];
+      $iDate = time();
+      if (\ImageMetadataParser::exifAvailable()) {
+        $sLongFilename = PATH_UPLOAD . '/galleries/' . $this->_aRequest['id'] . '/original/' . $sFile;
+        $oImageMetadataParser = new \ImageMetadataParser($sLongFilename);
+        $oImageMetadataParser->parseExif();
+        $oImageMetadataParser->parseIPTC();
+
+        if ($oImageMetadataParser->hasTitle())
+          $sContent = $oImageMetadataParser->getTitle();
+        if ($oImageMetadataParser->hasDateTime())
+          $iDate = $oImageMetadataParser->getDateTime();
+      }
+      $oQuery->bindParam('content', Helper::formatInput($sContent, false), PDO::PARAM_STR);
+      $oQuery->bindParam('date', date('Y-m-d H:i:s', $iDate), PDO::PARAM_STR);
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
