@@ -262,7 +262,7 @@ class Upload {
         return false;
 
       # upload was successfull
-      $oImage = & new Image($this->_sFileNames[0], $sUploadFolder, $this->aFilePaths[0], $this->_sFileExtensions[0]);
+      $oImage = new Image($this->_sFileNames[0], $sUploadFolder, $this->aFilePaths[0], $this->_sFileExtensions[0]);
 
       $oImage->resizeDefault(POPUP_DEFAULT_X, POPUP_DEFAULT_Y, 'popup');
       $oImage->resizeDefault(THUMB_DEFAULT_X, THUMB_DEFAULT_Y, 'thumbnail');
