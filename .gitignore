@@ -11,8 +11,7 @@ app/*
 !/app/tests
 !/app/extensions
 
-composer.lock
-composer.phar
+*.lock
+*.phar
 /vendor/*
 !/vendor/tiny_mce
-tools/migrate
