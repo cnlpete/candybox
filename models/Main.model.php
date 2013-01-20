@@ -377,7 +377,6 @@ abstract class Main {
             $aData['user_email'],
             $aData['use_gravatar']);
 
-    die(print_r($aData));
     return $aData;
   }
 
