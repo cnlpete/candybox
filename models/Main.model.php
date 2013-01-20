@@ -411,11 +411,8 @@ abstract class Main {
     $aData['url_clean']   = WEBSITE_URL . '/users/' . $aData['id'];
     $aData['url']         = $aData['url_clean'] . '/' . $aData['full_name_encoded'];
     $aData['url_encoded'] = urlencode($aData['url']);
-
-    if ($this->_aSession['user']['role'] >= 3) {
-      $aData['url_destroy'] = $aData['url_clean'] . '/destroy';
-      $aData['url_update']  = $aData['url_clean'] . '/update';
-    }
+//    $aData['url_destroy'] = $aData['url_clean'] . '/destroy';
+//    $aData['url_update']  = $aData['url_clean'] . '/update';
 
     return $aData;
   }
