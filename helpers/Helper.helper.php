@@ -336,8 +336,14 @@ class Helper {
 
       # Standard views
       else {
-        if (!file_exists(PATH_STANDARD . '/vendor/candyCMS/core/views/' . $sFolder . '/' . $sFile . '.tpl'))
-          throw new AdvancedException('This template does not exist: ' . $sFolder . '/' . $sFile . '.tpl');
+        if (!file_exists(PATH_STANDARD . '/vendor/candyCMS/core/views/' . $sFolder . '/' . $sFile . '.tpl')) {
+          # This action might be disabled due to missing form templates.
+          if (substr($sFile, 0, 5) == '_form')
+            return Helper::redirectTo('/errors/403');
+
+          else
+            throw new AdvancedException('This template does not exist: ' . $sFolder . '/' . $sFile . '.tpl');
+        }
 
         else
           return PATH_STANDARD . '/vendor/candyCMS/core/views/' . $sFolder;
