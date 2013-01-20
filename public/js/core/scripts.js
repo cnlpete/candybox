@@ -1,10 +1,9 @@
 /* Quote comment */
 function quote(sName, sDivId) {
   var oTextField  = $('#js-create_commment_text');
-  var sOldMessage = oTextField.val();
   var sQuote      = $('#' + sDivId).html();
   var sNewMessage = "[quote=" + sName + "]" + sQuote + "[/quote]\n";
-  oTextField.val(sOldMessage + sNewMessage);
+  oTextField.val(oTextField.val() + sNewMessage);
 
   if ($.mobile)
     $.mobile.silentScroll(oTextField.offset().top);

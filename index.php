@@ -31,6 +31,9 @@ catch (Exception $e) {
   die($e->getMessage());
 }
 
+# Are we executing tests?
+define('ACTIVE_TEST', WEBSITE_MODE == 'test' ? true : false);
+
 # Redirect to www.website.tld if set in config. We need this for update urls etc.
 if('http://' . $_SERVER['HTTP_HOST'] !== WEBSITE_URL && 'https://' . $_SERVER['HTTP_HOST'] !== WEBSITE_URL)
   exit(header('Location:' . WEBSITE_URL));
