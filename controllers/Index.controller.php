@@ -207,7 +207,7 @@ class Index {
             Helper::removeSlash($_SERVER['REQUEST_URI']) :
             '';
 
-    # Disabled slashes at the end of the domain
+    # Disable slashes at the end of the domain
     $sURILen = strlen($sURI);
     if (substr($sURI, $sURILen - 1, $sURILen) == '/')
       $sURI = substr($sURI, 0, $sURILen - 1);

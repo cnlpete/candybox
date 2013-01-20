@@ -489,7 +489,7 @@ abstract class Main {
    *
    */
   protected function _showXML() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_showXML()');
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
     return Helper::redirectTo('/errors/404');
   }
 
@@ -501,7 +501,7 @@ abstract class Main {
    *
    */
   protected function _overviewXML() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_overviewXML()');
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
     return Helper::redirectTo('/errors/404');
   }
 
@@ -513,11 +513,11 @@ abstract class Main {
    *
    */
   protected function _showJSON() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_showJSON()');
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
     header('Content-Type: application/json');
     exit(json_encode(array(
                 'success' => false,
-                'error'   => 'There is no JSON handling method.',
+                'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.',
             )));
   }
 
@@ -529,11 +529,11 @@ abstract class Main {
    *
    */
   protected function _overviewJSON() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_overviewJSON()');
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
     header('Content-Type: application/json');
     exit(json_encode(array(
                 'success' => false,
-                'error'   => 'There is no JSON handling method.',
+                'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.',
             )));
   }
 
@@ -545,7 +545,7 @@ abstract class Main {
    *
    */
   protected function _showRSS() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_showRSS()');
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
     return Helper::redirectTo('/errors/404');
   }
 
@@ -557,7 +557,7 @@ abstract class Main {
    *
    */
   protected function _overviewRSS() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_overviewRSS()');
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
     return Helper::redirectTo('/errors/404');
   }
 

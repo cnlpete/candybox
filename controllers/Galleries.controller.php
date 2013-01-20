@@ -57,6 +57,47 @@ class Galleries extends Main {
   }
 
   /**
+   * This function is not yet implemented.
+   *
+   * @static
+   * @access protected
+   * @return string json
+   * @todo return correct values
+   *
+   */
+  protected static function _albumsJSON() {
+    header('Content-Type: application/json');
+    exit(json_encode(array(
+                'success' => false,
+                'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.',
+            )));
+  }
+
+  /**
+   * Just a backup method to show an entry as RSS.
+   *
+   * @access protected
+   * @return string json
+   *
+   */
+  protected function _albumsRSS() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
+    return Helper::redirectTo('/errors/404');
+  }
+
+  /**
+   * Just a backup method to show an entry as XML.
+   *
+   * @access protected
+   * @return string XML
+   *
+   */
+  protected function _albumsXML() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
+    return Helper::redirectTo('/errors/404');
+  }
+
+  /**
    * Show overview of images in one album.
    *
    * @access protected
@@ -87,6 +128,35 @@ class Galleries extends Main {
     }
 
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+  }
+
+  /**
+   * This function is not yet implemented.
+   *
+   * @static
+   * @access protected
+   * @return string json
+   * @todo return correct values
+   *
+   */
+  protected static function _filesJSON() {
+    header('Content-Type: application/json');
+    exit(json_encode(array(
+                'success' => false,
+                'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.',
+            )));
+  }
+
+  /**
+   * Just a backup method to show an entry as XML.
+   *
+   * @access protected
+   * @return string json
+   *
+   */
+  protected function _filesXML() {
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
+    return Helper::redirectTo('/errors/404');
   }
 
   /**
