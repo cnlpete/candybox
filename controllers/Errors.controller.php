@@ -42,4 +42,15 @@ class Errors extends Main {
     $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
+
+  /**
+   * There is no overview avaiable
+   *
+   * @access protected
+   * @return HTML 404
+   *
+   */
+  protected function _overview() {
+    return Helper::redirectTo('/errors/403');
+  }
 }

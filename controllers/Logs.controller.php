@@ -24,13 +24,13 @@ class Logs extends Main {
    * @return string HTML content
    *
    */
-  protected function _show() {
+  protected function _overview() {
     if ($this->_aSession['user']['role'] < 4)
       return Helper::redirectTo('/errors/401');
 
     else {
-      $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
-      $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+      $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
+      $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
       $this->oSmarty->setTemplateDir($sTemplateDir);
 
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
@@ -130,6 +130,9 @@ class Logs extends Main {
    *
    */
   public static function write($sMessage) {
+    if(!$sMessage)
+      return Helper::redirectTo('/errors/403');
+
     return \candyCMS\Core\Helpers\AdvancedException::writeLog($sMessage);
   }
 }
