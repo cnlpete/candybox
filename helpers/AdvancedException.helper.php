@@ -25,7 +25,7 @@ class AdvancedException extends \Exception {
    *
    */
   public static function reportBoth($sMessage) {
-    if(WEBSITE_MODE !== 'test')
+    if (!ACTIVE_TEST)
       AdvancedException::writeLog($sMessage);
 
     else
@@ -61,7 +61,7 @@ class AdvancedException extends \Exception {
    *
    */
   public static function writeLog($sMessage) {
-    $sIP = WEBSITE_MODE !== 'test' ? $_SERVER['REMOTE_ADDR'] : 'localhost';
+    $sIP = !ACTIVE_TEST ? $_SERVER['REMOTE_ADDR'] : 'localhost';
     $sMessage = date('Y-m-d Hi', time()) . ' - ' . $sIP . ' - ' . $sMessage;
 
     if (!is_dir(PATH_STANDARD . '/app/logs'))

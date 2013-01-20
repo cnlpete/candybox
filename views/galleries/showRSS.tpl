@@ -8,7 +8,7 @@
     <language>{$WEBSITE_LANGUAGE}</language>
     <link>{$data.url}</link>
     <copyright>{$data.author.full_name}</copyright>
-    <pubDate>{if $WEBSITE_MODE !== 'test'}{$smarty.now|date_format:'%a, %d %b %Y %H:%M:%S %z'}{/if}</pubDate>
+    <pubDate>{if $!ACTIVE_TEST}{$smarty.now|date_format:'%a, %d %b %Y %H:%M:%S %z'}{/if}</pubDate>
     <atom:link href="{$CURRENT_URL}" rel="self" type="application/rss+xml" />
     {foreach $data.files as $d}
     <item>
@@ -16,7 +16,7 @@
       <pubDate>{$d.date.rss}</pubDate>
       <guid isPermaLink="false">{$d.url_popup}</guid>
       <link>{$d.url_popup}</link>
-      {if $WEBSITE_MODE !== 'test'}
+      {if !ACTIVE_TEST}
         <description>
           <![CDATA[
           <img src="{$WEBSITE_URL}/{$d.url_thumb}"

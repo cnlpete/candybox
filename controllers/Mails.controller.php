@@ -82,7 +82,7 @@ class Mails extends Main {
    *
    */
   public function create() {
-    $bShowCaptcha = class_exists('\candyCMS\Plugins\Recaptcha') && WEBSITE_MODE !== 'test' ?
+    $bShowCaptcha = class_exists('\candyCMS\Plugins\Recaptcha') && !ACTIVE_TEST ?
             $this->_aSession['user']['role'] == 0 && SHOW_CAPTCHA :
             false;
 

@@ -73,7 +73,7 @@ class I18n {
     self::$_aPlugins  = $aPlugins;
 
     # first call
-    if (!isset(I18n::$_aLang) || WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test') {
+    if (!isset(I18n::$_aLang) || WEBSITE_MODE == 'development' || ACTIVE_TEST) {
       $sLanguageFile = $sLanguage . '.yml';
       $sLanguagePath = PATH_STANDARD . '/app/languages/' . $sLanguageFile;
 
@@ -82,7 +82,7 @@ class I18n {
         $_COOKIE['default_language'] = 'en';
 
       # reload the files, if necessary
-      if (WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test' || !isset($aSession['lang'])) {
+      if (WEBSITE_MODE == 'development' || ACTIVE_TEST || !isset($aSession['lang'])) {
         self::$_aLang = array();
 
         if ($aSession != null)

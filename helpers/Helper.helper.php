@@ -285,7 +285,7 @@ class Helper {
    *
    */
   public static function getFileSize($sPath) {
-    $iSize = @filesize( WEBSITE_MODE == 'test' ? $sPath : Helper::removeSlash($sPath) );
+    $iSize = @filesize( ACTIVE_TEST ? $sPath : Helper::removeSlash($sPath) );
 
     return $iSize === false ? -1 : $iSize;
   }

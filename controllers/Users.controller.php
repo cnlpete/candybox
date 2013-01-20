@@ -265,7 +265,7 @@ class Users extends Main {
    */
   public function create() {
     # Logged in users should not have a recaptcha field since we can assume that these are real humans.
-    $bShowCaptcha = class_exists('\candyCMS\Plugins\Recaptcha') && WEBSITE_MODE !== 'test' ?
+    $bShowCaptcha = class_exists('\candyCMS\Plugins\Recaptcha') && !ACTIVE_TEST ?
             $this->_aSession['user']['role'] == 0 && SHOW_CAPTCHA :
             false;
 
