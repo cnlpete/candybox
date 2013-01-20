@@ -93,7 +93,7 @@ class Mails extends Main {
    *
    */
   protected function _send($aMail) {
-    require_once 'vendor/phpmailer/phpmailer/class.phpmailer.php';
+    require_once PATH_STANDARD . '/vendor/phpmailer/phpmailer/class.phpmailer.php';
     $oMail = new \PHPMailer(true);
 
     if (SMTP_ENABLE === true || WEBSITE_MODE == 'test') {
