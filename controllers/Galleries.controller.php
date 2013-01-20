@@ -30,8 +30,8 @@ class Galleries extends Main {
   public function show() {
     $sType    = isset($this->_aRequest['type']) ? strtoupper($this->_aRequest['type']) : '';
     $sMethod  = $this->_iId && !isset($this->_aRequest['album_id']) ?
-            '_files' . $sType :
-            '_albums' . $sType;
+            '_show' . $sType :
+            '_overview' . $sType;
 
     return $this->$sMethod();
   }
@@ -43,9 +43,9 @@ class Galleries extends Main {
    * @return string HTML content
    *
    */
-  protected function _albums() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'albums');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'albums');
+  protected function _overview() {
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
+    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
@@ -57,111 +57,34 @@ class Galleries extends Main {
   }
 
   /**
-   * This function is not yet implemented.
-   *
-   * @access protected
-   * @return string json
-   * @todo return correct values
-   * @todo rename gallery methods
-   *
-   */
-  protected function _albumsJSON() {
-    header('Content-Type: application/json');
-    exit(json_encode(array(
-                'success' => true,
-                'error'   => '',
-                'data'    => $this->_oModel->getOverview()
-            )));
-  }
-
-  /**
-   * Just a backup method to show an entry as RSS.
-   *
-   * @access protected
-   * @return string json
-   * @deprecated
-   *
-   */
-  protected function _albumsRSS() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
-    return Helper::redirectTo('/errors/404');
-  }
-
-  /**
-   * Just a backup method to show an entry as XML.
-   *
-   * @access protected
-   * @return string XML
-   * @deprecated
-   *
-   */
-  protected function _albumsXML() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
-    return Helper::redirectTo('/errors/404');
-  }
-
-  /**
    * Show overview of images in one album.
    *
    * @access protected
    * @return string HTML content
    *
    */
-  protected function _files() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'files');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'files');
+  protected function _show() {
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
+    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
     # Collect data array
-    $sAlbumData = $this->_oModel->getAlbumNameAndContent($this->_iId, $this->_aRequest);
+    $aData = $this->_oModel->getId($this->_iId, false, true);
 
-    $this->setTitle($this->_removeHighlight($sAlbumData['title']) . ' - ' . I18n::get('global.gallery'));
-    $this->setDescription($this->_removeHighlight($sAlbumData['content']));
+    $this->setTitle($this->_removeHighlight($aData['title']) . ' - ' . I18n::get('global.gallery'));
+    $this->setDescription($this->_removeHighlight($aData['content']));
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-      $aData = $this->_oModel->getThumbnails($this->_iId);
-
-      $this->oSmarty->assign('files', $aData);
-      $this->oSmarty->assign('file_no', count($aData));
+      $this->oSmarty->assign('files', $aData['files']);
+      $this->oSmarty->assign('file_no', count($aData['files']));
 
       # @todo into array
-      $this->oSmarty->assign('gallery_name', $sAlbumData['title']);
-      $this->oSmarty->assign('gallery_content', $sAlbumData['content']);
+      $this->oSmarty->assign('gallery_name', $aData['title']);
+      $this->oSmarty->assign('gallery_content', $aData['content']);
       $this->oSmarty->assign('gallery_url', WEBSITE_URL . '/galleries/' . $this->_iId);
     }
 
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
-  }
-
-  /**
-   * This function is not yet implemented.
-   *
-   * @static
-   * @access protected
-   * @return string json
-   * @todo return correct values
-   * @deprecated
-   *
-   */
-  protected static function _filesJSON() {
-    header('Content-Type: application/json');
-    exit(json_encode(array(
-                'success' => false,
-                'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
-            )));
-  }
-
-  /**
-   * Just a backup method to show an entry as XML.
-   *
-   * @access protected
-   * @return string json
-   * @deprecated
-   *
-   */
-  protected function _filesXML() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
-    return Helper::redirectTo('/errors/404');
   }
 
   /**
@@ -171,16 +94,16 @@ class Galleries extends Main {
    * @return string XML (no real return, exits before)
    *
    */
-  protected function _filesRSS() {
+  protected function _showRSS() {
     if (!$this->_iId)
       Helper::redirectTo('/errors/404');
 
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'filesRSS');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'filesRSS');
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'showRSS');
+    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'showRSS');
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-      $aData  = $this->_oModel->getId($this->_iId, false, true);
+      $aData = $this->_oModel->getId($this->_iId, false, true);
       $this->oSmarty->assign('data', $aData);
     }
 
@@ -195,7 +118,7 @@ class Galleries extends Main {
    *
    */
   protected function _showFormTemplate() {
-    return parent::_showFormTemplate('_form_album', 'galleries.albums.title');
+    return parent::_showFormTemplate('_form_overview', 'galleries.albums.title');
   }
 
   /**
@@ -250,8 +173,8 @@ class Galleries extends Main {
    *
    */
     protected function _showFormFileTemplate() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, '_form_file');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form_file');
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, '_form_show');
+    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form_show');
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
     if ($this->_iId && $this->_aRequest['action'] == 'create') {

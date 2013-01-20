@@ -519,7 +519,7 @@ abstract class Main {
       exit(json_encode(array(
                   'success' => true,
                   'error'   => '',
-                  'data'    => $this->_oModel->getId()
+                  'data'    => $this->_oModel->getId($this->_iId)
               )));
 
     else {
