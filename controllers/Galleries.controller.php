@@ -59,17 +59,18 @@ class Galleries extends Main {
   /**
    * This function is not yet implemented.
    *
-   * @static
    * @access protected
    * @return string json
    * @todo return correct values
+   * @todo rename gallery methods
    *
    */
-  protected static function _albumsJSON() {
+  protected function _albumsJSON() {
     header('Content-Type: application/json');
     exit(json_encode(array(
-                'success' => false,
-                'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.',
+                'success' => true,
+                'error'   => '',
+                'data'    => $this->_oModel->getOverview()
             )));
   }
 
@@ -78,6 +79,7 @@ class Galleries extends Main {
    *
    * @access protected
    * @return string json
+   * @deprecated
    *
    */
   protected function _albumsRSS() {
@@ -90,6 +92,7 @@ class Galleries extends Main {
    *
    * @access protected
    * @return string XML
+   * @deprecated
    *
    */
   protected function _albumsXML() {
@@ -137,13 +140,14 @@ class Galleries extends Main {
    * @access protected
    * @return string json
    * @todo return correct values
+   * @deprecated
    *
    */
   protected static function _filesJSON() {
     header('Content-Type: application/json');
     exit(json_encode(array(
                 'success' => false,
-                'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.',
+                'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
             )));
   }
 
@@ -152,6 +156,7 @@ class Galleries extends Main {
    *
    * @access protected
    * @return string json
+   * @deprecated
    *
    */
   protected function _filesXML() {
@@ -419,13 +424,22 @@ class Galleries extends Main {
    *
    * @access public
    * @return boolean returned status of model action (boolean).
-   * @todo header('Content-Type: application/json');
    *
    */
   public function updateOrder() {
+    header('Content-Type: application/json');
+
     return $this->_aSession['user']['role'] < 3 ?
-            false :
-            exit(json_encode($this->_updateOrder()));
+            exit(json_encode(array(
+                'success' => false,
+                'error'   => '',
+                'data'    => ''
+            ))) :
+            exit(json_encode(array(
+                'success' => true,
+                'error'   => '',
+                'data'    => $this->_updateOrder()
+            )));
   }
 
   /**

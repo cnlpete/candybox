@@ -64,7 +64,10 @@ class Mails extends Main {
    */
   public function resend() {
     header('Content-Type: application/json');
-    exit(json_encode(array('success' => $this->_oModel->resend($this->_iId))));
+    exit(json_encode(array(
+        'success' => $this->_oModel->resend($this->_iId),
+        'errors'  => ''
+            )));
   }
 
   /**

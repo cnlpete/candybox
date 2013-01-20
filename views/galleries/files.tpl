@@ -80,7 +80,7 @@
               $(this).val(lang.loading).attr('disabled', 'disabled');
               var order = $('.thumbnails').sortable('serialize');
               $.post('/{$_REQUEST.controller}/{$_REQUEST.id}/updateorder', order, function(data) {
-                if(data == true) {
+                if(data.success == true) {
                   $('#js-update-order').parent().fadeOut();
                 }
                 else {

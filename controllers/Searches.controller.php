@@ -50,7 +50,7 @@ class Searches extends Main {
 
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
         $this->oSmarty->assign('string', urlencode($sString));
-        $this->oSmarty->assign('tables', $this->_oModel->getData($sString,
+        $this->oSmarty->assign('tables', $this->_oModel->getOverview($sString,
                     array('blogs', 'contents', 'downloads', 'gallery_albums')));
 
         $this->setTitle(I18n::get('searches.title.show', $sString));

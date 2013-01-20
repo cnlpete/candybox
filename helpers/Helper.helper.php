@@ -37,8 +37,8 @@ class Helper {
       header('Content-Type: application/json');
 
       exit(json_encode(array(
-                'success' => true,
-                'debug'   => WEBSITE_MODE == 'development' ? $aData : '',
+                'success'     => true,
+                'data'        => WEBSITE_MODE == 'development' ? $aData : '',
                 'redirectURL' => $sRedirectTo,
                 'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
             )));
@@ -71,8 +71,8 @@ class Helper {
       header('Content-Type: application/json');
 
       exit(json_encode(array(
-                'success' => false,
-                'debug' => WEBSITE_MODE == 'development' ? $aData : '',
+                'success'     => false,
+                'data'        => WEBSITE_MODE == 'development' ? $aData : '',
                 'redirectURL' => $sRedirectTo,
                 'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
               )));
@@ -103,8 +103,8 @@ class Helper {
         header('Content-Type: application/json');
 
         exit(json_encode(array(
-                  'success' => false,
-                  'debug' => WEBSITE_MODE == 'development' ? $aData : '',
+                  'success'     => false,
+                  'data'        => WEBSITE_MODE == 'development' ? $aData : '',
                   'redirectURL' => $sRedirectTo,
                   'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
               )));

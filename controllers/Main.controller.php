@@ -398,7 +398,7 @@ abstract class Main {
         exit(json_encode(array(
                     'success' => false,
                     'error'   => array($sField => $sMessage ? $sMessage : I18n::get('error.form.missing.file')),
-                    'debug'   => WEBSITE_MODE == 'development' ? $this->_aFile : ''
+                    'data'    => WEBSITE_MODE == 'development' ? $this->_aFile : ''
                 )));
       }
 
@@ -417,7 +417,7 @@ abstract class Main {
         exit(json_encode(array(
                     'success' => false,
                     'error'   => array($sField => $sMessage ? $sMessage : I18n::get('error.form.missing.' . strtolower($sField))),
-                    'debug'   => WEBSITE_MODE == 'development' ? $this->_aRequest : ''
+                    'data'    => WEBSITE_MODE == 'development' ? $this->_aRequest : ''
                 )));
       }
 
@@ -513,12 +513,22 @@ abstract class Main {
    *
    */
   protected function _showJSON() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
     header('Content-Type: application/json');
-    exit(json_encode(array(
-                'success' => false,
-                'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.',
-            )));
+
+    if (method_exists($this->_oModel, 'getId'))
+      exit(json_encode(array(
+                  'success' => true,
+                  'error'   => '',
+                  'data'    => $this->_oModel->getId()
+              )));
+
+    else {
+      AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
+      exit(json_encode(array(
+                  'success' => false,
+                  'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
+              )));
+    }
   }
 
   /**
@@ -529,12 +539,22 @@ abstract class Main {
    *
    */
   protected function _overviewJSON() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
     header('Content-Type: application/json');
-    exit(json_encode(array(
-                'success' => false,
-                'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.',
-            )));
+
+    if (method_exists($this->_oModel, 'getOverview'))
+      exit(json_encode(array(
+                  'success' => true,
+                  'error'   => '',
+                  'data'    => $this->_oModel->getOverview()
+              )));
+
+    else {
+      AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
+      exit(json_encode(array(
+                  'success' => false,
+                  'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
+              )));
+    }
   }
 
   /**
