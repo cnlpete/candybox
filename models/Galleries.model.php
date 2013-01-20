@@ -95,7 +95,8 @@ class Galleries extends Main {
               $this->_getThumbnails($aRow['id'], $bAdvancedImageInformation) :
               '';
 
-      $this->_aData['url_createfile'] = $this->_aData['url_clean'] . '/createfile';
+      if ($this->_aSession['user']['role'] >= 3)
+        $this->_aData['url_createfile'] = $this->_aData['url_clean'] . '/createfile';
     }
 
     return $this->_aData;
@@ -235,20 +236,22 @@ class Galleries extends Main {
       $iId           = $aRow['id'];
       $sUrlUpload    = Helper::addSlash(PATH_UPLOAD . '/galleries/' . $aRow['album_id']);
 
-      $this->_aThumbs[$iId]                 = $this->_formatForOutput($aRow, array('id', 'album_id', 'author_id'));
-      $this->_aThumbs[$iId]['url']          = '/galleries/' . $aRow['album_id'] . '/image/' . $iId;
+      $this->_aThumbs[$iId]         = $this->_formatForOutput($aRow, array('id', 'album_id', 'author_id'));
+      $this->_aThumbs[$iId]['url']  = '/galleries/' . $aRow['album_id'] . '/image/' . $iId;
 
       foreach (array('32', 'popup', 'original', 'thumb') as $sSize)
         $this->_aThumbs[$iId]['url_' . $sSize] = $sUrlUpload . '/' . $sSize . '/' . $aRow['file'];
 
-      $this->_aThumbs[$iId]['url_upload']   = $sUrlUpload;
-      $this->_aThumbs[$iId]['url_thumb']    = $sUrlUpload . '/thumbnail/' . $aRow['file'];
+      $this->_aThumbs[$iId]['url_upload'] = $sUrlUpload;
+      $this->_aThumbs[$iId]['url_thumb']  = $sUrlUpload . '/thumbnail/' . $aRow['file'];
 
       # /{$_REQUEST.controller}/{$f.id}/updatefile
-      $this->_aThumbs[$iId]['url_update']   = $this->_aThumbs[$iId]['url_update'] . 'file';
-
       # /{$_REQUEST.controller}/{$f.id}/destroyfile?album_id={$_REQUEST.id}
-      $this->_aThumbs[$iId]['url_destroy']  = $this->_aThumbs[$iId]['url_destroy'] . 'file?album_id=' . $aRow['album_id'];
+      if ($this->_aSession['user']['role'] >= 3) {
+        $this->_aThumbs[$iId]['url_update']   = $this->_aThumbs[$iId]['url_update'] . 'file';
+        $this->_aThumbs[$iId]['url_destroy']  = $this->_aThumbs[$iId]['url_destroy'] . 'file?album_id=' . $aRow['album_id'];
+      }
+
       $this->_aThumbs[$iId]['thumb_width']  = THUMB_DEFAULT_X;
       $this->_aThumbs[$iId]['loop']         = $iLoop;
 
