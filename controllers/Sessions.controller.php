@@ -109,7 +109,7 @@ class Sessions extends Main {
       $this->setTitle(I18n::get('sessions.password.title'));
       $this->setDescription(I18n::get('sessions.password.description'));
 
-      $bShowCaptcha = class_exists('\candyCMS\Plugins\Recaptcha') && WEBSITE_MODE !== 'test' ?
+      $bShowCaptcha = class_exists('\candyCMS\Plugins\Recaptcha') && !ACTIVE_TEST ?
               SHOW_CAPTCHA :
               false;
 
@@ -173,7 +173,7 @@ class Sessions extends Main {
       $this->setTitle(I18n::get('sessions.verification.title'));
       $this->setDescription(I18n::get('sessions.verification.description'));
 
-      $bShowCaptcha = class_exists('\candyCMS\Plugins\Recaptcha') && WEBSITE_MODE !== 'test' ?
+      $bShowCaptcha = class_exists('\candyCMS\Plugins\Recaptcha') && !ACTIVE_TEST ?
               SHOW_CAPTCHA :
               false;
 
@@ -243,19 +243,6 @@ class Sessions extends Main {
       $this->oSmarty->assign($sInput, $sData);
 
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
-  }
-
-  /**
-   * There is no update action for the sessions controller.
-   *
-   * @access public
-   * @param integer $iUserRole required user right - actually not required. Just a bug fix for PHP strict mode
-   * @return HTML redirected 404 page
-   *
-   */
-  public function update($iUserRole = 0) {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->update()');
-    return Helper::redirectTo('/errors/404');
   }
 
   /**

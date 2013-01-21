@@ -37,8 +37,8 @@ class Helper {
       header('Content-Type: application/json');
 
       exit(json_encode(array(
-                'success' => true,
-                'debug'   => WEBSITE_MODE == 'development' ? $aData : '',
+                'success'     => true,
+                'data'        => WEBSITE_MODE == 'development' ? $aData : '',
                 'redirectURL' => $sRedirectTo,
                 'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
             )));
@@ -71,8 +71,8 @@ class Helper {
       header('Content-Type: application/json');
 
       exit(json_encode(array(
-                'success' => false,
-                'debug' => WEBSITE_MODE == 'development' ? $aData : '',
+                'success'     => false,
+                'data'        => WEBSITE_MODE == 'development' ? $aData : '',
                 'redirectURL' => $sRedirectTo,
                 'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
               )));
@@ -103,8 +103,8 @@ class Helper {
         header('Content-Type: application/json');
 
         exit(json_encode(array(
-                  'success' => false,
-                  'debug' => WEBSITE_MODE == 'development' ? $aData : '',
+                  'success'     => false,
+                  'data'        => WEBSITE_MODE == 'development' ? $aData : '',
                   'redirectURL' => $sRedirectTo,
                   'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
               )));
@@ -285,7 +285,7 @@ class Helper {
    *
    */
   public static function getFileSize($sPath) {
-    $iSize = @filesize( WEBSITE_MODE == 'test' ? $sPath : Helper::removeSlash($sPath) );
+    $iSize = @filesize( ACTIVE_TEST ? $sPath : Helper::removeSlash($sPath) );
 
     return $iSize === false ? -1 : $iSize;
   }
@@ -336,8 +336,14 @@ class Helper {
 
       # Standard views
       else {
-        if (!file_exists(PATH_STANDARD . '/vendor/candyCMS/core/views/' . $sFolder . '/' . $sFile . '.tpl'))
-          throw new AdvancedException('This template does not exist: ' . $sFolder . '/' . $sFile . '.tpl');
+        if (!file_exists(PATH_STANDARD . '/vendor/candyCMS/core/views/' . $sFolder . '/' . $sFile . '.tpl')) {
+          # This action might be disabled due to missing form templates.
+          if (substr($sFile, 0, 5) == '_form')
+            return Helper::redirectTo('/errors/403');
+
+          else
+            throw new AdvancedException('This template does not exist: ' . $sFolder . '/' . $sFile . '.tpl');
+        }
 
         else
           return PATH_STANDARD . '/vendor/candyCMS/core/views/' . $sFolder;

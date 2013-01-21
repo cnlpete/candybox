@@ -60,7 +60,7 @@ class Downloads extends Main {
 
       $iSize = Helper::getFileSize(PATH_UPLOAD . '/' . $this->_sController . '/' . $aRow['file']);
 
-      if ($iSize != -1 || WEBSITE_MODE == 'test') {
+      if ($iSize != -1 || ACTIVE_TEST) {
         # Name category for overview
         $this->_aData[$sCategory]['category'] = $sCategory;
 

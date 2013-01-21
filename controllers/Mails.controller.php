@@ -60,12 +60,14 @@ class Mails extends Main {
    *
    * @access public
    * @return string HTML content
-   * @todo optimize JSON
    *
    */
   public function resend() {
     header('Content-Type: application/json');
-    exit(json_encode($this->_oModel->resend($this->_iId) == true));
+    exit(json_encode(array(
+        'success' => $this->_oModel->resend($this->_iId),
+        'errors'  => ''
+            )));
   }
 
   /**
@@ -80,7 +82,7 @@ class Mails extends Main {
    *
    */
   public function create() {
-    $bShowCaptcha = class_exists('\candyCMS\Plugins\Recaptcha') && WEBSITE_MODE !== 'test' ?
+    $bShowCaptcha = class_exists('\candyCMS\Plugins\Recaptcha') && !ACTIVE_TEST ?
             $this->_aSession['user']['role'] == 0 && SHOW_CAPTCHA :
             false;
 
@@ -204,27 +206,5 @@ class Mails extends Main {
 
     $this->oSmarty->setCaching(\candyCMS\Core\Helpers\SmartySingleton::CACHING_LIFETIME_SAVED);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
-  }
-
-  /**
-   * There is no update Action for the mails Controller
-   *
-   * @access public
-   *
-   */
-  public function update() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->update()');
-    return Helper::redirectTo('/errors/404');
-  }
-
-  /**
-   * There is no destroy Action for the mails Controller
-   *
-   * @access public
-   *
-   */
-  public function destroy() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->destroy()');
-    return Helper::redirectTo('/errors/404');
   }
 }

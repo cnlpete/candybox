@@ -157,7 +157,7 @@ class Index {
    *
    */
   public static function getPlugins($sAllowedPlugins) {
-    if (WEBSITE_MODE !== 'test') {
+    if (!ACTIVE_TEST) {
       if (!empty($sAllowedPlugins)) {
         $aPlugins = explode(',', $sAllowedPlugins);
 
@@ -195,7 +195,7 @@ class Index {
     require_once PATH_STANDARD . '/vendor/simonhamp/routes/routes.php';
 
     # Cache routes for performance reasons
-    if(!isset($this->_aSession['routes']) || WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test')
+    if(!isset($this->_aSession['routes']) || WEBSITE_MODE == 'development' || ACTIVE_TEST)
       $this->_aSession['routes'] = \Symfony\Component\Yaml\Yaml::parse(file_get_contents(PATH_STANDARD . '/app/config/Routes.yml'));
 
     Routes::add($this->_aSession['routes']);
@@ -206,6 +206,11 @@ class Index {
     $sURI = isset($_SERVER['REQUEST_URI']) ?
             Helper::removeSlash($_SERVER['REQUEST_URI']) :
             '';
+
+    # Disable slashes at the end of the domain
+    $sURILen = strlen($sURI);
+    if (substr($sURI, $sURILen - 1, $sURILen) == '/')
+      $sURI = substr($sURI, 0, $sURILen - 1);
 
     if ( strpos( $sURI, '?' ) !== false ) {
       # Break the query string off and attach later
@@ -288,7 +293,7 @@ class Index {
     }
 
     # ...or browsers default language...
-    elseif (file_exists(PATH_STANDARD . '/app/languages/' . strtolower($sBrowserLanguage) . '.yml') && WEBSITE_MODE !== 'test')
+    elseif (file_exists(PATH_STANDARD . '/app/languages/' . strtolower($sBrowserLanguage) . '.yml') && !ACTIVE_TEST)
       $sLanguage = $sBrowserLanguage;
 
     # ...or fall back to default language.
@@ -584,7 +589,7 @@ class Index {
       $sCachedHTML = $oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
 
-    if (ALLOW_PLUGINS !== '' && WEBSITE_MODE !== 'test')
+    if (ALLOW_PLUGINS !== '' && !ACTIVE_TEST)
       $sCachedHTML = $this->_showPlugins($sCachedHTML);
 
     header('Content-Type: text/html; charset=utf-8');

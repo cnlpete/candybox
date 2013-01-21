@@ -117,6 +117,7 @@ class SmartySingleton extends Smarty {
     }
 
     # Define smarty constants
+    $this->assign('ACTIVE_TEST', ACTIVE_TEST);
     $this->assign('CURRENT_URL', CURRENT_URL);
     $this->assign('MOBILE', MOBILE);
     $this->assign('MOBILE_DEVICE', MOBILE_DEVICE);

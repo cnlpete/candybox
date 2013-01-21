@@ -30,7 +30,7 @@ class Searches extends Main {
    * @return array $this->_aData search data
    *
    */
-  public function getData($sSearch, $aTables = '', $sOrderBy = 't.date DESC') {
+  public function getOverview($sSearch, $aTables = '', $sOrderBy = 't.date DESC') {
     if (empty($aTables))
       $aTables = array('blogs', 'contents');
 

@@ -33,7 +33,7 @@ class Searches extends Main {
    * @return string HTML content
    *
    */
-  protected function _show() {
+  protected function _overview() {
     # Bugfix: Use search via form or via URL
     if (isset($this->_aRequest['search']))
       $this->_aRequest[$this->_sController]['search'] =& $this->_aRequest['search'];
@@ -42,15 +42,15 @@ class Searches extends Main {
       return $this->_create();
 
     else {
-      $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
-      $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+      $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
+      $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
       $this->oSmarty->setTemplateDir($sTemplateDir);
 
       $sString = Helper::formatInput(urldecode($this->_aRequest[$this->_sController]['search']));
 
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
         $this->oSmarty->assign('string', urlencode($sString));
-        $this->oSmarty->assign('tables', $this->_oModel->getData($sString,
+        $this->oSmarty->assign('tables', $this->_oModel->getOverview($sString,
                     array('blogs', 'contents', 'downloads', 'gallery_albums')));
 
         $this->setTitle(I18n::get('searches.title.show', $sString));

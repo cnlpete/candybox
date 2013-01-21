@@ -238,7 +238,7 @@ abstract class Main {
     $this->oSmarty = SmartySingleton::getInstance();
 
     # Clear cache on development mode or when we force it via a request.
-    if (isset($this->_aRequest['clearcache']) || WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test') {
+    if (isset($this->_aRequest['clearcache']) || WEBSITE_MODE == 'development' || ACTIVE_TEST) {
       $this->oSmarty->clearAllCache();
       $this->oSmarty->clearCompiledTemplate();
     }
@@ -398,7 +398,7 @@ abstract class Main {
         exit(json_encode(array(
                     'success' => false,
                     'error'   => array($sField => $sMessage ? $sMessage : I18n::get('error.form.missing.file')),
-                    'debug'   => WEBSITE_MODE == 'development' ? $this->_aFile : ''
+                    'data'    => WEBSITE_MODE == 'development' ? $this->_aFile : ''
                 )));
       }
 
@@ -417,7 +417,7 @@ abstract class Main {
         exit(json_encode(array(
                     'success' => false,
                     'error'   => array($sField => $sMessage ? $sMessage : I18n::get('error.form.missing.' . strtolower($sField))),
-                    'debug'   => WEBSITE_MODE == 'development' ? $this->_aRequest : ''
+                    'data'    => WEBSITE_MODE == 'development' ? $this->_aRequest : ''
                 )));
       }
 
@@ -489,7 +489,7 @@ abstract class Main {
    *
    */
   protected function _showXML() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_showXML()');
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
     return Helper::redirectTo('/errors/404');
   }
 
@@ -501,7 +501,7 @@ abstract class Main {
    *
    */
   protected function _overviewXML() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_overviewXML()');
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
     return Helper::redirectTo('/errors/404');
   }
 
@@ -513,12 +513,22 @@ abstract class Main {
    *
    */
   protected function _showJSON() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_showJSON()');
     header('Content-Type: application/json');
-    exit(json_encode(array(
-                'success' => false,
-                'error'   => 'There is no JSON handling method.',
-            )));
+
+    if (method_exists($this->_oModel, 'getId'))
+      exit(json_encode(array(
+                  'success' => true,
+                  'error'   => '',
+                  'data'    => $this->_oModel->getId($this->_iId)
+              )));
+
+    else {
+      AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
+      exit(json_encode(array(
+                  'success' => false,
+                  'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
+              )));
+    }
   }
 
   /**
@@ -529,12 +539,22 @@ abstract class Main {
    *
    */
   protected function _overviewJSON() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_overviewJSON()');
     header('Content-Type: application/json');
-    exit(json_encode(array(
-                'success' => false,
-                'error'   => 'There is no JSON handling method.',
-            )));
+
+    if (method_exists($this->_oModel, 'getOverview'))
+      exit(json_encode(array(
+                  'success' => true,
+                  'error'   => '',
+                  'data'    => $this->_oModel->getOverview()
+              )));
+
+    else {
+      AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
+      exit(json_encode(array(
+                  'success' => false,
+                  'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
+              )));
+    }
   }
 
   /**
@@ -545,7 +565,7 @@ abstract class Main {
    *
    */
   protected function _showRSS() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_showRSS()');
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
     return Helper::redirectTo('/errors/404');
   }
 
@@ -557,7 +577,7 @@ abstract class Main {
    *
    */
   protected function _overviewRSS() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_overviewRSS()');
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
     return Helper::redirectTo('/errors/404');
   }
 

@@ -93,14 +93,14 @@ class Mails extends Main {
    *
    */
   protected function _send($aMail) {
-    require_once 'vendor/phpmailer/phpmailer/class.phpmailer.php';
+    require_once PATH_STANDARD . '/vendor/phpmailer/phpmailer/class.phpmailer.php';
     $oMail = new \PHPMailer(true);
 
-    if (SMTP_ENABLE === true || WEBSITE_MODE == 'test') {
+    if (SMTP_ENABLE === true || ACTIVE_TEST) {
       $oMail->IsSMTP();
 
       $oMail->SMTPAuth  = defined('SMTP_USE_AUTH') ? SMTP_USE_AUTH === true : true;
-      $oMail->SMTPDebug = WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test' ? 1 : 0;
+      $oMail->SMTPDebug = WEBSITE_MODE == 'development' || ACTIVE_TEST ? 1 : 0;
 
       $oMail->Host      = defined('SMTP_HOST') ? SMTP_HOST : 'localhost';
       $oMail->Port      = defined('SMTP_POST') ? SMTP_PORT : '1025';
@@ -212,7 +212,7 @@ class Mails extends Main {
       $sErrorMessage = $e->errorMessage();
     }
 
-    if ((!$bReturn && $bSaveMail && defined('USE_MAIL_QUEUE') && USE_MAIL_QUEUE == true) || WEBSITE_MODE == 'test') {
+    if ((!$bReturn && $bSaveMail && defined('USE_MAIL_QUEUE') && USE_MAIL_QUEUE == true) || ACTIVE_TEST) {
       try {
         $oQuery = $this->_oDb->prepare("INSERT INTO
                                           " . SQL_PREFIX . "mails

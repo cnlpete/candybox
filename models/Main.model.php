@@ -311,40 +311,48 @@ abstract class Main {
     # Normal user
     if ($aData['user_id'] != 0) {
       $aUserData = array(
-          'email'         => $aData['user_email'],
           'id'            => $aData['user_id'],
           'use_gravatar'  => isset($aData['use_gravatar']) ? (bool) $aData['use_gravatar'] : false,
           'name'          => $aData['user_name'],
           'surname'       => $aData['user_surname'],
-          'facebook_id'   => isset($aData['author_facebook_id']) ? $aData['author_facebook_id'] : '',
-          'ip'            => isset($aData['author_ip']) ? $aData['author_ip'] : '',
+          'facebook_id'   => isset($aData['author_facebook_id']) ? $aData['author_facebook_id'] : ''
       );
+
+      if ($this->_aSession['user']['role'] >= 3) {
+        $aUserData = array(
+            'email'       => $aData['user_email'],
+            'ip'          => isset($aData['author_ip']) ? $aData['author_ip'] : ''
+        );
+      }
     }
 
-    # We don't have a user (comments) and format the user given data instead.
+    # We don't have a user (comments) - format the user given data instead.
     else {
       $aUserData = array(
-          'email'         => isset($aData['author_email']) ? $aData['author_email'] : WEBSITE_MAIL,
           'id'            => isset($aData['author_id']) ? $aData['author_id'] : 0,
           'use_gravatar'  => isset($aData['use_gravatar']) ? (bool) $aData['use_gravatar'] : true,
           'name'          => isset($aData['author_name']) ? $aData['author_name'] : '',
           'surname'       => '',
-          'facebook_id'   => isset($aData['author_facebook_id']) ? $aData['author_facebook_id'] : '',
-          'ip'            => isset($aData['author_ip']) ? $aData['author_ip'] : '',
+          'facebook_id'   => isset($aData['author_facebook_id']) ? $aData['author_facebook_id'] : ''
       );
+
+      if ($this->_aSession['user']['role'] >= 3) {
+        $aUserData = array(
+            'email'       => isset($aData['author_email']) ? $aData['author_email'] : WEBSITE_MAIL,
+            'ip'          => isset($aData['author_ip']) ? $aData['author_ip'] : ''
+        );
+      }
     }
 
     $aData['author'] = self::_formatForUserOutput($aUserData);
 
     # Encode data for SEO
-    $aData['title_encoded'] = isset($aData['title']) ? urlencode($aData['title']) : $aData['author']['encoded_full_name'];
+    $aData['title_encoded'] = isset($aData['title']) ? urlencode($aData['title']) : $aData['author']['full_name_encoded'];
 
     # URL to entry
     $aData['url_clean']   = WEBSITE_URL . '/' . $sController . '/' . $aData['id'];
     $aData['url']         = $aData['url_clean'] . '/' . $aData['title_encoded'];
     $aData['url_encoded'] = urlencode($aData['url']); #SEO
-    $aData['url_destroy'] = $aData['url_clean'] . '/destroy';
-    $aData['url_update']  = $aData['url_clean'] . '/update';
 
     # Do we need to highlight text?
     $sHighlight = isset($this->_aRequest['highlight']) ? $this->_aRequest['highlight'] : '';
@@ -356,19 +364,31 @@ abstract class Main {
       $aData['content'] = Helper::formatOutput($aData['content'], $sHighlight);
     }
 
+    # Skip sensible data
+    if ($this->_aSession['user']['role'] >= 3) {
+      $aData['url_destroy'] = $aData['url_clean'] . '/destroy';
+      $aData['url_update']  = $aData['url_clean'] . '/update';
+    }
+
+    # Destroy redundant data
+    unset(  $aData['user_id'],
+            $aData['user_name'],
+            $aData['user_surname'],
+            $aData['user_email'],
+            $aData['use_gravatar']);
+
     return $aData;
   }
 
   /**
    * Formats / adds all relevant Information for displaying a user.
    *
-   * @static
    * @access protected
    * @param array $aData array of given userdata, required fields are 'email', 'id', 'name', 'surname' and 'use_gravatar'
    * @return array $aData returns reference of $aData
    *
    */
-  protected static function _formatForUserOutput(&$aData) {
+  protected function _formatForUserOutput(&$aData) {
     # Set up ints first
     $aData['id']    = (int) $aData['id'];
     $aData['role']  = (int) isset($aData['role']) ? $aData['role'] : 0;
@@ -385,17 +405,14 @@ abstract class Main {
     $aData['name']      = isset($aData['name']) ? (string) $aData['name'] : '';
     $aData['surname']   = isset($aData['surname']) ? (string) $aData['surname'] : '';
     $aData['full_name'] = trim($aData['name'] . ' ' . $aData['surname']);
-
-    # Encode data for SEO
-    $aData['encoded_full_name'] = urlencode($aData['full_name']);
+    $aData['full_name_encoded'] = urlencode($aData['full_name']);
 
     # URL to entry
     $aData['url_clean']   = WEBSITE_URL . '/users/' . $aData['id'];
-    $aData['url']         = $aData['url_clean'] . '/' . $aData['encoded_full_name'];
+    $aData['url']         = $aData['url_clean'] . '/' . $aData['full_name_encoded'];
     $aData['url_encoded'] = urlencode($aData['url']);
-
-    $aData['url_destroy'] = $aData['url_clean'] . '/destroy';
-    $aData['url_update']  = $aData['url_clean'] . '/update';
+//    $aData['url_destroy'] = $aData['url_clean'] . '/destroy';
+//    $aData['url_update']  = $aData['url_clean'] . '/update';
 
     return $aData;
   }

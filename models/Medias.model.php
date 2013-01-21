@@ -87,7 +87,7 @@ class Medias extends Main {
     # We get the image information via GET
     $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $this->_aRequest['file']);
 
-    if (WEBSITE_MODE == 'test')
+    if (ACTIVE_TEST)
       return true;
 
     elseif (is_file($sPath))

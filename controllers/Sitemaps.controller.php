@@ -77,37 +77,4 @@ class Sitemaps extends Main {
     $this->oSmarty->assign('contents', $oContents->getOverview(1000));
     $this->oSmarty->assign('galleries', $oGalleries->getOverview(false, 1000));
   }
-
-  /**
-   * There is no create action for the sitemaps controller
-   *
-   * @access public
-   *
-   */
-  public function create() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->create()');
-    return Helper::redirectTo('/errors/404');
-  }
-
-  /**
-   * There is no update action for the sitemaps controller
-   *
-   * @access public
-   *
-   */
-  public function update() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->update()');
-    return Helper::redirectTo('/errors/404');
-  }
-
-  /**
-   * There is no destroy action for the sitemaps controller
-   *
-   * @access public
-   *
-   */
-  public function destroy() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->destroy()');
-    return Helper::redirectTo('/errors/404');
-  }
 }

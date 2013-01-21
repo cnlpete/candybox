@@ -79,7 +79,7 @@ class Galleries extends Main {
       exit('SQL error.');
     }
 
-    # Update a single entry. Fix it with 0 o
+    # Update a single entry.
     if ($bUpdate === true)
       $this->_aData = $this->_formatForUpdate($aRow);
 
@@ -92,10 +92,11 @@ class Galleries extends Main {
               'galleries');
 
       $this->_aData['files'] = $aRow['files_sum'] > 0 ?
-              $this->getThumbnails($aRow['id'], $bAdvancedImageInformation) :
+              $this->_getThumbnails($aRow['id'], $bAdvancedImageInformation) :
               '';
 
-      $this->_aData['url_createfile'] = $this->_aData['url_clean'] . '/createfile';
+      if ($this->_aSession['user']['role'] >= 3)
+        $this->_aData['url_createfile'] = $this->_aData['url_clean'] . '/createfile';
     }
 
     return $this->_aData;
@@ -111,11 +112,11 @@ class Galleries extends Main {
    *
    */
   public function getOverview($bAdvancedImageInformation = false, $iLimit = LIMIT_ALBUMS) {
-    $iResult  = 0;
+    $iResult = 0;
 
     try {
-      $oQuery = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "gallery_albums");
-      $iResult = $oQuery->fetchColumn();
+      $oQuery   = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "gallery_albums");
+      $iResult  = $oQuery->fetchColumn();
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
@@ -173,7 +174,7 @@ class Galleries extends Main {
               'galleries');
 
       $this->_aData[$iId]['files'] = $aRow['files_sum'] > 0 ?
-              $this->getThumbnails($aRow['id'], $bAdvancedImageInformation) :
+              $this->_getThumbnails($aRow['id'], $bAdvancedImageInformation) :
               '';
 
       $this->_aData[$iId]['url_createfile'] = $this->_aData[$iId]['url_clean'] . '/createfile';
@@ -185,13 +186,13 @@ class Galleries extends Main {
   /**
    * Get thumbnail array.
    *
-   * @access public
+   * @access protected
    * @param integer $iId album id to fetch images from
    * @param boolean $bAdvancedImageInformation fetch additional information like width, height etc.
    * @return array $this->_aThumbs processed array with image information
    *
    */
-  public function getThumbnails($iId, $bAdvancedImageInformation = false) {
+  protected function _getThumbnails($iId, $bAdvancedImageInformation = false) {
     # Clear existing array (fix, when we got no images at a gallery)
     if (!empty($this->_aThumbs))
       unset($this->_aThumbs);
@@ -235,20 +236,22 @@ class Galleries extends Main {
       $iId           = $aRow['id'];
       $sUrlUpload    = Helper::addSlash(PATH_UPLOAD . '/galleries/' . $aRow['album_id']);
 
-      $this->_aThumbs[$iId]                 = $this->_formatForOutput($aRow, array('id', 'album_id', 'author_id'));
-      $this->_aThumbs[$iId]['url']          = '/galleries/' . $aRow['album_id'] . '/image/' . $iId;
+      $this->_aThumbs[$iId]         = $this->_formatForOutput($aRow, array('id', 'album_id', 'author_id'));
+      $this->_aThumbs[$iId]['url']  = '/galleries/' . $aRow['album_id'] . '/image/' . $iId;
 
       foreach (array('32', 'popup', 'original', 'thumb') as $sSize)
         $this->_aThumbs[$iId]['url_' . $sSize] = $sUrlUpload . '/' . $sSize . '/' . $aRow['file'];
 
-      $this->_aThumbs[$iId]['url_upload']   = $sUrlUpload;
-      $this->_aThumbs[$iId]['url_thumb']    = $sUrlUpload . '/thumbnail/' . $aRow['file'];
+      $this->_aThumbs[$iId]['url_upload'] = $sUrlUpload;
+      $this->_aThumbs[$iId]['url_thumb']  = $sUrlUpload . '/thumbnail/' . $aRow['file'];
 
       # /{$_REQUEST.controller}/{$f.id}/updatefile
-      $this->_aThumbs[$iId]['url_update']   = $this->_aThumbs[$iId]['url_update'] . 'file';
-
       # /{$_REQUEST.controller}/{$f.id}/destroyfile?album_id={$_REQUEST.id}
-      $this->_aThumbs[$iId]['url_destroy']  = $this->_aThumbs[$iId]['url_destroy'] . 'file?album_id=' . $aRow['album_id'];
+      if ($this->_aSession['user']['role'] >= 3) {
+        $this->_aThumbs[$iId]['url_update']   = $this->_aThumbs[$iId]['url_update'] . 'file';
+        $this->_aThumbs[$iId]['url_destroy']  = $this->_aThumbs[$iId]['url_destroy'] . 'file?album_id=' . $aRow['album_id'];
+      }
+
       $this->_aThumbs[$iId]['thumb_width']  = THUMB_DEFAULT_X;
       $this->_aThumbs[$iId]['loop']         = $iLoop;
 
@@ -271,47 +274,6 @@ class Galleries extends Main {
     }
 
     return $this->_aThumbs;
-  }
-
-  /**
-   * Return album name and album content.
-   *
-   * @static
-   * @access public
-   * @param integer $iId album ID
-   * @param array $aRequest current request
-   * @return string album name
-   *
-   */
-  public static function getAlbumNameAndContent($iId, $aRequest = '') {
-    if (empty(parent::$_oDbStatic))
-      parent::connectToDatabase();
-
-    try {
-      $oQuery = parent::$_oDbStatic->prepare("SELECT
-                                                title, content
-                                              FROM
-                                                " . SQL_PREFIX . "gallery_albums
-                                              WHERE
-                                                id = :album_id");
-
-      $oQuery->bindParam('album_id', $iId, PDO::PARAM_INT);
-
-      $bReturn = $oQuery->execute();
-      $aResult = $oQuery->fetch(PDO::FETCH_ASSOC);
-    }
-    catch (\PDOException $p) {
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
-    }
-
-    if ($bReturn === true) {
-      foreach ($aResult as $sKey => $sValue)
-        $aResult[$sKey] = Helper::formatOutput(
-                        $sValue, isset($aRequest['highlight']) ? $aRequest['highlight'] : '');
-
-      return $aResult;
-    }
   }
 
   /**

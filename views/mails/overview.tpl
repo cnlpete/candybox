@@ -60,7 +60,7 @@
       function resendMail($this, iMailId) {
         $.getJSON('/mails/' + iMailId + '/resend', function(data) {
           var jRow = $($this).closest('tr');
-          if (data) {
+          if (data.success == true) {
             jRow.fadeOut(function() {
               jRow.remove();
             });

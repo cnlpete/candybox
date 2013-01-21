@@ -198,7 +198,7 @@ class Blogs extends Main {
    *
    */
   public function getOverview($iLimit = LIMIT_BLOG) {
-    if (WEBSITE_MODE == 'test' && $iLimit != 0)
+    if (ACTIVE_TEST && $iLimit != 0)
       $iLimit = 2;
 
     $iResult = $this->getCount();
