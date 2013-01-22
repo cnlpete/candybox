@@ -22,8 +22,7 @@ class Sites extends Main {
    * Print out a static page.
    *
    * An example would be an URL linking to "/sites/welcome" when there is a template named
-   * "welcome.tpl" in the static folder defined in the "app/config/Candy.inc.php" (PATH_STATIC -
-   * normally located at "/public/_static/").
+   * "welcome.tpl" located at app/sites/welcome.tpl.
    *
    * @access protected
    * @return string HTML content
@@ -34,11 +33,11 @@ class Sites extends Main {
             strtolower((string) $this->_aRequest['site']) :
             '';
 
-    if (!file_exists(PATH_STANDARD . '/' . PATH_STATIC_TEMPLATES . '/' . $sSite . '.tpl'))
+    if (!file_exists(PATH_STANDARD . '/app/sites/' . $sSite . '.tpl'))
       return Helper::redirectTo('/errors/404');
 
     $this->setTitle(ucfirst($sSite));
-    return $this->oSmarty->fetch(PATH_STANDARD . '/' . PATH_STATIC_TEMPLATES . '/' . $sSite . '.tpl');
+    return $this->oSmarty->fetch(PATH_STANDARD . '/app/sites/' . $sSite . '.tpl');
   }
 
   /**
@@ -59,7 +58,7 @@ class Sites extends Main {
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
       $aSites = array();
-      $oPathDir = opendir(PATH_STANDARD . '/' . PATH_STATIC_TEMPLATES);
+      $oPathDir = opendir(PATH_STANDARD . '/app/sites');
 
       while ($sSite = readdir($oPathDir)) {
         if (substr($sSite, 0, 1) == '.')
