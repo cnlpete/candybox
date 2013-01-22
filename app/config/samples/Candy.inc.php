@@ -178,10 +178,6 @@ define('POPUP_DEFAULT_Y', '640');
 # DEFAULT: ''
 define('PATH_TEMPLATE', '');
 
-# Define, where to find static HTML-Templates
-# DEFAULT: 'public/skins/_static'
-define('PATH_STATIC_TEMPLATES', 'public/_static');
-
 # Define, where files are uploaded to
 # DEFAULT: upload
 define('PATH_UPLOAD', 'upload');
