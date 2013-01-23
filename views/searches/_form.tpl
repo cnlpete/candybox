@@ -11,7 +11,7 @@
       </label>
       <div class='controls'>
         <input type='search'
-               class='span4 focused'
+               class='span3 focused'
                name='{$_REQUEST.controller}[search]'
                id='input-search'
                autofocus required />

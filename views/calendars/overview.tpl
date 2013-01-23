@@ -83,7 +83,7 @@
                     </span>
                   {/if}
                 </td>
-                <td class='center'>
+                <td class='right'>
                   <a href='{$d.url}'>
                     <i class='icon-calendar js-tooltip'
                       title='{$lang.calendars.info.ics}'></i>

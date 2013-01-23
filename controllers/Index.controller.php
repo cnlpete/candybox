@@ -194,7 +194,7 @@ class Index {
   public function getRoutes() {
     require_once PATH_STANDARD . '/vendor/simonhamp/routes/routes.php';
 
-    # Cache routes for performance reasons
+    # Cache routes for performance reasons and clear it for testing and development
     if(!isset($this->_aSession['routes']) || WEBSITE_MODE == 'development' || ACTIVE_TEST)
       $this->_aSession['routes'] = \Symfony\Component\Yaml\Yaml::parse(file_get_contents(PATH_STANDARD . '/app/config/Routes.yml'));
 
