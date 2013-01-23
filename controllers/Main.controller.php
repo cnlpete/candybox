@@ -198,8 +198,8 @@ abstract class Main {
       return \candyCMS\Core\Models\Main::__autoload($sClass);
 
     else {
-      if (EXTENSION_CHECK && file_exists(PATH_STANDARD . '/app/extensions/controllers/' . $sClass . '.controller.php')) {
-        require_once PATH_STANDARD . '/app/extensions/controllers/' . $sClass . '.controller.php';
+      if (EXTENSION_CHECK && file_exists(PATH_STANDARD . '/app/controllers/' . $sClass . '.controller.php')) {
+        require_once PATH_STANDARD . '/app/controllers/' . $sClass . '.controller.php';
         return '\candyCMS\Controllers\\' . $sClass;
       }
       else {

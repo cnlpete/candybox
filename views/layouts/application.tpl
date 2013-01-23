@@ -5,7 +5,7 @@
         xmlns:fb='http://www.facebook.com/2008/fbml'>
     <head>
       {* Production mode: Use compiled CSS *}
-      <link href='{$_PATH.css}/core/application{$_SYSTEM.compress_files_suffix}.css'
+      <link href='{$_PATH.css}/core{$_SYSTEM.compress_files_suffix}.css'
             rel='stylesheet' type='text/css' media='screen, projection'/>
 
       <meta http-equiv='content-type' content='text/html;charset=utf-8'/>

@@ -180,45 +180,31 @@ class SmartySingleton extends Smarty {
    *
    * @access public
    * @return array Array with Paths for 'images', 'js', 'less', 'css', 'templates', 'upload', 'public'
+   * @todo update PATH and description
    *
    */
   public function getPaths() {
-    $aPaths = array('css' => 'css', 'less' => 'less', 'images' => 'images', 'js' => 'js');
-
-    # Use an external CDN within a custom template
-    if (PATH_TEMPLATE !== '' && substr(WEBSITE_CDN, 0, 4) == 'http') {
-      $sPath = WEBSITE_CDN . '/templates/' . PATH_TEMPLATE;
-
-      foreach ($aPaths as $sKey => $sValue)
-        $aPaths[$sKey] = $sPath . '/' . $sValue;
-    }
-
-    # Use our public folder within a custom template
-    elseif (PATH_TEMPLATE !== '' && substr(WEBSITE_CDN, 0, 4) !== 'http') {
-      $sPath = WEBSITE_CDN . '/templates/' . PATH_TEMPLATE;
-
-      foreach ($aPaths as $sKey => $sValue)
-        $aPaths[$sKey] = ( @is_dir(substr($sPath, 1) . '/css') ? $sPath : WEBSITE_CDN ) . '/' . $sValue;
-    }
-
-    # Use standard folders
-    else {
-      foreach ($aPaths as $sKey => $sValue)
-        $aPaths[$sKey] = WEBSITE_CDN . '/' . $sValue;
-    }
+    foreach (array(
+        'css'     => WEBSITE_CDN . '/stylesheets',
+        'less'    => '/app/assets/stylesheets',
+        'images'  => '/app/assets/images',
+        'js'      => '/app/assets/javascripts') as $sKey => $sValue)
+      $aPaths[$sKey] = $sValue;
 
     # Compile CSS when in development mode and clearing the cache
     if (WEBSITE_MODE == 'development' && !isset($this->_aRequest['type'])) {
       try {
-        if (MOBILE === true && file_exists(Helper::removeSlash($aPaths['less'] . '/mobile/application.less'))) {
-          @unlink(Helper::removeSlash($aPaths['css'] . '/mobile/application.css'));
-          lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
-                  Helper::removeSlash($aPaths['css'] . '/mobile/application.css'));
+        lessc::setFormatter(WEBSITE_COMPRESS_FILES === true ? 'compressed' : 'classic');
+
+        if (MOBILE === true && file_exists(Helper::removeSlash($aPaths['less'] . '/mobile.less'))) {
+          unlink(Helper::removeSlash($aPaths['css'] . '/mobile.css'));
+          lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/mobile.less'),
+                  Helper::removeSlash($aPaths['css'] . '/mobile.css'));
         }
         elseif (file_exists(Helper::removeSlash($aPaths['less'] . '/core/application.less'))) {
-          @unlink(Helper::removeSlash($aPaths['css'] . '/core/application.css'));
+          unlink(Helper::removeSlash($aPaths['css'] . '/core.css'));
           lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/core/application.less'),
-                  Helper::removeSlash($aPaths['css'] . '/core/application.css'));
+                  Helper::removeSlash($aPaths['css'] . '/core.css'));
         }
       }
       catch (AdvancedException $e) {
@@ -230,7 +216,6 @@ class SmartySingleton extends Smarty {
         'core'      => '/vendor/candyCMS/core',
         'public'    => WEBSITE_CDN,
         'plugins'   => '/vendor/candyCMS/plugins',
-        'template'  => WEBSITE_CDN . '/templates/' . PATH_TEMPLATE,
         'upload'    => Helper::removeSlash(PATH_UPLOAD));
   }
 

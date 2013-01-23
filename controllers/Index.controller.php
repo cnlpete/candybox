@@ -242,13 +242,9 @@ class Index {
 
     # Show files from public folder (robots.txt, human.txt and favicon.ico)
     if (preg_match('/\.txt/', $sURI) || preg_match('/\.ico/', $sURI) && !isset($this->_aRequest['action'])) {
-			$sFileTemplate	= Helper::removeSlash(WEBSITE_CDN) . '/templates/' . PATH_TEMPLATE . '/' . $sURI;
-			$sFileRoot      = Helper::removeSlash(WEBSITE_CDN) . '/' . $sURI;
+			$sFileRoot = Helper::removeSlash(WEBSITE_CDN) . '/' . $sURI;
 
-      if (PATH_TEMPLATE && file_exists($sFileTemplate))
-        exit(file_get_contents($sFileTemplate));
-
-      elseif (file_exists($sFileRoot))
+      if (file_exists($sFileRoot))
         exit(file_get_contents($sFileRoot));
 
       else
@@ -467,8 +463,8 @@ class Index {
 
     # Get user by token
     if (isset($this->_aRequest['api_token']) && !empty($this->_aRequest['api_token'])) {
-      if (EXTENSION_CHECK && file_exists(PATH_STANDARD . '/app/extensions/models/Users.model.php')) {
-        require_once PATH_STANDARD . '/app/extensions/models/Users.model.php';
+      if (EXTENSION_CHECK && file_exists(PATH_STANDARD . '/app/models/Users.model.php')) {
+        require_once PATH_STANDARD . '/app/models/Users.model.php';
         $aUser = \candyCMS\Models\Users::getUserByToken(Helper::formatInput($this->_aRequest['api_token']));
       }
       else {
@@ -479,8 +475,8 @@ class Index {
 
     # Get user by session
     else {
-      if (EXTENSION_CHECK && file_exists(PATH_STANDARD . '/app/extensions/models/Sessions.model.php')) {
-        require_once PATH_STANDARD . '/app/extensions/models/Sessions.model.php';
+      if (EXTENSION_CHECK && file_exists(PATH_STANDARD . '/app/models/Sessions.model.php')) {
+        require_once PATH_STANDARD . '/app/models/Sessions.model.php';
         $aUser = \candyCMS\Models\Sessions::getUserBySession();
       }
       else {
@@ -542,7 +538,7 @@ class Index {
 
     if (!defined('UNIQUE_ID')) {
       define('UNIQUE_ID', UNIQUE_PREFIX . '|' . (MOBILE ? 'mob|' : 'tpl|') .
-              substr(md5($this->_aSession['user']['role'] . PATH_TEMPLATE), 0, 10) . '|' .
+              substr(md5($this->_aSession['user']['role']), 0, 10) . '|' .
               substr(md5(CURRENT_URL), 0, 10));
     }
 

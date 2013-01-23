@@ -491,8 +491,8 @@ abstract class Main {
   public static function __autoload($sClass) {
     $sClass = (string) ucfirst(strtolower($sClass));
 
-    if (EXTENSION_CHECK && file_exists(PATH_STANDARD . '/app/extensions/models/' . $sClass . '.model.php')) {
-      require_once PATH_STANDARD . '/app/extensions/models/' . $sClass . '.model.php';
+    if (EXTENSION_CHECK && file_exists(PATH_STANDARD . '/app/models/' . $sClass . '.model.php')) {
+      require_once PATH_STANDARD . '/app/models/' . $sClass . '.model.php';
       return '\candyCMS\Models\\' . $sClass;
     }
     elseif (file_exists(PATH_STANDARD . '/vendor/candyCMS/core/models/' . $sClass . '.model.php')) {

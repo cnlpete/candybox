@@ -327,12 +327,8 @@ class Helper {
   public static function getTemplateDir($sFolder, $sFile) {
     try {
       # Extensions
-      if (EXTENSION_CHECK && file_exists(PATH_STANDARD . '/app/extensions/views/' . $sFolder . '/' . $sFile . '.tpl'))
-        return PATH_STANDARD . '/app/extensions/views/' . $sFolder;
-
-      # Template use
-      elseif (file_exists(PATH_STANDARD . '/public/templates/' . PATH_TEMPLATE . '/views/' . $sFolder . '/' . $sFile . '.tpl'))
-        return PATH_STANDARD . '/public/templates/' . PATH_TEMPLATE . '/views/' . $sFolder;
+      if (EXTENSION_CHECK && file_exists(PATH_STANDARD . '/app/views/' . $sFolder . '/' . $sFile . '.tpl'))
+        return PATH_STANDARD . '/app/views/' . $sFolder;
 
       # Standard views
       else {
@@ -393,8 +389,8 @@ class Helper {
   public static function getPluginTemplateDir($sFolder, $sFile) {
     try {
       # Template
-      if (file_exists(PATH_STANDARD . '/public/templates/' . PATH_TEMPLATE . '/views/' . strtolower($sFolder) . '/' . $sFile . '.tpl'))
-        return PATH_STANDARD . '/public/templates/' . PATH_TEMPLATE . '/views/' . strtolower($sFolder);
+      if (file_exists(PATH_STANDARD . '/app/views/' . strtolower($sFolder) . '/' . $sFile . '.tpl'))
+        return PATH_STANDARD . '/app/views/' . strtolower($sFolder);
 
       # Standard views
       else {
