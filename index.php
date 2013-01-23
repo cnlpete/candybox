@@ -55,7 +55,6 @@ if (WEBSITE_MODE == 'production' && is_file('composer.phar'))
   exit('Please delete the composer.phar.');
 
 # Override the system variables in development mode.
-ini_set('log_errors', 1);
 if (WEBSITE_MODE == 'test') {
   ini_set('display_errors', 0);
   ini_set('error_reporting', 0);
@@ -65,18 +64,20 @@ else {
   ini_set('error_reporting', 1);
 }
 
-# Define current url
+# Define current URL and server IP
 define('CURRENT_URL', isset($_SERVER['REQUEST_URI']) ? WEBSITE_URL . $_SERVER['REQUEST_URI'] : WEBSITE_URL);
+define('SERVER_IP', $_SERVER['REMOTE_ADDR']);
 
 # Reload page when redirected
-if (preg_match('/\?reload=1/', CURRENT_URL))
-  exit(header('Location:' . str_replace('?reload=1', '', CURRENT_URL)));
+# @todo deprecated?
+#if (preg_match('/\?reload=1/', CURRENT_URL))
+#  exit(header('Location:' . str_replace('?reload=1', '', CURRENT_URL)));
 
 # Start user session.
 @session_start();
 
 # Do we have a mobile device?
-# @todo
+# @todo - research alternative way
 if(isset($_SERVER['HTTP_USER_AGENT'])) {
   if (!defined('MOBILES'))
     define('MOBILES', 'Opera Mini|Symb|Windows CE|IEMobile|iPhone|iPod|Blackberry|Android|Mobile Safari');
