@@ -9,9 +9,12 @@ nbproject/*
 app/*
 !/app/assets
 !/app/config/samples/
-!/app/extensions
+!/app/controllers
+!/app/languages
+!/app/models
 !/app/sites
 !/app/tests
+!/app/views
 
 public/templates/*
 !public/templates/sample
@@ -20,3 +23,4 @@ upload/*
 
 /vendor/*
 !/vendor/tiny_mce
+/.minify/

@@ -1,0 +1,63 @@
+@path_bootstrap = "../../../vendor/twitter/bootstrap/twitter/bootstrap/less";
+@path_candy     = "../../../vendor/candyCMS/core/assets/stylesheets/less/core";
+
+// CSS Reset
+@import @path_bootstrap + "/reset.less";
+
+// Core variables and mixins
+@import @path_bootstrap + "/variables.less"; // Modify this for custom colors, font-sizes, etc
+@import @path_bootstrap + "/mixins.less";
+
+// Grid system and page structure
+@import @path_bootstrap + "/scaffolding.less";
+@import @path_bootstrap + "/grid.less";
+@import @path_bootstrap + "/layouts.less";
+
+// Base CSS
+@import @path_bootstrap + "/type.less";
+@import @path_bootstrap + "/code.less";
+@import @path_bootstrap + "/forms.less";
+@import @path_bootstrap + "/tables.less";
+
+// Components: common
+//@import @path_bootstrap + "/sprites.less";
+@import @path_bootstrap + "/dropdowns.less";
+@import @path_bootstrap + "/wells.less";
+@import @path_bootstrap + "/component-animations.less";
+@import @path_bootstrap + "/close.less";
+
+// Components: Buttons & Alerts
+@import @path_bootstrap + "/buttons.less";
+//@import @path_bootstrap + "/button-groups.less";
+@import @path_bootstrap + "/alerts.less"; // Note: alerts share common CSS with buttons and thus have styles in buttons.less
+
+// Components: Nav
+@import @path_bootstrap + "/navs.less";
+@import @path_bootstrap + "/navbar.less";
+//@import @path_bootstrap + "/breadcrumbs.less";
+@import @path_bootstrap + "/pagination.less";
+@import @path_bootstrap + "/pager.less";
+
+// Components: Popovers
+@import @path_bootstrap + "/modals.less";
+@import @path_bootstrap + "/tooltip.less";
+//@import @path_bootstrap + "/popovers.less";
+
+// Components: Misc
+@import @path_bootstrap + "/thumbnails.less";
+//@import @path_bootstrap + "/labels-badges.less";
+@import @path_bootstrap + "/progress-bars.less";
+/*@import @path_bootstrap + "/accordion.less";
+@import @path_bootstrap + "/carousel.less";
+@import @path_bootstrap + "/hero-unit.less";*/
+
+// Utility classes
+@import @path_bootstrap + "/utilities.less"; // Has to be last to override when necessary
+
+/* candyCMS requirements */
+@import @path_candy + "jquery.capty.less";
+@import @path_candy + "jquery.fancybox.less";
+@import @path_candy + "candy.less";
+
+// Include this icons as alternative to Twitter
+@import @path_candy + "candy.icons.less";

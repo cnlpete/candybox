@@ -173,11 +173,6 @@ define('POPUP_DEFAULT_Y', '640');
 
 # ------------------------------------------------------------------------------
 
-# If you want to use templates, enter name of template-folder here
-# They are placed at templates/<TemplateName>/...
-# DEFAULT: ''
-define('PATH_TEMPLATE', '');
-
 # Define, where files are uploaded to
 # DEFAULT: upload
 define('PATH_UPLOAD', 'upload');
