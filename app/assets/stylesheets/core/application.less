@@ -178,14 +178,17 @@ p.center i,
   }
 }
 
-// Remove border at user details view
-#users table.table.unstyled th, #users table.table.unstyled td {
-  border:none;
-}
+#users {
+  // Remove border at user details view
+  table.table.unstyled th,
+  table.table.unstyled td {
+    border:none;
+  }
 
-// Mark first field at user details table
-#users table td:first-child {
-  font-weight:bold;
+  // Mark first field at user details table
+  table td:first-child {
+    font-weight:bold;
+  }
 }
 
 // Make small tags in forms smaller
@@ -201,11 +204,21 @@ table {
       .background-size(40px 40px);
     }
   }
+
+  td.right {
+    text-align:right;
+  }
 }
 
 // Alert fix
-.alert p {
-  margin-bottom:0px;
+.alert {
+  h4 {
+    font-size: 100%;
+  }
+
+  p {
+    margin-bottom:0px;
+  }
 }
 
 // Align addthis to right side

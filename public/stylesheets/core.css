@@ -4464,6 +4464,12 @@ table tr.result-error {
   -o-background-size: 40px 40px;
   background-size: 40px 40px;
 }
+table td.right {
+  text-align: right;
+}
+.alert h4 {
+  font-size: 100%;
+}
 .alert p {
   margin-bottom: 0px;
 }
