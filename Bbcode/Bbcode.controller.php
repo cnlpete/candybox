@@ -57,9 +57,6 @@ final class Bbcode {
     # Load specific icon
     $sStr = preg_replace('#\[icon:(.*)\]#Uis', '<i class="icon-\1"></i>', $sStr);
 
-    # Insert uploaded image
-    $sStr = preg_replace('#\[img:(.*)\]#Uis', '<img src="{$_PATH.images}/\1" alt="\1" style="vertical-align:baseline" />', $sStr);
-
     # Replace images with image tag (every location allowed
     while (preg_match('=\[img\](.*)\[\/img\]=isU', $sStr, $sUrl)) {
       $sUrl[1] = Helper::removeSlash($sUrl[1]);
