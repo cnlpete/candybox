@@ -1,5 +1,5 @@
+<!DOCTYPE html>
 {strip}
-  <!DOCTYPE html>
   <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'
         xmlns:og='http://opengraphprotocol.org/schema/'
         xmlns:fb='http://www.facebook.com/2008/fbml'>
@@ -46,7 +46,7 @@
       {* Fallback if CDN is not available. Also include language parts. *}
       <script type='text/javascript'>
         if (typeof jQuery == 'undefined')
-          document.write(unescape("%3Cscript src='{$_PATH.js}/core/jquery{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'%3E%3C/script%3E"));
+          document.write(unescape("%3Cscript src='{$_PATH.core}/assets/javascripts/core/jquery{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'%3E%3C/script%3E"));
 
         var lang = {$_SYSTEM.json_language};
       </script>
@@ -202,11 +202,11 @@
       </div>
 
       {* Add bootstrap support *}
-      <script type='text/javascript' src='{$_PATH.js}/core/jquery.bootstrap.dropdown{$_SYSTEM.compress_files_suffix}.js'></script>
-      <script type='text/javascript' src='{$_PATH.js}/core/jquery.bootstrap.tooltip{$_SYSTEM.compress_files_suffix}.js'></script>
+      <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.bootstrap.dropdown{$_SYSTEM.compress_files_suffix}.js'></script>
+      <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.bootstrap.tooltip{$_SYSTEM.compress_files_suffix}.js'></script>
 
       {* Own JS and plugins *}
-      <script type='text/javascript' src='{$_PATH.js}/core/scripts{$_SYSTEM.compress_files_suffix}.js'></script>
+      <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/scripts{$_SYSTEM.compress_files_suffix}.js'></script>
       <!-- plugin:analytics -->
       <!-- plugin:piwik -->
       <!-- plugin:facebook -->

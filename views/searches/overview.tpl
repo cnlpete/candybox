@@ -46,5 +46,5 @@
       <a href='/{$_REQUEST.controller}'>{$lang.searches.info.research}</a>
     </div>
   {/if}
-  <script type='text/javascript' src='{$_PATH.js}/core/jquery.bootstrap.tabs{$_SYSTEM.compress_files_suffix}.js'></script>
+  <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.bootstrap.tabs{$_SYSTEM.compress_files_suffix}.js'></script>
 {/strip}

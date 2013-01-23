@@ -72,12 +72,12 @@
       </div>
     </div>
     {$_pages_}
-    <script type='text/javascript' src='{$_PATH.js}/core/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
+    <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
     {if $_AUTOLOAD_.enabled && isset($comments) && count($comments) > 0}
-      <script type='text/javascript' src='{$_PATH.js}/core/jquery.infiniteScroll{$_SYSTEM.compress_files_suffix}.js'></script>
+      <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.infiniteScroll{$_SYSTEM.compress_files_suffix}.js'></script>
       <script type="text/javascript">
         $(document).ready(function(){
-          enableInfiniteScroll('#js-commments', '#js-commments article', {$_AUTOLOAD_.times}, '{$_PATH.images}');
+          enableInfiniteScroll('#js-commments', '#js-commments article', {$_AUTOLOAD_.times}, '{$_PATH.core}/assets/images');
         });
       </script>
     {/if}

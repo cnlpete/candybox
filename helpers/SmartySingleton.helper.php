@@ -171,7 +171,6 @@ class SmartySingleton extends Smarty {
    */
   public function __destruct() {
     parent::__destruct();
-
     self::$_oInstance = null;
   }
 
@@ -179,28 +178,33 @@ class SmartySingleton extends Smarty {
    * Generate all path variables that could be useful for Smarty templates.
    *
    * @access public
-   * @return array Array with Paths for 'images', 'js', 'less', 'css', 'templates', 'upload', 'public'
+   * @return array $aPath path information
    * @todo update PATH and description
    *
    */
   public function getPaths() {
     foreach (array(
-        'css'     => WEBSITE_CDN . '/stylesheets',
-        'less'    => '/app/assets/stylesheets',
-        'images'  => '/app/assets/images',
-        'js'      => '/app/assets/javascripts') as $sKey => $sValue)
+        'core'      => '/vendor/candyCMS/core',
+        'css'       => WEBSITE_CDN . '/stylesheets',
+        'images'    => '/app/assets/images',
+        'js'        => '/app/assets/javascripts',
+        'less'      => '/app/assets/stylesheets',
+        'plugins'   => '/vendor/candyCMS/plugins',
+        'public'    => WEBSITE_CDN,
+        'upload'    => Helper::removeSlash(PATH_UPLOAD)) as $sKey => $sValue)
       $aPaths[$sKey] = $sValue;
 
-    # Compile CSS when in development mode and clearing the cache
+    # Compile CSS when in development mode
     if (WEBSITE_MODE == 'development' && !isset($this->_aRequest['type'])) {
       try {
         lessc::setFormatter(WEBSITE_COMPRESS_FILES === true ? 'compressed' : 'classic');
 
-        if (MOBILE === true && file_exists(Helper::removeSlash($aPaths['less'] . '/mobile.less'))) {
+        if (MOBILE === true && file_exists(Helper::removeSlash($aPaths['less'] . '/mobile/application.less'))) {
           unlink(Helper::removeSlash($aPaths['css'] . '/mobile.css'));
-          lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/mobile.less'),
+          lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
                   Helper::removeSlash($aPaths['css'] . '/mobile.css'));
         }
+
         elseif (file_exists(Helper::removeSlash($aPaths['less'] . '/core/application.less'))) {
           unlink(Helper::removeSlash($aPaths['css'] . '/core.css'));
           lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/core/application.less'),
@@ -212,11 +216,7 @@ class SmartySingleton extends Smarty {
       }
     }
 
-    return $aPaths + array(
-        'core'      => '/vendor/candyCMS/core',
-        'public'    => WEBSITE_CDN,
-        'plugins'   => '/vendor/candyCMS/plugins',
-        'upload'    => Helper::removeSlash(PATH_UPLOAD));
+    return $aPaths;
   }
 
   /**

@@ -36,7 +36,7 @@
                     width='32' height='32'
                     alt='{$f.type}' />
               {else}
-                <img src='{$_PATH.images}/files/{$f.type}.png'
+                <img src='{$_PATH.core}/assets/images/files/{$f.type}.png'
                     class='thumbnail'
                     width='32' height='32'
                     alt='{$f.type}' />
@@ -79,9 +79,9 @@
       </tbody>
     </table>
   {/if}
-  <script type='text/javascript' src='{$_PATH.js}/core/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
-  <script type='text/javascript' src='{$_PATH.js}/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js'></script>
-  <script type='text/javascript' src='{$_PATH.js}/core/jquery.tablesorter{$_SYSTEM.compress_files_suffix}.js'></script>
+  <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
+  <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js'></script>
+  <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.tablesorter{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type="text/javascript">
     $(document).ready(function(){
       $('.js-fancybox').fancybox({

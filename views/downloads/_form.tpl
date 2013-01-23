@@ -138,7 +138,7 @@
       {/if}
     </div>
   </form>
-  <script type='text/javascript' src='{$_PATH.js}/core/jquery.bootstrap.typeahead{$_SYSTEM.compress_files_suffix}.js'></script>
+  <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.bootstrap.typeahead{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript'>
     $(document).ready(function(){
       $('#input-title').bind('keyup', function() {

@@ -13,7 +13,7 @@
         {foreach $d.files as $f}
           <li data-icon='arrow-d' data-iconpos="right">
             <a href='{$f.url}' title='{$f.content}' data-ajax='false'>
-              <img src='{$_PATH.images}/candy.files/{$f.extension}.png'
+              <img src='{$_PATH.core}/assets/images/candy.files/{$f.extension}.png'
                    alt='{$f.extension}'
                    class='ui-li-icon'
                    width='32'
