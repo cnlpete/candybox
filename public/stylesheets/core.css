@@ -4070,7 +4070,7 @@ div.capty-caption {
 .fancybox-close,
 .fancybox-prev span,
 .fancybox-next span {
-  background-image: url('../../images/jquery.fancybox/sprite.png');
+  background-image: url("../../../../vendor/candyCMS/core/assets/images/jquery.fancybox/sprite.png");
 }
 #fancybox-loading {
   position: fixed;
@@ -4086,7 +4086,7 @@ div.capty-caption {
 #fancybox-loading div {
   width: 44px;
   height: 44px;
-  background: url('../../images/candy.global/loading.gif') center center no-repeat;
+  background: url("../../../../vendor/candyCMS/core/assets/images/candy.global/loading.gif") center center no-repeat;
 }
 .fancybox-close {
   position: absolute;
@@ -4104,7 +4104,7 @@ div.capty-caption {
   height: 100%;
   cursor: pointer;
   text-decoration: none;
-  background: transparent url('../../images/candy.global/spacer.gif');
+  background: transparent url("../../../../vendor/candyCMS/core/assets/images/candy.global/spacer.png");
   -webkit-tap-highlight-color: rgba(0,0,0,0);
   z-index: 8040;
 }
@@ -4151,7 +4151,7 @@ div.capty-caption {
   overflow: hidden;
   display: none;
   z-index: 8010;
-  background: url('../images/jquery.fancybox/overlay.png');
+  background: url("../../../../vendor/candyCMS/core/assets/images/jquery.fancybox/overlay.png");
 }
 .fancybox-overlay-fixed {
   position: fixed;
