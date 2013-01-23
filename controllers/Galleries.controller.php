@@ -74,15 +74,8 @@ class Galleries extends Main {
     $this->setTitle($this->_removeHighlight($aData['title']) . ' - ' . I18n::get('global.gallery'));
     $this->setDescription($this->_removeHighlight($aData['content']));
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-      $this->oSmarty->assign('files', $aData['files']);
-      $this->oSmarty->assign('file_no', count($aData['files']));
-
-      # @todo into array
-      $this->oSmarty->assign('gallery_name', $aData['title']);
-      $this->oSmarty->assign('gallery_content', $aData['content']);
-      $this->oSmarty->assign('gallery_url', WEBSITE_URL . '/galleries/' . $this->_iId);
-    }
+    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
+      $this->oSmarty->assign('album', $aData);
 
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }

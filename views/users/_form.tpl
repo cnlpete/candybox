@@ -330,7 +330,6 @@
   {* Destroy account *}
   {if $_SESSION.user.role < 4}
     <div class="tab-pane{if $_REQUEST['action'] == 'destroy'} active{/if}" id='user-destroy'>
-      {* @todo change to DELETE *}
       <form method='post'
             action='/{$_REQUEST.controller}/{$uid}/destroy'
             class='form-horizontal'>
@@ -362,7 +361,6 @@
   <script src='{$_PATH.core}/assets/javascripts/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
   <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.bootstrap.tabs{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript'>
-    {* @todo Change status when uploading avatar *}
     $('#input-use_gravatar').change(function() {
       var avatarIsChecked = $(this).is(':checked');
       $('#js-gravatar').toggleOpacity(avatarIsChecked);

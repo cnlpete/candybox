@@ -227,7 +227,7 @@ abstract class Main {
   }
 
   /**
-   * Set up smarty.
+   * Set up Smarty.
    *
    * @access proteced
    * @return object $this->oSmarty
@@ -466,7 +466,7 @@ abstract class Main {
    *
    */
   protected function _show() {
-    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->_show()');
+    AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
     return Helper::redirectTo('/errors/404');
   }
 
@@ -748,13 +748,13 @@ abstract class Main {
         return Helper::successMessage(
                 I18n::get('success.create'),
                 $sRedirectURL,
-                isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'] ? $this->_aRequest : '');
+                $this->_aRequest);
       }
       else
         return Helper::errorMessage(
                 I18n::get('error.sql'),
                 $sRedirectURL,
-                isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'] ? $this->_aRequest : '');
+                $this->_aRequest);
     }
   }
 

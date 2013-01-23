@@ -57,11 +57,10 @@ class AdvancedException extends \Exception {
    *
    * @static
    * @access public
-   * @todo better use of $_SERVER. Add constant to index.php
    *
    */
   public static function writeLog($sMessage) {
-    $sIP = !ACTIVE_TEST ? $_SERVER['REMOTE_ADDR'] : 'localhost';
+    $sIP = !ACTIVE_TEST ? SERVER_IP : 'localhost';
     $sMessage = date('Y-m-d Hi', time()) . ' - ' . $sIP . ' - ' . $sMessage;
 
     if (!is_dir(PATH_STANDARD . '/app/logs'))

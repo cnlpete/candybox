@@ -1,7 +1,7 @@
 {strip}
-  <h1>{$gallery_name}</h3>
-  {if $gallery_content}
-    <p>{$gallery_content}</p>
+  <h1>{$album.name}</h3>
+  {if $album.content}
+    <p>{$album.content}</p>
   {/if}
   {if !$files}
     <div class='alert alert-warning' title="{$lang.error.missing.files}">
@@ -9,7 +9,7 @@
     </div>
   {else}
     <ul data-role="listview">
-      {foreach $files as $f}
+      {foreach $album.files as $f}
         <li>
           <a href='{$f.url_popup}' title='{$f.content}' data-ajax="false" rel='external' class='js-photoswipe'>
             <img src='{$f.url_thumb}' alt='{$f.content}' title='{$f.content}' />

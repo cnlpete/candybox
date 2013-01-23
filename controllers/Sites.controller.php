@@ -45,7 +45,6 @@ class Sites extends Main {
    *
    * @access protected
    * @return string HTML content
-   * @todo needs test
    *
    */
   protected function _overview() {

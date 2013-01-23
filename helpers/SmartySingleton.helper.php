@@ -16,11 +16,11 @@ use Smarty;
 use lessc;
 
 # @todo remove deprecated dir
-if (file_exists(PATH_STANDARD . '/vendor/smarty/smarty/distribution/libs/Smarty.class.php'))
-  require_once PATH_STANDARD . '/vendor/smarty/smarty/distribution/libs/Smarty.class.php';
+#if (file_exists(PATH_STANDARD . '/vendor/smarty/smarty/distribution/libs/Smarty.class.php'))
+require_once PATH_STANDARD . '/vendor/smarty/smarty/distribution/libs/Smarty.class.php';
 
-else
-  require_once PATH_STANDARD . '/vendor/smarty/smarty/libs/Smarty.class.php';
+#else
+#  require_once PATH_STANDARD . '/vendor/smarty/smarty/libs/Smarty.class.php';
 
 class SmartySingleton extends Smarty {
 

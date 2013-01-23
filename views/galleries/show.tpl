@@ -8,14 +8,14 @@
       </a>
     </p>
   {/if}
-  {if !$gallery_name}
+  {if !$album.name}
     <div class='alert alert-warning'>
       <h4>{$lang.error.missing.entry}</h4>
     </div>
   {else}
     <header class='page-header'>
       <h1>
-        {$gallery_name}
+        {$album.name}
         <small>
           ({$file_no} {$lang.global.files})
         </small>
@@ -27,8 +27,8 @@
         {/if}
       </h1>
     </header>
-    {if $gallery_content}
-      <p>{$gallery_content}</p>
+    {if $album.content}
+      <p>{$album.content}</p>
     {/if}
     {if !$files}
       <div class='alert alert-warning'>
@@ -36,7 +36,7 @@
       </div>
     {else}
       <ul class='thumbnails'>
-        {foreach $files as $f}
+        {foreach $album.files as $f}
           <li id='file_{$f.id}'>
             <a href='{$f.url_popup}'
                class='thumbnail js-fancybox fancybox-thumb'
@@ -92,7 +92,7 @@
         </script>
       {/if}
       <p class='center'>
-        <a href='{$gallery_url}.rss'>
+        <a href='{$album.url_clean}.rss'>
           <i class='icon-rss js-tooltip'
              title='{$lang.global.rss}'></i>
         </a>
