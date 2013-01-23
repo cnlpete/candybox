@@ -5,7 +5,7 @@
 #AddHandler php53-cgi .php
 
 # Hide files for non script access
-<FilesMatch "\.(sql|gz|tpl|mob|ini|yml|php|log)$">
+<FilesMatch "\.(sql|gz|tpl|mob|ini|yml|php|log|less)$">
   order allow,deny
   deny from all
 </FilesMatch>

@@ -4151,7 +4151,7 @@ div.capty-caption {
   overflow: hidden;
   display: none;
   z-index: 8010;
-  background: url('../../images/jquery.fancybox/overlay.png');
+  background: url('../images/jquery.fancybox/overlay.png');
 }
 .fancybox-overlay-fixed {
   position: fixed;
@@ -4312,6 +4312,13 @@ div.capty-caption {
 .icon-download {
   width: 32px;
   height: 32px;
+}
+.mceEditor body,
+.mceEditor td,
+.mceEditor pre {
+  color: #000;
+  font: 13px "Trebuchet MS", Arial, Sans-serif;
+  margin: 6px;
 }
 figure.image {
   margin: 0px;

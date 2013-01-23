@@ -1,5 +1,5 @@
-@path_bootstrap = "../../../../vendor/twitter/bootstrap/twitter/bootstrap/less";
-@path_candy     = "../../../../vendor/candyCMS/core/assets/stylesheets/core";
+@path_bootstrap         = "../../../../vendor/twitter/bootstrap/twitter/bootstrap/less";
+@path_candy_stylesheets = "../../../../vendor/candyCMS/core/assets/stylesheets/core";
 
 // CSS Reset
 @import @path_bootstrap + "/reset.less";
@@ -55,9 +55,11 @@
 @import @path_bootstrap + "/utilities.less"; // Has to be last to override when necessary
 
 /* candyCMS requirements */
-@import @path_candy + "/jquery.capty.less";
-@import @path_candy + "/jquery.fancybox.less";
-@import @path_candy + "/candy.less";
+@import @path_candy_stylesheets + "/jquery.capty.less";
+@import @path_candy_stylesheets + "/jquery.fancybox.less";
+@import @path_candy_stylesheets + "/candy.less";
 
 // Include this icons as alternative to Twitter
-@import @path_candy + "/candy.icons.less";
+@import @path_candy_stylesheets + "/candy.icons.less";
+
+@import "_tiny_mce.less";
