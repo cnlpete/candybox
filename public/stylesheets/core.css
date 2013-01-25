@@ -4486,6 +4486,3 @@ h2 [class*=" icon-"] {
 .progress {
   height: 25px;
 }
-.checkbox input[type="checkbox"] {
-  margin-top: -2px;
-}
