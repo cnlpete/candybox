@@ -305,7 +305,7 @@ class Users extends Main {
         $this->_aError['captcha'] = I18n::get('error.captcha.incorrect');
 
     # Generate verification code for users (double-opt-in) when not created by admin.
-    $iVerificationCode = $this->_aSession['user']['role'] < 4 ? Helper::createRandomChar(12) : '';
+    $iVerificationCode = $this->_aSession['user']['role'] < 4 ? Helper::createRandomChar(16) : '';
 
     if (isset($this->_aError))
       return $this->_showCreateUserTemplate();

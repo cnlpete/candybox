@@ -483,10 +483,10 @@ class Helper {
   public static function getLastEntry($sTable) {
     try {
       $sModel = Main::__autoload('Main', true);
-      $oDb = $sModel::connectToDatabase();
+      $oDb    = $sModel::connectToDatabase();
 
       $oQuery = $oDb->query("SELECT id FROM " . SQL_PREFIX . $sTable . " ORDER BY id DESC LIMIT 1");
-      $aRow = $oQuery->fetch();
+      $aRow   = $oQuery->fetch();
 
       return (int) $aRow['id'];
     }

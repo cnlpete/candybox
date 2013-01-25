@@ -138,7 +138,7 @@ class Sessions extends Main {
     if (isset($this->_aError))
       return $this->_showCreateResendActionsTemplate($bShowCaptcha);
 
-    $sNewPasswordClean = Helper::createRandomChar(10, true);
+    $sNewPasswordClean = Helper::createRandomChar(16, true);
     $bReturn = $this->_oModel->password(md5(RANDOM_HASH . $sNewPasswordClean));
     $sRedirect = '/' . $this->_sController . '/create';
 

@@ -71,6 +71,7 @@ class Mails extends Main {
    * @access private
    * @param string $sText the text in which to replace the placeholders
    * @return string the text with all placeholders replaced
+   * @todo check if we need both variable types
    *
    */
   private static function _replaceNameAndUrl($sText) {

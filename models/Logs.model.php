@@ -29,8 +29,8 @@ class Logs extends Main {
    */
   public function getOverview($iLimit = 50) {
     try {
-      $oQuery = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "logs");
-      $iResult = $oQuery->fetchColumn();
+      $oQuery   = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "logs");
+      $iResult  = $oQuery->fetchColumn();
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
@@ -167,7 +167,7 @@ class Logs extends Main {
     if (empty(parent::$_oDbStatic))
       parent::connectToDatabase();
 
-    $iEndTime   = empty($iEndTime) ? time() : $iEndTime;
+    $iEndTime = empty($iEndTime) ? time() : $iEndTime;
 
     try {
       $oQuery = parent::$_oDbStatic->prepare("UPDATE
