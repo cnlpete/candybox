@@ -10,7 +10,7 @@
 # Set up your SQL preferences. If they are incorrect, the website won't work.
 
 # SQL type.
-# SUPPORTED: mysql /
+# SUPPORTED: mysql / pgsql
 # DEFAULT: mysql
 define('SQL_TYPE', 'mysql');
 

@@ -19,7 +19,7 @@
       </p>
     </div>
   {/if}
-  <div class='form-actions right'>
-    <input type='submit' class='btn' value='Login &rarr;' />
+  <div class='form-actions'>
+    <input type='submit' class='btn pull-right' value='Login &rarr;' />
   </div>
 </form>

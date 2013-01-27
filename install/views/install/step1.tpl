@@ -110,7 +110,7 @@
   <div class="alert alert-notice">
     You must set your Mailchimp information in the <code>config/Candy.inc.php</code>!
   </div>
-  <div class='form-actions right'>
-    <input type='submit' class='btn' value='Step 2: Create folder structure &rarr;' />
+  <div class='form-actions'>
+    <input type='submit' class='btn pull-right' value='Step 2: Create folder structure &rarr;' />
   </div>
 </form>

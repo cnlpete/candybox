@@ -81,8 +81,8 @@
               required />
     </div>
   </div>
-  <div class='form-actions right'>
-    <input type='submit' class='btn' value='Step 5: Install admin user &rarr;' />
+  <div class='form-actions'>
+    <input type='submit' class='btn pull-right' value='Step 5: Install admin user &rarr;' />
   </div>
 </form>
 <script type="text/javascript">

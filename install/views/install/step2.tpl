@@ -16,7 +16,7 @@
       </li>
     {/foreach}
   </ul>
-  <div class='form-actions right'>
-    <input type='submit' class='btn' value='Step 3: Create database &rarr;' />
+  <div class='form-actions'>
+    <input type='submit' class='btn pull-right' value='Step 3: Create database &rarr;' />
   </div>
 </form>

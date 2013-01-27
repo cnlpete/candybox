@@ -101,10 +101,10 @@ class Install extends Index {
    * @access private
    * @param array $aFolders array of Folders to create, can also contain subarrays
    * @param string $sPrefix prefix for folder creations, default: '/'
-   * @param integer $iPermissions the permissions to create the folders with, default: 0777
+   * @param integer $iPermissions the permissions to create the folders with, default: 0775
    *
    */
-  private function _createFoldersIfNotExistent($aFolders, $sPrefix = '/', $iPermissions = 0777) {
+  private function _createFoldersIfNotExistent($aFolders, $sPrefix = '/', $iPermissions = 0775) {
     foreach ($aFolders as $sKey => $mFolder) {
       # create multiple folders
       if (is_array($mFolder))
@@ -129,7 +129,7 @@ class Install extends Index {
    * @return boolean status of folders
    *
    */
-  private function _checkFoldersAndAssign($aFolders, &$aReturn, $sPrefix = '/', $iPermissions = 0777) {
+  private function _checkFoldersAndAssign($aFolders, &$aReturn, $sPrefix = '/', $iPermissions = 0775) {
     $bReturn = true;
 
     foreach ($aFolders as $sKey => $mFolder) {

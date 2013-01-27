@@ -14,8 +14,8 @@
         Database creation was successful.
       </h4>
     </div>
-    <div class='form-actions right'>
-      <input type='submit' class='btn' value='Step 4: Create admin user &rarr;' />
+    <div class='form-actions'>
+      <input type='submit' class='btn pull-right' value='Step 4: Create admin user &rarr;' />
     </div>
   {/if}
 </form>
