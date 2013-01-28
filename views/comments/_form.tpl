@@ -4,16 +4,16 @@
     <h2>
       {$lang.comments.title.create}
     </h2>
+    {if $_SESSION.user.role == 0 && $_SYSTEM.facebook_plugin == true}
+      <p>
+        <fb:login-button scope='email' onlogin="window.location='{$CURRENT_URL}'"></fb:login-button>
+      </p>
+    {/if}
   </div>
   <form method='post'
         action='/comments'
         data-ajax='false'
         class='form-horizontal'>
-    {if $_SESSION.user.role == 0 && $_SYSTEM.facebook_plugin == true}
-      <p>
-        <fb:login-button scope='email' onlogin="window.location='{$CURRENT_URL}?reload=1#comments'"></fb:login-button>
-      </p>
-    {/if}
     <div class='control-group{if isset($error.name)} alert alert-error{/if}'>
       <label for='input-name' class='control-label'>
         {$lang.global.name} <span title='{$lang.global.required}'>*</span>

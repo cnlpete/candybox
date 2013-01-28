@@ -141,18 +141,17 @@ abstract class Main {
    * @todo test Postgre connection
    *
    */
-  public static function connectToDatabase() {
+  public static function connectToDatabase() {    
     if (empty(self::$_oDbStatic)) {
       try {
         $sSQLType   = defined('SQL_TYPE') ? strtolower(SQL_TYPE) : 'mysql';
-				$sDatabase  = defined('SQL_SINGLE_DB_MODE') && SQL_SINGLE_DB_MODE === true ?
-								SQL_DB :
-								SQL_DB . '_' . WEBSITE_MODE;
+        $sDatabase  = defined('SQL_SINGLE_DB_MODE') && SQL_SINGLE_DB_MODE === true ?
+                SQL_DB :
+                SQL_DB . '_' . WEBSITE_MODE;
 
         # Postgre
         if($sSQLType == 'pgsql')
-          self::$_oDbStatic = new PDO($sSQLType . ':host=' . SQL_HOST . ';port=' . SQL_PORT . ';dbname=' . $sDatabase . ';user=' . SQL_USER . ';password=' . SQL_PASSWORD,
-                          array(PDO::ATTR_PERSISTENT => true));
+          self::$_oDbStatic = new PDO($sSQLType . ':host=' . SQL_HOST . ';port=' . SQL_PORT . ';dbname=' . $sDatabase . ';user=' . SQL_USER . ';password=' . SQL_PASSWORD);
 
         # MySQL
         else

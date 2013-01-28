@@ -284,12 +284,11 @@ class Index {
 
     # ...or use cookie...
     elseif (isset($aRequest['default_language']) &&
-        file_exists(PATH_STANDARD . '/app/languages/' . strtolower((string) $aRequest['default_language']) . '.yml')) {
+        file_exists(PATH_STANDARD . '/app/languages/' . strtolower((string) $aRequest['default_language']) . '.yml'))
       $sLanguage = strtolower((string) $aRequest['default_language']);
-    }
 
     # ...or browsers default language...
-    elseif (file_exists(PATH_STANDARD . '/app/languages/' . strtolower($sBrowserLanguage) . '.yml') && !ACTIVE_TEST)
+    elseif (!ACTIVE_TEST && file_exists(PATH_STANDARD . '/app/languages/' . strtolower($sBrowserLanguage) . '.yml'))
       $sLanguage = $sBrowserLanguage;
 
     # ...or fall back to default language.
@@ -373,9 +372,9 @@ class Index {
   public function getFacebookExtension() {
     if (PLUGIN_FACEBOOK_APP_ID && class_exists('\candyCMS\Plugins\FacebookCMS')) {
       $this->_aSession['facebook'] = new FacebookCMS(array(
-          'appId' => PLUGIN_FACEBOOK_APP_ID,
-          'secret' => PLUGIN_FACEBOOK_SECRET,
-          'cookie' => true
+          'appId'   => PLUGIN_FACEBOOK_APP_ID,
+          'secret'  => PLUGIN_FACEBOOK_SECRET,
+          'cookie'  => true
           ));
 
       return $this->_aSession['facebook'];

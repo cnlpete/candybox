@@ -38,6 +38,17 @@ class SmartySingleton extends Smarty {
    *
    */
   private static $_oInstance = null;
+  
+  /**
+   *
+   * This is just a bugfix for PHPs E_STRICT mode which is forgotten by LESS.
+   *
+   * @var static
+   * @access public
+   * @todo check if removeable
+   *
+   */
+  public static $formatterName;
 
   /**
    * Get the Smarty instance
