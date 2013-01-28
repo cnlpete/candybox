@@ -69,9 +69,8 @@ define('CURRENT_URL', isset($_SERVER['REQUEST_URI']) ? WEBSITE_URL . $_SERVER['R
 define('SERVER_IP', $_SERVER['REMOTE_ADDR']);
 
 # Reload page when redirected
-# @todo deprecated?
-#if (preg_match('/\?reload=1/', CURRENT_URL))
-#  exit(header('Location:' . str_replace('?reload=1', '', CURRENT_URL)));
+if (preg_match('/\?reload=1/', CURRENT_URL))
+  exit(header('Location:' . str_replace('?reload=1', '', CURRENT_URL)));
 
 # Start user session.
 @session_start();
