@@ -63,9 +63,6 @@ class AdvancedException extends \Exception {
     $sIP = !ACTIVE_TEST ? SERVER_IP : 'localhost';
     $sMessage = date('Y-m-d Hi', time()) . ' - ' . $sIP . ' - ' . $sMessage;
 
-    if (!is_dir(PATH_STANDARD . '/app/logs'))
-      mkdir(PATH_STANDARD . '/app/logs');
-
     $oFile = fopen(PATH_STANDARD . '/app/logs/' . WEBSITE_MODE . '.log', 'a');
     fputs($oFile, $sMessage . "\n");
     fclose($oFile);
