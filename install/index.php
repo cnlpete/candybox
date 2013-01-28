@@ -18,7 +18,8 @@ use candyCMS\Core\Helpers\SmartySingleton;
 use candyCMS\Core\Helpers\I18n;
 use PDO;
 
-define('PATH_STANDARD', dirname(__FILE__) . '/..');
+if (!defined('PATH_STANDARD'))
+  define('PATH_STANDARD', dirname(__FILE__) . '/..');
 
 require PATH_STANDARD . '/vendor/candyCMS/core/controllers/Index.controller.php';
 
@@ -52,7 +53,7 @@ class Install extends Index {
     $this->_aPlugins = $this->getPlugins('Cronjob');
 
     $this->oSmarty = SmartySingleton::getInstance();
-    $this->oSmarty->template_dir = PATH_STANDARD . '/install/views';
+    $this->oSmarty->setTemplateDir(PATH_STANDARD . '/install/views');
     $this->oSmarty->setCaching(SmartySingleton::CACHING_OFF);
     $this->oSmarty->setCompileCheck(true);
 
@@ -61,15 +62,25 @@ class Install extends Index {
     $this->oSmarty->assign('_REQUEST', $this->_aRequest);
     $this->_sController = $this->_aRequest['controller'];
 
-    # Direct actions
-    if (isset($this->_aRequest['action']) && 'install' == $this->_aRequest['action'])
-      $this->showInstallation();
+    switch ($this->_aRequest['action']) {
+      case 'install':
+        echo $this->showInstallation();
+        break;
 
-    elseif (isset($this->_aRequest['action']) && 'migrate' == $this->_aRequest['action'])
-      $this->showMigration();
+      case 'migrate':
+        echo $this->showMigration();
+        break;
 
-    else
-      $this->showIndex();
+      default:
+      case 'standard':
+
+        $this->oSmarty->assign('title', 'Welcome!');
+        $this->oSmarty->assign('content', $this->oSmarty->fetch('index.tpl'));
+
+        break;
+    }
+
+    $this->oSmarty->display('layout.tpl');
   }
 
   /**
@@ -83,10 +94,10 @@ class Install extends Index {
       define('WEBSITE_URL', 'http://' . $_SERVER['SERVER_NAME']);
 
     if (!defined('CACHE_DIR'))
-      define('CACHE_DIR', 'cache');
+      define('CACHE_DIR', 'app/cache');
 
     if (!defined('COMPILE_DIR'))
-      define('COMPILE_DIR', 'compile');
+      define('COMPILE_DIR', 'app/compile');
 
     define('CURRENT_URL', isset($_SERVER['REQUEST_URI']) ? WEBSITE_URL . $_SERVER['REQUEST_URI'] : WEBSITE_URL);
     define('EXTENSION_CHECK', false);
@@ -96,16 +107,19 @@ class Install extends Index {
   }
 
   /**
-   * Create all Folders specified in given array
+   * Create all folders specified in given array
    *
    * @access private
    * @param array $aFolders array of Folders to create, can also contain subarrays
    * @param string $sPrefix prefix for folder creations, default: '/'
-   * @param integer $iPermissions the permissions to create the folders with, default: 0775
+   * @param integer $iPermissions the permissions to create the folders with, default: 775
    *
    */
-  private function _createFoldersIfNotExistent($aFolders, $sPrefix = '/', $iPermissions = 0775) {
+  private function _createFoldersIfNotExistent($aFolders, $sPrefix = '/', $iPermissions = 775) {
     foreach ($aFolders as $sKey => $mFolder) {
+      if (preg_match('/cache/i', $mFolder) || preg_match('/compile/i', $mFolder))
+        $iPermissions = 777;
+
       # create multiple folders
       if (is_array($mFolder))
         $this->_createFoldersIfNotExistent($mFolder, $sPrefix . $sKey . '/', $iPermissions);
@@ -125,19 +139,25 @@ class Install extends Index {
    * @param array $aFolders array of Folders to check for, can also contain subarrays
    * @param array $aReturn array of bool return values for smarty
    * @param string $sPrefix prefix for assigns and checks, default: '/'
-   * @param integer $iPermissions the permissions to create the folders with, default: '0775'
+   * @param integer $iPermissions the permissions to create the folders with, default: 775
    * @return boolean status of folders
+   * @todo add cache and compile dir to 0777
    *
    */
-  private function _checkFoldersAndAssign($aFolders, &$aReturn, $sPrefix = '/', $iPermissions = 0775) {
+  private function _checkFoldersAndAssign($aFolders, &$aReturn, $sPrefix = '/', $iPermissions = 775) {
     $bReturn = true;
 
     foreach ($aFolders as $sKey => $mFolder) {
-      # check multiple folders
+      if (preg_match('/cache/i', $mFolder) || preg_match('/compile/i', $mFolder) || preg_match('/upload/i', $mFolder))
+        $iPermissions = 777;
+
+      # Check multiple folders
       if (is_array($mFolder)) {
-        # check root folder
+
+        # Check root folder
         $bReturnSub = $this->_checkFoldersAndAssign(array($sKey), $aReturn, $sPrefix, $iPermissions);
-        # and check all subfolders
+
+        # Check subfolders
         $bReturnRoot = $this->_checkFoldersAndAssign($mFolder, $aReturn, $sPrefix . $sKey . '/', $iPermissions);
 
         $bReturn = $bReturn && $bReturnRoot && $bReturnSub;
@@ -205,14 +225,12 @@ class Install extends Index {
             )
         );
 
-        $this->_createFoldersIfNotExistent($aFolders);
-
         $aFolderChecks = array();
-        $bHasNoErrors = $this->_checkFoldersAndAssign($aFolders, $aFolderChecks);
 
-        $this->oSmarty->assign('_folder_checks_', $aFolderChecks);
-        $this->oSmarty->assign('_has_errors_', !$bHasNoErrors);
+        $this->_createFoldersIfNotExistent($aFolders);
+        $this->_checkFoldersAndAssign($aFolders, $aFolderChecks);
 
+        $this->oSmarty->assign('folders', $aFolderChecks);
         $this->oSmarty->assign('title', 'Installation - Step 2 - Folder rights');
         $this->oSmarty->assign('content', $this->oSmarty->fetch('install/step2.tpl'));
 
@@ -282,25 +300,6 @@ class Install extends Index {
 
         break;
     }
-  }
-
-  /**
-   *
-   * @access public
-   *
-   */
-  public function showIndex() {
-    $this->oSmarty->assign('title', 'Welcome!');
-    $this->oSmarty->assign('content', $this->oSmarty->fetch('index.tpl'));
-  }
-
-  /**
-   * @access public
-   * @return string HTML
-   *
-   */
-  public function show() {
-    return $this->oSmarty->fetch('layout.tpl');
   }
 
   /**
@@ -494,6 +493,5 @@ ini_set('error_reporting', 1);
 ini_set('log_errors', 1);
 
 $oInstall = new Install(array_merge($_GET, $_POST));
-echo $oInstall->show();
 
 ?>

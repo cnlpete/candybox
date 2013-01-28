@@ -8,7 +8,7 @@
     for that.
   </p>
   <ul>
-    {foreach $_folder_checks_ as $folder=>$check}
+    {foreach $folders as $folder=>$check}
       <li style='color:{if $check}green{else}red{/if}'>
         {if !$check}<strong>{/if}
           {$folder}
