@@ -92,9 +92,4 @@
       {/if}
     </div>
   </form>
-  <script type='text/javascript'>
-    $('#input-title').bind('keyup', function() {
-      countCharLength(this);
-    });
-  </script>
 {/strip}

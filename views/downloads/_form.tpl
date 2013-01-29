@@ -140,11 +140,8 @@
   </form>
   <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.bootstrap.typeahead{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript'>
+    {* @todo add countCharLength again *}
     $(document).ready(function(){
-      $('#input-title').bind('keyup', function() {
-        countCharLength(this);
-      });
-
       $('#input-file').change(function() {
         checkFileSize($(this), {$_SYSTEM.maximumUploadSize.raw}, '{$_SYSTEM.maximumUploadSize.mb|string_format: $lang.error.file.size}');
         prepareForUpload();

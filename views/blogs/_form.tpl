@@ -192,13 +192,4 @@
   {if !$MOBILE}
     <!-- plugin:tinymce -->
   {/if}
-  <script type='text/javascript'>
-    $('#input-title').bind('keyup', function() {
-      countCharLength(this);
-    });
-
-    $('#input-teaser').bind('keyup', function() {
-      countCharLength(this);
-    });
-  </script>
 {/strip}

@@ -18,7 +18,7 @@
         <article class='blogs' itemprop='blogPost'>
           <header class='page-header'>
             <h2 itemprop='headline'>
-              {if $b.published == false}
+              {if !$b.published}
                 {$lang.global.not_published}:&nbsp;
               {/if}
               <a href='{$b.url}'>{$b.title}</a>
@@ -97,7 +97,7 @@
         </article>
       {/foreach}
     </div>
-    {* Show comments only if we got a entry *}
+    {* Show either comments or pagination *}
     {if isset($b.id)}
       {$_blog_footer_}
     {/if}
@@ -110,6 +110,7 @@
         nextEffect : 'fade',
         prevEffect : 'fade'
       });
+
       $('.js-image').capty({ height: 30 });
 
       $('.js-media').each(function(e) {

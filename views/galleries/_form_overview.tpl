@@ -63,12 +63,5 @@
       {/if}
     </div>
   </form>
-  <script type='text/javascript'>
-    $('#input-title').bind('keyup', function() {
-      countCharLength(this);
-    });
-    $('#input-content').bind('keyup', function() {
-      countCharLength(this);
-    });
-  </script>
+  {* @todo add countCharLength again at file upload *}
 {/strip}

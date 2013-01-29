@@ -38,7 +38,7 @@ class SmartySingleton extends Smarty {
    *
    */
   private static $_oInstance = null;
-  
+
   /**
    *
    * This is just a bugfix for PHPs E_STRICT mode which is forgotten by LESS.
@@ -94,14 +94,7 @@ class SmartySingleton extends Smarty {
 
     $this->setCacheDir(PATH_STANDARD . '/' . CACHE_DIR);
     $this->setCompileDir(PATH_STANDARD . '/' . COMPILE_DIR);
-
-    # @todo check real path
-    if (is_dir(PATH_STANDARD . '/vendor/smarty/smarty/distribution'))
-      $this->setPluginsDir(PATH_STANDARD . '/vendor/smarty/smarty/distribution/libs/plugins');
-
-    else
-      $this->setPluginsDir(PATH_STANDARD . '/vendor/smarty/smarty/libs/plugins');
-
+    $this->setPluginsDir(PATH_STANDARD . '/vendor/smarty/smarty/distribution/libs/plugins');
     $this->setTemplateDir(PATH_STANDARD . '/vendor/candyCMS/core/views');
 
     # See http://www.smarty.net/docs/en/variable.merge.compiled.includes.tpl

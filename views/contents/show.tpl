@@ -2,7 +2,7 @@
   <article class='contents'>
     <header class='page-header'>
       <h1 itemprop='headline'>
-        {if $contents.published == false}
+        {if !$contents.published}
           {$lang.global.not_published}:&nbsp;
         {/if}
         {$contents.title}

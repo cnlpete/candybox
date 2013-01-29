@@ -59,8 +59,8 @@ function confirmDestroy(sUrl, sDivId) {
  *
  */
 function countCharLength(sDivId, iLen) {
-  var oInput = $(sDivId);
-  var iLength = (iLen === undefined) ? oInput.attr('maxlength') : iLen;
+  var oInput  = $(sDivId);
+  var iLength = iLen === undefined ? oInput.prop('maxlength') : iLen;
   $(sDivId).next().html(iLength - oInput.val().length);
 }
 
@@ -321,5 +321,17 @@ $('#js-flash_success, #js-flash_error, #js-flash_warning').click(function() {
 if ($('.js-tooltip').length)
   $('.js-tooltip').tooltip();
 
+/**
+ *
+ **/
 if ($('p.error').length)
   $('p.error').tooltip();
+
+/**
+ *
+ */
+$('input[maxlength]').each(function() {
+  $(this).bind('keyup', function() {
+    countCharLength(this);
+  });
+});
