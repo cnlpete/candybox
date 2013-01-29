@@ -49,7 +49,7 @@ class Sessions extends Main {
                                               LIMIT
                                                 1");
 
-      $oQuery->bindParam('session_id', session_id(), PDO::PARAM_STR);
+      $oQuery->bindValue('session_id', session_id(), PDO::PARAM_STR);
       $oQuery->bindParam('ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
       $bReturn = $oQuery->execute();
 
@@ -149,11 +149,12 @@ class Sessions extends Main {
    * Destroy a user session and logout.
    *
    * @access public
-   * @param integer $sSessionId the session id
+   * @param integer $iId the session id
+   * @param string $sController controller to use, obsolete and only for not giving E_STRICT warnings
    * @return boolean status of query
    *
    */
-  public function destroy($sSessionId) {
+  public function destroy($iId, $sController = '') {
     if (empty(parent::$_oDbStatic))
       parent::connectToDatabase();
 
@@ -165,7 +166,7 @@ class Sessions extends Main {
                                               WHERE
                                                 session = :session_id");
 
-      $oQuery->bindParam('session_id', $sSessionId, PDO::PARAM_STR);
+      $oQuery->bindParam('session_id', $iId, PDO::PARAM_STR);
       return $oQuery->execute();
     }
     catch (\PDOException $p) {

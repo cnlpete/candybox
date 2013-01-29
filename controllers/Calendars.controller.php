@@ -118,10 +118,11 @@ class Calendars extends Main {
    * Create a calendar entry.
    *
    * @access protected
+   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _create() {
+  protected function _create($sRedirectURL = '') {
     $this->_setError('start_date');
 
     return parent::_create();
@@ -131,12 +132,13 @@ class Calendars extends Main {
    * Update a calendar entry.
    *
    * @access protected
+   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _update() {
+  protected function _update($sRedirectURL = '') {
     $this->_setError('start_date');
 
-    return parent::_update(null, '/' . $this->_sController);
+    return parent::_update('/' . $this->_sController);
   }
 }

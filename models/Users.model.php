@@ -214,8 +214,8 @@ class Users extends Main {
                                         date ASC
                                       LIMIT
                                         :offset, :limit");
-      $oQuery->bindParam('limit', $this->oPagination->getLimit(), PDO::PARAM_INT);
-      $oQuery->bindParam('offset', $this->oPagination->getOffset(), PDO::PARAM_INT);
+      $oQuery->bindValue('limit', $this->oPagination->getLimit(), PDO::PARAM_INT);
+      $oQuery->bindValue('offset', $this->oPagination->getOffset(), PDO::PARAM_INT);
       $oQuery->execute();
 
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);

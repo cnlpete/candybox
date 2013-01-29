@@ -60,8 +60,8 @@ class Logs extends Main {
                                       LIMIT
                                         :offset, :limit");
 
-      $oQuery->bindParam('limit', $this->oPagination->getLimit(), PDO::PARAM_INT);
-      $oQuery->bindParam('offset', $this->oPagination->getOffset(), PDO::PARAM_INT);
+      $oQuery->bindValue('limit', $this->oPagination->getLimit(), PDO::PARAM_INT);
+      $oQuery->bindValue('offset', $this->oPagination->getOffset(), PDO::PARAM_INT);
       $oQuery->execute();
 
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
@@ -127,11 +127,11 @@ class Logs extends Main {
                                                   :user_id,
                                                   :result_flag)");
 
-      $oQuery->bindParam('controller_name', strtolower($sControllerName), PDO::PARAM_STR);
-      $oQuery->bindParam('action_name', strtolower($sActionName), PDO::PARAM_STR);
+      $oQuery->bindValue('controller_name', strtolower($sControllerName), PDO::PARAM_STR);
+      $oQuery->bindValue('action_name', strtolower($sActionName), PDO::PARAM_STR);
       $oQuery->bindParam('action_id', $iActionId, PDO::PARAM_INT);
-      $oQuery->bindParam('time_start', date('Y-m-d H:i:s', $iTimeStart), PDO::PARAM_STR);
-      $oQuery->bindParam('time_end', date('Y-m-d H:i:s', $iTimeEnd), PDO::PARAM_STR);
+      $oQuery->bindValue('time_start', date('Y-m-d H:i:s', $iTimeStart), PDO::PARAM_STR);
+      $oQuery->bindValue('time_end', date('Y-m-d H:i:s', $iTimeEnd), PDO::PARAM_STR);
       $oQuery->bindParam('user_id', $iUserId, PDO::PARAM_INT);
       $oQuery->bindParam('result_flag', $bResultFlag, PDO::PARAM_BOOL);
 

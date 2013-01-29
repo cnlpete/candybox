@@ -33,10 +33,11 @@ class Newsletters extends Main {
    * Override standard create method due to different user rights.
    *
    * @access public
+   * @param integer $iUserRole required user right, only for E_STRICT
    * @return string HTML content
    *
    */
-  public function create() {
+  public function create($iUserRole = 0) {
     return parent::create(0);
   }
 
@@ -44,10 +45,11 @@ class Newsletters extends Main {
    * Create a newsletter subscription. Send email information to mailchimp servers.
    *
    * @access public
+   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return string HTML content
    *
    */
-  public function _create() {
+  public function _create($sRedirectURL = '') {
     $this->_setError('email');
 
     if (isset($this->_aError))
@@ -64,12 +66,14 @@ class Newsletters extends Main {
    * Show a form for email subscription.
    *
    * @access protected
+   * @param string $sTemplateName name of form template, only for E_STRICT
+   * @param string $sTitle title to show, only for E_STRICT
    * @return string HTML content
    *
    */
-  protected function _showFormTemplate() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, '_form');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
+  protected function _showFormTemplate($sTemplateName = '_form', $sTitle = '') {
+    $sTemplateDir   = Helper::getTemplateDir($this->_sController, $sTemplateName);
+    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, $sTemplateName);
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
     $this->oSmarty->assign('name', isset($this->_aRequest['name']) ? (string) $this->_aRequest['name'] : '');

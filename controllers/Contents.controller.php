@@ -17,6 +17,16 @@ use candyCMS\Core\Helpers\I18n;
 
 class Contents extends Main {
 
+  public function __init() {
+    parent::__init();
+
+    $this->_aDependentCaches[] = 'searches';
+    # $this->_aDependentCaches[] = 'rss';
+    $this->_aDependentCaches[] = 'sitemaps';
+
+    return $this->_oModel;
+  }
+
   /**
    * Show content page.
    *
@@ -70,36 +80,27 @@ class Contents extends Main {
    * Create a content entry.
    *
    * @access protected
+   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _create() {
+  protected function _create($sRedirectURL = '') {
     $this->_setError('content');
 
-    return parent::_create(array('searches', 'sitemaps'));
+    return parent::_create();
   }
 
   /**
    * Update a content entry.
    *
    * @access protected
+   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return boolean status of model action
    *
    */
-  protected function _update() {
+  protected function _update($sRedirectURL = '') {
     $this->_setError('content');
 
-    return parent::_update(array('searches', 'sitemaps'));
-  }
-
-  /**
-   * Destroy a content entry.
-   *
-   * @access protected
-   * @return boolean status of model action
-   *
-   */
-  protected function _destroy() {
-    return parent::_destroy(array('searches', 'sitemaps'));
+    return parent::_update();
   }
 }

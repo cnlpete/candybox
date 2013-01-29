@@ -628,4 +628,30 @@ class Helper {
 
     return $aAr1;
   }
+
+  /**
+   * Get languages from app/languages folder.
+   *
+   * @static
+   * @access public
+   * @return array $aLanguages array with our languages
+   * @todo test cases
+   *
+   */
+  public static function getLanguages() {
+    $aLanguages = array();
+    $oPathDir = opendir(PATH_STANDARD . '/app/languages');
+
+    while ($sFile = readdir($oPathDir)) {
+      # Skip extra german languages.
+      if (substr($sFile, 0, 1) == '.' || substr($sFile, 0, 3) == 'de_')
+        continue;
+
+      array_push($aLanguages, substr($sFile, 0, 2));
+    }
+
+    closedir($oPathDir);
+
+    return $aLanguages;
+  }
 }

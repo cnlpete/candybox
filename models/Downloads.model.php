@@ -156,6 +156,7 @@ class Downloads extends Main {
    * @param string $sFile file name
    * @param string $sExtension file extension
    * @return boolean status of query
+   * @todo make the model::create() action compilant with the main::create() action
    *
    */
   public function create($sFile, $sExtension) {
@@ -270,10 +271,11 @@ class Downloads extends Main {
    *
    * @access public
    * @param integer $iId ID to destroy
+   * @param string $sController controller to use, obsolete and only for not giving E_STRICT warnings
    * @return boolean status of query
    *
    */
-  public function destroy($iId) {
+  public function destroy($iId, $sController = '') {
     # Get file name
     $sFile = $this->getFileName($iId);
 

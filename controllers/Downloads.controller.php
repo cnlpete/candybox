@@ -19,6 +19,14 @@ use candyCMS\Core\Helpers\Upload;
 
 class Downloads extends Main {
 
+  public function __init() {
+    parent::__init();
+
+    $this->_aDependentCaches[] = 'searches';
+
+    return $this->_oModel;
+  }
+
   /**
    * Provide download.
    *
@@ -69,10 +77,12 @@ class Downloads extends Main {
    * Build form template to create or update a download entry.
    *
    * @access protected
+   * @param string $sTemplateName name of form template, only for E_STRICT
+   * @param string $sTitle title to show, only for E_STRICT
    * @return string HTML content
    *
    */
-  protected function _showFormTemplate() {
+  protected function _showFormTemplate($sTemplateName = '_form', $sTitle = '') {
     $this->oSmarty->assign('_categories_', $this->_oModel->getTypeaheadData($this->_sController, 'category'));
 
     return parent::_showFormTemplate();
@@ -85,10 +95,11 @@ class Downloads extends Main {
    * If data is given, activate the model, insert them into the database and redirect afterwards.
    *
    * @access protected
+   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _create() {
+  protected function _create($sRedirectURL = '') {
     $this->_setError('title');
     $this->_setError('category');
     $this->_setError('file');
@@ -116,7 +127,9 @@ class Downloads extends Main {
 
       # Fileupload was successfull, so we can clear cache and insert into db.
       if ($aReturnValues[0] === true) {
-        $this->oSmarty->clearCacheForController($this->_sController, 'searches');
+        $this->oSmarty->clearCacheForController($this->_sController);
+        # i do not need to check, since i now about the existance of additional searches cache
+        $this->_clearAdditionalCaches();
 
         $aIds   = $oUploadFile->getIds(false);
         $aExts  = $oUploadFile->getExtensions();
@@ -148,21 +161,23 @@ class Downloads extends Main {
    * Update a download entry.
    *
    * @access protected
-   * @return boolean status of model action
+   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
+   * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _update() {
-    return parent::_update('searches', '/' . $this->_sController);
+  protected function _update($sRedirectURL = '') {
+    return parent::_update('/' . $this->_sController);
   }
 
   /**
    * Destroy a download entry.
    *
    * @access protected
+   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return boolean status of model action
    *
    */
-  protected function _destroy() {
-    return parent::_destroy('searches', '/' . $this->_sController);
+  protected function _destroy($sRedirectURL = '') {
+    return parent::_destroy();
   }
 }

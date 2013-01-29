@@ -152,8 +152,8 @@ class Galleries extends Main {
                                     LIMIT
                                       :offset, :limit");
 
-      $oQuery->bindParam('limit', $this->oPagination->getLimit(), PDO::PARAM_INT);
-      $oQuery->bindParam('offset', $this->oPagination->getOffset(), PDO::PARAM_INT);
+      $oQuery->bindValue('limit', $this->oPagination->getLimit(), PDO::PARAM_INT);
+      $oQuery->bindValue('offset', $this->oPagination->getOffset(), PDO::PARAM_INT);
       $oQuery->execute();
 
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
@@ -407,10 +407,11 @@ class Galleries extends Main {
    *
    * @access public
    * @param integer $iId album ID
-   * @return type
+   * @param string $sController controller to use, obsolete and only for not giving E_STRICT warnings
+   * @return boolean status of query
    *
    */
-  public function destroy($iId) {
+  public function destroy($iId, $sController = '') {
     $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . (int) $iId);
 
     # Fetch all images

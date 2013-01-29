@@ -236,10 +236,11 @@ class Comments extends Main {
    * @static
    * @access public
    * @param integer $iId ID to delete
+   * @param string $sController controller to use, obsolete and only for not giving E_STRICT warnings
    * @return boolean status of query
    *
    */
-  public function destroy($iId) {
+  public function destroy($iId, $sController = '') {
     return parent::destroy($iId, 'comments');
   }
 }

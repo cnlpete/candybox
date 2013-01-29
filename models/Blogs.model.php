@@ -382,13 +382,13 @@ class Blogs extends Main {
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
 
       foreach (array('title', 'teaser', 'content') as $sInput)
-        $oQuery->bindParam(
+        $oQuery->bindValue(
                 $sInput,
                 Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
                 PDO::PARAM_STR);
 
       foreach (array('keywords', 'language') as $sInput)
-        $oQuery->bindParam(
+        $oQuery->bindValue(
                 $sInput,
                 Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
                 PDO::PARAM_STR);
@@ -499,11 +499,12 @@ class Blogs extends Main {
    * Delete a blog entry and also delete its comments.
    *
    * @access public
-   * @param integer $iId ID to delete
+   * @param integer $iId ID to destroy
+   * @param string $sController controller to use, obsolete and only for not giving E_STRICT warnings
    * @return boolean status of query
    *
    */
-  public function destroy($iId) {
+  public function destroy($iId, $sController = '') {
     $bResult = parent::destroy($iId);
 
     try {

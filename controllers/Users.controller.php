@@ -80,6 +80,7 @@ class Users extends Main {
    * @access protected
    * @param boolean $bUseRequest whether the displayed data should be overwritten by query result
    * @return string HTML content
+   * @todo remove E_STRICT warning, e.g. make this comaptible to al lother showFormTemplates
    *
    */
   protected function _showFormTemplate($bUseRequest = false) {
@@ -260,21 +261,17 @@ class Users extends Main {
    * This method must override the parent one because of another showTemplate method.
    *
    * @access public
+   * @param integer $iUserRole required user right, only for E_STRICT
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  public function create() {
-    # Logged in users should not have a recaptcha field since we can assume that these are real humans.
-    $bShowCaptcha = class_exists('\candyCMS\Plugins\Recaptcha') && !ACTIVE_TEST ?
-            $this->_aSession['user']['role'] == 0 && SHOW_CAPTCHA :
-            false;
-
-    if($this->_aSession['user']['role'] > 0 && $this->_aSession['user']['role'] < 4)
+  public function create($iUserRole = 4) {
+    if($this->_aSession['user']['role'] > 0 && $this->_aSession['user']['role'] < $iUserRole)
       return Helper::redirectTo('/errors/401');
 
     else
       return isset($this->_aRequest[$this->_sController]) ?
-              $this->_create($bShowCaptcha) :
+              $this->_create() :
               $this->_showCreateUserTemplate();
   }
 
@@ -285,10 +282,16 @@ class Users extends Main {
    * If data is given, activate the model, insert them into the database, send mail and redirect afterwards.
    *
    * @access protected
+   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _create($bShowCaptcha) {
+  protected function _create($sRedirectURL = '') {
+    # Logged in users should not have a recaptcha field since we can assume that these are real humans.
+    $bShowCaptcha = class_exists('\candyCMS\Plugins\Recaptcha') && !ACTIVE_TEST ?
+            $this->_aSession['user']['role'] == 0 && SHOW_CAPTCHA :
+            false;
+
     $this->_setError('name')->_setError('surname')->_setError('email')->_setError('password');
 
     if ($this->_oModel->getExistingUser($this->_aRequest[$this->_sController]['email']))
@@ -386,14 +389,15 @@ class Users extends Main {
    * Update entry or show form template if we have enough rights.
    *
    * @access public
+   * @param integer $iUserRole required user right, only for E_STRICT
    * @return string HTML content
    *
    */
-  public function update() {
+  public function update($iUserRole = 4) {
     if ($this->_aSession['user']['id'] == 0)
       return Helper::errorMessage(I18n::get('error.session.create_first'), '/sessions/create');
 
-    elseif ($this->_aSession['user']['id'] !== $this->_iId && $this->_aSession['user']['role'] < 4)
+    elseif ($this->_aSession['user']['id'] !== $this->_iId && $this->_aSession['user']['role'] < $iUserRole)
       return Helper::redirectTo('/errors/401');
 
     else
@@ -408,10 +412,11 @@ class Users extends Main {
    * Activate model, insert data into the database and redirect afterwards.
    *
    * @access protected
+   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return string HTML content
    *
    */
-  protected function _update() {
+  protected function _update($sRedirectURL = '') {
     $this->_setError('name');
 
     if (isset($this->_aError))
@@ -447,16 +452,17 @@ class Users extends Main {
    * Delete a user account.
    *
    * @access public
+   * @param integer $iUserRole required user right, only for E_STRICT
    * @return boolean status message
    *
    */
-  public function destroy() {
+  public function destroy($iUserRole = 4) {
     if (!$this->_iId)
       return Helper::redirectTo('/errors/403');
 
     else
       return ( (isset($this->_aRequest[$this->_sController]) && $this->_aSession['user']['id'] == $this->_iId)) ||
-              $this->_aSession['user']['role'] == 4 ?
+              $this->_aSession['user']['role'] == $iUserRole ?
               $this->_destroy() :
               Helper::errorMessage(I18n::get('error.401.title'), '/', $this->_aRequest);
   }
@@ -468,10 +474,11 @@ class Users extends Main {
    * delete the user from database and redirect afterwards
    *
    * @access protected
+   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return boolean status message
    *
    */
-  protected function _destroy() {
+  protected function _destroy($sRedirectURL = '') {
     require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
     $aUser = $this->_oModel->getUserNamesAndEmail($this->_iId);
 
@@ -535,7 +542,7 @@ class Users extends Main {
       # Subscribe to MailChimp after email address is confirmed
       $this->_subscribeToNewsletter($this->_oModel->getActivationData());
 
-      $this->oSmarty->clearCacheForController('users');
+      $this->oSmarty->clearCacheForController($this->_sController);
 
       return Helper::successMessage(I18n::get('success.user.verification'), '/');
     }

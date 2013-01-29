@@ -387,7 +387,7 @@ abstract class Main {
    * @return array $aData returns reference of $aData
    *
    */
-  protected function _formatForUserOutput(&$aData) {
+  protected static function _formatForUserOutput(&$aData) {
     # Set up ints first
     $aData['id']    = (int) $aData['id'];
     $aData['role']  = (int) isset($aData['role']) ? $aData['role'] : 0;
@@ -517,10 +517,11 @@ abstract class Main {
    * This is just a fallback method if a model has no update method.
    *
    * @access public
+   * @param integer $iId ID to update
    * @return boolean false
    *
    */
-  public function update() {
+  public function update($iId) {
     return false;
   }
 
