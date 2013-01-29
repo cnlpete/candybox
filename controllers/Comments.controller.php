@@ -63,11 +63,11 @@ class Comments extends Main {
    * @return string HTML
    *
    */
-  public function show() {
-    return $this->_sController == 'comments' ?
-            Helper::redirectTo('/errors/404') :
-            $this->_show();
-  }
+//  public function show() {
+//    return $this->_sController == 'comments' ?
+//            Helper::redirectTo('/errors/404') :
+//            $this->_show();
+//  }
 
   /**
    * Show comment entries.
