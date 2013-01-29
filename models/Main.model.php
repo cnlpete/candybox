@@ -318,10 +318,8 @@ abstract class Main {
       );
 
       if ($this->_aSession['user']['role'] >= 3) {
-        $aUserData = array(
-            'email'       => $aData['user_email'],
-            'ip'          => isset($aData['author_ip']) ? $aData['author_ip'] : ''
-        );
+        $aUserData['email'] = $aData['user_email'];
+        $aUserData['ip']    = isset($aData['author_ip']) ? $aData['author_ip'] : '';
       }
     }
 
@@ -336,10 +334,8 @@ abstract class Main {
       );
 
       if ($this->_aSession['user']['role'] >= 3) {
-        $aUserData = array(
-            'email'       => isset($aData['author_email']) ? $aData['author_email'] : WEBSITE_MAIL,
-            'ip'          => isset($aData['author_ip']) ? $aData['author_ip'] : ''
-        );
+        $aUserData['email'] = isset($aData['author_email']) ? $aData['author_email'] : WEBSITE_MAIL;
+        $aUserData['ip']    = isset($aData['author_ip']) ? $aData['author_ip'] : '';
       }
     }
 
@@ -374,7 +370,10 @@ abstract class Main {
             $aData['user_name'],
             $aData['user_surname'],
             $aData['user_email'],
-            $aData['use_gravatar']);
+            $aData['use_gravatar'],
+            $aData['author_name'],
+            $aData['author_email'],
+            $aData['author_ip']);
 
     return $aData;
   }
