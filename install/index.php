@@ -139,18 +139,15 @@ class Install extends Index {
    * @param array $aFolders array of Folders to check for, can also contain subarrays
    * @param array $aReturn array of bool return values for smarty
    * @param string $sPrefix prefix for assigns and checks, default: '/'
-   * @param integer $iPermissions the permissions to create the folders with, default: 775
+   * @param integer $iPermissions the permissions to create the folders with, default: 777
    * @return boolean status of folders
    * @todo add cache and compile dir to 0777
    *
    */
-  private function _checkFoldersAndAssign($aFolders, &$aReturn, $sPrefix = '/', $iPermissions = 775) {
+  private function _checkFoldersAndAssign($aFolders, &$aReturn, $sPrefix = '/', $iPermissions = 777) {
     $bReturn = true;
 
     foreach ($aFolders as $sKey => $mFolder) {
-      if (preg_match('/cache/i', $mFolder) || preg_match('/compile/i', $mFolder) || preg_match('/upload/i', $mFolder))
-        $iPermissions = 777;
-
       # Check multiple folders
       if (is_array($mFolder)) {
 
@@ -211,8 +208,6 @@ class Install extends Index {
         $sUpload = Helper::removeSlash(PATH_UPLOAD);
         $aFolders = array(
             'app/backup',
-            Helper::removeSlash(CACHE_DIR),
-            Helper::removeSlash(COMPILE_DIR),
             'app/logs',
             $sUpload => array(
                 'downloads',
