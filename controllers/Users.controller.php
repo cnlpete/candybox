@@ -561,7 +561,7 @@ class Users extends Main {
 
     header('Content-Type: application/json');
     exit(isset($sToken) && $sToken ?
-										json_encode(array('success' => true,	'error' => '', 'token' => $sToken)) :
-										json_encode(array('success' => false, 'error' => 'No matching results.', 'token' => '')));
+              json_encode(array('success' => true,  'error' => '', 'token' => $sToken)) :
+              json_encode(array('success' => false, 'error' => 'No matching results.', 'token' => '')));
   }
 }
