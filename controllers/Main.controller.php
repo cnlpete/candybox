@@ -730,19 +730,17 @@ abstract class Main {
   protected function _create() {
     $this->_setError('title');
 
-    $sRedirectURL = empty($this->_sRedirectURL) ?
-            '/' . $this->_sController :
-            $this->_sRedirectURL;
-
     if ($this->_aError)
       return $this->_showFormTemplate();
 
     else {
       $bResult = $this->_oModel->create() === true;
 
+      $iId = $this->_oModel->getLastInsertId($this->_sController);
+
       Logs::insert( $this->_sController,
                     $this->_aRequest['action'],
-                    $this->_oModel->getLastInsertId($this->_sController),
+                    $iId,
                     $this->_aSession['user']['id'],
                     '', '', $bResult);
 
@@ -753,16 +751,21 @@ abstract class Main {
         if (count($this->_aDependentCaches) > 0)
           $this->_clearAdditionalCaches();
 
+        $sRedirectURL = empty($this->_sRedirectURL) ? '/' . $this->_sController . '/' . $iId : $this->_sRedirectURL;
+
         return Helper::successMessage(
                 I18n::get('success.create'),
                 $sRedirectURL,
                 $this->_aRequest);
       }
-      else
+      else {
+        $sRedirectURL = empty($this->_sRedirectURL) ? '/' . $this->_sController : $this->_sRedirectURL;
+
         return Helper::errorMessage(
                 I18n::get('error.sql'),
                 $sRedirectURL,
                 $this->_aRequest);
+      }
     }
   }
 
