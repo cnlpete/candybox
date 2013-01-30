@@ -21,7 +21,6 @@ class Contents extends Main {
     parent::__init();
 
     $this->_aDependentCaches[] = 'searches';
-    # $this->_aDependentCaches[] = 'rss';
     $this->_aDependentCaches[] = 'sitemaps';
 
     return $this->_oModel;
