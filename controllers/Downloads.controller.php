@@ -95,14 +95,16 @@ class Downloads extends Main {
    * If data is given, activate the model, insert them into the database and redirect afterwards.
    *
    * @access protected
-   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _create($sRedirectURL = '') {
+  protected function _create() {
     $this->_setError('title');
     $this->_setError('category');
     $this->_setError('file');
+
+    # Always redirect to overview
+    $this->_sRedirectURL = '/' . $this->_sController;
 
     if (isset($this->_aError))
       return $this->_showFormTemplate();
@@ -142,17 +144,17 @@ class Downloads extends Main {
                         $this->_aSession['user']['id']);
 
           return Helper::successMessage(I18n::get('success.create'),
-                  '/' . $this->_sController,
+                  $this->_sRedirectURL,
                   $this->_aFile);
         }
         else
           return Helper::errorMessage(I18n::get('error.sql'),
-                  '/' . $this->_sController,
+                  $this->_sRedirectURL,
                   $this->_aFile);
       }
       else
         return Helper::errorMessage(I18n::get('error.missing.file'),
-                '/' . $this->_sController,
+                $this->_sRedirectURL,
                 $this->_aFile);
     }
   }
@@ -161,11 +163,12 @@ class Downloads extends Main {
    * Update a download entry.
    *
    * @access protected
-   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _update($sRedirectURL = '') {
+  protected function _update() {
+    # redirect to overview, since show will prompt the download
+    $this->_sRedirectURL = '/' . $this->_sController;
     return parent::_update('/' . $this->_sController);
   }
 
@@ -173,11 +176,10 @@ class Downloads extends Main {
    * Destroy a download entry.
    *
    * @access protected
-   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return boolean status of model action
    *
    */
-  protected function _destroy($sRedirectURL = '') {
+  protected function _destroy() {
     return parent::_destroy();
   }
 }

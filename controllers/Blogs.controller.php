@@ -183,11 +183,10 @@ class Blogs extends Main {
    * Create a blog entry.
    *
    * @access protected
-   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _create($sRedirectURL = '') {
+  protected function _create() {
     $this->_setError('content');
 
     return parent::_create();
@@ -197,11 +196,10 @@ class Blogs extends Main {
    * Update a blog entry.
    *
    * @access protected
-   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _update($sRedirectURL = '') {
+  protected function _update() {
     $this->_setError('content');
 
     return parent::_update();
@@ -211,11 +209,10 @@ class Blogs extends Main {
    * Destroy a blog entry.
    *
    * @access protected
-   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return boolean status of model action
    *
    */
-  protected function _destroy($sRedirectURL = '') {
+  protected function _destroy() {
     return parent::_destroy();
   }
 }

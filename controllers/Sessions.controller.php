@@ -45,14 +45,10 @@ class Sessions extends Main {
    * If data is given, create session.
    *
    * @access protected
-   * @param string|array $mAdditionalCaches specify aditional caches to clear on success - actually not required.
-   * Just a bug fix for PHP strict mode
-   * @param string $sRedirectURL specify the URL to redirect to after execution - actually not required.
-   * Just a bug fix for PHP strict mode
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _create($mAdditionalCaches = null, $sRedirectURL = '') {
+  protected function _create() {
     $this->_setError('email');
     $this->_setError('password');
 

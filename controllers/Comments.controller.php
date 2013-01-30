@@ -149,11 +149,10 @@ class Comments extends Main {
    * Check if required data is given or throw an error instead.
    *
    * @access protected
-   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _create($sRedirectURL = '') {
+  protected function _create() {
     $bShowCaptcha = class_exists('candyCMS\Plugins\Recaptcha') && !ACTIVE_TEST ?
                       $this->_aSession['user']['role'] == 0 && SHOW_CAPTCHA :
                       false;
@@ -175,7 +174,7 @@ class Comments extends Main {
 
     else {
       # Bugfix for jquery mobile not handling this redirect with hash very vell
-      $sRedirect = '/blogs/' . (int) $this->_aRequest[$this->_sController]['parent_id'] . (MOBILE ? '' : '#comments');
+      $this->_sRedirectURL = '/blogs/' . (int) $this->_aRequest[$this->_sController]['parent_id'] . (MOBILE ? '' : '#comments');
 
       if ($this->_oModel->create() === true) {
         # there is no 'comments' cache for now
@@ -187,10 +186,10 @@ class Comments extends Main {
                       Helper::getLastEntry('comments'),
                       $this->_aSession['user']['id']);
 
-        return Helper::successMessage(I18n::get('success.create'), $sRedirect);
+        return Helper::successMessage(I18n::get('success.create'), $this->_sRedirectURL);
       }
       else
-        return Helper::errorMessage(I18n::get('error.sql'), $sRedirect);
+        return Helper::errorMessage(I18n::get('error.sql'), $this->_sRedirectURL);
     }
   }
 
@@ -198,13 +197,12 @@ class Comments extends Main {
    * Delete a a comment.
    *
    * @access protected
-   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return boolean status of model action
    *
    */
-  protected function _destroy($sRedirectURL = '') {
-    $sRedirect = '/blogs/' . $this->_oModel->getParentId((int) $this->_aRequest['id']);
+  protected function _destroy() {
+    $this->_sRedirectURL = '/blogs/' . $this->_oModel->getParentId((int) $this->_aRequest['id']);
 
-    parrent::_destroy($sRedirect);
+    parrent::_destroy();
   }
 }

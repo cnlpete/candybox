@@ -43,11 +43,10 @@ class Medias extends Main {
    * We must override the main method due to a file upload.
    *
    * @access protected
-   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _create($sRedirectURL = '') {
+  protected function _create() {
     $this->_setError('file');
 
     require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';

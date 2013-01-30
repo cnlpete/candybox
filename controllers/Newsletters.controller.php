@@ -49,7 +49,7 @@ class Newsletters extends Main {
    * @return string HTML content
    *
    */
-  public function _create($sRedirectURL = '') {
+  public function _create() {
     $this->_setError('email');
 
     if (isset($this->_aError))

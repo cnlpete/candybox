@@ -154,6 +154,14 @@ abstract class Main {
   protected $_aDependentCaches = array();
 
   /**
+   * the current redirect URL, if set, the controller 'should' redirect there after completion of _create, _update or _destroy
+   *
+   * @var array
+   * @access protected
+   */
+  protected $_sRedirectURL = '';
+
+  /**
    * Initialize the controller by adding input params, set default id and start template engine.
    *
    * @access public
@@ -716,16 +724,15 @@ abstract class Main {
    * If data is given, activate the model, insert them into the database and redirect afterwards.
    *
    * @access protected
-   * @param string $sRedirectURL specify the URL to redirect to after execution
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _create($sRedirectURL = '') {
+  protected function _create() {
     $this->_setError('title');
 
-    $sRedirectURL = empty($sRedirectURL) ?
+    $sRedirectURL = empty($this->_sRedirectURL) ?
             '/' . $this->_sController :
-            $sRedirectURL;
+            $this->_sRedirectURL;
 
     if ($this->_aError)
       return $this->_showFormTemplate();
@@ -765,16 +772,15 @@ abstract class Main {
    * Activate model, insert data into the database and redirect afterwards.
    *
    * @access protected
-   * @param string $sRedirectURL specify the URL to redirect to after execution
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _update($sRedirectURL = '') {
+  protected function _update() {
     $this->_setError('title');
 
-    $sRedirectURL = empty($sRedirectURL) ?
+    $sRedirectURL = empty($this->_sRedirectURL) ?
             '/' . $this->_aRequest['controller'] . '/' . (int) $this->_aRequest['id'] :
-            $sRedirectURL;
+            $this->_sRedirectURL;
 
     if ($this->_aError)
       return $this->_showFormTemplate();
@@ -814,16 +820,15 @@ abstract class Main {
    * Activate model, delete data from database and redirect afterwards.
    *
    * @access protected
-   * @param string $sRedirectURL specify the URL to redirect to after execution
    * @return boolean status of model action
    *
    */
-  protected function _destroy($sRedirectURL = '') {
+  protected function _destroy() {
     $bReturn = $this->_oModel->destroy($this->_iId) === true;
 
-    $sRedirectURL = empty($sRedirectURL) ?
+    $sRedirectURL = empty($this->_sRedirectURL) ?
             '/' . $this->_sController :
-            $sRedirectURL;
+            $this->_sRedirectURL;
 
     Logs::insert( $this->_sController,
                   $this->_aRequest['action'],

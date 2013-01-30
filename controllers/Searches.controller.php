@@ -65,11 +65,10 @@ class Searches extends Main {
    * Show the search form, this is a create action since it creates a new search.
    *
    * @access protected
-   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return string HTML content
    *
    */
-  protected function _create($sRedirectURL = '') {
+  protected function _create() {
     $this->oSmarty->setCaching(\candyCMS\Core\Helpers\SmartySingleton::CACHING_LIFETIME_SAVED);
     return $this->_formTemplate();
   }

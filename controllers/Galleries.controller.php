@@ -129,11 +129,10 @@ class Galleries extends Main {
    * Create a gallery album.
    *
    * @access protected
-   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _create($sRedirectURL = '') {
+  protected function _create() {
     $this->_setError('title');
 
     if ($this->_aError)

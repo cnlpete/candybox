@@ -282,11 +282,10 @@ class Users extends Main {
    * If data is given, activate the model, insert them into the database, send mail and redirect afterwards.
    *
    * @access protected
-   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _create($sRedirectURL = '') {
+  protected function _create() {
     # Logged in users should not have a recaptcha field since we can assume that these are real humans.
     $bShowCaptcha = class_exists('\candyCMS\Plugins\Recaptcha') && !ACTIVE_TEST ?
             $this->_aSession['user']['role'] == 0 && SHOW_CAPTCHA :
@@ -412,11 +411,10 @@ class Users extends Main {
    * Activate model, insert data into the database and redirect afterwards.
    *
    * @access protected
-   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return string HTML content
    *
    */
-  protected function _update($sRedirectURL = '') {
+  protected function _update() {
     $this->_setError('name');
 
     if (isset($this->_aError))
@@ -474,11 +472,10 @@ class Users extends Main {
    * delete the user from database and redirect afterwards
    *
    * @access protected
-   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
    * @return boolean status message
    *
    */
-  protected function _destroy($sRedirectURL = '') {
+  protected function _destroy() {
     require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
     $aUser = $this->_oModel->getUserNamesAndEmail($this->_iId);
 
