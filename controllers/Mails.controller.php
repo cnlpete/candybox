@@ -139,6 +139,7 @@ class Mails extends Main {
    * @access protected
    * @param boolean $bShowCaptcha Show the captcha?
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
+   * @todo make E_STRICT compilant
    *
    */
   protected function _create($bShowCaptcha = true) {
