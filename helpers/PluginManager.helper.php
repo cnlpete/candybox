@@ -90,6 +90,7 @@ class PluginManager {
   protected $_aContentDisplayPluginNames = array();
   protected $_aGlobalDisplayPluginNames = array();
   protected $_aRepetitivePluginNames = array();
+  protected $_aCaptchaPluginNames = array();
 
   /**
    * Load all defined plugins.
@@ -255,4 +256,35 @@ class PluginManager {
         $oPlugin->execute();
     }
   }
+
+  /**
+   * register as Captcha plugin
+   *
+   * Plugin MUST provide a show() and a check() function
+   *
+   * @access public
+   * @param object $oPlugin the plugin to be added to this event
+   *
+   */
+  public function registerCaptchaPlugin(&$oPlugin) {
+    $this->_aCaptchaPluginNames[] = strtolower($oPlugin::IDENTIFIER);
+    # forms will provide all nessecary <!--captchaPluginName--> placeholders
+    # @todo make this more elegant by having forms provide a global <!--captchas--> Placeholder and and/or run show on all Captchaplugins
+    $this->registerSimplePlugin($oPlugin);
+  }
+
+  /**
+   * check all captcha plugins
+   *
+   * @access public
+   * @param array $aError an array to append errors to
+   *
+   */
+  public function checkCaptcha(&$aError) {
+    foreach ($this->_aCaptchaPluginNames as $sPluginName) {
+      $oPlugin = $this->_aPlugins[$sPluginName];
+      $oPlugin->check($aError);
+    }
+  }
+
 }
