@@ -24,6 +24,28 @@ use PDO;
 final class Cronjob {
 
   /**
+   * Identifier for Template Replacements
+   *
+   * @var constant
+   *
+   */
+  const IDENTIFIER = 'Cronjob';
+
+  /**
+   * @var array
+   * @access protected
+   *
+   */
+  protected $_aRequest;
+
+  /**
+   * @var array
+   * @access protected
+   *
+   */
+  protected $_aSession;
+
+  /**
    * holds the database connection
    *
    * @access private
@@ -31,26 +53,71 @@ final class Cronjob {
   private $_oDB;
 
   /**
-   * Create a new Cronjob Object
+   * holds the timestamp of the last execution
+   *
+   * @access private
+   */
+  private $_iLastRun = 0;
+
+  /**
+   * Initialize the software by adding input params.
+   *
+   * @access public
+   * @param array $aRequest alias for the combination of $_GET and $_POST
+   * @param array $aSession alias for $_SESSION
+   * @param object $oPlugins the PluginManager
+   *
+   */
+  public function __construct(&$aRequest, &$aSession, &$oPlugins) {
+    $this->_aRequest  = & $aRequest;
+    $this->_aSession  = & $aSession;
+
+    // check for the file and read its timestamp
+    $sBackupFile = PATH_STANDARD . '/app/backup/lastrun.timestamp';
+    if (file_exists($sBackupFile)) {
+      $oFile = @fopen($sBackupFile, 'r');
+      $sContent = @fgets($oFile);
+      @fclose($oFile);
+
+      $this->_iLastRun = (int)$sContent;
+    }
+
+    # now register some events with the pluginmanager
+    $oPlugins->registerRepetitivePlugin($this);
+  }
+
+  /**
+   * Return the status if we want to execute the cronjob.
+   *
+   * @access public
+   * @param boolean $bForceExecution whether to force the execution
+   * @return boolean update status
+   *
+   */
+  public function needsExecution($bForceExecution = false) {
+    # if the execution is forced, still do not run more than once every 60 seconds
+    $iInterval = $bForceExecution ? PLUGIN_CRONJOB_UPDATE_INTERVAL : 60;
+
+    return !$this->_iLastRun ? true : $this->_iLastRun + $iInterval < time();
+  }
+
+  /**
+   * Execute the Cronjob
    *
    * @access public
    *
    */
-  public function __construct() {
+  public function execute() {
     // write to the file, so there will be no duplicate execution
     $this->_writeTimestamp();
 
     $this->_oDB = Main::connectToDatabase();
-  }
 
-  /**
-   * Finish up the execution of the Cronjob
-   *
-   * @access public
-   *
-   */
-  public function __destruct() {
-    // update the timestamp
+    $this->cleanup(array('medias', 'bbcode'));
+    $this->optimize();
+    $this->backup();
+
+    // update the timestamp, since this action might take a while
     $this->_writeTimestamp();
   }
 
@@ -71,16 +138,15 @@ final class Cronjob {
     }
   }
 
-
   /**
    * Cleanup our temp folders.
    *
    * @final
-   * @access public
+   * @access private
    * @param array $aFolders temp folders to clean
    *
    */
-  public final function cleanup($aFolders) {
+  private final function cleanup($aFolders) {
     foreach ($aFolders as $sFolder) {
       $sTempPath = Helper::removeSlash(PATH_UPLOAD . '/temp/' . $sFolder);
       $oDir = opendir($sTempPath);
@@ -94,15 +160,14 @@ final class Cronjob {
     }
   }
 
-
   /**
    * Optimize tables and delete old sessions.
    *
    * @final
-   * @access public
+   * @access private
    *
    */
-  public final function optimize() {
+  private final function optimize() {
     try {
       $this->_oDB->query("OPTIMIZE TABLE
                           " . SQL_PREFIX . "blogs,
@@ -293,10 +358,10 @@ EOD;
    * Create a SQL backup.
    *
    * @final
-   * @access public
+   * @access private
    *
    */
-  public final function backup() {
+  private final function backup() {
     $sBackupName      = date('Y-m-d_H-i');
     $sBackupFolder    = PATH_STANDARD . '/app/backup';
     $sBackupPath      = $sBackupFolder . '/' . $sBackupName . '.sql';
@@ -384,30 +449,5 @@ EOD;
 
     # Rollback, since we did only read statements
     $this->_oDB->rollBack();
-  }
-
-  /**
-   * Return the status if we want to execute the cronjob.
-   *
-   * @static
-   * @access public
-   * @param integer $iInterval time in seconds that the cronjob should be executed
-   * @return boolean update status
-   *
-   */
-  public static function getNextUpdate($iInterval = '') {
-    $iInterval = !empty($iInterval) ? $iInterval : PLUGIN_CRONJOB_UPDATE_INTERVAL;
-
-    // check for the file and read its timestamp
-    $sBackupFile = PATH_STANDARD . '/app/backup/lastrun.timestamp';
-    if (file_exists($sBackupFile)) {
-      $oFile = @fopen($sBackupFile, 'r');
-      $sContent = @fgets($oFile);
-      @fclose($oFile);
-
-      $iLastRun = (int)$sContent;
-    }
-
-    return !$iLastRun ? true : $iLastRun + $iInterval < time();
   }
 }
