@@ -27,16 +27,45 @@ final class LanguageChooser {
   const IDENTIFIER = 'LanguageChooser';
 
   /**
+   * @var array
+   * @access protected
+   *
+   */
+  protected $_aRequest;
+
+  /**
+   * @var array
+   * @access protected
+   *
+   */
+  protected $_aSession;
+
+  /**
+   * Initialize the software by adding input params.
+   *
+   * @access public
+   * @param array $aRequest alias for the combination of $_GET and $_POST
+   * @param array $aSession alias for $_SESSION
+   * @param object $oPlugins the PluginManager
+   *
+   */
+  public function __construct(&$aRequest, &$aSession, &$oPlugins) {
+    $this->_aRequest  = & $aRequest;
+    $this->_aSession  = & $aSession;
+
+    # now register some events with the pluginmanager
+    $oPlugins->registerSimplePlugin($this);
+  }
+
+  /**
    * Show the (cached) headlines.
    *
    * @final
    * @access public
-   * @param array $aRequest
-   * @param array $aSession
    * @return string HTML
    *
    */
-  public final function show(&$aRequest, &$aSession) {
+  public final function show() {
     $sTemplateDir   = Helper::getPluginTemplateDir(self::IDENTIFIER, 'show');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
 
@@ -44,7 +73,7 @@ final class LanguageChooser {
     $oSmarty->setTemplateDir($sTemplateDir);
     $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
-    $sCacheId = WEBSITE_MODE . '|layout|' . WEBSITE_LOCALE . '|' . self::IDENTIFIER . '|' . substr(md5($aSession['user']['role']), 0 , 10);
+    $sCacheId = WEBSITE_MODE . '|layout|' . WEBSITE_LOCALE . '|' . self::IDENTIFIER . '|' . substr(md5($this->_aSession['user']['role']), 0 , 10);
     if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
       $aLangs = array();
       $sLanguagesPath = PATH_STANDARD . '/app/languages/';

@@ -27,6 +27,46 @@ use candyCMS\Core\Helpers\Image;
 final class Bbcode {
 
   /**
+   * Identifier for Template Replacements
+   *
+   * @var constant
+   *
+   */
+  const IDENTIFIER = 'Bbcode';
+
+  /**
+   * @var array
+   * @access protected
+   *
+   */
+  protected $_aRequest;
+
+  /**
+   * @var array
+   * @access protected
+   *
+   */
+  protected $_aSession;
+
+  /**
+   * Initialize the plugin and register all needed events.
+   *
+   * @access public
+   * @param array $aRequest alias for the combination of $_GET and $_POST
+   * @param array $aSession alias for $_SESSION
+   * @param object $oPlugins the PluginManager
+   *
+   */
+  public function __construct(&$aRequest, &$aSession, &$oPlugins) {
+    $this->_aRequest  = & $aRequest;
+    $this->_aSession  = & $aSession;
+
+    # now register some events with the pluginmanager
+    #$oPlugins->registerSimplePlugin($this);
+    $oPlugins->registerContentDisplayPlugin($this);
+  }
+
+  /**
    * Search and replace BB code.
    *
    * @final
@@ -172,7 +212,7 @@ final class Bbcode {
    * @return string HTML with formated code
    *
    */
-  public final function getFormatedText($sStr) {
+  public final function prepareContent($sStr) {
     return self::_setFormatedText($sStr);
   }
 }
