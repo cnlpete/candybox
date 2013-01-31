@@ -114,7 +114,7 @@ define('ALLOW_EXTENSIONS', false);
 # If you disable TinyMCE, Markdown is used.
 # DEFAULT: 'Bbcode,FormatTimestamp,Headlines,Archive,TinyMCE'
 # OTHER OFFICIALLY SUPPORTED PLUGINS: Facebook, Cronjob, Piwik, Analytics,
-# TagCloud, AddThis, SocialSharePrivacy, LanguageChooser, Replace
+#   TagCloud, AddThis, SocialSharePrivacy, LanguageChooser, Replace, Markdown
 define('ALLOW_PLUGINS', 'Bbcode,FormatTimestamp,Headlines,Archive,TinyMCE');
 
 # ------------------------------------------------------------------------------
