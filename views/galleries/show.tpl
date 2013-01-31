@@ -31,39 +31,45 @@
     {if $album.content}
       <p>{$album.content}</p>
     {/if}
-    <ul class='thumbnails'>
-      {foreach $album.files as $f}
-        <li id='file_{$f.id}'>
-          <a href='{$f.url_popup}'
-              class='thumbnail js-fancybox fancybox-thumb'
-              rel='fancybox-thumb'
-              title='{$f.content}'
-              data-fancybox-group="thumb">
-            <img src='{$f.url_thumb}'
-                  alt='{$f.file}'
-                  title=''
-                  class='js-image' />
-          </a>
-          {if $_SESSION.user.role >= 3}
-            <p class='center'>
-              <a href='{$f.url_update}'>
-                <i class='icon-pencil js-tooltip'
-                    title='{$lang.global.update.update}'></i>
-              </a>
-              <i class='icon-trash js-tooltip'
-                onclick="confirmDestroy('{$f.url_destroy}', 'file_{$f.id}')"
-                title='{$lang.global.destroy.destroy}'></i>
-            </p>
-          {/if}
-        </li>
-      {/foreach}
-    </ul>
-    {* This div is needed for sortable actions *}
-    <div class='form-actions hide'>
-      <input id='js-update-order' type='button'
-            class='btn btn-primary'
-            value='{$lang.galleries.files.update.order}' />
-    </div>
+    {if !$album.files}
+      <div class='alert alert-warning'>
+        <h4>{$lang.error.missing.files}</h4>
+      </div>
+    {else}
+      <ul class='thumbnails'>
+        {foreach $album.files as $f}
+          <li id='file_{$f.id}'>
+            <a href='{$f.url_popup}'
+                class='thumbnail js-fancybox fancybox-thumb'
+                rel='fancybox-thumb'
+                title='{$f.content}'
+                data-fancybox-group="thumb">
+              <img src='{$f.url_thumb}'
+                    alt='{$f.file}'
+                    title=''
+                    class='js-image' />
+            </a>
+            {if $_SESSION.user.role >= 3}
+              <p class='center'>
+                <a href='{$f.url_update}'>
+                  <i class='icon-pencil js-tooltip'
+                      title='{$lang.global.update.update}'></i>
+                </a>
+                <i class='icon-trash js-tooltip'
+                  onclick="confirmDestroy('{$f.url_destroy}', 'file_{$f.id}')"
+                  title='{$lang.global.destroy.destroy}'></i>
+              </p>
+            {/if}
+          </li>
+        {/foreach}
+      </ul>
+      {* This div is needed for sortable actions *}
+      <div class='form-actions hide'>
+        <input id='js-update-order' type='button'
+              class='btn btn-primary'
+              value='{$lang.galleries.files.update.order}' />
+      </div>
+    {/if}
     <p class='center'>
       <a href='{$album.url_clean}.rss'>
         <i class='icon-rss js-tooltip'
