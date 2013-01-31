@@ -15,6 +15,7 @@ namespace candyCMS\Core\Controllers;
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Dispatcher;
 use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\SmartySingleton;
 use candyCMS\Plugins\Cronjob;
@@ -31,6 +32,7 @@ require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/AdvancedException.he
 require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Dispatcher.helper.php';
 require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/I18n.helper.php';
 require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/SmartySingleton.helper.php';
+require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/PluginManager.helper.php';
 
 class Index {
 
@@ -71,13 +73,13 @@ class Index {
   protected $_oObject;
 
   /**
-   * Saves loaded Plugins
+   * holds the reference to our PluginManager
    *
-   * @var array
+   * @var object
    * @access protected
    *
    */
-  protected $_aPlugins;
+  protected $_oPlugins;
 
   /**
    * Initialize the software by adding input params.
@@ -96,12 +98,19 @@ class Index {
     $this->_aCookie   = & $aCookie;
 
     $this->getConfigFiles(array('Plugins'));
-    $this->_aPlugins = $this->getPlugins(ALLOW_PLUGINS);
     $this->getRoutes();
     $this->getLanguage();
-    $this->getFacebookExtension();
+    # always initialize the pluginmanager, since we want to call the events later
+    $this->_oPlugins = PluginManager::getInstance();
+    if (strlen(ALLOW_PLUGINS) > 0) {
+      $this->_oPlugins->setRequestAndSession($this->_aRequest, $this->_aSession);
+      $this->_oPlugins->load(ALLOW_PLUGINS);
+
+      # run repetitive plugins (such as cronjob)
+      $this->_oPlugins->runRepetitivePlugins();
+    }
+#    $this->getFacebookExtension();
     $this->setUser();
-    $this->getCronjob();
   }
 
   /**
@@ -143,43 +152,6 @@ class Index {
       catch (AdvancedException $e) {
         die($e->getMessage());
       }
-    }
-  }
-
-  /**
-   * Load all defined plugins.
-   *
-   * @static
-   * @access public
-   * @param string $sAllowedPlugins comma separated plugin names
-   * @see app/config/Candy.inc.php
-   * @return array of plugins
-   *
-   */
-  public static function getPlugins($sAllowedPlugins) {
-    if (!ACTIVE_TEST) {
-      if (!empty($sAllowedPlugins)) {
-        $aPlugins = explode(',', $sAllowedPlugins);
-
-        foreach ($aPlugins as $sPluginName) {
-          try {
-            if (!file_exists(PATH_STANDARD . '/vendor/candyCMS/plugins/' . (string) ucfirst($sPluginName) . '/' .
-                            (string) ucfirst($sPluginName) . '.controller.php'))
-              throw new AdvancedException('Missing plugin: ' . ucfirst($sPluginName));
-
-            else
-              require_once PATH_STANDARD . '/vendor/candyCMS/plugins/' . (string) ucfirst($sPluginName) . '/' .
-                      (string) ucfirst($sPluginName) . '.controller.php';
-          }
-          catch (AdvancedException $e) {
-            die($e->getMessage());
-          }
-        }
-
-        return $aPlugins;
-      }
-      else
-        return array();
     }
   }
 
@@ -338,26 +310,6 @@ class Index {
     new I18n($sLanguage, $this->_aSession, $this->_aPlugins);
 
     return $sLocale;
-  }
-
-  /**
-   * Get the cronjob working. Check for last execution and plan next cleanup, optimization and backup.
-   *
-   * @access public
-   * @param boolean $bForceAction force the cronjob to be executed, but it will still only execute once per minute.
-   * @see app/config/Candy.inc.php
-   *
-   */
-  public function getCronjob($bForceAction = false) {
-    if (in_array('Cronjob', $this->_aPlugins)) {
-      if (Cronjob::getNextUpdate() == true || ($bForceAction === true && Cronjob::getNextUpdate(60*1) == true)) {
-        $oCronjob = new Cronjob();
-        $oCronjob->cleanup(array('medias', 'bbcode'));
-        $oCronjob->optimize();
-        $oCronjob->backup();
-        $oCronjob = null;
-      }
-    }
   }
 
   /**
@@ -584,51 +536,10 @@ class Index {
       $sCachedHTML = $oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
 
-    if (ALLOW_PLUGINS !== '' && !ACTIVE_TEST)
-      $sCachedHTML = $this->_showPlugins($sCachedHTML);
+    $sCachedHTML = $this->_oPlugins->runGlobalDisplayPlugins($sCachedHTML);
+    $sCachedHTML = $this->_oPlugins->runSimplePlugins($sCachedHTML);
 
     header('Content-Type: text/html; charset=utf-8');
-    return $sCachedHTML;
-  }
-
-  /**
-   * Get plugin placeholders, render needed plugins and replace placeholders.
-   * This is done at the end of execution for performance reasons.
-   *
-   * @access private
-   * @param string $sCachedHTML
-   * @return string HTML content
-   *
-   */
-  private function _showPlugins($sCachedHTML) {
-    # Bugfix: Fix search bug
-    unset($this->_aRequest['id'], $this->_aRequest['search'], $this->_aRequest['page']);
-
-    foreach ($this->_aPlugins as $sPlugin) {
-      if($sPlugin == 'Bbcode' || $sPlugin == 'Cronjob')
-        continue;
-
-      if($sPlugin == 'Facebook')
-        $sPlugin = 'FacebookCMS';
-
-      $sPluginNamespace = '\candyCMS\Plugins\\' . $sPlugin;
-
-      if (class_exists($sPluginNamespace)) {
-				$oPlugin = $sPlugin == 'Recaptcha' ?
-								$sPluginNamespace::getInstance() :
-								new $sPluginNamespace($sCachedHTML);
-
-        # Bugfix: Only replace text at show actions, because of conflicts with links to be replaced.
-        if($sPlugin == 'Replace' && !isset($this->_aRequest['action']))
-          $sCachedHTML = $oPlugin->replace($this->_aRequest, $this->_aSession, $sCachedHTML);
-
-        elseif (preg_match('/<!-- plugin:' . strtolower($oPlugin::IDENTIFIER) . ' -->/', $sCachedHTML) &&
-                $sPlugin !== 'Replace')
-          $sCachedHTML = str_replace('<!-- plugin:' . strtolower($oPlugin::IDENTIFIER) . ' -->',
-                  $oPlugin->show($this->_aRequest, $this->_aSession), $sCachedHTML);
-      }
-    }
-
     return $sCachedHTML;
   }
 }
