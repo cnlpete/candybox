@@ -55,7 +55,8 @@ final class Markdown {
 
     # now register some events with the pluginmanager
     #$oPlugins->registerSimplePlugin($this);
-    $oPlugins->registerContentDisplayPlugin($this);
+    #$oPlugins->registerContentDisplayPlugin($this);
+    $oPlugins->registerEditorPlugin($this);
   }
 
   /**
@@ -72,5 +73,32 @@ final class Markdown {
   public final function prepareContent(&$sStr) {
     $oMarkdown = new \dflydev\markdown\MarkdownParser();
     return $oMarkdown->transformMarkdown($sStr);
+  }
+
+  /**
+   * Show nothing, since this plugin does not need to output additional javascript.
+   *
+   * @final
+   * @access public
+   * @return string HTML
+   * @todo add markdowneditor: https://github.com/samwillis/pagedown-bootstrap ??
+   *
+   */
+  public final function show() {
+    return '';
+  }
+
+  /**
+   * Generate an Info Array ('url' => '', 'iconurl' => '', 'description' => '')
+   *
+   * @final
+   * @access public
+   * @return array|boolean infor array or false
+   * @todo return array with markdown logo and link to some markup info page
+   * @todo markdown logo: https://github.com/dcurtis/markdown-mark
+   *
+   */
+  public final function getInfo() {
+    return false;
   }
 }

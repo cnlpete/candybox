@@ -53,7 +53,8 @@ final class TinyMCE {
     $this->_aSession  = & $aSession;
 
     # now register some events with the pluginmanager
-    $oPlugins->registerSimplePlugin($this);
+    #$oPlugins->registerSimplePlugin($this);
+    $oPlugins->registerEditorPlugin($this);
   }
 
   /**
@@ -61,8 +62,6 @@ final class TinyMCE {
    *
    * @final
    * @access public
-   * @param array $aRequest
-   * @param array $aSession
    * @return string HTML
    *
    */
@@ -77,5 +76,33 @@ final class TinyMCE {
     $sCacheId = WEBSITE_MODE . '|layout|' . WEBSITE_LOCALE . '|' . self::IDENTIFIER . '|';
 
     return $oSmarty->fetch($sTemplateFile, $sCacheId);
+  }
+
+  /**
+   * Return the formatted code.
+   *
+   * @final
+   * @static
+   * @access public
+   * @param string $sStr
+   * @return string HTML with formated code
+   * @todo maybe do some code cleanup here?
+   *
+   */
+  public final function prepareContent(&$sStr) {
+    return $sStr;
+  }
+
+  /**
+   * Generate an Info Array ('url' => '', 'iconurl' => '', 'description' => '')
+   *
+   * @final
+   * @access public
+   * @return array|boolean infor array or false
+   *
+   */
+  public final function getInfo() {
+    # we do not have an icon and/or info to display
+    return false;
   }
 }

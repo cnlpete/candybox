@@ -62,8 +62,8 @@ final class Bbcode {
     $this->_aSession  = & $aSession;
 
     # now register some events with the pluginmanager
-    #$oPlugins->registerSimplePlugin($this);
-    $oPlugins->registerContentDisplayPlugin($this);
+    #$oPlugins->registerContentDisplayPlugin($this);
+    $oPlugins->registerEditorPlugin($this);
   }
 
   /**
@@ -214,5 +214,30 @@ final class Bbcode {
    */
   public final function prepareContent($sStr) {
     return self::_setFormatedText($sStr);
+  }
+
+  /**
+   * Show nothing, since this plugin does not need to output additional javascript.
+   *
+   * @final
+   * @access public
+   * @return string HTML
+   *
+   */
+  public final function show() {
+    return '';
+  }
+
+  /**
+   * Generate an Info Array ('url' => '', 'iconurl' => '', 'description' => '')
+   *
+   * @final
+   * @access public
+   * @return array|boolean infor array or false
+   * @todo return array with bbcode logo and link to github info page
+   *
+   */
+  public final function getInfo() {
+    return false;
   }
 }
