@@ -218,7 +218,7 @@ class PluginManager {
       if ($aTmpReturnValue !== false)
         $aReturnValue[] = $aTmpReturnValue;
     }
-    return $sHtml;
+    return $aReturnValue;
   }
 
   /**
