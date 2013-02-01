@@ -87,7 +87,7 @@
         {/if}
       </div>
     </div>
-    <!-- plugin:recaptcha -->
+    <!-- pluginmanager:captcha -->
     {if $MOBILE}
       <div data-role='fieldcontain' class='center'>
     {/if}

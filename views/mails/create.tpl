@@ -50,7 +50,7 @@
         {/if}
       </div>
     </div>
-    <!-- plugin:recaptcha -->
+    <!-- pluginmanager:captcha -->
     <div class='form-actions'>
       <input type='submit'
              class='btn btn-primary'

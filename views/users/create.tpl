@@ -121,7 +121,7 @@
         </div>
       </div>
     {/if}
-    <!-- plugin:recaptcha -->
+    <!-- pluginmanager:captcha -->
     <div class='form-actions'>
       <input type='submit'
              class='btn btn-primary'

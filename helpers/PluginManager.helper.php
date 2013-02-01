@@ -277,9 +277,6 @@ class PluginManager {
    */
   public function registerCaptchaPlugin(&$oPlugin) {
     $this->_aCaptchaPluginNames[] = strtolower($oPlugin::IDENTIFIER);
-    # forms will provide all nessecary <!--captchaPluginName--> placeholders
-    # @todo make this more elegant by having forms provide a global <!--captchas--> Placeholder and and/or run show on all Captchaplugins
-    $this->registerSimplePlugin($oPlugin);
   }
 
   /**
@@ -294,6 +291,21 @@ class PluginManager {
       $oPlugin = $this->_aPlugins[$sPluginName];
       $oPlugin->check($aError);
     }
+  }
+
+  /**
+   * output all captcha information
+   *
+   * @access public
+   * @param string $sHtml the content, the plugins want to change
+   *
+   */
+  public function runCaptchaPlugins(&$sHtml) {
+    foreach ($this->_aCaptchaPluginNames as $sPluginName) {
+      $oPlugin = $this->_aPlugins[$sPluginName];
+      $sHtml = str_replace('<!-- pluginmanager:captcha -->', $oPlugin->show() . '<!-- pluginmanager:captcha -->', $sHtml);
+    }
+    return $sHtml;
   }
 
 }
