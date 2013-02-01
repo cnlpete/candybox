@@ -120,6 +120,9 @@ class Mails extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
+    $oPluginManager = PluginManager::getInstance();
+    $this->oSmarty->assign('editorinfo', $oPluginManager->getEditorInfo());
+
     $sFullname = trim($aUser['name'] . ' ' . $aUser['surname']);
 		$sFullname = empty($sFullname) ? WEBSITE_NAME : $sFullname;
 

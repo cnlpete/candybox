@@ -116,6 +116,9 @@ class Users extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
+    $oPluginManager = PluginManager::getInstance();
+    $this->oSmarty->assign('editorinfo', $oPluginManager->getEditorInfo());
+
     $this->oSmarty->assign('uid', $iId);
 
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);

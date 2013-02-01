@@ -113,6 +113,14 @@
       <div class='control-group'>
         <label for='input-content' class='control-label'>
           {$lang.users.label.content.update}
+          {if count($editorinfo) > 0}
+          <br />{$lang.global.editorinfo}<br />
+          {foreach $editorinfo as $oMarkup}
+            <a href="{$oMarkup.url}" alt="{$oMarkup.description}">
+              <img src="{$oMarkup.iconurl}" />
+            </a>
+          {/foreach}
+        {/if}
         </label>
         <div class='controls'>
           <textarea name='{$_REQUEST.controller}[content]'

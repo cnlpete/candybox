@@ -36,6 +36,14 @@
     <div class='control-group{if isset($error.content)} alert alert-error{/if}'>
       <label for='input-content' class='control-label'>
         {$lang.global.content} <span title='{$lang.global.required}'>*</span>
+        {if count($editorinfo) > 0}
+          <br />{$lang.global.editorinfo}<br />
+          {foreach $editorinfo as $oMarkup}
+            <a href="{$oMarkup.url}" alt="{$oMarkup.description}">
+              <img src="{$oMarkup.iconurl}" />
+            </a>
+          {/foreach}
+        {/if}
       </label>
       <div class='controls'>
         <textarea class='required span5'

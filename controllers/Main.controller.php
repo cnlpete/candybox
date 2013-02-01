@@ -687,6 +687,9 @@ abstract class Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
+    $oPluginManager = PluginManager::getInstance();
+    $this->oSmarty->assign('editorinfo', $oPluginManager->getEditorInfo());
+
     $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }

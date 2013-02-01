@@ -47,6 +47,7 @@ global:
   disclaimer: Disclaimer
   download: Download
   downloads: Downloads
+  editorinfo: "You may use the following markup styles:"
   email:
     email: Email
     send: Send Mail
