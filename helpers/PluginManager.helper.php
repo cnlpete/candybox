@@ -145,6 +145,15 @@ class PluginManager {
     return null;
   }
 
+  public function getLoadedPluginNames() {
+    $aReturnArray = array();
+    foreach ($this->_aPlugins as $sKey => &$oPlugin)
+      $aReturnArray[] = $oPlugin::IDENTIFIER;
+    return $aReturnArray;
+  }
+
+  /** -------------------- THE API'S -------------------- **/
+
   /**
    * register as oldschool plugin (simple <!--Name--> replacement)
    *

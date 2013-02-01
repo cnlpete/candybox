@@ -99,7 +99,6 @@ class Index {
 
     $this->getConfigFiles(array('Plugins'));
     $this->getRoutes();
-    $this->getLanguage();
     # always initialize the pluginmanager, since we want to call the events later
     $this->_oPlugins = PluginManager::getInstance();
     if (strlen(ALLOW_PLUGINS) > 0) {
@@ -109,6 +108,7 @@ class Index {
       # run repetitive plugins (such as cronjob)
       $this->_oPlugins->runRepetitivePlugins();
     }
+    $this->getLanguage();
 #    $this->getFacebookExtension();
     $this->setUser();
   }
