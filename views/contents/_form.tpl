@@ -66,7 +66,7 @@
       </label>
       <div class='controls'>
         <textarea name='{$_REQUEST.controller}[content]'
-                  class='js-tinymce required span5'
+                  class='js-editor required span5'
                   id='input-content'
                   rows='10'>
           {$content}
@@ -109,6 +109,6 @@
     </div>
   </form>
   {if !$MOBILE}
-    <!-- plugin:tinymce -->
+    <!-- pluginmanager:editor -->
   {/if}
 {/strip}

@@ -91,6 +91,7 @@ class PluginManager {
   protected $_aGlobalDisplayPluginNames = array();
   protected $_aRepetitivePluginNames = array();
   protected $_aCaptchaPluginNames = array();
+  protected $_aEditorPluginNames = array();
 
   /**
    * Load all defined plugins.
@@ -178,6 +179,59 @@ class PluginManager {
     foreach ($this->_aSimplePluginNames as $sPluginName) {
       $oPlugin = $this->_aPlugins[$sPluginName];
       $sHtml = str_replace('<!-- plugin:' . strtolower($oPlugin::IDENTIFIER) . ' -->', $oPlugin->show(), $sHtml);
+    }
+    # @todo: only run the following on type=='create' pages?
+    $sHtml = $this->runEditorPlugins($sHtml);
+    $sHtml = $this->runCaptchaPlugins($sHtml);
+    return $sHtml;
+  }
+
+  /**
+   * register as oldschool plugin (simple <!--Name--> replacement)
+   *
+   * Plugin MUST provide a show() function for additional content to load,
+   * a prepareContent() function for displaying content and a getInfo()
+   * function for displaying an icon and/or link to some help page
+   *
+   * @access public
+   * @param object $oPlugin the plugin to be added to this event
+   *
+   */
+  public function registerEditorPlugin(&$oPlugin) {
+    $this->_aEditorPluginNames[] = strtolower($oPlugin::IDENTIFIER);
+    # make editor plugins use the prepareContent-Event
+    $this->registerContentDisplayPlugin($oPlugin);
+  }
+
+  /**
+   * get Editor Info from all registered Plugins
+   *
+   * @access public
+   * @return array all the info data in one big array
+   *
+   */
+  public function getEditorInfo() {
+    $aReturnValue = array();
+    foreach ($this->_aEditorPluginNames as $sPluginName) {
+      $oPlugin = $this->_aPlugins[$sPluginName];
+      $aTmpReturnValue = $oPlugin->getInfo();
+      if ($aTmpReturnValue !== false)
+        $aReturnValue[] = $aTmpReturnValue;
+    }
+    return $sHtml;
+  }
+
+  /**
+   * output all editor information
+   *
+   * @access public
+   * @param string $sHtml the content, the plugins want to change
+   *
+   */
+  public function runEditorPlugins(&$sHtml) {
+    foreach ($this->_aEditorPluginNames as $sPluginName) {
+      $oPlugin = $this->_aPlugins[$sPluginName];
+      $sHtml = str_replace('<!-- pluginmanager:editor -->', $oPlugin->show() . '<!-- pluginmanager:editor -->', $sHtml);
     }
     return $sHtml;
   }

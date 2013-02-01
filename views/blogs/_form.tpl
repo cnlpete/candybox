@@ -87,7 +87,7 @@
       </label>
       <div class='controls'>
         <textarea name='{$_REQUEST.controller}[content]'
-                  class='js-tinymce required span5'
+                  class='js-editor required span5'
                   id='input-content'
                   rows='10'>{$content}</textarea>
         {if isset($error.content)}
@@ -190,6 +190,6 @@
   </form>
   <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.bootstrap.typeahead{$_SYSTEM.compress_files_suffix}.js'></script>
   {if !$MOBILE}
-    <!-- plugin:tinymce -->
+    <!-- pluginmanager:editor -->
   {/if}
 {/strip}
