@@ -94,11 +94,11 @@ final class Markdown {
    * @final
    * @access public
    * @return array|boolean infor array or false
-   * @todo return array with markdown logo and link to some markup info page
-   * @todo markdown logo: https://github.com/dcurtis/markdown-mark
    *
    */
   public final function getInfo() {
-    return false;
+    return array('url' => 'http://daringfireball.net/projects/markdown/syntax',
+                'description' => 'Markdown',
+                'iconurl' => '/vendor/candyCMS/plugins/Markdown/assets/icon39x24.png');
   }
 }
