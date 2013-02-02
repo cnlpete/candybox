@@ -109,7 +109,6 @@ class Index {
       $this->_oPlugins->runRepetitivePlugins();
     }
     $this->getLanguage();
-#    $this->getFacebookExtension();
     $this->setUser();
   }
 
@@ -313,27 +312,6 @@ class Index {
   }
 
   /**
-   * Give the users the ability to interact with facebook. Facebook is used as a plugin and loaded in the method above.
-   *
-   * @access public
-   * @see app/config/Candy.inc.php
-   * @see vendor/candyCMS/plugins/Facebook/Facebook.controller.php
-   * @return object FacebookCMS
-   *
-   */
-  public function getFacebookExtension() {
-    if (PLUGIN_FACEBOOK_APP_ID && class_exists('\candyCMS\Plugins\FacebookCMS')) {
-      $this->_aSession['facebook'] = new FacebookCMS(array(
-          'appId'   => PLUGIN_FACEBOOK_APP_ID,
-          'secret'  => PLUGIN_FACEBOOK_SECRET,
-          'cookie'  => true
-          ));
-
-      return $this->_aSession['facebook'];
-    }
-  }
-
-  /**
    * Store and show flash status messages in the application.
    *
    * @access protected
@@ -441,7 +419,8 @@ class Index {
 
     # Try to get facebook data
     if ($this->_aSession['user']['role'] == 0) {
-      $oFacebook = $this->getFacebookExtension();
+      if (class_exists('\candyCMS\Plugins\FacebookCMS'))
+        $oFacebook = FacebookCMS::getInstance();
 
       if ($oFacebook)
         $aFacebookData = $oFacebook->getUserData();
