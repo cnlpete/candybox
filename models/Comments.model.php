@@ -120,7 +120,7 @@ class Comments extends Main {
     }
 
     # Create a new facebook array with avatar urls and use Session as cache
-    $aFacebookAvatarCache = $this->_aSession['facebook']->getUserAvatars($aIds, $this->_aSession);
+    $aFacebookAvatarCache = FacebookCMS::getInstance()->getUserAvatars($aIds, $this->_aSession);
 
     # Finally, we need to rebuild avatar data in main data array
     foreach ($aIds as $iId => $sFacebookId) {

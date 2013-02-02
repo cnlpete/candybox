@@ -209,7 +209,7 @@
       <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/scripts{$_SYSTEM.compress_files_suffix}.js'></script>
       <!-- plugin:analytics -->
       <!-- plugin:piwik -->
-      <!-- plugin:facebook -->
+      <!-- plugin:facebookcms -->
       <!-- plugin:formattimestamp -->
     </body>
   </html>
