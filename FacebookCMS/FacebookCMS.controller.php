@@ -28,7 +28,7 @@ final class FacebookCMS extends Facebook {
    * @var contant
    *
    */
-  const IDENTIFIER = 'Facebook';
+  const IDENTIFIER = 'FacebookCMS';
 
   /**
    * @var array
@@ -45,6 +45,46 @@ final class FacebookCMS extends Facebook {
   protected $_aSession;
 
   /**
+   * public key.
+   *
+   * @access protected
+   * @var string
+   * @see app/config/Plugins.inc.php
+   *
+   */
+  protected $_sPublicKey = PLUGIN_FACEBOOK_APP_ID;
+
+  /**
+   * private key.
+   *
+   * @access protected
+   * @var string
+   * @see app/config/Plugins.inc.php
+   *
+   */
+  protected $_sPrivateKey = PLUGIN_FACEBOOK_SECRET;
+
+  /**
+   *
+   * @var static
+   * @access private
+   *
+   */
+  private static $_oInstance = null;
+
+  /**
+   * Get the instance
+   *
+   * @static
+   * @access public
+   * @return object self::$_oInstance instance that was found or generated
+   *
+   */
+  public static function getInstance() {echo "getInstance ";
+    return self::$_oInstance;
+  }
+
+  /**
    * Initialize the plugin and register all needed events.
    *
    * @access public
@@ -54,6 +94,12 @@ final class FacebookCMS extends Facebook {
    *
    */
   public function __construct(&$aRequest, &$aSession, &$oPlugins) {
+    parent::__construct(array(
+        'appId'   => $this->_sPublicKey,
+        'secret'  => $this->_sPrivateKey,
+        'cookie'  => true
+        ));
+
     $this->_aRequest  = & $aRequest;
     $this->_aSession  = & $aSession;
 
@@ -61,6 +107,8 @@ final class FacebookCMS extends Facebook {
     $oPlugins->registerSimplePlugin($this);
     #$oPlugins->registerContentDisplayPlugin($this);
     # @todo there is no pluginmanager event for this yet
+
+    self::$_oInstance = $this;
   }
 
   /**
