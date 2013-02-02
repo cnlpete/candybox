@@ -74,7 +74,7 @@
         {if count($editorinfo) > 0}
           <br />{$lang.global.editorinfo}<br />
           {foreach $editorinfo as $oMarkup}
-            <a href="{$oMarkup.url}" alt="{$oMarkup.description}">
+            <a href="{$oMarkup.url}" title="{$oMarkup.description}" class='js-tooltip'>
               <img src="{$oMarkup.iconurl}" />
             </a>
           {/foreach}
