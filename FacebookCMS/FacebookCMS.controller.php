@@ -45,14 +45,24 @@ final class FacebookCMS extends Facebook {
   protected $_aSession;
 
   /**
-   * public key.
+   * admin id.
    *
    * @access protected
    * @var string
    * @see app/config/Plugins.inc.php
    *
    */
-  protected $_sPublicKey = PLUGIN_FACEBOOK_APP_ID;
+  protected $_sAdminId = PLUGIN_FACEBOOK_ADMIN_ID;
+
+  /**
+   * app id.
+   *
+   * @access protected
+   * @var string
+   * @see app/config/Plugins.inc.php
+   *
+   */
+  protected $_sAppId = PLUGIN_FACEBOOK_APP_ID;
 
   /**
    * private key.
@@ -95,18 +105,21 @@ final class FacebookCMS extends Facebook {
    */
   public function __construct(&$aRequest, &$aSession, &$oPlugins) {
     parent::__construct(array(
-        'appId'   => $this->_sPublicKey,
+        'appId'   => $this->_sAppId,
         'secret'  => $this->_sPrivateKey,
         'cookie'  => true
         ));
+
+    if (!defined('PLUGIN_FACEBOOK_APP_ID') || PLUGIN_FACEBOOK_APP_ID == '')
+      throw new AdvancedException('Missing config entry: PLUGIN_FACEBOOK_APP_ID');
+    if (!defined('PLUGIN_FACEBOOK_SECRET') || PLUGIN_FACEBOOK_SECRET == '')
+      throw new AdvancedException('Missing config entry: PLUGIN_FACEBOOK_SECRET');
 
     $this->_aRequest  = & $aRequest;
     $this->_aSession  = & $aSession;
 
     # now register some events with the pluginmanager
-    $oPlugins->registerSimplePlugin($this);
-    #$oPlugins->registerContentDisplayPlugin($this);
-    # @todo there is no pluginmanager event for this yet
+    $oPlugins->registerSessionPlugin($this);
 
     self::$_oInstance = $this;
   }
@@ -115,12 +128,12 @@ final class FacebookCMS extends Facebook {
    * Get user data.
    *
    * @final
-   * @access public
+   * @access private
    * @param string $sKey
    * @return array
    *
    */
-  public final function getUserData($sKey = '') {
+  private final function getUserData($sKey = '') {
     try {
       $aApiCall = array(
           'method'  => 'users.getinfo',
@@ -138,18 +151,50 @@ final class FacebookCMS extends Facebook {
   }
 
   /**
-   *
-   * Get the Facebook avatar info for all given UIDs, load from cache, if cache is specified
+   * Set user data by overriding provided user array.
    *
    * @final
    * @access public
+   * @param array $aUserData insert userdata here
+   * @return array
+   *
+   */
+  public final function setUserData(&$aUserData) {
+    $aFacebookData = $this->getUserData();
+
+    # Override empty data with facebook data
+    if (isset($aFacebookData) && isset($aFacebookData[0]['uid'])) {
+      $aUserData['facebook_id'] =  (int) $aFacebookData[0]['uid'];
+      $aUserData['email'] = isset($aFacebookData[0]['email']) ?
+              $aFacebookData[0]['email'] :
+              $aUserData['email'];
+      $aUserData['name'] = isset($aFacebookData[0]['first_name']) ?
+              $aFacebookData[0]['first_name'] :
+              $aUserData['name'];
+      $aUserData['surname'] = isset($aFacebookData[0]['last_name']) ?
+              $aFacebookData[0]['last_name'] :
+              $aUserData['surname'];
+
+      unset($aFacebookData);
+      return true;
+    }
+    else
+      return false;
+  }
+
+  /**
+   *
+   * Get the Facebook avatar info for all given UIDs
+   *
+   * @final
+   * @access private
    * @param array $aUids
    * @return array
    *
    */
-  public final function getUserAvatars($aUids) {
+  private final function _getUserAvatars($aUids) {
     try {
-      $aFacebookAvatarCache = &$aSession['facebookavatars'];
+      $aFacebookAvatarCache = &$this->_aSession['facebookavatars'];
 
       # only query for ids we don't know
       $sUids = '';
@@ -183,14 +228,45 @@ final class FacebookCMS extends Facebook {
   }
 
   /**
-   * Show FB JavaScript code.
+   * Get user profile images and write to $aResult
+   *
+   * @access public
+   * @param array $aIds the ids to get avatars for (array('entryid' => 'facebook_id'))
+   * @param array $aData data array to insert avatarurl and user url into
+   *
+   */
+  public function setAvatars(&$aIds, &$aData) {
+    # Create a new facebook array with avatar urls
+    $aFacebookAvatarCache = $this->_getUserAvatars($aIds);
+
+    # Finally, we need to rebuild avatar data in main data array
+    foreach ($aIds as $iId => $sFacebookId) {
+      if (isset($aFacebookAvatarCache[$sFacebookId])) {
+        $aData[$iId]['author']['avatar_64'] = $aFacebookAvatarCache[$sFacebookId]['pic_square_with_logo'];
+        $aData[$iId]['author']['url'] = $aFacebookAvatarCache[$sFacebookId]['profile_url'];
+      }
+    }
+  }
+
+  /**
+   * Get the FB logout url
+   *
+   * @param string $sTargetUrl the url to redirect to afterwards
+   *
+   */
+  public function logoutUrl($sTargetUrl) {
+    return $this->getLogoutUrl(array('next' => $sTargetUrl . '?reload=1'));
+  }
+
+  /**
+   * Get FB JavaScript code.
    *
    * @final
    * @access public
    * @return string HTML
    *
    */
-  public final function show() {
+  public final function showJavascript() {
     $sTemplateDir   = Helper::getPluginTemplateDir(self::IDENTIFIER, 'show');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
 
@@ -198,12 +274,37 @@ final class FacebookCMS extends Facebook {
     $oSmarty->setTemplateDir($sTemplateDir);
     $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
-    $sCacheId = WEBSITE_MODE . '|plugins|' . WEBSITE_LOCALE . '|' . self::IDENTIFIER;
+    $sCacheId = WEBSITE_MODE . '|plugins|' . WEBSITE_LOCALE . '|' . self::IDENTIFIER . '|' . $this->_sAppId;
     if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
-      $oSmarty->assign('PLUGIN_FACEBOOK_APP_ID', defined('PLUGIN_FACEBOOK_APP_ID') ? PLUGIN_FACEBOOK_APP_ID : '');
+      $oSmarty->assign('PLUGIN_FACEBOOK_APP_ID', $this->_sAppId);
       $oSmarty->assign('WEBSITE_LOCALE', WEBSITE_LOCALE);
     }
 
     return $oSmarty->fetch($sTemplateFile, $sCacheId);
+  }
+
+  /**
+   * Get FB Meta tags.
+   *
+   * @final
+   * @access public
+   * @return string HTML
+   *
+   */
+  public final function showMeta() {
+    return '<meta property="fb:admins" content="' . $this->_sAdminId . '"/>' .
+        '<meta property="fb:app_id" content="' . $this->_sAppId . '"/>';
+  }
+
+  /**
+   * Get FB Button tag.
+   *
+   * @final
+   * @access public
+   * @return string HTML
+   *
+   */
+  public final function showButton() {
+    return '<fb:login-button scope="email" onlogin="window.location=\'' . CURRENT_URL .'\'"></fb:login-button>';
   }
 }
