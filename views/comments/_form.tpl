@@ -4,9 +4,9 @@
     <h2>
       {$lang.comments.title.create}
     </h2>
-    {if $_SESSION.user.role == 0 && $_SYSTEM.facebook_plugin == true}
+    {if $_SESSION.user.role == 0 && $_SYSTEM.hasSessionPlugin}
       <p>
-        <fb:login-button scope='email' onlogin="window.location='{$CURRENT_URL}'"></fb:login-button>
+        <!-- pluginmanager:sessionplugin::button -->
       </p>
     {/if}
   </div>
@@ -26,11 +26,6 @@
                  id='input-name'
                  class='disabled span4'
                  disabled />
-          {if $_SESSION.user.facebook_id}
-            <input type='hidden'
-                   value="{$_SESSION.user.facebook_id}"
-                   name='comments[facebook_id]' />
-          {/if}
         {else}
           <input type='text'
                  value="{if isset($name)}{$name}{/if}"

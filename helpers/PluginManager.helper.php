@@ -92,6 +92,7 @@ class PluginManager {
   protected $_aRepetitivePluginNames = array();
   protected $_aCaptchaPluginNames = array();
   protected $_aEditorPluginNames = array();
+  protected $_sSessionPluginName = '';
 
   /**
    * Load all defined plugins.
@@ -362,4 +363,45 @@ class PluginManager {
     return $sHtml;
   }
 
+  /**
+   * register as Session plugin
+   * There can only be ONE session plugin
+   *
+   * it MUST provide setUserData, setAvatars, logoutUrl, showJavascript, showMeta and showButton functions
+   * to see how these functions work, have a look at the official facebook plugin
+   *
+   * @access public
+   * @param object $oPlugin the plugin to be added to this event
+   *
+   */
+  public function registerSessionPlugin(&$oPlugin) {
+    if (!empty($this->_sSessionPluginName))
+      throw new AdvancedException('Duplicate Session plugin: ' . ucfirst($this->_sSessionPluginName) . ' and ' . $oPlugin::IDENTIFIER);
+    $this->_sSessionPluginName = strtolower($oPlugin::IDENTIFIER);
+  }
+
+  public function hasSessionPlugin() {
+    return !empty($this->_sSessionPluginName);
+  }
+
+  public function getSessionPlugin() {
+    return $this->_aPlugins[$this->_sSessionPluginName];
+  }
+
+  /**
+   * output all session plugin information
+   *
+   * @access public
+   * @param string $sHtml the content, the plugin wants to change
+   *
+   */
+  public function runSessionPlugin(&$sHtml) {
+    if ($this->hasSessionPlugin()) {
+      $oPlugin = $this->_aPlugins[$this->_sSessionPluginName];
+      $sHtml = str_replace('<!-- pluginmanager:sessionplugin::meta -->', $oPlugin->showMeta(), $sHtml);
+      $sHtml = str_replace('<!-- pluginmanager:sessionplugin::javascript -->', $oPlugin->showJavascript(), $sHtml);
+      $sHtml = str_replace('<!-- pluginmanager:sessionplugin::button -->', $oPlugin->showButton(), $sHtml);
+    }
+    return $sHtml;
+  }
 }

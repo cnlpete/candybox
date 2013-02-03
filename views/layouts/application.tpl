@@ -26,11 +26,7 @@
         <meta itemprop='description' content="{$_WEBSITE.meta.og.description}">
       {/if}
 
-      {* If we want to use a facebook plugin, provide tracking data. *}
-      {if $_SYSTEM.facebook_plugin == true}
-        <meta property='fb:admins' content='{$PLUGIN_FACEBOOK_ADMIN_ID}'/>
-        <meta property='fb:app_id' content='{$PLUGIN_FACEBOOK_APP_ID}'/>
-      {/if}
+      <!-- pluginmanager:sessionplugin::meta -->
 
       {* Basic stuff *}
       {if isset($_REQUEST.search)}
@@ -209,7 +205,7 @@
       <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/scripts{$_SYSTEM.compress_files_suffix}.js'></script>
       <!-- plugin:analytics -->
       <!-- plugin:piwik -->
-      <!-- plugin:facebookcms -->
+      <!-- pluginmanager:sessionplugin::javascript -->
       <!-- plugin:formattimestamp -->
     </body>
   </html>

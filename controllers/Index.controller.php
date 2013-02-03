@@ -18,8 +18,6 @@ use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\SmartySingleton;
-use candyCMS\Plugins\Cronjob;
-use candyCMS\Plugins\FacebookCMS;
 use Routes;
 
 require_once PATH_STANDARD . '/vendor/autoload.php';
@@ -361,12 +359,11 @@ class Index {
   protected static function _resetUser() {
     return array(
         'email' => '',
-        'facebook_id' => NULL,
-        'id' => (int) 0,
+        'id' => 0,
         'name' => '',
         'surname' => '',
         'password' => '',
-        'role' => (int) 0,
+        'role' => 0,
         'full_name' => ''
     );
   }
@@ -377,7 +374,7 @@ class Index {
    * List of user roles:
    * 0 = Guests / unregistered users
    * 1 = Members
-   * 2 = Facebook users
+   * 2 = Session Plugin users
    * 3 = Moderators
    * 4 = Administrators
    *
@@ -417,34 +414,12 @@ class Index {
     if (is_array($aUser))
       $this->_aSession['user'] = & array_merge($this->_aSession['user'], $aUser);
 
-    # Try to get facebook data
+    # Try to get session plugin data
     if ($this->_aSession['user']['role'] == 0) {
-      if (class_exists('\candyCMS\Plugins\FacebookCMS'))
-        $oFacebook = FacebookCMS::getInstance();
-
-      if ($oFacebook)
-        $aFacebookData = $oFacebook->getUserData();
-
-      # Override empty data with facebook data
-      if (isset($aFacebookData)) {
-        $this->_aSession['user']['facebook_id'] = isset($aFacebookData[0]['uid']) ?
-                (int) $aFacebookData[0]['uid'] :
-                '';
-        $this->_aSession['user']['email'] = isset($aFacebookData[0]['email']) ?
-                $aFacebookData[0]['email'] :
-                $this->_aSession['user']['email'];
-        $this->_aSession['user']['name'] = isset($aFacebookData[0]['first_name']) ?
-                $aFacebookData[0]['first_name'] :
-                $this->_aSession['user']['name'];
-        $this->_aSession['user']['surname'] = isset($aFacebookData[0]['last_name']) ?
-                $aFacebookData[0]['last_name'] :
-                $this->_aSession['user']['surname'];
-        $this->_aSession['user']['role'] = isset($aFacebookData[0]['uid']) ?
-                2 :
-                (int) $this->_aSession['user']['role'];
-
-        unset($aFacebookData);
-      }
+      $oPluginManager = PluginManager::getInstance();
+      if ($oPluginManager->hasSessionPlugin())
+        if ($oPluginManager->getSessionPlugin()->setUserData($this->_aSession['user']))
+          $this->_aSession['user']['role'] = 2;
     }
 
     # Set up full name finally
@@ -517,6 +492,7 @@ class Index {
 
     $sCachedHTML = $this->_oPlugins->runGlobalDisplayPlugins($sCachedHTML);
     $sCachedHTML = $this->_oPlugins->runSimplePlugins($sCachedHTML);
+    $sCachedHTML = $this->_oPlugins->runSessionPlugin($sCachedHTML);
 
     header('Content-Type: text/html; charset=utf-8');
     return $sCachedHTML;

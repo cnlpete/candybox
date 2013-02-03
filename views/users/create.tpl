@@ -128,9 +128,7 @@
              value='{$lang.global.register}' />
       <input type='reset'
              class='btn' />
-      {if $_SESSION.user.role == 0 && $_SYSTEM.facebook_plugin == true}
-        <fb:login-button scope='email' onlogin="window.location='{$CURRENT_URL}'"></fb:login-button>
-      {/if}
+      <!-- pluginmanager:sessionplugin::button -->
     </div>
   </form>
   <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.bootstrap.modal{$_SYSTEM.compress_files_suffix}.js'></script>

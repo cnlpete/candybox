@@ -17,7 +17,6 @@ use candyCMS\Core\Controllers\Main;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
-use candyCMS\Plugins\FacebookCMS;
 
 class Sessions extends Main {
 
@@ -251,22 +250,18 @@ class Sessions extends Main {
    *
    */
   public function destroy($iUserRole = 0) {
-    # Facebook logout
-    if ($this->_aSession['user']['role'] == 2) {
-      $sRedirectTo = FacebookCMS::getInstance()->getLogoutUrl(
-              array('next' => WEBSITE_URL . '?reload=1')
-      );
+
+    if ($this->_aSession['user']['role'] > 0) {
+      $oPluginManager = PluginManager::getInstance();
+      $sRedirectUrl = '/';
+      if ($oPluginManager->hasSessionPlugin() && $this->_aSession['user']['role'] == 2)
+        $sRedirectUrl = $oPluginManager->getSessionPlugin()->logoutUrl(WEBSITE_URL);
+      else
+        $this->_oModel->destroy(session_id());
 
       unset($this->_aSession);
-      return Helper::successMessage(I18n::get('success.session.destroy'), $sRedirectTo);
+      return Helper::successMessage(I18n::get('success.session.destroy'), $sRedirectUrl);
     }
-
-    # Standard member
-    elseif ($this->_aSession['user']['role'] > 0 && $this->_oModel->destroy(session_id()) === true) {
-      unset($this->_aSession);
-      return Helper::successMessage(I18n::get('success.session.destroy'), '/');
-    }
-
     else
       return Helper::redirectTo('/');
   }
