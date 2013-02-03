@@ -256,7 +256,7 @@ class Sessions extends Main {
   public function destroy($iUserRole = 0) {
     # Facebook logout
     if ($this->_aSession['user']['role'] == 2) {
-      $sRedirectTo = $this->_aSession['facebook']->getLogoutUrl(
+      $sRedirectTo = FacebookCMS::getInstance()->getLogoutUrl(
               array('next' => WEBSITE_URL . '?reload=1')
       );
 
