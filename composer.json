@@ -77,7 +77,8 @@
     "mailchimp/mcapi": "1.3",
     "simonhamp/routes": "1.0",
     "dflydev/markdown" : "1.0.*",
-    "twitter/bootstrap" : "2.2.*"
+    "twitter/bootstrap" : "2.2.*",
+    "cnlpete/image-metadata-parser" : ""v0.0.1""
   },
 
   "require-dev": {
