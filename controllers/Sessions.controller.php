@@ -15,9 +15,9 @@ namespace candyCMS\Core\Controllers;
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Controllers\Main;
 use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Plugins\FacebookCMS;
-use candyCMS\Plugins\Recaptcha;
 
 class Sessions extends Main {
 
@@ -109,13 +109,9 @@ class Sessions extends Main {
       $this->setTitle(I18n::get('sessions.password.title'));
       $this->setDescription(I18n::get('sessions.password.description'));
 
-      $bShowCaptcha = class_exists('\candyCMS\Plugins\Recaptcha') && !ACTIVE_TEST ?
-              SHOW_CAPTCHA :
-              false;
-
       return isset($this->_aRequest[$this->_sController]['email']) ?
-              $this->_password($bShowCaptcha) :
-              $this->_showCreateResendActionsTemplate($bShowCaptcha);
+              $this->_password() :
+              $this->_showCreateResendActionsTemplate();
     }
   }
 
@@ -129,11 +125,14 @@ class Sessions extends Main {
    * @return string HTML
    *
    */
-  protected function _password($bShowCaptcha) {
+  protected function _password() {
     $this->_setError('email');
 
-    if ($bShowCaptcha === true && Recaptcha::getInstance()->checkCaptcha($this->_aRequest) === false)
-        $this->_aError['captcha'] = I18n::get('error.captcha.incorrect');
+    # do the captchaCheck for for not logged in users
+    if ($this->_aSession['user']['role'] == 0) {
+      $oPluginManager = PluginManager::getInstance();
+      $oPluginManager->checkCaptcha($this->_aError);
+    }
 
     if (isset($this->_aError))
       return $this->_showCreateResendActionsTemplate($bShowCaptcha);
@@ -173,13 +172,9 @@ class Sessions extends Main {
       $this->setTitle(I18n::get('sessions.verification.title'));
       $this->setDescription(I18n::get('sessions.verification.description'));
 
-      $bShowCaptcha = class_exists('\candyCMS\Plugins\Recaptcha') && !ACTIVE_TEST ?
-              SHOW_CAPTCHA :
-              false;
-
       return isset($this->_aRequest[$this->_sController]['email']) ?
-              $this->_verification($bShowCaptcha) :
-              $this->_showCreateResendActionsTemplate($bShowCaptcha);
+              $this->_verification() :
+              $this->_showCreateResendActionsTemplate();
     }
   }
 
@@ -190,15 +185,17 @@ class Sessions extends Main {
    * If data is given, try to send mail.
    *
    * @access protected
-   * @param boolean $bShowCaptcha display Captcha?
    * @return string HTML
    *
    */
   protected function _verification($bShowCaptcha) {
     $this->_setError('email');
 
-    if ($bShowCaptcha === true && Recaptcha::getInstance()->checkCaptcha($this->_aRequest) === false)
-        $this->_aError['captcha'] = I18n::get('error.captcha.incorrect');
+    # do the captchaCheck for for not logged in users
+    if ($this->_aSession['user']['role'] == 0) {
+      $oPluginManager = PluginManager::getInstance();
+      $oPluginManager->checkCaptcha($this->_aError);
+    }
 
     if (isset($this->_aError))
       return $this->_showCreateResendActionsTemplate($bShowCaptcha);
