@@ -80,7 +80,7 @@ final class FacebookCMS extends Facebook {
    * @return object self::$_oInstance instance that was found or generated
    *
    */
-  public static function getInstance() {echo "getInstance ";
+  public static function getInstance() {
     return self::$_oInstance;
   }
 
