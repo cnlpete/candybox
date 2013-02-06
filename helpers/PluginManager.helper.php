@@ -92,7 +92,7 @@ class PluginManager {
   protected $_aRepetitivePluginNames = array();
   protected $_aCaptchaPluginNames = array();
   protected $_aEditorPluginNames = array();
-  protected $_sSessionPluginName = '';
+  protected $_sSessionPluginName = ''; # @todo doc
 
   /**
    * Load all defined plugins.
@@ -115,7 +115,7 @@ class PluginManager {
             $this->_aPlugins[$sLowerPluginName] = $oPlugin;
           }
         }
-      };
+      }
     }
   }
 
@@ -144,14 +144,21 @@ class PluginManager {
     catch (AdvancedException $e) {
       die($e->getMessage());
     }
+
     return null;
   }
 
+  /**
+   *
+   * @return type
+   * @todo documentation
+   *
+   */
   public function getLoadedPluginNames() {
-    $aReturnArray = array();
     foreach ($this->_aPlugins as $sKey => &$oPlugin)
       $aReturnArray[] = $oPlugin::IDENTIFIER;
-    return $aReturnArray;
+
+    return isset($aReturnArray) ? $aReturnArray : array();
   }
 
   /** -------------------- THE API'S -------------------- **/

@@ -420,7 +420,7 @@ class Helper {
   public static function formatInput($sStr, $bDisableHTML = true) {
     try {
       if (!is_string($sStr) && !is_int($sStr) && $bDisableHTML === true)
-        throw new AdvancedException('Input \'' . $sStr . '\' does not seem valid.');
+        throw new AdvancedException('### Input \'' . $sStr . '\' does not seem valid. ###');
 
       if ($bDisableHTML === true)
         $sStr = htmlspecialchars($sStr);
@@ -459,9 +459,10 @@ class Helper {
     if ($sHighlight)
       $sStr = str_ireplace(urldecode($sHighlight), '<mark>' . urldecode($sHighlight) . '</mark>', $sStr);
 
-    $oPluginManager = PluginManager::getInstance();
-    if ($bFormat)
+    if ($bFormat) {
+      $oPluginManager = PluginManager::getInstance();
       $sStr = $oPluginManager->runContentDisplayPlugins($sStr);
+    }
 
     return $sStr;
   }
