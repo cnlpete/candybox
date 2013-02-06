@@ -17,6 +17,15 @@ use candyCMS\Core\Helpers\I18n;
 
 class Contents extends Main {
 
+  public function __init() {
+    parent::__init();
+
+    $this->_aDependentCaches[] = 'searches';
+    $this->_aDependentCaches[] = 'sitemaps';
+
+    return $this->_oModel;
+  }
+
   /**
    * Show content page.
    *
@@ -76,7 +85,7 @@ class Contents extends Main {
   protected function _create() {
     $this->_setError('content');
 
-    return parent::_create(array('searches', 'sitemaps'));
+    return parent::_create();
   }
 
   /**
@@ -89,17 +98,6 @@ class Contents extends Main {
   protected function _update() {
     $this->_setError('content');
 
-    return parent::_update(array('searches', 'sitemaps'));
-  }
-
-  /**
-   * Destroy a content entry.
-   *
-   * @access protected
-   * @return boolean status of model action
-   *
-   */
-  protected function _destroy() {
-    return parent::_destroy(array('searches', 'sitemaps'));
+    return parent::_update();
   }
 }

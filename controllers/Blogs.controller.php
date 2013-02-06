@@ -17,6 +17,15 @@ use candyCMS\Core\Helpers\I18n;
 
 class Blogs extends Main {
 
+  public function __init() {
+    parent::__init();
+
+    $this->_aDependentCaches[] = 'searches';
+    $this->_aDependentCaches[] = 'sitemaps';
+
+    return $this->_oModel;
+  }
+
   /**
    * Show blog entry or blog overview (depends on a given ID or not).
    *
@@ -37,7 +46,8 @@ class Blogs extends Main {
 
       $sClass = $this->__autoload('Comments');
       $oComments = new $sClass($this->_aRequest, $this->_aSession);
-      $oComments->__init($this->_aData);
+      $oComments->__init();
+      $oComments->_setParentData($this->_aData);
 
       $this->oSmarty->assign('blogs', $this->_aData);
       $this->oSmarty->assign('_blog_footer_', $oComments->show());
@@ -156,41 +166,17 @@ class Blogs extends Main {
    * Build form template to create or update a blog entry.
    *
    * @access protected
+   * @param string $sTemplateName name of form template, only for E_STRICT
+   * @param string $sTitle title to show, only for E_STRICT
    * @return string HTML content
    *
    */
-  protected function _showFormTemplate() {
+  protected function _showFormTemplate($sTemplateName = '_form', $sTitle = '') {
     # Get available languages.
-    $this->oSmarty->assign('languages', self::getLanguages());
+    $this->oSmarty->assign('languages', Helper::getLanguages());
     $this->oSmarty->assign('_tags_', $this->_oModel->getTypeaheadData($this->_sController, 'tags', true));
 
     return parent::_showFormTemplate();
-  }
-
-  /**
-   * Get languages from app/languages folder.
-   *
-   * @static
-   * @access public
-   * @return array $aLanguages array with our languages
-   * @todo test cases
-   *
-   */
-  public static function getLanguages() {
-    $aLanguages = array();
-    $oPathDir = opendir(PATH_STANDARD . '/app/languages');
-
-    while ($sFile = readdir($oPathDir)) {
-      # Skip extra german languages.
-      if (substr($sFile, 0, 1) == '.' || substr($sFile, 0, 3) == 'de_')
-        continue;
-
-      array_push($aLanguages, substr($sFile, 0, 2));
-    }
-
-    closedir($oPathDir);
-
-    return $aLanguages;
   }
 
   /**
@@ -203,20 +189,20 @@ class Blogs extends Main {
   protected function _create() {
     $this->_setError('content');
 
-    return parent::_create(array('searches', 'rss', 'sitemaps'));
+    return parent::_create();
   }
 
   /**
    * Update a blog entry.
    *
    * @access protected
-   * @return boolean status of model action
+   * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
   protected function _update() {
     $this->_setError('content');
 
-    return parent::_update(array('searches', 'rss', 'sitemaps'));
+    return parent::_update();
   }
 
   /**
@@ -227,6 +213,6 @@ class Blogs extends Main {
    *
    */
   protected function _destroy() {
-    return parent::_destroy(array('searches', 'rss', 'sitemaps'));
+    return parent::_destroy();
   }
 }

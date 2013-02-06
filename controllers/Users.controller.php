@@ -80,6 +80,7 @@ class Users extends Main {
    * @access protected
    * @param boolean $bUseRequest whether the displayed data should be overwritten by query result
    * @return string HTML content
+   * @todo remove E_STRICT warning, e.g. make this comaptible to al lother showFormTemplates
    *
    */
   protected function _showFormTemplate($bUseRequest = false) {
@@ -263,6 +264,7 @@ class Users extends Main {
    * This method must override the parent one because of another showTemplate method.
    *
    * @access public
+   * @param integer $iUserRole required user right, only for E_STRICT
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
@@ -387,14 +389,15 @@ class Users extends Main {
    * Update entry or show form template if we have enough rights.
    *
    * @access public
+   * @param integer $iUserRole required user right, only for E_STRICT
    * @return string HTML content
    *
    */
-  public function update() {
+  public function update($iUserRole = 4) {
     if ($this->_aSession['user']['id'] == 0)
       return Helper::errorMessage(I18n::get('error.session.create_first'), '/sessions/create');
 
-    elseif ($this->_aSession['user']['id'] !== $this->_iId && $this->_aSession['user']['role'] < 4)
+    elseif ($this->_aSession['user']['id'] !== $this->_iId && $this->_aSession['user']['role'] < $iUserRole)
       return Helper::redirectTo('/errors/401');
 
     else
@@ -448,16 +451,17 @@ class Users extends Main {
    * Delete a user account.
    *
    * @access public
+   * @param integer $iUserRole required user right, only for E_STRICT
    * @return boolean status message
    *
    */
-  public function destroy() {
+  public function destroy($iUserRole = 4) {
     if (!$this->_iId)
       return Helper::redirectTo('/errors/403');
 
     else
       return ( (isset($this->_aRequest[$this->_sController]) && $this->_aSession['user']['id'] == $this->_iId)) ||
-              $this->_aSession['user']['role'] == 4 ?
+              $this->_aSession['user']['role'] == $iUserRole ?
               $this->_destroy() :
               Helper::errorMessage(I18n::get('error.401.title'), '/', $this->_aRequest);
   }
@@ -536,7 +540,7 @@ class Users extends Main {
       # Subscribe to MailChimp after email address is confirmed
       $this->_subscribeToNewsletter($this->_oModel->getActivationData());
 
-      $this->oSmarty->clearCacheForController('users');
+      $this->oSmarty->clearCacheForController($this->_sController);
 
       return Helper::successMessage(I18n::get('success.user.verification'), '/');
     }
@@ -558,7 +562,7 @@ class Users extends Main {
 
     header('Content-Type: application/json');
     exit(isset($sToken) && $sToken ?
-										json_encode(array('success' => true,	'error' => '', 'token' => $sToken)) :
-										json_encode(array('success' => false, 'error' => 'No matching results.', 'token' => '')));
+              json_encode(array('success' => true,  'error' => '', 'token' => $sToken)) :
+              json_encode(array('success' => false, 'error' => 'No matching results.', 'token' => '')));
   }
 }

@@ -65,7 +65,7 @@ class Searches extends Main {
    * Show the search form, this is a create action since it creates a new search.
    *
    * @access protected
-   * @return string HTML content.
+   * @return string HTML content
    *
    */
   protected function _create() {

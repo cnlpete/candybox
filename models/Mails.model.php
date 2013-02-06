@@ -188,6 +188,7 @@ class Mails extends Main {
    * @return boolean the status of the action
    * @see vendor/phpmailer/phpmailer/class.phpmailer.php
    * @todo log entry
+   * @todo make compilant to main::create, since in strict-mode inheritance also inherits parameters
    *
    */
   public function create($aMail, $bSaveMail = true) {

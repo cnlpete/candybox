@@ -11,7 +11,7 @@
     {/if}
   </div>
   <form method='post'
-        action='/comments'
+        action='/comments/create'
         data-ajax='false'
         class='form-horizontal'>
     <div class='control-group{if isset($error.name)} alert alert-error{/if}'>

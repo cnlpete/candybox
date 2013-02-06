@@ -21,16 +21,38 @@ use candyCMS\Plugins\Recaptcha;
 class Comments extends Main {
 
   /**
+   * Initialize the controller by adding input params, set default id and start template engine.
+   *
+   * @access public
+   * @param array $aRequest alias for the combination of $_GET and $_POST
+   * @param array $aSession alias for $_SESSION
+   * @param array $aFile alias for $_FILE
+   * @param array $aCookie alias for $_COOKIE
+   *
+   */
+  public function __construct(&$aRequest, &$aSession, &$aFile = '', &$aCookie = '') {
+    parent::__construct($aRequest, $aSession, $aFile, $aCookie);
+
+    # overwrite the _sController variable
+    $this->_sController = 'comments';
+  }
+
+  /**
    * Include the content model.
    *
    * @access public
    * @param array $aParentData optionally provided blog data
    *
    */
-  public function __init($aParentData = '') {
-    $oModel = $this->__autoload('Comments', true);
-    $this->_oModel = new $oModel($this->_aRequest, $this->_aSession);
+  public function __init() {
+    parent::__init();
 
+    $this->_aDependentCaches[] = 'blogs';
+
+    return $this->_oModel;
+  }
+
+  public function _setParentData($aParentData = '') {
     $this->_aParentData = & $aParentData;
   }
 
@@ -42,11 +64,11 @@ class Comments extends Main {
    * @return string HTML
    *
    */
-  public function show() {
-    return $this->_sController == 'comments' ?
-            Helper::redirectTo('/errors/404') :
-            $this->_show();
-  }
+//  public function show() {
+//    return $this->_sController == 'comments' ?
+//            Helper::redirectTo('/errors/404') :
+//            $this->_show();
+//  }
 
   /**
    * Show comment entries.
@@ -85,10 +107,12 @@ class Comments extends Main {
    * Build form template to create a comment.
    *
    * @access protected
+   * @param string $sTemplateName name of form template, only for E_STRICT
+   * @param string $sTitle title to show, only for E_STRICT
    * @return string HTML content
    *
    */
-  protected function _showFormTemplate() {
+  protected function _showFormTemplate($sTemplateName = '_form', $sTitle = '') {
     $sTemplateDir   = Helper::getTemplateDir('comments', '_form');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
     $this->oSmarty->setTemplateDir($sTemplateDir);
@@ -110,6 +134,7 @@ class Comments extends Main {
    * We must override the main method due to a diffent required user role.
    *
    * @access public
+   * @param integer $iUserRole required user right, only for E_STRICT
    * @return string HTML content
    *
    */
@@ -132,6 +157,7 @@ class Comments extends Main {
    *
    */
   protected function _create() {
+
     $this->_setError('parent_id', I18n::get('error.missing.id'));
     $this->_setError('content');
 
@@ -152,21 +178,22 @@ class Comments extends Main {
 
     else {
       # Bugfix for jquery mobile not handling this redirect with hash very vell
-      $sRedirect = '/blogs/' . (int) $this->_aRequest[$this->_sController]['parent_id'] . (MOBILE ? '' : '#comments');
+      $this->_sRedirectURL = '/blogs/' . (int) $this->_aRequest[$this->_sController]['parent_id'] . (MOBILE ? '' : '#comments');
 
       if ($this->_oModel->create() === true) {
-        # This also clears cache for our comments, since they are stored in the blogs namespace.
-        $this->oSmarty->clearCacheForController($this->_sController);
+        # there is no 'comments' cache for now
+        #$this->oSmarty->clearCacheForController($this->_sController);
+        $this->_clearAdditionalCaches();
 
         Logs::insert( 'comments',
                       'create',
                       Helper::getLastEntry('comments'),
                       $this->_aSession['user']['id']);
 
-        return Helper::successMessage(I18n::get('success.create'), $sRedirect);
+        return Helper::successMessage(I18n::get('success.create'), $this->_sRedirectURL);
       }
       else
-        return Helper::errorMessage(I18n::get('error.sql'), $sRedirect);
+        return Helper::errorMessage(I18n::get('error.sql'), $this->_sRedirectURL);
     }
   }
 
@@ -178,24 +205,8 @@ class Comments extends Main {
    *
    */
   protected function _destroy() {
-    $sRedirect = '/blogs/' . $this->_oModel->getParentId((int) $this->_aRequest['id']);
+    $this->_sRedirectURL = '/blogs/' . $this->_oModel->getParentId((int) $this->_aRequest['id']);
 
-    if ($this->_oModel->destroy((int) $this->_aRequest['id']) === true) {
-      # This also clears cache for our comments, since they are stored in the blogs namespace.
-      $this->oSmarty->clearCacheForController('blogs');
-
-      Logs::insert( 'comments',
-                    'destroy',
-                    (int) $this->_aRequest['id'],
-                    $this->_aSession['user']['id']);
-
-      return Helper::successMessage(I18n::get('success.destroy'),
-              $sRedirect,
-              $this->_aRequest);
-    }
-    else
-      return Helper::errorMessage(I18n::get('error.sql'),
-              $sRedirect,
-              $this->_aRequest);
+    parrent::_destroy();
   }
 }

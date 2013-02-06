@@ -20,6 +20,15 @@ use candyCMS\Core\Helpers\SmartySingleton;
 
 class Galleries extends Main {
 
+  public function __init() {
+    parent::__init();
+
+    $this->_aDependentCaches[] = 'searches';
+    $this->_aDependentCaches[] = 'sitemaps';
+
+    return $this->_oModel;
+  }
+
   /**
    * Show image, gallery album or overview (depends on a given ID and album_id).
    *
@@ -107,11 +116,13 @@ class Galleries extends Main {
    * Build form template to create or update a gallery album.
    *
    * @access protected
+   * @param string $sTemplateName name of form template
+   * @param string $sTitle title to show
    * @return string HTML content
    *
    */
-  protected function _showFormTemplate() {
-    return parent::_showFormTemplate('_form_overview', 'galleries.albums.title');
+  protected function _showFormTemplate($sTemplateName = '_form_overview', $sTitle = 'galleries.albums.title') {
+    return parent::_showFormTemplate($sTemplateName, $sTitle);
   }
 
   /**
@@ -129,7 +140,8 @@ class Galleries extends Main {
 
     else {
       if ($this->_oModel->create() === true) {
-        $this->oSmarty->clearCacheForController(array($this->_sController, 'searches', 'rss', 'sitemaps'));
+        $this->oSmarty->clearCacheForController($this->_sController);
+        $this->_clearAdditionalCaches();
 
         $iId    = $this->_oModel->getLastInsertId('gallery_albums');
         $sPath  = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $iId);
@@ -165,7 +177,7 @@ class Galleries extends Main {
    * @see vendor/candyCMS/core/helper/Image.helper.php
    *
    */
-    protected function _showFormFileTemplate() {
+  protected function _showFormFileTemplate() {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, '_form_show');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form_show');
     $this->oSmarty->setTemplateDir($sTemplateDir);
@@ -395,9 +407,9 @@ class Galleries extends Main {
    *
    */
   public function destroyFile() {
-		return $this->_aSession['user']['role'] < 3 ?
-						Helper::redirectTo('/errors/401') :
-						$this->_destroyFile();
+    return $this->_aSession['user']['role'] < 3 ?
+            Helper::redirectTo('/errors/401') :
+            $this->_destroyFile();
   }
 
   /**
@@ -428,27 +440,5 @@ class Galleries extends Main {
     else
       return Helper::errorMessage(I18n::get('error.sql'), '/' . $this->_sController . '/' .
               $aDetails['album_id']);
-  }
-
-  /**
-   * Update an album.
-   *
-   * @access protected
-   * @return boolean status of model action
-   *
-   */
-  protected function _update() {
-    return parent::_update(array('searches', 'rss', 'sitemaps'));
-  }
-
-  /**
-   * Destroy an album.
-   *
-   * @access protected
-   * @return boolean status of model action
-   *
-   */
-  protected function _destroy() {
-    return parent::_destroy(array('searches', 'rss', 'sitemaps'));
   }
 }

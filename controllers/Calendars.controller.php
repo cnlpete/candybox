@@ -124,6 +124,8 @@ class Calendars extends Main {
   protected function _create() {
     $this->_setError('start_date');
 
+    # set a custom redirect url, because otherwise it would prompt to download
+    $this->_sRedirectURL = '/' . $this->_sController;
     return parent::_create();
   }
 
@@ -137,6 +139,8 @@ class Calendars extends Main {
   protected function _update() {
     $this->_setError('start_date');
 
-    return parent::_update(null, '/' . $this->_sController);
+    # set a custom redirect url, because otherwise it would prompt to download
+    $this->_sRedirectURL = '/' . $this->_sController;
+    return parent::_update();
   }
 }

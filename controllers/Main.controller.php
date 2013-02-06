@@ -147,6 +147,22 @@ abstract class Main {
   public $oSmarty;
 
   /**
+   * All the caches, the controller has to clear on change.
+   *
+   * @var array
+   * @access protected
+   */
+  protected $_aDependentCaches = array();
+
+  /**
+   * the current redirect URL, if set, the controller 'should' redirect there after completion of _create, _update or _destroy
+   *
+   * @var array
+   * @access protected
+   */
+  protected $_sRedirectURL = '';
+
+  /**
    * Initialize the controller by adding input params, set default id and start template engine.
    *
    * @access public
@@ -214,11 +230,10 @@ abstract class Main {
    * Method to include the model files.
    *
    * @access public
-   * @param string $sController optional controller to load
    * @return object $this->_oModel
    *
    */
-  public function __init($sController = '') {
+  public function __init() {
     $sModel = $this->__autoload($sController ? $sController : $this->_sController, true);
 
     if ($sModel)
@@ -699,16 +714,11 @@ abstract class Main {
    * Clear all Caches for given Controllers
    *
    * @access protected
-   * @param string|array $mAdditionalCaches specify aditional caches to clear on success
    *
    */
-  protected function _clearCaches($mAdditionalCaches) {
-    if (gettype($mAdditionalCaches) === 'string')
-      $this->oSmarty->clearCacheForController($mAdditionalCaches);
-
-    else
-      foreach ($mAdditionalCaches as $sCache)
-        $this->oSmarty->clearCacheForController($sCache);
+  protected function _clearAdditionalCaches() {
+    foreach ($this->_aDependentCaches as $sCache)
+      $this->oSmarty->clearCacheForController($sCache);
   }
 
   /**
@@ -718,17 +728,11 @@ abstract class Main {
    * If data is given, activate the model, insert them into the database and redirect afterwards.
    *
    * @access protected
-   * @param string|array $mAdditionalCaches specify aditional caches to clear on success
-   * @param string $sRedirectURL specify the URL to redirect to after execution
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _create($mAdditionalCaches = null, $sRedirectURL = '') {
+  protected function _create() {
     $this->_setError('title');
-
-    $sRedirectURL = empty($sRedirectURL) ?
-            '/' . $this->_sController :
-            $sRedirectURL;
 
     if ($this->_aError)
       return $this->_showFormTemplate();
@@ -736,9 +740,11 @@ abstract class Main {
     else {
       $bResult = $this->_oModel->create() === true;
 
+      $iId = $this->_oModel->getLastInsertId($this->_sController);
+
       Logs::insert( $this->_sController,
                     $this->_aRequest['action'],
-                    $this->_oModel->getLastInsertId($this->_sController),
+                    $iId,
                     $this->_aSession['user']['id'],
                     '', '', $bResult);
 
@@ -746,19 +752,24 @@ abstract class Main {
         $this->oSmarty->clearCacheForController($this->_sController);
 
         # clear additional caches if given
-        if ($mAdditionalCaches)
-          $this->_clearCaches($mAdditionalCaches);
+        if (count($this->_aDependentCaches) > 0)
+          $this->_clearAdditionalCaches();
+
+        $sRedirectURL = empty($this->_sRedirectURL) ? '/' . $this->_sController . '/' . $iId : $this->_sRedirectURL;
 
         return Helper::successMessage(
                 I18n::get('success.create'),
                 $sRedirectURL,
                 $this->_aRequest);
       }
-      else
+      else {
+        $sRedirectURL = empty($this->_sRedirectURL) ? '/' . $this->_sController : $this->_sRedirectURL;
+
         return Helper::errorMessage(
                 I18n::get('error.sql'),
                 $sRedirectURL,
                 $this->_aRequest);
+      }
     }
   }
 
@@ -768,17 +779,15 @@ abstract class Main {
    * Activate model, insert data into the database and redirect afterwards.
    *
    * @access protected
-   * @param string|array $mAdditionalCaches specify aditional caches to clear on success
-   * @param string $sRedirectURL specify the URL to redirect to after execution
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _update($mAdditionalCaches = null, $sRedirectURL = '') {
+  protected function _update() {
     $this->_setError('title');
 
-    $sRedirectURL = empty($sRedirectURL) ?
+    $sRedirectURL = empty($this->_sRedirectURL) ?
             '/' . $this->_aRequest['controller'] . '/' . (int) $this->_aRequest['id'] :
-            $sRedirectURL;
+            $this->_sRedirectURL;
 
     if ($this->_aError)
       return $this->_showFormTemplate();
@@ -793,11 +802,11 @@ abstract class Main {
                     '', '', $bReturn);
 
       if ($bReturn) {
-        $this->oSmarty->clearCacheForController($this->_sController);
+        $this->oSmarty->clearAdditionalCaches($this->_sController);
 
         # Clear additional caches if given
-        if ($mAdditionalCaches)
-          $this->_clearCaches($mAdditionalCaches);
+        if (count($this->_aDependentCaches) > 0)
+          $this->_clearCachesAdditionalCaches();
 
         return Helper::successMessage(
                 I18n::get('success.update'),
@@ -818,17 +827,15 @@ abstract class Main {
    * Activate model, delete data from database and redirect afterwards.
    *
    * @access protected
-   * @param string|array $mAdditionalCaches specify aditional caches to clear on success
-   * @param string $sRedirectURL specify the URL to redirect to after execution
    * @return boolean status of model action
    *
    */
-  protected function _destroy($mAdditionalCaches = null, $sRedirectURL = '') {
+  protected function _destroy() {
     $bReturn = $this->_oModel->destroy($this->_iId) === true;
 
-    $sRedirectURL = empty($sRedirectURL) ?
+    $sRedirectURL = empty($this->_sRedirectURL) ?
             '/' . $this->_sController :
-            $sRedirectURL;
+            $this->_sRedirectURL;
 
     Logs::insert( $this->_sController,
                   $this->_aRequest['action'],
@@ -840,8 +847,8 @@ abstract class Main {
       $this->oSmarty->clearCacheForController($this->_sController);
 
       # Clear additional caches if given
-      if ($mAdditionalCaches)
-        $this->_clearCaches($mAdditionalCaches);
+        if (count($this->_aDependentCaches) > 0)
+          $this->_clearAdditionalCaches();
 
       return Helper::successMessage(
               I18n::get('success.destroy'),

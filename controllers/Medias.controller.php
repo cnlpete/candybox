@@ -21,6 +21,24 @@ use candyCMS\Core\Helpers\Upload;
 class Medias extends Main {
 
   /**
+   * Initialize the controller by adding input params, set default id and start template engine.
+   *
+   * Overwrite the main::__construct since we want to set a custom iId
+   *
+   * @access public
+   * @param array $aRequest alias for the combination of $_GET and $_POST
+   * @param array $aSession alias for $_SESSION
+   * @param array $aFile alias for $_FILE
+   * @param array $aCookie alias for $_COOKIE
+   *
+   */
+  public function __construct(&$aRequest, &$aSession, &$aFile = '', &$aCookie = '') {
+    parent::__construct($aRequest, $aSession, $aFile, $aCookie);
+
+    $this->_iId = isset($this->_aRequest['file']) ? $this->_aRequest['file'] : '';
+  }
+
+  /**
    * Upload media file.
    * We must override the main method due to a file upload.
    *
@@ -79,10 +97,12 @@ class Medias extends Main {
    * Build form template to create an upload.
    *
    * @access protected
+   * @param string $sTemplateName name of form template, only for E_STRICT
+   * @param string $sTitle title to show, only for E_STRICT
    * @return string HTML content
    *
    */
-  protected function _showFormTemplate() {
+  protected function _showFormTemplate($sTemplateName = '_form', $sTitle = '') {
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'create');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'create');
     $this->oSmarty->setTemplateDir($sTemplateDir);

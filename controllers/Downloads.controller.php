@@ -19,6 +19,14 @@ use candyCMS\Core\Helpers\Upload;
 
 class Downloads extends Main {
 
+  public function __init() {
+    parent::__init();
+
+    $this->_aDependentCaches[] = 'searches';
+
+    return $this->_oModel;
+  }
+
   /**
    * Provide download.
    *
@@ -69,10 +77,12 @@ class Downloads extends Main {
    * Build form template to create or update a download entry.
    *
    * @access protected
+   * @param string $sTemplateName name of form template, only for E_STRICT
+   * @param string $sTitle title to show, only for E_STRICT
    * @return string HTML content
    *
    */
-  protected function _showFormTemplate() {
+  protected function _showFormTemplate($sTemplateName = '_form', $sTitle = '') {
     $this->oSmarty->assign('_categories_', $this->_oModel->getTypeaheadData($this->_sController, 'category'));
 
     return parent::_showFormTemplate();
@@ -92,6 +102,9 @@ class Downloads extends Main {
     $this->_setError('title');
     $this->_setError('category');
     $this->_setError('file');
+
+    # Always redirect to overview
+    $this->_sRedirectURL = '/' . $this->_sController;
 
     if (isset($this->_aError))
       return $this->_showFormTemplate();
@@ -116,7 +129,9 @@ class Downloads extends Main {
 
       # Fileupload was successfull, so we can clear cache and insert into db.
       if ($aReturnValues[0] === true) {
-        $this->oSmarty->clearCacheForController($this->_sController, 'searches');
+        $this->oSmarty->clearCacheForController($this->_sController);
+        # i do not need to check, since i now about the existance of additional searches cache
+        $this->_clearAdditionalCaches();
 
         $aIds   = $oUploadFile->getIds(false);
         $aExts  = $oUploadFile->getExtensions();
@@ -129,17 +144,17 @@ class Downloads extends Main {
                         $this->_aSession['user']['id']);
 
           return Helper::successMessage(I18n::get('success.create'),
-                  '/' . $this->_sController,
+                  $this->_sRedirectURL,
                   $this->_aFile);
         }
         else
           return Helper::errorMessage(I18n::get('error.sql'),
-                  '/' . $this->_sController,
+                  $this->_sRedirectURL,
                   $this->_aFile);
       }
       else
         return Helper::errorMessage(I18n::get('error.missing.file'),
-                '/' . $this->_sController,
+                $this->_sRedirectURL,
                 $this->_aFile);
     }
   }
@@ -148,11 +163,13 @@ class Downloads extends Main {
    * Update a download entry.
    *
    * @access protected
-   * @return boolean status of model action
+   * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
   protected function _update() {
-    return parent::_update('searches', '/' . $this->_sController);
+    # redirect to overview, since show will prompt the download
+    $this->_sRedirectURL = '/' . $this->_sController;
+    return parent::_update('/' . $this->_sController);
   }
 
   /**
@@ -163,6 +180,6 @@ class Downloads extends Main {
    *
    */
   protected function _destroy() {
-    return parent::_destroy('searches', '/' . $this->_sController);
+    return parent::_destroy();
   }
 }

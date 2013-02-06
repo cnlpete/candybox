@@ -80,12 +80,14 @@ class Medias extends Main {
    * Destroy a file and delete from HDD.
    *
    * @access public
+   * @param mixed $iId the id of the file
+   * @param string $sController controller to use, obsolete and only for not giving E_STRICT warnings
    * @return boolean status of query
    *
    */
-  public function destroy() {
+  public function destroy($iId, $sController = '') {
     # We get the image information via GET
-    $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $this->_aRequest['file']);
+    $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $iId);
 
     if (ACTIVE_TEST)
       return true;
