@@ -17,14 +17,14 @@ use candyCMS\Core\Helpers\I18n;
 
 class Blogs extends Main {
 
-  public function __init() {
-    parent::__init();
-
-    $this->_aDependentCaches[] = 'searches';
-    $this->_aDependentCaches[] = 'sitemaps';
-
-    return $this->_oModel;
-  }
+  /**
+   *
+   * Defines the additional caches that will be deleted on CRUD actions.
+   *
+   * @access protected
+   *
+   */
+  protected $_aDependentCaches = array('searches', 'sitemap');
 
   /**
    * Show blog entry or blog overview (depends on a given ID or not).
@@ -44,8 +44,9 @@ class Blogs extends Main {
       if (!$this->_aData[1]['id'])
         return Helper::redirectTo('/errors/404');
 
-      $sClass = $this->__autoload('Comments');
-      $oComments = new $sClass($this->_aRequest, $this->_aSession);
+      $sClass     = $this->__autoload('Comments');
+      $oComments  = new $sClass($this->_aRequest, $this->_aSession);
+
       $oComments->__init();
       $oComments->_setParentData($this->_aData);
 
@@ -79,7 +80,7 @@ class Blogs extends Main {
    * Show blog as RSS.
    *
    * @access protected
-   * @return string XML (no real return, exits before)
+   * @return string XML
    *
    */
   protected function _overviewRSS() {
@@ -96,7 +97,7 @@ class Blogs extends Main {
       $this->oSmarty->assign('_WEBSITE', array('title' => $this->_setBlogsTitle()));
     }
 
-    exit($this->oSmarty->fetch($sTemplateFile, UNIQUE_ID));
+    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
   /**
@@ -166,8 +167,8 @@ class Blogs extends Main {
    * Build form template to create or update a blog entry.
    *
    * @access protected
-   * @param string $sTemplateName name of form template, only for E_STRICT
-   * @param string $sTitle title to show, only for E_STRICT
+   * @param string $sTemplateName name of form template (only for E_STRICT)
+   * @param string $sTitle title to show (only for E_STRICT)
    * @return string HTML content
    *
    */
@@ -203,16 +204,5 @@ class Blogs extends Main {
     $this->_setError('content');
 
     return parent::_update();
-  }
-
-  /**
-   * Destroy a blog entry.
-   *
-   * @access protected
-   * @return boolean status of model action
-   *
-   */
-  protected function _destroy() {
-    return parent::_destroy();
   }
 }

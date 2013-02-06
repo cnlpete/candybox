@@ -181,8 +181,6 @@ class Comments extends Main {
       $this->_sRedirectURL = '/blogs/' . (int) $this->_aRequest[$this->_sController]['parent_id'] . (MOBILE ? '' : '#comments');
 
       if ($this->_oModel->create() === true) {
-        # there is no 'comments' cache for now
-        #$this->oSmarty->clearCacheForController($this->_sController);
         $this->_clearAdditionalCaches();
 
         Logs::insert( 'comments',

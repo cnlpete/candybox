@@ -711,7 +711,7 @@ abstract class Main {
   }
 
   /**
-   * Clear all Caches for given Controllers
+   * Clear all caches for given controllers.
    *
    * @access protected
    *
@@ -806,7 +806,7 @@ abstract class Main {
 
         # Clear additional caches if given
         if (count($this->_aDependentCaches) > 0)
-          $this->_clearCachesAdditionalCaches();
+          $this->_clearAdditionalCaches();
 
         return Helper::successMessage(
                 I18n::get('success.update'),

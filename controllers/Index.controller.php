@@ -71,7 +71,7 @@ class Index {
   protected $_oObject;
 
   /**
-   * holds the reference to our PluginManager
+   * Holds the reference to our PluginManager
    *
    * @var object
    * @access protected
@@ -457,8 +457,12 @@ class Index {
     $oDispatcher->getController();
     $oDispatcher->getAction();
 
-    # Minimal settings for AJAX-request
-    if (isset($this->_aRequest['type']) && 'ajax' == $this->_aRequest['type'])
+    # Minimal settings for non HTML requests
+    if (isset($this->_aRequest['type']) && (
+            'ajax'  == $this->_aRequest['type'] ||
+            'rss'   == $this->_aRequest['type'] ||
+            'json'  == $this->_aRequest['type'] ||
+            'xml'   == $this->_aRequest['type']))
       $sCachedHTML = $oDispatcher->oController->getContent();
 
     # HTML with template
