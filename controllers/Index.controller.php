@@ -277,14 +277,14 @@ class Index {
     # We got a language request? This is either done via putting ?language=en to an URL or via cookie
     # Get the request...
     if (isset($aRequest['language']) && !isset($this->_aRequest['blogs']) &&
-        file_exists(PATH_STANDARD . '/app/languages/' . strtolower((string) $aRequest['language']) . '.yml')) {
+            file_exists(PATH_STANDARD . '/app/languages/' . strtolower((string) $aRequest['language']) . '.yml')) {
       $sLanguage = strtolower((string) $aRequest['language']);
       setcookie('default_language', (string) $sLanguage, time() + 2592000, '/');
     }
 
     # ...or use cookie...
     elseif (isset($aRequest['default_language']) &&
-        file_exists(PATH_STANDARD . '/app/languages/' . strtolower((string) $aRequest['default_language']) . '.yml'))
+            file_exists(PATH_STANDARD . '/app/languages/' . strtolower((string) $aRequest['default_language']) . '.yml'))
       $sLanguage = strtolower((string) $aRequest['default_language']);
 
     # ...or browsers default language...

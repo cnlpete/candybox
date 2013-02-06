@@ -40,17 +40,6 @@ class SmartySingleton extends Smarty {
   private static $_oInstance = null;
 
   /**
-   *
-   * This is just a bugfix for PHPs E_STRICT mode which is forgotten by LESS.
-   *
-   * @var static
-   * @access public
-   * @todo check if removeable
-   *
-   */
-  public static $formatterName;
-
-  /**
    * Get the Smarty instance
    *
    * @static
@@ -201,8 +190,6 @@ class SmartySingleton extends Smarty {
     # Compile CSS when in development mode
     if (WEBSITE_MODE == 'development' && !isset($this->_aRequest['type'])) {
       try {
-        lessc::setFormatter(WEBSITE_COMPRESS_FILES === true ? 'compressed' : 'classic');
-
         if (MOBILE === true && file_exists(Helper::removeSlash($aPaths['less'] . '/mobile/application.less'))) {
           unlink(Helper::removeSlash($aPaths['css'] . '/mobile.css'));
           lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
