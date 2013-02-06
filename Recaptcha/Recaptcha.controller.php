@@ -60,22 +60,6 @@ final class Recaptcha {
   protected $_sError = '';
 
   /**
-   * Identifier for template replacements
-   *
-   * @var constant
-   *
-   */
-  const IDENTIFIER = 'Recaptcha';
-
-  /**
-   *
-   * @var static
-   * @access private
-   *
-   */
-  private static $_oInstance = null;
-
-  /**
    * Error Message of last captcha check
    *
    * @var string
@@ -84,28 +68,44 @@ final class Recaptcha {
   private $_sErrorMessage = '';
 
   /**
-   * Get the Recaptcha instance
+   * Identifier for template replacements
    *
-   * @static
-   * @access public
-   * @return object self::$_oInstance Recaptcha instance that was found or generated
+   * @var constant
    *
    */
-  public static function getInstance() {
-    if (self::$_oInstance === null)
-      self::$_oInstance = new self();
-
-    return self::$_oInstance;
-  }
+  const IDENTIFIER = 'Recaptcha';
 
   /**
-   * Include the needed lib.
-   *
-   * @access public
+   * @var array
+   * @access protected
    *
    */
-  public function __construct() {
-    require PATH_STANDARD . '/vendor/recaptcha/recaptcha/recaptchalib.php';
+  protected $_aRequest;
+
+  /**
+   * @var array
+   * @access protected
+   *
+   */
+  protected $_aSession;
+
+  /**
+   * Initialize the software by adding input params.
+   *
+   * @access public
+   * @param array $aRequest alias for the combination of $_GET and $_POST
+   * @param array $aSession alias for $_SESSION
+   * @param object $oPlugins the PluginManager
+   *
+   */
+  public function __construct(&$aRequest, &$aSession, &$oPlugins) {
+    $this->_aRequest  = & $aRequest;
+    $this->_aSession  = & $aSession;
+
+    require_once PATH_STANDARD . '/vendor/recaptcha/recaptcha/recaptchalib.php';
+
+    # now register some events with the pluginmanager
+    $oPlugins->registerCaptchaPlugin($this);
   }
 
   /**
@@ -113,31 +113,29 @@ final class Recaptcha {
    *
    * @final
    * @access public
-   * @param array $aRequest
-   * @param array $aSession
    * @return string HTML
    *
    */
-  public final function show(&$aRequest, &$aSession) {
-		if ($aSession['user']['role'] == 0) {
-			$sTemplateDir   = Helper::getPluginTemplateDir(self::IDENTIFIER, 'recaptcha');
-			$sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'recaptcha');
+  public final function show() {
+    if ($this->_aSession['user']['role'] == 0) {
+      $sTemplateDir   = Helper::getPluginTemplateDir(self::IDENTIFIER, 'recaptcha');
+      $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'recaptcha');
 
-			$oSmarty = SmartySingleton::getInstance();
-			$oSmarty->setTemplateDir($sTemplateDir);
+      $oSmarty = SmartySingleton::getInstance();
+      $oSmarty->setTemplateDir($sTemplateDir);
 
-			# No caching for this very dynamic form
-			$oSmarty->setCaching(SmartySingleton::CACHING_OFF);
+      # No caching for this very dynamic form
+      $oSmarty->setCaching(SmartySingleton::CACHING_OFF);
 
-			$oSmarty->assign('WEBSITE_MODE', WEBSITE_MODE);
-			$oSmarty->assign('MOBILE', MOBILE);
-			$oSmarty->assign('_captcha_', recaptcha_get_html($this->_sPublicKey, $this->_sError));
+      $oSmarty->assign('WEBSITE_MODE', WEBSITE_MODE);
+      $oSmarty->assign('MOBILE', MOBILE);
+      $oSmarty->assign('_captcha_', recaptcha_get_html($this->_sPublicKey, $this->_sError));
 
-			if ($this->_sErrorMessage)
-				$oSmarty->assign('_error_', $this->_sErrorMessage);
+      if ($this->_sErrorMessage)
+        $oSmarty->assign('_error_', $this->_sErrorMessage);
 
-			return $oSmarty->fetch($sTemplateFile);
-		}
+      return $oSmarty->fetch($sTemplateFile);
+    }
   }
 
   /**
@@ -145,31 +143,25 @@ final class Recaptcha {
    *
    * @final
    * @access public
-   * @param array $aRequest
-   * @return boolean status of recpatcha check
+   * @param array $aError
+   * @return
    *
    */
-  public final function checkCaptcha(&$aRequest) {
-    if (isset($aRequest['recaptcha_response_field'])) {
+  public final function check(&$aError) {
+    $this->_sErrorMessage = '';
+    if (isset($this->_aRequest['recaptcha_response_field'])) {
       $this->_oRecaptchaResponse = recaptcha_check_answer (
               $this->_sPrivateKey,
               $_SERVER['REMOTE_ADDR'],
-              $aRequest['recaptcha_challenge_field'],
-              $aRequest['recaptcha_response_field']);
+              $this->_aRequest['recaptcha_challenge_field'],
+              $this->_aRequest['recaptcha_response_field']);
 
-      if ($this->_oRecaptchaResponse->is_valid) {
-        $this->_sErrorMessage = '';
-        return true;
-      }
-
-      else {
+      if (!$this->_oRecaptchaResponse->is_valid)
         $this->_sErrorMessage = I18n::get('error.captcha.incorrect');
-        return Helper::errorMessage(I18n::get('error.captcha.incorrect'));
-      }
     }
-    else {
+    else
       $this->_sErrorMessage = I18n::get('error.captcha.loading');
-      return Helper::errorMessage(I18n::get('error.captcha.loading'));
-    }
+
+    $aError['captcha'] = $this->_sErrorMessage;
   }
 }

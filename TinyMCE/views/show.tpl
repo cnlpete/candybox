@@ -2,7 +2,7 @@
 <script type='text/javascript' src='/vendor/tiny_mce/jquery.tinymce.js'></script>
 <script type='text/javascript'>
   $(document).ready(function(){
-    $('textarea.js-tinymce').tinymce({
+    $('textarea.js-editor').tinymce({
       script_url : '/vendor/tiny_mce/tiny_mce.js',
       theme : 'advanced',
       plugins : 'autosave,safari,style,advimage,advlink,inlinepopups,insertdatetime,media,searchreplace,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras',

@@ -1,21 +1,22 @@
 <?php
 
 /**
- * This plugin adds javscript code to make some textbox into a tinymce instance.
+ * Format text using Markdown.
+ *
+ * This plugin is the most powerful plugin, if you don't want to write every
+ * text in HTML. It enables users to use markdown formatting in their content
+ * texts.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Hauke Schade <http://hauke-schade.de>
+ * @author Hauke Schade <http://haukeschade.de>
  * @license MIT
- * @since 2.1
+ * @since 3.0
  *
  */
 
 namespace candyCMS\Plugins;
 
-use candyCMS\Core\Helpers\Helper;
-use candyCMS\Core\Helpers\SmartySingleton;
-
-final class TinyMCE {
+final class Markdown {
 
   /**
    * Identifier for Template Replacements
@@ -23,7 +24,7 @@ final class TinyMCE {
    * @var constant
    *
    */
-  const IDENTIFIER = 'TinyMCE';
+  const IDENTIFIER = 'Markdown';
 
   /**
    * @var array
@@ -40,7 +41,7 @@ final class TinyMCE {
   protected $_aSession;
 
   /**
-   * Initialize the software by adding input params.
+   * Initialize the plugin and register all needed events.
    *
    * @access public
    * @param array $aRequest alias for the combination of $_GET and $_POST
@@ -54,28 +55,8 @@ final class TinyMCE {
 
     # now register some events with the pluginmanager
     #$oPlugins->registerSimplePlugin($this);
+    #$oPlugins->registerContentDisplayPlugin($this);
     $oPlugins->registerEditorPlugin($this);
-  }
-
-  /**
-   * Show the (cached) tinymce javascript code.
-   *
-   * @final
-   * @access public
-   * @return string HTML
-   *
-   */
-  public final function show() {
-    $sTemplateDir   = Helper::getPluginTemplateDir(self::IDENTIFIER, 'show');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
-
-    $oSmarty = SmartySingleton::getInstance();
-    $oSmarty->setTemplateDir($sTemplateDir);
-    $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
-
-    $sCacheId = WEBSITE_MODE . '|layout|' . WEBSITE_LOCALE . '|' . self::IDENTIFIER . '|';
-
-    return $oSmarty->fetch($sTemplateFile, $sCacheId);
   }
 
   /**
@@ -86,11 +67,25 @@ final class TinyMCE {
    * @access public
    * @param string $sStr
    * @return string HTML with formated code
-   * @todo maybe do some code cleanup here?
+   * @todo caching?
    *
    */
   public final function prepareContent(&$sStr) {
-    return $sStr;
+    $oMarkdown = new \dflydev\markdown\MarkdownParser();
+    return $oMarkdown->transformMarkdown($sStr);
+  }
+
+  /**
+   * Show nothing, since this plugin does not need to output additional javascript.
+   *
+   * @final
+   * @access public
+   * @return string HTML
+   * @todo add markdowneditor: https://github.com/samwillis/pagedown-bootstrap ??
+   *
+   */
+  public final function show() {
+    return '';
   }
 
   /**
@@ -102,7 +97,8 @@ final class TinyMCE {
    *
    */
   public final function getInfo() {
-    # we do not have an icon and/or info to display
-    return false;
+    return array('url' => 'http://daringfireball.net/projects/markdown/syntax',
+                'description' => 'Markdown',
+                'iconurl' => '/vendor/candyCMS/plugins/Markdown/assets/icon39x24.png');
   }
 }
