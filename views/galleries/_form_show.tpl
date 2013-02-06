@@ -27,7 +27,7 @@
                 name='file[]'
                 id='input-file'
                 multiple required />
-        {if isset($error.file)}<span class='help-inlin'>{$error.file}</span>{/if}
+        {if isset($error.file)}<span class='help-inline'>{$error.file}</span>{/if}
       </div>
     </div>
     <div class='control-group'>
