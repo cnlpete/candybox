@@ -78,7 +78,7 @@
     "simonhamp/routes": "1.0",
     "dflydev/markdown" : "1.0.*",
     "twitter/bootstrap" : "2.2.*",
-    "cnlpete/image-metadata-parser" : ""v0.0.1""
+    "cnlpete/image-metadata-parser" : "0.0.*"
   },
 
   "require-dev": {

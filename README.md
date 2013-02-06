@@ -1,4 +1,4 @@
-candyCMS Version 2.1.8
+candyCMS Version 2.1.7 (Stable release)
 ========================================================================================================================
 
 What is candyCMS?
@@ -51,7 +51,7 @@ Additional reasons, why candyCMS might be interesting for you
 
 Requirements
 ------------------------------------------------------------------------------------------------------------------------
-- at least PHP 5.3 & PDO supported database
+- at least PHP 5.3 & MySQL database
 - Imagemagick, GD2 and mod_rewrite
 - an account at http://recaptcha.org to use captchas
 - an account at http://mailchimp.com to use the newsletter management
@@ -64,10 +64,12 @@ Setup
 2. Install the vendor packages afterwards: `php composer.phar install` or `php composer.phar install --dev` if you would
 like have the possibility to run tests.
 3. Configure your website settings at "app/config/Candy.inc.php" and start uploading all files.
-4. Execute the "/install/index.php" file.
+4. Execute the "/install/index.php" file. If an error occurs it might be, that you have to give CHMOD 777 to `app/cache`
+and `app/compile`.
 5. Follow the instructions and make sure, you delete the install folder after installation.
-6. If you want to use compressed CSS and JS, make sure the template folders are writeable (775) and start the compressor
+6. If you want to use compressed CSS and JS, make sure the template folders are writeable and start the compressor
 via console: `php tools/minify/index.php`. This will compress the actual JS and CSS rendered by your DEVELOPMENT enviroment.
+
 
 Update
 ------------------------------------------------------------------------------------------------------------------------
