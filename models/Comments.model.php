@@ -15,7 +15,7 @@ namespace candyCMS\Core\Models;
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\Pagination;
-use candyCMS\Plugins\FacebookCMS;
+use candyCMS\Core\Helpers\PluginManager;
 use PDO;
 
 class Comments extends Main {
@@ -85,8 +85,21 @@ class Comments extends Main {
     }
 
     # We crawl the facebook avatars
-    if (defined('PLUGIN_FACEBOOK_APP_ID') && class_exists('\candyCMS\Plugins\FacebookCMS'))
-      $this->_getFacebookAvatars($aResult);
+    $oPluginManager = PluginManager::getInstance();
+    if ($oPluginManager->hasSessionPlugin()) {
+      $aIds = array();
+      foreach ($aResult as $aRow) {
+
+        # Skip unnecessary data
+        if (empty($aRow['author_facebook_id']))
+          continue;
+
+        else
+          $aIds[(int)$aRow['id']] = $aRow['author_facebook_id'];
+      }
+      if (count($aIds) > 0)
+        $oPluginManager->getSessionPlugin()->setAvatars($aIds, $this->_aData);
+    }
 
     # Get comment number
     $iLoop = 1;
@@ -97,36 +110,6 @@ class Comments extends Main {
     }
 
     return $this->_aData;
-  }
-
-  /**
-   * Get user profile images from Facebook if enabled.
-   *
-   * @access private
-   * @param array $aResult comment data to search image from
-   *
-   */
-  private function _getFacebookAvatars($aResult) {
-    # We go through our data and get all facebook uids we want to query
-    $aIds = array();
-    foreach ($aResult as $aRow) {
-
-      # Skip unnecessary data
-      if (empty($aRow['author_facebook_id']))
-        continue;
-
-      else
-        $aIds[(int)$aRow['id']] = $aRow['author_facebook_id'];
-    }
-
-    # Create a new facebook array with avatar urls and use Session as cache
-    $aFacebookAvatarCache = $this->_aSession['facebook']->getUserAvatars($aIds, $this->_aSession);
-
-    # Finally, we need to rebuild avatar data in main data array
-    foreach ($aIds as $iId => $sFacebookId) {
-      $this->_aData[$iId]['author']['avatar_64'] = $aFacebookAvatarCache[$sFacebookId]['pic_square_with_logo'];
-      $this->_aData[$iId]['author']['url'] = $aFacebookAvatarCache[$sFacebookId]['profile_url'];
-    }
   }
 
   /**
@@ -145,9 +128,7 @@ class Comments extends Main {
             Helper::formatInput($this->_aRequest[$this->_sController]['email']) :
             $this->_aSession['user']['email'];
 
-    $iFacebookId = isset($this->_aRequest[$this->_sController]['facebook_id']) ?
-            Helper::formatInput($this->_aRequest[$this->_sController]['facebook_id']) :
-            $this->_aSession['user']['facebook_id'];
+    $iFacebookId = $this->_aSession['user']['facebook_id'];
 
     try {
       $oQuery = $this->_oDb->prepare("INSERT INTO

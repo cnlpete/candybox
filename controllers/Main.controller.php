@@ -15,6 +15,7 @@ namespace candyCMS\Core\Controllers;
 
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\SmartySingleton;
 use candyCMS\plugins\Bbcode;
@@ -686,6 +687,9 @@ abstract class Main {
 
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
+
+    $oPluginManager = PluginManager::getInstance();
+    $this->oSmarty->assign('editorinfo', $oPluginManager->getEditorInfo());
 
     $this->oSmarty->setTemplateDir($sTemplateDir);
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);

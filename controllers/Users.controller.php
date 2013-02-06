@@ -15,7 +15,7 @@ namespace candyCMS\Core\Controllers;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\Upload;
-use candyCMS\Plugins\Recaptcha;
+use candyCMS\Core\Helpers\PluginManager;
 
 class Users extends Main {
 
@@ -115,6 +115,9 @@ class Users extends Main {
 
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
+
+    $oPluginManager = PluginManager::getInstance();
+    $this->oSmarty->assign('editorinfo', $oPluginManager->getEditorInfo());
 
     $this->oSmarty->assign('uid', $iId);
 
@@ -264,17 +267,12 @@ class Users extends Main {
    *
    */
   public function create() {
-    # Logged in users should not have a recaptcha field since we can assume that these are real humans.
-    $bShowCaptcha = class_exists('\candyCMS\Plugins\Recaptcha') && !ACTIVE_TEST ?
-            $this->_aSession['user']['role'] == 0 && SHOW_CAPTCHA :
-            false;
-
     if($this->_aSession['user']['role'] > 0 && $this->_aSession['user']['role'] < 4)
       return Helper::redirectTo('/errors/401');
 
     else
       return isset($this->_aRequest[$this->_sController]) ?
-              $this->_create($bShowCaptcha) :
+              $this->_create() :
               $this->_showCreateUserTemplate();
   }
 
@@ -288,7 +286,7 @@ class Users extends Main {
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _create($bShowCaptcha) {
+  protected function _create() {
     $this->_setError('name')->_setError('surname')->_setError('email')->_setError('password');
 
     if ($this->_oModel->getExistingUser($this->_aRequest[$this->_sController]['email']))
@@ -301,8 +299,11 @@ class Users extends Main {
     if ($this->_aSession['user']['role'] < 4 && !isset($this->_aRequest[$this->_sController]['terms']))
       $this->_aError['terms'] = I18n::get('error.form.missing.terms');
 
-    if ($bShowCaptcha === true && Recaptcha::getInstance()->checkCaptcha($this->_aRequest) === false)
-        $this->_aError['captcha'] = I18n::get('error.captcha.incorrect');
+    # do the captchaCheck for for not logged in users
+    if ($this->_aSession['user']['role'] == 0) {
+      $oPluginManager = PluginManager::getInstance();
+      $oPluginManager->checkCaptcha($this->_aError);
+    }
 
     # Generate verification code for users (double-opt-in) when not created by admin.
     $iVerificationCode = $this->_aSession['user']['role'] < 4 ? Helper::createRandomChar(16) : '';

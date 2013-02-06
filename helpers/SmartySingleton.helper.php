@@ -110,16 +110,6 @@ class SmartySingleton extends Smarty {
       $this->setCacheLifetime(-1);
     }
 
-    $bUseFacebook = class_exists('\candyCMS\Plugins\FacebookCMS') ? true : false;
-
-    if($bUseFacebook === true) {
-       # Required for meta only
-      $this->assign('PLUGIN_FACEBOOK_ADMIN_ID', PLUGIN_FACEBOOK_ADMIN_ID);
-
-      # Required for facebook actions
-      $this->assign('PLUGIN_FACEBOOK_APP_ID', PLUGIN_FACEBOOK_APP_ID);
-    }
-
     # Define smarty constants
     $this->assign('ACTIVE_TEST', ACTIVE_TEST);
     $this->assign('CURRENT_URL', CURRENT_URL);
@@ -139,7 +129,7 @@ class SmartySingleton extends Smarty {
     $this->assign('_SYSTEM', array(
         'date'                  => date('Y-m-d'),
         'compress_files_suffix' => WEBSITE_COMPRESS_FILES === true ? '.min' : '',
-        'facebook_plugin'       => $bUseFacebook,
+        'hasSessionPlugin'      => PluginManager::getInstance()->hasSessionPlugin(),
         'maximumUploadSize'     => array(
             'raw'               => $iMaximumUploadSize,
             'b'                 => $iMaximumUploadSize . 'B',

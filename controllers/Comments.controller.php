@@ -14,6 +14,7 @@ namespace candyCMS\Core\Controllers;
 
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Plugins\Recaptcha;
 
@@ -98,6 +99,9 @@ class Comments extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
+    $oPluginManager = PluginManager::getInstance();
+    $this->oSmarty->assign('editorinfo', $oPluginManager->getEditorInfo());
+
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
@@ -110,15 +114,11 @@ class Comments extends Main {
    *
    */
   public function create() {
-    $bShowCaptcha = class_exists('candyCMS\Plugins\Recaptcha') && !ACTIVE_TEST ?
-                      $this->_aSession['user']['role'] == 0 && SHOW_CAPTCHA :
-                      false;
-
     # No caching for comments
     $this->oSmarty->setCaching(false);
 
     return isset($this->_aRequest[$this->_sController]) ?
-            $this->_create($bShowCaptcha) :
+            $this->_create() :
             $this->_showFormTemplate();
   }
 
@@ -128,11 +128,10 @@ class Comments extends Main {
    * Check if required data is given or throw an error instead.
    *
    * @access protected
-   * @param boolean $bShowCaptcha show captcha?
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _create($bShowCaptcha = true) {
+  protected function _create() {
     $this->_setError('parent_id', I18n::get('error.missing.id'));
     $this->_setError('content');
 
@@ -142,8 +141,11 @@ class Comments extends Main {
     if (isset($this->_aRequest[$this->_sController]['email']) && $this->_aRequest[$this->_sController]['email'])
       $this->_setError('email');
 
-    if ($bShowCaptcha === true && Recaptcha::getInstance()->checkCaptcha($this->_aRequest) === false)
-      $this->_aError['captcha'] = I18n::get('error.captcha.loading');
+    # do the captchaCheck for for not logged in users
+    if ($this->_aSession['user']['role'] == 0) {
+      $oPluginManager = PluginManager::getInstance();
+      $oPluginManager->checkCaptcha($this->_aError);
+    }
 
     if ($this->_aError)
       return $this->_showFormTemplate();

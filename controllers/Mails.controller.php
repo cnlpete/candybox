@@ -14,6 +14,7 @@ namespace candyCMS\Core\Controllers;
 
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Plugins\Recaptcha;
 
@@ -82,12 +83,8 @@ class Mails extends Main {
    *
    */
   public function create() {
-    $bShowCaptcha = class_exists('\candyCMS\Plugins\Recaptcha') && !ACTIVE_TEST ?
-            $this->_aSession['user']['role'] == 0 && SHOW_CAPTCHA :
-            false;
-
     return isset($this->_aRequest[$this->_sController]) ?
-            $this->_create($bShowCaptcha) :
+            $this->_create() :
             $this->_showCreateTemplate();
   }
 
@@ -109,19 +106,22 @@ class Mails extends Main {
     $aUser = $sUser::getUserNamesAndEmail($this->_iId);
 
     if (!$aUser && $this->_iId)
-			return Helper::redirectTo('/errors/404');
+      return Helper::redirectTo('/errors/404');
 
     $this->oSmarty->assign('user', $aUser);
 
-		# Set own email when logged in
-		if ($this->_aSession['user']['email'] && !isset($this->_aRequest[$this->_sController]['email']))
-			$this->_aRequest[$this->_sController]['email'] = $this->_aSession['user']['email'];
+    # Set own email when logged in
+    if ($this->_aSession['user']['email'] && !isset($this->_aRequest[$this->_sController]['email']))
+      $this->_aRequest[$this->_sController]['email'] = $this->_aSession['user']['email'];
 
     foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
       $this->oSmarty->assign($sInput, $sData);
 
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
+
+    $oPluginManager = PluginManager::getInstance();
+    $this->oSmarty->assign('editorinfo', $oPluginManager->getEditorInfo());
 
     $sFullname = trim($aUser['name'] . ' ' . $aUser['surname']);
 		$sFullname = empty($sFullname) ? WEBSITE_NAME : $sFullname;
@@ -144,8 +144,11 @@ class Mails extends Main {
   protected function _create($bShowCaptcha = true) {
     $this->_setError('content')->_setError('email');
 
-    if ($bShowCaptcha === true && Recaptcha::getInstance()->checkCaptcha($this->_aRequest) === false)
-        $this->_aError['captcha'] = I18n::get('error.captcha.incorrect');
+    # do the captchaCheck for for not logged in users
+    if ($this->_aSession['user']['role'] == 0) {
+      $oPluginManager = PluginManager::getInstance();
+      $oPluginManager->checkCaptcha($this->_aError);
+    }
 
     if (isset($this->_aError))
       return $this->_showCreateTemplate();
