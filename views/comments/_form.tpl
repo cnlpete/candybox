@@ -4,9 +4,9 @@
     <h2>
       {$lang.comments.title.create}
     </h2>
-    {if $_SESSION.user.role == 0 && $_SYSTEM.facebook_plugin == true}
+    {if $_SESSION.user.role == 0 && $_SYSTEM.hasSessionPlugin}
       <p>
-        <fb:login-button scope='email' onlogin="window.location='{$CURRENT_URL}'"></fb:login-button>
+        <!-- pluginmanager:sessionplugin::button -->
       </p>
     {/if}
   </div>
@@ -26,11 +26,6 @@
                  id='input-name'
                  class='disabled span4'
                  disabled />
-          {if $_SESSION.user.facebook_id}
-            <input type='hidden'
-                   value="{$_SESSION.user.facebook_id}"
-                   name='comments[facebook_id]' />
-          {/if}
         {else}
           <input type='text'
                  value="{if isset($name)}{$name}{/if}"
@@ -71,6 +66,14 @@
     <div class='control-group{if isset($error.content)} alert alert-error{/if}'>
       <label for='js-create_commment_text' class='control-label'>
         {$lang.global.content} <span title='{$lang.global.required}'>*</span>
+        {if count($editorinfo) > 0}
+          <br />{$lang.global.editorinfo}<br />
+          {foreach $editorinfo as $oMarkup}
+            <a href="{$oMarkup.url}" title="{$oMarkup.description}" class='js-tooltip'>
+              <img src="{$oMarkup.iconurl}" />
+            </a>
+          {/foreach}
+        {/if}
       </label>
       <div class='controls'>
         <textarea name='comments[content]'
@@ -87,7 +90,7 @@
         {/if}
       </div>
     </div>
-    <!-- plugin:recaptcha -->
+    <!-- pluginmanager:captcha -->
     {if $MOBILE}
       <div data-role='fieldcontain' class='center'>
     {/if}

@@ -39,7 +39,7 @@
         {/if}
       </div>
     </div>
-    <!-- plugin:recaptcha -->
+    <!-- pluginmanager:captcha -->
     <div data-role='fieldcontain' class='form-actions'>
       <input type='submit'
              class='btn btn-primary'
