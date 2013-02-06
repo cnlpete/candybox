@@ -49,6 +49,7 @@ class Calendars extends Main {
    * @access protected
    * @param integer $iId ID to show
    * @return string ICS-File
+   * @todo remove exit
    *
    */
   protected function _ics($iId) {
@@ -98,6 +99,7 @@ class Calendars extends Main {
    *
    * @access public
    * @return string HTML content
+   * @todo remove exit
    *
    */
   public function iCalFeed() {
@@ -124,7 +126,7 @@ class Calendars extends Main {
   protected function _create() {
     $this->_setError('start_date');
 
-    # set a custom redirect url, because otherwise it would prompt to download
+    # Set a custom redirect url, because otherwise it would prompt to download.
     $this->_sRedirectURL = '/' . $this->_sController;
     return parent::_create();
   }
@@ -139,7 +141,7 @@ class Calendars extends Main {
   protected function _update() {
     $this->_setError('start_date');
 
-    # set a custom redirect url, because otherwise it would prompt to download
+    # Set a custom redirect url, because otherwise it would prompt to download.
     $this->_sRedirectURL = '/' . $this->_sController;
     return parent::_update();
   }
