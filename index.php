@@ -102,7 +102,8 @@ define('CRAWLER', defined('CRAWLERS') ?
 define('EXTENSION_CHECK', ALLOW_EXTENSIONS === true || WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test');
 
 # @todo extension check
-$oIndex = new \candyCMS\Core\Controllers\Index(array_merge($_GET, $_POST), $_SESSION, $_FILES, $_COOKIE);
+$_aRequest = array_merge($_GET, $_POST);
+$oIndex = new \candyCMS\Core\Controllers\Index($_aRequest, $_SESSION, $_FILES, $_COOKIE);
 
 # Print out HTML
 echo $oIndex->show();
