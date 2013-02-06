@@ -103,7 +103,7 @@ class Install extends Index {
     define('EXTENSION_CHECK', false);
     define('MOBILE', false);
     define('MOBILE_DEVICE', false);
-    define('WEBSITE_MODE', 'production');
+    define('WEBSITE_MODE', 'development');
   }
 
   /**

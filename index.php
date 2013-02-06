@@ -42,10 +42,6 @@ if('http://' . $_SERVER['HTTP_HOST'] !== WEBSITE_URL && 'https://' . $_SERVER['H
 if (WEBSITE_MODE == 'production' && is_dir('install'))
   exit('Please install software via <strong>install/</strong> and delete the folder afterwards.');
 
-# Also disable tools to avoid system crashes.
-if (WEBSITE_MODE == 'production' && is_dir('tools'))
-  exit('Please delete the tools folder.');
-
 # Disable tests on productive system.
 if (WEBSITE_MODE == 'production' && is_dir('tests'))
   exit('Please delete the tests enviroment (/tests).');
@@ -55,7 +51,7 @@ if (WEBSITE_MODE == 'production' && is_file('composer.phar'))
   exit('Please delete the composer.phar.');
 
 # Override the system variables in development mode.
-if (WEBSITE_MODE == 'test') {
+if (WEBSITE_MODE == 'test' || WEBSITE_MODE == 'production') {
   ini_set('display_errors', 0);
   ini_set('error_reporting', 0);
 }
