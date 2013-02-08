@@ -19,14 +19,6 @@ use candyCMS\Core\Helpers\Upload;
 
 class Downloads extends Main {
 
-  public function __init() {
-    parent::__init();
-
-    $this->_aDependentCaches[] = 'searches';
-
-    return $this->_oModel;
-  }
-
   /**
    * Provide download.
    *
@@ -77,8 +69,8 @@ class Downloads extends Main {
    * Build form template to create or update a download entry.
    *
    * @access protected
-   * @param string $sTemplateName name of form template, only for E_STRICT
-   * @param string $sTitle title to show, only for E_STRICT
+   * @param string $sTemplateName name of form template (only for E_STRICT)
+   * @param string $sTitle title to show (only for E_STRICT)
    * @return string HTML content
    *
    */
@@ -167,19 +159,9 @@ class Downloads extends Main {
    *
    */
   protected function _update() {
-    # redirect to overview, since show will prompt the download
+    # Redirect to overview, since show will prompt the download
     $this->_sRedirectURL = '/' . $this->_sController;
-    return parent::_update('/' . $this->_sController);
-  }
 
-  /**
-   * Destroy a download entry.
-   *
-   * @access protected
-   * @return boolean status of model action
-   *
-   */
-  protected function _destroy() {
-    return parent::_destroy();
+    return parent::_update();
   }
 }
