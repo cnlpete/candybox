@@ -18,14 +18,6 @@ use candyCMS\Core\Helpers\I18n;
 class Blogs extends Main {
 
   /**
-   * Defines the additional caches that will be deleted on CRUD actions.
-   *
-   * @access protected
-   *
-   */
-  protected $_aDependentCaches = array('searches', 'sitemap');
-
-  /**
    * Show blog entry or blog overview (depends on a given ID or not).
    *
    * @access protected

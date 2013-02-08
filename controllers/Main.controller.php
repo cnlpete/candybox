@@ -152,7 +152,7 @@ abstract class Main {
    * @var array
    * @access protected
    */
-  protected $_aDependentCaches = array();
+  protected $_aDependentCaches = array('searches', 'sitemap');
 
   /**
    * the current redirect URL, if set, the controller 'should' redirect there after completion of _create, _update or _destroy

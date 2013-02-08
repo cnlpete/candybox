@@ -17,15 +17,6 @@ use candyCMS\Core\Helpers\I18n;
 
 class Contents extends Main {
 
-  public function __init() {
-    parent::__init();
-
-    $this->_aDependentCaches[] = 'searches';
-    $this->_aDependentCaches[] = 'sitemaps';
-
-    return $this->_oModel;
-  }
-
   /**
    * Show content page.
    *
