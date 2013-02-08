@@ -188,6 +188,7 @@ class PluginManager {
       $oPlugin = $this->_aPlugins[$sPluginName];
       $sHtml = str_replace('<!-- plugin:' . strtolower($oPlugin::IDENTIFIER) . ' -->', $oPlugin->show(), $sHtml);
     }
+
     # @todo: only run the following on type=='create' pages?
     $sHtml = $this->runEditorPlugins($sHtml);
     $sHtml = $this->runCaptchaPlugins($sHtml);
@@ -195,11 +196,11 @@ class PluginManager {
   }
 
   /**
-   * register as oldschool plugin (simple <!--Name--> replacement)
+   * Register as oldschool plugin (simple <!--Name--> replacement).
    *
    * Plugin MUST provide a show() function for additional content to load,
    * a prepareContent() function for displaying content and a getInfo()
-   * function for displaying an icon and/or link to some help page
+   * function for displaying an icon and/or link to some help page.
    *
    * @access public
    * @param object $oPlugin the plugin to be added to this event
@@ -207,33 +208,35 @@ class PluginManager {
    */
   public function registerEditorPlugin(&$oPlugin) {
     $this->_aEditorPluginNames[] = strtolower($oPlugin::IDENTIFIER);
-    # make editor plugins use the prepareContent-Event
+
+    # Make editor plugins use the prepareContent event
     $this->registerContentDisplayPlugin($oPlugin);
   }
 
   /**
-   * get Editor Info from all registered Plugins
+   * Get information regarding current editors from plugins.
    *
    * @access public
-   * @return array all the info data in one big array
+   * @return array $aReturnValue all the info data in one big array
    *
    */
   public function getEditorInfo() {
-    $aReturnValue = array();
     foreach ($this->_aEditorPluginNames as $sPluginName) {
       $oPlugin = $this->_aPlugins[$sPluginName];
       $aTmpReturnValue = $oPlugin->getInfo();
+
       if ($aTmpReturnValue !== false)
         $aReturnValue[] = $aTmpReturnValue;
     }
-    return $aReturnValue;
+    return isset($aReturnValue) ? $aReturnValue : array();
   }
 
   /**
-   * output all editor information
+   * Output all editor information.
    *
    * @access public
    * @param string $sHtml the content, the plugins want to change
+   * @return string replaced HTML
    *
    */
   public function runEditorPlugins(&$sHtml) {
@@ -241,6 +244,7 @@ class PluginManager {
       $oPlugin = $this->_aPlugins[$sPluginName];
       $sHtml = str_replace('<!-- pluginmanager:editor -->', $oPlugin->show() . '<!-- pluginmanager:editor -->', $sHtml);
     }
+
     return $sHtml;
   }
 

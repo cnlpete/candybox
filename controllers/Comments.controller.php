@@ -21,7 +21,18 @@ use candyCMS\Plugins\Recaptcha;
 class Comments extends Main {
 
   /**
+   * Defines the additional caches that will be deleted on CRUD actions.
+   *
+   * @access protected
+   *
+   */
+  protected $_aDependentCaches = array('blogs', 'searches', 'sitemap');
+
+
+  /**
    * Initialize the controller by adding input params, set default id and start template engine.
+   *
+   * We must override the controller in here.
    *
    * @access public
    * @param array $aRequest alias for the combination of $_GET and $_POST
@@ -33,51 +44,33 @@ class Comments extends Main {
   public function __construct(&$aRequest, &$aSession, &$aFile = '', &$aCookie = '') {
     parent::__construct($aRequest, $aSession, $aFile, $aCookie);
 
-    # overwrite the _sController variable
+    # Overwrite the _sController variable
     $this->_sController = 'comments';
   }
 
   /**
-   * Include the content model.
+   * Set parent data as array.
    *
-   * @access public
-   * @param array $aParentData optionally provided blog data
+   * @param array $aParentData
    *
    */
-  public function __init() {
-    parent::__init();
-
-    $this->_aDependentCaches[] = 'blogs';
-
-    return $this->_oModel;
-  }
-
   public function _setParentData($aParentData = '') {
     $this->_aParentData = & $aParentData;
   }
-
-  /**
-   *
-   * Avoid the use of "/comments".
-   *
-   * @access public
-   * @return string HTML
-   *
-   */
-//  public function show() {
-//    return $this->_sController == 'comments' ?
-//            Helper::redirectTo('/errors/404') :
-//            $this->_show();
-//  }
 
   /**
    * Show comment entries.
    *
    * @access protected
    * @return string HTML content
+   * @todo seperate form and comments
    *
    */
   protected function _show() {
+    # Bugfix: Avoid the use of "/comments" and "/comments/ID"
+    if (!$this->_aParentData)
+      return Helper::redirectTo('/blogs' . $this->_iId ? '/' . $this->_iId : '');
+
     $sTemplateDir   = Helper::getTemplateDir('comments', 'show');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
     $this->oSmarty->setTemplateDir($sTemplateDir);
@@ -99,7 +92,8 @@ class Comments extends Main {
       $this->oSmarty->assign('_pages_', $this->_oModel->oPagination->showPages('/blogs/' . $this->_iId));
     }
 
-    # We can leave caching on, the form itself will turn caching off, but that is a different template
+    # We can leave caching on, the form itself will turn caching off, but that is a different template.
+    # Also _form is directly attached. Might be good to seperate.
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID) . $this->create();
   }
 
@@ -134,7 +128,6 @@ class Comments extends Main {
    * We must override the main method due to a diffent required user role.
    *
    * @access public
-   * @param integer $iUserRole required user right, only for E_STRICT
    * @return string HTML content
    *
    */
@@ -157,7 +150,6 @@ class Comments extends Main {
    *
    */
   protected function _create() {
-
     $this->_setError('parent_id', I18n::get('error.missing.id'));
     $this->_setError('content');
 
@@ -167,7 +159,7 @@ class Comments extends Main {
     if (isset($this->_aRequest[$this->_sController]['email']) && $this->_aRequest[$this->_sController]['email'])
       $this->_setError('email');
 
-    # do the captchaCheck for for not logged in users
+    # Do the captchaCheck only for for not logged in users.
     if ($this->_aSession['user']['role'] == 0) {
       $oPluginManager = PluginManager::getInstance();
       $oPluginManager->checkCaptcha($this->_aError);
@@ -177,7 +169,8 @@ class Comments extends Main {
       return $this->_showFormTemplate();
 
     else {
-      # Bugfix for jquery mobile not handling this redirect with hash very vell
+      # Bugfix for jquery mobile not handling this redirect with hash very vell.
+      # @todo: Remove when removing jQuery mobile (before 3.0 release).
       $this->_sRedirectURL = '/blogs/' . (int) $this->_aRequest[$this->_sController]['parent_id'] . (MOBILE ? '' : '#comments');
 
       if ($this->_oModel->create() === true) {
@@ -198,6 +191,8 @@ class Comments extends Main {
   /**
    * Delete a a comment.
    *
+   * Override to set up correct redirect URL.
+   *
    * @access protected
    * @return boolean status of model action
    *
@@ -205,6 +200,6 @@ class Comments extends Main {
   protected function _destroy() {
     $this->_sRedirectURL = '/blogs/' . $this->_oModel->getParentId((int) $this->_aRequest['id']);
 
-    parrent::_destroy();
+    return parent::_destroy();
   }
 }

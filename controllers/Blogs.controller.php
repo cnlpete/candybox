@@ -18,7 +18,6 @@ use candyCMS\Core\Helpers\I18n;
 class Blogs extends Main {
 
   /**
-   *
    * Defines the additional caches that will be deleted on CRUD actions.
    *
    * @access protected

@@ -59,7 +59,7 @@ class I18n {
     if ($aSession)
       $this->_aSession = $aSession;
 
-    self::$_oObject   = $this;
+    self::$_oObject = $this;
 
     # first call
     if (!isset(I18n::$_aLang) || WEBSITE_MODE == 'development' || ACTIVE_TEST) {

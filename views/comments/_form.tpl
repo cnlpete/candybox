@@ -66,14 +66,6 @@
     <div class='control-group{if isset($error.content)} alert alert-error{/if}'>
       <label for='js-create_commment_text' class='control-label'>
         {$lang.global.content} <span title='{$lang.global.required}'>*</span>
-        {if count($editorinfo) > 0}
-          <br />{$lang.global.editorinfo}<br />
-          {foreach $editorinfo as $oMarkup}
-            <a href="{$oMarkup.url}" title="{$oMarkup.description}" class='js-tooltip'>
-              <img src="{$oMarkup.iconurl}" />
-            </a>
-          {/foreach}
-        {/if}
       </label>
       <div class='controls'>
         <textarea name='comments[content]'
@@ -83,11 +75,19 @@
                   required>
           {if isset($content)}{$content}{/if}
         </textarea>
-        {if isset($error.content)}
-          <span class='help-inline'>
+        <span class='help-block'>
+          {if isset($error.content)}
             {$error.content}
-          </span>
-        {/if}
+          {elseif count($editorinfo) > 0}
+            {$lang.global.editorinfo}
+            &nbsp;
+            {foreach $editorinfo as $aMarkup}
+              <a href='{$aMarkup.url}' title='{$oMarkup.description}' class='js-tooltip'>
+                <img src='{$aMarkup.iconurl}' />
+              </a>
+            {/foreach}
+          {/if}
+        </span>
       </div>
     </div>
     <!-- pluginmanager:captcha -->
