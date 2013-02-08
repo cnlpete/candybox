@@ -83,7 +83,7 @@ class Medias extends Main {
 
     # Return to website
     if ($bAllTrue) {
-      $this->oSmarty->clearCacheForController($this->_sController);
+      $this->oSmarty->clearControllerCache($this->_sController);
 
       return Helper::successMessage(I18n::get('success.file.upload'),
               '/' . $this->_sController, $this->_aFile);

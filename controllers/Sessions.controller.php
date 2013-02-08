@@ -56,7 +56,7 @@ class Sessions extends Main {
 
     elseif ($this->_oModel->create() === true) {
       # Clear the cache for users, since a new session updates some users last login date.
-      $this->oSmarty->clearCacheForController('users');
+      $this->oSmarty->clearControllerCache('users');
       return Helper::successMessage(I18n::get('success.session.create'), '/');
     }
 

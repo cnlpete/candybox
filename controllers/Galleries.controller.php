@@ -131,7 +131,7 @@ class Galleries extends Main {
 
     else {
       if ($this->_oModel->create() === true) {
-        $this->oSmarty->clearCacheForController($this->_sController);
+        $this->oSmarty->clearControllerCache($this->_sController);
         $this->_clearAdditionalCaches();
 
         $iId    = $this->_oModel->getLastInsertId('gallery_albums');
@@ -260,8 +260,8 @@ class Galleries extends Main {
                       '', '', $bReturnValue);
 
         if ($bReturnValue) {
-          $this->oSmarty->clearCacheForController($this->_sController);
-          $this->oSmarty->clearCacheForController('rss');
+          $this->oSmarty->clearControllerCache($this->_sController);
+          $this->oSmarty->clearControllerCache('rss');
 
           return Helper::successMessage(I18n::get('success.file.upload'),
                   '/' . $this->_sController . '/' . $this->_iId,
@@ -327,8 +327,8 @@ class Galleries extends Main {
                   '', '', $bReturn);
 
     if ($bReturn) {
-      $this->oSmarty->clearCacheForController($this->_sController);
-      $this->oSmarty->clearCacheForController('rss');
+      $this->oSmarty->clearControllerCache($this->_sController);
+      $this->oSmarty->clearControllerCache('rss');
 
       return Helper::successMessage(I18n::get('success.update'), $sRedirectPath);
     }
@@ -383,7 +383,7 @@ class Galleries extends Main {
                   '', '', $bReturn);
 
     if ($bReturn) {
-      $this->oSmarty->clearCacheForController($this->_sController);
+      $this->oSmarty->clearControllerCache($this->_sController);
       return true;
     }
     else
@@ -421,8 +421,8 @@ class Galleries extends Main {
                   '', '', $bReturn);
 
     if ($bReturn) {
-      $this->oSmarty->clearCacheForController($this->_sController);
-      $this->oSmarty->clearCacheForController('rss');
+      $this->oSmarty->clearControllerCache($this->_sController);
+      $this->oSmarty->clearControllerCache('rss');
 
       unset($this->_iId);
       return Helper::successMessage(I18n::get('success.destroy'), '/' . $this->_sController . '/' .

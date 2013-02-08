@@ -207,7 +207,7 @@ class SmartySingleton extends Smarty {
    * @param string $sController
    *
    */
-  public function clearCacheForController($sController) {
+  public function clearControllerCache($sController) {
     $this->clearCache(null, WEBSITE_MODE . '|' . $sController);
   }
 }

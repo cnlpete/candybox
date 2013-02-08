@@ -121,7 +121,7 @@ class Downloads extends Main {
 
       # Fileupload was successfull, so we can clear cache and insert into db.
       if ($aReturnValues[0] === true) {
-        $this->oSmarty->clearCacheForController($this->_sController);
+        $this->oSmarty->clearControllerCache($this->_sController);
         # i do not need to check, since i now about the existance of additional searches cache
         $this->_clearAdditionalCaches();
 

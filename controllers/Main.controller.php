@@ -716,7 +716,7 @@ abstract class Main {
    */
   protected function _clearAdditionalCaches() {
     foreach ($this->_aDependentCaches as $sCache)
-      $this->oSmarty->clearCacheForController($sCache);
+      $this->oSmarty->clearControllerCache($sCache);
   }
 
   /**
@@ -747,7 +747,7 @@ abstract class Main {
                     '', '', $bResult);
 
       if ($bResult) {
-        $this->oSmarty->clearCacheForController($this->_sController);
+        $this->oSmarty->clearControllerCache($this->_sController);
 
         # clear additional caches if given
         if (count($this->_aDependentCaches) > 0)
@@ -800,7 +800,7 @@ abstract class Main {
                     '', '', $bReturn);
 
       if ($bReturn) {
-        $this->oSmarty->clearAdditionalCaches($this->_sController);
+        $this->oSmarty->clearControllerCache($this->_sController);
 
         # Clear additional caches if given
         if (count($this->_aDependentCaches) > 0)
@@ -842,7 +842,7 @@ abstract class Main {
                   '', '', $bReturn);
 
     if ($bReturn) {
-      $this->oSmarty->clearCacheForController($this->_sController);
+      $this->oSmarty->clearControllerCache($this->_sController);
 
       # Clear additional caches if given
         if (count($this->_aDependentCaches) > 0)

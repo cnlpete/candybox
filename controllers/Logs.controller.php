@@ -71,7 +71,7 @@ class Logs extends Main {
             (bool) $bResultFlag);
 
     if ($bReturn)
-      \candyCMS\Core\Helpers\SmartySingleton::getInstance()->clearCacheForController('logs');
+      \candyCMS\Core\Helpers\SmartySingleton::getInstance()->clearControllerCache('logs');
 
     return $bReturn;
   }
@@ -94,7 +94,7 @@ class Logs extends Main {
     $bReturn = $sModel::setEndTime($iLogsId, $iEndTime);
 
     if ($bReturn)
-      \candyCMS\Core\Helpers\SmartySingleton::getInstance()->clearCacheForController('logs');
+      \candyCMS\Core\Helpers\SmartySingleton::getInstance()->clearControllerCache('logs');
 
     return $bReturn;
   }
@@ -116,7 +116,7 @@ class Logs extends Main {
     $bReturn = $sModel::setResultFlag($iLogsId, $bResultFlag);
 
     if ($bReturn)
-      \candyCMS\Core\Helpers\SmartySingleton::getInstance()->clearCacheForController('logs');
+      \candyCMS\Core\Helpers\SmartySingleton::getInstance()->clearControllerCache('logs');
 
     return $bReturn;
   }

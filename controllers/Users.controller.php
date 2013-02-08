@@ -323,7 +323,7 @@ class Users extends Main {
                     '', '', $bReturn);
 
       if ($bReturn) {
-        $this->oSmarty->clearCacheForController($this->_sController);
+        $this->oSmarty->clearControllerCache($this->_sController);
 
         # Send email if user has registered and creator is not an admin.
         if ($this->_aSession['user']['role'] < 4) {
@@ -431,7 +431,7 @@ class Users extends Main {
                     '', '', $bReturn);
 
       if ($bReturn) {
-        $this->oSmarty->clearCacheForController($this->_sController);
+        $this->oSmarty->clearControllerCache($this->_sController);
 
         # Check if user wants to unsubscribe from mailchimp
         if (!isset($this->_aRequest[$this->_sController]['receive_newsletter']))
@@ -508,7 +508,7 @@ class Users extends Main {
                     '', '', $bReturn);
 
       if ($bReturn) {
-        $this->oSmarty->clearCacheForController($this->_sController);
+        $this->oSmarty->clearControllerCache($this->_sController);
 
         # Unsubscribe from newsletter
         $this->_unsubscribeFromNewsletter($aUser['email']);
@@ -540,7 +540,7 @@ class Users extends Main {
       # Subscribe to MailChimp after email address is confirmed
       $this->_subscribeToNewsletter($this->_oModel->getActivationData());
 
-      $this->oSmarty->clearCacheForController($this->_sController);
+      $this->oSmarty->clearControllerCache($this->_sController);
 
       return Helper::successMessage(I18n::get('success.user.verification'), '/');
     }

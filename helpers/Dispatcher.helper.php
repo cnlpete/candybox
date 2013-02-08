@@ -78,7 +78,6 @@ class Dispatcher {
               Helper::pluralize($sController) !== $sController &&
               file_exists(PATH_STANDARD . '/vendor/candyCMS/core/controllers/' . Helper::pluralize($sController) . '.controller.php')) {
         $sUrl = str_replace(strtolower($sController), strtolower(Helper::pluralize($sController)), $_SERVER['REQUEST_URI']);
-
         return Helper::warningMessage(I18n::get('error.302.info', $sUrl), $sUrl);
       }
       else {
@@ -99,7 +98,11 @@ class Dispatcher {
    *
    */
   public function getAction() {
-    switch (strtoupper($this->_aRequest['method'])) {
+    # Bugfix for all versions
+    if (!defined('REQUEST_METHOD'))
+      define('REQUEST_METHOD', $this->_aRequest['method']);
+
+    switch (REQUEST_METHOD) {
       case 'POST':
 
         $sAction = isset($this->_aRequest['action']) ?

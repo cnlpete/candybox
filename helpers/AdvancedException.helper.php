@@ -25,11 +25,7 @@ class AdvancedException extends \Exception {
    *
    */
   public static function reportBoth($sMessage) {
-    if (!ACTIVE_TEST)
-      AdvancedException::writeLog($sMessage);
-
-    else
-      printf("\n" . $sMessage);
+    !ACTIVE_TEST ? AdvancedException::writeLog($sMessage) : printf("\n" . $sMessage);
 
     if (WEBSITE_MODE == 'production' || WEBSITE_MODE == 'staging')
       AdvancedException::sendAdminMail($sMessage);
@@ -49,7 +45,9 @@ class AdvancedException extends \Exception {
     $sModel = \candyCMS\Core\Controllers\Main::__autoload('Mails', true);
     $oMails = new $sModel();
 
-    return $oMails->create(array('subject' => 'Exception', 'message' => $sMessage), false);
+    return $oMails->create(array(
+        'subject' => 'Exception',
+        'message' => $sMessage), false);
   }
 
   /**
@@ -60,7 +58,7 @@ class AdvancedException extends \Exception {
    *
    */
   public static function writeLog($sMessage) {
-    $sIP = !ACTIVE_TEST ? SERVER_IP : 'localhost';
+    $sIP = !ACTIVE_TEST ? SERVER_IP : '127.0.0.1';
     $sMessage = date('Y-m-d Hi', time()) . ' - ' . $sIP . ' - ' . $sMessage;
 
     $oFile = fopen(PATH_STANDARD . '/app/logs/' . WEBSITE_MODE . '.log', 'a');

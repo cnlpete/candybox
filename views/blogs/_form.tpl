@@ -84,14 +84,6 @@
     <div class='control-group{if isset($error.content)} alert alert-error{/if}'>
       <label for='input-content' class='control-label'>
         {$lang.global.content} <span title='{$lang.global.required}'>*</span>
-        {if count($editorinfo) > 0}
-          <br />{$lang.global.editorinfo}<br />
-          {foreach $editorinfo as $oMarkup}
-            <a href="{$oMarkup.url}" title="{$oMarkup.description}" class='js-tooltip'>
-              <img src="{$oMarkup.iconurl}" />
-            </a>
-          {/foreach}
-        {/if}
       </label>
       <div class='controls'>
         <textarea name='{$_REQUEST.controller}[content]'
@@ -100,6 +92,16 @@
                   rows='10'>{$content}</textarea>
         {if isset($error.content)}
           <span class='help-inline'>{$error.content}</span>
+        {elseif count($editorinfo) > 0}
+          <span class='help-block'>
+            {$lang.global.editorinfo}
+            &nbsp;
+            {foreach $editorinfo as $aMarkup}
+              <a href='{$aMarkup.url}' title='{$aMarkup.description}' class='js-tooltip'>
+                <img src='{$aMarkup.iconurl}' />
+              </a>
+            {/foreach}
+          </span>
         {/if}
       </div>
     </div>

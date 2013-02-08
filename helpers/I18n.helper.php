@@ -61,27 +61,16 @@ class I18n {
 
     self::$_oObject = $this;
 
-    # first call
     if (!isset(I18n::$_aLang) || WEBSITE_MODE == 'development' || ACTIVE_TEST) {
-      $sLanguageFile = $sLanguage . '.yml';
-      $sLanguagePath = PATH_STANDARD . '/app/languages/' . $sLanguageFile;
-
-      # Remove mistakenly set cookie to avoid exceptions.
-      if (!file_exists($sLanguagePath))
-        $_COOKIE['default_language'] = 'en';
-
-      # reload the files, if necessary
-      if (WEBSITE_MODE == 'development' || ACTIVE_TEST || !isset($aSession['lang'])) {
+      if (!isset($aSession['lang'])) {
         self::$_aLang = array();
 
         if ($aSession != null)
           $aSession['lang'] = & I18n::$_aLang;
       }
-      # use the already loaded session stuff
       else
         self::$_aLang = & $aSession['lang'];
 
-      # load the default language
       self::load($sLanguage);
     }
   }
@@ -97,7 +86,7 @@ class I18n {
    */
   public static function load($sLanguage) {
     # Already loaded?
-    if (isset(I18n::$_aLang[$sLanguage])) {
+    if (isset(self::$_aLang[$sLanguage])) {
       self::$_sLanguage = $sLanguage;
       SmartySingleton::getInstance()->setDefaultLanguage(self::$_aLang[$sLanguage], $sLanguage);
       return true;
@@ -116,15 +105,16 @@ class I18n {
     if (file_exists($sCoreLanguageFile))
       self::$_aLang[$sLanguage] = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sCoreLanguageFile));
 
-    else
     # We also allow the user to create custom languages, everything he does not overwrite, will be english
+    else
       self::$_aLang[$sLanguage] = \Symfony\Component\Yaml\Yaml::parse(
                       file_get_contents(PATH_STANDARD . '/vendor/candyCMS/core/languages/en.yml'));
 
     # Load the plugin language files and merge them
-    $sPluginPath = PATH_STANDARD . '/vendor/candyCMS/plugins/';
+    $sPluginPath    = PATH_STANDARD . '/vendor/candyCMS/plugins/';
     $oPluginManager = Pluginmanager::getInstance();
-    $aPluginNames = $oPluginManager->getLoadedPluginNames();
+    $aPluginNames   = $oPluginManager->getLoadedPluginNames();
+
     foreach ($aPluginNames as $sPlugin) {
       if (file_exists($sPluginPath . $sPlugin . '/languages')) {
         $aPluginLang = file_exists($sPluginPath . $sPlugin . '/languages/' . $sLanguageFile) ?
