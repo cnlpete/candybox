@@ -20,17 +20,23 @@ use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\SmartySingleton;
 use Routes;
 
+$aFiles = array(
+    'models/Main.model.php',
+    'controllers/Main.controller.php',
+    'controllers/Sessions.controller.php',
+    'controllers/Logs.controller.php',
+    'helpers/Helper.helper.php',
+    'helpers/AdvancedException.helper.php',
+    'helpers/Dispatcher.helper.php',
+    'helpers/I18n.helper.php',
+    'helpers/SmartySingleton.helper.php',
+    'helpers/PluginManager.helper.php'
+);
+
 require_once PATH_STANDARD . '/vendor/autoload.php';
-require_once PATH_STANDARD . '/vendor/candyCMS/core/models/Main.model.php';
-require_once PATH_STANDARD . '/vendor/candyCMS/core/controllers/Main.controller.php';
-require_once PATH_STANDARD . '/vendor/candyCMS/core/controllers/Sessions.controller.php';
-require_once PATH_STANDARD . '/vendor/candyCMS/core/controllers/Logs.controller.php';
-require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Helper.helper.php';
-require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/AdvancedException.helper.php';
-require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Dispatcher.helper.php';
-require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/I18n.helper.php';
-require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/SmartySingleton.helper.php';
-require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/PluginManager.helper.php';
+
+foreach ($aFiles as $sFile)
+  require PATH_STANDARD . '/vendor/candyCMS/core/' . $sFile;
 
 class Index {
 

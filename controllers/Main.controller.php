@@ -21,8 +21,6 @@ use candyCMS\Core\Helpers\SmartySingleton;
 use candyCMS\plugins\Bbcode;
 use MCAPI;
 
-require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Helper.helper.php';
-
 abstract class Main {
 
   /**

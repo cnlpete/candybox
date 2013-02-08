@@ -533,7 +533,8 @@ class Galleries extends Main {
 
       $sContent = trim($this->_aRequest[$this->_sController]['content']);
       $iDate = time();
-      if (\ImageMetadataParser::exifAvailable()) {
+
+      if (class_exists('\ImageMetadataParser') && \ImageMetadataParser::exifAvailable()) {
         $sLongFilename = PATH_UPLOAD . '/galleries/' . $this->_aRequest['id'] . '/original/' . $sFile;
         $oImageMetadataParser = new \ImageMetadataParser($sLongFilename);
         $oImageMetadataParser->parseExif();

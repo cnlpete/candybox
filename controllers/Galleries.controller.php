@@ -20,15 +20,6 @@ use candyCMS\Core\Helpers\SmartySingleton;
 
 class Galleries extends Main {
 
-  public function __init() {
-    parent::__init();
-
-    $this->_aDependentCaches[] = 'searches';
-    $this->_aDependentCaches[] = 'sitemaps';
-
-    return $this->_oModel;
-  }
-
   /**
    * Show image, gallery album or overview (depends on a given ID and album_id).
    *
