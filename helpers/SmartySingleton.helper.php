@@ -13,7 +13,6 @@
 namespace candyCMS\Core\Helpers;
 
 use Smarty;
-use lessc;
 
 # @todo remove deprecated dir
 #if (file_exists(PATH_STANDARD . '/vendor/smarty/smarty/distribution/libs/Smarty.class.php'))
@@ -179,29 +178,21 @@ class SmartySingleton extends Smarty {
 
     # Compile CSS when in development mode
     if (WEBSITE_MODE == 'development') {
-      $oLessc = new lessc();
-      $oLessc->setFormatter('compressed');
-      try {
-        if (MOBILE === true && file_exists(Helper::removeSlash($aPaths['less'] . '/mobile/application.less'))) {
-          unlink(Helper::removeSlash($aPaths['css'] . '/mobile.css'));
-          lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
-                  Helper::removeSlash($aPaths['css'] . '/mobile.css'));
-          unlink(Helper::removeSlash($aPaths['css'] . '/mobile.min.css'));
-          lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
-                  Helper::removeSlash($aPaths['css'] . '/mobile.min.css'), $oLessc);
-        }
-
-        if (file_exists(Helper::removeSlash($aPaths['less'] . '/core/application.less'))) {
-          unlink(Helper::removeSlash($aPaths['css'] . '/core.css'));
-          lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/core/application.less'),
-                  Helper::removeSlash($aPaths['css'] . '/core.css'));
-          unlink(Helper::removeSlash($aPaths['css'] . '/core.min.css'));
-          lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/core/application.less'),
-                  Helper::removeSlash($aPaths['css'] . '/core.min.css'), $oLessc);
-        }
+      if (MOBILE === true) {
+        Helper::compileStylesheet(false,
+                    Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
+                    Helper::removeSlash($aPaths['css'] . '/mobile.css'));
+        Helper::compileStylesheet(true,
+                    Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
+                    Helper::removeSlash($aPaths['css'] . '/mobile.min.css'));
       }
-      catch (AdvancedException $e) {
-        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
+      else {
+        Helper::compileStylesheet(false,
+                    Helper::removeSlash($aPaths['less'] . '/core/application.less'),
+                    Helper::removeSlash($aPaths['css'] . '/core.css'));
+        Helper::compileStylesheet(true,
+                    Helper::removeSlash($aPaths['less'] . '/core/application.less'),
+                    Helper::removeSlash($aPaths['css'] . '/core.min.css'));
       }
     }
 
