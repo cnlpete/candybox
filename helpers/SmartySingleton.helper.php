@@ -178,18 +178,26 @@ class SmartySingleton extends Smarty {
       $aPaths[$sKey] = $sValue;
 
     # Compile CSS when in development mode
-    if (WEBSITE_MODE == 'development' && !isset($this->_aRequest['type'])) {
+    if (WEBSITE_MODE == 'development') {
+      $oLessc = new lessc();
+      $oLessc->setFormatter('compressed');
       try {
         if (MOBILE === true && file_exists(Helper::removeSlash($aPaths['less'] . '/mobile/application.less'))) {
           unlink(Helper::removeSlash($aPaths['css'] . '/mobile.css'));
           lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
                   Helper::removeSlash($aPaths['css'] . '/mobile.css'));
+          unlink(Helper::removeSlash($aPaths['css'] . '/mobile.min.css'));
+          lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
+                  Helper::removeSlash($aPaths['css'] . '/mobile.min.css'), $oLessc);
         }
 
-        elseif (file_exists(Helper::removeSlash($aPaths['less'] . '/core/application.less'))) {
+        if (file_exists(Helper::removeSlash($aPaths['less'] . '/core/application.less'))) {
           unlink(Helper::removeSlash($aPaths['css'] . '/core.css'));
           lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/core/application.less'),
                   Helper::removeSlash($aPaths['css'] . '/core.css'));
+          unlink(Helper::removeSlash($aPaths['css'] . '/core.min.css'));
+          lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/core/application.less'),
+                  Helper::removeSlash($aPaths['css'] . '/core.min.css'), $oLessc);
         }
       }
       catch (AdvancedException $e) {
