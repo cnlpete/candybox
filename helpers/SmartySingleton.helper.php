@@ -14,13 +14,6 @@ namespace candyCMS\Core\Helpers;
 
 use Smarty;
 
-# @todo remove deprecated dir
-#if (file_exists(PATH_STANDARD . '/vendor/smarty/smarty/distribution/libs/Smarty.class.php'))
-require_once PATH_STANDARD . '/vendor/smarty/smarty/distribution/libs/Smarty.class.php';
-
-#else
-#  require_once PATH_STANDARD . '/vendor/smarty/smarty/libs/Smarty.class.php';
-
 class SmartySingleton extends Smarty {
 
   /**
@@ -162,6 +155,7 @@ class SmartySingleton extends Smarty {
    * @access public
    * @return array $aPath path information
    * @todo update PATH and description
+   * @todo, does smarty need to know about less?
    *
    */
   public function getPaths() {
