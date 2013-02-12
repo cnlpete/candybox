@@ -48,18 +48,15 @@ class Install extends Index {
     $this->getLanguage();
 
     # do the initial creation of smarty/cache and smarty/compile folders
-    $sCacheDir = Helper::removeSlash(CACHE_DIR);
-    $sCompileDir = Helper::removeSlash(COMPILE_DIR);
-    $aFolders = array(
-        Helper::removeSlash(CACHE_DIR),
-        Helper::removeSlash(COMPILE_DIR)
-    );
+    $aFolders = array( Helper::removeSlash(PATH_SMARTY) => array( 'cache', 'compile' ) );
     $aFolderChecks = array();
     $this->_createFoldersIfNotExistent($aFolders, 0777, '/');
     $this->_checkFoldersAndAssign($aFolders, $aFolderChecks, 0777, '/');
-    if (!$aFolderChecks['/'.$sCacheDir] || !$aFolderChecks['/'.$sCompileDir]) {
+
+    if (!$aFolderChecks['/'.Helper::removeSlash(PATH_SMARTY).'/cache'] || 
+        !$aFolderChecks['/'.Helper::removeSlash(PATH_SMARTY).'/compile']) {
       # @todo print a nice error message
-      echo "please make sure the folders '" . $sCacheDir . "' and '" . $sCompileDir ."' are writable.";
+      echo "please make sure the folders '" . '/'.Helper::removeSlash(PATH_SMARTY).'/compile' . "' and '" . '/'.Helper::removeSlash(PATH_SMARTY).'/compile' ."' are writable.";
       die();
     }
 
@@ -218,6 +215,7 @@ class Install extends Index {
         $aFolders = array(
             'app/backup',
             'app/logs',
+            Helper::removeSlash(CACHE_DIR),
             $sUpload => array(
                 'downloads',
                 'galleries',

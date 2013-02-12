@@ -179,11 +179,11 @@ define('PATH_UPLOAD', 'upload');
 
 # Smarty cache folder
 # DEFAULT: app/cache
-define('CACHE_DIR', 'app/cache');
+define('PATCH_CACHE', 'app/cache');
 
-# Smarty compile folder
-# DEFAULT: app/compile
-define('COMPILE_DIR', 'app/compile');
+# Smarty cache/compile folder
+# DEFAULT: app/smarty(cache|compile)
+define('PATH_SMARTY', 'app/smarty');
 
 # ------------------------------------------------------------------------------
 
