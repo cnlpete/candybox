@@ -178,21 +178,10 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
       $('.help-inline').remove();
     });
 
-    if($('#input-' + dependencyId).is(':checkbox'))
-      fd.append(controller + '[' + dependencyId + ']', $('#input-' + dependencyId).attr('checked'));
-
-    else
-      fd.append(controller + '[' + dependencyId + ']', $('#input-' + dependencyId).val());
-
     // Additional information fields
-    if(controller == 'downloads') {
-      fd.append(controller + '[category]', $('#input-category').val());
-      fd.append(controller + '[content]', $('#input-content').val());
-    }
-    else if(controller == 'galleries') {
-      fd.append(controller + '[cut]', $("input[name='" + controller + "[cut]']:checked").val());
-      fd.append(controller + '[content]', $('#input-content').val());
-    }
+    $.each($('form').serializeArray(), function(i, field) {
+      fd.append(field.name, field.value);
+    });
   }
 
   var xhr = new XMLHttpRequest();
