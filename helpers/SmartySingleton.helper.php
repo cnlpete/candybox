@@ -13,14 +13,6 @@
 namespace candyCMS\Core\Helpers;
 
 use Smarty;
-use lessc;
-
-# @todo remove deprecated dir
-#if (file_exists(PATH_STANDARD . '/vendor/smarty/smarty/distribution/libs/Smarty.class.php'))
-require_once PATH_STANDARD . '/vendor/smarty/smarty/distribution/libs/Smarty.class.php';
-
-#else
-#  require_once PATH_STANDARD . '/vendor/smarty/smarty/libs/Smarty.class.php';
 
 class SmartySingleton extends Smarty {
 
@@ -81,9 +73,9 @@ class SmartySingleton extends Smarty {
     if (!defined('WEBSITE_LANGUAGE'))
       define('WEBSITE_LANGUAGE', 'en');
 
-    $this->setCacheDir(PATH_STANDARD . '/' . CACHE_DIR);
-    $this->setCompileDir(PATH_STANDARD . '/' . COMPILE_DIR);
-    $this->setPluginsDir(PATH_STANDARD . '/vendor/smarty/smarty/distribution/libs/plugins');
+    $this->setCacheDir(PATH_STANDARD . '/' . PATH_SMARTY . '/cache');
+    $this->setCompileDir(PATH_STANDARD . '/' . PATH_SMARTY . '/compile');
+    $this->setPluginsDir(SMARTY_DIR . '/plugins');
     $this->setTemplateDir(PATH_STANDARD . '/vendor/candyCMS/core/views');
 
     # See http://www.smarty.net/docs/en/variable.merge.compiled.includes.tpl
@@ -163,6 +155,7 @@ class SmartySingleton extends Smarty {
    * @access public
    * @return array $aPath path information
    * @todo update PATH and description
+   * @todo, does smarty need to know about less?
    *
    */
   public function getPaths() {
@@ -178,22 +171,22 @@ class SmartySingleton extends Smarty {
       $aPaths[$sKey] = $sValue;
 
     # Compile CSS when in development mode
-    if (WEBSITE_MODE == 'development' && !isset($this->_aRequest['type'])) {
-      try {
-        if (MOBILE === true && file_exists(Helper::removeSlash($aPaths['less'] . '/mobile/application.less'))) {
-          unlink(Helper::removeSlash($aPaths['css'] . '/mobile.css'));
-          lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
-                  Helper::removeSlash($aPaths['css'] . '/mobile.css'));
-        }
-
-        elseif (file_exists(Helper::removeSlash($aPaths['less'] . '/core/application.less'))) {
-          unlink(Helper::removeSlash($aPaths['css'] . '/core.css'));
-          lessc::ccompile(Helper::removeSlash($aPaths['less'] . '/core/application.less'),
-                  Helper::removeSlash($aPaths['css'] . '/core.css'));
-        }
+    if (WEBSITE_MODE == 'development') {
+      if (MOBILE === true) {
+        Helper::compileStylesheet(false,
+                    Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
+                    Helper::removeSlash($aPaths['css'] . '/mobile.css'));
+        Helper::compileStylesheet(true,
+                    Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
+                    Helper::removeSlash($aPaths['css'] . '/mobile.min.css'));
       }
-      catch (AdvancedException $e) {
-        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
+      else {
+        Helper::compileStylesheet(false,
+                    Helper::removeSlash($aPaths['less'] . '/core/application.less'),
+                    Helper::removeSlash($aPaths['css'] . '/core.css'));
+        Helper::compileStylesheet(true,
+                    Helper::removeSlash($aPaths['less'] . '/core/application.less'),
+                    Helper::removeSlash($aPaths['css'] . '/core.min.css'));
       }
     }
 
