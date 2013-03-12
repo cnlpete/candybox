@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Show all available languages
+ * Insert Disqus instead of normal comments.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Hauke Schade <http://hauke-schade.de>
+ * @author Marco Raddatz <http://marcoraddatz.com>
  * @license MIT
  * @since 3.0
  *
@@ -13,10 +13,9 @@
 namespace candyCMS\Plugins;
 
 use candyCMS\Core\Helpers\Helper;
-use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\SmartySingleton;
 
-final class LanguageChooser {
+final class Disqus {
 
   /**
    * Identifier for Template Replacements
@@ -24,7 +23,7 @@ final class LanguageChooser {
    * @var constant
    *
    */
-  const IDENTIFIER = 'LanguageChooser';
+  const IDENTIFIER = 'Disqus';
 
   /**
    * @var array
@@ -41,7 +40,7 @@ final class LanguageChooser {
   protected $_aSession;
 
   /**
-   * Initialize the software by adding input params.
+   * Initialize the plugin and register all needed events.
    *
    * @access public
    * @param array $aRequest alias for the combination of $_GET and $_POST
@@ -53,16 +52,16 @@ final class LanguageChooser {
     $this->_aRequest  = & $aRequest;
     $this->_aSession  = & $aSession;
 
-    # now register some events with the pluginmanager
+    # Now register some events with the pluginmanager
     $oPlugins->registerSimplePlugin($this);
   }
 
   /**
-   * Show the (cached) headlines.
+   * Register HTML code to display.
    *
    * @final
    * @access public
-   * @return string HTML
+   * @return string HTML content
    *
    */
   public final function show() {
@@ -73,24 +72,10 @@ final class LanguageChooser {
     $oSmarty->setTemplateDir($sTemplateDir);
     $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
-    $sCacheId = WEBSITE_MODE . '|layout|' . WEBSITE_LOCALE . '|' . self::IDENTIFIER . '|' . substr(md5($this->_aSession['user']['role']), 0 , 10);
+    $sCacheId = WEBSITE_MODE . '|plugins|' . WEBSITE_LOCALE . '|' . self::IDENTIFIER;
     if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
-      $aLangs = array();
-      $sLanguagesPath = PATH_STANDARD . '/app/languages/';
-      $oDir = opendir($sLanguagesPath);
-
-      while ($sFile = readdir($oDir)) {
-        if (substr($sFile, -4) != '.yml')
-          continue;
-
-        $sLang = substr($sFile, 0, -4);
-        $aLangs[] = array(
-            'lang'      => $sLang,
-            'selected'  => WEBSITE_LANGUAGE == substr($sLang, 0, 2),
-            'title'     => I18n::get('languagechooser.' . $sLang));
-      }
-      closedir($sLanguagesPath);
-      $oSmarty->assign('languages', $aLangs);
+      $oSmarty->assign('WEBSITE_MODE', WEBSITE_MODE);
+      $oSmarty->assign('PLUGIN_DISQUS_SHORTNAME', PLUGIN_DISQUS_SHORTNAME);
     }
 
     return $oSmarty->fetch($sTemplateFile, $sCacheId);

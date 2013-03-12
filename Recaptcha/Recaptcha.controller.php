@@ -145,6 +145,7 @@ final class Recaptcha {
    * @access public
    * @param array $aError
    * @return
+   * @todo doc; test: captcha might be broken before
    *
    */
   public final function check(&$aError) {
@@ -156,12 +157,14 @@ final class Recaptcha {
               $this->_aRequest['recaptcha_challenge_field'],
               $this->_aRequest['recaptcha_response_field']);
 
-      if (!$this->_oRecaptchaResponse->is_valid)
+      if (!$this->_oRecaptchaResponse->is_valid) {
         $this->_sErrorMessage = I18n::get('error.captcha.incorrect');
+        return false;
+      }
     }
     else
       $this->_sErrorMessage = I18n::get('error.captcha.loading');
 
-    $aError['captcha'] = $this->_sErrorMessage;
+    return $this->_sErrorMessage;
   }
 }

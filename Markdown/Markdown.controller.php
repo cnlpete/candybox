@@ -53,9 +53,7 @@ final class Markdown {
     $this->_aRequest  = & $aRequest;
     $this->_aSession  = & $aSession;
 
-    # now register some events with the pluginmanager
-    #$oPlugins->registerSimplePlugin($this);
-    #$oPlugins->registerContentDisplayPlugin($this);
+    # Register some events to the plugin manager
     $oPlugins->registerEditorPlugin($this);
   }
 
@@ -70,7 +68,7 @@ final class Markdown {
    * @todo caching?
    *
    */
-  public final function prepareContent(&$sStr) {
+  public static final function prepareContent(&$sStr) {
     $oMarkdown = new \dflydev\markdown\MarkdownParser();
     return $oMarkdown->transformMarkdown($sStr);
   }
@@ -79,26 +77,28 @@ final class Markdown {
    * Show nothing, since this plugin does not need to output additional javascript.
    *
    * @final
+   * @static
    * @access public
    * @return string HTML
    * @todo add markdowneditor: https://github.com/samwillis/pagedown-bootstrap ??
    *
    */
-  public final function show() {
+  public static final function show() {
     return '';
   }
 
   /**
-   * Generate an Info Array ('url' => '', 'iconurl' => '', 'description' => '')
+   * Generate an info array ('url' => '', 'iconurl' => '', 'description' => '')
    *
    * @final
+   * @static
    * @access public
-   * @return array|boolean infor array or false
+   * @return array
    *
    */
-  public final function getInfo() {
-    return array('url' => 'http://daringfireball.net/projects/markdown/syntax',
-                'description' => 'Markdown',
-                'iconurl' => '/vendor/candyCMS/plugins/Markdown/assets/icon39x24.png');
+  public static final function getInfo() {
+    return array( 'url'         => 'http://daringfireball.net/projects/markdown/syntax',
+                  'description' => 'Markdown',
+                  'iconurl'     => '/vendor/candyCMS/plugins/Markdown/assets/icon39x24.png');
   }
 }
