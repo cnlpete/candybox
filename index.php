@@ -64,6 +64,9 @@ else {
 define('CURRENT_URL', isset($_SERVER['REQUEST_URI']) ? WEBSITE_URL . $_SERVER['REQUEST_URI'] : WEBSITE_URL);
 define('SERVER_IP', $_SERVER['REMOTE_ADDR']);
 
+# Set up REQUEST_METHOD and support old methods
+define('REQUEST_METHOD', isset($_REQUEST['method']) ? (string) strtoupper($_SERVER['REQUEST_METHOD']) : $_SERVER['REQUEST_METHOD']);
+
 # Reload page when redirected
 if (preg_match('/\?reload=1/', CURRENT_URL))
   exit(header('Location:' . str_replace('?reload=1', '', CURRENT_URL)));

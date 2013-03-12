@@ -114,8 +114,8 @@ define('ALLOW_EXTENSIONS', false);
 # If you disable TinyMCE, Markdown is used.
 # DEFAULT: 'Bbcode,FormatTimestamp,Headlines,Archive,TinyMCE'
 # OTHER OFFICIALLY SUPPORTED PLUGINS: Facebook, Cronjob, Piwik, Analytics,
-#   TagCloud, AddThis, SocialSharePrivacy, LanguageChooser, Replace, Markdown
-define('ALLOW_PLUGINS', 'Bbcode,FormatTimestamp,Headlines,Archive,TinyMCE');
+# TagCloud, AddThis, SocialSharePrivacy, LanguageChooser, Replace, Markdown
+define('ALLOW_PLUGINS', 'Bbcode,FormatTimestamp,Headlines,Archive,TinyMCE,LanguageChooser');
 
 # ------------------------------------------------------------------------------
 
@@ -177,13 +177,9 @@ define('POPUP_DEFAULT_Y', '640');
 # DEFAULT: upload
 define('PATH_UPLOAD', 'upload');
 
-# Smarty cache folder
-# DEFAULT: app/cache
-define('CACHE_DIR', 'app/cache');
-
-# Smarty compile folder
-# DEFAULT: app/compile
-define('COMPILE_DIR', 'app/compile');
+# Set Smarty folder for compiling and caching
+# DEFAULT: app
+define('PATH_SMARTY', 'app');
 
 # ------------------------------------------------------------------------------
 
