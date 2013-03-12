@@ -44,13 +44,21 @@ class Install extends Index {
     if (file_exists(PATH_STANDARD . '/app/config/Candy.inc.php'))
       require PATH_STANDARD . '/app/config/Candy.inc.php';
 
-    if (file_exists(PATH_STANDARD . '/app/config/Plugins.inc.php'))
-      $this->getConfigFiles(array('Plugins'));
-
     $this->_defines();
     $this->getLanguage();
 
-    $this->_aPlugins = $this->getPlugins('Cronjob');
+    # do the initial creation of smarty/cache and smarty/compile folders
+    $aFolders = array( Helper::removeSlash(PATH_SMARTY) => array( 'cache', 'compile' ) );
+    $aFolderChecks = array();
+    $this->_createFoldersIfNotExistent($aFolders, 0777, '/');
+    $this->_checkFoldersAndAssign($aFolders, $aFolderChecks, 0777, '/');
+
+    if (!$aFolderChecks['/'.Helper::removeSlash(PATH_SMARTY).'/cache'] || 
+        !$aFolderChecks['/'.Helper::removeSlash(PATH_SMARTY).'/compile']) {
+      # @todo print a nice error message
+      echo "please make sure the folders '" . '/'.Helper::removeSlash(PATH_SMARTY).'/compile' . "' and '" . '/'.Helper::removeSlash(PATH_SMARTY).'/compile' ."' are writable.";
+      die();
+    }
 
     $this->oSmarty = SmartySingleton::getInstance();
     $this->oSmarty->setTemplateDir(PATH_STANDARD . '/install/views');
@@ -111,18 +119,16 @@ class Install extends Index {
    *
    * @access private
    * @param array $aFolders array of Folders to create, can also contain subarrays
+   * @param integer $iPermissions the permissions to create the folders with, default: 0775
+   *                  IMPORTANT: it needs to be an octal (put a 0 at beginning)
    * @param string $sPrefix prefix for folder creations, default: '/'
-   * @param integer $iPermissions the permissions to create the folders with, default: 775
    *
    */
-  private function _createFoldersIfNotExistent($aFolders, $sPrefix = '/', $iPermissions = 775) {
+  private function _createFoldersIfNotExistent($aFolders, $iPermissions = 0775, $sPrefix = '/') {
     foreach ($aFolders as $sKey => $mFolder) {
-      if (preg_match('/cache/i', $mFolder) || preg_match('/compile/i', $mFolder))
-        $iPermissions = 777;
-
       # create multiple folders
       if (is_array($mFolder))
-        $this->_createFoldersIfNotExistent($mFolder, $sPrefix . $sKey . '/', $iPermissions);
+        $this->_createFoldersIfNotExistent($mFolder, $iPermissions, $sPrefix . $sKey . '/');
 
       # create single Folder
       elseif (!is_dir(PATH_STANDARD . $sPrefix . $mFolder)) {
@@ -138,13 +144,13 @@ class Install extends Index {
    *
    * @param array $aFolders array of Folders to check for, can also contain subarrays
    * @param array $aReturn array of bool return values for smarty
+   * @param integer $iPermissions the permissions to create the folders with, default: 0775.
+   *                  IMPORTANT: it needs to be an octal (put a 0 at beginning)
    * @param string $sPrefix prefix for assigns and checks, default: '/'
-   * @param integer $iPermissions the permissions to create the folders with, default: 777
    * @return boolean status of folders
-   * @todo add cache and compile dir to 0777
    *
    */
-  private function _checkFoldersAndAssign($aFolders, &$aReturn, $sPrefix = '/', $iPermissions = 777) {
+  private function _checkFoldersAndAssign($aFolders, &$aReturn, $iPermissions = 0775, $sPrefix = '/') {
     $bReturn = true;
 
     foreach ($aFolders as $sKey => $mFolder) {
@@ -152,17 +158,17 @@ class Install extends Index {
       if (is_array($mFolder)) {
 
         # Check root folder
-        $bReturnSub = $this->_checkFoldersAndAssign(array($sKey), $aReturn, $sPrefix, $iPermissions);
+        $bReturnSub = $this->_checkFoldersAndAssign(array($sKey), $aReturn, $iPermissions, $sPrefix);
 
         # Check subfolders
-        $bReturnRoot = $this->_checkFoldersAndAssign($mFolder, $aReturn, $sPrefix . $sKey . '/', $iPermissions);
+        $bReturnRoot = $this->_checkFoldersAndAssign($mFolder, $aReturn, $iPermissions, $sPrefix . $sKey . '/');
 
         $bReturn = $bReturn && $bReturnRoot && $bReturnSub;
       }
 
       # check single Folder
       else {
-        $aReturn[$sPrefix . $mFolder] = substr(decoct(fileperms(PATH_STANDARD . $sPrefix . $mFolder)), 1) == $iPermissions;
+        $aReturn[$sPrefix . $mFolder] = substr(decoct(fileperms(PATH_STANDARD . $sPrefix . $mFolder)), 2) == decoct($iPermissions);
         $bReturn = $bReturn && $aReturn[$sPrefix . $mFolder];
       }
     }
@@ -209,6 +215,7 @@ class Install extends Index {
         $aFolders = array(
             'app/backup',
             'app/logs',
+            Helper::removeSlash(CACHE_DIR),
             $sUpload => array(
                 'downloads',
                 'galleries',
@@ -453,7 +460,6 @@ class Install extends Index {
    *
    */
   public function showMigration() {
-    $this->getCronjob(true);
     return isset($this->_aRequest['file']) ?
             $this->_doMigration($this->_aRequest['file']) :
             $this->_showMigrations();
