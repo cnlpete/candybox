@@ -128,7 +128,7 @@ class Blogs extends Main {
                                         u.surname AS user_surname,
                                         u.email AS user_email,
                                         u.use_gravatar,
-                                        COUNT(c.id) AS comment_sum
+                                        COUNT(c.id) AS comment_count
                                       FROM
                                         " . SQL_PREFIX . "blogs b
                                       LEFT JOIN
@@ -174,7 +174,7 @@ class Blogs extends Main {
 
       # We need to specify 'blogs' because this might also be called for rss
       $this->_aData[$iDate] = $this->_formatForOutput($aRow,
-              array('id', 'uid', 'author_id', 'comment_sum'),
+              array('id', 'uid', 'author_id', 'comment_count'),
               array('published', 'use_gravatar'),
               'blogs');
 
@@ -225,7 +225,7 @@ class Blogs extends Main {
                                         u.surname AS user_surname,
                                         u.email AS user_email,
                                         u.use_gravatar,
-                                        COUNT(c.id) AS comment_sum
+                                        COUNT(c.id) AS comment_count
                                       FROM
                                         " . SQL_PREFIX . "blogs b
                                       LEFT JOIN
@@ -257,7 +257,7 @@ class Blogs extends Main {
 
       # We need to specify 'blogs' because this might also be called for rss
       $this->_aData[$iDate] = $this->_formatForOutput($aRow,
-              array('id', 'uid', 'author_id', 'comment_sum'),
+              array('id', 'uid', 'author_id', 'comment_count'),
               array('published', 'use_gravatar'),
               'blogs');
 
@@ -296,7 +296,7 @@ class Blogs extends Main {
                                         u.surname AS user_surname,
                                         u.email AS user_email,
                                         u.use_gravatar,
-                                        COUNT(c.id) AS comment_sum
+                                        COUNT(c.id) AS comment_count
                                       FROM
                                         " . SQL_PREFIX . "blogs b
                                       LEFT JOIN
@@ -329,7 +329,7 @@ class Blogs extends Main {
 
     else {
       $this->_aData[1] = $this->_formatForOutput($aRow,
-              array('id', 'uid', 'author_id', 'comment_sum'),
+              array('id', 'uid', 'author_id', 'comment_count'),
               array('published', 'use_gravatar'));
       $this->_aData[1]['tags_raw']      = $aRow['tags'];
       $this->_aData[1]['tags']          = array_filter( array_map('trim', explode(',', $aRow['tags'])) );
@@ -581,7 +581,7 @@ class Blogs extends Main {
       $iDate = $aRow['date'];
 
       # We need to specify 'blogs' because this might also be called for rss
-      $this->_aData[$iDate] = $this->_formatForOutput($aRow, array('id', 'uid', 'author_id', 'comment_sum'),
+      $this->_aData[$iDate] = $this->_formatForOutput($aRow, array('id', 'uid', 'author_id', 'comment_count'),
               array('published', 'use_gravatar'), 'blogs');
     }
 

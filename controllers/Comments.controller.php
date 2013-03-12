@@ -77,7 +77,7 @@ class Comments extends Main {
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
       $this->oSmarty->assign('comments',
-              $this->_oModel->getOverview($this->_iId, (int) $this->_aParentData[1]['comment_sum'], LIMIT_COMMENTS));
+              $this->_oModel->getOverview($this->_iId, (int) $this->_aParentData[1]['comment_count'], LIMIT_COMMENTS));
 
       # Set author of blog entry
       $this->oSmarty->assign('author_id', (int) $this->_aParentData[1]['author_id']);

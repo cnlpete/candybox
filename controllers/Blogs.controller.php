@@ -35,14 +35,18 @@ class Blogs extends Main {
       if (!$this->_aData[1]['id'])
         return Helper::redirectTo('/errors/404');
 
-      $sClass     = $this->__autoload('Comments');
-      $oComments  = new $sClass($this->_aRequest, $this->_aSession);
+      # If comments are disabled
+      if (!DISABLE_COMMENTS) {
+        $sClass     = $this->__autoload('Comments');
+        $oComments  = new $sClass($this->_aRequest, $this->_aSession);
 
-      $oComments->__init();
-      $oComments->_setParentData($this->_aData);
+        $oComments->__init();
+        $oComments->_setParentData($this->_aData);
+
+        $this->oSmarty->assign('_comments_', $oComments->show());
+      }
 
       $this->oSmarty->assign('blogs', $this->_aData);
-      $this->oSmarty->assign('_blog_footer_', $oComments->show());
 
       # Bugfix: This is necessary, because comments also do a setDir on the singleton object.
       $this->oSmarty->setTemplateDir($sTemplateDir);
@@ -56,7 +60,7 @@ class Blogs extends Main {
                 $this->_oModel->getOverview();
 
         $this->oSmarty->assign('blogs', $this->_aData);
-        $this->oSmarty->assign('_blog_footer_', $this->_oModel->oPagination->showSurrounding());
+        $this->oSmarty->assign('_pages_', $this->_oModel->oPagination->showSurrounding());
       }
     }
 

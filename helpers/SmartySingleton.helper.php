@@ -93,7 +93,9 @@ class SmartySingleton extends Smarty {
 
     # Define smarty constants
     $this->assign('ACTIVE_TEST', ACTIVE_TEST);
+    $this->assign('ALLOW_PLUGINS', ALLOW_PLUGINS);
     $this->assign('CURRENT_URL', CURRENT_URL);
+    $this->assign('DISABLE_COMMENTS', DISABLE_COMMENTS);
     $this->assign('MOBILE', MOBILE);
     $this->assign('MOBILE_DEVICE', MOBILE_DEVICE);
     $this->assign('THUMB_DEFAULT_X', THUMB_DEFAULT_X);
@@ -104,9 +106,10 @@ class SmartySingleton extends Smarty {
 
     # Define system variables
     $this->assign('_PATH', $this->getPaths());
-    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
 
+    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
     $iMaximumUploadSize = \candyCMS\Core\Helpers\Upload::getUploadLimit();
+
     $this->assign('_SYSTEM', array(
         'date'                  => date('Y-m-d'),
         'compress_files_suffix' => WEBSITE_COMPRESS_FILES === true ? '.min' : '',
@@ -119,11 +122,10 @@ class SmartySingleton extends Smarty {
         'json_language'         => I18n::getJson()));
 
     # Do we want autoloading of pages?
-    $aAutoload = array(
+    $this->assign('_AUTOLOAD', array(
         'enabled' => !defined('AUTOLOAD') || AUTOLOAD ? true : false,
         'times'   => !defined('AUTOLOAD_TIMES') ? 3 : AUTOLOAD_TIMES
-    );
-    $this->assign('_AUTOLOAD_', $aAutoload);
+    ));
   }
 
   /**

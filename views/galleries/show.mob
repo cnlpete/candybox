@@ -13,7 +13,7 @@
         <li>
           <a href='{$f.url_popup}' title='{$f.content}' data-ajax="false" rel='external' class='js-photoswipe'>
             <img src='{$f.url_thumb}' alt='{$f.content}' title='{$f.content}' />
-            {if isset($f.content)}
+            {if $f.content}
               <h3>{$f.content}</h3>
             {/if}
             <p>{$f.date.raw|date_format:$lang.global.time.format.datetime}</p>

@@ -13,7 +13,7 @@
       <h4>{$lang.error.missing.entries}</h4>
     </div>
   {else}
-    <div itemscope itemtype="http://schema.org/Blog">
+    <div itemscope itemtype='http://schema.org/Blog'>
       {foreach $blogs as $b}
         <article class='blogs' itemprop='blogPost'>
           <header class='page-header'>
@@ -79,13 +79,15 @@
                 &nbsp;
               {/if}
             </div>
-            <div class='span4 comments'>
-              <a href='{$b.url}#comments'
-                class=' pull-right'
-                itemprop='discussionUrl'>
-                {$b.comment_sum} {$lang.global.comments}
-              </a>
-            </div>
+            {if !$DISABLE_COMMENTS && !preg_match('/Disqus/', $ALLOW_PLUGINS)}
+              <div class='span4 comments'>
+                <a href='{$b.url}#comments'
+                  class='pull-right'
+                  itemprop='discussionUrl'>
+                  {$b.comment_count} {$lang.global.comments}
+                </a>
+              </div>
+            {/if}
             {if isset($_REQUEST.id)}
               <div class='span8'>
                 <hr />
@@ -97,14 +99,16 @@
         </article>
       {/foreach}
     </div>
-    {* Show either comments or pagination *}
-    {if isset($b.id)}
-      {$_blog_footer_}
+    {$_pages_}
+    {if isset($_REQUEST.id) && preg_match('/Disqus/', $ALLOW_PLUGINS)}
+      <!-- plugin:disqus -->
+    {elseif isset($_REQUEST.id) && !$DISABLE_COMMENTS}
+      {$_comments_}
     {/if}
   {/if}
   <script src='{$_PATH.core}/assets/javascripts/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
   <script src='{$_PATH.core}/assets/javascripts/core/jquery.capty{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
-  <script type="text/javascript">
+  <script type='text/javascript'>
     $(document).ready(function(){
       $('.js-fancybox').fancybox({
         nextEffect : 'fade',
@@ -112,7 +116,6 @@
       });
 
       $('.js-image').capty({ height: 30 });
-
       $('.js-media').each(function(e) {
         var $this = $(this);
         $.getJSON(this.title, function(data) {

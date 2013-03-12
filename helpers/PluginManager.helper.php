@@ -164,7 +164,7 @@ class PluginManager {
   /** -------------------- THE API'S -------------------- **/
 
   /**
-   * register as oldschool plugin (simple <!--Name--> replacement)
+   * Register as oldschool plugin (simple <!--Name--> replacement)
    *
    * Plugin MUST provide a show() function
    *

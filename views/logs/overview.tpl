@@ -63,9 +63,9 @@
   <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.infiniteScroll{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.tablesorter{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript'>
-    {if $_AUTOLOAD_.enabled}
+    {if $_AUTOLOAD.enabled}
       $(document).ready(function(){
-        enableInfiniteScroll('table', 'table tbody tr', {$_AUTOLOAD_.times}, '{$_PATH.assets}/images');
+        enableInfiniteScroll('table', 'table tbody tr', {$_AUTOLOAD.times}, '{$_PATH.assets}/images');
       });
     {/if}
     $('table').tablesorter();

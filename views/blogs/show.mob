@@ -38,7 +38,7 @@
               {else}
                 {$b.content}
               {/if}
-              <span class='ui-li-count'>{$b.comment_sum}</span>
+              <span class='ui-li-count'>{$b.comment_count}</span>
             </a>
           </li>
         </ul>
@@ -76,8 +76,13 @@
       {/if}
     {/foreach}
   {/if}
-  {$_blog_footer_}
-  <script type="text/javascript">
+  {$_pages_}
+  {if isset($_REQUEST.id) && preg_match('/Disqus/', $ALLOW_PLUGINS)}
+    <!-- plugin:disqus -->
+  {elseif isset($_REQUEST.id)}
+    {$_comments_}
+  {/if}
+  <script type='text/javascript'>
     $('.js-media').each(function(e) {
       var $this = $(this);
       $.getJSON(this.title, function(data) {

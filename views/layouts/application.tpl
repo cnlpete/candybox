@@ -164,7 +164,7 @@
                 </p>
               </div>
             </div>
-            {if isset($_WEBSITE.update) &&! empty($_WEBSITE.update)}
+            {if isset($_WEBSITE.update) && !empty($_WEBSITE.update)}
               <div class='alert alert-warning'>
                 {$_WEBSITE.update}
               </div>
@@ -203,9 +203,9 @@
 
       {* Own JS and plugins *}
       <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/scripts{$_SYSTEM.compress_files_suffix}.js'></script>
+      <!-- pluginmanager:sessionplugin::javascript -->
       <!-- plugin:analytics -->
       <!-- plugin:piwik -->
-      <!-- pluginmanager:sessionplugin::javascript -->
       <!-- plugin:formattimestamp -->
     </body>
   </html>
