@@ -177,9 +177,19 @@ define('POPUP_DEFAULT_Y', '640');
 # DEFAULT: upload
 define('PATH_UPLOAD', 'upload');
 
+<<<<<<< HEAD
 # Set Smarty folder for compiling and caching
 # DEFAULT: app
 define('PATH_SMARTY', 'app');
+=======
+# Smarty cache folder
+# DEFAULT: app/cache
+define('PATCH_CACHE', 'app/cache');
+
+# Smarty cache/compile folder
+# DEFAULT: app/smarty(cache|compile)
+define('PATH_SMARTY', 'app/smarty');
+>>>>>>> e791b3b2b97bb6dfa43526754c396a648166d41b
 
 # ------------------------------------------------------------------------------
 

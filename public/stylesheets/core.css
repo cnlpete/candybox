@@ -3192,4 +3192,7 @@ h1 [class^="icon-"], h2 [class^="icon-"], h1 [class*=" icon-"], h2 [class*=" ico
   vertical-align:middle;
   margin-left:5px;
 }
-.progress { height:25px; }
+.progress {
+  height:25px;
+  margin:0px;
+}
