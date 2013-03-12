@@ -16,6 +16,7 @@ use candyCMS\Core\Controllers\Main;
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\PluginManager;
 use PDO;
+use lessc;
 
 class Helper {
 
@@ -649,5 +650,40 @@ class Helper {
     closedir($oPathDir);
 
     return $aLanguages;
+  }
+
+  /**
+   * Try to compile the less stylesheet
+   *
+   * @static
+   * @access public
+   * @param bool $bCompressed whether to use the compressed output mode
+   * @param string $sSource the less file
+   * @param string $sOutput the target output file
+   *
+   */
+  public static function compileStylesheet($bCompressed, $sSource, $sOutput) {
+    if (file_exists($sSource)) {
+      $sCacheFile = PATH_CACHE . '/' . md5($sOutput).".cache";
+
+      // load the cache
+      if (file_exists($sCacheFile))
+        $aCache = unserialize(file_get_contents($sCacheFile));
+      else
+        $aCache = $sSource;
+
+      $oLessc = new lessc();
+      if ($bCompressed)
+        $oLessc->setFormatter('compressed');
+      else
+        $oLessc->setFormatter('classic');
+
+      $aNewCache = $oLessc->cachedCompile($aCache);
+
+      if (!is_array($aCache) || $aNewCache["updated"] > $aCache["updated"]) {
+        file_put_contents($sCacheFile, serialize($aNewCache));
+        file_put_contents($sOutput, $aNewCache['compiled']);
+      }
+    }
   }
 }

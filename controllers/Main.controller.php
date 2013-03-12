@@ -800,7 +800,7 @@ abstract class Main {
                     '', '', $bReturn);
 
       if ($bReturn) {
-        $this->oSmarty->clearAdditionalCaches($this->_sController);
+        $this->oSmarty->clearCacheForController($this->_sController);
 
         # Clear additional caches if given
         if (count($this->_aDependentCaches) > 0)

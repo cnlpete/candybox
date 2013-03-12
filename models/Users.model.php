@@ -14,6 +14,7 @@ namespace candyCMS\Core\Models;
 
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\Pagination;
 use PDO;
 
@@ -284,6 +285,9 @@ class Users extends Main {
               $aRow,
               array('id', 'role'),
               array('use_gravatar', 'receive_newsletter'));
+
+      $oPluginManager = PluginManager::getInstance();
+      $this->_aData['content'] = $oPluginManager->runContentDisplayPlugins($this->_aData['content']);
 
       $this->_formatDates($this->_aData, 'last_login');
     }
