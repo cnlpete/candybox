@@ -193,6 +193,7 @@ class I18n {
         AdvancedException::writeLog('MISSING TRANSLATION: "' . $sLanguagePart);
         return '### MISSING TRANSLATION: "' . $sLanguagePart . '" ###';
       }
+
       return (string) $mTemp;
     }
   }

@@ -141,7 +141,7 @@ abstract class Main {
    * @todo test Postgre connection
    *
    */
-  public static function connectToDatabase() {    
+  public static function connectToDatabase() {
     if (empty(self::$_oDbStatic)) {
       try {
         $sSQLType   = defined('SQL_TYPE') ? strtolower(SQL_TYPE) : 'mysql';
@@ -360,10 +360,10 @@ abstract class Main {
     }
 
     # Skip sensible data
-    if ($this->_aSession['user']['role'] >= 3) {
+    #if ($this->_aSession['user']['role'] >= 3) {
       $aData['url_destroy'] = $aData['url_clean'] . '/destroy';
       $aData['url_update']  = $aData['url_clean'] . '/update';
-    }
+    #}
 
     # Destroy redundant data
     unset(  $aData['user_id'],
@@ -394,7 +394,8 @@ abstract class Main {
     self::_formatDates($aData);
 
     # Create avatars
-    Helper::createAvatarURLs($aData,
+    Helper::createAvatarURLs(
+            $aData,
             $aData['id'],
             isset($aData['email']) ? $aData['email'] : WEBSITE_MAIL,
             isset($aData['use_gravatar']) ? (bool) $aData['use_gravatar'] : false);
@@ -409,8 +410,8 @@ abstract class Main {
     $aData['url_clean']   = WEBSITE_URL . '/users/' . $aData['id'];
     $aData['url']         = $aData['url_clean'] . '/' . $aData['full_name_encoded'];
     $aData['url_encoded'] = urlencode($aData['url']);
-//    $aData['url_destroy'] = $aData['url_clean'] . '/destroy';
-//    $aData['url_update']  = $aData['url_clean'] . '/update';
+    $aData['url_destroy'] = $aData['url_clean'] . '/destroy';
+    $aData['url_update']  = $aData['url_clean'] . '/update';
 
     return $aData;
   }

@@ -3,7 +3,7 @@
 /**
  * Execute the plugin logic
  *
- * This is basically an observer patter with some predefined events
+ * This is basically an observer patter with some predefined events.
  *
  * @link http://github.com/marcoraddatz/candyCMS
  * @author Hauke Schade <http://haukeschade.de>
