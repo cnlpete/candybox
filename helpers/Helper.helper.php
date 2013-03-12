@@ -454,6 +454,7 @@ class Helper {
    * @param boolean $bFormat format this field using ContentDisplayPlugins?
    * @return string $sStr formatted string
    * @see vendor/candyCMS/core/Bbcode/Bbcode.controller.php
+   * @todo fix test; this one fails
    *
    */
   public static function formatOutput(&$sStr, $sHighlight = '', $bFormat = false) {
@@ -660,11 +661,13 @@ class Helper {
    * @param bool $bCompressed whether to use the compressed output mode
    * @param string $sSource the less file
    * @param string $sOutput the target output file
+   * @todo remove PATH_CACHE fix
+   * @todo test cases
    *
    */
   public static function compileStylesheet($bCompressed, $sSource, $sOutput) {
     if (file_exists($sSource)) {
-      $sCacheFile = PATH_CACHE . '/' . md5($sOutput).".cache";
+      $sCacheFile = (defined('PATH_CACHE') ? PATH_CACHE : 'app') . '/' . md5($sOutput) . '.cache';
 
       // load the cache
       if (file_exists($sCacheFile))

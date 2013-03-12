@@ -112,7 +112,7 @@ class I18n {
 
     # Load the plugin language files and merge them
     $sPluginPath    = PATH_STANDARD . '/vendor/candyCMS/plugins/';
-    $oPluginManager = Pluginmanager::getInstance();
+    $oPluginManager = PluginManager::getInstance();
     $aPluginNames   = $oPluginManager->getLoadedPluginNames();
 
     foreach ($aPluginNames as $sPlugin) {
