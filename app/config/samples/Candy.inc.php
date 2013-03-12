@@ -114,7 +114,7 @@ define('ALLOW_EXTENSIONS', false);
 # If you disable TinyMCE, Markdown is used.
 # DEFAULT: 'Bbcode,FormatTimestamp,Headlines,Archive,TinyMCE'
 # OTHER OFFICIALLY SUPPORTED PLUGINS: Facebook, Cronjob, Piwik, Analytics,
-# TagCloud, AddThis, SocialSharePrivacy, LanguageChooser, Replace, Markdown
+# TagCloud, AddThis, SocialSharePrivacy, LanguageChooser, Replace, Markdown, Disqus
 define('ALLOW_PLUGINS', 'Bbcode,FormatTimestamp,Headlines,Archive,TinyMCE,LanguageChooser');
 
 # ------------------------------------------------------------------------------
@@ -173,15 +173,32 @@ define('POPUP_DEFAULT_Y', '640');
 
 # ------------------------------------------------------------------------------
 
-# Define, where files are uploaded to
-# DEFAULT: upload
-define('PATH_UPLOAD', 'upload');
-
 # Set Smarty folder for compiling and caching
 # DEFAULT: app
 define('PATH_SMARTY', 'app');
 
+# Define, where files are uploaded to
+# DEFAULT: upload
+define('PATH_UPLOAD', 'upload');
+
 # ------------------------------------------------------------------------------
+
+# Automatically load next page when scrolling down.
+# OPTIONS: true,false
+# DEFAULT: true
+define('AUTOLOAD', true);
+
+# Stop loading of next pages after x times.
+# DEFAULT: 3
+define('AUTOLOAD_TIMES', 3);
+
+# Should comments be disabled?
+# DEFAULT: false
+define('DISABLE_COMMENTS', false);
+
+# Limit of gallery albums per page
+# DEFAULT: 10
+define('LIMIT_ALBUMS', 10);
 
 # Limit of blog entries per page
 # DEFAULT: 8
@@ -190,10 +207,6 @@ define('LIMIT_BLOG', 8);
 # Limit of comments per page
 # DEFAULT: 10
 define('LIMIT_COMMENTS', 10);
-
-# Limit of gallery albums per page
-# DEFAULT: 10
-define('LIMIT_ALBUMS', 10);
 
 # Sorting order of comments.
 # OPTIONS: ASC,DESC
@@ -204,15 +217,6 @@ define('SORTING_COMMENTS', 'ASC');
 # OPTIONS: ASC,DESC
 # DEFAULT: ASC (oldest last)
 define('SORTING_GALLERY_FILES', 'DESC');
-
-# Automatically load next page when scrolling down.
-# OPTIONS: true,false
-# DEFAULT: true
-define('AUTOLOAD', true);
-
-# Stop loading of next pages after x times.
-# DEFAULT: 3
-define('AUTOLOAD_TIMES', 3);
 
 # ------------------------------------------------------------------------------
 
@@ -228,19 +232,15 @@ define('MOBILES', 'Opera Mini|Symb|Windows CE|IEMobile|iPhone|iPod|Blackberry|An
 
 # ------------------------------------------------------------------------------
 
-# grab an API Key from https://us4.admin.mailchimp.com/account/api
+# Grab an API Key from https://us4.admin.mailchimp.com/account/api
 define('MAILCHIMP_API_KEY', '');
 
-# grab your List's Unique Id by going to http://admin.mailchimp.com/lists/
-# Click the "settings" link for the list - the Unique Id is at the bottom of that page.
+# Grab your list's unique ID by going to http://admin.mailchimp.com/lists/
+# Click the "Settings" link for the list - the unique ID is at the bottom of that page.
 define('MAILCHIMP_LIST_ID', '');
 
-# should the user be redirected, if he tries to access old links ('/blog, /gallery, ...)
-# DEFAULT: false
-define('CHECK_DEPRECATED_LINKS', false);
-
-# should mails, that failed to get send, be stored in a mail queue
-# Note that those mails can be seen by Administrators until they are send
+# Should mails, that failed to get send, be stored in a mail queue?
+# Note that those mails can be seen and must be sent by admins.
 # DEFAULT: true
 define('USE_MAIL_QUEUE', true);
 
