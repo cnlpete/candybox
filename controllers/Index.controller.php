@@ -104,13 +104,13 @@ class Index {
     $this->getConfigFiles(array('Plugins'));
     $this->getRoutes();
 
-    # Always initialize the plugin manager, since we want to call the events later
+    # Always initialize the plugin manager, since we want to call the events later.
     $this->_oPlugins = PluginManager::getInstance();
     if (strlen(ALLOW_PLUGINS) > 0) {
       $this->_oPlugins->setRequestAndSession($this->_aRequest, $this->_aSession);
       $this->_oPlugins->load(ALLOW_PLUGINS);
 
-      # Run repetitive plugins (such as cronjob)
+      # Run repetitive plugins (such as cronjob).
       $this->_oPlugins->runRepetitivePlugins();
     }
 
@@ -382,7 +382,7 @@ class Index {
    * List of user roles:
    * 0 = Guests / unregistered users
    * 1 = Members
-   * 2 = Session Plugin users
+   * 2 = Session plugin users
    * 3 = Moderators
    * 4 = Administrators
    *
@@ -422,12 +422,13 @@ class Index {
     if (is_array($aUser))
       $this->_aSession['user'] = array_merge($this->_aSession['user'], $aUser);
 
-    # Try to get session plugin data
+    # Try to get session plugin data from Facebook or similar.
     if ($this->_aSession['user']['role'] == 0) {
       $oPluginManager = PluginManager::getInstance();
-      if ($oPluginManager->hasSessionPlugin())
+      if ($oPluginManager->hasSessionPlugin()) {
         if ($oPluginManager->getSessionPlugin()->setUserData($this->_aSession['user']))
           $this->_aSession['user']['role'] = 2;
+      }
     }
 
     # Set up full name finally
