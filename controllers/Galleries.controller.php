@@ -100,7 +100,7 @@ class Galleries extends Main {
       $this->oSmarty->assign('data', $aData);
     }
 
-    exit($this->oSmarty->fetch($sTemplateFile, UNIQUE_ID));
+    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 
   /**
@@ -343,22 +343,23 @@ class Galleries extends Main {
    *
    * @access public
    * @return boolean returned status of model action (boolean).
+   * @todo test
    *
    */
   public function updateOrder() {
     header('Content-Type: application/json');
 
     return $this->_aSession['user']['role'] < 3 ?
-            exit(json_encode(array(
+            json_encode(array(
                 'success' => false,
                 'error'   => '',
                 'data'    => ''
-            ))) :
-            exit(json_encode(array(
+            )) :
+            json_encode(array(
                 'success' => true,
                 'error'   => '',
                 'data'    => $this->_updateOrder()
-            )));
+            ));
   }
 
   /**
