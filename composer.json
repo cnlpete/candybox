@@ -13,7 +13,7 @@
     "symfony/yaml": "2.1.*",
     "twitter/bootstrap" : "2.2.*",
     "leafo/lessphp": "0.3.*",
-    "simonhamp/routes": "1.*",
+    "simonhamp/routes": "1.*"
   },
 
   "authors": [ {
