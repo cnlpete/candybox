@@ -123,7 +123,7 @@ class Sessions extends Main {
   protected function _password() {
     $this->_setError('email');
 
-    # do the captchaCheck for for not logged in users
+    # Do the captchaCheck for for not logged in users
     if ($this->_aSession['user']['role'] == 0) {
       $oPluginManager = PluginManager::getInstance();
       $oPluginManager->checkCaptcha($this->_aError);
@@ -186,7 +186,7 @@ class Sessions extends Main {
   protected function _verification($bShowCaptcha) {
     $this->_setError('email');
 
-    # do the captchaCheck for for not logged in users
+    # Do the captchaCheck for for not logged in users
     if ($this->_aSession['user']['role'] == 0) {
       $oPluginManager = PluginManager::getInstance();
       $oPluginManager->checkCaptcha($this->_aError);
@@ -241,7 +241,7 @@ class Sessions extends Main {
    * Destroy user session.
    *
    * @access public
-   * @param integer $iUserRole required user right - actually not required. Just a bug fix for PHP strict mode
+   * @param integer $iUserRole required user right (only for E_STRICT)
    * @return boolean status of model action
    *
    */

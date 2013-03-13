@@ -36,7 +36,7 @@ class Sitemaps extends Main {
       $this->_getSitemapData();
     }
 
-    exit($this->oSmarty->display($sTemplateFile, UNIQUE_ID));
+    return $this->oSmarty->display($sTemplateFile, UNIQUE_ID);
   }
 
   /**

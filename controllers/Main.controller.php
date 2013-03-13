@@ -402,6 +402,7 @@ abstract class Main {
    * @param string $sMessage error to be displayed
    * @return object $this due to method chaining
    * @todo extend tests for JSON requests
+   * @todo remove exit() function from JSON
    *
    */
   protected function _setError($sField, $sMessage = '') {
@@ -530,18 +531,18 @@ abstract class Main {
     header('Content-Type: application/json');
 
     if (method_exists($this->_oModel, 'getId'))
-      exit(json_encode(array(
+      return json_encode(array(
                   'success' => true,
                   'error'   => '',
                   'data'    => $this->_oModel->getId($this->_iId)
-              )));
+              ));
 
     else {
       AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
-      exit(json_encode(array(
+      return json_encode(array(
                   'success' => false,
                   'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
-              )));
+              ));
     }
   }
 
@@ -556,18 +557,18 @@ abstract class Main {
     header('Content-Type: application/json');
 
     if (method_exists($this->_oModel, 'getOverview'))
-      exit(json_encode(array(
+      return json_encode(array(
                   'success' => true,
                   'error'   => '',
                   'data'    => $this->_oModel->getOverview()
-              )));
+              ));
 
     else {
       AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
-      exit(json_encode(array(
+      return json_encode(array(
                   'success' => false,
                   'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
-              )));
+              ));
     }
   }
 

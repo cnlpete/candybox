@@ -301,7 +301,7 @@ class Users extends Main {
     if ($this->_aSession['user']['role'] < 4 && !isset($this->_aRequest[$this->_sController]['terms']))
       $this->_aError['terms'] = I18n::get('error.form.missing.terms');
 
-    # do the captchaCheck for for not logged in users
+    # Do the captchaCheck for for not logged in users
     if ($this->_aSession['user']['role'] == 0) {
       $oPluginManager = PluginManager::getInstance();
       $oPluginManager->checkCaptcha($this->_aError);
@@ -561,8 +561,8 @@ class Users extends Main {
       $sToken = $this->_oModel->getToken();
 
     header('Content-Type: application/json');
-    exit(isset($sToken) && $sToken ?
+    return isset($sToken) && $sToken ?
               json_encode(array('success' => true,  'error' => '', 'token' => $sToken)) :
-              json_encode(array('success' => false, 'error' => 'No matching results.', 'token' => '')));
+              json_encode(array('success' => false, 'error' => 'No matching results.', 'token' => ''));
   }
 }

@@ -38,12 +38,12 @@ class Helper {
     if (!empty($aData) && isset($aData['type']) && 'json' == $aData['type']) {
       header('Content-Type: application/json');
 
-      exit(json_encode(array(
+      return json_encode(array(
                 'success'     => true,
                 'data'        => WEBSITE_MODE == 'development' ? $aData : '',
                 'redirectURL' => $sRedirectTo,
                 'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
-            )));
+            ));
     } else {
       $_SESSION['flash_message'] = array(
           'type'      => 'success',
@@ -72,12 +72,12 @@ class Helper {
     if (!empty($aData) && isset($aData['type']) && 'json' == $aData['type']) {
       header('Content-Type: application/json');
 
-      exit(json_encode(array(
+      return json_encode(array(
                 'success'     => false,
                 'data'        => WEBSITE_MODE == 'development' ? $aData : '',
                 'redirectURL' => $sRedirectTo,
                 'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
-              )));
+              ));
     } else {
       $_SESSION['flash_message'] = array(
           'type'    => 'warning',
@@ -104,12 +104,12 @@ class Helper {
     if (!empty($aData) && isset($aData['type']) && 'json' == $aData['type']) {
         header('Content-Type: application/json');
 
-        exit(json_encode(array(
+        return json_encode(array(
                   'success'     => false,
                   'data'        => WEBSITE_MODE == 'development' ? $aData : '',
                   'redirectURL' => $sRedirectTo,
                   'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
-              )));
+              ));
     } else {
       $_SESSION['flash_message'] = array(
           'type'    => 'error',

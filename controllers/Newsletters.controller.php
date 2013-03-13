@@ -33,7 +33,7 @@ class Newsletters extends Main {
    * Override standard create method due to different user rights.
    *
    * @access public
-   * @param integer $iUserRole required user right, only for E_STRICT
+   * @param integer $iUserRole required user right (only for E_STRICT)
    * @return string HTML content
    *
    */
@@ -45,7 +45,7 @@ class Newsletters extends Main {
    * Create a newsletter subscription. Send email information to mailchimp servers.
    *
    * @access public
-   * @param string $sRedirectURL specify the URL to redirect to after execution, only for E_STRICT
+   * @param string $sRedirectURL specify the URL to redirect to after execution (only for E_STRICT)
    * @return string HTML content
    *
    */
@@ -66,8 +66,8 @@ class Newsletters extends Main {
    * Show a form for email subscription.
    *
    * @access protected
-   * @param string $sTemplateName name of form template, only for E_STRICT
-   * @param string $sTitle title to show, only for E_STRICT
+   * @param string $sTemplateName name of form template (only for E_STRICT)
+   * @param string $sTitle title to show (only for E_STRICT)
    * @return string HTML content
    *
    */

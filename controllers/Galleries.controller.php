@@ -84,7 +84,7 @@ class Galleries extends Main {
    * Show gallery album as RSS.
    *
    * @access protected
-   * @return string XML (no real return, exits before)
+   * @return string XML
    *
    */
   protected function _showRSS() {

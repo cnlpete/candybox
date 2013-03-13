@@ -30,6 +30,7 @@ class Medias extends Main {
    * @param array $aSession alias for $_SESSION
    * @param array $aFile alias for $_FILE
    * @param array $aCookie alias for $_COOKIE
+   * @todo $_iId is not an integer. We should change that variable.
    *
    */
   public function __construct(&$aRequest, &$aSession, &$aFile = '', &$aCookie = '') {
@@ -97,8 +98,8 @@ class Medias extends Main {
    * Build form template to create an upload.
    *
    * @access protected
-   * @param string $sTemplateName name of form template, only for E_STRICT
-   * @param string $sTitle title to show, only for E_STRICT
+   * @param string $sTemplateName name of form template (only for E_STRICT)
+   * @param string $sTitle title to show (only for E_STRICT)
    * @return string HTML content
    *
    */
