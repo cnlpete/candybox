@@ -99,6 +99,6 @@ final class Markdown {
   public final function getInfo() {
     return array('url' => 'http://daringfireball.net/projects/markdown/syntax',
                 'description' => 'Markdown',
-                'iconurl' => '/vendor/candyCMS/plugins/Markdown/assets/icon39x24.png');
+                'iconurl' => '/vendor/candyCMS/plugins/Markdown/assets/icon.png');
   }
 }
