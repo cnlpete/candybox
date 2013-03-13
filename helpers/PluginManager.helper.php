@@ -6,7 +6,7 @@
  * This is basically an observer patter with some predefined events.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Hauke Schade <http://haukeschade.de>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 3.0
  *
@@ -104,16 +104,15 @@ class PluginManager {
    *
    */
   public function load($sAllowedPlugins) {
-    if (!ACTIVE_TEST) {
-      if (!empty($sAllowedPlugins)) {
-        $aPlugins = explode(',', $sAllowedPlugins);
+    if (!empty($sAllowedPlugins) && !ACTIVE_TEST) {
+      $aPlugins = explode(',', $sAllowedPlugins);
 
-        foreach ($aPlugins as $sPluginName) {
-          $oPlugin = self::_load($sPluginName);
-          if ($oPlugin !== null) {
-            $sLowerPluginName = strtolower($oPlugin::IDENTIFIER);
-            $this->_aPlugins[$sLowerPluginName] = $oPlugin;
-          }
+      foreach ($aPlugins as $sPluginName) {
+        $oPlugin = self::_load($sPluginName);
+
+        if ($oPlugin !== null) {
+          $sLowerPluginName = strtolower($oPlugin::IDENTIFIER);
+          $this->_aPlugins[$sLowerPluginName] = $oPlugin;
         }
       }
     }
@@ -150,6 +149,7 @@ class PluginManager {
 
   /**
    *
+   * @access public
    * @return type
    * @todo documentation
    *
@@ -161,12 +161,12 @@ class PluginManager {
     return isset($aReturnArray) ? $aReturnArray : array();
   }
 
-  /** -------------------- THE API'S -------------------- **/
+  /** ----------------------- THE API'S ----------------------- **/
 
   /**
-   * Register as oldschool plugin (simple <!--Name--> replacement)
+   * Register as oldschool plugin (simple <!-- plugin:name_of_plugin --> replacement).
    *
-   * Plugin MUST provide a show() function
+   * Plugin MUST provide a show() function.
    *
    * @access public
    * @param object $oPlugin the plugin to be added to this event
@@ -177,7 +177,7 @@ class PluginManager {
   }
 
   /**
-   * run all oldschool plugins (simple <!--Name--> replacement)
+   * Run all oldschool plugins (simple <!-- plugin:name_of_plugin --> replacement).
    *
    * @access public
    * @param string $sHtml the content, the plugins want to change
@@ -189,9 +189,11 @@ class PluginManager {
       $sHtml = str_replace('<!-- plugin:' . strtolower($oPlugin::IDENTIFIER) . ' -->', $oPlugin->show(), $sHtml);
     }
 
-    # @todo: only run the following on type=='create' pages?
+    if (isset($this->_aRequest['action']) && 'create' == $this->_aRequest['action'])
+      $sHtml = $this->runCaptchaPlugins($sHtml);
+
     $sHtml = $this->runEditorPlugins($sHtml);
-    $sHtml = $this->runCaptchaPlugins($sHtml);
+
     return $sHtml;
   }
 
@@ -228,6 +230,7 @@ class PluginManager {
       if ($aTmpReturnValue !== false)
         $aReturnValue[] = $aTmpReturnValue;
     }
+
     return isset($aReturnValue) ? $aReturnValue : array();
   }
 
@@ -249,7 +252,7 @@ class PluginManager {
   }
 
   /**
-   * register as content display plugin
+   * Register as content display plugin.
    *
    * Plugin MUST provide a prepareContent() function
    *
@@ -262,7 +265,7 @@ class PluginManager {
   }
 
   /**
-   * run all content display plugins (that wil lalter given content)
+   * Run all content display plugins (that wil lalter given content).
    *
    * @access public
    * @param string $sHtml the content, the plugins want to change
@@ -273,11 +276,12 @@ class PluginManager {
       $oPlugin = $this->_aPlugins[$sPluginName];
       $sHtml = $oPlugin->prepareContent($sHtml);
     }
+
     return $sHtml;
   }
 
   /**
-   * register as global display plugin
+   * Register as global display plugin.
    *
    * Plugin MUST provide a prepareContent() function
    *
@@ -290,7 +294,7 @@ class PluginManager {
   }
 
   /**
-   * run all content display plugins (who will alter given content)
+   * Run all content display plugins (who will alter given content).
    *
    * @access public
    * @param string $sHtml the content, the plugins want to change
@@ -301,13 +305,14 @@ class PluginManager {
       $oPlugin = $this->_aPlugins[$sPluginName];
       $sHtml = $oPlugin->prepareContent($sHtml);
     }
+
     return $sHtml;
   }
 
   /**
-   * register as repetitive plugin
+   * Register as repetitive plugin.
    *
-   * Plugin MUST provide a needsExecution() and an execute() function
+   * Plugin MUST provide a needsExecution() and an execute() function.
    *
    * @access public
    * @param object $oPlugin the plugin to be added to this event
@@ -318,7 +323,7 @@ class PluginManager {
   }
 
   /**
-   * run all repetitive plugins (who will execute every x seconds)
+   * Run all repetitive plugins (who will execute every x seconds).
    *
    * @access public
    * @param boolean $bForceExecution whether to force the execution
@@ -327,15 +332,16 @@ class PluginManager {
   public function runRepetitivePlugins($bForceExecution = false) {
     foreach ($this->_aRepetitivePluginNames as $sPluginName) {
       $oPlugin = $this->_aPlugins[$sPluginName];
+
       if ($oPlugin->needsExecution($bForceExecution))
         $oPlugin->execute();
     }
   }
 
   /**
-   * register as Captcha plugin
+   * Register as Captcha plugin.
    *
-   * Plugin MUST provide a show() and a check() function
+   * Plugin MUST provide a show() and a check() function.
    *
    * @access public
    * @param object $oPlugin the plugin to be added to this event
@@ -346,7 +352,7 @@ class PluginManager {
   }
 
   /**
-   * check all captcha plugins
+   * Check all captcha plugins.
    *
    * @access public
    * @param array $aError an array to append errors to
@@ -360,10 +366,11 @@ class PluginManager {
   }
 
   /**
-   * output all captcha information
+   * Output all captcha information.
    *
    * @access public
    * @param string $sHtml the content, the plugins want to change
+   * @return string HTML
    *
    */
   public function runCaptchaPlugins(&$sHtml) {
@@ -371,15 +378,16 @@ class PluginManager {
       $oPlugin = $this->_aPlugins[$sPluginName];
       $sHtml = str_replace('<!-- pluginmanager:captcha -->', $oPlugin->show() . '<!-- pluginmanager:captcha -->', $sHtml);
     }
+
     return $sHtml;
   }
 
   /**
-   * register as Session plugin
-   * There can only be ONE session plugin
+   * Register as session plugin.
+   * There can only be ONE session plugin.
    *
-   * it MUST provide setUserData, setAvatars, logoutUrl, showJavascript, showMeta and showButton functions
-   * to see how these functions work, have a look at the official facebook plugin
+   * It MUST provide setUserData, setAvatars, logoutUrl, showJavascript, showMeta and showButton functions
+   * to see how these functions work, have a look at the official facebook plugin.
    *
    * @access public
    * @param object $oPlugin the plugin to be added to this event
@@ -388,22 +396,36 @@ class PluginManager {
   public function registerSessionPlugin(&$oPlugin) {
     if (!empty($this->_sSessionPluginName))
       throw new AdvancedException('Duplicate Session plugin: ' . ucfirst($this->_sSessionPluginName) . ' and ' . $oPlugin::IDENTIFIER);
+
     $this->_sSessionPluginName = strtolower($oPlugin::IDENTIFIER);
   }
 
+  /**
+   *
+   * @return type
+   * @todo documentation
+   *
+   */
   public function hasSessionPlugin() {
     return !empty($this->_sSessionPluginName);
   }
 
+  /**
+   *
+   * @return type
+   * @todo documentation
+   *
+   */
   public function getSessionPlugin() {
     return $this->_aPlugins[$this->_sSessionPluginName];
   }
 
   /**
-   * output all session plugin information
+   * Output all session plugin information.
    *
    * @access public
    * @param string $sHtml the content, the plugin wants to change
+   * @return string HTML
    *
    */
   public function runSessionPlugin(&$sHtml) {
@@ -413,6 +435,7 @@ class PluginManager {
       $sHtml = str_replace('<!-- pluginmanager:sessionplugin::javascript -->', $oPlugin->showJavascript(), $sHtml);
       $sHtml = str_replace('<!-- pluginmanager:sessionplugin::button -->', $oPlugin->showButton(), $sHtml);
     }
+
     return $sHtml;
   }
 }

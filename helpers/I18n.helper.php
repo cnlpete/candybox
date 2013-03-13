@@ -37,13 +37,13 @@ class I18n {
   private static $_oObject = null;
 
   /**
-  *
-  * Holds the wanted Language
-  *
-  * @var static
-  * @access private
-  *
-  */
+   *
+   * Holds the current language
+   *
+   * @var static
+   * @access private
+   *
+   */
   private static $_sLanguage = null;
 
   /**

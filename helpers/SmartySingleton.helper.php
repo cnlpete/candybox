@@ -129,12 +129,12 @@ class SmartySingleton extends Smarty {
   }
 
   /**
-  * Assign the language array to smartys templates
-  *
-  * @access public
-  * @param array $aLang the language array
-  *
-  */
+   * Assign the language array to smarty templates.
+   *
+   * @access public
+   * @param array $aLang the language array
+   *
+   */
   public function setDefaultLanguage(&$aLang, $sLanguage) {
     $this->assign('lang', $aLang);
     $this->assign('WEBSITE_LANGUAGE', $sLanguage);
@@ -172,23 +172,27 @@ class SmartySingleton extends Smarty {
         'upload'    => Helper::removeSlash(PATH_UPLOAD)) as $sKey => $sValue)
       $aPaths[$sKey] = $sValue;
 
-    # Compile CSS when in development mode
+    # Compile CSS only when in development mode
     if (WEBSITE_MODE == 'development') {
       if (MOBILE === true) {
-        Helper::compileStylesheet(false,
-                    Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
-                    Helper::removeSlash($aPaths['css'] . '/mobile.css'));
-        Helper::compileStylesheet(true,
-                    Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
-                    Helper::removeSlash($aPaths['css'] . '/mobile.min.css'));
+        Helper::compileStylesheet(
+                Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
+                Helper::removeSlash($aPaths['css'] . '/mobile.css'),
+                false);
+
+        Helper::compileStylesheet(
+                Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
+                Helper::removeSlash($aPaths['css'] . '/mobile.min.css'));
       }
       else {
-        Helper::compileStylesheet(false,
-                    Helper::removeSlash($aPaths['less'] . '/core/application.less'),
-                    Helper::removeSlash($aPaths['css'] . '/core.css'));
-        Helper::compileStylesheet(true,
-                    Helper::removeSlash($aPaths['less'] . '/core/application.less'),
-                    Helper::removeSlash($aPaths['css'] . '/core.min.css'));
+        Helper::compileStylesheet(
+                Helper::removeSlash($aPaths['less'] . '/core/application.less'),
+                Helper::removeSlash($aPaths['css'] . '/core.css'),
+                false);
+
+        Helper::compileStylesheet(
+                Helper::removeSlash($aPaths['less'] . '/core/application.less'),
+                Helper::removeSlash($aPaths['css'] . '/core.min.css'));
       }
     }
 

@@ -117,7 +117,6 @@ class Upload {
   }
 
   /**
-   *
    * Return file information for AJAX uploading purposes.
    *
    * @access public

@@ -575,7 +575,6 @@ class Helper {
 
     else
       return $sStr . 's';
-
   }
 
   /**
@@ -658,32 +657,24 @@ class Helper {
    *
    * @static
    * @access public
-   * @param bool $bCompressed whether to use the compressed output mode
    * @param string $sSource the less file
    * @param string $sOutput the target output file
+   * @param bool $bCompressed whether to use the compressed output mode
    * @todo remove PATH_CACHE fix
    * @todo test cases
    *
    */
-  public static function compileStylesheet($bCompressed, $sSource, $sOutput) {
+  public static function compileStylesheet($sSource, $sOutput, $bCompressed = true) {
     if (file_exists($sSource)) {
       $sCacheFile = (defined('PATH_CACHE') ? PATH_CACHE : 'app') . '/' . md5($sOutput) . '.cache';
-
-      // load the cache
-      if (file_exists($sCacheFile))
-        $aCache = unserialize(file_get_contents($sCacheFile));
-      else
-        $aCache = $sSource;
+      $aCache = file_exists($sCacheFile) ? unserialize(file_get_contents($sCacheFile)) : $sSource;
 
       $oLessc = new lessc();
-      if ($bCompressed)
-        $oLessc->setFormatter('compressed');
-      else
-        $oLessc->setFormatter('classic');
+      $bCompressed ? $oLessc->setFormatter('compressed') : $oLessc->setFormatter('classic');
 
       $aNewCache = $oLessc->cachedCompile($aCache);
 
-      if (!is_array($aCache) || $aNewCache["updated"] > $aCache["updated"]) {
+      if (!is_array($aCache) || $aNewCache['updated'] > $aCache['updated']) {
         file_put_contents($sCacheFile, serialize($aNewCache));
         file_put_contents($sOutput, $aNewCache['compiled']);
       }
