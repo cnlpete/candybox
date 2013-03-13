@@ -1,5 +1,5 @@
 {strip}
-  <article class='contents'>
+  <article class='contents' itemscope itemtype='http://schema.org/Article'>
     <header class='page-header'>
       <h1 itemprop='headline'>
         {if !$contents.published}
@@ -16,21 +16,30 @@
       <p>
         {$lang.global.last_update}:
         &nbsp;
-        <time datetime='{$contents.date.w3c}' class='js-timeago'>
+        <time datetime='{$contents.date.w3c}'
+              class='js-timeago'
+              itemprop='dateCreated'>
           {$contents.date.raw|date_format:$lang.global.time.format.datetime}
         </time>
         &nbsp;
         {$lang.global.by}
         &nbsp;
-        <a href='{$contents.author.url}' rel='author'>
+        <a href='{$contents.author.url}'
+           rel='author'
+           itemprop='author'>
           {$contents.author.full_name}
         </a>
       </p>
     </header>
     {if $contents.teaser}
-      <p class='summary'>{$contents.teaser}</p>
+      <p class='summary'
+         itemprop='description'>
+        {$contents.teaser}
+      </p>
     {/if}
-    {$contents.content}
+    <div itemprop='text'>
+      {$contents.content}
+    </div>
     <footer>
       {if $_REQUEST.id && (!isset($_REQUEST.action) || $_REQUEST.action !== 'page')}
         <hr />

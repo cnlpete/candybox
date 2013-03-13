@@ -45,65 +45,63 @@
   {else}
     {foreach $calendar as $c}
       <h2>{$c.month} {$c.year}</h2>
-      <div itemscope itemtype='http://schema.org/Event'>
-        <table class='table tablesorter'>
-          <thead>
-            <tr>
-              <th class='column-date headerSortDown'>
-                {$lang.global.date.date}
-              </th>
-              <th class='column-description'>
-                {$lang.global.description}
-              </th>
-              <th class='column-actions'></th>
-            </tr>
-          </thead>
-          <tbody>
-            {foreach $c.dates as $d}
-              <tr id='row_{$d.id}'>
-                <td>
-                  <time datetime='{$d.start_date.w3c_date}' class='js-timeago' itemprop='startDate'>
-                    {$d.start_date.raw|date_format:$lang.global.time.format.date}
+      <table class='table tablesorter'>
+        <thead>
+          <tr>
+            <th class='column-date headerSortDown'>
+              {$lang.global.date.date}
+            </th>
+            <th class='column-description'>
+              {$lang.global.description}
+            </th>
+            <th class='column-actions'></th>
+          </tr>
+        </thead>
+        <tbody>
+          {foreach $c.dates as $d}
+            <tr id='row_{$d.id}' itemscope itemtype='http://schema.org/Event'>
+              <td>
+                <time datetime='{$d.start_date.w3c_date}' class='js-timeago' itemprop='startDate'>
+                  {$d.start_date.raw|date_format:$lang.global.time.format.date}
+                </time>
+                {if $d.end_date.raw}
+                  &nbsp;-&nbsp;
+                  <time datetime='{$d.end_date.w3c_date}' class='js-timeago' itemprop='endDate'>
+                    {$d.end_date.raw|date_format:$lang.global.time.format.date}
                   </time>
-                  {if $d.end_date.raw}
-                    &nbsp;-&nbsp;
-                    <time datetime='{$d.end_date.w3c_date}' class='js-timeago' itemprop='endDate'>
-                      {$d.end_date.raw|date_format:$lang.global.time.format.date}
-                    </time>
-                  {/if}
-                </td>
-                <td>
-                  <strong itemprop='name'>
-                    {$d.title}
-                  </strong>
-                  {if $d.content}
-                    <br />
-                    <span itemprop='description'>
-                      {$d.content}
-                    </span>
-                  {/if}
-                </td>
-                <td class='right'>
-                  <a href='{$d.url}'>
-                    <i class='icon-calendar js-tooltip'
-                      title='{$lang.calendars.info.ics}'></i>
+                {/if}
+              </td>
+              <td>
+                <strong itemprop='name'>
+                  {$d.title}
+                </strong>
+                {if $d.content}
+                  <br />
+                  <span itemprop='description'>
+                    {$d.content}
+                  </span>
+                {/if}
+              </td>
+              <td class='right'>
+                <a href='{$d.url}'>
+                  <i class='icon-calendar js-tooltip'
+                    title='{$lang.calendars.info.ics}'></i>
+                </a>
+                {if $_SESSION.user.role >= 3}
+                  &nbsp;
+                  <a href='{$d.url_update}'>
+                    <i class='icon-pencil js-tooltip'
+                      title='{$lang.global.update.update}'></i>
                   </a>
-                  {if $_SESSION.user.role >= 3}
-                    &nbsp;
-                    <a href='{$d.url_update}'>
-                      <i class='icon-pencil js-tooltip'
-                        title='{$lang.global.update.update}'></i>
-                    </a>
-                    <i class='icon-trash js-tooltip'
-                      onclick="confirmDestroy('{$d.url_destroy}', 'row_{$d.id}')"
-                      title='{$lang.global.destroy.destroy}'></i>
-                  {/if}
-                </td>
-              </tr>
-            {/foreach}
-          </tbody>
-        </table>
-      </div>
+                  <i class='icon-trash js-tooltip'
+                    onclick="confirmDestroy('{$d.url_destroy}', 'row_{$d.id}')"
+                    title='{$lang.global.destroy.destroy}'></i>
+                {/if}
+              </td>
+            </tr>
+          {/foreach}
+        </tbody>
+      </table>
     {/foreach}
   {/if}
   {if !isset($_REQUEST.action)}

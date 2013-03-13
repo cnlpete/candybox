@@ -1,27 +1,30 @@
 {strip}
-  {if $_SESSION.user.role >= 3}
-    <p class='center'>
-      <a href='/{$_REQUEST.controller}/create'>
-        <i class='icon-plus'
-           title='{$lang.global.create.entry}'></i>
-        {$lang.global.create.entry}
-      </a>
-    </p>
-  {/if}
-  {if !$blogs}
-    <div class='alert alert-warning'>
-      <h4>{$lang.error.missing.entries}</h4>
-    </div>
-  {else}
-    <div itemscope itemtype='http://schema.org/Blog'>
+  <div itemscope itemtype='http://schema.org/Blog'>
+    {if $_SESSION.user.role >= 3}
+      <p class='center'>
+        <a href='/{$_REQUEST.controller}/create'>
+          <i class='icon-plus'
+            title='{$lang.global.create.entry}'></i>
+          {$lang.global.create.entry}
+        </a>
+      </p>
+    {/if}
+    {if !$blogs}
+      <div class='alert alert-warning'>
+        <h4>{$lang.error.missing.entries}</h4>
+      </div>
+    {else}
       {foreach $blogs as $b}
-        <article class='blogs' itemprop='blogPost'>
+        <article class='blogs' itemscope itemtype='http://schema.org/BlogPosting'>
           <header class='page-header'>
             <h2 itemprop='headline'>
               {if !$b.published}
                 {$lang.global.not_published}:&nbsp;
               {/if}
-              <a href='{$b.url}'>{$b.title}</a>
+              <a href='{$b.url}'
+                 itemprop='discussionUrl'>
+                {$b.title}
+              </a>
               {if $_SESSION.user.role >= 3}
                 <a href='{$b.url_update}'>
                   <i class='icon-pencil js-tooltip'
@@ -44,7 +47,9 @@
               &nbsp;
               {$lang.global.by}
               &nbsp;
-              <a href='{$b.author.url}' rel='author' itemprop='author'>{$b.author.full_name}</a>
+              <a href='{$b.author.url}'
+                 rel='author'
+                 itemprop='author'>{$b.author.full_name}</a>
               {if $b.date_modified.raw}
                 &nbsp;
                 - {$lang.global.last_update}:
@@ -57,16 +62,17 @@
               {/if}
             </p>
           </header>
+          {if $b.teaser}
+            <p class='summary' itemprop='description'>
+              {$b.teaser}
+            </p>
+          {/if}
           <div itemprop='text'>
-            {if $b.teaser}
-              <p class='summary'>
-                {$b.teaser}
-              </p>
-            {/if}
             {$b.content}
           </div>
           <footer class='row'>
-            <div class='span4 tags'>
+            <div class='span4 tags'
+                 itemprop='keywords'>
               {if $b.tags|@count > 0}
                 {$lang.global.tags.tags}:
                 {foreach $b.tags as $t}
@@ -82,9 +88,11 @@
             {if !$DISABLE_COMMENTS && !preg_match('/Disqus/', $ALLOW_PLUGINS)}
               <div class='span4 comments'>
                 <a href='{$b.url}#comments'
-                  class='pull-right'
-                  itemprop='discussionUrl'>
-                  {$b.comment_count} {$lang.global.comments}
+                   class='pull-right'
+                   itemprop='discussionUrl'>
+                  <span itemprop='interactionCount'>
+                    {$b.comment_count} {$lang.global.comments}
+                  </span>
                 </a>
               </div>
             {/if}
@@ -98,30 +106,30 @@
           </footer>
         </article>
       {/foreach}
-    </div>
-    {$_pages_}
-    {if isset($_REQUEST.id) && preg_match('/Disqus/', $ALLOW_PLUGINS)}
-      <!-- plugin:disqus -->
-    {elseif isset($_REQUEST.id) && !$DISABLE_COMMENTS}
-      {$_comments_}
+      {$_pages_}
+      {if isset($_REQUEST.id) && preg_match('/Disqus/', $ALLOW_PLUGINS)}
+        <!-- plugin:disqus -->
+      {elseif isset($_REQUEST.id) && !$DISABLE_COMMENTS}
+        {$_comments_}
+      {/if}
     {/if}
-  {/if}
-  <script src='{$_PATH.core}/assets/javascripts/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
-  <script src='{$_PATH.core}/assets/javascripts/core/jquery.capty{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
-  <script type='text/javascript'>
-    $(document).ready(function(){
-      $('.js-fancybox').fancybox({
-        nextEffect : 'fade',
-        prevEffect : 'fade'
-      });
+    <script src='{$_PATH.core}/assets/javascripts/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
+    <script src='{$_PATH.core}/assets/javascripts/core/jquery.capty{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
+    <script type='text/javascript'>
+      $(document).ready(function(){
+        $('.js-fancybox').fancybox({
+          nextEffect : 'fade',
+          prevEffect : 'fade'
+        });
 
-      $('.js-image').capty({ height: 30 });
-      $('.js-media').each(function(e) {
-        var $this = $(this);
-        $.getJSON(this.title, function(data) {
-          $this.html(data['html']);
+        $('.js-image').capty({ height: 30 });
+        $('.js-media').each(function(e) {
+          var $this = $(this);
+          $.getJSON(this.title, function(data) {
+            $this.html(data['html']);
+          });
         });
       });
-    });
-  </script>
+    </script>
+  </div>
 {/strip}

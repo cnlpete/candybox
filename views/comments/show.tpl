@@ -1,24 +1,26 @@
 {strip}
   {if isset($comments) && count($comments) > 0}
-    <div id='comments'>
+    <div id='comments' itemscope itemtype='http://schema.org/CreativeWork'>
       <div class='page-header'>
         <a name='comments'></a>
-        <h2>{$lang.global.comments}</h2>
+        <h2 itemprop='headline'>
+          {$lang.global.comments}
+        </h2>
       </div>
       <div id='js-commments'>
         {foreach $comments as $c}
-          <article{if $c.author.id == $author_id} class='from_author'{/if} id='comment_{$c.id}'>
+          <article itemscope itemtype='http://schema.org/Comments'{if $c.author.id == $author_id} class='from_author'{/if} id='comment_{$c.id}'>
             <header>
               <a href='#{$c.id}'
-                name='{$c.id}'
-                class='count'>
+                 name='{$c.id}'
+                 class='count'>
                 {$c.loop+$comment_number}
               </a>
               <img class='thumbnail'
-                  src='{$c.author.avatar_64}'
-                  width='40'
-                  height='40'
-                  alt='{$c.author.name}' />
+                   src='{$c.author.avatar_64}'
+                   width='40'
+                   height='40'
+                   alt='{$c.author.name}' />
               {if $c.author.id > 0}
                 <a href='{$c.author.url}'
                    rel='author'
@@ -30,7 +32,8 @@
                   {$c.author.full_name}
                 </span>
               {else}
-                <em style='text-decoration:line-through' itemprop='creator'>
+                <em style='text-decoration:line-through'
+                    itemprop='creator'>
                   {$lang.global.deleted_user}
                 </em>
               {/if}
@@ -41,7 +44,8 @@
                 {$c.date.raw|date_format:$lang.global.time.format.datetime}
               </time>
             </header>
-            <div id='js-comment_{$c.id}'>
+            <div id='js-comment_{$c.id}'
+                 itemprop='text'>
               {$c.content}
             </div>
             <footer>
@@ -56,15 +60,15 @@
                 &nbsp;
               {/if}
               <a href='#create' rel='nofollow'
-                onclick="quote('{$c.author.full_name}', 'js-comment_{$c.id}')">
+                 onclick="quote('{$c.author.full_name}', 'js-comment_{$c.id}')">
                 <i class='icon-comment js-tooltip'
                    title='{$lang.global.quote.quote}'></i>
               </a>
               {if $_SESSION.user.role >= 3}
                 &nbsp;
                 <i class='icon-trash js-tooltip'
-                    onclick="confirmDestroy('{$c.url_destroy}', 'comment_{$c.id}')"
-                    title='{$lang.global.destroy.destroy}'></i>
+                   onclick="confirmDestroy('{$c.url_destroy}', 'comment_{$c.id}')"
+                   title='{$lang.global.destroy.destroy}'></i>
               {/if}
             </footer>
           </article>

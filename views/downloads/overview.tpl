@@ -30,25 +30,39 @@
         </thead>
         <tbody>
         {foreach $d.files as $f}
-          <tr id='row_{$f.id}'>
+          <tr id='row_{$f.id}' itemscope itemtype='http://schema.org/SoftwareApplication'>
             <td class='center'>
               <img src='{$_PATH.core}/assets/images/candy.files/{$f.extension}.png'
-                  width='32' height='32' alt='{$f.extension}' />
+                   width='32'
+                   height='32'
+                   alt='{$f.extension}' />
             </td>
             <td class='left'>
-              <a href='{$f.url}' target='_blank'>{$f.title}</a>
+              <a href='{$f.url}'
+                 target='_blank'
+                 itemprop='downloadUrl'>
+                <span itemprop='name'>
+                  {$f.title}
+                </span>
+              </a>
               {if $f.content}
                 <br />
-                {$f.content}
+                <div itemprop='text'>
+                  {$f.content}
+                </div>
               {/if}
             </td>
             <td>
-              <time datetime='{$f.date.w3c}' class='js-timeago'>
+              <time datetime='{$f.date.w3c}'
+                    class='js-timeago'
+                    itemprop='dateCreated'>
                 {$f.date.raw|date_format:$lang.global.time.format.date}
               </time>
             </td>
             <td>
-              {$f.size}
+              <span itemprop='fileSize'>
+                {$f.size}
+              </span>
               {if $_SESSION.user.role >= 3}
                 <br />
                 {$f.downloads} {$lang.global.downloads}
@@ -65,7 +79,8 @@
                   onclick="confirmDestroy('{$f.url_destroy}', 'row_{$f.id}')"
                   title='{$lang.global.destroy.destroy}'></i>
               {else}
-                <a href='{$f.url}'>
+                <a href='{$f.url}'
+                   itemprop='downloadUrl'>
                   <i class='icon-download js-tooltip'
                      title='{$lang.global.download}'></i>
                 </a>
