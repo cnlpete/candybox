@@ -24,9 +24,10 @@
             </a>
           {/if}
           &nbsp;
-          <small itemprop='interactionCount'>
+          <small>
             ({$album.files_sum} {$lang.global.files})
           </small>
+          <meta itemprop='interactionCount' content='Albums:{$album.files_sum}' />
         </h1>
       </header>
       {if $album.content}

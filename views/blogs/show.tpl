@@ -90,11 +90,10 @@
                 <a href='{$b.url}#comments'
                    class='pull-right'
                    itemprop='discussionUrl'>
-                  <span itemprop='interactionCount'>
                     {$b.comment_count} {$lang.global.comments}
-                  </span>
                 </a>
               </div>
+              <meta itemprop='interactionCount' content='Comments:{$b.comment_count}' />
             {/if}
             {if isset($_REQUEST.id)}
               <div class='span8'>

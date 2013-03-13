@@ -67,6 +67,7 @@
                 <br />
                 {$f.downloads} {$lang.global.downloads}
               {/if}
+              <meta itemprop='interactionCount' content='Downloads:{$f.downloads}' />
             </td>
             <td class='center'>
               {if $_SESSION.user.role >= 3}
