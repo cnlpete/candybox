@@ -9,9 +9,11 @@
             rel='stylesheet' type='text/css' media='screen, projection'/>
 
       <meta http-equiv='content-type' content='text/html;charset=utf-8'/>
-      <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+      <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/>
       <meta name='description' content="{$_WEBSITE.meta.description}"/>
       <meta name='dc.title' content="{$_WEBSITE.title}"/>
+      <meta itemprop='name' content="{$_WEBSITE.meta.og.title}"/>
+      <meta itemprop='description' content="{$_WEBSITE.meta.og.description}"/>
       {if $_WEBSITE.meta.keywords}
         <meta name='keywords' content="{$_WEBSITE.meta.keywords}"/>
       {/if}
@@ -22,10 +24,9 @@
         <meta property='og:site_name' content="{$_WEBSITE.meta.og.site_name}"/>
         <meta property='og:title' content="{$_WEBSITE.meta.og.title}"/>
         <meta property='og:url' content="{$_WEBSITE.meta.og.url}"/>
-        <meta itemprop='name' content="{$_WEBSITE.meta.og.title}">
-        <meta itemprop='description' content="{$_WEBSITE.meta.og.description}">
       {/if}
 
+      {* Include additional meta data from PluginManager *}
       <!-- pluginmanager:sessionplugin::meta -->
 
       {* Basic stuff *}
@@ -182,13 +183,13 @@
             <h3>{$lang.global.tagcloud}</h3>
             <!-- plugin:tagcloud -->
             <p>
-              <a href='http://ac.empuxa.com/tasks/submit/candycms'
+              <a href='https://ac.empuxa.com/tasks/submit/candycms'
                  target='_blank'
                  class='btn btn-danger'>
                 Report Bug
               </a>
             </p>
-            {if $MOBILE_DEVICE == true}
+            {if $MOBILE_DEVICE}
               <p>
                 <a href='/?mobile=1' ref='nofollow'>{$lang.global.view.mobile}</a>
               </p>
