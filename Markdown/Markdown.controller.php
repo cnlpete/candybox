@@ -96,9 +96,16 @@ final class Markdown {
    * @return array
    *
    */
+<<<<<<< HEAD
   public static final function getInfo() {
     return array( 'url'         => 'http://daringfireball.net/projects/markdown/syntax',
                   'description' => 'Markdown',
                   'iconurl'     => '/vendor/candyCMS/plugins/Markdown/assets/icon39x24.png');
+=======
+  public final function getInfo() {
+    return array('url' => 'http://daringfireball.net/projects/markdown/syntax',
+                'description' => 'Markdown',
+                'iconurl' => '/vendor/candyCMS/plugins/Markdown/assets/icon.png');
+>>>>>>> 3d25d7fd09f84688b6c50f15fa4ae8dcf6f09aba
   }
 }
