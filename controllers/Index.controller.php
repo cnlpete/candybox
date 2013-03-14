@@ -113,7 +113,6 @@ class Index {
       # Run repetitive plugins (such as cronjob).
       $this->_oPlugins->runRepetitivePlugins();
     }
-
     $this->getLanguage();
     $this->setUser();
   }
