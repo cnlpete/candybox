@@ -107,7 +107,7 @@ class Install extends Index {
     if (!defined('COMPILE_DIR'))
       define('COMPILE_DIR', 'app/compile');
 
-    if (!definde('WEBSITE_MODE'))
+    if (!defined('WEBSITE_MODE'))
       define('WEBSITE_MODE', 'development');
 
     define('CURRENT_URL', isset($_SERVER['REQUEST_URI']) ? WEBSITE_URL . $_SERVER['REQUEST_URI'] : WEBSITE_URL);

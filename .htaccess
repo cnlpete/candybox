@@ -22,8 +22,7 @@ RewriteCond %{REQUEST_FILENAME} -s [OR]
 RewriteCond %{REQUEST_FILENAME} -l
 RewriteRule ^.*$ - [NC,L]
 
-# rewrite tools and install folders
-RewriteRule tools - [NC,L]
+# rewrite install folder
 RewriteRule install - [NC,L]
 
 # rewrite all other calls to our index.php

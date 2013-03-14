@@ -14,7 +14,6 @@ namespace candyCMS\Controllers;
 
 use candyCMS\Core\Helpers\Helper;
 
-
 class Sample extends \candyCMS\core\Controllers\Main {
 
   /**
