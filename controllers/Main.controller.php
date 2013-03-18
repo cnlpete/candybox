@@ -267,8 +267,8 @@ abstract class Main {
    * @param string $sDescription description to be set.
    *
    */
-  public function setDescription($sDescription = '') {
-    if ($sDescription && !$this->_sDescription)
+  public function setDescription($sDescription) {
+    if (!empty($sDescription))
       $this->_sDescription = & $sDescription;
   }
 
@@ -280,14 +280,12 @@ abstract class Main {
    *
    */
   public function getDescription() {
-    if(!$this->_sDescription) {
-      # Show default description if this is our landing page or we got no descrption.
-      if ($this->_sController == $this->_aSession['routes']['/'])
-        $this->setDescription(I18n::get('website.description'));
+    # Show default description if this is our landing page or we got no descrption.
+    if (CURRENT_URL == (WEBSITE_URL . '/'))
+      $this->setDescription(I18n::get('website.description'));
 
-      elseif (!$this->_sDescription)
-        $this->setDescription($this->getTitle());
-    }
+    elseif (!$this->_sDescription)
+      $this->setDescription($this->getTitle());
 
     return $this->_sDescription;
   }
@@ -299,8 +297,8 @@ abstract class Main {
    * @param string $sKeywords keywords to be set.
    *
    */
-  public function setKeywords($sKeywords = '') {
-    if ($sKeywords && !$this->_sKeywords)
+  public function setKeywords($sKeywords) {
+    if (!empty($sKeywords))
       $this->_sKeywords = & $sKeywords;
   }
 
@@ -316,14 +314,14 @@ abstract class Main {
   }
 
   /**
-   * Set meta keywords.
+   * Set meta title.
    *
    * @access public
    * @param string $sTitle title to be set.
    *
    */
-  public function setTitle($sTitle = '') {
-    if ($sTitle && !$this->_sTitle)
+  public function setTitle($sTitle) {
+    if (!empty($sTitle))
       $this->_sTitle = & $sTitle;
   }
 
@@ -335,6 +333,7 @@ abstract class Main {
    *
    */
   public function getTitle() {
+    # Normally title should be already set.
     if(!$this->_sTitle) {
       if ($this->_sController == 'errors')
         $this->setTitle(I18n::get('error.' . $this->_aRequest['id'] . '.title'));
