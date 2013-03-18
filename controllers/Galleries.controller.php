@@ -165,7 +165,7 @@ class Galleries extends Main {
    *
    * @access protected
    * @return string HTML content
-   * @see vendor/candyCMS/core/helper/Image.helper.php
+   * @see vendor/candycms/core/helper/Image.helper.php
    *
    */
   protected function _showFormFileTemplate() {
@@ -230,7 +230,7 @@ class Galleries extends Main {
     $this->_setError('cut');
     $this->_setError('file');
 
-    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
+    require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Upload.helper.php';
 
     if ($this->_aError)
       return $this->_showFormFileTemplate();

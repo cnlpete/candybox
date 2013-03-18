@@ -25,7 +25,7 @@ class Sessions extends Main {
    * @static
    * @access public
    * @return array | boolean $aData with user data or false
-   * @see vendor/candyCMS/core/controllers/Index.controller.php
+   * @see vendor/candycms/core/controllers/Index.controller.php
    *
    */
   public static function getUserBySession() {

@@ -106,7 +106,7 @@ class Blogs extends Main {
 
     $iResult = $this->getCountForTag($sTagname);
 
-    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Pagination.helper.php';
+    require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Pagination.helper.php';
     $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit != 0 ? $iLimit : $iResult);
 
     try {
@@ -203,7 +203,7 @@ class Blogs extends Main {
 
     $iResult = $this->getCount();
 
-    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Pagination.helper.php';
+    require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Pagination.helper.php';
     $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit != 0 ? $iLimit : $iResult);
 
     try {

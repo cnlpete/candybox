@@ -41,7 +41,7 @@ class Contents extends Main {
       exit('SQL error.');
     }
 
-    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Pagination.helper.php';
+    require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Pagination.helper.php';
     $this->oPagination = new Pagination($this->_aRequest, $iResult, $iLimit);
 
     try {

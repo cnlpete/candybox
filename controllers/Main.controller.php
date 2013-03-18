@@ -218,7 +218,7 @@ abstract class Main {
         return '\candyCMS\Controllers\\' . $sClass;
       }
       else {
-        require_once PATH_STANDARD . '/vendor/candyCMS/core/controllers/' . $sClass . '.controller.php';
+        require_once PATH_STANDARD . '/vendor/candycms/core/controllers/' . $sClass . '.controller.php';
         return '\candyCMS\Core\Controllers\\' . $sClass;
       }
     }
@@ -350,7 +350,7 @@ abstract class Main {
    *
    * @access public
    * @param string $sContent HTML content
-   * @see vendor/candyCMS/core/helpers/Dispatcher.helper.php
+   * @see vendor/candycms/core/helpers/Dispatcher.helper.php
    *
    */
   public function setContent($sContent) {

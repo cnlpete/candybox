@@ -102,7 +102,7 @@ class Downloads extends Main {
       return $this->_showFormTemplate();
 
     else {
-      require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
+      require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Upload.helper.php';
 
       # Set up upload helper and rename file to title
       $oUploadFile = new Upload($this->_aRequest,

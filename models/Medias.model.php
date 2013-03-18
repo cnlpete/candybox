@@ -26,7 +26,7 @@ class Medias extends Main {
    *
    */
   public function getOverview() {
-    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Image.helper.php';
+    require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Image.helper.php';
 
     $sOriginalPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController);
     $oDir = opendir($sOriginalPath);

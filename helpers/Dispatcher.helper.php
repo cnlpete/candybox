@@ -43,7 +43,7 @@ class Dispatcher {
    *
    * @access public
    * @return object $this->oController controller
-   * @see vendor/candyCMS/core/controllers/Main.controller.php -> __autoload()
+   * @see vendor/candycms/core/controllers/Main.controller.php -> __autoload()
    *
    */
   public function getController() {
@@ -59,8 +59,8 @@ class Dispatcher {
       }
 
       # There are no extensions, so we use the default controllers
-      elseif (file_exists(PATH_STANDARD . '/vendor/candyCMS/core/controllers/' . $sController . '.controller.php')) {
-        require_once PATH_STANDARD . '/vendor/candyCMS/core/controllers/' . $sController . '.controller.php';
+      elseif (file_exists(PATH_STANDARD . '/vendor/candycms/core/controllers/' . $sController . '.controller.php')) {
+        require_once PATH_STANDARD . '/vendor/candycms/core/controllers/' . $sController . '.controller.php';
 
         $sClassName = '\candyCMS\Core\Controllers\\' . $sController;
         $this->oController = new $sClassName($this->_aRequest, $this->_aSession, $this->_aFile, $this->_aCookie);
@@ -69,14 +69,14 @@ class Dispatcher {
         # Bugfix: Fix exceptions when upload file is missing
         if ($sController && substr(strtolower($sController), 0, 6) !== 'upload')
           throw new AdvancedException('Controller not found:' . PATH_STANDARD .
-                  '/vendor/candyCMS/core/controllers/' . $sController . '.controller.php');
+                  '/vendor/candycms/core/controllers/' . $sController . '.controller.php');
       }
     }
     catch (AdvancedException $e) {
       # Check if site should be compatible to candyCMS version 1.x and send headers to browser.
       if (defined('CHECK_DEPRECATED_LINKS') && CHECK_DEPRECATED_LINKS === true &&
               Helper::pluralize($sController) !== $sController &&
-              file_exists(PATH_STANDARD . '/vendor/candyCMS/core/controllers/' . Helper::pluralize($sController) . '.controller.php')) {
+              file_exists(PATH_STANDARD . '/vendor/candycms/core/controllers/' . Helper::pluralize($sController) . '.controller.php')) {
         $sUrl = str_replace(strtolower($sController), strtolower(Helper::pluralize($sController)), $_SERVER['REQUEST_URI']);
         return Helper::warningMessage(I18n::get('error.302.info', $sUrl), $sUrl);
       }

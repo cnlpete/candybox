@@ -94,7 +94,7 @@ class Users extends Main {
    * @access public
    * @param string $sEmail email address to search user from.
    * @return array|boolean user data or false.
-   * @see vendor/candyCMS/core/models/Session.model.php
+   * @see vendor/candycms/core/models/Session.model.php
    *
    */
   public static function getVerificationData($sEmail) {
@@ -185,7 +185,7 @@ class Users extends Main {
       exit('SQL error.');
     }
 
-    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Pagination.helper.php';
+    require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Pagination.helper.php';
     $this->oPagination = new Pagination($this->_aRequest, $iResult, $iLimit);
 
     try {
@@ -650,7 +650,7 @@ class Users extends Main {
    * @access public
    * @param string $sApiToken API token
    * @return array $aResult user data
-   * @see vendor/candyCMS/core/controllers/Index.controller.php
+   * @see vendor/candycms/core/controllers/Index.controller.php
    *
    */
   public static function getUserByToken($sApiToken) {

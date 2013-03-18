@@ -161,7 +161,7 @@ class Users extends Main {
     $this->_setError('terms', I18n::get('error.form.missing.terms'));
     $this->_setError('image');
 
-    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
+    require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Upload.helper.php';
     $oUpload = new Upload($this->_aRequest, $this->_aSession, $this->_aFile);
 
     try {
@@ -477,7 +477,7 @@ class Users extends Main {
    *
    */
   protected function _destroy() {
-    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
+    require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Upload.helper.php';
     $aUser = $this->_oModel->getUserNamesAndEmail($this->_iId);
 
     # Do IDs match?

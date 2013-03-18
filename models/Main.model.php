@@ -494,8 +494,8 @@ abstract class Main {
       require_once PATH_STANDARD . '/app/models/' . $sClass . '.model.php';
       return '\candyCMS\Models\\' . $sClass;
     }
-    elseif (file_exists(PATH_STANDARD . '/vendor/candyCMS/core/models/' . $sClass . '.model.php')) {
-      require_once PATH_STANDARD . '/vendor/candyCMS/core/models/' . $sClass . '.model.php';
+    elseif (file_exists(PATH_STANDARD . '/vendor/candycms/core/models/' . $sClass . '.model.php')) {
+      require_once PATH_STANDARD . '/vendor/candycms/core/models/' . $sClass . '.model.php';
       return '\candyCMS\Core\Models\\' . $sClass;
     }
   }

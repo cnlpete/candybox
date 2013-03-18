@@ -329,12 +329,12 @@ class Helper {
   public static function getTemplateDir($sFolder, $sFile) {
     try {
       # Extensions
-      if (EXTENSION_CHECK && file_exists(PATH_STANDARD . '/app/views/' . $sFolder . '/' . $sFile . '.tpl'))
+      if (file_exists(PATH_STANDARD . '/app/views/' . $sFolder . '/' . $sFile . '.tpl'))
         return PATH_STANDARD . '/app/views/' . $sFolder;
 
       # Standard views
       else {
-        if (!file_exists(PATH_STANDARD . '/vendor/candyCMS/core/views/' . $sFolder . '/' . $sFile . '.tpl')) {
+        if (!file_exists(PATH_STANDARD . '/vendor/candycms/core/views/' . $sFolder . '/' . $sFile . '.tpl')) {
           # This action might be disabled due to missing form templates.
           if (substr($sFile, 0, 5) == '_form')
             return Helper::redirectTo('/errors/403');
@@ -344,7 +344,7 @@ class Helper {
         }
 
         else
-          return PATH_STANDARD . '/vendor/candyCMS/core/views/' . $sFolder;
+          return PATH_STANDARD . '/vendor/candycms/core/views/' . $sFolder;
       }
     }
     catch (AdvancedException $e) {
@@ -396,11 +396,11 @@ class Helper {
 
       # Standard views
       else {
-        if (!file_exists(PATH_STANDARD . '/vendor/candyCMS/plugins/' . ucfirst($sFolder) . '/views/' . $sFile . '.tpl'))
+        if (!file_exists(PATH_STANDARD . '/vendor/candycms/plugins/' . ucfirst($sFolder) . '/views/' . $sFile . '.tpl'))
           throw new AdvancedException('This plugin template does not exist: ' . ucfirst($sFolder) . '/views/' . $sFile . '.tpl');
 
         else
-          return PATH_STANDARD . '/vendor/candyCMS/plugins/' . ucfirst($sFolder) . '/views';
+          return PATH_STANDARD . '/vendor/candycms/plugins/' . ucfirst($sFolder) . '/views';
       }
     }
     catch (AdvancedException $e) {
@@ -453,7 +453,7 @@ class Helper {
    * @param string $sHighlight string to highlight
    * @param boolean $bFormat format this field using ContentDisplayPlugins?
    * @return string $sStr formatted string
-   * @see vendor/candyCMS/core/Bbcode/Bbcode.controller.php
+   * @see vendor/candycms/core/Bbcode/Bbcode.controller.php
    * @todo fix test; this one fails
    *
    */
@@ -586,7 +586,7 @@ class Helper {
    * @access public
    * @param string $sStr
    * @return string singleize string
-   * @see vendor/candyCMS/core/controllers/Main.controller.php
+   * @see vendor/candycms/core/controllers/Main.controller.php
    *
    */
   public static function singleize($sStr) {

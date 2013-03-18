@@ -50,7 +50,7 @@ class Medias extends Main {
   protected function _create() {
     $this->_setError('file');
 
-    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
+    require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Upload.helper.php';
     $oUpload = new Upload($this->_aRequest, $this->_aSession, $this->_aFile);
 
     $sFolder = isset($this->_aRequest['folder']) ?

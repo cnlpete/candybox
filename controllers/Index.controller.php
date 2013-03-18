@@ -36,7 +36,7 @@ $aFiles = array(
 require_once PATH_STANDARD . '/vendor/autoload.php';
 
 foreach ($aFiles as $sFile)
-  require PATH_STANDARD . '/vendor/candyCMS/core/' . $sFile;
+  require PATH_STANDARD . '/vendor/candycms/core/' . $sFile;
 
 class Index {
 
@@ -341,7 +341,7 @@ class Index {
   private function _checkForNewVersion() {
     if ($this->_aSession['user']['role'] == 4 && ALLOW_VERSION_CHECK === true &&
             (WEBSITE_MODE == 'staging' || WEBSITE_MODE == 'production')) {
-      $oFile = @fopen('https://raw.github.com/marcoraddatz/candyCMS/master/version.txt', 'rb');
+      $oFile = @fopen('https://raw.github.com/marcoraddatz/candycms/master/version.txt', 'rb');
       $sVersionContent = @stream_get_contents($oFile);
       @fclose($oFile);
 
@@ -401,7 +401,7 @@ class Index {
         $aUser = \candyCMS\Models\Users::getUserByToken(Helper::formatInput($this->_aRequest['api_token']));
       }
       else {
-        require_once PATH_STANDARD . '/vendor/candyCMS/core/models/Users.model.php';
+        require_once PATH_STANDARD . '/vendor/candycms/core/models/Users.model.php';
         $aUser = \candyCMS\Core\Models\Users::getUserByToken(Helper::formatInput($this->_aRequest['api_token']));
       }
     }
@@ -413,7 +413,7 @@ class Index {
         $aUser = \candyCMS\Models\Sessions::getUserBySession();
       }
       else {
-        require_once PATH_STANDARD . '/vendor/candyCMS/core/models/Sessions.model.php';
+        require_once PATH_STANDARD . '/vendor/candycms/core/models/Sessions.model.php';
         $aUser = \candyCMS\Core\Models\Sessions::getUserBySession();
       }
     }

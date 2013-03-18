@@ -74,7 +74,7 @@ class Upload {
 
     $this->_sController = $this->_aRequest['controller'];
 
-    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Image.helper.php';
+    require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Image.helper.php';
   }
 
   /**
@@ -134,7 +134,7 @@ class Upload {
    * @access public
    * @param string $sFolder name of upload folder
    * @param boolean $bFilenameHashes whether a hash should be used as the filename
-   * @see vendor/candyCMS/core/controllers/Medias.controller.php
+   * @see vendor/candycms/core/controllers/Medias.controller.php
    * @return array(boolean) status of uploads.
    *
    */
@@ -191,7 +191,7 @@ class Upload {
    * @access public
    * @param string $sResize cut or resize the images?!
    * @return array boolean status of each upload
-   * @see vendor/candyCMS/core/controllers/Galleries.controller.php
+   * @see vendor/candycms/core/controllers/Galleries.controller.php
    *
    */
   public function uploadGalleryFiles($sResize = '') {
@@ -238,7 +238,7 @@ class Upload {
    *
    * @access public
    * @param boolean $bReturnPath return path information?!
-   * @see vendor/candyCMS/core/controllers/Users.controller.php
+   * @see vendor/candycms/core/controllers/Users.controller.php
    * @return string|boolean user avatar path or boolean status of upload.
    *
    */

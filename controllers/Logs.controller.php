@@ -110,7 +110,7 @@ class Logs extends Main {
    *
    */
   public static function updateResultFlag($iLogsId, $bResultFlag) {
-    require_once PATH_STANDARD . '/vendor/candyCMS/core/models/Logs.model.php';
+    require_once PATH_STANDARD . '/vendor/candycms/core/models/Logs.model.php';
 
     $sModel  = Main::__autoload('Logs', true);
     $bReturn = $sModel::setResultFlag($iLogsId, $bResultFlag);

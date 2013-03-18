@@ -76,7 +76,7 @@ class SmartySingleton extends Smarty {
     $this->setCacheDir(PATH_STANDARD . '/' . PATH_SMARTY . '/cache');
     $this->setCompileDir(PATH_STANDARD . '/' . PATH_SMARTY . '/compile');
     $this->setPluginsDir(SMARTY_DIR . '/plugins');
-    $this->setTemplateDir(PATH_STANDARD . '/vendor/candyCMS/core/views');
+    $this->setTemplateDir(PATH_STANDARD . '/vendor/candycms/core/views');
 
     # See http://www.smarty.net/docs/en/variable.merge.compiled.includes.tpl
     $this->merge_compiled_includes = true;
@@ -107,7 +107,7 @@ class SmartySingleton extends Smarty {
     # Define system variables
     $this->assign('_PATH', $this->getPaths());
 
-    require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Upload.helper.php';
+    require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Upload.helper.php';
     $iMaximumUploadSize = \candyCMS\Core\Helpers\Upload::getUploadLimit();
 
     $this->assign('_SYSTEM', array(
@@ -162,12 +162,12 @@ class SmartySingleton extends Smarty {
    */
   public function getPaths() {
     foreach (array(
-        'core'      => '/vendor/candyCMS/core',
+        'core'      => '/vendor/candycms/core',
         'css'       => WEBSITE_CDN . '/stylesheets',
         'images'    => '/app/assets/images',
         'js'        => '/app/assets/javascripts',
         'less'      => '/app/assets/stylesheets',
-        'plugins'   => '/vendor/candyCMS/plugins',
+        'plugins'   => '/vendor/candycms/plugins',
         'public'    => WEBSITE_CDN,
         'upload'    => Helper::removeSlash(PATH_UPLOAD)) as $sKey => $sValue)
       $aPaths[$sKey] = $sValue;
