@@ -503,6 +503,7 @@ abstract class Main {
    *
    */
   protected function _showXML() {
+    header('Content-Type: application/xml');
     AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
     return Helper::redirectTo('/errors/404');
   }
@@ -515,6 +516,7 @@ abstract class Main {
    *
    */
   protected function _overviewXML() {
+    header('Content-Type: application/xml');
     AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
     return Helper::redirectTo('/errors/404');
   }
@@ -579,6 +581,7 @@ abstract class Main {
    *
    */
   protected function _showRSS() {
+    header('Content-Type: application/rss+xml');
     AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
     return Helper::redirectTo('/errors/404');
   }
@@ -591,6 +594,7 @@ abstract class Main {
    *
    */
   protected function _overviewRSS() {
+    header('Content-Type: application/rss+xml');
     AdvancedException::writeLog('404: Trying to access ' . ucfirst($this->_sController) . '->' . __FUNCTION__);
     return Helper::redirectTo('/errors/404');
   }

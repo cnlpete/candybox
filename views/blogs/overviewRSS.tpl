@@ -9,13 +9,13 @@
     <link>{$WEBSITE_URL}</link>
     <copyright>{$WEBSITE_NAME}</copyright>
     {if !$ACTIVE_TEST}
-      <pubDate>{$smarty.now|date_format:'%a, %d %b %Y %H:%M:%S %z'}</pubDate>
+      <pubDate>{$_WEBSITE.date}</pubDate>
     {/if}
     <atom:link href="{$CURRENT_URL}" rel="self" type="application/rss+xml" />
     {foreach $data as $d}
       <item>
         <title>{$d.title}</title>
-        {if !ACTIVE_TEST}
+        {if !$ACTIVE_TEST}
           <pubDate>{$d.date.rss}</pubDate>
           <description>
             <![CDATA[

@@ -89,9 +89,13 @@ class Blogs extends Main {
           $this->_oModel->getOverview();
 
       $this->oSmarty->assign('data', $this->_aData);
-      $this->oSmarty->assign('_WEBSITE', array('title' => $this->_setBlogsTitle()));
+      $this->oSmarty->assign('_WEBSITE', array(
+          'title' => $this->_setBlogsTitle(),
+          'date'  => date('D, d M Y H:i:s O', time())
+      ));
     }
 
+    header('Content-Type: application/rss+xml');
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
   }
 

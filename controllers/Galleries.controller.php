@@ -348,7 +348,6 @@ class Galleries extends Main {
    */
   public function updateOrder() {
     header('Content-Type: application/json');
-
     return $this->_aSession['user']['role'] < 3 ?
             json_encode(array(
                 'success' => false,
