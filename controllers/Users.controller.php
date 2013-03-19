@@ -65,7 +65,7 @@ class Users extends Main {
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
         $this->oSmarty->assign('user', $this->_oModel->getOverview());
 
-        $this->oSmarty->assign('_pages_',
+        $this->oSmarty->assign('_pagination_',
                 $this->_oModel->oPagination->showPages('/' . $this->_sController));
       }
 

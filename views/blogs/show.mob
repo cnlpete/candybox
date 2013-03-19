@@ -76,7 +76,7 @@
       {/if}
     {/foreach}
   {/if}
-  {$_pages_}
+  {$_pagination_}
   {if isset($_REQUEST.id) && preg_match('/Disqus/', $ALLOW_PLUGINS)}
     <!-- plugin:disqus -->
   {elseif isset($_REQUEST.id)}

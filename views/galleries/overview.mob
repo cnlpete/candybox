@@ -34,6 +34,6 @@
       </li>
     </ul>
     {/foreach}
-    {$_pages_}
+    {$_pagination_}
   {/if}
 {/strip}

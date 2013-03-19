@@ -75,7 +75,7 @@
         {/foreach}
       </div>
     </div>
-    {$_pages_}
+    {$_pagination_}
     <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
     {if $_AUTOLOAD.enabled && isset($comments) && count($comments) > 0}
       <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.infiniteScroll{$_SYSTEM.compress_files_suffix}.js'></script>

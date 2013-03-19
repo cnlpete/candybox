@@ -50,7 +50,13 @@ class Galleries extends Main {
 
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
       $this->oSmarty->assign('albums', $this->_oModel->getOverview());
-      $this->oSmarty->assign('_pages_', $this->_oModel->oPagination->showPages('/' . $this->_sController));
+
+      # Limit to maximum pages
+      if (isset($this->_aRequest['page']) && (int) $this->_aRequest['page'] > $this->_oModel->oPagination->getPages())
+        return Helper::redirectTo('/errors/404');
+
+      else
+        $this->oSmarty->assign('_pagination_', $this->_oModel->oPagination->showPages('/' . $this->_sController));
     }
 
     return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);

@@ -131,7 +131,7 @@ function enableInfiniteScroll(selector, itemselector, repeatTimes, pathImages) {
         if (iCounter % repeatTimes == 0){
           /** if we did load a few times, we want to stop and display a resume button **/
           opts.contentSelector.infinitescroll('pause');
-          var a = $('<a alt="{$lang.pages.more}" data-role="button" class="btn">{$lang.pages.more}</a>');
+          var a = $('<a alt="' + lang.pages.more + '" data-role="button" class="btn">' + lang.pages.more + '</a>');
           a.click(function(){
             $(this).fadeOut( opts.loading.speed, function(){
               opts.contentSelector.infinitescroll('resume');

@@ -502,6 +502,7 @@ class Index {
       $sCachedHTML = $oSmarty->fetch($sTemplateFile, UNIQUE_ID);
     }
 
+
     $sCachedHTML = $this->_oPlugins->runGlobalDisplayPlugins($sCachedHTML);
     $sCachedHTML = $this->_oPlugins->runSimplePlugins($sCachedHTML);
     $sCachedHTML = $this->_oPlugins->runSessionPlugin($sCachedHTML);

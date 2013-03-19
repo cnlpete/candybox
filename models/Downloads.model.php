@@ -14,7 +14,6 @@ namespace candyCMS\Core\Models;
 
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
-use candyCMS\Core\Helpers\Pagination;
 use candyCMS\Core\Helpers\Upload;
 use PDO;
 

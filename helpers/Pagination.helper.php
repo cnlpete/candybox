@@ -109,11 +109,7 @@ class Pagination {
     if ($this->_iCurrentPage > $this->_iPages)
       $this->_iCurrentPage = $this->_iPages;
 
-    if (isset($this->_aRequest['page']) && (int) $this->_aRequest['page'] > $this->_iPages)
-      return Helper::redirectTo('/errors/404');
-
     $this->_iOffset = ($this->_iCurrentPage - 1) * $this->_iLimit;
-
     $this->_oSmarty = SmartySingleton::getInstance();
   }
 

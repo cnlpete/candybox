@@ -79,17 +79,23 @@ class Comments extends Main {
       $this->oSmarty->assign('comments',
               $this->_oModel->getOverview($this->_iId, (int) $this->_aParentData[1]['comment_count'], LIMIT_COMMENTS));
 
-      # Set author of blog entry
-      $this->oSmarty->assign('author_id', (int) $this->_aParentData[1]['author_id']);
+      # Limit to maximum pages
+      if (isset($this->_aRequest['page']) && (int) $this->_aRequest['page'] > $this->_oModel->oPagination->getPages())
+        return Helper::redirectTo('/errors/404');
+      
+      else {
+        # Set author of blog entry
+        $this->oSmarty->assign('author_id', (int) $this->_aParentData[1]['author_id']);
 
-      # For correct information, do some math to display entries.
-      # NOTE: If you're admin, you can see all entries. That might bring pagination to your view, even
-      # when other people don't see it
-      $this->oSmarty->assign('comment_number',
-              ($this->_oModel->oPagination->getCurrentPage() * LIMIT_COMMENTS) - LIMIT_COMMENTS);
+        # For correct information, do some math to display entries.
+        # NOTE: If you're admin, you can see all entries. That might bring pagination to your view, even
+        # when other people don't see it
+        $this->oSmarty->assign('comment_number',
+                ($this->_oModel->oPagination->getCurrentPage() * LIMIT_COMMENTS) - LIMIT_COMMENTS);
 
-      # Do we need pages?
-      $this->oSmarty->assign('_pages_', $this->_oModel->oPagination->showPages('/blogs/' . $this->_iId));
+        # Do we need pages?
+        $this->oSmarty->assign('_pagination_', $this->_oModel->oPagination->showPages('/blogs/' . $this->_iId));
+      }
     }
 
     # We can leave caching on, the form itself will turn caching off, but that is a different template.

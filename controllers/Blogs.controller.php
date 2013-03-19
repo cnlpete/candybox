@@ -59,8 +59,14 @@ class Blogs extends Main {
                 $this->_oModel->getOverviewByTag() :
                 $this->_oModel->getOverview();
 
-        $this->oSmarty->assign('blogs', $this->_aData);
-        $this->oSmarty->assign('_pages_', $this->_oModel->oPagination->showSurrounding());
+        # Limit to maximum pages
+        if (isset($this->_aRequest['page']) && (int) $this->_aRequest['page'] > $this->_oModel->oPagination->getPages())
+          return Helper::redirectTo('/errors/404');
+
+        else {
+          $this->oSmarty->assign('blogs', $this->_aData);
+          $this->oSmarty->assign('_pagination_', $this->_oModel->oPagination->showSurrounding());
+        }
       }
     }
 

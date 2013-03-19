@@ -58,7 +58,7 @@
           {/if}
         </article>
       {/foreach}
-      {$_pages_}
+      {$_pagination_}
     {/if}
   </div>
 {/strip}

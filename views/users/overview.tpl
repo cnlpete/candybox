@@ -88,7 +88,7 @@
       </tr>
     {/foreach}
   </table>
-  {$_pages_}
+  {$_pagination_}
   <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.tablesorter{$_SYSTEM.compress_files_suffix}.js'></script>

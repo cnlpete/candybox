@@ -105,7 +105,9 @@
           </footer>
         </article>
       {/foreach}
-      {$_pages_}
+      {if !isset($_REQUEST.id)}
+        {$_pagination_}
+      {/if}
       {if isset($_REQUEST.id) && preg_match('/Disqus/', $ALLOW_PLUGINS)}
         <!-- plugin:disqus -->
       {elseif isset($_REQUEST.id) && !$DISABLE_COMMENTS}
