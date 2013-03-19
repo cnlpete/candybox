@@ -25,7 +25,7 @@ define('PATH_STANDARD', dirname(__FILE__));
 # Initialize software
 try {
   require PATH_STANDARD . '/app/config/Candy.inc.php';
-  require PATH_STANDARD . '/vendor/candyCMS/core/controllers/Index.controller.php';
+  require PATH_STANDARD . '/vendor/candycms/core/controllers/Index.controller.php';
 }
 catch (Exception $e) {
   die($e->getMessage());

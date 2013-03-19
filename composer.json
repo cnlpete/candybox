@@ -68,10 +68,10 @@
     "candycms/core": "2.1.*",
     "candycms/plugins": "2.1.*",
 
-    "phpmailer/phpmailer": "5.2.1",
+    "phpmailer/phpmailer": "5.2.*",
     "smushit/smushit": "1.0",
-    "recaptcha/recaptcha": "1.11",
-    "mailchimp/mcapi": "1.3"
+    "recaptcha/recaptcha": "1.*",
+    "mailchimp/mcapi": "1.*"
   },
 
   "require-dev": {

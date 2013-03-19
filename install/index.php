@@ -21,7 +21,7 @@ use PDO;
 if (!defined('PATH_STANDARD'))
   define('PATH_STANDARD', dirname(__FILE__) . '/..');
 
-require PATH_STANDARD . '/vendor/candyCMS/core/controllers/Index.controller.php';
+require PATH_STANDARD . '/vendor/candycms/core/controllers/Index.controller.php';
 
 class Install extends Index {
 
@@ -53,7 +53,7 @@ class Install extends Index {
     $this->_createFoldersIfNotExistent($aFolders, 0777, '/');
     $this->_checkFoldersAndAssign($aFolders, $aFolderChecks, 0777, '/');
 
-    if (!$aFolderChecks['/'.Helper::removeSlash(PATH_SMARTY).'/cache'] || 
+    if (!$aFolderChecks['/'.Helper::removeSlash(PATH_SMARTY).'/cache'] ||
         !$aFolderChecks['/'.Helper::removeSlash(PATH_SMARTY).'/compile']) {
       # @todo print a nice error message
       echo "please make sure the folders '" . '/'.Helper::removeSlash(PATH_SMARTY).'/compile' . "' and '" . '/'.Helper::removeSlash(PATH_SMARTY).'/compile' ."' are writable.";
@@ -472,7 +472,7 @@ class Install extends Index {
    * @param string $sField
    * @param string $sMessage
    * @return object \candyCMS\Install
-   * @see /vendor/candyCMS/core/controllers/Main.controller.php - taken from there
+   * @see /vendor/candycms/core/controllers/Main.controller.php - taken from there
    *
    */
   protected function _setError($sField, $sMessage = '') {
