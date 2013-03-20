@@ -13,9 +13,49 @@
  *
  */
 
-@import "_requirements.less";
+@path_bootstrap         = "../../../../vendor/twitter/bootstrap/twitter/bootstrap/less";
+@path_candy_images      = "../../../../vendor/candyCMS/core/assets/images";
+@path_candy_stylesheets = "../../../../vendor/candyCMS/core/assets/stylesheets/core";
 
-/* Bootstrap fixes */
+/* If you want to include all bootstrap modules simply uncomment following lines
+ * and replace with: @import @path_bootstrap + "/bootstrap.less";
+ *
+ * I chose to include only the plugins I need and delete all the other ones */
+@import @path_bootstrap + "/reset.less";
+@import @path_bootstrap + "/variables.less";
+@import @path_bootstrap + "/mixins.less";
+@import @path_bootstrap + "/scaffolding.less";
+@import @path_bootstrap + "/grid.less";
+@import @path_bootstrap + "/layouts.less";
+@import @path_bootstrap + "/type.less";
+@import @path_bootstrap + "/code.less";
+@import @path_bootstrap + "/forms.less";
+@import @path_bootstrap + "/tables.less";
+@import @path_bootstrap + "/dropdowns.less";
+@import @path_bootstrap + "/wells.less";
+@import @path_bootstrap + "/component-animations.less";
+@import @path_bootstrap + "/close.less";
+@import @path_bootstrap + "/buttons.less";
+@import @path_bootstrap + "/alerts.less";
+@import @path_bootstrap + "/navs.less";
+@import @path_bootstrap + "/navbar.less";
+@import @path_bootstrap + "/pagination.less";
+@import @path_bootstrap + "/pager.less";
+@import @path_bootstrap + "/modals.less";
+@import @path_bootstrap + "/tooltip.less";
+@import @path_bootstrap + "/thumbnails.less";
+@import @path_bootstrap + "/progress-bars.less";
+@import @path_bootstrap + "/utilities.less";
+
+/* candyCMS requirements - Do not modify them */
+/* ------------------------------------------------------- */
+@import @path_candy_stylesheets + "/jquery.capty.less";
+@import @path_candy_stylesheets + "/jquery.fancybox.less";
+@import @path_candy_stylesheets + "/candy.less";
+@import @path_candy_stylesheets + "/candy.icons.less"; // Include this icons as alternative to Twitters icons
+
+
+/* ------------------- Bootstrap fixes ------------------- */
 // No margin at BBCode images
 figure.image {
   margin:0px;
@@ -32,18 +72,21 @@ figure.image {
   max-width:300px;
 }
 
-/* Own styles */
+/* -------------------- TinyMCE fixes -------------------- */
+.mceEditor {
+  body, td, pre {
+    color:#000;
+    font: 13px "Trebuchet MS", Arial, Sans-serif;
+    margin:6px;
+  }
+}
+
+/* ---------------------- Own styles ---------------------- */
 // Avoid conflicts with navbar
 body {
   padding-top:60px;
 }
 
-// Remove padding when displaying the collapsable nav
-@media (max-width: 979px) {
-  body {
-    padding-top:0px;
-  }
-}
 // Remove outlines on Firefox and Opera
 a:active, a:link {
   outline:none;

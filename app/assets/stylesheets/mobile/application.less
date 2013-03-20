@@ -13,102 +13,44 @@
  *
  */
 
-@import "jquery.mobile.less";
-@import "candy.less";
-@import "photoswipe.less";
+@path_bootstrap         = "../../../../vendor/twitter/bootstrap/twitter/bootstrap/less";
+@path_candy_images      = "../../../../vendor/candyCMS/core/assets/images";
+@path_candy_stylesheets = "../../../../vendor/candyCMS/core/assets/stylesheets/core";
 
-.center {
-  text-align: center;
-}
+/* If you want to include all bootstrap modules simply uncomment following lines
+ * and replace with: @import @path_bootstrap + "/bootstrap.less";
+ *
+ * I chose to include only the plugins I need and delete all the other ones */
+@import @path_bootstrap + "/reset.less";
+@import @path_bootstrap + "/variables.less";
+@import @path_bootstrap + "/mixins.less";
+@import @path_bootstrap + "/scaffolding.less";
+@import @path_bootstrap + "/grid.less";
+@import @path_bootstrap + "/layouts.less";
+@import @path_bootstrap + "/type.less";
+@import @path_bootstrap + "/code.less";
+@import @path_bootstrap + "/forms.less";
+@import @path_bootstrap + "/tables.less";
+@import @path_bootstrap + "/dropdowns.less";
+@import @path_bootstrap + "/wells.less";
+@import @path_bootstrap + "/component-animations.less";
+@import @path_bootstrap + "/close.less";
+@import @path_bootstrap + "/buttons.less";
+@import @path_bootstrap + "/alerts.less";
+@import @path_bootstrap + "/navs.less";
+@import @path_bootstrap + "/navbar.less";
+@import @path_bootstrap + "/pagination.less";
+@import @path_bootstrap + "/pager.less";
+@import @path_bootstrap + "/modals.less";
+@import @path_bootstrap + "/tooltip.less";
+@import @path_bootstrap + "/thumbnails.less";
+@import @path_bootstrap + "/progress-bars.less";
+@import @path_bootstrap + "/utilities.less";
+@import @path_bootstrap + "/responsive-utilities.less"; // Extra for mobile
+@import @path_bootstrap + "/responsive-navbar.less"; // Extra for mobile
 
-a, a:hover {
-  text-decoration: none;
-}
 
-p.create {
-  margin: 0px 0px 30px;
-}
-
-/* Comments */
-#comments {
-  clear:both;
-  padding:10px 0px;
-
-  a {
-    font-weight: bold;
-    color: #000;
-  }
-
-  article {
-    margin-top:30px;
-    text-align:left;
-    padding:10px;
-    background:#eee;
-    -webkit-border-radius: .6em;
-    -moz-border-radius: .6em;
-    border-radius: .6em;
-
-    header {
-      line-height:1.5em;
-      border-bottom:1px solid #ccc;
-      padding-bottom:8px;
-
-      img {
-        float:left;
-        margin: 3px 10px 0px 0px;
-      }
-
-      a:hover {
-        text-decoration: none;
-      }
-    }
-
-    p {
-      font-size:90%;
-
-      &.center {
-        font-size:80%;
-        text-align:center;
-      }
-    }
-
-    footer {
-      text-align:right;
-    }
-
-    &.from_author {
-      background: #E3E3E3;
-    }
-  }
-}
-
-#downloads .ui-link-inherit {
-  padding-left:50px;
-}
-
-#galleries li a div img {
-  margin-right:5px;
-}
-
-p.center {
-  clear:both;
-}
-
-/* Quotes */
-blockquote {
-  padding:0px 15px;
-  margin:10px auto;
-  text-align:left;
-  border-left:5px solid #ccc;
-}
-
-blockquote h3 {
-  margin-top:0px;
-  margin-bottom:0px;
-  font-size:90%;
-}
-
-/* hide the descriptions in forms */
-form .control-group .controls .help-block {
-  display: none;
-}
+/* candyCMS requirements - Do not modify them */
+/* ------------------------------------------------------- */
+@import @path_candy_stylesheets + "/candy.less";
+@import @path_candy_stylesheets + "/candy.icons.less"; // Include this icons as alternative to Twitters icons

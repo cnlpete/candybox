@@ -1,0 +1,1 @@
+ALTER TABLE `%SQL_PREFIX%mails` ADD `attachment` TEXT  NULL  AFTER `message`;
