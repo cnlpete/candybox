@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 {strip}
-  <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'
-        xmlns:og='http://opengraphprotocol.org/schema/'
-        xmlns:fb='http://www.facebook.com/2008/fbml'>
+  <html>
     <head>
       {* Production mode: Use compiled CSS *}
-      <link href='{$_PATH.css}/core{$_SYSTEM.compress_files_suffix}.css'
+      <link href='{$_PATH.css}/mobile{$_SYSTEM.compress_files_suffix}.css'
             rel='stylesheet' type='text/css' media='screen, projection'/>
 
+      {* Responsive support *}
+      <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+      <link href='{$_PATH.css}/bootstrap.responsive{$_SYSTEM.compress_files_suffix}.css'
+            rel='stylesheet'>
+
       <meta http-equiv='content-type' content='text/html;charset=utf-8'/>
-      <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/>
       <meta name='description' content="{$_WEBSITE.meta.description}"/>
       <meta name='dc.title' content="{$_WEBSITE.title}"/>
       <meta itemprop='name' content="{$_WEBSITE.meta.og.title}"/>
@@ -50,22 +52,24 @@
 
       <title>{$_WEBSITE.title} - {$WEBSITE_NAME}</title>
     </head>
-    <!--[if lt IE 7]><body class='ie6'><![endif]-->
-    <!--[if IE 7]><body class='ie7'><![endif]-->
-    <!--[if IE 8]><body class='ie8'><![endif]-->
-    <!--[if gt IE 8]><!--><body itemscope itemtype='http://schema.org/WebPage'><!--<![endif]-->
-
+    <body>
       {* Top navigation *}
       <nav class='navbar navbar-inverse navbar-fixed-top'>
         <div class='navbar-inner'>
           <div class='container'>
+            <a class='btn btn-navbar' data-toggle='collapse' data-target='.nav-collapse'>
+              <span class='icon-bar'></span>
+              <span class='icon-bar'></span>
+              <span class='icon-bar'></span>
+            </a>
             <a href='/' class='brand' title='{$WEBSITE_NAME}'>
               {$WEBSITE_NAME}
               {if $WEBSITE_MODE !== 'production'}
                 &nbsp;- {$WEBSITE_MODE|upper}
               {/if}
             </a>
-            <div class='nav-collapse'>
+
+            <div class='nav-collapse collapse'>
               <ul class='nav'>
                 <li{if $_REQUEST.controller == 'blogs'} class='active'{/if}>
                   <a href='/blogs'>{$lang.global.blog}</a>
@@ -153,9 +157,9 @@
       </nav>
 
       {* Main container *}
-      <div class='container'>
-        <div class='row'>
-          <div class='span8'>
+      <div class='container-fluid'>
+        <div class='row-fluid'>
+          <div class='span12'>
             <div id='js-flash_message'>
               <div class='alert alert-{$_FLASH.type}' id='js-flash_{$_FLASH.type}'>
                 <a class='close' href='#'>×</a>
@@ -165,42 +169,15 @@
                 </p>
               </div>
             </div>
-            {if isset($_WEBSITE.update) && !empty($_WEBSITE.update)}
-              <div class='alert alert-warning'>
-                {$_WEBSITE.update}
-              </div>
-            {/if}
             <section id='{$_REQUEST.controller}' itemprop='mainContentOfPage'>
               {$_WEBSITE.content}
             </section>
-          </div>
-          <div class='span4'>
-            <!-- plugin:languagechooser -->
-            <h3>{$lang.global.headlines}</h3>
-            <!-- plugin:headlines -->
-            <h3>{$lang.global.archive}</h3>
-            <!-- plugin:archive -->
-            <h3>{$lang.global.tagcloud}</h3>
-            <!-- plugin:tagcloud -->
-            <p>
-              <a href='https://ac.empuxa.com/tasks/submit/candycms'
-                 target='_blank'
-                 class='btn btn-danger'>
-                Report Bug
-              </a>
-            </p>
-            {if $MOBILE_DEVICE}
-              <p>
-                <a href='/?mobile=1' ref='nofollow'>{$lang.global.view.mobile}</a>
-              </p>
-            {/if}
           </div>
         </div>
       </div>
 
       {* Add bootstrap support *}
-      <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.bootstrap.dropdown{$_SYSTEM.compress_files_suffix}.js'></script>
-      <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.bootstrap.tooltip{$_SYSTEM.compress_files_suffix}.js'></script>
+      <script type='text/javascript' src='/vendor/twitter/bootstrap/twitter/bootstrap/js/bootstrap-collapse.js'></script>
 
       {* Own JS and plugins *}
       <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/scripts{$_SYSTEM.compress_files_suffix}.js'></script>
