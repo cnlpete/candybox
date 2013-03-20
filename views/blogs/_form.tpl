@@ -164,38 +164,36 @@
         </div>
       </div>
     {/if}
-    <div data-role='fieldcontain'>
-      <div class='form-actions' data-role='controlgroup'>
-        {if isset($author_id)}
-          <input type='hidden'
-                 value='{$author_id}'
-                 name='{$_REQUEST.controller}[author_id]' />
-        {/if}
-        {if $_REQUEST.action == 'create'}
-          <input type='submit'
-                 class='btn btn-primary'
-                 value="{$lang.global.create.create}"
-                 data-theme='b' />
-        {elseif $_REQUEST.action == 'update'}
-          <input type='submit'
-                 class='btn btn-primary'
-                 value="{$lang.global.update.update}"
-                 data-theme='b' />
-          <input type='button'
-                 class='btn btn-danger'
-                 value='{$lang.blogs.title.destroy}'
-                 onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroy')" />
-          <input type='reset'
-                 class='btn'
-                 value='{$lang.global.reset}' />
-          <input type='hidden'
-                 value='{$date}'
-                 name='{$_REQUEST.controller}[date]' />
-          <input type='hidden'
-                 name='method'
-                 value='PUT' />
-        {/if}
-      </div>
+    <div class='form-actions'>
+      {if isset($author_id)}
+        <input type='hidden'
+                value='{$author_id}'
+                name='{$_REQUEST.controller}[author_id]' />
+      {/if}
+      {if $_REQUEST.action == 'create'}
+        <input type='submit'
+                class='btn btn-primary'
+                value="{$lang.global.create.create}"
+                data-theme='b' />
+      {elseif $_REQUEST.action == 'update'}
+        <input type='submit'
+                class='btn btn-primary'
+                value="{$lang.global.update.update}"
+                data-theme='b' />
+        <input type='button'
+                class='btn btn-danger'
+                value='{$lang.blogs.title.destroy}'
+                onclick="confirmDestroy('/{$_REQUEST.controller}/{$_REQUEST.id}/destroy')" />
+        <input type='reset'
+                class='btn'
+                value='{$lang.global.reset}' />
+        <input type='hidden'
+                value='{$date}'
+                name='{$_REQUEST.controller}[date]' />
+        <input type='hidden'
+                name='method'
+                value='PUT' />
+      {/if}
     </div>
   </form>
   <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.bootstrap.typeahead{$_SYSTEM.compress_files_suffix}.js'></script>

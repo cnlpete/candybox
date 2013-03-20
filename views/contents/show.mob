@@ -1,9 +1,0 @@
-{strip}
-  <header>
-    <h1>{$contents.title}</h1>
-  </header>
-  {if $contents.teaser}
-    <h3>{$contents.teaser}</h3>
-  {/if}
-  {$contents.content}
-{/strip}

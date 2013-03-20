@@ -88,7 +88,7 @@ class Mails extends Main {
    *
    * @access protected
    * @param array $aMail array with information for subject, message, name of receipient, email of receipient,
-   * name of reply to, email of reply to and attachement path
+   * name of reply to, email of reply to and attachment path
    * @return boolean whether phpmailers returned true or false
    * @see vendor/phpmailer/phpmailer/class.phpmailer.php
    *
@@ -128,8 +128,8 @@ class Mails extends Main {
     $oMail->Subject = isset($aMail['subject']) ? $aMail['subject'] : I18n::get('mails.subject.by', 'System');
     $oMail->MsgHTML(nl2br(isset($aMail['message']) ? $aMail['message'] : ''));
 
-    if (isset($aMail['attachement']))
-      $oMail->AddAttachment($aMail['attachement']);
+    if (!empty($aMail['attachment']))
+      $oMail->AddAttachment($aMail['attachment']);
 
     return $oMail->Send();
   }
@@ -183,7 +183,7 @@ class Mails extends Main {
    *
    * @access public
    * @param array $aMail array with information for subject, message, name of receipient, email of receipient,
-   * name of reply to, email of reply to and attachement path
+   * name of reply to, email of reply to and attachment path
    * @param bool $bSaveMail whehter the mail queue should be used on failure
    * @return boolean the status of the action
    * @see vendor/phpmailer/phpmailer/class.phpmailer.php
@@ -199,9 +199,10 @@ class Mails extends Main {
     $aMail['subject'] = $this->_replaceNameAndUrl($aMail['subject']);
 
     # Bugfix: Fix all the missing email parts to avoid SQL errors
-    $aMail['to_name']       = isset($aMail['to_name']) ? $aMail['to_name'] : '';
+    $aMail['attachment']   = isset($aMail['attachment']) ? $aMail['attachment'] : '';
     $aMail['from_address']  = isset($aMail['from_address']) ? $aMail['from_address'] : WEBSITE_MAIL_NOREPLY;
     $aMail['from_name']     = isset($aMail['from_name']) ? $aMail['from_name'] : WEBSITE_NAME;
+    $aMail['to_name']       = isset($aMail['to_name']) ? $aMail['to_name'] : '';
 
     $sErrorMessage  = '';
     $bReturn        = false;
@@ -227,6 +228,7 @@ class Mails extends Main {
                                             to_name,
                                             subject,
                                             message,
+                                            attachment,
                                             error_message)
                                         VALUES
                                           ( :user_id,
@@ -238,6 +240,7 @@ class Mails extends Main {
                                             :to_name,
                                             :subject,
                                             :message,
+                                            :attachment,
                                             :error_message)");
 
         $iUserId = (int) (isset($this->_aSession['user']['id']) ? $this->_aSession['user']['id'] : 0);

@@ -91,10 +91,7 @@
       </div>
     </div>
     <!-- pluginmanager:captcha -->
-    {if $MOBILE}
-      <div data-role='fieldcontain' class='center'>
-    {/if}
-    <div class='form-actions' data-role='controlgroup' data-type='horizontal'>
+    <div class='form-actions'>
       <input type='submit'
              value='{$lang.comments.title.create}'
              data-theme='b'
@@ -109,8 +106,5 @@
              value='{$_REQUEST.controller}'
              name='comments[parent_controller]' />
     </div>
-    {if $MOBILE}
-      </div>
-    {/if}
   </form>
 {/strip}

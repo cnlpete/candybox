@@ -38,12 +38,16 @@
         {/if}
       </div>
     </div>
-    <div data-role='fieldcontain' class='form-actions'>
+    <div class='form-actions'>
       <input type='submit' value='{$lang.global.login}' data-theme='b' class='btn btn-primary'/>
     </div>
   </form>
-  <div class='center' data-role='controlgroup'>
-    <a href='/{$_REQUEST.controller}/password' class='btn' data-role='button'>{$lang.sessions.password.title}</a>
-    <a href='/{$_REQUEST.controller}/verification' class='btn' data-role='button'>{$lang.sessions.verification.title}</a>
+  <div class='center'>
+    <a href='/{$_REQUEST.controller}/password' class='btn'>
+      {$lang.sessions.password.title}
+    </a>
+    <a href='/{$_REQUEST.controller}/verification' class='btn'>
+      {$lang.sessions.verification.title}
+    </a>
   </div>
 {/strip}

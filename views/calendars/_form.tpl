@@ -73,7 +73,7 @@
         </p>
       </div>
     </div>
-    <div data-role='fieldcontain' class='form-actions'>
+    <div class='form-actions'>
       <input class='btn btn-primary'
              type='submit'
              data-theme='b'

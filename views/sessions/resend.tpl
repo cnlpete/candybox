@@ -40,7 +40,7 @@
       </div>
     </div>
     <!-- pluginmanager:captcha -->
-    <div data-role='fieldcontain' class='form-actions'>
+    <div class='form-actions'>
       <input type='submit'
              class='btn btn-primary'
              value='{$lang.global.submit}'
