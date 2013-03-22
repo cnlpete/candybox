@@ -301,8 +301,8 @@ class PluginManager {
    */
   public function runGlobalDisplayPlugins(&$sHtml) {
     foreach ($this->_aGlobalDisplayPluginNames as $sPluginName) {
-      $oPlugin = $this->_aPlugins[$sPluginName];
-      $sHtml = $oPlugin->prepareContent($sHtml);
+      $oPlugin  = $this->_aPlugins[$sPluginName];
+      $sHtml    = $oPlugin->prepareContent($sHtml);
     }
 
     return $sHtml;
@@ -331,7 +331,7 @@ class PluginManager {
   public function runRepetitivePlugins($bForceExecution = false) {
     foreach ($this->_aRepetitivePluginNames as $sPluginName) {
       $oPlugin = $this->_aPlugins[$sPluginName];
-
+      
       if ($oPlugin->needsExecution($bForceExecution))
         $oPlugin->execute();
     }
