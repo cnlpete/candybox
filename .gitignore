@@ -16,9 +16,6 @@ app/*
 !/app/tests
 !/app/views
 
-public/templates/*
-!public/templates/sample
-
 upload/*
 
 /vendor/*
