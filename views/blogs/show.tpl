@@ -71,13 +71,12 @@
             {$b.content}
           </div>
           <footer class='row'>
-            <div class='span4 tags'
-                 itemprop='keywords'>
+            <div class='span4 tags'>
               {if $b.tags|@count > 0}
                 {$lang.global.tags.tags}:
                 {foreach $b.tags as $t}
                   <a class='js-tooltip' title='{$lang.global.tags.info}: {$t}' href='/{$_REQUEST.controller}/{$t}'>
-                    {$t}
+                    <span itemprop='keywords'>{$t}</span>
                   </a>
                   {if !$t@last}, {/if}
                 {/foreach}
