@@ -450,7 +450,7 @@ class Index {
       define('UNIQUE_PREFIX', WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|' . $this->_aRequest['controller']);
 
     if (!defined('UNIQUE_ID')) {
-      define('UNIQUE_ID', UNIQUE_PREFIX . '|' . $this->_aSession['user']['role']) .
+      define('UNIQUE_ID', UNIQUE_PREFIX . '|' . $this->_aSession['user']['role'] .
               (MOBILE ? 'mob|' : 'tpl|') . '|' .
               substr(md5(CURRENT_URL), 0, 10));
     }
