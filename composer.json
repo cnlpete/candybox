@@ -9,7 +9,7 @@
   "require": {
     "php": ">=5.3.0",
 
-    "candycms/core": ">=2.1.0",
+    "candycms/core": ">=3.0.0",
 
     "facebook/php-sdk": "3.2.*",
     "dflydev/markdown" : "1.0.*",
