@@ -51,32 +51,31 @@ Additional reasons, why candyCMS might be interesting for you
 
 Requirements
 ------------------------------------------------------------------------------------------------------------------------
-- at least PHP 5.3 & MySQL database
+- at least PHP 5.3 & MySQL database (PHP 5.4 recommended)
 - Imagemagick, GD2 and mod_rewrite
 - an account at http://recaptcha.org to use captchas
 - an account at http://mailchimp.com to use the newsletter management
-- about 25MB webspace
+- about 50MB webspace
 
 
 Setup
 ------------------------------------------------------------------------------------------------------------------------
-1. Download and install Composer ( http://getcomposer.org ): `curl -s http://getcomposer.org/installer | php`.
-2. Install the vendor packages afterwards: `php composer.phar install` or `php composer.phar install --dev` if you would
-like have the possibility to run tests.
-3. Configure your website settings at "app/config/Candy.inc.php" and start uploading all files.
-4. Execute the "/install/index.php" file. If an error occurs it might be, that you have to give CHMOD 777 to `app/cache`
-and `app/compile`.
-5. Follow the instructions and make sure, you delete the install folder after installation.
-6. If you want to use compressed CSS and JS, make sure the template folders are writeable and start the compressor
-via console: `php tools/minify/index.php`. This will compress the actual JS and CSS rendered by your DEVELOPMENT enviroment.
+1. Download the newest version of this package.
+2. Download and install Composer ( http://getcomposer.org ): `curl -s http://getcomposer.org/installer | php`.
+3. Install the vendor packages afterwards: `php composer.phar install` or `php composer.phar install --dev` if you would
+like to have the possibility to run tests.
+4. Copy files from "app/config/samples/" to "app/config" and configure your website settings at "app/config/Candy.inc.php".
+5. Execute the "/install/index.php" file. If an error occurs, it might be, that you have to give CHMOD 777 to `app/cache`
+and `app/compile` first.
+6. Follow the instructions (also on CHMODs) and make sure, you delete the install folder after installation.
 
 
 Update
 ------------------------------------------------------------------------------------------------------------------------
 To upgrade candyCMS, read the release notes (if provided) first. If no specific information are given,
-upload following folders and files after using the Composer (`php composer.phar update`):
-"index.php", "composer.json" and "install". You might also need to update all javascript files under "public/js". Make
-sure, the links in your views are still correct! Sorry for not providing more release information.
+upload following folders and files and start the Composer  afterwards (`php composer.phar update`):
+"index.php", "composer.json" and "install". After Composer has loaded all requirements, go to "install/index.php" and
+migrate your application to the newest version. Delete the install folder afterwards.
 
 
 Credits
