@@ -293,7 +293,7 @@ final class FacebookCMS extends Facebook {
    */
   public final function showMeta() {
     return '<meta property="fb:admins" content="' . $this->_sAdminId . '"/>' .
-        '<meta property="fb:app_id" content="' . $this->_sAppId . '"/>';
+           '<meta property="fb:app_id" content="' . $this->_sAppId . '"/>';
   }
 
   /**
