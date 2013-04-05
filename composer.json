@@ -75,11 +75,7 @@
   },
 
   "require-dev": {
-    "candycms/tests": "dev-master",
-    "candycms/documentation": "dev-master",
-
-    "opauth/opauth":"dev-master",
-    "opauth/twitter": "dev-master",
-    "opauth/facebook": "dev-master"
+    "candycms/tests": "3.0.*",
+    "candycms/documentation": "3.0.*"
   }
 }
