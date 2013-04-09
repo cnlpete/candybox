@@ -225,7 +225,7 @@ class Helper {
    *
    * @static
    * @access public
-   * @param integer $mSize avatar size
+   * @param mixed $mSize avatar size
    * @param integer $iUserId user ID
    * @param string $sEmail email address to search gravatar for
    * @param boolean $bUseGravatar do we want to use gravatar?
