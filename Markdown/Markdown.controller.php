@@ -61,14 +61,13 @@ final class Markdown {
    * Return the formatted code.
    *
    * @final
-   * @static
    * @access public
    * @param string $sStr
    * @return string HTML with formated code
    * @todo caching?
    *
    */
-  public static final function prepareContent(&$sStr) {
+  public final function prepareContent(&$sStr) {
     $oMarkdown = new \dflydev\markdown\MarkdownParser();
     return $oMarkdown->transformMarkdown($sStr);
   }
@@ -77,13 +76,12 @@ final class Markdown {
    * Show nothing, since this plugin does not need to output additional javascript.
    *
    * @final
-   * @static
    * @access public
    * @return string HTML
    * @todo add markdowneditor: https://github.com/samwillis/pagedown-bootstrap ??
    *
    */
-  public static final function show() {
+  public final function show() {
     return '';
   }
 
@@ -91,12 +89,11 @@ final class Markdown {
    * Generate an info array ('url' => '', 'iconurl' => '', 'description' => '')
    *
    * @final
-   * @static
    * @access public
    * @return array
    *
    */
-  public static final function getInfo() {
+  public final function getInfo() {
     return array( 'url'         => 'http://daringfireball.net/projects/markdown/syntax',
                   'description' => 'Markdown',
                   'iconurl'     => '/vendor/candyCMS/plugins/Markdown/assets/icon.png');

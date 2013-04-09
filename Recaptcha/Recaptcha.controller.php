@@ -144,7 +144,7 @@ final class Recaptcha {
    * @final
    * @access public
    * @param array $aError
-   * @return
+   * @return array|boolean
    * @todo doc; test: captcha might be broken before
    *
    */
@@ -165,6 +165,7 @@ final class Recaptcha {
     else
       $this->_sErrorMessage = I18n::get('error.captcha.loading');
 
-    return $this->_sErrorMessage;
+    $aError['captcha'] = $this->_sErrorMessage;
+    return $aError;
   }
 }
