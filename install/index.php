@@ -311,13 +311,16 @@ class Install extends Index {
    *
    */
   private function _showMigrations() {
-    $sDir = PATH_STANDARD . '/install/migrations/';
+    $sFolder = isset($this->_aRequest['show']) && 'version' == $this->_aRequest['show'] ? 'current' : 'previous';
+     
+    $sDir = PATH_STANDARD . '/install/migrations/' . $sFolder;
     $oDir = opendir($sDir);
 
+    # Get all migrations
     $oDb = \candyCMS\Core\Models\Main::connectToDatabase();
     try {
-      $oQuery = $oDb->prepare('SELECT file, date FROM ' . SQL_PREFIX . 'migrations');
-      $bReturn = $oQuery->execute();
+      $oQuery   = $oDb->prepare('SELECT file, date FROM ' . SQL_PREFIX . 'migrations');
+      $bReturn  = $oQuery->execute();
 
       if ($bReturn == true)
         $aResults = $oQuery->fetchAll(PDO::FETCH_ASSOC);
@@ -331,17 +334,13 @@ class Install extends Index {
     foreach ($aResults as $aResult) {
       $aAlreadyMigrated[$aResult['file']] = $aResult['date'];
     }
-
+    
     $iI = 0;
     $aFiles = array();
     while ($sFile = readdir($oDir)) {
       $bAlreadyMigrated = isset($aAlreadyMigrated[$sFile]);
 
       if (substr($sFile, 0, 1) == '.' || $bAlreadyMigrated == true)
-        continue;
-
-      if (isset($this->_aRequest['show']) && 'version' == $this->_aRequest['show'] &&
-              substr($sFile, 0, 8) <= (int) file_get_contents(PATH_STANDARD . '/version.txt'))
         continue;
 
       else {
@@ -418,8 +417,9 @@ class Install extends Index {
    *
    */
   private function _doMigration() {
-    $sFile = trim($_REQUEST['file']);
-    $sPath = PATH_STANDARD . '/install/migrations/';
+    $sFile    = trim($_REQUEST['file']);
+    $sPath    = isset($this->_aRequest['path']) && 'version' == $this->_aRequest['path'] ? 'current' : 'previous';
+    $sPath    = PATH_STANDARD . '/install/migrations/' . $sPath . '/';
 
     $sExt = pathinfo($sFile, PATHINFO_EXTENSION);
     $bResult = false;
@@ -430,6 +430,8 @@ class Install extends Index {
     elseif ($sExt == 'php') {
       $bResult = $this->_doPHPMigration($sPath . $sFile);
     }
+    else
+      exit('Unknown file type.');
 
     # Write migration into table
     if($bResult) {

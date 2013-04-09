@@ -7,7 +7,7 @@
     <script type='text/javascript' src='http://code.jquery.com/jquery-1.8.2{$_SYSTEM.compress_files_suffix}.js'></script>
     <script type="text/javascript">
       if (typeof jQuery == 'undefined')
-        document.write(unescape("%3Cscript src='{$_PATH.public}/js/core/jquery{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'%3E%3C/script%3E"));
+        document.write(unescape("%3Cscript src='{$_PATH.core}/assets/javascripts/core/jquery{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'%3E%3C/script%3E"));
     </script>
     <style type='text/css'>
       .container {

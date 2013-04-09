@@ -22,19 +22,14 @@
     <a class='btn' href='/install/?action=migrate&show=all'>Show older migrations</a>
   {/if}
 </div>
-<script type='text/javascript' src='../public/js/core/jquery.bootstrap.tooltip.js'></script>
-<script type='text/javascript' src='../public/js/core/scripts.js'></script>
+<script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.bootstrap.tooltip.js'></script>
+<script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/scripts.js'></script>
 <script type='text/javascript'>
   $('.js-migration').click(function () {
     jTarget = $(this).parent();
-    $.getJSON('?file=' + $(this).data('file') + '&action=migrate', function (data) {
-      console.log(data);
+    $.getJSON('?path={$smarty.get.show}&file=' + $(this).data('file') + '&action=migrate', function (data) {
       if (data) {
-        jTarget.addClass('alert alert-success');
         jTarget.fadeOut();
-      }
-      else {
-        jTarget.addClass('alert alert-error');
       }
     });
     return false;
