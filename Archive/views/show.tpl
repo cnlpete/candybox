@@ -3,7 +3,9 @@
     <ul>
       {foreach from=$data item=d key=month}
         <li>
-          <a href='#{$month}' name='archive-{$month}' class='js-archive_month'>{$month} ({$d|@count})</a>
+          <a href="#archive-{$month|replace:' ':''}"
+             id="archive-{$month|replace:' ':''}"
+             class='js-archive_month'>{$month} ({$d|@count})</a>
           <ul style='display:none'>
           {foreach $d as $entry}
             <li>

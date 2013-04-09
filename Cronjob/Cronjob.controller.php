@@ -75,11 +75,11 @@ final class Cronjob {
     // check for the file and read its timestamp
     $sBackupFile = PATH_STANDARD . '/app/backup/lastrun.timestamp';
     if (file_exists($sBackupFile)) {
-      $oFile = @fopen($sBackupFile, 'r');
+      $oFile    = @fopen($sBackupFile, 'r');
       $sContent = @fgets($oFile);
       @fclose($oFile);
 
-      $this->_iLastRun = (int)$sContent;
+      $this->_iLastRun = (int) $sContent;
     }
 
     # now register some events with the pluginmanager
@@ -442,7 +442,7 @@ EOD;
       $aData['subject']       = I18n::get('cronjob.mail.subject', $sBackupName);
       $aData['message']       = I18n::get('cronjob.mail.body');
       $aData['to_address']    = WEBSITE_MAIL;
-      $aData['attachement']   = $sBackupPath;
+      $aData['attachment']    = $sBackupPath;
 
       return $oMails->create($aData);
     }
