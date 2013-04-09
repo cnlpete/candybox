@@ -225,15 +225,15 @@ class Helper {
    *
    * @static
    * @access public
-   * @param integer $iSize avatar size
+   * @param integer $mSize avatar size
    * @param integer $iUserId user ID
    * @param string $sEmail email address to search gravatar for
    * @param boolean $bUseGravatar do we want to use gravatar?
    * @return string URL of the avatar
    *
    */
-  public static function getAvatar($iSize, $iUserId, $sEmail, $bUseGravatar = false) {
-    $sFilePath = Helper::removeSlash(PATH_UPLOAD . '/users/' . $iSize . '/' . $iUserId);
+  public static function getAvatar($mSize, $iUserId, $sEmail, $bUseGravatar = false) {
+    $sFilePath = Helper::removeSlash(PATH_UPLOAD . '/users/' . $mSize . '/' . $iUserId);
 
     if ($bUseGravatar === false && file_exists($sFilePath . '.jpg'))
       return '/' . $sFilePath . '.jpg';
@@ -245,16 +245,18 @@ class Helper {
       return '/' . $sFilePath . '.gif';
 
     else {
-      if (!is_int($iSize)) {
-        if ($iSize === 'popup')
-          $iSize = POPUP_DEFAULT_X;
-        else if ($iSize === 'thumbnail')
-          $iSize = THUMB_DEFAULT_X;
+      if (!is_int($mSize)) {
+        if ($mSize == 'popup')
+          $mSize = POPUP_DEFAULT_X;
+
+        else if ($mSize == 'thumbnail')
+          $mSize = THUMB_DEFAULT_X;
       }
 
+      # @todo check if Gravatar always gets an integer size
       # Bugfix: Make sure, that user wants to show his Gravatar and system url does not match with user ones.
       $sEmail = $bUseGravatar === true ? $sEmail : md5(WEBSITE_MAIL_NOREPLY);
-      return 'http://www.gravatar.com/avatar/' . md5($sEmail) . '.jpg?s=' . $iSize . '&d=mm';
+      return 'http://www.gravatar.com/avatar/' . md5($sEmail) . '.jpg?s=' . $mSize . '&d=mm';
     }
   }
 

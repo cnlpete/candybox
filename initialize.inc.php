@@ -103,7 +103,7 @@ if (!defined('MOBILE'))
 if (!defined('MOBILE_DEVICE'))
   define('MOBILE_DEVICE', $bMobile);
 
-# page called by crawler?
+# Page called by crawler?
 if (!defined('CRAWLER'))
   define('CRAWLER', defined('CRAWLERS') ?
               preg_match('/' . CRAWLERS . '/', $_SERVER['HTTP_USER_AGENT']) > 0 :
@@ -113,10 +113,11 @@ if (!defined('CRAWLER'))
 if (!defined('EXTENSION_CHECK'))
   define('EXTENSION_CHECK', ALLOW_EXTENSIONS === true || WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test');
 
-# @todo extension check
+# @todo extension check for Index.controller
 $_aRequest = array_merge($_GET, $_POST);
 $oIndex = new \candyCMS\Core\Controllers\Index($_aRequest, $_SESSION, $_FILES, $_COOKIE);
 
 # Print out HTML
 echo $oIndex->show();
 
+?>
