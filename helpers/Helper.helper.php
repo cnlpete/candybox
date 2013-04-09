@@ -245,10 +245,14 @@ class Helper {
       return '/' . $sFilePath . '.gif';
 
     else {
-      if (!is_int($iSize))
-        $iSize = POPUP_DEFAULT_X;
+      if (!is_int($iSize)) {
+        if ($iSize === 'popup')
+          $iSize = POPUP_DEFAULT_X;
+        else if ($iSize === 'thumbnail')
+          $iSize = THUMB_DEFAULT_X;
+      }
 
-      # Bugfix: Make sure, that user wants to show his Gravatar and system url does'nt match with user ones.
+      # Bugfix: Make sure, that user wants to show his Gravatar and system url does not match with user ones.
       $sEmail = $bUseGravatar === true ? $sEmail : md5(WEBSITE_MAIL_NOREPLY);
       return 'http://www.gravatar.com/avatar/' . md5($sEmail) . '.jpg?s=' . $iSize . '&d=mm';
     }
@@ -268,10 +272,11 @@ class Helper {
    *
    */
   public static function createAvatarURLs(&$aData, $iUserId, $sEmail, $bUseGravatar = false, $sPrefix = '') {
-    $aData[$sPrefix . 'avatar_32']    = Helper::getAvatar(32, $iUserId, $sEmail, $bUseGravatar);
-    $aData[$sPrefix . 'avatar_64']    = Helper::getAvatar(64, $iUserId, $sEmail, $bUseGravatar);
-    $aData[$sPrefix . 'avatar_100']   = Helper::getAvatar(100, $iUserId, $sEmail, $bUseGravatar);
-    $aData[$sPrefix . 'avatar_popup'] = Helper::getAvatar('popup', $iUserId, $sEmail, $bUseGravatar);
+    $aData[$sPrefix . 'avatar_32']        = Helper::getAvatar(32, $iUserId, $sEmail, $bUseGravatar);
+    $aData[$sPrefix . 'avatar_64']        = Helper::getAvatar(64, $iUserId, $sEmail, $bUseGravatar);
+    $aData[$sPrefix . 'avatar_100']       = Helper::getAvatar(100, $iUserId, $sEmail, $bUseGravatar);
+    $aData[$sPrefix . 'avatar_thumbnail'] = Helper::getAvatar('thumbnail', $iUserId, $sEmail, $bUseGravatar);
+    $aData[$sPrefix . 'avatar_popup']     = Helper::getAvatar('popup', $iUserId, $sEmail, $bUseGravatar);
 
     return $aData;
   }

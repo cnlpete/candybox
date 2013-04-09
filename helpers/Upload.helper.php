@@ -194,7 +194,7 @@ class Upload {
    * @see vendor/candycms/core/controllers/Galleries.controller.php
    *
    */
-  public function uploadGalleryFiles($sResize = '') {
+  public function uploadGalleryFiles($sFolder = 'galleries', $sResize = '') {
     $this->_aRequest[$this->_sController]['cut'] = !empty($sResize) ?
             $sResize :
             $this->_aRequest[$this->_sController]['cut'];
@@ -203,7 +203,7 @@ class Upload {
       throw new AdvancedException(I18n::get('error.file.size', self::getUploadLimit(false) . 'MB'));
 
     else {
-      $sUploadFolder = 'galleries/' . (int) $this->_aRequest['id'];
+      $sUploadFolder = $sFolder . '/' . (int) $this->_aRequest['id'];
       $aUploads = $this->uploadFiles($sUploadFolder . '/original', true);
 
       # Do cuts and or resizes
