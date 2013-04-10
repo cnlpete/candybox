@@ -144,8 +144,8 @@ abstract class Main {
   public static function connectToDatabase() {
     if (empty(self::$_oDbStatic)) {
       try {
-        $sSQLType   = defined('SQL_TYPE') ? strtolower(SQL_TYPE) : 'mysql';
-        $sDatabase  = defined('SQL_SINGLE_DB_MODE') && SQL_SINGLE_DB_MODE === true ?
+        $sSQLType   = strtolower(SQL_TYPE);
+        $sDatabase  = SQL_SINGLE_DB_MODE === true ?
                 SQL_DB :
                 SQL_DB . '_' . WEBSITE_MODE;
 

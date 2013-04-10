@@ -673,7 +673,7 @@ class Helper {
    */
   public static function compileStylesheet($sSource, $sOutput, $bCompressed = true) {
     if (file_exists($sSource)) {
-      $sCacheFile = (defined('PATH_CACHE') ? PATH_CACHE : 'app') . '/' . md5($sOutput) . '.cache';
+      $sCacheFile = PATH_CACHE . '/' . md5($sOutput) . '.cache';
       $aCache = file_exists($sCacheFile) ? unserialize(file_get_contents($sCacheFile)) : $sSource;
 
       $oLessc = new lessc();
