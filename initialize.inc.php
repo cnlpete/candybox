@@ -26,10 +26,15 @@ if (!defined('PATH_STANDARD'))
 # Initialize software
 try {
   require PATH_STANDARD . '/app/config/Candy.inc.php';
+  require PATH_STANDARD . '/vendor/candycms/core/config.inc.php';
   require PATH_STANDARD . '/vendor/candycms/core/controllers/Index.controller.php';
 }
 catch (Exception $e) {
   die($e->getMessage());
+}
+
+if (VALID_CONFIG) {
+  die('The configuration seems invalid, please check that you defined all necessary values.');
 }
 
 # Are we executing tests?
@@ -81,12 +86,8 @@ if (preg_match('/\?reload=1/', CURRENT_URL))
 
 # Do we have a mobile device?
 # @todo - research alternative way
-if(isset($_SERVER['HTTP_USER_AGENT'])) {
-  if (!defined('MOBILES'))
-    define('MOBILES', 'Opera Mini|Symb|Windows CE|IEMobile|iPhone|iPod|Blackberry|Android|Mobile Safari');
-
+if(isset($_SERVER['HTTP_USER_AGENT']))
   $bMobile = preg_match('/' . MOBILES . '/i', $_SERVER['HTTP_USER_AGENT']) ? true : false;
-}
 else
   $bMobile = false;
 
@@ -102,12 +103,6 @@ if (!defined('MOBILE'))
   define('MOBILE', $_SESSION['mobile']);
 if (!defined('MOBILE_DEVICE'))
   define('MOBILE_DEVICE', $bMobile);
-
-# Page called by crawler?
-if (!defined('CRAWLER'))
-  define('CRAWLER', defined('CRAWLERS') ?
-              preg_match('/' . CRAWLERS . '/', $_SERVER['HTTP_USER_AGENT']) > 0 :
-              false);
 
 # Check for extensions?
 if (!defined('EXTENSION_CHECK'))

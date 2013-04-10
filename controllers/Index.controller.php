@@ -239,9 +239,6 @@ class Index {
    *
    */
   public function getLanguage() {
-    if (!defined('DEFAULT_LANGUAGE'))
-      define('DEFAULT_LANGUAGE', 'en');
-
     $aRequest = (isset($this->_aCookie) && is_array($this->_aCookie)) ?
                   array_merge($this->_aRequest, $this->_aCookie) :
                   $this->_aRequest;
