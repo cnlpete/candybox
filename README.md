@@ -27,7 +27,7 @@ It provides...
 - [Mailchimp](http://mailchimp.com) for newsletter managing
 - [reCAPTCHA](http://recaptcha.org) to protect spam (as plugin)
 - [TinyMCE](http://tinymce.moxiecode.com/) as WYSIWYG editor (as plugin)
-- [BB-Code](https://github.com/marcoraddatz/candyCMS/wiki/BBCode) and [Markdown](http://daringfireball.net/projects/markdown/) to make editing easy
+- [BB-Code](https://github.com/marcoraddatz/candyCMS/wiki/BBCode) or [Markdown](http://daringfireball.net/projects/markdown/) to make editing easy
 - [SmushIt](http://www.smushit.com/ysmush.it/) to compress images on the fly
 - [Facebook](http://facebook.com/) and [Gravatar](http://gravatar.com/) to display user images
 - [Composer](http://getcomposer.org/) to keep the software up to date
@@ -65,8 +65,7 @@ Setup
 3. Install the vendor packages afterwards: `php composer.phar install` or `php composer.phar install --dev` if you would
 like to have the possibility to run tests.
 4. Copy files from "app/config/samples/" to "app/config" and configure your website settings at "app/config/Candy.inc.php".
-5. Execute the "/install/index.php" file. If an error occurs, it might be, that you have to give CHMOD 777 to "app/cache"
-and "app/compile" first.
+5. Execute the "/install/index.php" file. If an error occurs, you might have to give CHMOD 777 to `app/` first.
 6. Follow the instructions (also on CHMODs) and make sure, you delete the install folder after installation.
 
 
