@@ -176,7 +176,7 @@ class SmartySingleton extends Smarty {
     }
     $aPaths['core']     = '/vendor/candycms/core'; # @todo check if needed
     $aPaths['public']   = WEBSITE_CDN !== '' ? WEBSITE_CDN : '/public';
-    $aPaths['css']      = WEBSITE_CDN . '/stylesheets';
+    $aPaths['css']      = $aPaths['public'] . '/stylesheets';
     $aPaths['plugins']  = (WEBSITE_CDN !== '' ? WEBSITE_CDN : '/vendor/candycms') . '/plugins';
     $aPaths['upload']   = Helper::removeSlash(PATH_UPLOAD);
 
