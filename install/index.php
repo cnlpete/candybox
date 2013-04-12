@@ -44,6 +44,8 @@ class Install extends Index {
     if (file_exists(PATH_STANDARD . '/app/config/Candy.inc.php'))
       require PATH_STANDARD . '/app/config/Candy.inc.php';
 
+    require PATH_STANDARD . '/vendor/candycms/core/config.inc.php';
+
     $this->_defines();
     $this->getLanguage();
 

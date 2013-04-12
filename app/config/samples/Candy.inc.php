@@ -15,7 +15,7 @@
 define('SQL_TYPE', 'mysql');
 
 # SQL host
-# DEFAULT: 'locahost'
+# DEFAULT: 'localhost'
 define('SQL_HOST', 'localhost');
 
 # SQL user
