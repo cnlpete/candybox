@@ -34,7 +34,7 @@
             </h2>
             <p>
               {if $_SESSION.user.role >= 3}
-                <img src='{$_PATH.core}/assets/images/candy.flags/{$b.language}.png'
+                <img src='{$_PATH.img.core}/candy.flags/{$b.language}.png'
                     alt='{$b.language}'
                     title='{$b.language}' />
                 &nbsp;
@@ -113,8 +113,8 @@
         {$_comments_}
       {/if}
     {/if}
-    <script src='{$_PATH.core}/assets/javascripts/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
-    <script src='{$_PATH.core}/assets/javascripts/core/jquery.capty{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
+    <script src='{$_PATH.js.core}/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
+    <script src='{$_PATH.js.core}/jquery.capty{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
     <script type='text/javascript'>
       $(document).ready(function(){
         $('.js-fancybox').fancybox({

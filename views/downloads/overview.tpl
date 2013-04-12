@@ -32,7 +32,7 @@
         {foreach $d.files as $f}
           <tr id='row_{$f.id}' itemscope itemtype='http://schema.org/SoftwareApplication'>
             <td class='center'>
-              <img src='{$_PATH.core}/assets/images/candy.files/{$f.extension}.png'
+              <img src='{$_PATH.img.core}/candy.files/{$f.extension}.png'
                    width='32'
                    height='32'
                    alt='{$f.extension}' />
@@ -94,9 +94,9 @@
     {/foreach}
   {/if}
   {if $_SESSION.user.role >= 3}
-    <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
+    <script type='text/javascript' src='{$_PATH.js.core}/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
   {/if}
-  <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.tablesorter{$_SYSTEM.compress_files_suffix}.js'></script>
+  <script type='text/javascript' src='{$_PATH.js.core}/jquery.tablesorter{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript'>
     $(document).ready(function(){
       $('table').tablesorter();

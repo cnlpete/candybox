@@ -158,37 +158,48 @@ class SmartySingleton extends Smarty {
    *
    */
   public function getPaths() {
-    foreach (array(
-        'core'      => '/vendor/candycms/core',
-        'css'       => WEBSITE_CDN . '/stylesheets',
-        'images'    => '/app/assets/images',
-        'js'        => '/app/assets/javascripts',
-        'less'      => '/app/assets/stylesheets',
-        'plugins'   => '/vendor/candycms/plugins',
-        'public'    => WEBSITE_CDN,
-        'upload'    => Helper::removeSlash(PATH_UPLOAD)) as $sKey => $sValue)
-      $aPaths[$sKey] = $sValue;
+    $aPaths['js'] = array(
+      'core' => '/vendor/candycms/core/assets/javascripts/core',
+      'app' => '/app/assets/javascripts',
+      'bootstrap' => '/vendor/twitter/bootstrap/js'
+    );
+    $aPaths['img'] = array(
+      'core' => '/vendor/candycms/core/assets/images',
+      'app' => '/app/assets/images',
+      'bootstrap' => '/vendor/twitter/bootstrap/img'
+    );
+    if (WEBSITE_CDN !== '') {
+      foreach ($aPaths['js'] as $sKey => $sValue)
+        $aPaths['js'][key] = WEBSITE_CDN . '/' . key;
+      foreach ($aPaths['img'] as $sKey => $sValue)
+        $aPaths['img'][key] = WEBSITE_CDN . '/' . key;
+    }
+    $aPaths['core']     = '/vendor/candycms/core'; # @todo check if needed
+    $aPaths['public']   = WEBSITE_CDN !== '' ? WEBSITE_CDN : '/public';
+    $aPaths['css']      = WEBSITE_CDN . '/stylesheets';
+    $aPaths['plugins']  = (WEBSITE_CDN !== '' ? WEBSITE_CDN : '/vendor/candycms') . '/plugins';
+    $aPaths['upload']   = Helper::removeSlash(PATH_UPLOAD);
 
     # Compile CSS only when in development mode
     if (WEBSITE_MODE == 'development') {
       if (MOBILE === true) {
         Helper::compileStylesheet(
-                Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
+                Helper::removeSlash('/app/assets/stylesheets/mobile/application.less'),
                 Helper::removeSlash($aPaths['css'] . '/mobile.css'),
                 false);
 
         Helper::compileStylesheet(
-                Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
+                Helper::removeSlash('/app/assets/stylesheets/mobile/application.less'),
                 Helper::removeSlash($aPaths['css'] . '/mobile.min.css'));
       }
       else {
         Helper::compileStylesheet(
-                Helper::removeSlash($aPaths['less'] . '/core/application.less'),
+                Helper::removeSlash('/app/assets/stylesheets/core/application.less'),
                 Helper::removeSlash($aPaths['css'] . '/core.css'),
                 false);
 
         Helper::compileStylesheet(
-                Helper::removeSlash($aPaths['less'] . '/core/application.less'),
+                Helper::removeSlash('/app/assets/stylesheets/core/application.less'),
                 Helper::removeSlash($aPaths['css'] . '/core.min.css'));
       }
     }

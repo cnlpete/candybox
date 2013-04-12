@@ -53,7 +53,7 @@ if (!defined('WEBSITE_MODE'))
   define('WEBSITE_MODE', 'staging');
 
 if (!defined('WEBSITE_CDN'))
-  define('WEBSITE_CDN', '/public');
+  define('WEBSITE_CDN', '');
 
 if (!defined('WEBSITE_COMPRESS_FILES'))
   define('WEBSITE_COMPRESS_FILES', false);

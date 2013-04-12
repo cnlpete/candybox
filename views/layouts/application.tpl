@@ -45,7 +45,7 @@
         var lang = {$_SYSTEM.json_language};
 
         if (typeof jQuery == 'undefined')
-          document.write(unescape("%3Cscript src='{$_PATH.core}/assets/javascripts/core/jquery{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'%3E%3C/script%3E"));
+          document.write(unescape("%3Cscript src='{$_PATH.js.core}/jquery{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'%3E%3C/script%3E"));
       </script>
 
       <title>{$_WEBSITE.title} - {$WEBSITE_NAME}</title>
@@ -199,11 +199,11 @@
       </div>
 
       {* Add bootstrap support *}
-      <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.bootstrap.dropdown{$_SYSTEM.compress_files_suffix}.js'></script>
-      <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.bootstrap.tooltip{$_SYSTEM.compress_files_suffix}.js'></script>
+      <script type='text/javascript' src='{$_PATH.js.bootstrap}/bootstrap.dropdown{$_SYSTEM.compress_files_suffix}.js'></script>
+      <script type='text/javascript' src='{$_PATH.js.bootstrap}/bootstrap.tooltip{$_SYSTEM.compress_files_suffix}.js'></script>
 
       {* Own JS and plugins *}
-      <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/scripts{$_SYSTEM.compress_files_suffix}.js'></script>
+      <script type='text/javascript' src='{$_PATH.js.core}/scripts{$_SYSTEM.compress_files_suffix}.js'></script>
       <!-- pluginmanager:sessionplugin::javascript -->
       <!-- plugin:analytics -->
       <!-- plugin:piwik -->
