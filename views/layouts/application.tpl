@@ -199,8 +199,8 @@
       </div>
 
       {* Add bootstrap support *}
-      <script type='text/javascript' src='{$_PATH.js.bootstrap}/bootstrap.dropdown{$_SYSTEM.compress_files_suffix}.js'></script>
-      <script type='text/javascript' src='{$_PATH.js.bootstrap}/bootstrap.tooltip{$_SYSTEM.compress_files_suffix}.js'></script>
+      <script type='text/javascript' src='{$_PATH.js.bootstrap}/bootstrap-dropdown{$_SYSTEM.compress_files_suffix}.js'></script>
+      <script type='text/javascript' src='{$_PATH.js.bootstrap}/bootstrap-tooltip{$_SYSTEM.compress_files_suffix}.js'></script>
 
       {* Own JS and plugins *}
       <script type='text/javascript' src='{$_PATH.js.core}/scripts{$_SYSTEM.compress_files_suffix}.js'></script>

@@ -368,7 +368,7 @@
     {/if}
   </div>
   <script src='{$_PATH.js.core}/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
-  <script src='{$_PATH.js.bootstrap}/bootstrap.tab{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
+  <script src='{$_PATH.js.bootstrap}/bootstrap-tab{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
   <script type='text/javascript'>
     $('#input-use_gravatar').change(function() {
       var avatarIsChecked = $(this).is(':checked');

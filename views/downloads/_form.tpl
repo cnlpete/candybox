@@ -138,7 +138,7 @@
       {/if}
     </div>
   </form>
-  <script type='text/javascript' src='{$_PATH.js.bootstrap}/bootstrap.typeahead{$_SYSTEM.compress_files_suffix}.js'></script>
+  <script type='text/javascript' src='{$_PATH.js.bootstrap}/bootstrap-typeahead{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript'>
     {* @todo add countCharLength again *}
     $(document).ready(function(){
