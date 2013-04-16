@@ -1,7 +1,11 @@
 <div id='disqus_thread'></div>
 <script type="text/javascript">
   /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-  var disqus_shortname = '{$PLUGIN_DISQUS_SHORTNAME}'; // required: replace example with your forum shortname
+  {* Required: replace example with your forum shortname *}
+  var disqus_shortname = '{$PLUGIN_DISQUS_SHORTNAME}';
+  
+  {* We must set this otherwise wrong URLs are used by Disqus due to urlencode *}
+  var disqus_url = '{$disqus_url}';
 
   /* * * DON'T EDIT BELOW THIS LINE * * */
   (function() {
