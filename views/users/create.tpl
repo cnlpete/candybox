@@ -131,7 +131,7 @@
       <!-- pluginmanager:sessionplugin::button -->
     </div>
   </form>
-  <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.bootstrap.modal{$_SYSTEM.compress_files_suffix}.js'></script>
+  <script type='text/javascript' src='{$_PATH.js.bootstrap}/bootstrap-modal{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type="text/javascript">
     $(document).ready(function(){
       $('#input-password2').keyup(function(){
