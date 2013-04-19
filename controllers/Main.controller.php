@@ -556,8 +556,6 @@ abstract class Main {
    *
    */
   protected function _overviewJSON() {
-    header('Content-Type: application/json');
-
     if (method_exists($this->_oModel, 'getOverview'))
       return json_encode(array(
                   'success' => true,
