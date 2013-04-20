@@ -71,6 +71,9 @@ final class Disqus {
     $oSmarty = SmartySingleton::getInstance();
     $oSmarty->setTemplateDir($sTemplateDir);
     $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
+    
+    if (isset($this->_aRequest['id']))
+      $oSmarty->assign('disqus_url', WEBSITE_URL . '/' . $this->_aRequest['controller'] . '/' . $this->_aRequest['id']);
 
     $sCacheId = WEBSITE_MODE . '|plugins|' . WEBSITE_LOCALE . '|' . self::IDENTIFIER;
     if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
