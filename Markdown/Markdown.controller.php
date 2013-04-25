@@ -53,9 +53,7 @@ final class Markdown {
     $this->_aRequest  = & $aRequest;
     $this->_aSession  = & $aSession;
 
-    # now register some events with the pluginmanager
-    #$oPlugins->registerSimplePlugin($this);
-    #$oPlugins->registerContentDisplayPlugin($this);
+    # Register some events to the plugin manager
     $oPlugins->registerEditorPlugin($this);
   }
 
@@ -63,7 +61,6 @@ final class Markdown {
    * Return the formatted code.
    *
    * @final
-   * @static
    * @access public
    * @param string $sStr
    * @return string HTML with formated code
@@ -89,16 +86,16 @@ final class Markdown {
   }
 
   /**
-   * Generate an Info Array ('url' => '', 'iconurl' => '', 'description' => '')
+   * Generate an info array ('url' => '', 'iconurl' => '', 'description' => '')
    *
    * @final
    * @access public
-   * @return array|boolean infor array or false
+   * @return array
    *
    */
   public final function getInfo() {
-    return array('url'        => 'http://daringfireball.net/projects/markdown/syntax',
-                'description' => 'Markdown',
-                'iconurl'     => '/vendor/candycms/plugins/Markdown/assets/icon.png');
+    return array( 'url'         => 'http://daringfireball.net/projects/markdown/syntax',
+                  'description' => 'Markdown',
+                  'iconurl'     => '/vendor/candycms/plugins/Markdown/assets/icon.png');
   }
 }
