@@ -8,11 +8,11 @@
       {foreach $blogs as $b}
         <article class='blogs' itemscope itemtype='http://schema.org/BlogPosting'>
           <header class='page-header'>
-            <h2 itemprop='headline'>
+            <h3 itemprop='headline'>
               <a href='{$b.url}' itemprop='discussionUrl'>
                 {$b.title}
               </a>
-            </h2>
+            </h3>
             <p>
               <time datetime='{$b.date.w3c}' class='js-timeago' itemprop='dateCreated'>
                 {$b.date.raw|date_format:$lang.global.time.format.datetime}

@@ -1,9 +1,9 @@
 {strip}
 <article class='gallery_albums' itemscope itemtype='http://schema.org/ImageGallery'>
   <header>
-    <h2 itemprop='headline'>
+    <h3 itemprop='headline'>
       <a href='{$album.url}'>{$album.title}</a>
-    </h2>
+    </h3>
     <p>
       <time datetime='{$album.date.w3c}' class='js-timeago' itemprop='dateCreated'>
         {$album.date.raw|date_format:$lang.global.time.format.datetime}
