@@ -194,28 +194,56 @@ class I18n {
   }
 
   /**
+   * Get all possible Languages
+   *
+   * @static
+   * @return array all language strings that can be loaded
+   * @access public
+   *
+   */
+  public static function getPossibleLanguages() {
+    $aLangs = array();
+    if (!Cache::isCachedAndLoad('translation.all', $aLangs)) {
+      $sLanguagesPath = PATH_STANDARD . '/app/languages/';
+      $oDir = opendir($sLanguagesPath);
+
+      while ($sFile = readdir($oDir)) {
+        if (substr($sFile, -4) != '.yml')
+          continue;
+
+        $sLang = substr($sFile, 0, -4);
+        $aLangs[] = $sLang;
+      }
+      closedir($sLanguagesPath);
+
+      Cache::save('translation.all', $aLangs);
+    }
+    return $aLangs;
+  }
+
+  /**
    * Unset the language saved in the session.
    *
    * @static
    * @param string $sLanguage language part we want to unload. Unload all if not set
    * @access public
-   * @return NULL
    *
    */
   public static function unsetLanguage($sLanguage = '') {
     if ($sLanguage == '') {
-      self::$_aLang = null;
-      if (self::$_oObject != null)
-        unset(self::$_oObject->_aSession['lang']);
+      self::$_aLang = array();
 
-      return self::$_oObject->_aSession['lang'];
+      # clear the possible languages cache
+      Cache::clear('translation.all');
+
+      # clear all possible languages
+      $aLangs = self::getPossibleLanguages();
+      foreach ($aLangs as $sLang)
+        Cache::clear('translation' . $sLang);
     }
     else {
       self::$_aLang[$sLanguage] = null;
-      if (self::$_oObject != null)
-        unset(self::$_oObject->_aSession['lang'][$sLanguage]);
-
-      return self::$_oObject->_aSession['lang'][$sLanguage];
+      Cache::clear('translation' . $sLanguage);
     }
   }
 }
