@@ -106,7 +106,7 @@ final class Bbcode {
       $sHTML = '';
 
       if (!file_exists($sTempFilePath)) {
-        require_once PATH_STANDARD . '/vendor/candyCMS/core/helpers/Image.helper.php';
+        require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Image.helper.php';
 
         # This might be very slow. So we try to use it rarely.
         $aInfo = @getImageSize($sUrl[1]);
