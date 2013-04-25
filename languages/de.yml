@@ -6,6 +6,7 @@ website:
 global:
   about: Über
   action: Aktion
+  admins: Administration
   album: Album
   albums: Alben
   api_token: API-Token

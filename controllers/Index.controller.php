@@ -28,6 +28,7 @@ $aFiles = array(
     'helpers/Helper.helper.php',
     'helpers/AdvancedException.helper.php',
     'helpers/Dispatcher.helper.php',
+    'helpers/Cache.helper.php',
     'helpers/I18n.helper.php',
     'helpers/SmartySingleton.helper.php',
     'helpers/PluginManager.helper.php'
