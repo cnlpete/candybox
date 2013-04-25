@@ -76,20 +76,12 @@ final class LanguageChooser {
     $sCacheId = WEBSITE_MODE . '|layout|' . WEBSITE_LOCALE . '|' . self::IDENTIFIER . '|' . substr(md5($this->_aSession['user']['role']), 0 , 10);
     if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
       $aLangs = array();
-      $sLanguagesPath = PATH_STANDARD . '/app/languages/';
-      $oDir = opendir($sLanguagesPath);
-
-      while ($sFile = readdir($oDir)) {
-        if (substr($sFile, -4) != '.yml')
-          continue;
-
-        $sLang = substr($sFile, 0, -4);
+      foreach (I18n::getPossibleLanguages() as $sLang) {
         $aLangs[] = array(
             'lang'      => $sLang,
             'selected'  => WEBSITE_LANGUAGE == substr($sLang, 0, 2),
             'title'     => I18n::get('languagechooser.' . $sLang));
       }
-      closedir($sLanguagesPath);
       $oSmarty->assign('languages', $aLangs);
     }
 
