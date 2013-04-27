@@ -47,11 +47,17 @@ class Searches extends Main {
       $this->oSmarty->setTemplateDir($sTemplateDir);
 
       $sString = Helper::formatInput(urldecode($this->_aRequest[$this->_sController]['search']));
+      $this->oSmarty->assign('string', urlencode($sString));
 
       if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-        $this->oSmarty->assign('string', urlencode($sString));
-        $this->oSmarty->assign('tables', $this->_oModel->getOverview($sString,
-                    array('blogs', 'contents', 'downloads', 'gallery_albums')));
+        $aSitemapModels = array_filter( array_map('trim', explode(',', DATA_SEARCHES)));
+        $aResults = array();
+        foreach ($aSitemapModels as $sSitemapModel) {
+          $sModel = $this->__autoload($sSitemapModel, true);
+          $oModel = new $sModel($this->_aRequest, $this->_aSession);
+          $aResults[strtolower($sSitemapModel)] = $oModel->search($sString, strtolower($sSitemapModel));
+        }
+        $this->oSmarty->assign('tables', $aResults);
 
         $this->setTitle(I18n::get('searches.title.show', $sString));
         $this->setDescription(I18n::get('searches.description.show', $sString));
