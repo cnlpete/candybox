@@ -106,12 +106,12 @@ class Galleries extends Main {
    * Get album overview
    *
    * @access public
-   * @param boolean $bAdvancedImageInformation provide image with advanced information (MIME_TYPE etc.)
    * @param integer $iLimit blog post limit
+   * @param boolean $bAdvancedImageInformation provide image with advanced information (MIME_TYPE etc.)
    * @return array data from _setData
    *
    */
-  public function getOverview($bAdvancedImageInformation = false, $iLimit = LIMIT_ALBUMS) {
+  public function getOverview($iLimit = LIMIT_ALBUMS, $bAdvancedImageInformation = false) {
     $iResult = 0;
 
     try {

@@ -64,17 +64,11 @@ class Sitemaps extends Main {
    *
    */
   protected function _getSitemapData() {
-    $sModel     = $this->__autoload('Blogs', true);
-    $oBlogs     = new $sModel($this->_aRequest, $this->_aSession);
-
-    $sModel     = $this->__autoload('Contents', true);
-    $oContents  = new $sModel($this->_aRequest, $this->_aSession);
-
-    $sModel     = $this->__autoload('Galleries', true);
-    $oGalleries = new $sModel($this->_aRequest, $this->_aSession);
-
-    $this->oSmarty->assign('blogs', $oBlogs->getOverview(1000));
-    $this->oSmarty->assign('contents', $oContents->getOverview(1000));
-    $this->oSmarty->assign('galleries', $oGalleries->getOverview(false, 1000));
+    $aSitemapModels = array_filter( array_map('trim', explode(',', DATA_SITEMAPS)));
+    foreach ($aSitemapModels as $sSitemapModel) {
+      $sModel = $this->__autoload($sSitemapModel, true);
+      $oModel = new $sModel($this->_aRequest, $this->_aSession);
+      $this->oSmarty->assign(strtolower($sSitemapModel), $oModel->getOverview(1000));
+    }
   }
 }
