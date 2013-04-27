@@ -142,6 +142,12 @@ if (!defined('MAILCHIMP_LIST_ID'))
 if (!defined('USE_MAIL_QUEUE'))
   define('USE_MAIL_QUEUE', true);
 
+if (!defined('DATA_SITEMAPS'))
+  define('DATA_SITEMAPS', 'Blogs,Contents,Galleries');
+
+if (!defined('DATA_SEARCHES'))
+  define('DATA_SEARCHES', 'Blogs,Contents,Galleries,Downloads');
+
 # do we have a valid config?
 define('VALID_CONFIG', (defined('ERROR_MISSING_CONFIG_VALUES_SQL') || defined('ERROR_MISSING_CONFIG_VALUES_SMTP') || defined('ERROR_MISSING_CONFIG_VALUES_WEBSITE')));
 

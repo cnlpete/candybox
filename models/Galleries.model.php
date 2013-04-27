@@ -14,6 +14,7 @@ namespace candyCMS\Core\Models;
 
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\Pagination;
 use candyCMS\Core\Helpers\Upload;
 use PDO;
@@ -106,12 +107,12 @@ class Galleries extends Main {
    * Get album overview
    *
    * @access public
-   * @param boolean $bAdvancedImageInformation provide image with advanced information (MIME_TYPE etc.)
    * @param integer $iLimit blog post limit
+   * @param boolean $bAdvancedImageInformation provide image with advanced information (MIME_TYPE etc.)
    * @return array data from _setData
    *
    */
-  public function getOverview($bAdvancedImageInformation = false, $iLimit = LIMIT_ALBUMS) {
+  public function getOverview($iLimit = LIMIT_ALBUMS, $bAdvancedImageInformation = false) {
     $iResult = 0;
 
     try {
@@ -708,4 +709,22 @@ class Galleries extends Main {
       exit('SQL error.');
     }
   }
+
+  /**
+   * Get search information.
+   *
+   * @access public
+   * @param string $sSearch query string to search
+   * @param string $sController controller to use
+   * @param string $sOrderBy how to order search
+   * @return array $this->_aData search data
+   *
+   */
+  public function search($sSearch, $sController = '', $sOrderBy = 't.date DESC') {
+    $this->_aData = parent::search($sSearch, 'gallery_albums', $sOrderBy);
+    $this->_aData['controller'] = $sController;
+    $this->_aData['title'] = I18n::get('global.' . strtolower($sController));
+    return $this->_aData;
+  }
+
 }
