@@ -15,6 +15,7 @@ namespace candyCMS\Core\Helpers;
 use candyCMS\Core\Controllers\Main;
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\PluginManager;
+use candyCMS\Core\Helpers\Cache;
 use PDO;
 use lessc;
 
@@ -661,14 +662,13 @@ class Helper {
    * @param string $sSource the less file
    * @param string $sOutput the target output file
    * @param bool $bCompressed whether to use the compressed output mode
-   * @todo remove PATH_CACHE fix
    * @todo test cases
    *
    */
   public static function compileStylesheet($sSource, $sOutput, $bCompressed = true) {
     if (file_exists($sSource)) {
-      $sCacheFile = PATH_CACHE . '/' . md5($sOutput) . '.cache';
-      $aCache = file_exists($sCacheFile) ? unserialize(file_get_contents($sCacheFile)) : $sSource;
+      $aCache = $sSource;
+      Cache::isCachedAndLoad($sOutput, $aCache);
 
       $oLessc = new lessc();
       $bCompressed ? $oLessc->setFormatter('compressed') : $oLessc->setFormatter('classic');
@@ -676,8 +676,9 @@ class Helper {
       $aNewCache = $oLessc->cachedCompile($aCache);
 
       if (!is_array($aCache) || $aNewCache['updated'] > $aCache['updated']) {
-        file_put_contents($sCacheFile, serialize($aNewCache));
-        file_put_contents($sOutput, $aNewCache['compiled']);
+        # save the compiled css
+        if (!(file_put_contents($sOutput, $aNewCache['compiled']) === false))
+          Cache::save($sOutput, $aNewCache);
       }
     }
   }

@@ -54,42 +54,4 @@ class Admins extends Main {
 
     return Helper::successMessage($sSuccessMessage, '/admins/');
   }
-
-  /**
-   * Recompile the stylesheets
-   *
-   * @access protected
-   *
-   */
-  public function recompilestylesheets() {
-    if ($this->_aSession['user']['role'] < 4)
-      return Helper::redirectTo('/errors/401');
-
-    $sStylesheetPath = WEBSITE_CDN !== '' ? WEBSITE_CDN : '/public';
-    $sStylesheetPath .= '/stylesheets';
-
-    Cache::clear(Helper::removeSlash($sStylesheetPath . '/mobile.css'));
-    Helper::compileStylesheet(
-          Helper::removeSlash('/app/assets/stylesheets/mobile/application.less'),
-          Helper::removeSlash($sStylesheetPath . '/mobile.css'),
-          false);
-
-    Cache::clear(Helper::removeSlash($sStylesheetPath . '/mobile.min.css'));
-    Helper::compileStylesheet(
-          Helper::removeSlash('/app/assets/stylesheets/mobile/application.less'),
-          Helper::removeSlash($sStylesheetPath . '/mobile.min.css'));
-
-    Cache::clear(Helper::removeSlash($sStylesheetPath . '/core.css'));
-    Helper::compileStylesheet(
-          Helper::removeSlash('/app/assets/stylesheets/core/application.less'),
-          Helper::removeSlash($sStylesheetPath . '/core.css'),
-          false);
-
-    Cache::clear(Helper::removeSlash($sStylesheetPath . '/core.min.css'));
-    Helper::compileStylesheet(
-          Helper::removeSlash('/app/assets/stylesheets/core/application.less'),
-          Helper::removeSlash($sStylesheetPath . '/core.min.css'));
-
-    return Helper::successMessage(I18n::get('success.update'), '/admins/');
-  }
 }
