@@ -29,8 +29,6 @@ class Sitemaps extends Main {
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overviewXML');
     $this->oSmarty->setTemplateDir($sTemplateDir);
 
-    Header('Content-Type: text/xml');
-
     if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
       $this->oSmarty->assign('_website_landing_page_', WEBSITE_URL . '/' . WEBSITE_LANDING_PAGE);
       $this->_getSitemapData();
