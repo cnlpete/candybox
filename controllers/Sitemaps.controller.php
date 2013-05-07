@@ -26,7 +26,7 @@ class Sitemaps extends Main {
    *
    */
   protected function _overviewXML() {
-    $oTemplate = Smarty::getTemplate($this->_sController, 'overviewXML');
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'overviewXML');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
@@ -45,7 +45,7 @@ class Sitemaps extends Main {
    *
    */
   protected function _overview() {
-    $oTemplate = Smarty::getTemplate($this->_sController, 'overview');
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'overview');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID))

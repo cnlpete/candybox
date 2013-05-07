@@ -44,7 +44,7 @@ class Galleries extends Main {
    *
    */
   protected function _overview() {
-    $oTemplate = Smarty::getTemplate($this->_sController, 'overview');
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'overview');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
@@ -69,7 +69,7 @@ class Galleries extends Main {
    *
    */
   protected function _show() {
-    $oTemplate = Smarty::getTemplate($this->_sController, 'show');
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'show');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     # Collect data array
@@ -95,7 +95,7 @@ class Galleries extends Main {
     if (!$this->_iId)
       Helper::redirectTo('/errors/404');
 
-    $oTemplate = Smarty::getTemplate($this->_sController, 'showRSS');
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'showRSS');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
@@ -172,7 +172,7 @@ class Galleries extends Main {
    *
    */
   protected function _showFormFileTemplate() {
-    $oTemplate = Smarty::getTemplate($this->_sController, '_form_show');
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, '_form_show');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     if ($this->_iId && $this->_aRequest['action'] == 'updatefile') {

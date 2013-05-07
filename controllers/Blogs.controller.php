@@ -26,7 +26,7 @@ class Blogs extends Main {
    *
    */
   protected function _show() {
-    $oTemplate = Smarty::getTemplate($this->_sController, 'show');
+    $oTemplate =  $this->oSmarty->getTemplate($this->_sController, 'show');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     if ($this->_iId) {
@@ -85,7 +85,7 @@ class Blogs extends Main {
    *
    */
   protected function _overviewRSS() {
-    $oTemplate = Smarty::getTemplate($this->_sController, 'overviewRSS');
+    $oTemplate =  $this->oSmarty->getTemplate($this->_sController, 'overviewRSS');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {

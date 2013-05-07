@@ -686,7 +686,7 @@ abstract class Main {
                   'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
               ));
 
-    $oTemplate = Smarty::getTemplate($this->_sController, $sTemplateName);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, $sTemplateName);
 
     if ($this->_iId) {
       $aData = $this->_oModel->getId($this->_iId, true);

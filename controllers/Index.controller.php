@@ -466,7 +466,7 @@ class Index {
 
     # HTML with template
     else {
-      $oTemplate = Smarty::getTemplate('layouts', 'application');
+      $oTemplate = $oSmarty->getTemplate('layouts', 'application');
 
       # Get flash messages (success and error)
       $oSmarty->assign('_FLASH', $this->_getFlashMessage());

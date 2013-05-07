@@ -71,7 +71,7 @@ class Comments extends Main {
     if (!$this->_aParentData)
       return Helper::redirectTo('/blogs' . $this->_iId ? '/' . $this->_iId : '');
 
-    $oTemplate = Smarty::getTemplate('comments', 'show');
+    $oTemplate =  $this->oSmarty->getTemplate('comments', 'show');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
@@ -112,7 +112,7 @@ class Comments extends Main {
    *
    */
   protected function _showFormTemplate($sTemplateName = '_form', $sTitle = '') {
-    $oTemplate = Smarty::getTemplate('comments', $sTemplateName);
+    $oTemplate =  $this->oSmarty->getTemplate('comments', $sTemplateName);
     $this->oSmarty->setTemplateDir($oTemplate);
 
     foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)

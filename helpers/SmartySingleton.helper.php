@@ -233,7 +233,6 @@ class SmartySingleton extends Smarty {
   /**
    * Get the template dir. Check if there are extension files and use them if available.
    *
-   * @static
    * @access public
    * @param string $sFolder dir of the templates
    * @param string $sFile file name of the template
@@ -241,7 +240,7 @@ class SmartySingleton extends Smarty {
    * @return array dir of the chosen template and file: filename of template
    *
    */
-  public static function getTemplate($sFolder, $sFile, $bPlugin = false) {
+  public function getTemplate($sFolder, $sFile, $bPlugin = false) {
     $sLowerFolder = strtolower($sFolder);
     $sUCFirstFolder = ucfirst($sFolder);
     $aReturn = array();

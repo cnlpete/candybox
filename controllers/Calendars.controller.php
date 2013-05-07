@@ -54,7 +54,7 @@ class Calendars extends Main {
    *
    */
   protected function _ics($iId) {
-    $oTemplate = Smarty::getTemplate($this->_sController, 'ics');
+    $oTemplate =  $this->oSmarty->getTemplate($this->_sController, 'ics');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
@@ -79,7 +79,7 @@ class Calendars extends Main {
    *
    */
   protected function _overview() {
-    $oTemplate = Smarty::getTemplate($this->_sController, 'overview');
+    $oTemplate =  $this->oSmarty->getTemplate($this->_sController, 'overview');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     if ($this->_iId) {
@@ -102,7 +102,7 @@ class Calendars extends Main {
    *
    */
   public function iCalFeed() {
-    $oTemplate = Smarty::getTemplate($this->_sController, 'icalfeed');
+    $oTemplate =  $this->oSmarty->getTemplate($this->_sController, 'icalfeed');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID))

@@ -30,7 +30,7 @@ class Logs extends Main {
       return Helper::redirectTo('/errors/401');
 
     else {
-      $oTemplate = Smarty::getTemplate($this->_sController, 'overview');
+      $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'overview');
       $this->oSmarty->setTemplateDir($oTemplate);
 
       if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {

@@ -28,7 +28,7 @@ class Users extends Main {
    *
    */
   protected function _show() {
-    $oTemplate = Smarty::getTemplate($this->_sController, 'show');
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'show');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
@@ -58,7 +58,7 @@ class Users extends Main {
       return Helper::redirectTo('/errors/401');
 
     else {
-    $oTemplate = Smarty::getTemplate($this->_sController, 'overview');
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'overview');
     $this->oSmarty->setTemplateDir($oTemplate);
 
       if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
@@ -83,7 +83,7 @@ class Users extends Main {
    *
    */
   protected function _showFormTemplate($bUseRequest = false) {
-    $oTemplate = Smarty::getTemplate($this->_sController, '_form');
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, '_form');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     # Set user id of person to update
@@ -363,7 +363,7 @@ class Users extends Main {
                   'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
               ));
     
-    $oTemplate = Smarty::getTemplate($this->_sController, 'create');
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'create');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     if ($this->_aSession['user']['role'] == 4) {

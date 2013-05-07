@@ -43,7 +43,7 @@ class Searches extends Main {
       return $this->_create();
 
     else {
-      $oTemplate = Smarty::getTemplate($this->_sController, 'overview');
+      $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'overview');
       $this->oSmarty->setTemplateDir($oTemplate);
 
       $sString = Helper::formatInput(urldecode($this->_aRequest[$this->_sController]['search']));
@@ -87,7 +87,7 @@ class Searches extends Main {
    *
    */
   protected function _formTemplate() {
-    $oTemplate = Smarty::getTemplate($this->_sController, '_form');
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, '_form');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     $this->setTitle(I18n::get('global.search'));

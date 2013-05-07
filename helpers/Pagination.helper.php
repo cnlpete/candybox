@@ -170,7 +170,7 @@ class Pagination {
    */
   public function showPages($sController = '') {
     if ($this->_iPages > 1) {
-      $oTemplate = Smarty::getTemplate('paginations', 'showPagination');
+      $oTemplate = $this->_oSmarty->getTemplate('paginations', 'showPagination');
       //$this->oSmarty->setTemplateDir($oTemplate);
       $this->_oSmarty->addTemplateDir($oTemplate['dir']);
 
@@ -205,7 +205,7 @@ class Pagination {
    *
    */
   public function showSurrounding($sController = 'blogs') {
-      $oTemplate = Smarty::getTemplate('paginations', 'surrounding');
+      $oTemplate = $this->_oSmarty->getTemplate('paginations', 'surrounding');
       //$this->oSmarty->setTemplateDir($oTemplate);
       $this->_oSmarty->addTemplateDir($oTemplate['dir']);
 

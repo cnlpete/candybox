@@ -45,7 +45,7 @@ class Mails extends Main {
    *
    */
   protected function _overview() {
-    $oTemplate = Smarty::getTemplate($this->_sController, 'overview');
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'overview');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID))
@@ -105,7 +105,7 @@ class Mails extends Main {
                   'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
               ));
 
-    $oTemplate = Smarty::getTemplate($this->_sController, 'create');
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'create');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     $sUser = $this->__autoload('Users', true);
@@ -207,7 +207,7 @@ class Mails extends Main {
    *
    */
   protected function _showSuccessPage() {
-    $oTemplate = Smarty::getTemplate($this->_sController, 'success');
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'success');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     $this->setTitle(I18n::get('mails.success_page.title'));

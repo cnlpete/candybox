@@ -112,7 +112,7 @@ class Medias extends Main {
                   'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
               ));
 
-    $oTemplate = Smarty::getTemplate($this->_sController, 'create');
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'create');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     $this->setTitle(I18n::get('medias.title.create'));
@@ -144,7 +144,7 @@ class Medias extends Main {
    *
    */
   protected function _show() {
-    $oTemplate = Smarty::getTemplate($this->_sController, 'show');
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'show');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     $this->setTitle(I18n::get('global.manager.media'));

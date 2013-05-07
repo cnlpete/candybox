@@ -75,7 +75,7 @@ class Sessions extends Main {
    *
    */
   public function _showFormTemplate($sTemplateName = '_form', $sTitle = 'global') {
-    $oTemplate = Smarty::getTemplate($this->_sController, $sTemplateName);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, $sTemplateName);
     $this->oSmarty->setTemplateDir($oTemplate);
 
     if ($this->_aError)
@@ -224,7 +224,7 @@ class Sessions extends Main {
    *
    */
   protected function _showCreateResendActionsTemplate() {
-    $oTemplate = Smarty::getTemplate($this->_sController, 'resend');
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'resend');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     if ($this->_aError)

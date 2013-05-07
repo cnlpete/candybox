@@ -53,7 +53,7 @@ class Sites extends Main {
     # Set caching false for now
     $this->oSmarty->setCaching(false);
 
-    $oTemplate = Smarty::getTemplate($this->_sController, 'overview');
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'overview');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {

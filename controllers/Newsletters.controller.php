@@ -73,7 +73,7 @@ class Newsletters extends Main {
    *
    */
   protected function _showFormTemplate($sTemplateName = '_form', $sTitle = '') {
-    $oTemplate = Smarty::getTemplate($this->_sController, $sTemplateName);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, $sTemplateName);
     $this->oSmarty->setTemplateDir($oTemplate);
 
     $this->oSmarty->assign('name', isset($this->_aRequest['name']) ? (string) $this->_aRequest['name'] : '');

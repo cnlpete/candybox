@@ -26,8 +26,6 @@ class Errors extends Main {
    *
    */
   protected function _show() {
-    $oTemplate = Smarty::getTemplate($this->_sController, $this->_iId);
-
     if ($this->_iId == '401') {
       header('HTTP/1.0 401 Authorization Required');
     }
@@ -39,6 +37,7 @@ class Errors extends Main {
       header('HTTP/1.0 404 Not Found');
     }
 
+    $oTemplate =  $this->oSmarty->getTemplate($this->_sController, $this->_iId);
     $this->oSmarty->setTemplateDir($oTemplate);
     return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }

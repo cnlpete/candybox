@@ -31,7 +31,7 @@ class Admins extends Main {
     if ($this->_aSession['user']['role'] < 4)
       return Helper::redirectTo('/errors/401');
 
-    $oTemplate = Smarty::getTemplate($this->_sController, 'overview');
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'overview');
     $this->oSmarty->setTemplateDir($oTemplate);
     return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }

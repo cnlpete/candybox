@@ -26,7 +26,7 @@ class Contents extends Main {
    *
    */
   protected function _show() {
-    $oTemplate = Smarty::getTemplate($this->_sController, 'show');
+    $oTemplate =  $this->oSmarty->getTemplate($this->_sController, 'show');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     $aData = $this->_oModel->getId($this->_iId);
@@ -51,7 +51,7 @@ class Contents extends Main {
    *
    */
   protected function _overview() {
-    $oTemplate = Smarty::getTemplate($this->_sController, 'overview');
+    $oTemplate =  $this->oSmarty->getTemplate($this->_sController, 'overview');
     $this->oSmarty->setTemplateDir($oTemplate);
 
     $this->setTitle(I18n::get('global.manager.content'));
