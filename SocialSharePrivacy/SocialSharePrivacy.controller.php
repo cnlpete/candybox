@@ -63,6 +63,7 @@ final class SocialSharePrivacy {
    * @final
    * @access public
    * @return string HTML
+   * @todo remove $sCacheId
    *
    */
   public final function show() {
@@ -73,6 +74,6 @@ final class SocialSharePrivacy {
     $oSmarty->setTemplateDir($sTemplateDir);
     $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
-    return $oSmarty->fetch($sTemplateFile, WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|layout|' . self::IDENTIFIER);
+    return $oSmarty->fetch($sTemplateFile, WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|plugins|' . self::IDENTIFIER);
   }
 }

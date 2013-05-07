@@ -62,6 +62,7 @@ final class Disqus {
    * @final
    * @access public
    * @return string HTML content
+   * @todo remove $sCacheId 
    *
    */
   public final function show() {

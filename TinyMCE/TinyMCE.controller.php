@@ -63,6 +63,7 @@ final class TinyMCE {
    * @final
    * @access public
    * @return string HTML
+   * @todo remove $sCacheId
    *
    */
   public final function show() {
@@ -73,8 +74,7 @@ final class TinyMCE {
     $oSmarty->setTemplateDir($sTemplateDir);
     $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
-    $sCacheId = WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|layout|' . self::IDENTIFIER . '|';
-
+    $sCacheId = WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|plugins|' . self::IDENTIFIER . '|';
     return $oSmarty->fetch($sTemplateFile, $sCacheId);
   }
 
