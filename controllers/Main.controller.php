@@ -18,7 +18,6 @@ use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\SmartySingleton;
-use candyCMS\plugins\Bbcode;
 use MCAPI;
 
 abstract class Main {
