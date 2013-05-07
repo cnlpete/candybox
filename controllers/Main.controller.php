@@ -427,7 +427,7 @@ abstract class Main {
     else {
       # AJAX inputs
       if (isset($this->_aRequest['type']) && $this->_aRequest['type'] == 'json' &&
-              !isset($this->_aRequest[$this->_sController][$sField]) || empty($this->_aRequest[$this->_sController][$sField])) {
+              (!isset($this->_aRequest[$this->_sController][$sField]) || empty($this->_aRequest[$this->_sController][$sField]))) {
         header('Content-Type: application/json');
         exit(json_encode(array(
                     'success' => false,
