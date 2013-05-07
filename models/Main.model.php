@@ -197,11 +197,11 @@ abstract class Main {
 
     foreach ($aRow as $sColumn => $sData) {
 
-			# Bugfix: Avoid TinyMCE problems.
-			$sData = str_replace('\"', '', $sData);
-			$sData = str_replace('\&quot;', '', $sData);
+      # Bugfix: Avoid TinyMCE problems.
+      $sData = str_replace('\"', '', $sData);
+      $sData = str_replace('\&quot;', '', $sData);
       $aData[$sColumn] = $sData;
-		}
+    }
 
     return $aData;
   }
