@@ -75,7 +75,7 @@ final class AddThis {
     $oSmarty->setTemplateDir($sTemplateDir);
     $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
-    $sCacheId = WEBSITE_MODE . '|layout|' . WEBSITE_LOCALE . '|' . self::IDENTIFIER;
+    $sCacheId = WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|layout|' . self::IDENTIFIER;
 
     return $oSmarty->fetch($sTemplateFile, $sCacheId);
   }

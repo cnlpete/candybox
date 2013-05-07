@@ -73,6 +73,6 @@ final class SocialSharePrivacy {
     $oSmarty->setTemplateDir($sTemplateDir);
     $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
-    return $oSmarty->fetch($sTemplateFile, WEBSITE_MODE . '|layout|' . WEBSITE_LOCALE . '|' . self::IDENTIFIER);
+    return $oSmarty->fetch($sTemplateFile, WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|layout|' . self::IDENTIFIER);
   }
 }
