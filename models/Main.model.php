@@ -144,8 +144,8 @@ abstract class Main {
   public static function connectToDatabase() {
     if (empty(self::$_oDbStatic)) {
       try {
-        $sSQLType   = defined('SQL_TYPE') ? strtolower(SQL_TYPE) : 'mysql';
-        $sDatabase  = defined('SQL_SINGLE_DB_MODE') && SQL_SINGLE_DB_MODE === true ?
+        $sSQLType   = strtolower(SQL_TYPE);
+        $sDatabase  = SQL_SINGLE_DB_MODE === true ?
                 SQL_DB :
                 SQL_DB . '_' . WEBSITE_MODE;
 
@@ -197,11 +197,11 @@ abstract class Main {
 
     foreach ($aRow as $sColumn => $sData) {
 
-			# Bugfix: Avoid TinyMCE problems.
-			$sData = str_replace('\"', '', $sData);
-			$sData = str_replace('\&quot;', '', $sData);
+      # Bugfix: Avoid TinyMCE problems.
+      $sData = str_replace('\"', '', $sData);
+      $sData = str_replace('\&quot;', '', $sData);
       $aData[$sColumn] = $sData;
-		}
+    }
 
     return $aData;
   }
@@ -346,7 +346,7 @@ abstract class Main {
 
     # URL to entry
     $aData['url_clean']   = WEBSITE_URL . '/' . $sController . '/' . $aData['id'];
-    $aData['url']         = $aData['url_clean'] . '/' . $aData['title_encoded'];
+    $aData['url']         = $aData['url_clean'] . '/' . str_replace("%2F", '+', $aData['title_encoded']);
     $aData['url_encoded'] = urlencode($aData['url']); #SEO
 
     # Do we need to highlight text?

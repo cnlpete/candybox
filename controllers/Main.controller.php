@@ -177,6 +177,7 @@ abstract class Main {
     $this->_aCookie   = & $aCookie;
 
     # Load config files if not already done (important for unit testing)
+    # @todo this should be done in the testing scenarios instead, i.e. the respective initialization should be included
     if (!defined('WEBSITE_URL'))
       require PATH_STANDARD . '/config/Candy.inc.php';
 
@@ -555,8 +556,6 @@ abstract class Main {
    *
    */
   protected function _overviewJSON() {
-    header('Content-Type: application/json');
-
     if (method_exists($this->_oModel, 'getOverview'))
       return json_encode(array(
                   'success' => true,

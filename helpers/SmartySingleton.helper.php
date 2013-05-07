@@ -70,9 +70,6 @@ class SmartySingleton extends Smarty {
   public function __construct() {
     parent::__construct();
 
-    if (!defined('WEBSITE_LANGUAGE'))
-      define('WEBSITE_LANGUAGE', 'en');
-
     $this->setCacheDir(PATH_STANDARD . '/' . PATH_SMARTY . '/cache');
     $this->setCompileDir(PATH_STANDARD . '/' . PATH_SMARTY . '/compile');
     $this->setPluginsDir(SMARTY_DIR . '/plugins');
@@ -123,8 +120,8 @@ class SmartySingleton extends Smarty {
 
     # Do we want autoloading of pages?
     $this->assign('_AUTOLOAD', array(
-        'enabled' => !defined('AUTOLOAD') || AUTOLOAD ? true : false,
-        'times'   => !defined('AUTOLOAD_TIMES') ? 3 : AUTOLOAD_TIMES
+        'enabled' => AUTOLOAD === true,
+        'times'   => AUTOLOAD_TIMES
     ));
   }
 
@@ -207,6 +204,6 @@ class SmartySingleton extends Smarty {
    *
    */
   public function clearControllerCache($sController) {
-    $this->clearCache(null, WEBSITE_MODE . '|' . $sController);
+    $this->clearCache(null, WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|' . $sController);
   }
 }

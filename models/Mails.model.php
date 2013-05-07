@@ -215,7 +215,7 @@ class Mails extends Main {
       $sErrorMessage = $e->errorMessage();
     }
 
-    if ((!$bReturn && $bSaveMail && defined('USE_MAIL_QUEUE') && USE_MAIL_QUEUE == true) || ACTIVE_TEST) {
+    if ((!$bReturn && $bSaveMail && USE_MAIL_QUEUE == true) || ACTIVE_TEST) {
       try {
         $oQuery = $this->_oDb->prepare("INSERT INTO
                                           " . SQL_PREFIX . "mails

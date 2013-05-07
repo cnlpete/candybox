@@ -36,8 +36,6 @@ class Helper {
   public static function successMessage($sMessage, $sRedirectTo = '', $aData = '') {
     # This is supposed to be an AJAX request, so we will return JSON
     if (!empty($aData) && isset($aData['type']) && 'json' == $aData['type']) {
-      header('Content-Type: application/json');
-
       return json_encode(array(
                 'success'     => true,
                 'data'        => WEBSITE_MODE == 'development' ? $aData : '',
@@ -70,8 +68,6 @@ class Helper {
   public static function warningMessage($sMessage, $sRedirectTo = '', $aData = '') {
     # This is supposed to be an AJAX request, so we will return JSON
     if (!empty($aData) && isset($aData['type']) && 'json' == $aData['type']) {
-      header('Content-Type: application/json');
-
       return json_encode(array(
                 'success'     => false,
                 'data'        => WEBSITE_MODE == 'development' ? $aData : '',
@@ -102,8 +98,6 @@ class Helper {
    */
   public static function errorMessage($sMessage, $sRedirectTo = '', $aData = '') {
     if (!empty($aData) && isset($aData['type']) && 'json' == $aData['type']) {
-        header('Content-Type: application/json');
-
         return json_encode(array(
                   'success'     => false,
                   'data'        => WEBSITE_MODE == 'development' ? $aData : '',
@@ -673,7 +667,7 @@ class Helper {
    */
   public static function compileStylesheet($sSource, $sOutput, $bCompressed = true) {
     if (file_exists($sSource)) {
-      $sCacheFile = (defined('PATH_CACHE') ? PATH_CACHE : 'app') . '/' . md5($sOutput) . '.cache';
+      $sCacheFile = PATH_CACHE . '/' . md5($sOutput) . '.cache';
       $aCache = file_exists($sCacheFile) ? unserialize(file_get_contents($sCacheFile)) : $sSource;
 
       $oLessc = new lessc();

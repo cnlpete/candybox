@@ -239,9 +239,6 @@ class Index {
    *
    */
   public function getLanguage() {
-    if (!defined('DEFAULT_LANGUAGE'))
-      define('DEFAULT_LANGUAGE', 'en');
-
     $aRequest = (isset($this->_aCookie) && is_array($this->_aCookie)) ?
                   array_merge($this->_aRequest, $this->_aCookie) :
                   $this->_aRequest;
@@ -507,7 +504,21 @@ class Index {
     $sCachedHTML = $this->_oPlugins->runSimplePlugins($sCachedHTML);
     $sCachedHTML = $this->_oPlugins->runSessionPlugin($sCachedHTML);
 
-    header('Content-Type: text/html; charset=utf-8');
+    switch ($this->_aRequest['type']) {
+      case 'json':
+        header('Content-Type: application/json');
+        break;
+      case 'xml':
+        header('Content-Type: application/xml');
+        break;
+      case 'rss':
+        header('Content-Type: application/rss+xml');
+        break;
+      default:
+      case 'html':
+        header('Content-Type: text/html; charset=utf-8');
+        break;
+    }
     return $sCachedHTML;
   }
 }
