@@ -16,6 +16,7 @@ namespace candyCMS\Core\Controllers;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\Upload;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Downloads extends Main {
 
@@ -55,14 +56,13 @@ class Downloads extends Main {
    *
    */
   protected function _overview() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = Smarty::getTemplate($this->_sController, 'overview');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID))
       $this->oSmarty->assign('downloads', $this->_oModel->getOverview());
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**

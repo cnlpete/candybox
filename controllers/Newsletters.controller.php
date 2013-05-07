@@ -15,6 +15,7 @@ namespace candyCMS\Core\Controllers;
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Newsletters extends Main {
 
@@ -72,9 +73,8 @@ class Newsletters extends Main {
    *
    */
   protected function _showFormTemplate($sTemplateName = '_form', $sTitle = '') {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, $sTemplateName);
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, $sTemplateName);
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = Smarty::getTemplate($this->_sController, $sTemplateName);
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     $this->oSmarty->assign('name', isset($this->_aRequest['name']) ? (string) $this->_aRequest['name'] : '');
     $this->oSmarty->assign('surname', isset($this->_aRequest['surname']) ? (string) $this->_aRequest['surname'] : '');
@@ -86,6 +86,6 @@ class Newsletters extends Main {
     $this->setTitle(I18n::get('newsletters.title.subscribe'));
     $this->setDescription(I18n::get('newsletters.description.subscribe'));
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 }

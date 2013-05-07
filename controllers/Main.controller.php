@@ -686,9 +686,8 @@ abstract class Main {
                   'success' => false,
                   'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
               ));
-    
-    $sTemplateDir  = Helper::getTemplateDir($this->_sController, $sTemplateName);
-    $sTemplateFile = Helper::getTemplateType($sTemplateDir, $sTemplateName);
+
+    $oTemplate = Smarty::getTemplate($this->_sController, $sTemplateName);
 
     if ($this->_iId) {
       $aData = $this->_oModel->getId($this->_iId, true);
@@ -719,8 +718,8 @@ abstract class Main {
     $oPluginManager = PluginManager::getInstance();
     $this->oSmarty->assign('editorinfo', $oPluginManager->getEditorInfo());
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    $this->oSmarty->setTemplateDir($oTemplate);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**

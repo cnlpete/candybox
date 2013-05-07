@@ -14,7 +14,7 @@ namespace candyCMS\Core\Helpers;
 
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
-use candyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Pagination {
 
@@ -110,7 +110,7 @@ class Pagination {
       $this->_iCurrentPage = $this->_iPages;
 
     $this->_iOffset = ($this->_iCurrentPage - 1) * $this->_iLimit;
-    $this->_oSmarty = SmartySingleton::getInstance();
+    $this->_oSmarty = Smarty::getInstance();
   }
 
   /**
@@ -170,9 +170,9 @@ class Pagination {
    */
   public function showPages($sController = '') {
     if ($this->_iPages > 1) {
-      $sTemplateDir  = Helper::getTemplateDir('paginations', 'showPagination');
-      $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'showPagination');
-      $this->_oSmarty->addTemplateDir($sTemplateDir);
+      $oTemplate = Smarty::getTemplate('paginations', 'showPagination');
+      //$this->oSmarty->setTemplateDir($oTemplate);
+      $this->_oSmarty->addTemplateDir($oTemplate['dir']);
 
       $aPage = array(
           'last'       => $this->_iPages,
@@ -184,12 +184,12 @@ class Pagination {
 
       # turn off caching, because if cached, the content page that needs pagination is already cached
       $iCaching = $this->_oSmarty->getCaching();
-      if ($iCaching !== SmartySingleton::CACHING_OFF)
-        $this->_oSmarty->setCaching(SmartySingleton::CACHING_OFF);
+      if ($iCaching !== Smarty::CACHING_OFF)
+        $this->_oSmarty->setCaching(Smarty::CACHING_OFF);
 
-      $sHTML = $this->_oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+      $sHTML = $this->_oSmarty->fetch($oTemplate, UNIQUE_ID);
 
-      if ($iCaching !== SmartySingleton::CACHING_OFF)
+      if ($iCaching !== Smarty::CACHING_OFF)
         $this->_oSmarty->setCaching($iCaching);
 
       return $sHTML;
@@ -205,9 +205,9 @@ class Pagination {
    *
    */
   public function showSurrounding($sController = 'blogs') {
-    $sTemplateDir  = Helper::getTemplateDir('paginations', 'surrounding');
-    $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'surrounding');
-    $this->_oSmarty->addTemplateDir($sTemplateDir);
+      $oTemplate = Smarty::getTemplate('paginations', 'surrounding');
+      //$this->oSmarty->setTemplateDir($oTemplate);
+      $this->_oSmarty->addTemplateDir($oTemplate['dir']);
 
     if ($this->_iPages > 1 && $this->_iCurrentPage < $this->_iPages)
       $iNext = $this->_iCurrentPage + 1;
@@ -235,12 +235,12 @@ class Pagination {
 
     # turn off caching, because if cached, the content page that needs pagination is already cached
     $iCaching = $this->_oSmarty->getCaching();
-    if ($iCaching !== SmartySingleton::CACHING_OFF)
-      $this->_oSmarty->setCaching(SmartySingleton::CACHING_OFF);
+    if ($iCaching !== Smarty::CACHING_OFF)
+      $this->_oSmarty->setCaching(Smarty::CACHING_OFF);
 
-    $sHTML = $this->_oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    $sHTML = $this->_oSmarty->fetch($oTemplate, UNIQUE_ID);
 
-    if ($iCaching !== SmartySingleton::CACHING_OFF)
+    if ($iCaching !== Smarty::CACHING_OFF)
       $this->_oSmarty->setCaching($iCaching);
 
     return $sHTML;

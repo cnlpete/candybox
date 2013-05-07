@@ -14,6 +14,7 @@ namespace candyCMS\Core\Controllers;
 
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Errors extends Main {
 
@@ -25,8 +26,7 @@ class Errors extends Main {
    *
    */
   protected function _show() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, $this->_iId);
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, $this->_iId);
+    $oTemplate = Smarty::getTemplate($this->_sController, $this->_iId);
 
     if ($this->_iId == '401') {
       header('HTTP/1.0 401 Authorization Required');
@@ -39,8 +39,8 @@ class Errors extends Main {
       header('HTTP/1.0 404 Not Found');
     }
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    $this->oSmarty->setTemplateDir($oTemplate);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**

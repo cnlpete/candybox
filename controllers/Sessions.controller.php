@@ -17,6 +17,7 @@ use candyCMS\Core\Controllers\Main;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Sessions extends Main {
 
@@ -74,9 +75,8 @@ class Sessions extends Main {
    *
    */
   public function _showFormTemplate($sTemplateName = '_form', $sTitle = 'global') {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, $sTemplateName);
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, $sTemplateName);
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = Smarty::getTemplate($this->_sController, $sTemplateName);
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
@@ -86,7 +86,7 @@ class Sessions extends Main {
                     '');
 
     $this->setTitle(I18n::get($sTitle . '.login'));
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -224,9 +224,8 @@ class Sessions extends Main {
    *
    */
   protected function _showCreateResendActionsTemplate() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'resend');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'resend');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = Smarty::getTemplate($this->_sController, 'resend');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
@@ -234,7 +233,7 @@ class Sessions extends Main {
     foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
       $this->oSmarty->assign($sInput, $sData);
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**

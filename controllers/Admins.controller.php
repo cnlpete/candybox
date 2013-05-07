@@ -16,6 +16,7 @@ namespace candyCMS\Core\Controllers;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\Cache;
 use candyCMS\Core\Helpers\I18n;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Admins extends Main {
 
@@ -30,10 +31,9 @@ class Admins extends Main {
     if ($this->_aSession['user']['role'] < 4)
       return Helper::redirectTo('/errors/401');
 
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    $oTemplate = Smarty::getTemplate($this->_sController, 'overview');
+    $this->oSmarty->setTemplateDir($oTemplate);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**

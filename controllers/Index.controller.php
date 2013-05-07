@@ -17,7 +17,7 @@ use candyCMS\Core\Helpers\Dispatcher;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
-use candyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 use Routes;
 
 $aFiles = array(
@@ -454,7 +454,7 @@ class Index {
     }
 
     # Start the dispatcher and grab the controller.
-    $oSmarty = SmartySingleton::getInstance();
+    $oSmarty = Smarty::getInstance();
     $oSmarty->setRequestAndSession($this->_aRequest, $this->_aSession);
 
     $oDispatcher = new Dispatcher($this->_aRequest, $this->_aSession, $this->_aFile, $this->_aCookie);
@@ -471,8 +471,7 @@ class Index {
 
     # HTML with template
     else {
-      $sTemplateDir   = Helper::getTemplateDir('layouts', 'application');
-      $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'application');
+      $oTemplate = Smarty::getTemplate('layouts', 'application');
 
       # Get flash messages (success and error)
       $oSmarty->assign('_FLASH', $this->_getFlashMessage());
@@ -495,9 +494,9 @@ class Index {
 
       $oSmarty->assign('_WEBSITE', $aWebsite);
 
-      $oSmarty->setTemplateDir($sTemplateDir);
-      $oSmarty->setCaching(\candyCMS\Core\Helpers\SmartySingleton::CACHING_OFF);
-      $sCachedHTML = $oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+      $oSmarty->setTemplateDir($oTemplate);
+      $oSmarty->setCaching(Smarty::CACHING_OFF);
+      $sCachedHTML = $oSmarty->fetch($oTemplate, UNIQUE_ID);
     }
 
 

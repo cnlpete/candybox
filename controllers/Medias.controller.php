@@ -15,7 +15,7 @@ namespace candyCMS\Core\Controllers;
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
-use candyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 use candyCMS\Core\Helpers\Upload;
 
 class Medias extends Main {
@@ -111,14 +111,13 @@ class Medias extends Main {
                   'success' => false,
                   'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
               ));
-    
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'create');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'create');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+
+    $oTemplate = Smarty::getTemplate($this->_sController, 'create');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     $this->setTitle(I18n::get('medias.title.create'));
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -130,7 +129,7 @@ class Medias extends Main {
    *
    */
   public function show() {
-    $this->oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
+    $this->oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
     return $this->_aSession['user']['role'] < 3 ?
             Helper::redirectTo('/errors/401') :
@@ -145,15 +144,14 @@ class Medias extends Main {
    *
    */
   protected function _show() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = Smarty::getTemplate($this->_sController, 'show');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     $this->setTitle(I18n::get('global.manager.media'));
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID))
       $this->oSmarty->assign('files', $this->_oModel->getOverview());
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 }
