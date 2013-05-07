@@ -32,6 +32,13 @@ class SmartySingleton extends Smarty {
   private static $_oInstance = null;
 
   /**
+   *
+   * @access private
+   *
+   */
+  private $_aPathCache;
+
+  /**
    * Get the Smarty instance
    *
    * @static
@@ -69,6 +76,9 @@ class SmartySingleton extends Smarty {
    */
   public function __construct() {
     parent::__construct();
+
+    # Load the path cache
+    Cache::isCachedAndLoad('tpl-path-cache', $this->_aPathCache);
 
     $this->setCacheDir(PATH_STANDARD . '/' . PATH_SMARTY . '/cache');
     $this->setCompileDir(PATH_STANDARD . '/' . PATH_SMARTY . '/compile');
@@ -243,6 +253,13 @@ class SmartySingleton extends Smarty {
   public function getTemplate($sFolder, $sFile, $bPlugin = false) {
     $sLowerFolder = strtolower($sFolder);
     $sUCFirstFolder = ucfirst($sFolder);
+
+    $sCacheId = $sLowerFolder.'.'.$sFile.'.'.(MOBILE === true?'mob':'tpl');
+
+    # check the cache
+    if (isset($this->_aPathCache[$sCacheId]))
+      return $this->_aPathCache[$sCacheId];
+
     $aReturn = array();
 
     try {
@@ -289,6 +306,11 @@ class SmartySingleton extends Smarty {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       exit($e->getMessage());
     }
+
+    # save to cache
+    $this->_aPathCache[$sCacheId] = $aReturn;
+    Cache::save('tpl-path-cache', $this->_aPathCache);
+
     return $aReturn;
   }
 }
