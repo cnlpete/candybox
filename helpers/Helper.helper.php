@@ -666,21 +666,20 @@ class Helper {
    * @param string $sSource the less file
    * @param string $sOutput the target output file
    * @param bool $bCompressed whether to use the compressed output mode
-   * @todo remove PATH_CACHE fix
    * @todo test cases
    *
    */
   public static function compileStylesheet($sSource, $sOutput, $bCompressed = true) {
     if (file_exists($sSource)) {
-      $sCacheFile = PATH_SMARTY . '/cache/' . md5($sOutput) . '.cache';
-      $aCache     = file_exists($sCacheFile) ? unserialize(file_get_contents($sCacheFile)) : $sSource;
+      $sCacheFile = PATH_SMARTY . '/cache/' . WEBSITE_MODE . '/' . md5($sOutput) . '.cache';
+      $mCache     = file_exists($sCacheFile) ? unserialize(file_get_contents($sCacheFile)) : $sSource;
 
       $oLessc = new lessc();
       $bCompressed ? $oLessc->setFormatter('compressed') : $oLessc->setFormatter('classic');
 
       $aNewCache = $oLessc->cachedCompile($aCache);
 
-      if (!is_array($aCache) || $aNewCache['updated'] > $aCache['updated']) {
+      if (!is_array($mCache) || $aNewCache['updated'] > $mCache['updated']) {
         file_put_contents($sCacheFile, serialize($aNewCache));
         file_put_contents($sOutput, $aNewCache['compiled']);
       }
