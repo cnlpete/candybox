@@ -677,7 +677,7 @@ class Helper {
       $oLessc = new lessc();
       $bCompressed ? $oLessc->setFormatter('compressed') : $oLessc->setFormatter('classic');
 
-      $aNewCache = $oLessc->cachedCompile($aCache);
+      $aNewCache = $oLessc->cachedCompile($mCache);
 
       if (!is_array($mCache) || $aNewCache['updated'] > $mCache['updated']) {
         file_put_contents($sCacheFile, serialize($aNewCache));
