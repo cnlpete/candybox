@@ -17,7 +17,7 @@ use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
-use candyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 use MCAPI;
 
 abstract class Main {
@@ -249,7 +249,7 @@ abstract class Main {
    */
   protected function _setSmarty() {
     # Initialize smarty
-    $this->oSmarty = SmartySingleton::getInstance();
+    $this->oSmarty = Smarty::getInstance();
 
     # Clear cache on development mode or when we force it via a request.
     if (isset($this->_aRequest['clearcache']) || WEBSITE_MODE == 'development' || ACTIVE_TEST) {
@@ -459,7 +459,7 @@ abstract class Main {
    *
    */
   public function show() {
-    $this->oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
+    $this->oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
     $sType = isset($this->_aRequest['type']) && 'ajax' !== $this->_aRequest['type'] ?
             strtoupper($this->_aRequest['type']) :
