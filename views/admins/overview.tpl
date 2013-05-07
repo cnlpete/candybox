@@ -5,7 +5,7 @@
   </div>
   <ul>
     <li><a href="/admins/clearcache">Clear the Cache</li>
-    <li><a href="/admins/recompilestylesheets">Recompile the Stylesheets</li>
+    <li><a href="/admins/recompilestylesheets">Recompile the Stylesheets</a></li>
   </ul>
 </div>
 {/strip}
