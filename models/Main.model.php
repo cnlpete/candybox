@@ -346,7 +346,7 @@ abstract class Main {
 
     # URL to entry
     $aData['url_clean']   = WEBSITE_URL . '/' . $sController . '/' . $aData['id'];
-    $aData['url']         = $aData['url_clean'] . '/' . $aData['title_encoded'];
+    $aData['url']         = $aData['url_clean'] . '/' . str_replace("%2F", '+', $aData['title_encoded']);
     $aData['url_encoded'] = urlencode($aData['url']); #SEO
 
     # Do we need to highlight text?
