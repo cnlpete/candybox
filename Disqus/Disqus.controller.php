@@ -62,6 +62,7 @@ final class Disqus {
    * @final
    * @access public
    * @return string HTML content
+   * @todo remove $sCacheId 
    *
    */
   public final function show() {
@@ -75,7 +76,7 @@ final class Disqus {
     if (isset($this->_aRequest['id']))
       $oSmarty->assign('disqus_url', WEBSITE_URL . '/' . $this->_aRequest['controller'] . '/' . $this->_aRequest['id']);
 
-    $sCacheId = WEBSITE_MODE . '|plugins|' . WEBSITE_LOCALE . '|' . self::IDENTIFIER;
+    $sCacheId = WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|plugins|' . self::IDENTIFIER;
     if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
       $oSmarty->assign('WEBSITE_MODE', WEBSITE_MODE);
       $oSmarty->assign('PLUGIN_DISQUS_SHORTNAME', PLUGIN_DISQUS_SHORTNAME);

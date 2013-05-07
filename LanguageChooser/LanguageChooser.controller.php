@@ -73,7 +73,7 @@ final class LanguageChooser {
     $oSmarty->setTemplateDir($sTemplateDir);
     $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
-    $sCacheId = WEBSITE_MODE . '|layout|' . WEBSITE_LOCALE . '|' . self::IDENTIFIER . '|' . substr(md5($this->_aSession['user']['role']), 0 , 10);
+    $sCacheId = WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|plugins|' . self::IDENTIFIER . '|' . substr(md5($this->_aSession['user']['role']), 0 , 10);
     if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
       $aLangs = array();
       foreach (I18n::getPossibleLanguages() as $sLang) {
