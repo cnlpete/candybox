@@ -63,9 +63,8 @@ final class Snippets {
   private function _blogSnippet($mId) {
     $iId = intval($mId[1]);
 
-    $oTemplate = Smarty::getTemplate(self::IDENTIFIER, '_blog.snippet', true);
-
     $oSmarty = Smarty::getInstance();
+    $oTemplate = $oSmarty->getTemplate(self::IDENTIFIER, '_blog.snippet', true);
     $oSmarty->setTemplateDir($oTemplate);
     $oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
@@ -86,9 +85,8 @@ final class Snippets {
   private function _gallerySnippet($mId) {
     $iId = intval($mId[1]);
 
-    $oTemplate = Smarty::getTemplate(self::IDENTIFIER, '_gallery.snippet', true);
-
     $oSmarty = Smarty::getInstance();
+    $oTemplate = $oSmarty->getTemplate(self::IDENTIFIER, '_gallery.snippet', true);
     $oSmarty->setTemplateDir($oTemplate);
     $oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 

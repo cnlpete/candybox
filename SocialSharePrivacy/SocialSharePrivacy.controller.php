@@ -66,9 +66,8 @@ final class SocialSharePrivacy {
    *
    */
   public final function show() {
-    $oTemplate = Smarty::getTemplate(self::IDENTIFIER, 'show', true);
-
     $oSmarty = Smarty::getInstance();
+    $oTemplate = $oSmarty->getTemplate(self::IDENTIFIER, 'show', true);
     $oSmarty->setTemplateDir($oTemplate);
     $oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 

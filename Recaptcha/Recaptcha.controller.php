@@ -117,9 +117,8 @@ final class Recaptcha {
    */
   public final function show() {
     if ($this->_aSession['user']['role'] == 0) {
-      $oTemplate = Smarty::getTemplate(self::IDENTIFIER, 'recaptcha', true);
-
       $oSmarty = Smarty::getInstance();
+      $oTemplate = $oSmarty->getTemplate(self::IDENTIFIER, 'recaptcha', true);
       $oSmarty->setTemplateDir($oTemplate);
 
       # No caching for this very dynamic form

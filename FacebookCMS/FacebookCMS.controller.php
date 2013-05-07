@@ -266,9 +266,8 @@ final class FacebookCMS extends Facebook {
    *
    */
   public final function showJavascript() {
-    $oTemplate = Smarty::getTemplate(self::IDENTIFIER, 'show', true);
-
     $oSmarty = Smarty::getInstance();
+    $oTemplate = $oSmarty->getTemplate(self::IDENTIFIER, 'show', true);
     $oSmarty->setTemplateDir($oTemplate);
     $oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
