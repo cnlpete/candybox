@@ -65,6 +65,7 @@ else {
 # Define current URL and server IP
 if (!defined('CURRENT_URL'))
   define('CURRENT_URL', isset($_SERVER['REQUEST_URI']) ? WEBSITE_URL . $_SERVER['REQUEST_URI'] : WEBSITE_URL);
+
 if (!defined('SERVER_IP'))
   define('SERVER_IP', $_SERVER['REMOTE_ADDR']);
 
