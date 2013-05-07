@@ -12,8 +12,7 @@
 
 namespace candyCMS\Plugins;
 
-use candyCMS\Core\Helpers\Helper;
-use candyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 final class FormatTimestamp {
 
@@ -66,21 +65,20 @@ final class FormatTimestamp {
    *
    */
   public final function show() {
-    $sTemplateDir   = Helper::getPluginTemplateDir(self::IDENTIFIER, 'show');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+    $oTemplate = Smarty::getTemplate(self::IDENTIFIER, 'show', true);
 
-    $oSmarty = SmartySingleton::getInstance();
-    $oSmarty->setTemplateDir($sTemplateDir);
-    $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
+    $oSmarty = Smarty::getInstance();
+    $oSmarty->setTemplateDir($oTemplate);
+    $oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
     $sCacheId = WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|plugins|' . self::IDENTIFIER;
-    if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
+    if (!$oSmarty->isCached($oTemplate, $sCacheId)) {
       # the jQuery.timeago plugin takes it range in milliseconds,
       # PLUGIN_FORMATTIMESTAMP_RANGE is in minutes and defaults to 3 days
       $iRange = 1000 * 60 * (defined('PLUGIN_FORMATTIMESTAMP_RANGE') ? PLUGIN_FORMATTIMESTAMP_RANGE : 4320);
       $oSmarty->assign('range', $iRange);
     }
 
-    return $oSmarty->fetch($sTemplateFile, $sCacheId);
+    return $oSmarty->fetch($oTemplate, $sCacheId);
   }
 }

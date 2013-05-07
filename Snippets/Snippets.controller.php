@@ -15,9 +15,8 @@
 
 namespace candyCMS\Plugins;
 
-use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
-use candyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 final class Snippets {
 
@@ -64,49 +63,47 @@ final class Snippets {
   private function _blogSnippet($mId) {
     $iId = intval($mId[1]);
 
-    $sTemplateDir   = Helper::getPluginTemplateDir(self::IDENTIFIER, '_blog.snippet');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_blog.snippet');
+    $oTemplate = Smarty::getTemplate(self::IDENTIFIER, '_blog.snippet', true);
 
-    $oSmarty = SmartySingleton::getInstance();
-    $oSmarty->addTemplateDir($sTemplateDir);
-    $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
+    $oSmarty = Smarty::getInstance();
+    $oSmarty->setTemplateDir($oTemplate);
+    $oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
     // hook into the appropriate cache, so it gets cleared when needed
     $sCacheId = WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|blogs|' . self::IDENTIFIER . '|blogsnippet.' . $iId . '.' .
             substr(md5($this->_aSession['user']['role']), 0 , 10);
 
-    if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
+    if (!$oSmarty->isCached($oTemplate, $sCacheId)) {
       $sBlogsModel = \candyCMS\Core\Models\Main::__autoload('Blogs');
       $oModel = new $sBlogsModel($this->_aRequest, $this->_aSession);
 
       $oSmarty->assign('blogs', $oModel->getId($iId));
     }
 
-    return $oSmarty->fetch($sTemplateFile, $sCacheId);
+    return $oSmarty->fetch($oTemplate, $sCacheId);
   }
 
   private function _gallerySnippet($mId) {
     $iId = intval($mId[1]);
 
-    $sTemplateDir   = Helper::getPluginTemplateDir(self::IDENTIFIER, '_gallery.snippet');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_gallery.snippet');
+    $oTemplate = Smarty::getTemplate(self::IDENTIFIER, '_gallery.snippet', true);
 
-    $oSmarty = SmartySingleton::getInstance();
-    $oSmarty->addTemplateDir($sTemplateDir);
-    $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
+    $oSmarty = Smarty::getInstance();
+    $oSmarty->setTemplateDir($oTemplate);
+    $oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
     // hook into the appropriate cache, so it gets cleared when needed
     $sCacheId = WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|galleries|' . self::IDENTIFIER . '|gallerysnippet.' . $iId . '.' .
             substr(md5($this->_aSession['user']['role']), 0 , 10);
 
-    if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
+    if (!$oSmarty->isCached($oTemplate, $sCacheId)) {
       $sGalleriesModel = \candyCMS\Core\Models\Main::__autoload('Galleries');
       $oModel = new $sGalleriesModel($this->_aRequest, $this->_aSession);
 
       $oSmarty->assign('album', $oModel->getId($iId));
     }
 
-    return $oSmarty->fetch($sTemplateFile, $sCacheId);
+    return $oSmarty->fetch($oTemplate, $sCacheId);
   }
 
   /**
