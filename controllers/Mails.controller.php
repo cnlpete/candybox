@@ -98,6 +98,14 @@ class Mails extends Main {
    *
    */
   protected function _showCreateTemplate() {
+    # We don't support JSON
+    # @todo put this into a seperated method
+    if (isset($this->_aRequest['type']) && !empty($this->_aRequest['type']))
+      return json_encode(array(
+                  'success' => false,
+                  'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
+              ));
+    
     $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'create');
     $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'create');
     $this->oSmarty->setTemplateDir($sTemplateDir);
