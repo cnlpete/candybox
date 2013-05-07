@@ -100,7 +100,7 @@ class Mails extends Main {
   protected function _showCreateTemplate() {
     # We don't support JSON
     # @todo put this into a seperated method
-    if (isset($this->_aRequest['type']) && !empty($this->_aRequest['type']))
+    if (isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'])
       return json_encode(array(
                   'success' => false,
                   'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
