@@ -251,7 +251,7 @@
 
     {* Avatar *}
     <div class="tab-pane{if $_REQUEST['action'] == 'avatar'} active{/if}" id='user-image'>
-      <div class='form-horizontal'>
+      <form class='form-horizontal'>
         <div class='control-group{if isset($error.image)} alert alert-error{/if}'>
           {if $standard_avatar_popup !== $gravatar_avatar_popup}
             <div class='pull-right'>
@@ -332,7 +332,7 @@
                   name='MAX_FILE_SIZE'
                   value='409600' />
         </div>
-      </div>
+      </form>
     </div>
 
     {* Destroy account *}

@@ -36,13 +36,14 @@ class Helper {
    */
   public static function successMessage($sMessage, $sRedirectTo = '', $aData = '') {
     # This is supposed to be an AJAX request, so we will return JSON
-    if (!empty($aData) && isset($aData['type']) && 'json' == $aData['type']) {
-      return json_encode(array(
+    if (!empty($aData)) {
+      header('Content-Type: application/json');
+      exit(json_encode(array(
                 'success'     => true,
                 'data'        => WEBSITE_MODE == 'development' ? $aData : '',
                 'redirectURL' => $sRedirectTo,
                 'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
-            ));
+            )));
     } else {
       $_SESSION['flash_message'] = array(
           'type'      => 'success',
@@ -68,13 +69,15 @@ class Helper {
    */
   public static function warningMessage($sMessage, $sRedirectTo = '', $aData = '') {
     # This is supposed to be an AJAX request, so we will return JSON
-    if (!empty($aData) && isset($aData['type']) && 'json' == $aData['type']) {
-      return json_encode(array(
+    if (!empty($aData)) {
+      header('Content-Type: application/json');
+      exit(json_encode(array(
+
                 'success'     => false,
                 'data'        => WEBSITE_MODE == 'development' ? $aData : '',
                 'redirectURL' => $sRedirectTo,
                 'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
-              ));
+              )));
     } else {
       $_SESSION['flash_message'] = array(
           'type'    => 'warning',
@@ -98,13 +101,15 @@ class Helper {
    *
    */
   public static function errorMessage($sMessage, $sRedirectTo = '', $aData = '') {
-    if (!empty($aData) && isset($aData['type']) && 'json' == $aData['type']) {
-        return json_encode(array(
+    if (!empty($aData)) {
+      header('Content-Type: application/json');
+      exit(json_encode(array(
+
                   'success'     => false,
                   'data'        => WEBSITE_MODE == 'development' ? $aData : '',
                   'redirectURL' => $sRedirectTo,
                   'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
-              ));
+              )));
     } else {
       $_SESSION['flash_message'] = array(
           'type'    => 'error',
@@ -128,8 +133,8 @@ class Helper {
       header('Status: 404 Not Found');
       header('HTTP/1.0 404 Not Found');
     }
-    else
-      exit(header('Location:' . $sUrl));
+
+    exit(header('Location:' . $sUrl));
   }
 
   /**
@@ -667,15 +672,15 @@ class Helper {
    */
   public static function compileStylesheet($sSource, $sOutput, $bCompressed = true) {
     if (file_exists($sSource)) {
-      $aCache = $sSource;
-      Cache::isCachedAndLoad($sOutput, $aCache);
+      $mCache = $sSource;
+      Cache::isCachedAndLoad($sOutput, $mCache);
 
       $oLessc = new lessc();
       $bCompressed ? $oLessc->setFormatter('compressed') : $oLessc->setFormatter('classic');
 
-      $aNewCache = $oLessc->cachedCompile($aCache);
+      $aNewCache = $oLessc->cachedCompile($mCache);
 
-      if (!is_array($aCache) || $aNewCache['updated'] > $aCache['updated']) {
+      if (!is_array($mCache) || $aNewCache['updated'] > $mCache['updated']) {
         # save the compiled css
         if (!(file_put_contents($sOutput, $aNewCache['compiled']) === false))
           Cache::save($sOutput, $aNewCache);

@@ -156,20 +156,24 @@
       <div class='container'>
         <div class='row'>
           <div class='span8'>
-            <div id='js-flash_message'>
-              <div class='alert alert-{$_FLASH.type}' id='js-flash_{$_FLASH.type}'>
-                <a class='close' href='#'>×</a>
-                <h4 class='alert-heading'>{$_FLASH.headline}</h4>
-                <p>
-                  {$_FLASH.message}
-                </p>
-              </div>
-            </div>
-            {if isset($_WEBSITE.update) && !empty($_WEBSITE.update)}
-              <div class='alert alert-warning'>
-                {$_WEBSITE.update}
-              </div>
-            {/if}
+            {nocache}
+              {if $_FLASH.message}
+                <div id='js-flash_message'>
+                  <div class='alert alert-{$_FLASH.type}' id='js-flash_{$_FLASH.type}'>
+                    <a class='close' href='#'>×</a>
+                    <h4 class='alert-heading'>{$_FLASH.headline}</h4>
+                    <p>
+                      {$_FLASH.message}
+                    </p>
+                  </div>
+                </div>
+              {/if}
+              {if isset($_WEBSITE.update) && !empty($_WEBSITE.update)}
+                <div class='alert alert-warning'>
+                  {$_WEBSITE.update}
+                </div>
+              {/if}
+              {/nocache}
             <section id='{$_REQUEST.controller}' itemprop='mainContentOfPage'>
               {$_WEBSITE.content}
             </section>
