@@ -72,7 +72,7 @@ final class Snippets {
     $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
     // hook into the appropriate cache, so it gets cleared when needed
-    $sCacheId = WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|plugins|' . self::IDENTIFIER . '|blogsnippet.' . $iId . '.' .
+    $sCacheId = WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|blogs|' . self::IDENTIFIER . '|blogsnippet.' . $iId . '.' .
             substr(md5($this->_aSession['user']['role']), 0 , 10);
 
     if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
@@ -96,7 +96,7 @@ final class Snippets {
     $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
     // hook into the appropriate cache, so it gets cleared when needed
-    $sCacheId = WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|plugins|' . self::IDENTIFIER . '|gallerysnippet.' . $iId . '.' .
+    $sCacheId = WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|galleries|' . self::IDENTIFIER . '|gallerysnippet.' . $iId . '.' .
             substr(md5($this->_aSession['user']['role']), 0 , 10);
 
     if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {

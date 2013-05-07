@@ -75,7 +75,7 @@ final class Archive {
     $oSmarty->setTemplateDir($sTemplateDir);
     $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
 
-    $sCacheId = WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|plugins|' . self::IDENTIFIER . '|' .
+    $sCacheId = WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|blogs|' . self::IDENTIFIER . '|' .
             substr(md5($this->_aSession['user']['role']), 0 , 10);
 
     if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
