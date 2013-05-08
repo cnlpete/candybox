@@ -46,8 +46,9 @@ class AdvancedException extends \Exception {
     $oMails = new $sModel();
 
     return $oMails->create(array(
-        'subject' => 'Exception',
-        'message' => $sMessage), false);
+        'to_address'  => defined('WEBSITE_MAIL_EXCEPTION') ? WEBSITE_MAIL_EXCEPTION : WEBSITE_MAIL,
+        'subject'     => 'Exception',
+        'message'     => $sMessage), false);
   }
 
   /**
