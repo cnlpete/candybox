@@ -35,7 +35,7 @@ class Helper {
    */
   public static function successMessage($sMessage, $sRedirectTo = '', $aData = '') {
     # This is supposed to be an AJAX request, so we will return JSON
-    if (!empty($aData)) {
+    if (!empty($aData) && (isset($aData['type']) && 'json' == $aData['type'] || isset($aData['file']))) {
       header('Content-Type: application/json');
       exit(json_encode(array(
                 'success'     => true,
@@ -68,7 +68,7 @@ class Helper {
    */
   public static function warningMessage($sMessage, $sRedirectTo = '', $aData = '') {
     # This is supposed to be an AJAX request, so we will return JSON
-    if (!empty($aData)) {
+    if (!empty($aData) && (isset($aData['type']) && 'json' == $aData['type'] || isset($aData['file']))) {
       header('Content-Type: application/json');
       exit(json_encode(array(
 
@@ -100,7 +100,7 @@ class Helper {
    *
    */
   public static function errorMessage($sMessage, $sRedirectTo = '', $aData = '') {
-    if (!empty($aData)) {
+    if (!empty($aData) && (isset($aData['type']) && 'json' == $aData['type'] || isset($aData['file']))) {
       header('Content-Type: application/json');
       exit(json_encode(array(
 

@@ -169,12 +169,12 @@ class Users extends Main {
         $this->_oModel->updateGravatar($this->_iId);
 
         $aFileName = $oUpload->getIds();
-        $aFileInfo = $oUpload->getFileInformation();
+        $sFileMime = $oUpload->getFileMimeType();
 
         $this->_aRequest['fileData'] = array(
-            'popup'     => 'data:' . $aFileInfo['type'] . ';base64,' .
+            'popup'     => 'data:' . $sFileMime . ';base64,' .
             base64_encode(file_get_contents(PATH_UPLOAD . '/users/popup/' . $aFileName[0])),
-            'thumbnail' => 'data:' . $aFileInfo['type'] . ';base64,' .
+            'thumbnail' => 'data:' . $sFileMime . ';base64,' .
             base64_encode(file_get_contents(PATH_UPLOAD . '/users/64/' . $aFileName[0]))
         );
 
