@@ -14,7 +14,7 @@ namespace candyCMS\Controllers;
 
 use candyCMS\Core\Helpers\Helper;
 
-require_once PATH_STANDARD . '/vendor/candyCMS/core/controllers/Mails.controller.php';
+require_once PATH_STANDARD . '/vendor/candycms/core/controllers/Mails.controller.php';
 
 class Mails extends \candyCMS\Core\Controllers\Mails {
 

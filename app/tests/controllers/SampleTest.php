@@ -12,7 +12,7 @@
 
 namespace candyCMS\Controllers;
 
-require_once dirname(__FILE__) . '/../../../vendor/candyCMS/tests/CandyControllerTestCase.php';
+require_once dirname(__FILE__) . '/../../../vendor/candycms/tests/CandyControllerTestCase.php';
 require_once dirname(__FILE__) . '/../../extensions/controllers/Sample.controller.php';
 
 /**
