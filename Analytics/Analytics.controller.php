@@ -67,7 +67,7 @@ final class Analytics {
     $oSmarty->setTemplateDir($oTemplate);
     $oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
-    $sCacheId = WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|plugins|' . self::IDENTIFIER;
+    $sCacheId = UNIQUE_PREFIX . '|plugins|' . self::IDENTIFIER;
     if (!$oSmarty->isCached($oTemplate, $sCacheId)) {
       $oSmarty->assign('WEBSITE_MODE', WEBSITE_MODE);
       $oSmarty->assign('PLUGIN_ANALYTICS_TRACKING_CODE', PLUGIN_ANALYTICS_TRACKING_CODE);

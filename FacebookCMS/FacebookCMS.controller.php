@@ -271,7 +271,7 @@ final class FacebookCMS extends Facebook {
     $oSmarty->setTemplateDir($oTemplate);
     $oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
-    $sCacheId = WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|plugins|' . self::IDENTIFIER . '|' . $this->_sAppId;
+    $sCacheId = UNIQUE_PREFIX . '|plugins|' . self::IDENTIFIER . '|' . $this->_sAppId;
     if (!$oSmarty->isCached($oTemplate, $sCacheId)) {
       $oSmarty->assign('PLUGIN_FACEBOOK_APP_ID', $this->_sAppId);
       $oSmarty->assign('WEBSITE_LOCALE', WEBSITE_LOCALE);
