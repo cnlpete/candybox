@@ -65,7 +65,8 @@ final class Snippets {
 
     $oSmarty = Smarty::getInstance();
     $oTemplate = $oSmarty->getTemplate(self::IDENTIFIER, '_blog.snippet', true);
-    $oSmarty->setTemplateDir($oTemplate);
+    //$oSmarty->setTemplateDir($oTemplate);
+    $oSmarty->addTemplateDir($oTemplate);
     $oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
     // hook into the appropriate cache, so it gets cleared when needed
@@ -87,7 +88,8 @@ final class Snippets {
 
     $oSmarty = Smarty::getInstance();
     $oTemplate = $oSmarty->getTemplate(self::IDENTIFIER, '_gallery.snippet', true);
-    $oSmarty->setTemplateDir($oTemplate);
+    //$oSmarty->setTemplateDir($oTemplate);
+    $oSmarty->addTemplateDir($oTemplate);
     $oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
     // hook into the appropriate cache, so it gets cleared when needed
