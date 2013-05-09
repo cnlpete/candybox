@@ -160,6 +160,14 @@ abstract class Main {
   protected $_sRedirectURL = '';
 
   /**
+   * Store RSS Information Links
+   *
+   * @var array , title, url
+   * @access protected
+   */
+  protected $_aRSSInfo = array();
+
+  /**
    * Initialize the controller by adding input params, set default id and start template engine.
    *
    * @access public
@@ -258,6 +266,10 @@ abstract class Main {
     }
 
     return $this->oSmarty;
+  }
+
+  public function rssInfo() {
+    return $this->_aRSSInfo;
   }
 
   /**

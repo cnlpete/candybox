@@ -111,6 +111,9 @@ class Index {
     }
     $this->getLanguage();
     $this->setUser();
+
+    if (!defined('UNIQUE_PREFIX'))
+      define('UNIQUE_PREFIX', WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|');
   }
 
   /**
@@ -439,11 +442,8 @@ class Index {
   public function show() {
     # Set a caching / compile ID
     # Ask if defined because of unit tests.
-    if (!defined('UNIQUE_PREFIX'))
-      define('UNIQUE_PREFIX', WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|' . $this->_aRequest['controller']);
-
     if (!defined('UNIQUE_ID')) {
-      define('UNIQUE_ID', UNIQUE_PREFIX . '|' . $this->_aSession['user']['role'] .
+      define('UNIQUE_ID', UNIQUE_PREFIX . $this->_aRequest['controller'] . '|' . $this->_aSession['user']['role'] .
               (MOBILE ? 'mob|' : 'tpl|') . '|' .
               substr(md5(CURRENT_URL), 0, 10));
     }
@@ -480,6 +480,7 @@ class Index {
           'description' => $oDispatcher->oController->getDescription(),
           'expires'     => gmdate('D, d M Y H:i:s', time() + 60) . ' GMT',
           'keywords'    => $oDispatcher->oController->getKeywords(),
+          'rss'         => $oDispatcher->oController->rssInfo(),
           'og'          => array(
               'description' => $oDispatcher->oController->getDescription(),
               'site_name'   => WEBSITE_NAME,

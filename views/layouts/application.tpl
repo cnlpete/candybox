@@ -30,11 +30,9 @@
       <!-- pluginmanager:sessionplugin::meta -->
 
       {* Basic stuff *}
-      {if isset($_REQUEST.search)}
-        <link href='/blogs/{$_REQUEST.search}.rss' rel='alternate' type='application/rss+xml' title='{$_REQUEST.search} RSS'/>
-      {else}
-        <link href='/blogs.rss' rel='alternate' type='application/rss+xml' title='RSS'/>
-      {/if}
+      {foreach $_WEBSITE.meta.rss as $rss}
+        <link href='{$rss.url}' rel='alternate' type='application/rss+xml' title='{$rss.title}'/>
+      {/foreach}
       <link href='{$_PATH.public}/favicon.ico' rel='shortcut icon' type='image/x-icon'/>
 
       {* Include jQuery and its components *}

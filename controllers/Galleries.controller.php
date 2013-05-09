@@ -75,8 +75,14 @@ class Galleries extends Main {
     # Collect data array
     $aData = $this->_oModel->getId($this->_iId, false, true);
 
-    $this->setTitle($this->_removeHighlight($aData['title']) . ' - ' . I18n::get('global.gallery'));
+    $sTitle = $this->_removeHighlight($aData['title']) . ' - ' . I18n::get('global.gallery');
+    $this->setTitle($sTitle);
     $this->setDescription($this->_removeHighlight($aData['content']));
+
+    # add rss info
+    $this->_aRSSInfo[] = array(
+                            'url' => WEBSITE_URL . '/galleries/' . $this->_aRequest['id'] . '.rss',
+                            'title' => $sTitle);
 
     if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID))
       $this->oSmarty->assign('album', $aData);
