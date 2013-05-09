@@ -65,10 +65,11 @@ define('WEBSITE_URL', 'http://domain.tld');
 
 # ------------------------------------------------------------------------------
 
-# Define the url to your cdn.
+# Define the url to your cdn. 
+# Note that all javascripts, images and css files have to be accessible.
 # EXAMPLE: http://www.google.com
-# DEFAULT: '/public'
-define('WEBSITE_CDN', '/public');
+# DEFAULT: ''
+#define('WEBSITE_CDN', '');
 
 # ------------------------------------------------------------------------------
 
@@ -111,7 +112,7 @@ define('WEBSITE_MODE', 'development');
 # Set true, if you want to build your own app. Also, this is always set to true
 # in development or testing mode. Setting to false will speed the page up.
 # DEFAULT: false
-define('ALLOW_EXTENSIONS', false);
+#define('ALLOW_EXTENSIONS', false);
 
 # ------------------------------------------------------------------------------
 
@@ -127,7 +128,7 @@ define('ALLOW_PLUGINS', 'Bbcode,FormatTimestamp,Headlines,Archive,TinyMCE,Langua
 # Allow this software to connect to the candyCMS website to check for an update.
 # OPTIONS: true / false
 # DEFAULT: true
-define('ALLOW_VERSION_CHECK', true);
+#define('ALLOW_VERSION_CHECK', true);
 
 # ------------------------------------------------------------------------------
 
@@ -144,7 +145,7 @@ define('ALLOW_SMUSHIT', true);
 # translation available and the user didn't choose a language by himself, we fall
 # back to the system language.
 # DEFAULT: 'en'
-define('DEFAULT_LANGUAGE', 'en');
+#define('DEFAULT_LANGUAGE', 'en');
 
 # ------------------------------------------------------------------------------
 
@@ -161,92 +162,96 @@ define('RANDOM_HASH', '');
 # px.
 # Larger images and videos will be reseized or scaled down!
 # DEFAULT: 660
-define('MEDIA_DEFAULT_X', '620');
+#define('MEDIA_DEFAULT_X', '620');
 
 # DEFAULT: 371
-define('MEDIA_DEFAULT_Y', '393');
+#define('MEDIA_DEFAULT_Y', '393');
 
 # Set thumb width
 # DEFAULT: 180
-define('THUMB_DEFAULT_X', '180');
-define('THUMB_DEFAULT_Y', '180');
+#define('THUMB_DEFAULT_X', '180');
+#define('THUMB_DEFAULT_Y', '180');
 
 # Set maximum popup width
 # DEFAULT: 800 / 640
-define('POPUP_DEFAULT_X', '800');
-define('POPUP_DEFAULT_Y', '640');
+#define('POPUP_DEFAULT_X', '800');
+#define('POPUP_DEFAULT_Y', '640');
 
 # ------------------------------------------------------------------------------
 
 # Set Smarty folder for compiling and caching
-# DEFAULT: app
-define('PATH_SMARTY', 'app');
+# DEFAULT: app/smarty
+#define('PATH_SMARTY', 'app/smarty');
 
 # Define, where files are uploaded to
 # DEFAULT: upload
-define('PATH_UPLOAD', 'upload');
+#define('PATH_UPLOAD', 'upload');
+
+# Define, where cached files are stored
+# DEFAULT: app/cache
+#define('PATH_CACHE', 'app/cache');
 
 # ------------------------------------------------------------------------------
 
 # Automatically load next page when scrolling down.
 # OPTIONS: true,false
 # DEFAULT: true
-define('AUTOLOAD', true);
+#define('AUTOLOAD', true);
 
 # Stop loading of next pages after x times.
 # DEFAULT: 3
-define('AUTOLOAD_TIMES', 3);
+#define('AUTOLOAD_TIMES', 3);
 
 # Should comments be disabled?
 # DEFAULT: false
-define('DISABLE_COMMENTS', false);
+#define('DISABLE_COMMENTS', false);
 
 # Limit of gallery albums per page
 # DEFAULT: 10
-define('LIMIT_ALBUMS', 10);
+#define('LIMIT_ALBUMS', 10);
 
 # Limit of blog entries per page
 # DEFAULT: 8
-define('LIMIT_BLOG', 8);
+#define('LIMIT_BLOG', 8);
 
 # Limit of comments per page
 # DEFAULT: 10
-define('LIMIT_COMMENTS', 10);
+#define('LIMIT_COMMENTS', 10);
 
 # Sorting order of comments.
 # OPTIONS: ASC,DESC
 # DEFAULT: ASC (oldest last)
-define('SORTING_COMMENTS', 'ASC');
+#define('SORTING_COMMENTS', 'ASC');
 
 # Sorting order of album images.
 # OPTIONS: ASC,DESC
 # DEFAULT: ASC (oldest last)
-define('SORTING_GALLERY_FILES', 'DESC');
+#define('SORTING_GALLERY_FILES', 'DESC');
 
 # ------------------------------------------------------------------------------
 
 # List of Webcrawlers
 # used for sending 404 instead of showing the 404 page
-define('CRAWLERS', 'Google|msnbot|Rambler|Yahoo|AbachoBOT|accoona|AcioRobot|' .
-                    'ASPSeek|CocoCrawler|Dumbot|FAST-WebCrawler|GeonaBot|Gigabot|' .
-                    'Lycos|MSRBOT|Scooter|AltaVista|IDBot|eStyle|Scrubby');
+#define('CRAWLERS', 'Google|msnbot|Rambler|Yahoo|AbachoBOT|accoona|AcioRobot|' .
+#                    'ASPSeek|CocoCrawler|Dumbot|FAST-WebCrawler|GeonaBot|Gigabot|' .
+#                    'Lycos|MSRBOT|Scooter|AltaVista|IDBot|eStyle|Scrubby');
 
 # List of Mobile User Agents
 # used to show the mobile Version of the Page
-define('MOBILES', 'Opera Mini|Symb|Windows CE|IEMobile|iPhone|iPod|Blackberry|Android|Mobile Safari');
+#define('MOBILES', 'Opera Mini|Symb|Windows CE|IEMobile|iPhone|iPod|Blackberry|Android|Mobile Safari');
 
 # ------------------------------------------------------------------------------
 
 # Grab an API Key from https://us4.admin.mailchimp.com/account/api
-define('MAILCHIMP_API_KEY', '');
+#define('MAILCHIMP_API_KEY', '');
 
 # Grab your list's unique ID by going to http://admin.mailchimp.com/lists/
 # Click the "Settings" link for the list - the unique ID is at the bottom of that page.
-define('MAILCHIMP_LIST_ID', '');
+#define('MAILCHIMP_LIST_ID', '');
 
 # Should mails, that failed to get send, be stored in a mail queue?
 # Note that those mails can be seen and must be sent by admins.
 # DEFAULT: true
-define('USE_MAIL_QUEUE', true);
+#define('USE_MAIL_QUEUE', true);
 
 ?>

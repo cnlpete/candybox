@@ -22,8 +22,8 @@
     <a class='btn' href='/install/?action=migrate&show=all'>Show older migrations</a>
   {/if}
 </div>
-<script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.bootstrap.tooltip.js'></script>
-<script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/scripts.js'></script>
+<script type='text/javascript' src='{$_PATH.js.bootstrap}/bootstrap-tooltip.js'></script>
+<script type='text/javascript' src='{$_PATH.js.core}/scripts.js'></script>
 <script type='text/javascript'>
   $('.js-migration').click(function () {
     jTarget = $(this).parent();
