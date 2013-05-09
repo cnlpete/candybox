@@ -12,8 +12,7 @@
 
 namespace candyCMS\Plugins;
 
-use candyCMS\Core\Helpers\Helper;
-use candyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 final class TinyMCE {
 
@@ -67,15 +66,13 @@ final class TinyMCE {
    *
    */
   public final function show() {
-    $sTemplateDir   = Helper::getPluginTemplateDir(self::IDENTIFIER, 'show');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
-
-    $oSmarty = SmartySingleton::getInstance();
-    $oSmarty->setTemplateDir($sTemplateDir);
-    $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
+    $oSmarty = Smarty::getInstance();
+    $oTemplate = $oSmarty->getTemplate(self::IDENTIFIER, 'show', true);
+    $oSmarty->setTemplateDir($oTemplate);
+    $oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
     $sCacheId = WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|plugins|' . self::IDENTIFIER . '|';
-    return $oSmarty->fetch($sTemplateFile, $sCacheId);
+    return $oSmarty->fetch($oTemplate, $sCacheId);
   }
 
   /**
