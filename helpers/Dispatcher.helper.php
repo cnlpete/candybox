@@ -81,7 +81,7 @@ class Dispatcher {
         return Helper::warningMessage(I18n::get('error.302.info', $sUrl), $sUrl);
       }
       else {
-        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
+        AdvancedException::writeLog(__METHOD__ . ' - ' . $e->getMessage());
         return Helper::redirectTo('/errors/404');
       }
     }
