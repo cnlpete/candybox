@@ -227,7 +227,7 @@ class SmartySingleton extends Smarty {
    *
    */
   public function clearControllerCache($sController) {
-    $this->clearCache(null, WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|' . $sController);
+    $this->clearCache(null, UNIQUE_PREFIX . '|' . $sController);
   }
 
   public function isCached($oTemplate) {
