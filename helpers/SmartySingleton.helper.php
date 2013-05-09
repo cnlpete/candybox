@@ -32,6 +32,13 @@ class SmartySingleton extends Smarty {
   private static $_oInstance = null;
 
   /**
+   *
+   * @access private
+   *
+   */
+  private $_aPathCache;
+
+  /**
    * Get the Smarty instance
    *
    * @static
@@ -69,6 +76,9 @@ class SmartySingleton extends Smarty {
    */
   public function __construct() {
     parent::__construct();
+
+    # Load the path cache
+    Cache::isCachedAndLoad('tpl-path-cache', $this->_aPathCache);
 
     $this->setCacheDir(PATH_STANDARD . '/' . PATH_SMARTY . '/cache');
     $this->setCompileDir(PATH_STANDARD . '/' . PATH_SMARTY . '/compile');
@@ -218,5 +228,89 @@ class SmartySingleton extends Smarty {
    */
   public function clearControllerCache($sController) {
     $this->clearCache(null, WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|' . $sController);
+  }
+
+  public function isCached($oTemplate) {
+    return parent::isCached($oTemplate['file']);
+  }
+  public function setTemplateDir($oTemplate) {
+    return parent::setTemplateDir($oTemplate['dir']);
+  }
+  public function fetch($oTemplate, $sUniqueId) {
+    return parent::fetch($oTemplate['file'], $sUniqueId);
+  }
+
+  /**
+   * Get the template dir. Check if there are extension files and use them if available.
+   *
+   * @access public
+   * @param string $sFolder dir of the templates
+   * @param string $sFile file name of the template
+   * @param boolean $bPlugin whether to check core or plugins folder for original template
+   * @return array dir of the chosen template and file: filename of template
+   *
+   */
+  public function getTemplate($sFolder, $sFile, $bPlugin = false) {
+    $sLowerFolder = strtolower($sFolder);
+    $sUCFirstFolder = ucfirst($sFolder);
+
+    $sCacheId = $sLowerFolder.'.'.$sFile.'.'.(MOBILE === true?'mob':'tpl');
+
+    # check the cache
+    if (isset($this->_aPathCache[$sCacheId]))
+      return $this->_aPathCache[$sCacheId];
+
+    $aReturn = array();
+
+    try {
+      # Extensions
+      if (file_exists(PATH_STANDARD . '/app/views/' . $sLowerFolder . '/' . $sFile . '.tpl'))
+        $aReturn['dir'] = PATH_STANDARD . '/app/views/' . $sLowerFolder;
+
+      # Standard Plugin views
+      else if ($bPlugin) {
+        if (!file_exists(PATH_STANDARD . '/vendor/candycms/plugins/' . $sUCFirstFolder . '/views/' . $sFile . '.tpl'))
+          throw new AdvancedException('This plugin template does not exist: ' . $sUCFirstFolder . '/views/' . $sFile . '.tpl');
+        else
+          $aReturn['dir'] = PATH_STANDARD . '/vendor/candycms/plugins/' . $sUCFirstFolder . '/views';
+      }
+
+      # Standard Core views
+      else {
+        if (!file_exists(PATH_STANDARD . '/vendor/candycms/core/views/' . $sLowerFolder . '/' . $sFile . '.tpl')) {
+          # This action might be disabled due to missing form templates.
+          # @todo why is this check necessary?
+          if (substr($sFile, 0, 5) == '_form')
+            return Helper::redirectTo('/errors/403');
+          else
+            throw new AdvancedException('This template does not exist: ' . $sLowerFolder . '/' . $sFile . '.tpl');
+        }
+
+        else
+          $aReturn['dir'] = PATH_STANDARD . '/vendor/candycms/core/views/' . $sLowerFolder;
+      }
+    }
+    catch (AdvancedException $e) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
+    }
+
+    try {
+      # Mobile template.
+      if (MOBILE === true && file_exists($aReturn['dir'] . '/' . $sFile . '.mob'))
+        $aReturn['file'] = $sFile . '.mob';
+      # Standard template
+      else
+        $aReturn['file'] = $sFile . '.tpl';
+    }
+    catch (AdvancedException $e) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
+      exit($e->getMessage());
+    }
+
+    # save to cache
+    $this->_aPathCache[$sCacheId] = $aReturn;
+    Cache::save('tpl-path-cache', $this->_aPathCache);
+
+    return $aReturn;
   }
 }

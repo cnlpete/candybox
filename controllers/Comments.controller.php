@@ -16,7 +16,7 @@ use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
-use candyCMS\Plugins\Recaptcha;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Comments extends Main {
 
@@ -71,11 +71,10 @@ class Comments extends Main {
     if (!$this->_aParentData)
       return Helper::redirectTo('/blogs' . $this->_iId ? '/' . $this->_iId : '');
 
-    $sTemplateDir   = Helper::getTemplateDir('comments', 'show');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate =  $this->oSmarty->getTemplate('comments', 'show');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
       $this->oSmarty->assign('comments',
               $this->_oModel->getOverview($this->_iId, (int) $this->_aParentData[1]['comment_count'], LIMIT_COMMENTS));
 
@@ -100,7 +99,7 @@ class Comments extends Main {
 
     # We can leave caching on, the form itself will turn caching off, but that is a different template.
     # Also _form is directly attached. Might be good to seperate.
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID) . $this->create();
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID) . $this->create();
   }
 
   /**
@@ -113,9 +112,8 @@ class Comments extends Main {
    *
    */
   protected function _showFormTemplate($sTemplateName = '_form', $sTitle = '') {
-    $sTemplateDir   = Helper::getTemplateDir('comments', '_form');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate =  $this->oSmarty->getTemplate('comments', $sTemplateName);
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
       $this->oSmarty->assign($sInput, $sData);
@@ -126,7 +124,7 @@ class Comments extends Main {
     $oPluginManager = PluginManager::getInstance();
     $this->oSmarty->assign('editorinfo', $oPluginManager->getEditorInfo());
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**

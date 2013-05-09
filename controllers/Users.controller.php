@@ -16,6 +16,7 @@ use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\Upload;
 use candyCMS\Core\Helpers\PluginManager;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Users extends Main {
 
@@ -27,11 +28,10 @@ class Users extends Main {
    *
    */
   protected function _show() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'show');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
       $aData = $this->_oModel->getId($this->_iId);
 
       if (!isset($aData) || !$aData['id'])
@@ -43,7 +43,7 @@ class Users extends Main {
       $this->setDescription(I18n::get('users.description.show', $aData['full_name']));
     }
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -58,11 +58,10 @@ class Users extends Main {
       return Helper::redirectTo('/errors/401');
 
     else {
-      $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
-      $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
-      $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'overview');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
-      if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+      if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
         $this->oSmarty->assign('user', $this->_oModel->getOverview());
 
         $this->oSmarty->assign('_pagination_',
@@ -70,7 +69,7 @@ class Users extends Main {
       }
 
       $this->setTitle(I18n::get('users.title.overview'));
-      return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+      return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
     }
   }
 
@@ -84,9 +83,8 @@ class Users extends Main {
    *
    */
   protected function _showFormTemplate($bUseRequest = false) {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, '_form');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, '_form');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     # Set user id of person to update
     $iId =  $this->_iId !== $this->_aSession['user']['id'] && $this->_aSession['user']['role'] == 4 ?
@@ -122,7 +120,7 @@ class Users extends Main {
 
     $this->oSmarty->assign('uid', $iId);
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -365,9 +363,8 @@ class Users extends Main {
                   'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
               ));
     
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'create');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'create');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'create');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     if ($this->_aSession['user']['role'] == 4) {
       $this->setTitle(I18n::get('users.title.create'));
@@ -388,7 +385,7 @@ class Users extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**

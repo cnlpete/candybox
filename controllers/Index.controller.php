@@ -17,27 +17,22 @@ use candyCMS\Core\Helpers\Dispatcher;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
-use candyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 use Routes;
-
-$aFiles = array(
-    'models/Main.model.php',
-    'controllers/Main.controller.php',
-    'controllers/Sessions.controller.php',
-    'controllers/Logs.controller.php',
-    'helpers/Helper.helper.php',
-    'helpers/AdvancedException.helper.php',
-    'helpers/Dispatcher.helper.php',
-    'helpers/Cache.helper.php',
-    'helpers/I18n.helper.php',
-    'helpers/SmartySingleton.helper.php',
-    'helpers/PluginManager.helper.php'
-);
 
 require_once PATH_STANDARD . '/vendor/autoload.php';
 
-foreach ($aFiles as $sFile)
-  require PATH_STANDARD . '/vendor/candycms/core/' . $sFile;
+require PATH_STANDARD . '/vendor/candycms/core/models/Main.model.php';
+require PATH_STANDARD . '/vendor/candycms/core/controllers/Main.controller.php';
+require PATH_STANDARD . '/vendor/candycms/core/controllers/Sessions.controller.php';
+require PATH_STANDARD . '/vendor/candycms/core/controllers/Logs.controller.php';
+require PATH_STANDARD . '/vendor/candycms/core/helpers/Helper.helper.php';
+require PATH_STANDARD . '/vendor/candycms/core/helpers/AdvancedException.helper.php';
+require PATH_STANDARD . '/vendor/candycms/core/helpers/Dispatcher.helper.php';
+require PATH_STANDARD . '/vendor/candycms/core/helpers/Cache.helper.php';
+require PATH_STANDARD . '/vendor/candycms/core/helpers/I18n.helper.php';
+require PATH_STANDARD . '/vendor/candycms/core/helpers/SmartySingleton.helper.php';
+require PATH_STANDARD . '/vendor/candycms/core/helpers/PluginManager.helper.php';
 
 class Index {
 
@@ -454,7 +449,7 @@ class Index {
     }
 
     # Start the dispatcher and grab the controller.
-    $oSmarty = SmartySingleton::getInstance();
+    $oSmarty = Smarty::getInstance();
     $oSmarty->setRequestAndSession($this->_aRequest, $this->_aSession);
 
     $oDispatcher = new Dispatcher($this->_aRequest, $this->_aSession, $this->_aFile, $this->_aCookie);
@@ -471,8 +466,7 @@ class Index {
 
     # HTML with template
     else {
-      $sTemplateDir   = Helper::getTemplateDir('layouts', 'application');
-      $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'application');
+      $oTemplate = $oSmarty->getTemplate('layouts', 'application');
 
       # Get flash messages (success and error)
       $oSmarty->assign('_FLASH', $this->_getFlashMessage());
@@ -495,9 +489,9 @@ class Index {
 
       $oSmarty->assign('_WEBSITE', $aWebsite);
 
-      $oSmarty->setTemplateDir($sTemplateDir);
-      $oSmarty->setCaching(\candyCMS\Core\Helpers\SmartySingleton::CACHING_OFF);
-      $sCachedHTML = $oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+      $oSmarty->setTemplateDir($oTemplate);
+      $oSmarty->setCaching(Smarty::CACHING_OFF);
+      $sCachedHTML = $oSmarty->fetch($oTemplate, UNIQUE_ID);
     }
 
 

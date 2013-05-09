@@ -14,6 +14,7 @@ namespace candyCMS\Core\Controllers;
 
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Blogs extends Main {
 
@@ -25,9 +26,8 @@ class Blogs extends Main {
    *
    */
   protected function _show() {
-    $sTemplateDir  = Helper::getTemplateDir($this->_sController, 'show');
-    $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'show');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate =  $this->oSmarty->getTemplate($this->_sController, 'show');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     if ($this->_iId) {
       $this->_aData = $this->_oModel->getId($this->_iId);
@@ -49,12 +49,12 @@ class Blogs extends Main {
       $this->oSmarty->assign('blogs', $this->_aData);
 
       # Bugfix: This is necessary, because comments also do a setDir on the singleton object.
-      $this->oSmarty->setTemplateDir($sTemplateDir);
+      $this->oSmarty->setTemplateDir($oTemplate);
     }
 
     else {
       # Get tags
-      if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+      if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
         $this->_aData = isset($this->_aRequest['search']) && $this->_aRequest['search'] ?
                 $this->_oModel->getOverviewByTag() :
                 $this->_oModel->getOverview();
@@ -74,7 +74,7 @@ class Blogs extends Main {
     $this->setKeywords($this->_setBlogsKeywords());
     $this->setTitle($this->_setBlogsTitle());
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -85,11 +85,10 @@ class Blogs extends Main {
    *
    */
   protected function _overviewRSS() {
-    $sTemplateDir  = Helper::getTemplateDir($this->_sController, 'overviewRSS');
-    $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'overviewRSS');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate =  $this->oSmarty->getTemplate($this->_sController, 'overviewRSS');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
       $this->_aData = isset($this->_aRequest['search']) && $this->_aRequest['search'] ?
           $this->_oModel->getOverviewByTag() :
           $this->_oModel->getOverview();
@@ -102,7 +101,7 @@ class Blogs extends Main {
     }
 
     header('Content-Type: application/rss+xml');
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**

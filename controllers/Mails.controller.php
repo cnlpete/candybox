@@ -16,7 +16,7 @@ use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
-use candyCMS\Plugins\Recaptcha;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Mails extends Main {
 
@@ -45,15 +45,14 @@ class Mails extends Main {
    *
    */
   protected function _overview() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'overview');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID))
       $this->oSmarty->assign('mails', $this->_oModel->getOverview());
 
     $this->setTitle(I18n::get('global.mails'));
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -105,10 +104,9 @@ class Mails extends Main {
                   'success' => false,
                   'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
               ));
-    
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'create');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'create');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'create');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     $sUser = $this->__autoload('Users', true);
     $aUser = $sUser::getUserNamesAndEmail($this->_iId);
@@ -137,7 +135,7 @@ class Mails extends Main {
     $this->setTitle($sFullname . ' - ' . I18n::get('global.contact'));
     $this->setDescription(I18n::get('mails.description.show', $sFullname));
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -209,13 +207,12 @@ class Mails extends Main {
    *
    */
   protected function _showSuccessPage() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'success');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'success');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'success');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     $this->setTitle(I18n::get('mails.success_page.title'));
 
-    $this->oSmarty->setCaching(\candyCMS\Core\Helpers\SmartySingleton::CACHING_LIFETIME_SAVED);
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    $this->oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 }

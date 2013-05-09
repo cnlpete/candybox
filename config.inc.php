@@ -93,13 +93,13 @@ if (!defined('POPUP_DEFAULT_Y'))
 
 # Path values
 if (!defined('PATH_SMARTY'))
-  define('PATH_SMARTY', 'app');
+  define('PATH_SMARTY', 'app/smarty');
 
 if (!defined('PATH_UPLOAD'))
   define('PATH_UPLOAD', 'upload');
 
 if (!defined('PATH_CACHE'))
-  define('PATH_CACHE', 'app');
+  define('PATH_CACHE', 'app/cache');
 
 if (!defined('AUTOLOAD'))
   define('AUTOLOAD', true);

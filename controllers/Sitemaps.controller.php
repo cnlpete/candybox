@@ -14,6 +14,7 @@ namespace candyCMS\Core\Controllers;
 
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Sitemaps extends Main {
 
@@ -25,16 +26,15 @@ class Sitemaps extends Main {
    *
    */
   protected function _overviewXML() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overviewXML');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overviewXML');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'overviewXML');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
       $this->oSmarty->assign('_website_landing_page_', WEBSITE_URL . '/' . WEBSITE_LANDING_PAGE);
       $this->_getSitemapData();
     }
 
-    return $this->oSmarty->display($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->display($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -45,14 +45,13 @@ class Sitemaps extends Main {
    *
    */
   protected function _overview() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'overview');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID))
       $this->_getSitemapData();
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
