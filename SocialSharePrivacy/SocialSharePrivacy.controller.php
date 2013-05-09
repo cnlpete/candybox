@@ -71,6 +71,6 @@ final class SocialSharePrivacy {
     $oSmarty->setTemplateDir($oTemplate);
     $oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
-    return $oSmarty->fetch($oTemplate, WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|plugins|' . self::IDENTIFIER);
+    return $oSmarty->fetch($oTemplate, UNIQUE_PREFIX . '|plugins|' . self::IDENTIFIER);
   }
 }
