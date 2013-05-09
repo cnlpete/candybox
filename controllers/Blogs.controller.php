@@ -29,6 +29,10 @@ class Blogs extends Main {
     $oTemplate =  $this->oSmarty->getTemplate($this->_sController, 'show');
     $this->oSmarty->setTemplateDir($oTemplate);
 
+    $this->setDescription($this->_setBlogsDescription());
+    $this->setKeywords($this->_setBlogsKeywords());
+    $this->setTitle($this->_setBlogsTitle());
+
     if ($this->_iId) {
       $this->_aData = $this->_oModel->getId($this->_iId);
 
@@ -59,6 +63,13 @@ class Blogs extends Main {
                 $this->_oModel->getOverviewByTag() :
                 $this->_oModel->getOverview();
 
+        if (isset($this->_aRequest['search']) && $this->_aRequest['search'])
+          # add rss info
+          $this->_aRSSInfo[] = array(
+                                  'url' => WEBSITE_URL . '/blogs/' . $this->_aRequest['search'] . '.rss',
+                                  'title' => $this->_aRequest['search'] . ' - ' . I18n::get('global.blogs'));
+
+
         # Limit to maximum pages
         if (isset($this->_aRequest['page']) && (int) $this->_aRequest['page'] > $this->_oModel->oPagination->getPages())
           return Helper::redirectTo('/errors/404');
@@ -70,9 +81,11 @@ class Blogs extends Main {
       }
     }
 
-    $this->setDescription($this->_setBlogsDescription());
-    $this->setKeywords($this->_setBlogsKeywords());
-    $this->setTitle($this->_setBlogsTitle());
+    # add rss info
+    $this->_aRSSInfo[] = array(
+                          'url' => WEBSITE_URL . '/blogs.rss',
+                          'title' => I18n::get('global.blogs'));
+
 
     return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }

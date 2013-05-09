@@ -480,6 +480,7 @@ class Index {
           'description' => $oDispatcher->oController->getDescription(),
           'expires'     => gmdate('D, d M Y H:i:s', time() + 60) . ' GMT',
           'keywords'    => $oDispatcher->oController->getKeywords(),
+          'rss'         => $oDispatcher->oController->rssInfo(),
           'og'          => array(
               'description' => $oDispatcher->oController->getDescription(),
               'site_name'   => WEBSITE_NAME,
