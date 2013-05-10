@@ -117,15 +117,15 @@ class Upload {
   }
 
   /**
-   * Return file information for AJAX uploading purposes.
+   * Return file mime type for AJAX uploading purposes.
    *
    * @access public
    * @return array file information
    *
    */
-  public function getFileInformation() {
+  public function getFileMimeType() {
     $sType = isset($this->_aFile['image']) ? 'image' : 'file';
-    return $this->_aFile[$sType];
+    return $this->_aFile[$sType]['type'][0];
   }
 
   /**
