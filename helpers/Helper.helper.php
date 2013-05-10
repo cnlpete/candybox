@@ -41,7 +41,9 @@ class Helper {
                 'success'     => true,
                 'data'        => WEBSITE_MODE == 'development' ? $aData : '',
                 'redirectURL' => $sRedirectTo,
-                'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
+                'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : '',
+                'message'     => $sMessage,
+                'type'        => 'success'
             ));
     } else {
       $_SESSION['flash_message'] = array(
@@ -73,7 +75,9 @@ class Helper {
                 'success'     => false,
                 'data'        => WEBSITE_MODE == 'development' ? $aData : '',
                 'redirectURL' => $sRedirectTo,
-                'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
+                'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : '',
+                'message'     => $sMessage,
+                'type'        => 'warning'
               ));
     } else {
       $_SESSION['flash_message'] = array(
