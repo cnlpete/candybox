@@ -626,7 +626,7 @@ abstract class Main {
       return Helper::redirectTo('/errors/403');
 
     elseif (isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'])
-      $this->_create();
+      return $this->_create();
 
     else
       return isset($this->_aRequest[$this->_sController]) ?

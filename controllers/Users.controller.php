@@ -74,6 +74,20 @@ class Users extends Main {
   }
 
   /**
+   * Adjust the rights, only administrators and moderators should be able to see the list
+   *
+   * @access protected
+   * @return string json
+   *
+   */
+  protected function _overviewJSON() {
+    if ($this->_aSession['user']['role'] < 3)
+      return Helper::errorMessage(I18n::get('error.401.info'), '/errors/401', array('type' => 'json'));
+
+    return parent::_overviewJSON();
+  }
+
+  /**
    * Build form template to create or update a user.
    *
    * @access protected

@@ -37,13 +37,14 @@ class Helper {
   public static function successMessage($sMessage, $sRedirectTo = '', $aData = '') {
     # This is supposed to be an AJAX request, so we will return JSON
     if (!empty($aData) && (isset($aData['type']) && 'json' == $aData['type'] || isset($aData['file']))) {
-      header('Content-Type: application/json');
-      exit(json_encode(array(
+      return json_encode(array(
                 'success'     => true,
                 'data'        => WEBSITE_MODE == 'development' ? $aData : '',
                 'redirectURL' => $sRedirectTo,
-                'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
-            )));
+                'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : '',
+                'message'     => $sMessage,
+                'type'        => 'success'
+            ));
     } else {
       $_SESSION['flash_message'] = array(
           'type'      => 'success',
@@ -70,14 +71,14 @@ class Helper {
   public static function warningMessage($sMessage, $sRedirectTo = '', $aData = '') {
     # This is supposed to be an AJAX request, so we will return JSON
     if (!empty($aData) && (isset($aData['type']) && 'json' == $aData['type'] || isset($aData['file']))) {
-      header('Content-Type: application/json');
-      exit(json_encode(array(
-
+      return json_encode(array(
                 'success'     => false,
                 'data'        => WEBSITE_MODE == 'development' ? $aData : '',
                 'redirectURL' => $sRedirectTo,
-                'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
-              )));
+                'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : '',
+                'message'     => $sMessage,
+                'type'        => 'warning'
+              ));
     } else {
       $_SESSION['flash_message'] = array(
           'type'    => 'warning',
@@ -102,14 +103,14 @@ class Helper {
    */
   public static function errorMessage($sMessage, $sRedirectTo = '', $aData = '') {
     if (!empty($aData) && (isset($aData['type']) && 'json' == $aData['type'] || isset($aData['file']))) {
-      header('Content-Type: application/json');
-      exit(json_encode(array(
-
-                  'success'     => false,
-                  'data'        => WEBSITE_MODE == 'development' ? $aData : '',
-                  'redirectURL' => $sRedirectTo,
-                  'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
-              )));
+      return json_encode(array(
+                'success'     => false,
+                'data'        => WEBSITE_MODE == 'development' ? $aData : '',
+                'redirectURL' => $sRedirectTo,
+                'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : '',
+                'message'     => $sMessage,
+                'type'        => 'error'
+              ));
     } else {
       $_SESSION['flash_message'] = array(
           'type'    => 'error',
