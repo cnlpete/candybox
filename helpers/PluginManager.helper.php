@@ -189,8 +189,7 @@ class PluginManager {
       $sHtml = str_replace('<!-- plugin:' . strtolower($oPlugin::IDENTIFIER) . ' -->', $oPlugin->show(), $sHtml);
     }
 
-    if (isset($this->_aRequest['action']) && 'create' == $this->_aRequest['action'])
-      $sHtml = $this->runCaptchaPlugins($sHtml);
+    $sHtml = $this->runCaptchaPlugins($sHtml);
 
     $sHtml = $this->runEditorPlugins($sHtml);
     return $sHtml;
