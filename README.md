@@ -23,7 +23,7 @@ It provides...
 
 ... and uses...
 - [Twitter Bootstrap](http://twitter.github.com/bootstrap/) for its basic design
-- [Smarty](http://smarty.org) as template engine
+- [Smarty](http://smarty.net) as template engine
 - [Mailchimp](http://mailchimp.com) for newsletter managing
 - [reCAPTCHA](http://recaptcha.org) to protect spam (as plugin)
 - [TinyMCE](http://tinymce.moxiecode.com/) as WYSIWYG editor (as plugin)
