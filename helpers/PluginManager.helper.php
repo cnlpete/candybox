@@ -190,8 +190,8 @@ class PluginManager {
     }
 
     $sHtml = $this->runCaptchaPlugins($sHtml);
-
     $sHtml = $this->runEditorPlugins($sHtml);
+
     return $sHtml;
   }
 
