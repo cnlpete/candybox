@@ -121,6 +121,7 @@ class Upload {
    *
    * @access public
    * @return array file information
+   * @todo test
    *
    */
   public function getFileMimeType() {
