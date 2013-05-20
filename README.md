@@ -23,7 +23,7 @@ It provides...
 
 ... and uses...
 - [Twitter Bootstrap](http://twitter.github.com/bootstrap/) for its basic design
-- [Smarty](http://smarty.org) as template engine
+- [Smarty](http://smarty.net) as template engine
 - [Mailchimp](http://mailchimp.com) for newsletter managing
 - [reCAPTCHA](http://recaptcha.org) to protect spam (as plugin)
 - [TinyMCE](http://tinymce.moxiecode.com/) as WYSIWYG editor (as plugin)
@@ -65,7 +65,7 @@ Setup
 3. Install the vendor packages afterwards: `php composer.phar install` or `php composer.phar install --dev` if you would
 like to have the possibility to run tests.
 4. Copy files from "app/config/samples/" to "app/config" and configure your website settings at "app/config/Candy.inc.php".
-5. Execute the "/install/index.php" file. If an error occurs, you might have to give CHMOD 777 to `app/` first.
+5. Execute the "/install/index.php" file. If an error occurs, you might have to give CHMOD 777 to `app/cache` and `app/compile` first.
 6. Follow the instructions (also on CHMODs) and make sure, you delete the install folder after installation.
 
 
