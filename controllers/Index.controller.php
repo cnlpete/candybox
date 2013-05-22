@@ -4,7 +4,8 @@
  * Manage configs and route incoming request.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 1.0
  *
@@ -20,8 +21,7 @@ use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 use Routes;
 
-require_once PATH_STANDARD . '/vendor/autoload.php';
-
+require PATH_STANDARD . '/vendor/autoload.php';
 require PATH_STANDARD . '/vendor/candycms/core/models/Main.model.php';
 require PATH_STANDARD . '/vendor/candycms/core/controllers/Main.controller.php';
 require PATH_STANDARD . '/vendor/candycms/core/controllers/Sessions.controller.php';
