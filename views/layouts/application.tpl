@@ -139,6 +139,11 @@
                               {$lang.global.mails}
                             </a>
                           </li>
+                          <li>
+                            <a href='/admins' title='{$lang.global.admins}'>
+                              {$lang.global.admins}
+                            </a>
+                          </li>
                         {/if}
                       {/if}
                     </ul>

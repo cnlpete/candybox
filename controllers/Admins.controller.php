@@ -37,12 +37,14 @@ class Admins extends Main {
   }
 
   /**
-   * Clear the cache
+   * Clear the cache.
    *
-   * @access protected
+   * @access public
+   * @return
+   * @todo test and doc 
    *
    */
-  public function clearcache() {
+  public function clearCache() {
     if ($this->_aSession['user']['role'] < 4)
       return Helper::redirectTo('/errors/401');
 
@@ -59,16 +61,18 @@ class Admins extends Main {
   }
 
   /**
-   * Recompile the stylesheets
+   * Recompile the stylesheets.
    *
-   * @access protected
+   * @access public
+   * @return
+   * @todo test and doc
    *
    */
   public function recompilestylesheets() {
     if ($this->_aSession['user']['role'] < 4)
       return Helper::redirectTo('/errors/401');
 
-    $sStylesheetPath = WEBSITE_CDN !== '' ? WEBSITE_CDN : '/public';
+    $sStylesheetPath  = WEBSITE_CDN !== '' ? WEBSITE_CDN : '/public';
     $sStylesheetPath .= '/stylesheets';
 
     Cache::clear(Helper::removeSlash($sStylesheetPath . '/mobile.css'));
