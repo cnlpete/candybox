@@ -4,6 +4,7 @@
  * Make Smarty singleton aware.
  *
  * @link http://github.com/marcoraddatz/candyCMS
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
  * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 2.0
