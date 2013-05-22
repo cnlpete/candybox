@@ -81,11 +81,9 @@ class Blogs extends Main {
       }
     }
 
-    # add rss info
-    $this->_aRSSInfo[] = array(
-                          'url' => WEBSITE_URL . '/blogs.rss',
-                          'title' => I18n::get('global.blogs'));
-
+    # Add RSS info
+    $this->_aRSSInfo[] = array( 'url'   => WEBSITE_URL . '/blogs.rss',
+                                'title' => I18n::get('global.blogs') );
 
     return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
