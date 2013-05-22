@@ -4,8 +4,9 @@
  * Website entry.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
- * @version 3.0
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
+ * @license MIT
  * @since 3.0
  *
  */

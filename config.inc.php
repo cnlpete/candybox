@@ -5,8 +5,9 @@
  * Also set entries that have valid default entries and are not specified by the user
  *
  * @link http://github.com/marcoraddatz/candyCMS
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
  * @author Hauke Schade <http://hauke-schade.de>
- * @version 3.0
+ * @license MIT
  * @since 3.0
  *
  */
