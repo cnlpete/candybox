@@ -4,7 +4,8 @@
  * Handle all medias model requests.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Hauke Schade
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 2.1
  *

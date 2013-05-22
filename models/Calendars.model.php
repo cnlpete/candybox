@@ -4,7 +4,8 @@
  * Handle all calendar SQL requests.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 2.0
  *
