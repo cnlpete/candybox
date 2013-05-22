@@ -23,7 +23,7 @@
                    alt='{$c.author.name}' />
               {if $c.author.id > 0}
                 <a href='{$c.author.url}'
-                   rel='author'
+                   rel='author nofollow'
                    itemprop='creator'>
                   {$c.author.full_name}
                 </a>
