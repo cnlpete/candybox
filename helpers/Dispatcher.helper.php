@@ -78,12 +78,16 @@ class Dispatcher {
               Helper::pluralize($sController) !== $sController &&
               file_exists(PATH_STANDARD . '/vendor/candycms/core/controllers/' . Helper::pluralize($sController) . '.controller.php')) {
         $sUrl = str_replace(strtolower($sController), strtolower(Helper::pluralize($sController)), $_SERVER['REQUEST_URI']);
+        
+        AdvancedException::writeLog(__METHOD__ . ' - ' . $e->getMessage());
         return Helper::warningMessage(I18n::get('error.302.info', $sUrl), $sUrl);
       }
       
       # Redirect RSS
-      elseif (defined('CHECK_DEPRECATED_LINKS') && CHECK_DEPRECATED_LINKS === true && 'Rss' == $sController)
+      elseif (defined('CHECK_DEPRECATED_LINKS') && CHECK_DEPRECATED_LINKS === true && 'Rss' == $sController) {
+        AdvancedException::writeLog(__METHOD__ . ' - ' . $e->getMessage());
         return Helper::redirectTo('/blogs.rss');
+      }
 
       else {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
