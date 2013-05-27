@@ -80,6 +80,11 @@ class Dispatcher {
         $sUrl = str_replace(strtolower($sController), strtolower(Helper::pluralize($sController)), $_SERVER['REQUEST_URI']);
         return Helper::warningMessage(I18n::get('error.302.info', $sUrl), $sUrl);
       }
+      
+      # Redirect RSS
+      elseif (defined('CHECK_DEPRECATED_LINKS') && CHECK_DEPRECATED_LINKS === true && 'Rss' == $sController)
+        return Helper::redirectTo('/blogs.rss');
+
       else {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
         return Helper::redirectTo('/errors/404');
