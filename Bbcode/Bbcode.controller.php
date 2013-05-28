@@ -121,7 +121,7 @@ final class Bbcode {
         }
       }
 
-      $sUrl[1]  = substr($sUrl[1], 0, 4) !== 'http' ? '/' . $sUrl[1] : $sUrl[1];
+      $sUrl[1] = substr($sUrl[1], 0, 4) !== 'http' ? WEBSITE_URL . '/' . $sUrl[1] : $sUrl[1];
 
       # Remove capty and change image information.
       if (file_exists($sTempFilePath)) {
@@ -140,7 +140,7 @@ final class Bbcode {
       $sHTML .= '<figure class="image">';
       $sHTML .= '<a class="js-fancybox fancybox-thumb" rel="fancybox-thumb" href="' . $sUrl[1] . '">';
       $sHTML .= '<img class="' . $sClass . '" alt="' . $sAlt . '"';
-      $sHTML .= 'src="' . Helper::addSlash($sTempFilePath) . '" ' . $aNewInfo[3] . ' />';
+      $sHTML .= 'src="' . WEBSITE_URL . Helper::addSlash($sTempFilePath) . '" ' . $aNewInfo[3] . ' />';
       $sHTML .= '</a>';
       $sHTML .= '</figure>';
 
