@@ -90,6 +90,11 @@ define('WEBSITE_MAIL', 'admin@domain.tld');
 
 # ------------------------------------------------------------------------------
 
+# Define an exception mail address. This is where exceptions go to.
+define('WEBSITE_MAIL_EXCEPTION', 'exception@domain.tld');
+
+# ------------------------------------------------------------------------------
+
 # Define a noreply email for spam etc.
 # EXAMPLE: no-reply@mydomain.tld
 define('WEBSITE_MAIL_NOREPLY', 'no-reply@domain.tld');

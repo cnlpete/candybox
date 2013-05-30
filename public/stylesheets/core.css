@@ -3089,7 +3089,6 @@ div.capty-caption {
 }
 .center { text-align:center !important; }
 #infscr-loading { text-align:center; }
-#js-flash_message { display:none; }
 [class^="icon-"], [class*=" icon-"] {
   display:inline-block;
   width:16px;
