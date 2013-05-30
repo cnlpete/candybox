@@ -177,9 +177,10 @@ class SmartySingleton extends Smarty {
                 Helper::removeSlash($aPaths['css'] . '/mobile.css'),
                 false);
 
-        Helper::compileStylesheet(
-                Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
-                Helper::removeSlash($aPaths['css'] . '/mobile.min.css'));
+        if (WEBSITE_COMPRESS_FILES === true)
+          Helper::compileStylesheet(
+                  Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
+                  Helper::removeSlash($aPaths['css'] . '/mobile.min.css'));
       }
       else {
         Helper::compileStylesheet(
@@ -187,9 +188,10 @@ class SmartySingleton extends Smarty {
                 Helper::removeSlash($aPaths['css'] . '/core.css'),
                 false);
 
-        Helper::compileStylesheet(
-                Helper::removeSlash($aPaths['less'] . '/core/application.less'),
-                Helper::removeSlash($aPaths['css'] . '/core.min.css'));
+        if (WEBSITE_COMPRESS_FILES === true)
+          Helper::compileStylesheet(
+                  Helper::removeSlash($aPaths['less'] . '/core/application.less'),
+                  Helper::removeSlash($aPaths['css'] . '/core.min.css'));
       }
     }
 

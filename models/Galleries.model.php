@@ -543,10 +543,12 @@ class Galleries extends Main {
         # update the image title, if it has one storred in exif or iptc
         if ($sContent != '' && $oImageMetadataParser->hasTitle())
           $sContent = $oImageMetadataParser->getTitle();
+
         # update the image date, if the exif date can be parsed
         if ($oImageMetadataParser->hasDateTime())
           $iDate = $oImageMetadataParser->getDateTime();
       }
+
       $oQuery->bindParam('content', Helper::formatInput($sContent, false), PDO::PARAM_STR);
       $oQuery->bindParam('date', date('Y-m-d H:i:s', $iDate), PDO::PARAM_STR);
 

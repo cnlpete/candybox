@@ -281,6 +281,11 @@ class Users extends Main {
       $this->_aData = $this->_formatForUpdate($aRow);
 
     else {
+      # strip sensitive information
+      if ($this->_aSession['user']['role'] === 0 || 
+            ($this->_aSession['user']['id'] !== $aRow['id'] && $this->_aSession['user']['role'] < 4))
+        unset($aRow['api_token'], $aRow['verification_code'], $aRow['verification_date'], $aRow['registration_ip'], $aRow['password'], $aRow['password_temporary'], $aRow['role']);
+
       $this->_aData = $this->_formatForUserOutput(
               $aRow,
               array('id', 'role'),

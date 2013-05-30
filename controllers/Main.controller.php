@@ -427,7 +427,7 @@ abstract class Main {
     else {
       # AJAX inputs
       if (isset($this->_aRequest['type']) && $this->_aRequest['type'] == 'json' &&
-              !isset($this->_aRequest[$this->_sController][$sField]) || empty($this->_aRequest[$this->_sController][$sField])) {
+              (!isset($this->_aRequest[$this->_sController][$sField]) || empty($this->_aRequest[$this->_sController][$sField]))) {
         header('Content-Type: application/json');
         exit(json_encode(array(
                     'success' => false,
@@ -614,9 +614,11 @@ abstract class Main {
     if ($this->_aSession['user']['role'] < $iUserRole)
       return Helper::redirectTo('/errors/403');
 
+    elseif (isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'])
+      $this->_create();
+
     else
-      return isset($this->_aRequest[$this->_sController]) ||
-              isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'] ?
+      return isset($this->_aRequest[$this->_sController]) ?
               $this->_create() :
               $this->_showFormTemplate();
   }
@@ -638,9 +640,11 @@ abstract class Main {
     elseif ($this->_aSession['user']['role'] < $iUserRole)
       return Helper::redirectTo('/errors/401');
 
+    elseif (isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'])
+      $this->_update();
+
     else
-      return isset($this->_aRequest[$this->_sController]) ||
-              isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'] ?
+      return isset($this->_aRequest[$this->_sController]) ?
               $this->_update() :
               $this->_showFormTemplate();
   }
@@ -675,6 +679,14 @@ abstract class Main {
    *
    */
   protected function _showFormTemplate($sTemplateName = '_form', $sTitle = '') {
+    # We don't support JSON
+    # @todo put this into a seperated method
+    if (isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'])
+      return json_encode(array(
+                  'success' => false,
+                  'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
+              ));
+    
     $sTemplateDir  = Helper::getTemplateDir($this->_sController, $sTemplateName);
     $sTemplateFile = Helper::getTemplateType($sTemplateDir, $sTemplateName);
 
