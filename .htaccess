@@ -24,6 +24,7 @@ RewriteRule ^.*$ - [NC,L]
 
 # rewrite install folder
 RewriteRule install - [NC,L]
+RewriteRule upload - [NC,L]
 
 # rewrite all other calls to our index.php
 RewriteRule ^.*$ index.php [NC,L]
