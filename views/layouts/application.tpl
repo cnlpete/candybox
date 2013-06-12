@@ -176,7 +176,7 @@
                   {$_WEBSITE.update}
                 </div>
               {/if}
-              {/nocache}
+            {/nocache}
             <section id='{$_REQUEST.controller}' itemprop='mainContentOfPage'>
               {$_WEBSITE.content}
             </section>
