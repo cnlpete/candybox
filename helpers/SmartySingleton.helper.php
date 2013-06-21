@@ -170,7 +170,7 @@ class SmartySingleton extends Smarty {
       $aPaths[$sKey] = $sValue;
 
     # Compile CSS only when in development mode
-    if (WEBSITE_MODE == 'development') {
+    if (WEBSITE_MODE == 'development' && ALLOW_INTERNAL_LESS) {
       if (MOBILE === true) {
         Helper::compileStylesheet(
                 Helper::removeSlash($aPaths['less'] . '/mobile/application.less'),
