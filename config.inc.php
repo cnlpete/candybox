@@ -51,7 +51,7 @@ if (!defined('WEBSITE_URL') || !defined('WEBSITE_NAME') || !defined('WEBSITE_MAI
   define('ERROR_MISSING_CONFIG_VALUES_WEBSITE', true);
 
 if (!defined('WEBSITE_MAIL_EXCEPTION'))
-  define('WEBSITE_MAIL_EXCEPTION', WEBSITE_MAIL);
+  define('WEBSITE_MAIL_EXCEPTION', defined('WEBSITE_MAIL') ? WEBSITE_MAIL : '');
 
 if (!defined('WEBSITE_MODE'))
   define('WEBSITE_MODE', 'staging');
