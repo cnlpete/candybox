@@ -334,6 +334,11 @@ class Galleries extends Main {
    *
    */
   public function create() {
+    $iPublished = isset($this->_aRequest[$this->_sController]['published']) &&
+            $this->_aRequest[$this->_sController]['published'] == true ?
+            1 :
+            0;
+
     try {
       $oQuery = $this->_oDb->prepare("INSERT INTO
                                         " . SQL_PREFIX . "gallery_albums
@@ -385,6 +390,11 @@ class Galleries extends Main {
    *
    */
   public function update($iId) {
+    $iPublished = isset($this->_aRequest[$this->_sController]['published']) &&
+            $this->_aRequest[$this->_sController]['published'] == true ?
+            1 :
+            0;
+
     try {
       $oQuery = $this->_oDb->prepare("UPDATE
                                         " . SQL_PREFIX . "gallery_albums
