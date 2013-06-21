@@ -139,6 +139,14 @@ define('ALLOW_SMUSHIT', true);
 
 # ------------------------------------------------------------------------------
 
+# Decide whether candyCMS shall use the internal less compiler or an external
+# one like codeKit etc.
+# OPTIONS: true / false
+# DEFAULT: true
+define('ALLOW_INTERNAL_LESS', true);
+
+# ------------------------------------------------------------------------------
+
 # Set the standard language (file must be placed in "languages"). Note that the
 # language will be determined by the browsers settings. If there is no
 # translation available and the user didn't choose a language by himself, we fall
