@@ -83,6 +83,7 @@ CREATE TABLE `%SQL_PREFIX%gallery_albums` (
   `title` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `date` datetime NOT NULL,
   `content` varchar(160) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `published` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 

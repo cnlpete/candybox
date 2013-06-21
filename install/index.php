@@ -63,7 +63,7 @@ class Install extends Index {
     }
 
     $this->oSmarty = SmartySingleton::getInstance();
-    $this->oSmarty->setTemplateDir(PATH_STANDARD . '/install/views');
+    $this->oSmarty->setTemplateDir(array('dir' => PATH_STANDARD . '/install/views'));
     $this->oSmarty->setCaching(SmartySingleton::CACHING_OFF);
     $this->oSmarty->setCompileCheck(true);
 
@@ -85,12 +85,12 @@ class Install extends Index {
       case 'standard':
 
         $this->oSmarty->assign('title', 'Welcome!');
-        $this->oSmarty->assign('content', $this->oSmarty->fetch('index.tpl'));
+        $this->oSmarty->assign('content', $this->oSmarty->fetch(array('file' => 'index.tpl')));
 
         break;
     }
 
-    $this->oSmarty->display('layout.tpl');
+    echo $this->oSmarty->fetch(array('file' => 'layout.tpl'));
   }
 
   /**
@@ -208,7 +208,7 @@ class Install extends Index {
         $this->oSmarty->assign('_has_errors_', !$bHasNoErrors);
 
         $this->oSmarty->assign('title', 'Installation - Step 1 - Preparation');
-        $this->oSmarty->assign('content', $this->oSmarty->fetch('install/step1.tpl'));
+        $this->oSmarty->assign('content', $this->oSmarty->fetch(array('file' => 'install/step1.tpl')));
 
         break;
 
@@ -238,7 +238,7 @@ class Install extends Index {
 
         $this->oSmarty->assign('folders', $aFolderChecks);
         $this->oSmarty->assign('title', 'Installation - Step 2 - Folder rights');
-        $this->oSmarty->assign('content', $this->oSmarty->fetch('install/step2.tpl'));
+        $this->oSmarty->assign('content', $this->oSmarty->fetch(array('file' => 'install/step2.tpl')));
 
         break;
 
@@ -265,7 +265,7 @@ class Install extends Index {
 
         $this->oSmarty->assign('_has_errors_', $bHasErrors);
         $this->oSmarty->assign('title', 'Installation - Step 3 - Create database');
-        $this->oSmarty->assign('content', $this->oSmarty->fetch('install/step3.tpl'));
+        $this->oSmarty->assign('content', $this->oSmarty->fetch(array('file' => 'install/step3.tpl')));
 
         break;
 
@@ -294,7 +294,7 @@ class Install extends Index {
         }
 
         $this->oSmarty->assign('title', 'Installation - Step 4 - Create admin');
-        $this->oSmarty->assign('content', $this->oSmarty->fetch('install/step4.tpl'));
+        $this->oSmarty->assign('content', $this->oSmarty->fetch(array('file' => 'install/step4.tpl')));
 
         break;
 
@@ -302,7 +302,7 @@ class Install extends Index {
 
         $this->oSmarty->assign('_result_', $this->_aRequest['result'] ? true : false);
         $this->oSmarty->assign('title', 'Installation finished');
-        $this->oSmarty->assign('content', $this->oSmarty->fetch('install/step5.tpl'));
+        $this->oSmarty->assign('content', $this->oSmarty->fetch(array('file' => 'install/step5.tpl')));
 
         break;
     }
@@ -372,7 +372,7 @@ class Install extends Index {
     else
       $this->oSmarty->assign('title', 'Migrations for this version');
 
-    $this->oSmarty->assign('content', $this->oSmarty->fetch('migrate/index.tpl'));
+    $this->oSmarty->assign('content', $this->oSmarty->fetch(array('file' => 'migrate/index.tpl')));
   }
 
   /**
