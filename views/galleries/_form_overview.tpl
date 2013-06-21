@@ -41,6 +41,19 @@
                class='span4' />
       </div>
     </div>
+    <div class='control-group'>
+      <label for='input-published' class='control-label'>
+        {$lang.global.published}
+      </label>
+      <div class='controls'>
+        <input name='{$_REQUEST.controller}[published]'
+               value='1'
+               type='checkbox'
+               class='checkbox'
+               id='input-published'
+               {if $published == true}checked{/if} />
+      </div>
+    </div>
     <div class='form-actions'>
       {if $_REQUEST.action == 'create'}
         <input type='submit'

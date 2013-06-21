@@ -16,6 +16,9 @@
     <article itemscope itemtype='http://schema.org/ImageGallery'>
       <header class='page-header'>
         <h1 itemprop='name'>
+          {if !$album.published}
+            {$lang.global.not_published}:&nbsp;
+          {/if}
           {$album.title}
           {if $_SESSION.user.role >= 3}
             <a href='/{$_REQUEST.controller}/{$_REQUEST.id}/update'>

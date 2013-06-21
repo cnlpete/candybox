@@ -42,6 +42,10 @@ class Galleries extends Main {
    */
   public function getId($iId, $bUpdate = false, $bAdvancedImageInformation = false) {
     try {
+      $sWhere = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ?
+              'WHERE 1' :
+              "WHERE published = '1'";
+
       $sOrder = (SORTING_GALLERY_FILES == 'ASC' || SORTING_GALLERY_FILES == 'DESC') ?
               SORTING_GALLERY_FILES :
               'ASC';
@@ -64,7 +68,8 @@ class Galleries extends Main {
                                       " . SQL_PREFIX . "gallery_files f
                                     ON
                                       f.album_id=a.id
-                                    WHERE
+                                    " . $sWhere . "
+                                    AND
                                       a.id = :id
                                     GROUP BY
                                       a.id
@@ -90,7 +95,7 @@ class Galleries extends Main {
       $this->_aData = $this->_formatForOutput(
               $aRow,
               array('id', 'user_id', 'files_sum'),
-              null,
+              array('published'),
               'galleries');
 
       $this->_aData['files'] = $aRow['files_sum'] > 0 ?
@@ -115,6 +120,10 @@ class Galleries extends Main {
    */
   public function getOverview($iLimit = LIMIT_ALBUMS, $bAdvancedImageInformation = false) {
     $iResult = 0;
+
+    $sWhere = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ?
+            'WHERE 1' :
+            "WHERE published = '1'";
 
     try {
       $oQuery   = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "gallery_albums");
@@ -147,6 +156,7 @@ class Galleries extends Main {
                                       " . SQL_PREFIX . "gallery_files f
                                     ON
                                       f.album_id=a.id
+                                    " . $sWhere . "
                                     GROUP BY
                                       a.id
                                     ORDER BY
@@ -172,7 +182,7 @@ class Galleries extends Main {
       $this->_aData[$iId] = $this->_formatForOutput(
               $aRow,
               array('id', 'user_id', 'files_sum'),
-              null,
+              array('published'),
               'galleries');
 
       $this->_aData[$iId]['files'] = $aRow['files_sum'] > 0 ?
@@ -330,14 +340,17 @@ class Galleries extends Main {
                                         ( author_id,
                                           title,
                                           content,
+                                          published,
                                           date)
                                       VALUES
                                         ( :author_id,
                                           :title,
                                           :content,
+                                          :published,
                                           NOW() )");
 
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
+      $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
 
       foreach (array('title', 'content') as $sInput)
         $oQuery->bindParam(
@@ -377,11 +390,13 @@ class Galleries extends Main {
                                         " . SQL_PREFIX . "gallery_albums
                                       SET
                                         title = :title,
-                                        content = :content
+                                        content = :content,
+                                        published = :published
                                       WHERE
                                         id = :id");
 
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
+      $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
 
       foreach (array('title', 'content') as $sInput)
         $oQuery->bindParam(
