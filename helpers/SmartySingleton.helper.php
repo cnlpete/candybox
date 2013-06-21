@@ -314,4 +314,14 @@ class SmartySingleton extends Smarty {
 
     return $aReturn;
   }
+
+  /**
+   * Clear the precompiled template paths
+   *
+   * @access public
+   *
+   */
+  public function clearCompiledTemplatePaths() {
+    Cache::clear('tpl-path-cache');
+  }
 }
