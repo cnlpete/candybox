@@ -230,7 +230,7 @@ class Galleries extends Main {
                                       WHERE
                                         f.album_id= :album_id
                                       ORDER BY
-                                        f.position " . $sOrder . ",
+                                        f.position ASC,
                                         f.date " . $sOrder);
 
       $oQuery->bindParam('album_id', $iId, PDO::PARAM_INT);
