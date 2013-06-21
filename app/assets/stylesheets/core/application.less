@@ -13,43 +13,39 @@
  *
  */
 
-@path_bootstrap         = "../../../../vendor/twitter/bootstrap/less";
-@path_candy_images      = "../../../../vendor/candycms/core/assets/images";
-@path_candy_stylesheets = "../../../../vendor/candycms/core/assets/stylesheets/core";
-
 /* If you want to include all bootstrap modules simply uncomment following lines
- * and replace with: @import @path_bootstrap + "/bootstrap.less";
+ * and replace with: @import "../../../../vendor/twitter/bootstrap/less/bootstrap.less";
  *
  * I chose to include only the plugins I need and delete all the other ones */
-@import @path_bootstrap + "/reset.less";
-@import @path_bootstrap + "/variables.less";
-@import @path_bootstrap + "/mixins.less";
-@import @path_bootstrap + "/scaffolding.less";
-@import @path_bootstrap + "/grid.less";
-@import @path_bootstrap + "/layouts.less";
-@import @path_bootstrap + "/type.less";
-@import @path_bootstrap + "/code.less";
-@import @path_bootstrap + "/forms.less";
-@import @path_bootstrap + "/tables.less";
-@import @path_bootstrap + "/dropdowns.less";
-@import @path_bootstrap + "/wells.less";
-@import @path_bootstrap + "/component-animations.less";
-@import @path_bootstrap + "/close.less";
-@import @path_bootstrap + "/buttons.less";
-@import @path_bootstrap + "/alerts.less";
-@import @path_bootstrap + "/navs.less";
-@import @path_bootstrap + "/navbar.less";
-@import @path_bootstrap + "/pagination.less";
-@import @path_bootstrap + "/pager.less";
-@import @path_bootstrap + "/modals.less";
-@import @path_bootstrap + "/tooltip.less";
-@import @path_bootstrap + "/thumbnails.less";
-@import @path_bootstrap + "/progress-bars.less";
-@import @path_bootstrap + "/utilities.less";
+@import "../../../../vendor/twitter/bootstrap/less/reset.less";
+@import "../../../../vendor/twitter/bootstrap/less/variables.less";
+@import "../../../../vendor/twitter/bootstrap/less/mixins.less";
+@import "../../../../vendor/twitter/bootstrap/less/scaffolding.less";
+@import "../../../../vendor/twitter/bootstrap/less/grid.less";
+@import "../../../../vendor/twitter/bootstrap/less/layouts.less";
+@import "../../../../vendor/twitter/bootstrap/less/type.less";
+@import "../../../../vendor/twitter/bootstrap/less/code.less";
+@import "../../../../vendor/twitter/bootstrap/less/forms.less";
+@import "../../../../vendor/twitter/bootstrap/less/tables.less";
+@import "../../../../vendor/twitter/bootstrap/less/dropdowns.less";
+@import "../../../../vendor/twitter/bootstrap/less/wells.less";
+@import "../../../../vendor/twitter/bootstrap/less/component-animations.less";
+@import "../../../../vendor/twitter/bootstrap/less/close.less";
+@import "../../../../vendor/twitter/bootstrap/less/buttons.less";
+@import "../../../../vendor/twitter/bootstrap/less/alerts.less";
+@import "../../../../vendor/twitter/bootstrap/less/navs.less";
+@import "../../../../vendor/twitter/bootstrap/less/navbar.less";
+@import "../../../../vendor/twitter/bootstrap/less/pagination.less";
+@import "../../../../vendor/twitter/bootstrap/less/pager.less";
+@import "../../../../vendor/twitter/bootstrap/less/modals.less";
+@import "../../../../vendor/twitter/bootstrap/less/tooltip.less";
+@import "../../../../vendor/twitter/bootstrap/less/thumbnails.less";
+@import "../../../../vendor/twitter/bootstrap/less/progress-bars.less";
+@import "../../../../vendor/twitter/bootstrap/less/utilities.less";
 
 /* candyCMS requirements - Do not modify them */
 /* ------------------------------------------------------- */
-@import @path_candy_stylesheets + "/jquery.fancybox.less";
-@import @path_candy_stylesheets + "/candy.less";
-@import @path_candy_stylesheets + "/candy.icons.less"; // Include this icons as alternative to Twitters icons
-@import @path_candy_stylesheets + "/candy.adjustments.less";
+@import "../../../../vendor/candycms/core/assets/stylesheets/core/jquery.fancybox.less";
+@import "../../../../vendor/candycms/core/assets/stylesheets/core/candy.less";
+@import "../../../../vendor/candycms/core/assets/stylesheets/core/candy.icons.less"; // Include this icons as alternative to Twitters icons
+@import "../../../../vendor/candycms/core/assets/stylesheets/core/candy.adjustments.less";

@@ -1263,6 +1263,14 @@ table td[class*="span"], table th[class*="span"], .row-fluid table td[class*="sp
 }
 .open { *z-index:1000; }
 .open > .dropdown-menu { display:block; }
+.dropdown-backdrop {
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  top:0;
+  z-index:990;
+}
 .pull-right > .dropdown-menu {
   right:0;
   left:auto;
@@ -2857,20 +2865,6 @@ a.thumbnail:hover, a.thumbnail:focus {
 .show { display:block; }
 .invisible { visibility:hidden; }
 .affix { position:fixed; }
-.js-caption {
-  padding:0px;
-  margin:10px 0px 0px;
-  text-align:center;
-  list-style:none;
-}
-.js-caption li { display:inline-block; }
-div.capty-caption {
-  background-color:#000;
-  color:#FFF;
-  text-shadow:1px 1px 0 #202020;
-  padding:5px;
-  text-align:center;
-}
 .fancybox-wrap, .fancybox-skin, .fancybox-outer, .fancybox-inner, .fancybox-image, .fancybox-wrap iframe, .fancybox-wrap object, .fancybox-nav, .fancybox-nav span, .fancybox-tmp {
   padding:0;
   margin:0;
@@ -2918,7 +2912,7 @@ div.capty-caption {
   max-width:100%;
   max-height:100%;
 }
-#fancybox-loading, .fancybox-close, .fancybox-prev span, .fancybox-next span { background-image:url("../../../../vendor/candycms/core/assets/images/jquery.fancybox/sprite.png"); }
+#fancybox-loading, .fancybox-close, .fancybox-prev span, .fancybox-next span { background-image:url(/jquery.fancybox/sprite.png); }
 #fancybox-loading {
   position:fixed;
   top:50%;
@@ -2933,7 +2927,7 @@ div.capty-caption {
 #fancybox-loading div {
   width:44px;
   height:44px;
-  background:url("../../../../vendor/candycms/core/assets/images/candy.global/loading.gif") center center no-repeat;
+  background:url(/candy.global/loading.gif) center center no-repeat;
 }
 .fancybox-close {
   position:absolute;
@@ -2951,7 +2945,7 @@ div.capty-caption {
   height:100%;
   cursor:pointer;
   text-decoration:none;
-  background:transparent url("../../../../vendor/candycms/core/assets/images/candy.global/spacer.png");
+  background:transparent url(/candy.global/spacer.png);
   -webkit-tap-highlight-color:rgba(0,0,0,0);
   z-index:8040;
 }
@@ -2990,7 +2984,7 @@ div.capty-caption {
   overflow:hidden;
   display:none;
   z-index:8010;
-  background:url("../../../../vendor/candycms/core/assets/images/jquery.fancybox/overlay.png");
+  background:url(/jquery.fancybox/overlay.png);
 }
 .fancybox-overlay-fixed {
   position:fixed;
