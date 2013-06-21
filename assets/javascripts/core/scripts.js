@@ -197,7 +197,6 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
   xhr.onload = function() {
     $('#js-progress').toggle();
 
-    console.log(this.response);
     var aJson = JSON.parse(this.response);
 
     if(aJson.success == true) {
