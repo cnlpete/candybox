@@ -129,6 +129,7 @@ CREATE TABLE `%SQL_PREFIX%mails` (
   `to_name` varchar(32) DEFAULT NULL,
   `subject` varchar(128) NOT NULL,
   `message` text NOT NULL,
+  `attachment` text,
   `error_message` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -168,7 +169,8 @@ CREATE TABLE `%SQL_PREFIX%users` (
   `role` tinyint(1) NOT NULL DEFAULT '1',
   `registration_ip` varchar(15) NULL DEFAULT '',
   `date` datetime NOT NULL,
-  `verification_code` varchar(12) COLLATE utf8_unicode_ci NOT NULL,
+  `registration_ip` varchar(15) COLLATE utf8_unicode_ci DEFAULT '',
+  `verification_code` varchar(16) COLLATE utf8_unicode_ci NOT NULL,
   `verification_date` datetime NOT NULL,
   `api_token` varchar(32)  NOT NULL  DEFAULT '',
   PRIMARY KEY (`id`),
