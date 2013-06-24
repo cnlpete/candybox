@@ -5,9 +5,6 @@ function quote(sName, sDivId) {
   var sNewMessage = "[quote=" + sName + "]" + sQuote + "[/quote]\n";
   oTextField.val(oTextField.val() + sNewMessage);
 
-  if ($.mobile)
-    $.mobile.silentScroll(oTextField.offset().top);
-
   return false;
 }
 
@@ -128,7 +125,7 @@ function enableInfiniteScroll(selector, itemselector, repeatTimes, pathImages) {
       finished    : function(opts){
         opts.loading.msg.fadeOut(opts.loading.speed);
         iCounter = iCounter + 1;
-        if (iCounter % repeatTimes == 0){
+        if (iCounter % repeatTimes === 0){
           /** if we did load a few times, we want to stop and display a resume button **/
           opts.contentSelector.infinitescroll('pause');
           var a = $('<a alt="' + lang.pages.more + '" data-role="button" class="btn">' + lang.pages.more + '</a>');
@@ -142,7 +139,7 @@ function enableInfiniteScroll(selector, itemselector, repeatTimes, pathImages) {
         return true;
       }
     },
-    animate       : true
+    animate: true
   });
 }
 
