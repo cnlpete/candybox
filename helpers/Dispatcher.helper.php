@@ -90,7 +90,7 @@ class Dispatcher {
       }
 
       else {
-        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
+        AdvancedException::writeLog(__METHOD__ . ' - ' . $e->getMessage());
         return Helper::redirectTo('/errors/404');
       }
     }

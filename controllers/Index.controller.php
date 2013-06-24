@@ -218,14 +218,14 @@ class Index {
 
     # Show files from public folder (robots.txt, human.txt and favicon.ico)
     if (preg_match('/\.txt/', $sURI) || preg_match('/\.ico/', $sURI) && !isset($this->_aRequest['action'])) {
-			$sFileRoot = Helper::removeSlash(WEBSITE_CDN) . '/' . $sURI;
+      $sFileRoot = Helper::removeSlash(WEBSITE_CDN) . '/' . $sURI;
 
       if (file_exists($sFileRoot))
         exit(file_get_contents($sFileRoot));
 
       else
         return Helper::redirectTo('/errors/404');
-		}
+    }
 
     return $this->_aRequest;
   }
