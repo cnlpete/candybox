@@ -56,6 +56,7 @@ class Medias extends Main {
     $sFolder = isset($this->_aRequest['folder']) ?
             Helper::formatInput($this->_aRequest['folder']) :
             $this->_sController;
+
     try {
       if (!is_dir($sFolder))
         mkdir(Helper::removeSlash(PATH_UPLOAD . '/' . $sFolder, 0775));
