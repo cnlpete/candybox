@@ -125,9 +125,10 @@ final class Bbcode {
 
       # Remove capty and change image information.
       if (file_exists($sTempFilePath)) {
-        $aNewInfo = getImageSize($sTempFilePath);
-        $sClass   = 'js-image';
-        $sAlt     = I18n::get('global.image.click_to_enlarge');
+        $aNewInfo       = getImageSize($sTempFilePath);
+        $sTempFilePath  = WEBSITE_URL . Helper::addSlash($sTempFilePath);
+        $sClass         = 'js-image';
+        $sAlt           = I18n::get('global.image.click_to_enlarge');
       }
 
       else {
@@ -136,11 +137,13 @@ final class Bbcode {
         $sClass         = '';
         $sAlt           = $sTempFilePath;
       }
+      
+      print_r($sUrl);
 
       $sHTML .= '<figure class="image">';
       $sHTML .= '<a class="js-fancybox fancybox-thumb" rel="fancybox-thumb" href="' . $sUrl[1] . '">';
       $sHTML .= '<img class="' . $sClass . '" alt="' . $sAlt . '"';
-      $sHTML .= 'src="' . WEBSITE_URL . Helper::addSlash($sTempFilePath) . '" ' . $aNewInfo[3] . ' />';
+      $sHTML .= 'src="' . $sTempFilePath . '" ' . $aNewInfo[3] . ' />';
       $sHTML .= '</a>';
       $sHTML .= '</figure>';
 
