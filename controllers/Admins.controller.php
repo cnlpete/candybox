@@ -51,6 +51,7 @@ class Admins extends Main {
     # clear the smarty cache and compile directories
     $this->oSmarty->clearCompiledTemplate();
     $this->oSmarty->clearCache(null, WEBSITE_MODE);
+    $this->oSmarty->clearCompiledTemplatePaths();
 
     # clear all the translation directories
     # but save the success message first

@@ -130,7 +130,7 @@ if (!defined('SORTING_COMMENTS'))
   define('SORTING_COMMENTS', 'ASC');
 
 if (!defined('SORTING_GALLERY_FILES'))
-  define('SORTING_GALLERY_FILES', 'DESC');
+  define('SORTING_GALLERY_FILES', 'ASC');
 
 if (!defined('CRAWLERS'))
   define('CRAWLERS', 'Google|msnbot|Rambler|Yahoo|AbachoBOT|accoona|AcioRobot|' .
