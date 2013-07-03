@@ -112,6 +112,8 @@ class Blogs extends Main {
       ));
     }
 
+    $this->setTitle($this->_setBlogsTitle());
+
     header('Content-Type: application/rss+xml');
     return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }

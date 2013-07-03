@@ -6,7 +6,7 @@
       </h1>
     </div>
   {/if}
-  <form method='post' class='form-horizontal'>
+  <form class='form-horizontal'>
   {if $_REQUEST.action == 'createfile'}
     <div class='control-group{if isset($error.file)} alert alert-error{/if}'>
       <label for='input-file' class='control-label'>

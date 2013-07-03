@@ -51,7 +51,7 @@ if (!defined('WEBSITE_URL') || !defined('WEBSITE_NAME') || !defined('WEBSITE_MAI
   define('ERROR_MISSING_CONFIG_VALUES_WEBSITE', true);
 
 if (!defined('WEBSITE_MAIL_EXCEPTION'))
-  define('WEBSITE_MAIL_EXCEPTION', WEBSITE_MAIL);
+  define('WEBSITE_MAIL_EXCEPTION', defined('WEBSITE_MAIL') ? WEBSITE_MAIL : '');
 
 if (!defined('WEBSITE_MODE'))
   define('WEBSITE_MODE', 'staging');
@@ -73,6 +73,9 @@ if (!defined('ALLOW_VERSION_CHECK'))
 
 if (!defined('ALLOW_SMUSHIT'))
   define('ALLOW_SMUSHIT', true);
+
+if (!defined('ALLOW_INTERNAL_LESS'))
+  define('ALLOW_INTERNAL_LESS', true);
 
 if (!defined('DEFAULT_LANGUAGE'))
   define('DEFAULT_LANGUAGE', 'en');
@@ -154,4 +157,3 @@ if (!defined('DATA_SEARCHES'))
 
 # do we have a valid config?
 define('VALID_CONFIG', (defined('ERROR_MISSING_CONFIG_VALUES_SQL') || defined('ERROR_MISSING_CONFIG_VALUES_SMTP') || defined('ERROR_MISSING_CONFIG_VALUES_WEBSITE')));
-

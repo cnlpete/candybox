@@ -192,14 +192,14 @@ class SmartySingleton extends Smarty {
     $aPaths['upload']   = Helper::removeSlash(PATH_UPLOAD);
 
     # Compile CSS only when in development mode
-    if (WEBSITE_MODE == 'development') {
+    if (WEBSITE_MODE == 'development' && ALLOW_INTERNAL_LESS) {
       if (MOBILE === true) {
         Helper::compileStylesheet(
                 Helper::removeSlash('/app/assets/stylesheets/mobile/application.less'),
                 Helper::removeSlash($aPaths['css'] . '/mobile.css'),
                 false);
 
-        if (WEBSITE_COMPRESS_FILES === true)
+        if (WEBSITE_COMPRESS_FILES)
           Helper::compileStylesheet(
                   Helper::removeSlash('/app/assets/stylesheets/mobile/application.less'),
                   Helper::removeSlash($aPaths['css'] . '/mobile.min.css'));
@@ -210,7 +210,7 @@ class SmartySingleton extends Smarty {
                 Helper::removeSlash($aPaths['css'] . '/core.css'),
                 false);
 
-        if (WEBSITE_COMPRESS_FILES === true)
+        if (WEBSITE_COMPRESS_FILES)
           Helper::compileStylesheet(
                   Helper::removeSlash('/app/assets/stylesheets/core/application.less'),
                   Helper::removeSlash($aPaths['css'] . '/core.min.css'));

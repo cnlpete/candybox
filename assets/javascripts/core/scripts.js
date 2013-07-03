@@ -5,9 +5,6 @@ function quote(sName, sDivId) {
   var sNewMessage = "[quote=" + sName + "]" + sQuote + "[/quote]\n";
   oTextField.val(oTextField.val() + sNewMessage);
 
-  if ($.mobile)
-    $.mobile.silentScroll(oTextField.offset().top);
-
   return false;
 }
 
@@ -128,7 +125,7 @@ function enableInfiniteScroll(selector, itemselector, repeatTimes, pathImages) {
       finished    : function(opts){
         opts.loading.msg.fadeOut(opts.loading.speed);
         iCounter = iCounter + 1;
-        if (iCounter % repeatTimes == 0){
+        if (iCounter % repeatTimes === 0){
           /** if we did load a few times, we want to stop and display a resume button **/
           opts.contentSelector.infinitescroll('pause');
           var a = $('<a alt="' + lang.pages.more + '" data-role="button" class="btn">' + lang.pages.more + '</a>');
@@ -142,7 +139,7 @@ function enableInfiniteScroll(selector, itemselector, repeatTimes, pathImages) {
         return true;
       }
     },
-    animate       : true
+    animate: true
   });
 }
 
@@ -154,7 +151,7 @@ function enableInfiniteScroll(selector, itemselector, repeatTimes, pathImages) {
 function prepareForUpload() {
   $('#js-progress_bar').css('width', '0%');
   $('#js-progress').toggle();
-};
+}
 
 /**
  *
@@ -197,17 +194,16 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
   xhr.onload = function() {
     $('#js-progress').toggle();
 
-    console.log(this.response);
     var aJson = JSON.parse(this.response);
 
-    if(aJson.success == true) {
+    if(aJson.success === true) {
       var message = lang.upload_successful;
 
-      if(controller == 'medias' || controller == 'downloads' || controller == 'galleries') {
+      if(controller === 'medias' || controller === 'downloads' || controller === 'galleries') {
         message = message + ' ' + lang.reloading;
         $('.form-horizontal').toggle();
       }
-      else if(controller == 'users') {
+      else if(controller === 'users') {
         $('#js-avatar_thumb').attr('src', aJson.fileData.thumbnail);
         $('#js-avatar_link').attr('href', aJson.fileData.popup);
       }
@@ -216,8 +212,9 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
       showFlashMessage('success', message);
 
       // Reload to easily show images
-      if(reloadUrl == true)
+      if(reloadUrl === true) {
         setTimeout(function() {location.reload()}, 3000);
+      }
     }
     else {
       if (aJson.error) {
@@ -244,7 +241,7 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
  */
 function showAjaxUpload(sDivId, sController, sActionAndIdInformation) {
   $('p.center a').click(function() {
-    if($('#' + sDivId).length == 0) {
+    if($('#' + sDivId).length === 0) {
       $('.page-header').after("<div id='" + sDivId + "'></div>");
       $('#' + sDivId).load('/' + sController + '/' + sActionAndIdInformation + '.ajax');
     }
@@ -267,6 +264,11 @@ function showFlashMessage(sStatus, sMessage) {
   $('#js-flash_message').delay('10000').slideUp();
 }
 
+/* Hide div */
+function hide(sDivId, iDelay) {
+  $(sDivId).delay(iDelay).slideUp();
+}
+
 function show(sDivId) {
   $(sDivId).show();
 
@@ -275,22 +277,19 @@ function show(sDivId) {
   }
 }
 
-/* Hide div */
-function hide(sDivId, iDelay) {
-  $(sDivId).delay(iDelay).slideUp();
-}
-
 /* ToggleOpacity */
 $.fn.toggleOpacity = function (t) {
-  if(t)
+  if(t) {
     this.stop(true,true).animate({
       opacity:1
     });
-  else
+  }
+  else {
     this.stop(true,true).animate({
       opacity:0.25
     });
-}
+  } 
+};
 
 /* Show success and error messages */
 if($('#js-flash_success, #js-flash_error, #js-flash_warning').length) {
@@ -307,14 +306,16 @@ $('#js-flash_success, #js-flash_error, #js-flash_warning').click(function() {
  *
  *
  */
-if ($('.js-tooltip').length)
+if ($('.js-tooltip').length) {
   $('.js-tooltip').tooltip();
+}
 
 /**
  *
  **/
-if ($('p.error').length)
+if ($('p.error').length) {
   $('p.error').tooltip();
+}
 
 /**
  *
