@@ -137,8 +137,6 @@ final class Bbcode {
         $sClass         = '';
         $sAlt           = $sTempFilePath;
       }
-      
-      print_r($sUrl);
 
       $sHTML .= '<figure class="image">';
       $sHTML .= '<a class="js-fancybox fancybox-thumb" rel="fancybox-thumb" href="' . $sUrl[1] . '">';
