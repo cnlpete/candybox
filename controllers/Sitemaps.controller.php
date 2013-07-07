@@ -73,7 +73,7 @@ class Sitemaps extends Main {
     $sModel     = $this->__autoload('Galleries', true);
     $oGalleries = new $sModel($this->_aRequest, $this->_aSession);
 
-    $this->oSmarty->assign('blogs', $oBlogs->getOverview(1000));
+    $this->oSmarty->assign('blogs', $oBlogs->getOverview(1000, true));
     $this->oSmarty->assign('contents', $oContents->getOverview(1000));
     $this->oSmarty->assign('galleries', $oGalleries->getOverview(false, 1000));
   }
