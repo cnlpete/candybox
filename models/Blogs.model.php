@@ -208,9 +208,9 @@ class Blogs extends Main {
     $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit != 0 ? $iLimit : $iResult);
 
     try {
-      if ($bMultiLang === true)
+      if ($bMultilang === true)
         $sWhere = "WHERE published = '1'";
-
+      
       # Show unpublished items and entries with diffent languages to moderators or administrators only
       elseif (isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3)
         $sWhere = '';
