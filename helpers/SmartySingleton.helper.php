@@ -321,9 +321,6 @@ class SmartySingleton extends Smarty {
 
     return $aReturn;
   }
-<<<<<<< HEAD
-}
-=======
 
   /**
    * Clear the precompiled template paths
@@ -335,4 +332,3 @@ class SmartySingleton extends Smarty {
     Cache::clear('tpl-path-cache');
   }
 }
->>>>>>> 41af55ee350808ec6b7ad6d62f634795260c7cf1
