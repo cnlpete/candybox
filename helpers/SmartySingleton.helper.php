@@ -231,12 +231,19 @@ class SmartySingleton extends Smarty {
     $this->clearCache(null, UNIQUE_PREFIX . '|' . $sController);
   }
 
+  // @todo documentation
+  // @todo strict mode
   public function isCached($oTemplate) {
     return parent::isCached($oTemplate['file']);
   }
+
+  // @todo documentation
   public function setTemplateDir($oTemplate) {
     return parent::setTemplateDir($oTemplate['dir']);
   }
+
+  // @todo documentation
+  // @todo strict mode
   public function fetch($oTemplate, $sUniqueId) {
     return parent::fetch($oTemplate['file'], $sUniqueId);
   }
