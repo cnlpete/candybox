@@ -1,5 +1,5 @@
 {strip}
-  <div class='form-horizontal'>
+  <form class='form-horizontal'>
     <div class='control-group'>
       <label for='input-file' class='control-label'>
         {$lang.medias.label.choose} <span title='{$lang.global.required}'>*</span><br />
@@ -55,7 +55,7 @@
              class='btn btn-primary'
              value='{$lang.medias.title.create}' />
     </div>
-  </div>
+  </form>
   <script type="text/javascript">
     $(document).ready(function(){
       $('#input-file').change(function() {
