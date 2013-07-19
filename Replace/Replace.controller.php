@@ -54,17 +54,13 @@ final class Replace {
     if (!isset($this->_aSession['replace'])) {
       $sReplaceDataFile = PATH_STANDARD . '/app/config/Replace.yml';
 
-      if (file_exists($sReplaceDataFile))
-        $this->_aSession['replace'] = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sReplaceDataFile));
+    if (file_exists($sReplaceDataFile))
+      $this->_aSession['replace'] = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sReplaceDataFile));
 
-      else
-        die('No replace config file.');
+    else
+      die('No replace config file.');
     }
 
-    # now register some events with the pluginmanager
-    #$oPlugins->registerSimplePlugin($this);
-    # @todo do we want this plugin to replace globally or only in content fields?
-    #$oPlugins->registerContentDisplayPlugin($this);
     $oPlugins->registerGlobalDisplayPlugin($this);
   }
 
