@@ -114,17 +114,11 @@ if (!defined('AUTOLOAD'))
 if (!defined('AUTOLOAD_TIMES'))
   define('AUTOLOAD_TIMES', 3);
 
-if (!defined('DISABLE_COMMENTS'))
-  define('DISABLE_COMMENTS', false);
-
 if (!defined('LIMIT_ALBUMS'))
   define('LIMIT_ALBUMS', 10);
 
 if (!defined('LIMIT_BLOG'))
   define('LIMIT_BLOG', 8);
-
-if (!defined('LIMIT_COMMENTS'))
-  define('LIMIT_COMMENTS', 10);
 
 if (!defined('SORTING_COMMENTS'))
   define('SORTING_COMMENTS', 'ASC');

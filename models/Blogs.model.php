@@ -128,18 +128,13 @@ class Blogs extends Main {
                                         u.name AS user_name,
                                         u.surname AS user_surname,
                                         u.email AS user_email,
-                                        u.use_gravatar,
-                                        COUNT(c.id) AS comment_count
+                                        u.use_gravatar
                                       FROM
                                         " . SQL_PREFIX . "blogs b
                                       LEFT JOIN
                                         " . SQL_PREFIX . "users u
                                       ON
                                         b.author_id=u.id
-                                      LEFT JOIN
-                                        " . SQL_PREFIX . "comments c
-                                      ON
-                                        c.parent_id=b.id
                                       " . $sWhere . "
                                       AND (tags LIKE :commaTagnameComma
                                         OR tags LIKE :commaTagname
@@ -175,7 +170,7 @@ class Blogs extends Main {
 
       # We need to specify 'blogs' because this might also be called for rss
       $this->_aData[$iDate] = $this->_formatForOutput($aRow,
-              array('id', 'uid', 'author_id', 'comment_count'),
+              array('id', 'uid', 'author_id'),
               array('published', 'use_gravatar'),
               'blogs');
 
@@ -231,18 +226,13 @@ class Blogs extends Main {
                                         u.name AS user_name,
                                         u.surname AS user_surname,
                                         u.email AS user_email,
-                                        u.use_gravatar,
-                                        COUNT(c.id) AS comment_count
+                                        u.use_gravatar
                                       FROM
                                         " . SQL_PREFIX . "blogs b
                                       LEFT JOIN
                                         " . SQL_PREFIX . "users u
                                       ON
                                         b.author_id=u.id
-                                      LEFT JOIN
-                                        " . SQL_PREFIX . "comments c
-                                      ON
-                                        c.parent_id=b.id
                                       " . $sWhere . "
                                       GROUP BY
                                         b.id
@@ -264,7 +254,7 @@ class Blogs extends Main {
 
       # We need to specify 'blogs' because this might also be called for rss
       $this->_aData[$iDate] = $this->_formatForOutput($aRow,
-              array('id', 'uid', 'author_id', 'comment_count'),
+              array('id', 'uid', 'author_id'),
               array('published', 'use_gravatar'),
               'blogs');
 
@@ -302,18 +292,13 @@ class Blogs extends Main {
                                         u.name AS user_name,
                                         u.surname AS user_surname,
                                         u.email AS user_email,
-                                        u.use_gravatar,
-                                        COUNT(c.id) AS comment_count
+                                        u.use_gravatar
                                       FROM
                                         " . SQL_PREFIX . "blogs b
                                       LEFT JOIN
                                         " . SQL_PREFIX . "users u
                                       ON
                                         b.author_id=u.id
-                                      LEFT JOIN
-                                        " . SQL_PREFIX . "comments c
-                                      ON
-                                        c.parent_id=b.id
                                       WHERE
                                         b.id = :id
                                       AND
@@ -336,7 +321,7 @@ class Blogs extends Main {
 
     else {
       $this->_aData[1] = $this->_formatForOutput($aRow,
-              array('id', 'uid', 'author_id', 'comment_count'),
+              array('id', 'uid', 'author_id'),
               array('published', 'use_gravatar'));
       $this->_aData[1]['tags_raw']      = $aRow['tags'];
       $this->_aData[1]['tags']          = array_filter( array_map('trim', explode(',', $aRow['tags'])) );
@@ -512,30 +497,7 @@ class Blogs extends Main {
    *
    */
   public function destroy($iId, $sController = '') {
-    $bResult = parent::destroy($iId);
-
-    try {
-      $oQuery = $this->_oDb->prepare("DELETE FROM
-                                        " . SQL_PREFIX . "comments
-                                      WHERE
-                                        parent_id = :parent_id");
-
-      $oQuery->bindParam('parent_id', $iId, PDO::PARAM_INT);
-      $bResult = $bResult && $oQuery->execute();
-    }
-    catch (\PDOException $p) {
-      try {
-        $this->_oDb->rollBack();
-      }
-      catch (\Exception $e) {
-        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
-      }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
-    }
-
-    return $bResult;
+    return parent::destroy($iId);
   }
 
   /**
@@ -588,7 +550,7 @@ class Blogs extends Main {
       $iDate = $aRow['date'];
 
       # We need to specify 'blogs' because this might also be called for rss
-      $this->_aData[$iDate] = $this->_formatForOutput($aRow, array('id', 'uid', 'author_id', 'comment_count'),
+      $this->_aData[$iDate] = $this->_formatForOutput($aRow, array('id', 'uid', 'author_id'),
               array('published', 'use_gravatar'), 'blogs');
     }
 

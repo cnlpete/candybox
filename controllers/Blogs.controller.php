@@ -40,17 +40,6 @@ class Blogs extends Main {
       if (!$this->_aData[1]['id'])
         return Helper::redirectTo('/errors/404');
 
-      # If comments are disabled
-      if (!DISABLE_COMMENTS) {
-        $sClass     = $this->__autoload('Comments');
-        $oComments  = new $sClass($this->_aRequest, $this->_aSession);
-
-        $oComments->__init();
-        $oComments->_setParentData($this->_aData);
-
-        $this->oSmarty->assign('_comments_', $oComments->show());
-      }
-
       $this->oSmarty->assign('blogs', $this->_aData);
 
       # Bugfix: This is necessary, because comments also do a setDir on the singleton object.

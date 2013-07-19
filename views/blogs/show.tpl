@@ -84,19 +84,8 @@
                 &nbsp;
               {/if}
             </div>
-            {if !$DISABLE_COMMENTS && !preg_match('/Disqus/', $ALLOW_PLUGINS)}
-              <div class='span4 comments'>
-                <a href='{$b.url}#comments'
-                   class='pull-right'
-                   itemprop='discussionUrl'>
-                    {$b.comment_count} {$lang.global.comments}
-                </a>
-              </div>
-              <meta itemprop='interactionCount' content='Comments:{$b.comment_count}' />
-            {/if}
             {if isset($_REQUEST.id)}
               <div class='span8'>
-                <hr />
                 <!-- plugin:addthis -->
                 <!-- plugin:socialshareprivacy -->
               </div>
@@ -109,8 +98,6 @@
       {/if}
       {if isset($_REQUEST.id) && preg_match('/Disqus/', $ALLOW_PLUGINS)}
         <!-- plugin:disqus -->
-      {elseif isset($_REQUEST.id) && !$DISABLE_COMMENTS}
-        {$_comments_}
       {/if}
     {/if}
     <script src='{$_PATH.js.core}/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
