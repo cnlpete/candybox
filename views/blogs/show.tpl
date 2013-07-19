@@ -33,7 +33,7 @@
               {/if}
             </h2>
             <p>
-              {if $_SESSION.user.role >= 3}
+              {if $_SESSION.user.role >= 3 && $b.language}
                 <img src='{$_PATH.img.core}/candy.flags/{$b.language}.png'
                     alt='{$b.language}'
                     title='{$b.language}' />
@@ -121,10 +121,10 @@
           prevEffect : 'fade'
         });
 
-        $('.js-media').each(function(e) {
+        $('.js-media').each(function() {
           var $this = $(this);
           $.getJSON(this.title, function(data) {
-            $this.html(data['html']);
+            $this.html(data.html);
           });
         });
       });

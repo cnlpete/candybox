@@ -114,6 +114,7 @@
         <select name='{$_REQUEST.controller}[language]'
                 class='span4'
                 id='input-language'>
+          <option value=''>{$lang.global.multilingual}</option>
           {foreach $languages as $l}
             {if $_REQUEST.action == 'create'}
               <option value='{$l}' {if $l == $WEBSITE_LANGUAGE}selected='selected'{/if}>{$l}</option>

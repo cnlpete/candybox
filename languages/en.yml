@@ -76,6 +76,7 @@ global:
     content: Contents
     media: Files
     user: Users
+  multilingual: Multilingual
   months:
     1: January
     2: February

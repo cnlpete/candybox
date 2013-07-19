@@ -31,7 +31,7 @@ class Blogs extends Main {
     # Show unpublished items and entries with diffent languages to moderators or administrators only
     $sWhere = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ?
             'WHERE 1' :
-            "WHERE published = '1' AND language = '" . WEBSITE_LANGUAGE . "'";
+            "WHERE published = '1' AND (language = '" . WEBSITE_LANGUAGE . "' OR language = '')";
 
     try {
       $oQuery  = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "blogs " . $sWhere);
@@ -55,7 +55,7 @@ class Blogs extends Main {
     # Show unpublished items and entries with diffent languages to moderators or administrators only
     $sWhere = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ?
             'WHERE 1' :
-            "WHERE published = '1' AND language = '" . WEBSITE_LANGUAGE . "'";
+            "WHERE published = '1' AND (language = '" . WEBSITE_LANGUAGE . "' OR language = '')";
 
     try {
       $oQuery  = $this->_oDb->prepare("SELECT
@@ -114,7 +114,7 @@ class Blogs extends Main {
       # Show unpublished items and entries with diffent languages to moderators or administrators only
       $sWhere = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ?
               'WHERE 1' :
-              "WHERE published = '1' AND language = '" . WEBSITE_LANGUAGE . "'";
+              "WHERE published = '1' AND (language = '" . WEBSITE_LANGUAGE . "' OR language = '')";
 
       $sLimit = $iLimit != 0 ?
               ' LIMIT ' . $this->oPagination->getOffset() . ', ' . $this->oPagination->getLimit() :
@@ -217,7 +217,7 @@ class Blogs extends Main {
         $sWhere = '';
 
       else
-        $sWhere = "WHERE published = '1' AND language = '" . WEBSITE_LANGUAGE . "'";
+        $sWhere = "WHERE published = '1' AND (language = '" . WEBSITE_LANGUAGE . "' OR language = '')";
 
       $sLimit = $iLimit != 0 ?
               ' LIMIT ' . $this->oPagination->getOffset() . ', ' . $this->oPagination->getLimit() :
