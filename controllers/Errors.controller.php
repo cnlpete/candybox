@@ -44,10 +44,10 @@ class Errors extends Main {
   }
 
   /**
-   * There is no overview avaiable
+   * There is no overview available
    *
    * @access protected
-   * @return HTML 404
+   * @return string HTML 403
    *
    */
   protected function _overview() {

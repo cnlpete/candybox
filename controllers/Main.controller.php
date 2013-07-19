@@ -893,6 +893,7 @@ abstract class Main {
    * @static
    * @access protected
    * @param array $aData user data
+   * @param boolean $bDoubleOptIn decide if we have to use double opt-in
    * @return boolean status of subscription
    *
    */

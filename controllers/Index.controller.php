@@ -102,6 +102,7 @@ class Index {
 
     # Always initialize the plugin manager, since we want to call the events later.
     $this->_oPlugins = PluginManager::getInstance();
+
     if (strlen(ALLOW_PLUGINS) > 0) {
       $this->_oPlugins->setRequestAndSession($this->_aRequest, $this->_aSession);
       $this->_oPlugins->load(ALLOW_PLUGINS);
@@ -109,6 +110,7 @@ class Index {
       # Run repetitive plugins (such as cronjob).
       $this->_oPlugins->runRepetitivePlugins();
     }
+
     $this->getLanguage();
     $this->setUser();
 
