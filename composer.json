@@ -65,8 +65,8 @@
   "require": {
     "php": ">=5.3.0",
 
-    "candycms/core": "3.0.*",
-    "candycms/plugins": "3.0.*",
+    "candycms/core": "3.1.*",
+    "candycms/plugins": "3.1.*",
 
     "phpmailer/phpmailer": "5.2.*",
     "smushit/smushit": "1.0",
@@ -75,7 +75,7 @@
   },
 
   "require-dev": {
-    "candycms/tests": "3.0.*",
-    "candycms/documentation": "3.0.*"
+    "candycms/tests": "3.1.*",
+    "candycms/documentation": "3.1.*"
   }
 }
