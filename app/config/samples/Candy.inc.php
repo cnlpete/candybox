@@ -69,7 +69,7 @@ define('WEBSITE_URL', 'http://domain.tld');
 # Note that all javascripts, images and css files have to be accessible.
 # EXAMPLE: http://www.google.com
 # DEFAULT: ''
-#define('WEBSITE_CDN', '');
+define('WEBSITE_CDN', '');
 
 # ------------------------------------------------------------------------------
 
