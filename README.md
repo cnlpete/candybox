@@ -1,4 +1,4 @@
-candyCMS Version 3.0.4
+candyCMS Version 3.1
 ========================================================================================================================
 
 What is candyCMS?
@@ -10,7 +10,7 @@ only barely.
 
 It provides...
 
-- a blog that supports tags, comments, RSS and full social media integration (via plugin)
+- a blog that supports tags, RSS and full social media integration (via plugin)
 - basic content pages
 - a gallery with multiple file upload (based on HTML5) and Media RSS
 - a calendar with the option to download iCalendar events
