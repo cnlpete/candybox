@@ -194,10 +194,11 @@ class Blogs extends Main {
    *
    * @access public
    * @param integer $iLimit blog post limit, 0 for infinite
+   * @param boolean $bMultiLang show all entries, no matter what language we have selected
    * @return array data from _setData
    *
    */
-  public function getOverview($iLimit = LIMIT_BLOG) {
+  public function getOverview($iLimit = LIMIT_BLOG, $bMultilang = false) {
     if (ACTIVE_TEST && $iLimit != 0)
       $iLimit = 2;
 
@@ -207,10 +208,15 @@ class Blogs extends Main {
     $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit != 0 ? $iLimit : $iResult);
 
     try {
+      if ($bMultilang === true)
+        $sWhere = "WHERE published = '1'";
+      
       # Show unpublished items and entries with diffent languages to moderators or administrators only
-      $sWhere = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ?
-              '' :
-              "WHERE published = '1' AND language = '" . WEBSITE_LANGUAGE . "'";
+      elseif (isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3)
+        $sWhere = '';
+
+      else
+        $sWhere = "WHERE published = '1' AND language = '" . WEBSITE_LANGUAGE . "'";
 
       $sLimit = $iLimit != 0 ?
               ' LIMIT ' . $this->oPagination->getOffset() . ', ' . $this->oPagination->getLimit() :
