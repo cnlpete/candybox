@@ -5,6 +5,7 @@
 .DS_Store
 .project
 nbproject/*
+codekit-config.json
 
 app/*
 !/app/assets
