@@ -336,9 +336,9 @@ class Index {
    *
    */
   private function _checkForNewVersion() {
-    if ($this->_aSession['user']['role'] == 4 && ALLOW_VERSION_CHECK === true &&
+    if ($this->_aSession['user']['role'] == 4 && ALLOW_VERSION_CHECK &&
             (WEBSITE_MODE == 'staging' || WEBSITE_MODE == 'production')) {
-      $oFile = @fopen('https://raw.github.com/marcoraddatz/candycms/master/version.txt', 'rb');
+      $oFile = @fopen('https://raw.github.com/marcoraddatz/candycms-core/master/version.txt', 'rb');
       $sVersionContent = @stream_get_contents($oFile);
       @fclose($oFile);
 
