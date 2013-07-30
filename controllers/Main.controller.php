@@ -270,7 +270,7 @@ abstract class Main {
    */
   public function setDescription($sDescription) {
     if (!empty($sDescription))
-      $this->_sDescription = & $sDescription;
+      $this->_sDescription = & htmlentities($sDescription);
   }
 
   /**
@@ -300,7 +300,7 @@ abstract class Main {
    */
   public function setKeywords($sKeywords) {
     if (!empty($sKeywords))
-      $this->_sKeywords = & $sKeywords;
+      $this->_sKeywords = & htmlentities($sKeywords);
   }
 
   /**
@@ -323,7 +323,7 @@ abstract class Main {
    */
   public function setTitle($sTitle) {
     if (!empty($sTitle))
-      $this->_sTitle = & $sTitle;
+      $this->_sTitle = & htmlentities($sTitle);
   }
 
   /**
