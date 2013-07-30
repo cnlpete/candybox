@@ -76,6 +76,9 @@ upload following folders and files and start the Composer  afterwards (`php comp
 "index.php", "composer.json" and "install". After Composer has loaded all requirements, go to "install/index.php" and
 migrate your application to the newest version. Delete the install folder afterwards.
 
+For version 3.1 and later it's important that you make sure, you also update `vendor/tiny_mce` to newest `vendor/tinymce`
+(included in this download). Paths within templates are not compatible to version 3.0!
+
 
 Credits
 ------------------------------------------------------------------------------------------------------------------------
