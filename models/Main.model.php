@@ -202,7 +202,8 @@ abstract class Main {
       # Bugfix: Avoid TinyMCE problems.
       $sData = str_replace('\"', '', $sData);
       $sData = str_replace('\&quot;', '', $sData);
-      $aData[$sColumn] = $sData;
+
+      $aData[$sColumn] = htmlentities($sData);
     }
 
     return $aData;
