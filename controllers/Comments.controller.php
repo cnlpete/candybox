@@ -143,7 +143,7 @@ class Comments extends Main {
     $this->oSmarty->setCaching(false);
 
     # Avoid /comments/1/create
-    if ($this->_aRequest['controller'] == $this->_sController && $this->_iId)
+    if ( ($this->_aRequest['controller'] == $this->_sController && $this->_iId) || DISABLE_COMMENTS )
       return Helper::redirectTo('/errors/403');
 
     elseif (isset($this->_aRequest[$this->_sController]))
