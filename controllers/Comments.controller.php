@@ -141,8 +141,8 @@ class Comments extends Main {
   public function create() {
     # No caching for comments
     $this->oSmarty->setCaching(false);
-    
-    # Bugfix: Don't allow empty comment forms. We have to hardcode the controller, because it's also implemented in blogs.
+
+    # Avoid /comments/1/create
     if ($this->_aRequest['controller'] == $this->_sController && $this->_iId)
       return Helper::redirectTo('/errors/403');
 
@@ -151,6 +151,7 @@ class Comments extends Main {
         $this->_create() :
         Helper::redirectTo('/errors/404');
 
+      # Avoid /comments/create
     else
       return $this->_iId ? $this->_showFormTemplate() : Helper::redirectTo('/errors/404');
   }
