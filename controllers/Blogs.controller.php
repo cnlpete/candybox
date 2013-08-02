@@ -40,7 +40,7 @@ class Blogs extends Main {
       if (!$this->_aData[1]['id'])
         return Helper::redirectTo('/errors/404');
 
-      # If comments are disabled
+      # If comments are allowed
       if (!DISABLE_COMMENTS) {
         $sClass     = $this->__autoload('Comments');
         $oComments  = new $sClass($this->_aRequest, $this->_aSession);

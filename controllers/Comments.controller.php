@@ -134,15 +134,25 @@ class Comments extends Main {
    *
    * @access public
    * @return string HTML content
+   * @todo extend tests for that
    *
    */
   public function create() {
     # No caching for comments
     $this->oSmarty->setCaching(false);
 
-    return isset($this->_aRequest[$this->_sController]) ?
-            $this->_create() :
-            $this->_showFormTemplate();
+    # Avoid /comments/1/create
+    if ( ($this->_aRequest['controller'] == $this->_sController && $this->_iId) || DISABLE_COMMENTS )
+      return Helper::redirectTo('/errors/403');
+
+    elseif (isset($this->_aRequest[$this->_sController]))
+      return isset($this->_aRequest[$this->_sController]['parent_id']) && (int) $this->_aRequest[$this->_sController]['parent_id'] > 0  ?
+        $this->_create() :
+        Helper::redirectTo('/errors/404');
+
+      # Avoid /comments/create
+    else
+      return $this->_iId ? $this->_showFormTemplate() : Helper::redirectTo('/errors/404');
   }
 
   /**
