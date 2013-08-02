@@ -238,6 +238,9 @@ class SmartySingleton extends Smarty {
 
   // @todo documentation
   public function setTemplateDir($oTemplate) {
+    //if (!isset($oTemplate))
+    //  $oTemplate = $this->geTemplate('errors', '404');
+
     return parent::setTemplateDir($oTemplate['dir']);
   }
 
@@ -260,7 +263,7 @@ class SmartySingleton extends Smarty {
     $sLowerFolder = strtolower($sFolder);
     $sUCFirstFolder = ucfirst($sFolder);
 
-    $sCacheId = $sLowerFolder.'.'.$sFile.'.'.(MOBILE === true?'mob':'tpl');
+    $sCacheId = $sLowerFolder . '.' . $sFile . '.' . (MOBILE === true ? 'mob' : 'tpl');
 
     # check the cache
     if (isset($this->_aPathCache[$sCacheId]))

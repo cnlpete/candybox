@@ -111,7 +111,6 @@ class Pagination {
       $this->_iCurrentPage = $this->_iPages;
 
     $this->_iOffset = ($this->_iCurrentPage - 1) * $this->_iLimit;
-    $this->_oSmarty = Smarty::getInstance();
   }
 
   /**
@@ -171,8 +170,8 @@ class Pagination {
    */
   public function showPages($sController = '') {
     if ($this->_iPages > 1) {
+      $this->_oSmarty = Smarty::getInstance();
       $oTemplate = $this->_oSmarty->getTemplate('paginations', 'showPagination');
-      //$this->oSmarty->setTemplateDir($oTemplate);
       $this->_oSmarty->addTemplateDir($oTemplate['dir']);
 
       $aPage = array(
@@ -206,9 +205,9 @@ class Pagination {
    *
    */
   public function showSurrounding($sController = 'blogs') {
-      $oTemplate = $this->_oSmarty->getTemplate('paginations', 'surrounding');
-      //$this->oSmarty->setTemplateDir($oTemplate);
-      $this->_oSmarty->addTemplateDir($oTemplate['dir']);
+    $this->_oSmarty = Smarty::getInstance();
+    $oTemplate = $this->_oSmarty->getTemplate('paginations', 'surrounding');
+    $this->_oSmarty->addTemplateDir($oTemplate['dir']);
 
     if ($this->_iPages > 1 && $this->_iCurrentPage < $this->_iPages)
       $iNext = $this->_iCurrentPage + 1;
