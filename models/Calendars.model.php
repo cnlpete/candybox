@@ -227,10 +227,11 @@ class Calendars extends Main {
    * Create new calendar entry.
    *
    * @access public
+   * @param array $aOptions (only for E_STRICT)
    * @return boolean status of query
    *
    */
-  public function create() {
+  public function create($aOptions = array()) {
     try {
       $oQuery = $this->_oDb->prepare("INSERT INTO
                                         " . SQL_PREFIX . "calendars

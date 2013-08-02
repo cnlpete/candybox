@@ -350,10 +350,11 @@ class Blogs extends Main {
    * Create a blog entry.
    *
    * @access public
+   * @param array $aOptions (only for E_STRICT)
    * @return boolean status of query
    *
    */
-  public function create() {
+  public function create($aOptions = array()) {
     $iPublished = isset($this->_aRequest[$this->_sController]['published']) &&
             $this->_aRequest[$this->_sController]['published'] == true ?
             1 :
@@ -432,15 +433,15 @@ class Blogs extends Main {
             date('Y-m-d H:i:s') :
             '0000-00-00 00:00:00';
 
-    $iPublished = isset($this->_aRequest[$this->_sController]['published']) &&
-            $this->_aRequest[$this->_sController]['published'] == true ?
-            1 :
-            0;
-
     $iUpdateAuthor = isset($this->_aRequest[$this->_sController]['show_update']) &&
             $this->_aRequest[$this->_sController]['show_update'] == true ?
             $this->_aSession['user']['id'] :
             (int) $this->_aRequest[$this->_sController]['author_id'];
+
+    $iPublished = isset($this->_aRequest[$this->_sController]['published']) &&
+            $this->_aRequest[$this->_sController]['published'] == true ?
+            1 :
+            0;
 
     $iDate = isset($this->_aRequest[$this->_sController]['update_date']) &&
             $this->_aRequest[$this->_sController]['update_date'] == true ?
@@ -448,6 +449,8 @@ class Blogs extends Main {
             (int) $this->_aRequest[$this->_sController]['date'];
 
     $sDate = date('Y-m-d H:i:s', $iDate);
+
+    $sTags = Helper::formatInput(implode(',', array_filter( array_map('trim', explode(',', $this->_aRequest[$this->_sController]['tags'])))));
 
     try {
       $oQuery = $this->_oDb->prepare("UPDATE
@@ -466,8 +469,6 @@ class Blogs extends Main {
                                       WHERE
                                         id = :id");
 
-      $sTags = $this->_aRequest[$this->_sController]['tags'];
-      $sTags = Helper::formatInput(implode(',', array_filter( array_map('trim', explode(',', $sTags)))));
       $oQuery->bindParam('tags', $sTags, PDO::PARAM_STR);
       $oQuery->bindParam('author_id', $iUpdateAuthor, PDO::PARAM_INT);
       $oQuery->bindParam('date', $sDate, PDO::PARAM_STR);
@@ -475,17 +476,21 @@ class Blogs extends Main {
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
 
-      foreach (array('title', 'teaser', 'content') as $sInput)
+      foreach (array('title', 'teaser', 'content') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                $sValue,
                 PDO::PARAM_STR);
+      }
 
-      foreach (array('keywords', 'language') as $sInput)
+      foreach (array('keywords', 'language') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput]);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                $sValue,
                 PDO::PARAM_STR);
+      }
 
       return $oQuery->execute();
     }

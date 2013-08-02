@@ -153,10 +153,11 @@ class Contents extends Main {
    * Create a content entry.
    *
    * @access public
+   * @param array $aOptions (only for E_STRICT)
    * @return boolean status of query
    *
    */
-  public function create() {
+  public function create($aOptions) {
     $iPublished = isset($this->_aRequest[$this->_sController]['published']) &&
             $this->_aRequest[$this->_sController]['published'] == true ?
             1 :

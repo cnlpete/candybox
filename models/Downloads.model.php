@@ -153,13 +153,11 @@ class Downloads extends Main {
    * Create new download.
    *
    * @access public
-   * @param string $sFile file name
-   * @param string $sExtension file extension
+   * @param array $aOptions
    * @return boolean status of query
-   * @todo make the model::create() action compilant with the main::create() action
    *
    */
-  public function create($sFile, $sExtension) {
+  public function create($aOptions) {
     try {
       $oQuery = $this->_oDb->prepare("INSERT INTO
                                         " . SQL_PREFIX . "downloads
@@ -182,8 +180,8 @@ class Downloads extends Main {
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
 
       # Preset
-      $oQuery->bindParam('file', $sFile, PDO::PARAM_STR);
-      $oQuery->bindParam('extension', $sExtension, PDO::PARAM_STR);
+      $oQuery->bindParam('file', $aOptions['file'], PDO::PARAM_STR);
+      $oQuery->bindParam('extension', $aOptions['extension'], PDO::PARAM_STR);
 
       foreach (array('title', 'content') as $sInput)
         $oQuery->bindParam(

@@ -508,10 +508,11 @@ abstract class Main {
    * This is just a fallback method if a model has no create method.
    *
    * @access public
+   * @param array $aOptions options to handle
    * @return boolean false
    *
    */
-  public function create() {
+  public function create($aOptions) {
     return false;
   }
 

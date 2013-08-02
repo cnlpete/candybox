@@ -117,10 +117,11 @@ class Comments extends Main {
    * Create a comment.
    *
    * @access public
+   * @param array $aOptions (only for E_STRICT)
    * @return boolean status of query
    *
    */
-  public function create() {
+  public function create($aOptions) {
     $sAuthorName = isset($this->_aRequest[$this->_sController]['name']) ?
             Helper::formatInput($this->_aRequest[$this->_sController]['name']) :
             $this->_aSession['user']['full_name'];

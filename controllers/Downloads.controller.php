@@ -130,7 +130,8 @@ class Downloads extends Main {
         $aExts  = $oUploadFile->getExtensions();
 
         # File is up so insert data into database
-        if ($this->_oModel->create($aIds[0] . '.' . $aExts[0], $aExts[0]) === true) {
+        $aOptions = array('file' => $aIds[0] . '.' . $aExts[0], 'extension' => $aExts[0]);
+        if ($this->_oModel->create($aOptions) === true) {
           Logs::insert( $this->_sController,
                         $this->_aRequest['action'],
                         $this->_oModel->getLastInsertId($this->_sController),
