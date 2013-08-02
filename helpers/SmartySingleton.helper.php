@@ -232,8 +232,7 @@ class SmartySingleton extends Smarty {
   }
 
   // @todo documentation
-  // @todo strict mode
-  public function isCached($oTemplate) {
+  public function isCached($oTemplate = NULL, $cache_id = NULL, $compile_id = NULL, $parent = NULL) {
     return parent::isCached($oTemplate['file']);
   }
 
@@ -243,8 +242,7 @@ class SmartySingleton extends Smarty {
   }
 
   // @todo documentation
-  // @todo strict mode
-  public function fetch($oTemplate, $sUniqueId) {
+  public function fetch($oTemplate = NULL, $sUniqueId = NULL, $compile_id = NULL, $parent = NULL, $display = false, $merge_tpl_vars = true, $no_output_filter = false) {
     return parent::fetch($oTemplate['file'], $sUniqueId);
   }
 
