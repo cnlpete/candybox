@@ -183,6 +183,9 @@ abstract class Main {
    */
   public static function disconnectFromDatabase() {
     return self::$_oDbStatic = null;
+
+    # Close database connection
+    self::disconnectFromDatabase();
   }
 
   /**
