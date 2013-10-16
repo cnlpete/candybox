@@ -20,7 +20,7 @@ use candyCMS\Core\Helpers\Image;
 class Medias extends Main {
 
   /**
-   * Get log overview data.
+   * Get all uploaded media files.
    *
    * @access public
    * @return array $this->_aData
@@ -50,9 +50,9 @@ class Medias extends Main {
       if ($sFileType == 'jpg' || $sFileType == 'jpeg' || $sFileType == 'png' || $sFileType == 'gif') {
         $aImgDim = getImageSize($sPath);
 
-        if (!file_exists(Helper::removeSlash(PATH_UPLOAD . '/temp/' . $this->_sController . '/' . $sFile))) {
+        if (!file_exists(Helper::removeSlash(PATH_UPLOAD . '/temp/' . $this->_sController . '/' . $sFile)) || WEBSITE_MODE == 'development') {
           $oImage = new Image($sFileName, 'temp', $sPath, $sFileType);
-          $oImage->resizeAndCut('32', $this->_sController);
+          $oImage->resizeAndCut(32, $this->_sController);
         }
       }
 

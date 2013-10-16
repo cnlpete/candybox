@@ -14,6 +14,8 @@
 namespace candyCMS\Core\Helpers;
 
 use candyCMS\Core\Helpers\Helper;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
 
 class Image {
 
@@ -22,7 +24,7 @@ class Image {
    * @access protected
    *
    */
-  protected $_aInfo;
+  protected $_aInfo = array(0 => 1, 1 => 1);
 
   /**
    * @var string
@@ -74,12 +76,9 @@ class Image {
     $this->_sUploadDir    = & $sUploadDir;
     $this->_sOriginalPath = & $sOriginalPath;
     $this->_sImgType      = & $sImgType;
-    $this->_aInfo         = getimagesize($this->_sOriginalPath);
 
-    if (!isset($this->_aInfo)) {
-      $this->_aInfo[0] = 1;
-      $this->_aInfo[1] = 1;
-    }
+    if ( file_exists($this->_sOriginalPath) )
+      $this->_aInfo = getimagesize($this->_sOriginalPath);
   }
 
   /**
@@ -88,45 +87,33 @@ class Image {
    * @access private
    * @param integer $iSrcX x-coordinate of source point
    * @param integer $iSrcY y-coordinate of source point
-   * @param integer $iDstX destination width
-   * @param integer $iDstY destination height
+   * @param integer $iDim dimension to cut
    * @return string $sPath path of the new image
    *
    */
-  private function _createImage($iSrcX, $iSrcY, $iDstX, $iDstY) {
+  private function _createImage($iSrcX, $iSrcY, $iDim) {
     $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sUploadDir . '/' .
                     $this->_sFolder . '/' . $this->_sId . '.' . $this->_sImgType);
 
-    if ($this->_sImgType == 'jpg' || $this->_sImgType == 'jpeg')
-      $oOldImg = imagecreatefromjpeg($this->_sOriginalPath);
+    # Create image using Imagine
+    $oImagine = new \Imagine\Gd\Imagine();
 
-    elseif ($this->_sImgType == 'png')
-      $oOldImg = imagecreatefrompng($this->_sOriginalPath);
-
-    elseif ($this->_sImgType == 'gif')
-      $oOldImg = imagecreatefromgif($this->_sOriginalPath);
-
-    $oNewImg = imagecreatetruecolor($this->_iImageWidth, $this->_iImageHeight);
-    $oBg = imagecolorallocate($oNewImg, 255, 255, 255);
-
-    imagefill($oNewImg, 0, 0, $oBg);
-    imagecopyresampled($oNewImg, $oOldImg, 0, 0, $iSrcX, $iSrcY, $iDstX, $iDstY, $this->_aInfo[0], $this->_aInfo[1]);
-
-    if ($this->_sImgType == 'jpg' || $this->_sImgType == 'jpeg')
-      imagejpeg($oNewImg, $sPath, 75);
-
-    elseif ($this->_sImgType == 'png') {
-      imagealphablending($oNewImg, false);
-      imagesavealpha($oNewImg, true);
-      imagepng($oNewImg, $sPath, 9);
+    # Cut image
+    if ($this->_iImageWidth == $this->_iImageHeight) {
+      $oImage   = $oImagine->open($this->_sOriginalPath)
+                            ->crop(new Point($iSrcX, $iSrcY), new Box($iDim, $iDim))
+                            ->resize(new Box($this->_iImageWidth, $this->_iImageHeight))
+                            ->save($sPath);
     }
-    elseif ($this->_sImgType == 'gif')
-      imagegif($oNewImg, $sPath);
 
-    imagedestroy($oNewImg);
+    # Resize only
+    else
+      $oImage   = $oImagine->open($this->_sOriginalPath)
+                            ->resize(new Box($this->_iImageWidth, $this->_iImageHeight))
+                            ->save($sPath);
 
     # Reduce image size via Smush.it
-    if (ALLOW_SMUSHIT === true) {
+    if (ALLOW_SMUSHIT) {
       require_once PATH_STANDARD . '/vendor/smushit/smushit/class.smushit.php';
 
       # Send information of our created image to the server.
@@ -153,23 +140,21 @@ class Image {
    *
    */
   public function resizeDefault($iDim, $iMaxHeight = '', $sFolder = '') {
+    $this->_sFolder = empty($sFolder) ? $iDim : $sFolder;
+
     # Y bigger than X and max height
     if ($this->_aInfo[1] > $this->_aInfo[0] && $iMaxHeight) {
-      $iDstX = round($this->_aInfo[0] * ($iMaxHeight / $this->_aInfo[1]));
-      $iDstY = $iMaxHeight;
+      $this->_iImageWidth   = round($this->_aInfo[0] * ($iMaxHeight / $this->_aInfo[1]));
+      $this->_iImageHeight  = $iMaxHeight;
     }
 
     # X bigger than Y
     else {
-      $iDstX = $iDim;
-      $iDstY = round($this->_aInfo[1] * ($iDim / $this->_aInfo[0]));
+      $this->_iImageWidth   = $iDim;
+      $this->_iImageHeight  = round($this->_aInfo[1] * ($iDim / $this->_aInfo[0]));
     }
 
-    $this->_iImageWidth   = $iDstX;
-    $this->_iImageHeight  = $iDstY;
-    $this->_sFolder = empty($sFolder) ? $iDim : $sFolder;
-
-    return $this->_createImage(0, 0, $iDstX, $iDstY);
+    return $this->_createImage(0, 0, $iDim);
   }
 
   /**
@@ -182,28 +167,26 @@ class Image {
    *
    */
   public function resizeAndCut($iDim, $sFolder = '') {
+    $this->_sFolder = empty($sFolder) ? $iDim : $sFolder;
+
+    $this->_iImageWidth   = $iDim;
+    $this->_iImageHeight  = $iDim;
+
     # Y bigger than X
     if ($this->_aInfo[1] > $this->_aInfo[0]) {
       $iSrcX = 0;
       $iSrcY = ($this->_aInfo[1] - $this->_aInfo[0]) / 2;
-
-      $iDstX = $iDim;
-      $iDstY = round($this->_aInfo[1] * ($iDim / $this->_aInfo[0]));
+      $iDim = $this->_aInfo[0];
     }
 
     # X bigger than Y
     else {
       $iSrcX = ($this->_aInfo[0] - $this->_aInfo[1]) / 2;
       $iSrcY = 0;
-
-      $iDstX = round($this->_aInfo[0] * ($iDim / $this->_aInfo[1]));
-      $iDstY = $iDim;
+      $iDim = $this->_aInfo[1];
     }
 
-    $this->_iImageWidth   = $iDim;
-    $this->_iImageHeight  = $iDim;
-    $this->_sFolder = empty($sFolder) ? $iDim : $sFolder;
-
-    return $this->_createImage($iSrcX, $iSrcY, $iDstX, $iDstY);
+    # Attention: $iDim is overwritten!
+    return $this->_createImage($iSrcX, $iSrcY, $iDim);
   }
 }

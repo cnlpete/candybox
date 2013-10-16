@@ -217,6 +217,7 @@ error:
     missing:
       category: Bitte wählen Sie eine Kategorie.
       content: Füllen Sie bitte den Inhalt aus.
+      cut: Bitte wählen Sie aus, wie das Bild beschnitten werden soll.
       email: Geben Sie bitte Ihre E-Mail-Adresse an.
       file: Geben Sie bitte eine Datei zum Upload an.
       name: Geben Sie bitte Ihren Namen an.
