@@ -19,7 +19,6 @@ use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\SmartySingleton as Smarty;
-use MCAPI;
 
 abstract class Main {
 
@@ -885,42 +884,5 @@ abstract class Main {
               I18n::get('error.sql'),
               $sRedirectURL,
               isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'] ? $this->_aRequest : '');
-  }
-
-  /**
-   * Subscribe to newsletter list.
-   *
-   * @static
-   * @access protected
-   * @param array $aData user data
-   * @param boolean $bDoubleOptIn decide if we have to use double opt-in
-   * @return boolean status of subscription
-   *
-   */
-  protected static function _subscribeToNewsletter($aData, $bDoubleOptIn = false) {
-    require_once PATH_STANDARD . '/vendor/mailchimp/mcapi/MCAPI.class.php';
-
-    $oMCAPI = new MCAPI(MAILCHIMP_API_KEY);
-    return $oMCAPI->listSubscribe(MAILCHIMP_LIST_ID,
-            $aData['email'],
-            array('FNAME' => $aData['name'], 'LNAME' => $aData['surname']),
-            '',
-            $bDoubleOptIn);
-  }
-
-  /**
-   * Remove from newsletter list
-   *
-   * @static
-   * @access private
-   * @param string $sEmail
-   * @return boolean status of action
-   *
-   */
-  protected static function _unsubscribeFromNewsletter($sEmail) {
-    require_once PATH_STANDARD . '/vendor/mailchimp/mcapi/MCAPI.class.php';
-
-    $oMCAPI = new MCAPI(MAILCHIMP_API_KEY);
-    return $oMCAPI->listUnsubscribe(MAILCHIMP_LIST_ID, $sEmail, '', '', false, false);
   }
 }

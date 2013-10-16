@@ -133,18 +133,6 @@
             <span class='help-inline'></span>
           </div>
         </div>
-        <div class='control-group'>
-          <label for='input-receive_newsletter' class='control-label'>
-            {$lang.users.label.newsletter}
-          </label>
-          <div class='controls'>
-            <input name='{$_REQUEST.controller}[receive_newsletter]'
-                    id='input-receive_newsletter'
-                    value='1'
-                    type='checkbox'
-                    class='checkbox' {if $receive_newsletter == 1}checked{/if} />
-          </div>
-        </div>
         {if $_SESSION.user.role == 4 && $_SESSION.user.id !== $uid}
           <div class='control-group'>
             <label for='input-role' class='control-label'>

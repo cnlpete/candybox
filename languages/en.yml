@@ -217,6 +217,7 @@ error:
     missing:
       category: Please select a category.
       content: Please enter content.
+      cut: Please select how to handle image resizing.
       email: Please enter your email.
       file: Please select file.
       name: Please enter your name.

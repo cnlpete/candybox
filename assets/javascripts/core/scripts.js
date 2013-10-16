@@ -194,7 +194,7 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
   xhr.onload = function() {
     $('#js-progress').toggle();
 
-    var aJson = JSON.parse(this.response);
+    var aJson = JSON.parse(xhr.response);
 
     if(aJson.success === true) {
       var message = lang.upload_successful;
@@ -288,7 +288,7 @@ $.fn.toggleOpacity = function (t) {
     this.stop(true,true).animate({
       opacity:0.25
     });
-  } 
+  }
 };
 
 /* Show success and error messages */

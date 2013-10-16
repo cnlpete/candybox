@@ -34,8 +34,6 @@ class Cache {
       $aData = json_decode(file_get_contents($sCacheFile), true);
       return $aData !== false;
     }
-    else
-      return false;
   }
 
   /**

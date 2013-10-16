@@ -183,6 +183,9 @@ abstract class Main {
    */
   public static function disconnectFromDatabase() {
     return self::$_oDbStatic = null;
+
+    # Close database connection
+    self::disconnectFromDatabase();
   }
 
   /**
@@ -508,10 +511,11 @@ abstract class Main {
    * This is just a fallback method if a model has no create method.
    *
    * @access public
+   * @param array $aOptions options to handle
    * @return boolean false
    *
    */
-  public function create() {
+  public function create($aOptions) {
     return false;
   }
 

@@ -201,7 +201,7 @@ class Users extends Main {
                 '/' . $this->_sController . '/' . $this->_iId . '/update',
                 $this->_aRequest);
     }
-    catch (\Exception $e) {
+    catch (\AdvancedException $e) {
       return Helper::errorMessage($e->getMessage(),
               '/' . $this->_sController . '/' . $this->_iId . '/update',
                 $this->_aRequest);
@@ -377,7 +377,7 @@ class Users extends Main {
                   'success' => false,
                   'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
               ));
-    
+
     $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'create');
     $this->oSmarty->setTemplateDir($oTemplate);
 
@@ -452,13 +452,6 @@ class Users extends Main {
 
       if ($bReturn) {
         $this->oSmarty->clearControllerCache($this->_sController);
-
-        # Check if user wants to unsubscribe from mailchimp
-        if (!isset($this->_aRequest[$this->_sController]['receive_newsletter']))
-          $this->_unsubscribeFromNewsletter(Helper::formatInput(($this->_aRequest[$this->_sController]['email'])));
-
-        else
-          $this->_subscribeToNewsletter($this->_aRequest);
 
         return Helper::successMessage(I18n::get('success.update'), '/' . $this->_sController . '/' . $this->_iId);
       }

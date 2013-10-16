@@ -105,7 +105,7 @@ class Mails extends Main {
       $oMail->SMTPDebug = WEBSITE_MODE == 'development' || ACTIVE_TEST ? 1 : 0;
 
       $oMail->Host      = defined('SMTP_HOST') ? SMTP_HOST : 'localhost';
-      $oMail->Port      = defined('SMTP_POST') ? SMTP_PORT : '1025';
+      $oMail->Port      = defined('SMTP_PORT') ? SMTP_PORT : '1025';
       $oMail->Username  = defined('SMTP_USER') ? SMTP_USER : '';
       $oMail->Password  = defined('SMTP_PASSWORD') ? SMTP_PASSWORD : '';
     }
@@ -185,22 +185,20 @@ class Mails extends Main {
    * @access public
    * @param array $aMail array with information for subject, message, name of receipient, email of receipient,
    * name of reply to, email of reply to and attachment path
-   * @param bool $bSaveMail whehter the mail queue should be used on failure
    * @return boolean the status of the action
    * @see vendor/phpmailer/phpmailer/class.phpmailer.php
    * @todo log entry
-   * @todo make compilant to main::create, since in strict-mode inheritance also inherits parameters
    *
    */
-  public function create($aMail, $bSaveMail = true) {
-    $aMail['message'] = str_replace('%NOREPLY', I18n::get('mails.body.no_reply'), $aMail['message']);
-    $aMail['message'] = str_replace('%SIGNATURE', I18n::get('mails.body.signature'), $aMail['message']);
+  public function create($aMail) {
+    $aMail['message']       = str_replace('%NOREPLY', I18n::get('mails.body.no_reply'), $aMail['message']);
+    $aMail['message']       = str_replace('%SIGNATURE', I18n::get('mails.body.signature'), $aMail['message']);
 
-    $aMail['message'] = $this->_replaceNameAndUrl($aMail['message']);
-    $aMail['subject'] = $this->_replaceNameAndUrl($aMail['subject']);
+    $aMail['message']       = $this->_replaceNameAndUrl($aMail['message']);
+    $aMail['subject']       = $this->_replaceNameAndUrl($aMail['subject']);
 
     # Bugfix: Fix all the missing email parts to avoid SQL errors
-    $aMail['attachment']   = isset($aMail['attachment']) ? $aMail['attachment'] : '';
+    $aMail['attachment']    = isset($aMail['attachment']) ? $aMail['attachment'] : '';
     $aMail['from_address']  = isset($aMail['from_address']) ? $aMail['from_address'] : WEBSITE_MAIL_NOREPLY;
     $aMail['from_name']     = isset($aMail['from_name']) ? $aMail['from_name'] : WEBSITE_NAME;
     $aMail['to_name']       = isset($aMail['to_name']) ? $aMail['to_name'] : '';
@@ -216,7 +214,7 @@ class Mails extends Main {
       $sErrorMessage = $e->errorMessage();
     }
 
-    if ((!$bReturn && $bSaveMail && USE_MAIL_QUEUE == true) || ACTIVE_TEST) {
+    if ((!$bReturn && USE_MAIL_QUEUE == true) || ACTIVE_TEST) {
       try {
         $oQuery = $this->_oDb->prepare("INSERT INTO
                                           " . SQL_PREFIX . "mails
