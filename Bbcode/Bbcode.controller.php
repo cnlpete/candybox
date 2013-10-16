@@ -152,7 +152,8 @@ final class Bbcode {
       $sUrl = 'http://url2vid.com/?url=' . $aMatch[1] . '&w=' . MEDIA_DEFAULT_X . '&h=30&callback=?';
       $sStr = preg_replace('#\[audio\](.*)\[\/audio\]#Uis',
               '<div class="js-media" title="' . $sUrl . '"><a href="' . $sUrl . '">' . $aMatch[1] . '</a></div>',
-              $sStr);
+              $sStr,
+              1);
     }
 
     # [video]file[/video]
@@ -193,7 +194,8 @@ final class Bbcode {
     while (preg_match('#\[code\](.*)\[\/code\]#Uis', $sStr, $aMatch)) {
       $sStr = preg_replace('#\[code\](.*)\[\/code\]#Uis',
               '<pre>' . htmlentities($aMatch[1]) . '</pre>',
-              $sStr);
+              $sStr,
+              1);
     }
 
     # Bugfix: Fix quote and allow these tags for comment quoting
