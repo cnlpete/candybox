@@ -249,17 +249,25 @@ class Calendars extends Main {
 
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
 
-      foreach (array('title', 'content') as $sInput)
+      foreach (array('title', 'content') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                $sValue,
                 PDO::PARAM_STR);
 
-      foreach (array('start_date', 'end_date') as $sInput)
+        unset($sValue);
+      }
+
+      foreach (array('start_date', 'end_date') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput]);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                $sValue,
                 PDO::PARAM_INT);
+
+        unset($sValue);
+      }
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
@@ -302,17 +310,25 @@ class Calendars extends Main {
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
 
-      foreach (array('title', 'content') as $sInput)
+      foreach (array('title', 'content') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                $sValue,
                 PDO::PARAM_STR);
 
-      foreach (array('start_date', 'end_date') as $sInput)
+        unset($sValue);
+      }
+
+      foreach (array('start_date', 'end_date') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput]);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
-                PDO::PARAM_STR);
+                $sValue,
+                PDO::PARAM_INT);
+
+        unset($sValue);
+      }
 
       return $oQuery->execute();
     }

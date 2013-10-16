@@ -384,17 +384,25 @@ class Blogs extends Main {
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
 
-      foreach (array('title', 'teaser', 'content') as $sInput)
-        $oQuery->bindValue(
+      foreach (array('title', 'teaser', 'content') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
+        $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                $sValue,
                 PDO::PARAM_STR);
 
-      foreach (array('keywords', 'language') as $sInput)
-        $oQuery->bindValue(
+        unset($sValue);
+      }
+
+      foreach (array('keywords', 'language') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput]);
+        $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                $sValue,
                 PDO::PARAM_STR);
+
+        unset($sValue);
+      }
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
@@ -476,6 +484,8 @@ class Blogs extends Main {
                 $sInput,
                 $sValue,
                 PDO::PARAM_STR);
+
+        unset($sValue);
       }
 
       foreach (array('keywords', 'language') as $sInput) {
@@ -484,6 +494,8 @@ class Blogs extends Main {
                 $sInput,
                 $sValue,
                 PDO::PARAM_STR);
+
+        unset($sValue);
       }
 
       return $oQuery->execute();
