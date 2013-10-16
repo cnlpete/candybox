@@ -51,7 +51,7 @@
     "leafo/lessphp": "0.3.*",
     "simonhamp/routes": "1.*",
     "cnlpete/image-metadata-parser" : "0.0.*",
-    "imagine/imagine": "0.6.*@dev",
+    "imagine/imagine": "0.5.*",
     "phpmailer/phpmailer": "5.2.*",
     "mailchimp/mailchimp": "2.0.*",
 
