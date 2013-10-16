@@ -96,8 +96,9 @@ class Sessions extends Main {
                                             :ip,
                                             NOW())");
 
+        $sSessionId = session_id();
         $oQuery->bindParam('user_id', $aUser['id'], PDO::PARAM_INT);
-        $oQuery->bindParam('session', session_id(), PDO::PARAM_STR);
+        $oQuery->bindParam('session', $sSessionId, PDO::PARAM_STR);
         $oQuery->bindParam('ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
 
         return $oQuery->execute();

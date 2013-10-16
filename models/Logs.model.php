@@ -177,8 +177,9 @@ class Logs extends Main {
                                               LIMIT
                                                 1");
 
+      $sDate = date('Y-m-d H:i:s', $iEndTime);
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
-      $oQuery->bindParam('time_end', date('Y-m-d H:i:s', $iEndTime), PDO::PARAM_INT);
+      $oQuery->bindParam('time_end', $sDate, PDO::PARAM_INT);
 
       return $oQuery->execute();
     }

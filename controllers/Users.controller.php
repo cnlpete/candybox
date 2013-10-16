@@ -321,13 +321,13 @@ class Users extends Main {
     }
 
     # Generate verification code for users (double-opt-in) when not created by admin.
-    $iVerificationCode = $this->_aSession['user']['role'] < 4 ? Helper::createRandomChar(16) : '';
+    $aOptions['verification_code'] = $this->_aSession['user']['role'] < 4 ? Helper::createRandomChar(16) : '';
 
     if (isset($this->_aError))
       return $this->_showCreateUserTemplate();
 
     else {
-      $bReturn = $this->_oModel->create($iVerificationCode) === true;
+      $bReturn = $this->_oModel->create( $aOptions ) === true;
 
       Logs::insert( $this->_sController,
                     $this->_aRequest['action'],

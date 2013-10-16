@@ -180,17 +180,25 @@ class Downloads extends Main {
       $oQuery->bindParam('file', $aOptions['file'], PDO::PARAM_STR);
       $oQuery->bindParam('extension', $aOptions['extension'], PDO::PARAM_STR);
 
-      foreach (array('title', 'content') as $sInput)
+      foreach (array('title', 'content') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                $sValue,
                 PDO::PARAM_STR);
 
-      foreach (array('category') as $sInput)
+        unset($sValue);
+      }
+
+      foreach (array('category') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput]);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                $sValue,
                 PDO::PARAM_STR);
+
+        unset($sValue);
+      }
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
@@ -233,17 +241,25 @@ class Downloads extends Main {
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
 
-      foreach (array('title', 'content') as $sInput)
+      foreach (array('title', 'content') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                $sValue,
                 PDO::PARAM_STR);
 
-      foreach (array('category', 'downloads') as $sInput)
+        unset($sValue);
+      }
+
+      foreach (array('category', 'downloads') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput]);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                $sValue,
                 PDO::PARAM_STR);
+
+        unset($sValue);
+      }
 
       return $oQuery->execute();
     }

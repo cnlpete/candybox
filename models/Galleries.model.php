@@ -353,11 +353,15 @@ class Galleries extends Main {
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
 
-      foreach (array('title', 'content') as $sInput)
+      foreach (array('title', 'content') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                $sValue,
                 PDO::PARAM_STR);
+
+        unset($sValue);
+      }
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
@@ -403,11 +407,15 @@ class Galleries extends Main {
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
 
-      foreach (array('title', 'content') as $sInput)
+      foreach (array('title', 'content') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                $sValue,
                 PDO::PARAM_STR);
+
+        unset($sValue);
+      }
 
       return $oQuery->execute();
     }
@@ -550,10 +558,11 @@ class Galleries extends Main {
       $oQuery->bindParam('position', $iPosition, PDO::PARAM_INT);
 
       $sContent = trim($this->_aRequest[$this->_sController]['content']);
-      $iDate = time();
+      $iDate    = time();
 
-      if (class_exists('\ImageMetadataParser') && \ImageMetadataParser::exifAvailable()) {
+      if (!ACTIVE_TEST && class_exists('\ImageMetadataParser') && \ImageMetadataParser::exifAvailable()) {
         $sLongFilename = PATH_UPLOAD . '/galleries/' . $this->_aRequest['id'] . '/original/' . $sFile;
+
         $oImageMetadataParser = new \ImageMetadataParser($sLongFilename);
         $oImageMetadataParser->parseExif();
         $oImageMetadataParser->parseIPTC();
@@ -567,8 +576,10 @@ class Galleries extends Main {
           $iDate = $oImageMetadataParser->getDateTime();
       }
 
-      $oQuery->bindParam('content', Helper::formatInput($sContent, false), PDO::PARAM_STR);
-      $oQuery->bindParam('date', date('Y-m-d H:i:s', $iDate), PDO::PARAM_STR);
+      $sContent = Helper::formatInput($sContent, false);
+      $sDate    = date('Y-m-d H:i:s', $iDate);
+      $oQuery->bindParam('content', $sContent, PDO::PARAM_STR);
+      $oQuery->bindParam('date', $sDate, PDO::PARAM_STR);
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
@@ -606,11 +617,15 @@ class Galleries extends Main {
 
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
 
-      foreach (array('content') as $sInput)
+      foreach (array('content') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                $sValue,
                 PDO::PARAM_STR);
+
+        unset($sValue);
+      }
 
       return $oQuery->execute();
     }

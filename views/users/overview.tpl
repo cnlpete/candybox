@@ -19,7 +19,6 @@
         <th class='column-name'>{$lang.global.name}</th>
         <th class='column-registered_since center'>{$lang.users.label.registered_since}</th>
         <th class='column-last_login center'>{$lang.users.label.last_login}</th>
-        <th class='column-newsletter center'>{$lang.global.newsletter}</th>
         {if $_SESSION.user.role == 4}
           <th class='column-actions'></th>
         {/if}
@@ -68,10 +67,6 @@
           {else}
             -
           {/if}
-        </td>
-        <td class='center'>
-          <i class='icon-{if $u.receive_newsletter == 1}ok{/if} js-tooltip'
-             title='{if $u.receive_newsletter == 1}✔{/if}'></i>
         </td>
         {if $_SESSION.user.role == 4}
           <td class='center'>

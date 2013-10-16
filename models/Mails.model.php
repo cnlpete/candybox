@@ -32,7 +32,6 @@ class Mails extends Main {
       $oQuery = $this->_oDb->prepare("SELECT
                                         m.*,
                                         UNIX_TIMESTAMP(m.date) as date,
-                                        u.id AS user_id,
                                         u.name AS user_name,
                                         u.surname AS user_surname,
                                         u.email AS user_email
@@ -50,7 +49,6 @@ class Mails extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     foreach ($aResult as $aRow) {
@@ -95,10 +93,9 @@ class Mails extends Main {
    *
    */
   protected function _send($aMail) {
-    require_once PATH_STANDARD . '/vendor/phpmailer/phpmailer/class.phpmailer.php';
     $oMail = new \PHPMailer(true);
 
-    if (SMTP_ENABLE === true || ACTIVE_TEST) {
+    if (SMTP_ENABLE || ACTIVE_TEST) {
       $oMail->IsSMTP();
 
       $oMail->SMTPAuth  = defined('SMTP_USE_AUTH') ? SMTP_USE_AUTH === true : true;

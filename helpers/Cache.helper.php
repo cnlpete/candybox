@@ -30,10 +30,13 @@ class Cache {
   public static function isCachedAndLoad($sIdent, &$aData) {
     $sCacheFile = PATH_CACHE . '/' . md5($sIdent) . '.cache';
 
-    if (true === file_exists($sCacheFile)) {
+    if (file_exists($sCacheFile)) {
       $aData = json_decode(file_get_contents($sCacheFile), true);
       return $aData !== false;
     }
+
+    else
+      return false;
   }
 
   /**
@@ -62,9 +65,6 @@ class Cache {
   public static function clear($sIdent) {
     $sCacheFile = PATH_CACHE . '/' . md5($sIdent) . '.cache';
 
-    if (true === file_exists($sCacheFile))
-      return unlink($sCacheFile);
-    else
-      return true;
+    return file_exists($sCacheFile) ? unlink($sCacheFile) : true;
   }
 }
