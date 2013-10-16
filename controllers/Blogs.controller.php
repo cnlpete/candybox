@@ -193,7 +193,6 @@ class Blogs extends Main {
   protected function _showFormTemplate($sTemplateName = '_form', $sTitle = '') {
     # Get available languages.
     $this->oSmarty->assign('languages', Helper::getLanguages());
-    $this->oSmarty->assign('_tags_', $this->_oModel->getTypeaheadData($this->_sController, 'tags', true));
 
     return parent::_showFormTemplate();
   }

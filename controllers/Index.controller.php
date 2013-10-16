@@ -181,7 +181,7 @@ class Index {
       define('WEBSITE_LANDING_PAGE', Routes::route('/'));
 
     $sURI = isset($_SERVER['REQUEST_URI']) ?
-            Helper::removeSlash($_SERVER['REQUEST_URI']) :
+            Helper::removeSlash(urldecode($_SERVER['REQUEST_URI'])) :
             '';
 
     # Disable slashes at the end of the domain

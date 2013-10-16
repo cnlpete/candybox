@@ -56,7 +56,6 @@
         <input type='text'
                name='{$_REQUEST.controller}[category]'
                id='input-category'
-               placeholder=''
                data-provide='typeahead'
                value="{$category}"
                data-source='{$_categories_}'
