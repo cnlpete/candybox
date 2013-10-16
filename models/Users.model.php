@@ -283,7 +283,7 @@ class Users extends Main {
 
     else {
       # strip sensitive information
-      if ($this->_aSession['user']['role'] === 0 || 
+      if ($this->_aSession['user']['role'] === 0 ||
             ($this->_aSession['user']['id'] !== $aRow['id'] && $this->_aSession['user']['role'] < 4))
         unset($aRow['api_token'], $aRow['verification_code'], $aRow['verification_date'], $aRow['registration_ip'], $aRow['password'], $aRow['password_temporary'], $aRow['role']);
 
@@ -374,11 +374,10 @@ class Users extends Main {
    *
    */
   public function update($iId) {
-    $iReceiveNewsletter = isset($this->_aRequest[$this->_sController]['receive_newsletter']) ? 1 : 0;
     $iUseGravatar       = isset($this->_aRequest[$this->_sController]['use_gravatar']) ? 1 : 0;
 
     # Set other peoples user roles
-    if ($iId!== $this->_aSession['user']['id'] && $this->_aSession['user']['role'] == 4)
+    if ($iId !== $this->_aSession['user']['id'] && $this->_aSession['user']['role'] == 4)
       $iUserRole = isset($this->_aRequest[$this->_sController]['role']) && !empty($this->_aRequest[$this->_sController]['role']) ?
               (int) $this->_aRequest[$this->_sController]['role'] :
               1;
@@ -392,13 +391,11 @@ class Users extends Main {
                                         name = :name,
                                         surname = :surname,
                                         content = :content,
-                                        receive_newsletter = :receive_newsletter,
                                         use_gravatar = :use_gravatar,
                                         role = :role
                                       WHERE
                                         id = :id");
 
-      $oQuery->bindParam('receive_newsletter', $iReceiveNewsletter, PDO::PARAM_INT);
       $oQuery->bindParam('use_gravatar', $iUseGravatar, PDO::PARAM_INT);
       $oQuery->bindParam('role', $iUserRole, PDO::PARAM_INT);
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
@@ -412,6 +409,8 @@ class Users extends Main {
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
+
       try {
         $this->_oDb->rollBack();
       }
@@ -419,7 +418,6 @@ class Users extends Main {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
 
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
       exit('SQL error.');
     }
   }

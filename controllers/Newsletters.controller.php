@@ -89,4 +89,28 @@ class Newsletters extends Main {
 
     return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
+
+  /**
+   * Subscribe to newsletter list.
+   *
+   * @static
+   * @access protected
+   * @param array $aData user data
+   * @param boolean $bDoubleOptIn decide if we have to use double opt-in
+   * @return boolean status of subscription
+   *
+   */
+  protected static function _subscribeToNewsletter($aData, $bDoubleOptIn = false) {
+    $oMailchimp = new \Mailchimp(MAILCHIMP_API_KEY);
+
+    $aMailChimp = $oMailchimp->call('lists/subscribe', array(
+            'id'            => MAILCHIMP_LIST_ID,
+            'email'         => array('email' => $aData['email']),
+            'merge_vars'    => array('FNAME' => $aData['name'], 'LNAME' => $aData['surname']),
+            'double_optin'  => $bDoubleOptIn,
+            'send_welcome'  => true)
+          );
+
+    return isset($aMailChimp['leid']) && !empty($aMailChimp['leid']);
+  }
 }
