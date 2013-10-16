@@ -39,7 +39,6 @@ class Blogs extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -84,7 +83,6 @@ class Blogs extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -161,7 +159,6 @@ class Blogs extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     foreach ($aResult as $aRow) {
@@ -206,7 +203,7 @@ class Blogs extends Main {
     try {
       if ($bMultilang === true)
         $sWhere = "WHERE published = '1'";
-      
+
       # Show unpublished items and entries with diffent languages to moderators or administrators only
       elseif (isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3)
         $sWhere = '';
@@ -245,7 +242,6 @@ class Blogs extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     foreach ($aResult as $aRow) {
@@ -313,7 +309,6 @@ class Blogs extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     if ($bUpdate === true)
@@ -374,17 +369,25 @@ class Blogs extends Main {
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
 
-      foreach (array('title', 'teaser', 'content') as $sInput)
-        $oQuery->bindValue(
+      foreach (array('title', 'teaser', 'content') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
+        $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                $sValue,
                 PDO::PARAM_STR);
 
-      foreach (array('keywords', 'language') as $sInput)
-        $oQuery->bindValue(
+        unset($sValue);
+      }
+
+      foreach (array('keywords', 'language') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput]);
+        $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                $sValue,
                 PDO::PARAM_STR);
+
+        unset($sValue);
+      }
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
@@ -392,15 +395,14 @@ class Blogs extends Main {
       return $bReturn;
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -467,6 +469,8 @@ class Blogs extends Main {
                 $sInput,
                 $sValue,
                 PDO::PARAM_STR);
+
+        unset($sValue);
       }
 
       foreach (array('keywords', 'language') as $sInput) {
@@ -475,20 +479,21 @@ class Blogs extends Main {
                 $sInput,
                 $sValue,
                 PDO::PARAM_STR);
+
+        unset($sValue);
       }
 
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -547,7 +552,6 @@ class Blogs extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     foreach ($aResult as $aRow) {

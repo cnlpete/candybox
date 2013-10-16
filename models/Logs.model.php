@@ -35,7 +35,6 @@ class Logs extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Pagination.helper.php';
@@ -69,7 +68,6 @@ class Logs extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     foreach ($aResult as $aRow) {
@@ -142,15 +140,14 @@ class Logs extends Main {
       return $bReturn;
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         parent::$_oDbStatic->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -186,15 +183,14 @@ class Logs extends Main {
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         parent::$_oDbStatic->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -228,15 +224,14 @@ class Logs extends Main {
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         parent::$_oDbStatic->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 }

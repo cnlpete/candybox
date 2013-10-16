@@ -46,7 +46,9 @@ class Helper {
                 'message'     => $sMessage,
                 'type'        => 'success'
             ));
-    } else {
+    }
+
+    else {
       $_SESSION['flash_message'] = array(
           'type'      => 'success',
           'message'   => $sMessage,
@@ -80,7 +82,9 @@ class Helper {
                 'message'     => $sMessage,
                 'type'        => 'warning'
               ));
-    } else {
+    }
+
+    else {
       $_SESSION['flash_message'] = array(
           'type'    => 'warning',
           'message' => $sMessage,
@@ -112,7 +116,9 @@ class Helper {
                 'message'     => $sMessage,
                 'type'        => 'error'
               ));
-    } else {
+    }
+
+    else {
       $_SESSION['flash_message'] = array(
           'type'    => 'error',
           'message' => $sMessage,
@@ -217,7 +223,7 @@ class Helper {
    *
    */
   public static function createLinkTo($sUrl, $bExternal = false) {
-    return  $bExternal === true ?
+    return  $bExternal ?
             '<a href="' . $sUrl . '" rel="external">' . $sUrl . '</a>' :
             '<a href="' . WEBSITE_URL . '/' . $sUrl . '">' . WEBSITE_URL . '/' . $sUrl . '</a>';
   }
@@ -237,13 +243,13 @@ class Helper {
   public static function getAvatar($mSize, $iUserId, $sEmail, $bUseGravatar = false) {
     $sFilePath = Helper::removeSlash(PATH_UPLOAD . '/users/' . $mSize . '/' . $iUserId);
 
-    if ($bUseGravatar === false && file_exists($sFilePath . '.jpg'))
+    if (!$bUseGravatar && file_exists($sFilePath . '.jpg'))
       return '/' . $sFilePath . '.jpg';
 
-    elseif ($bUseGravatar === false && file_exists($sFilePath . '.png'))
+    elseif (!$bUseGravatar && file_exists($sFilePath . '.png'))
       return '/' . $sFilePath . '.png';
 
-    elseif ($bUseGravatar === false && file_exists($sFilePath . '.gif'))
+    elseif (!$bUseGravatar && file_exists($sFilePath . '.gif'))
       return '/' . $sFilePath . '.gif';
 
     else {
@@ -257,7 +263,7 @@ class Helper {
 
       # @todo check if Gravatar always gets an integer size
       # Bugfix: Make sure, that user wants to show his Gravatar and system url does not match with user ones.
-      $sEmail = $bUseGravatar === true ? $sEmail : md5(WEBSITE_MAIL_NOREPLY);
+      $sEmail = $bUseGravatar ? $sEmail : md5(WEBSITE_MAIL_NOREPLY);
       return 'http://www.gravatar.com/avatar/' . md5($sEmail) . '.jpg?s=' . $mSize . '&d=mm';
     }
   }
@@ -407,7 +413,6 @@ class Helper {
     }
     catch (AdvancedException $e) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
-      exit('SQL error.');
     }
   }
 

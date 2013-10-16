@@ -166,7 +166,6 @@ abstract class Main {
       }
       catch (PDOException $p) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-        exit('SQL error.');
       }
     }
 
@@ -472,15 +471,14 @@ abstract class Main {
       return json_encode($aEntries);
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         parent::$_oDbStatic->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -561,15 +559,14 @@ abstract class Main {
         return $oQuery->execute();
       }
       catch (\PDOException $p) {
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
         try {
           $this->_oDb->rollBack();
         }
         catch (\Exception $e) {
           AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
         }
-
-        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-        exit('SQL error.');
       }
     }
   }
@@ -635,7 +632,6 @@ abstract class Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     return $this->_aData;

@@ -83,7 +83,6 @@ class Galleries extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     # Update a single entry.
@@ -131,7 +130,6 @@ class Galleries extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Pagination.helper.php';
@@ -172,7 +170,6 @@ class Galleries extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     foreach ($aResult as $aRow) {
@@ -240,7 +237,6 @@ class Galleries extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     $iLoop = 0;
@@ -322,7 +318,6 @@ class Galleries extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -370,15 +365,14 @@ class Galleries extends Main {
       return $bReturn;
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -418,15 +412,14 @@ class Galleries extends Main {
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -458,7 +451,6 @@ class Galleries extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     if ($bReturn === true) {
@@ -482,15 +474,14 @@ class Galleries extends Main {
         }
       }
       catch (\PDOException $p) {
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
         try {
           $this->_oDb->rollBack();
         }
         catch (\Exception $e) {
           AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
         }
-
-        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-        exit('SQL error.');
       }
 
       # Destroy albums from database
@@ -510,15 +501,14 @@ class Galleries extends Main {
         return $bReturn;
       }
       catch (\PDOException $p) {
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
         try {
           $this->_oDb->rollBack();
         }
         catch (\Exception $e) {
           AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
         }
-
-        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-        exit('SQL error.');
       }
     }
   }
@@ -586,15 +576,14 @@ class Galleries extends Main {
       return $bReturn;
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -626,15 +615,14 @@ class Galleries extends Main {
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -689,15 +677,14 @@ class Galleries extends Main {
         return $bReturn;
       }
       catch (\PDOException $p) {
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
         try {
           $this->_oDb->rollBack();
         }
         catch (\Exception $e) {
           AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
         }
-
-        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-        exit('SQL error.');
       }
     }
   }
@@ -735,7 +722,6 @@ class Galleries extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -755,5 +741,4 @@ class Galleries extends Main {
     $this->_aData['title'] = I18n::get('global.' . strtolower($sController));
     return $this->_aData;
   }
-
 }

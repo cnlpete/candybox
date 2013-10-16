@@ -409,7 +409,7 @@ class Users extends Main {
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
 
       try {
         $this->_oDb->rollBack();
@@ -417,8 +417,6 @@ class Users extends Main {
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      exit('SQL error.');
     }
   }
 
@@ -446,15 +444,14 @@ class Users extends Main {
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -490,15 +487,14 @@ class Users extends Main {
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         parent::$_oDbStatic->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -527,7 +523,6 @@ class Users extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     if ($this->_aData['id']) {
@@ -552,19 +547,16 @@ class Users extends Main {
         return $oQuery->execute();
       }
       catch (\PDOException $p) {
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
         try {
           $this->_oDb->rollBack();
         }
         catch (\Exception $e) {
           AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
         }
-
-        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-        exit('SQL error.');
       }
     }
-    else
-      return false;
   }
 
   /**
@@ -609,7 +601,6 @@ class Users extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -643,7 +634,6 @@ class Users extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -679,7 +669,6 @@ class Users extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 }

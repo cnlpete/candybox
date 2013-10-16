@@ -39,7 +39,6 @@ class Contents extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Pagination.helper.php';
@@ -75,7 +74,6 @@ class Contents extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     foreach ($aResult as $aRow) {
@@ -132,10 +130,9 @@ class Contents extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
-    if ($bUpdate === true)
+    if ($bUpdate)
       $this->_aData = $this->_formatForUpdate($aRow);
 
     else {
@@ -211,15 +208,14 @@ class Contents extends Main {
       return $bReturn;
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -270,15 +266,14 @@ class Contents extends Main {
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 }

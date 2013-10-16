@@ -22,14 +22,20 @@ class AdvancedException extends \Exception {
    *
    * @static
    * @access public
-   * @param type $sMessage
+   * @param string $sMessage
+   * @param boolean $bExit
+   * @todo translate message
    *
    */
-  public static function reportBoth($sMessage) {
+  public static function reportBoth($sMessage, $bExit = true) {
     !ACTIVE_TEST ? AdvancedException::writeLog($sMessage) : printf("\n" . $sMessage);
 
     if (WEBSITE_MODE == 'production' || WEBSITE_MODE == 'staging')
       AdvancedException::sendAdminMail($sMessage);
+
+    # @todo translate message
+    if ($bExit)
+      exit('An error occured and the admin got informed.');
   }
 
   /**

@@ -108,7 +108,7 @@ if (!defined('MOBILE_DEVICE'))
 
 # Check for extensions?
 if (!defined('EXTENSION_CHECK'))
-  define('EXTENSION_CHECK', ALLOW_EXTENSIONS === true || WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test');
+  define('EXTENSION_CHECK', ALLOW_EXTENSIONS || WEBSITE_MODE == 'development' || WEBSITE_MODE == 'test');
 
 # @todo extension check for Index.controller
 $_aRequest = array_merge($_GET, $_POST);

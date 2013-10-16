@@ -243,6 +243,7 @@ class Mails extends Main {
                                             :error_message)");
 
         $iUserId = (int) (isset($this->_aSession['user']['id']) ? $this->_aSession['user']['id'] : 0);
+
         $oQuery->bindParam('user_id', $iUserId, PDO::PARAM_INT);
         $oQuery->bindParam('ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
         $oQuery->bindParam('error_message', $sErrorMessage, PDO::PARAM_STR);
@@ -256,15 +257,14 @@ class Mails extends Main {
         parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
       }
       catch (\PDOException $p) {
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
         try {
           $this->_oDb->rollBack();
         }
         catch (\Exception $e) {
           AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
         }
-
-        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-        exit('SQL error.');
       }
     }
 
