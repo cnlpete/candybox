@@ -105,7 +105,7 @@ class Mails extends Main {
       $oMail->SMTPDebug = WEBSITE_MODE == 'development' || ACTIVE_TEST ? 1 : 0;
 
       $oMail->Host      = defined('SMTP_HOST') ? SMTP_HOST : 'localhost';
-      $oMail->Port      = defined('SMTP_POST') ? SMTP_PORT : '1025';
+      $oMail->Port      = defined('SMTP_PORT') ? SMTP_PORT : '1025';
       $oMail->Username  = defined('SMTP_USER') ? SMTP_USER : '';
       $oMail->Password  = defined('SMTP_PASSWORD') ? SMTP_PASSWORD : '';
     }
