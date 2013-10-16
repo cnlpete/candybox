@@ -49,17 +49,18 @@
   "require": {
     "php": ">=5.3.0",
 
-    "candycms/core": "3.1.*",
-    "candycms/plugins": "3.1.*",
+    "candycms/core": "3.1.*@dev",
+    "candycms/plugins": "3.1.*@dev",
 
     "phpmailer/phpmailer": "5.2.*",
+    "swiftmailer/swiftmailer": "5.0.*",
     "smushit/smushit": "1.0.*",
     "recaptcha/recaptcha": "1.*",
     "mailchimp/mcapi": "1.*"
   },
 
   "require-dev": {
-    "candycms/tests": "3.1.*",
-    "candycms/documentation": "3.1.*"
+    "candycms/tests": "3.0.*",
+    "candycms/documentation": "3.0.*"
   }
 }
