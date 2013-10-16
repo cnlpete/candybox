@@ -70,14 +70,11 @@ class Mails extends Main {
    * @access private
    * @param string $sText the text in which to replace the placeholders
    * @return string the text with all placeholders replaced
-   * @todo check if we need both variable types
    *
    */
   private static function _replaceNameAndUrl($sText) {
     $sText = str_replace('%%WEBSITE_NAME',  WEBSITE_NAME, $sText);
     $sText = str_replace('%%WEBSITE_URL',   WEBSITE_URL,  $sText);
-    $sText = str_replace('%WEBSITE_NAME',   WEBSITE_NAME, $sText);
-    $sText = str_replace('%WEBSITE_URL',    WEBSITE_URL,  $sText);
 
     return $sText;
   }
@@ -95,7 +92,7 @@ class Mails extends Main {
   protected function _send($aMail) {
     $oMail = new \PHPMailer(true);
 
-    if (SMTP_ENABLE || ACTIVE_TEST) {
+    if (SMTP_ENABLE) {
       $oMail->IsSMTP();
 
       $oMail->SMTPAuth  = defined('SMTP_USE_AUTH') ? SMTP_USE_AUTH === true : true;
@@ -184,7 +181,6 @@ class Mails extends Main {
    * name of reply to, email of reply to and attachment path
    * @return boolean the status of the action
    * @see vendor/phpmailer/phpmailer/class.phpmailer.php
-   * @todo log entry
    *
    */
   public function create($aMail) {
@@ -207,11 +203,11 @@ class Mails extends Main {
       $bReturn = $this->_send($aMail);
     }
     catch (\phpmailerException $e) {
-      AdvancedException::writeLog(__METHOD__ . ' - '. $e->errorMessage());
       $sErrorMessage = $e->errorMessage();
+      AdvancedException::writeLog(__METHOD__ . ' - '. $sErrorMessage);
     }
 
-    if ((!$bReturn && USE_MAIL_QUEUE == true) || ACTIVE_TEST) {
+    if ((!$bReturn && USE_MAIL_QUEUE) || ACTIVE_TEST) {
       try {
         $oQuery = $this->_oDb->prepare("INSERT INTO
                                           " . SQL_PREFIX . "mails
@@ -250,7 +246,6 @@ class Mails extends Main {
           $oQuery->bindParam($sKey, $sValue, PDO::PARAM_STR);
         }
 
-        $oQuery->execute();
         parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
       }
       catch (\PDOException $p) {
@@ -264,6 +259,12 @@ class Mails extends Main {
         }
       }
     }
+
+    Logs::insert( $this->_sController,
+                  'resend',
+                  0,
+                  $this->_aSession['user']['id'],
+                  '', '', $bReturn);
 
     return $bReturn;
   }

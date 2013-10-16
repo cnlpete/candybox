@@ -65,10 +65,18 @@ class Mails extends Main {
    */
   public function resend() {
     header('Content-Type: application/json');
-    return json_encode(array(
-                'success' => $this->_oModel->resend($this->_iId),
-                'errors'  => ''
-            ));
+
+    if ($this->_aSession['user']['role'] == 4)
+      return json_encode(array(
+                  'success' => $this->_oModel->resend($this->_iId),
+                  'errors'  => ''
+              ));
+
+    else
+      return json_encode(array(
+                  'success' => false,
+                  'errors'  => I18n::get('error.401.title')
+              ));
   }
 
   /**

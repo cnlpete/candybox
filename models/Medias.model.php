@@ -50,7 +50,7 @@ class Medias extends Main {
       if ($sFileType == 'jpg' || $sFileType == 'jpeg' || $sFileType == 'png' || $sFileType == 'gif') {
         $aImgDim = getImageSize($sPath);
 
-        if (!file_exists(Helper::removeSlash(PATH_UPLOAD . '/temp/' . $this->_sController . '/' . $sFile)) || WEBSITE_MODE == 'development') {
+        if (!file_exists(Helper::removeSlash(PATH_UPLOAD . '/temp/' . $this->_sController . '/' . $sFile)) || WEBSITE_MODE == 'development' && !ACTIVE_TEST) {
           $oImage = new Image($sFileName, 'temp', $sPath, $sFileType);
           $oImage->resizeAndCut(32, $this->_sController);
         }

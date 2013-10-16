@@ -18,7 +18,7 @@
         </tr>
       </thead>
       {foreach $mails as $m}
-        <tr class='js-tooltip' title='{$m.error_message}'>
+        <tr class='js-tooltip' title='{$m.error_message}' id='row_{$m.id}'>
           <td class='left'>
             <a href='mailto:{$m.from_address}'>
               {if !empty($m.from_name)}
@@ -46,30 +46,33 @@
             </time>
           </td>
           <td class='center'>
-            <a href='#' onclick="resendMail(this, {$m.id})">
-              <i class='icon-mail'
-                 title='{$lang.global.email.send}'></i>
-            </a>
+            <i class='icon-mail'
+               title='{$lang.global.email.send}'
+               data-id='{$m.id}'></i>
           </td>
         </tr>
       {/foreach}
     </table>
+    <script type='text/javascript' src='{$_PATH.js.core}/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
     <script type='text/javascript' src='{$_PATH.js.core}/jquery.tablesorter{$_SYSTEM.compress_files_suffix}.js'></script>
     <script type='text/javascript'>
       $('table').tablesorter();
-      function resendMail($this, iMailId) {
-        $.getJSON('/mails/' + iMailId + '/resend', function(data) {
-          var jRow = $($this).closest('tr');
-          if (data.success == true) {
-            jRow.fadeOut(function() {
-              jRow.remove();
-            });
+
+      $('.icon-mail').click(function() {
+        /* @todo improve code */
+        var iId = $('.icon-mail').data('id');
+
+        $.getJSON('/mails/' + iId + '/resend.json', function(data) {
+          if (data.success === true) {
+            $('#row_' + iId).effect("highlight", {
+              mode: 'hide'
+            }, 2000);
           }
           else {
-            jRow.addClass('result-error');
+            $('#' + iId).addClass('result-error');
           }
         });
-      }
+      });
     </script>
   {/if}
 {/strip}
