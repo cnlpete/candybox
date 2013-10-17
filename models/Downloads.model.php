@@ -15,7 +15,6 @@ namespace candyCMS\Core\Models;
 
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
-use candyCMS\Core\Helpers\Upload;
 use PDO;
 
 class Downloads extends Main {
@@ -123,9 +122,6 @@ class Downloads extends Main {
    *
    */
   public static function getFileName($iId) {
-    if (empty(parent::$_oDbStatic))
-      parent::connectToDatabase();
-
     try {
       $oQuery = parent::$_oDbStatic->prepare("SELECT
                                                 file
@@ -226,6 +222,9 @@ class Downloads extends Main {
    *
    */
   public function update($iId) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     try {
       $oQuery = $this->_oDb->prepare("UPDATE
                                         " . SQL_PREFIX . "downloads

@@ -87,6 +87,9 @@ class Medias extends Main {
    *
    */
   public function destroy($sId, $sController = '') {
+    if (empty($sId))
+      return false;
+
     # We get the image information via GET
     $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sId);
 

@@ -14,7 +14,6 @@
 namespace candyCMS\Core\Models;
 
 use candyCMS\Core\Helpers\AdvancedException;
-use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\Pagination;
 use PDO;
 
@@ -101,9 +100,6 @@ class Logs extends Main {
    *
    */
   public static function insert($sControllerName, $sActionName, $iActionId, $iUserId, $iTimeStart = '', $iTimeEnd = '', $bResultFlag = true) {
-    if (empty(parent::$_oDbStatic))
-      parent::connectToDatabase();
-
     $iTimeStart = empty($iTimeStart) ? time() : $iTimeStart;
     $iTimeEnd   = empty($iTimeEnd) ? time() : $iTimeEnd;
 
@@ -162,9 +158,6 @@ class Logs extends Main {
    *
    */
   public static function setEndTime($iId, $iEndTime = null) {
-    if (empty(parent::$_oDbStatic))
-      parent::connectToDatabase();
-
     $iEndTime = empty($iEndTime) ? time() : $iEndTime;
 
     try {
@@ -206,9 +199,6 @@ class Logs extends Main {
    *
    */
   public static function setResultFlag($iId, $bResultFlag = false) {
-    if (empty(parent::$_oDbStatic))
-      parent::connectToDatabase();
-
     try {
       $oQuery = parent::$_oDbStatic->prepare("UPDATE
                                                 " . SQL_PREFIX . "logs

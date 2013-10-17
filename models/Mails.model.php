@@ -14,7 +14,6 @@
 namespace candyCMS\Core\Models;
 
 use candyCMS\Core\Helpers\AdvancedException;
-use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
 use PDO;
 
@@ -67,12 +66,12 @@ class Mails extends Main {
    * Replace the WEBSITE_NAME and WEBSITE_URL placeholders with its according constants
    *
    * @static
-   * @access private
+   * @access protected
    * @param string $sText the text in which to replace the placeholders
    * @return string the text with all placeholders replaced
    *
    */
-  private static function _replaceNameAndUrl($sText) {
+  protected static function _replaceNameAndUrl($sText) {
     $sText = str_replace('%%WEBSITE_NAME',  WEBSITE_NAME, $sText);
     $sText = str_replace('%%WEBSITE_URL',   WEBSITE_URL,  $sText);
 
@@ -87,6 +86,7 @@ class Mails extends Main {
    * name of reply to, email of reply to and attachment path
    * @return boolean whether phpmailers returned true or false
    * @see vendor/phpmailer/phpmailer/class.phpmailer.php
+   * @todo test
    *
    */
   protected function _send($aMail) {
@@ -134,7 +134,7 @@ class Mails extends Main {
    *
    * @access public
    * @param integer $iId the id of the mail, we are trying to send
-   * @return $bReturn boolean status
+   * @return boolean $bReturn
    *
    */
   public function resend($iId) {

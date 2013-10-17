@@ -13,8 +13,6 @@
 
 namespace candyCMS\Core\Helpers;
 
-use candyCMS\Core\Controllers\Mails;
-
 class AdvancedException extends \Exception {
 
   /**
@@ -24,18 +22,16 @@ class AdvancedException extends \Exception {
    * @access public
    * @param string $sMessage
    * @param boolean $bExit
-   * @todo translate message
    *
    */
   public static function reportBoth($sMessage, $bExit = true) {
-    !ACTIVE_TEST ? AdvancedException::writeLog($sMessage) : printf("\n" . $sMessage);
+    !ACTIVE_TEST ? AdvancedException::writeLog($sMessage) : '';
 
     if (WEBSITE_MODE == 'production' || WEBSITE_MODE == 'staging')
       AdvancedException::sendAdminMail($sMessage);
 
-    # @todo translate message
-    if ($bExit)
-      exit('An error occured and the admin got informed.');
+    if ($bExit && !ACTIVE_TEST)
+      exit(I18n::get('error.standard'));
   }
 
   /**

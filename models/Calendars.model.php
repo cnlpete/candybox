@@ -172,11 +172,14 @@ class Calendars extends Main {
    *
    * @access public
    * @param integer $iId Id to work with
-   * @param boolean $bUpdate prepare data for update
-   * @return array data
+   * @param boolean $bUpdate prepare data for update?
+   * @return array|boolean array on success, boolean on false
    *
    */
   public function getId($iId = '', $bUpdate = false) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         c.*,
@@ -262,9 +265,7 @@ class Calendars extends Main {
       foreach (array('start_date', 'end_date') as $sInput) {
         $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput]);
         $oQuery->bindParam(
-                $sInput,
-                $sValue,
-                PDO::PARAM_INT);
+                $sInput, $sValue, PDO::PARAM_INT);
 
         unset($sValue);
       }
@@ -295,6 +296,9 @@ class Calendars extends Main {
    *
    */
   public function update($iId) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     try {
       $oQuery = $this->_oDb->prepare("UPDATE
                                         " . SQL_PREFIX . "calendars

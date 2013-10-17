@@ -28,7 +28,7 @@ class Cache {
    *
    */
   public static function isCachedAndLoad($sIdent, &$aData) {
-    $sCacheFile = PATH_CACHE . '/' . md5($sIdent) . '.cache';
+    $sCacheFile = PATH_CACHE . '/' . WEBSITE_MODE . '/' . WEBSITE_LOCALE . '/' . md5($sIdent) . '.cache';
 
     if (file_exists($sCacheFile)) {
       $aData = json_decode(file_get_contents($sCacheFile), true);
@@ -46,11 +46,12 @@ class Cache {
    * @access public
    * @param string $sIdent the identifier where the data will be stored
    * @param array $aData the array with the data, note that only basic objects are supported (string|int|...)
+   * @return boolean true|false
    *
    */
   public static function save($sIdent, &$aData) {
-    $sCacheFile = PATH_CACHE . '/' . md5($sIdent) . '.cache';
-    file_put_contents($sCacheFile, json_encode($aData));
+    $sCacheFile = PATH_CACHE . '/' . WEBSITE_MODE . '/' . WEBSITE_LOCALE . '/' . md5($sIdent) . '.cache';
+    return (bool) file_put_contents($sCacheFile, json_encode($aData));
   }
 
   /**
@@ -63,7 +64,7 @@ class Cache {
    *
    */
   public static function clear($sIdent) {
-    $sCacheFile = PATH_CACHE . '/' . md5($sIdent) . '.cache';
+    $sCacheFile = PATH_CACHE . '/' . WEBSITE_MODE . '/' . WEBSITE_LOCALE . '/' . md5($sIdent) . '.cache';
 
     return file_exists($sCacheFile) ? unlink($sCacheFile) : true;
   }

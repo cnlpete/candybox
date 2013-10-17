@@ -238,9 +238,6 @@ class SmartySingleton extends Smarty {
 
   // @todo documentation
   public function setTemplateDir($oTemplate) {
-    //if (!isset($oTemplate))
-    //  $oTemplate = $this->geTemplate('errors', '404');
-
     return parent::setTemplateDir($oTemplate['dir']);
   }
 

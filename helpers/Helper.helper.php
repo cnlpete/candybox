@@ -261,7 +261,6 @@ class Helper {
           $mSize = THUMB_DEFAULT_X;
       }
 
-      # @todo check if Gravatar always gets an integer size
       # Bugfix: Make sure, that user wants to show his Gravatar and system url does not match with user ones.
       $sEmail = $bUseGravatar ? $sEmail : md5(WEBSITE_MAIL_NOREPLY);
       return 'http://www.gravatar.com/avatar/' . md5($sEmail) . '.jpg?s=' . $mSize . '&d=mm';
@@ -298,7 +297,6 @@ class Helper {
    * @access public
    * @param string $sPath path of the file
    * @return int size of the file in byte
-   * @todo write test
    *
    */
   public static function getFileSize($sPath) {
@@ -314,7 +312,6 @@ class Helper {
    * @access public
    * @param int $iSize size of file in byte
    * @return string size of the file plus hardcoded ending
-   * @todo write test
    *
    */
   public static function fileSizeToString($iSize) {
@@ -377,10 +374,9 @@ class Helper {
    * @param boolean $bFormat format this field using ContentDisplayPlugins?
    * @return string $sStr formatted string
    * @see vendor/candycms/core/Bbcode/Bbcode.controller.php
-   * @todo fix test; this one fails
    *
    */
-  public static function formatOutput(&$sStr, $sHighlight = '', $bFormat = false) {
+  public static function formatOutput($sStr, $sHighlight = '', $bFormat = false) {
     if ($sHighlight)
       $sStr = str_ireplace(urldecode($sHighlight), '<mark>' . urldecode($sHighlight) . '</mark>', $sStr);
 
@@ -554,7 +550,6 @@ class Helper {
    * @static
    * @access public
    * @return array $aLanguages array with our languages
-   * @todo test cases
    *
    */
   public static function getLanguages() {
@@ -581,8 +576,8 @@ class Helper {
    * @access public
    * @param string $sSource the less file
    * @param string $sOutput the target output file
-   * @param bool $bCompressed whether to use the compressed output mode
-   * @todo test cases
+   * @param boolean $bCompressed whether to use the compressed output mode
+   * @return boolean true|false
    *
    */
   public static function compileStylesheet($sSource, $sOutput, $bCompressed = true) {
@@ -590,15 +585,17 @@ class Helper {
       $mCache = $sSource;
       Cache::isCachedAndLoad($sOutput, $mCache);
 
-      $oLessc = new lessc();
+      $oLessc = new \lessc();
       $bCompressed ? $oLessc->setFormatter('compressed') : $oLessc->setFormatter('classic');
-
       $aNewCache = $oLessc->cachedCompile($mCache);
 
+      if (ACTIVE_TEST && isset($mCache['updated']))
+        $mCache['updated'] = '';
+
       if (!is_array($mCache) || $aNewCache['updated'] > $mCache['updated']) {
-        # save the compiled css
-        if (!(file_put_contents($sOutput, $aNewCache['compiled']) === false))
-          Cache::save($sOutput, $aNewCache);
+        # Save the compiled css
+        if (file_put_contents($sOutput, $aNewCache['compiled']))
+          return Cache::save($sOutput, $aNewCache);
       }
     }
   }

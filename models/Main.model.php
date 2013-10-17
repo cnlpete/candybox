@@ -152,11 +152,11 @@ abstract class Main {
                 SQL_DB . '_' . WEBSITE_MODE;
 
         # Postgre
-        if($sSQLType == 'pgsql')
-          self::$_oDbStatic = new PDO($sSQLType . ':host=' . SQL_HOST . ';port=' . SQL_PORT . ';dbname=' . $sDatabase . ';user=' . SQL_USER . ';password=' . SQL_PASSWORD);
+        #if($sSQLType == 'pgsql')
+        #  self::$_oDbStatic = new PDO($sSQLType . ':host=' . SQL_HOST . ';port=' . SQL_PORT . ';dbname=' . $sDatabase . ';user=' . SQL_USER . ';password=' . SQL_PASSWORD);
 
         # MySQL
-        else
+        #else
           self::$_oDbStatic = new PDO($sSQLType . ':host=' . SQL_HOST . ';port=' . SQL_PORT . ';dbname=' . $sDatabase,
                           SQL_USER,
                           SQL_PASSWORD,
@@ -182,9 +182,6 @@ abstract class Main {
    */
   public static function disconnectFromDatabase() {
     return self::$_oDbStatic = null;
-
-    # Close database connection
-    self::disconnectFromDatabase();
   }
 
   /**
@@ -200,10 +197,13 @@ abstract class Main {
     $aData = array();
 
     foreach ($aRow as $sColumn => $sData) {
-
       # Bugfix: Avoid TinyMCE problems.
+      # @todo Still in use?
       $sData = str_replace('\"', '', $sData);
       $sData = str_replace('\&quot;', '', $sData);
+
+      if (empty($sData))
+        continue;
 
       $aData[$sColumn] = htmlentities($sData);
     }
@@ -223,7 +223,7 @@ abstract class Main {
    */
   protected static function _formatDates(&$aData, $sKey = 'date') {
     if (isset($aData[$sKey])) {
-      $iTimeStamp = (int) $aData[$sKey];
+      $iTimeStamp = preg_match('/-/', $aData[$sKey]) ? strtotime($aData[$sKey]) : (int) $aData[$sKey];
 
       $aDateData = Array(
         'raw'       => $iTimeStamp,
@@ -272,7 +272,7 @@ abstract class Main {
     self::_formatDates($aData);
 
     # Set sitemaps.xml data
-    if (isset($aData['date']['raw'])) {
+    if (isset($aData['date']['raw']) && !empty($aData['date']['raw'])) {
       $iTimestampNow = time();
 
       # Entry is less than a day old
@@ -313,7 +313,7 @@ abstract class Main {
     }
 
     # Normal user
-    if ($aData['user_id'] != 0) {
+    if (isset($aData['user_id']) && $aData['user_id'] != 0) {
       $aUserData = array(
           'id'            => $aData['user_id'],
           'use_gravatar'  => isset($aData['use_gravatar']) ? (bool) $aData['use_gravatar'] : false,
@@ -324,22 +324,6 @@ abstract class Main {
 
       if ($this->_aSession['user']['role'] >= 3) {
         $aUserData['email'] = $aData['user_email'];
-        $aUserData['ip']    = isset($aData['author_ip']) ? $aData['author_ip'] : '';
-      }
-    }
-
-    # We don't have a user (comments) - format the user given data instead.
-    else {
-      $aUserData = array(
-          'id'            => isset($aData['author_id']) ? $aData['author_id'] : 0,
-          'use_gravatar'  => isset($aData['use_gravatar']) ? (bool) $aData['use_gravatar'] : true,
-          'name'          => isset($aData['author_name']) ? $aData['author_name'] : '',
-          'surname'       => '',
-          'facebook_id'   => isset($aData['author_facebook_id']) ? $aData['author_facebook_id'] : ''
-      );
-
-      if ($this->_aSession['user']['role'] >= 3) {
-        $aUserData['email'] = isset($aData['author_email']) ? $aData['author_email'] : WEBSITE_MAIL;
         $aUserData['ip']    = isset($aData['author_ip']) ? $aData['author_ip'] : '';
       }
     }
@@ -364,11 +348,8 @@ abstract class Main {
       $aData['content'] = Helper::formatOutput($aData['content'], $sHighlight);
     }
 
-    # Skip sensible data
-    #if ($this->_aSession['user']['role'] >= 3) {
-      $aData['url_destroy'] = $aData['url_clean'] . '/destroy';
-      $aData['url_update']  = $aData['url_clean'] . '/update';
-    #}
+    $aData['url_destroy']       = $aData['url_clean'] . '/destroy';
+    $aData['url_update']        = $aData['url_clean'] . '/update';
 
     # Destroy redundant data
     unset(  $aData['user_id'],
@@ -396,6 +377,7 @@ abstract class Main {
     $aData['id']    = (int) $aData['id'];
     $aData['role']  = (int) isset($aData['role']) ? $aData['role'] : 0;
 
+    # Format user registration dates
     self::_formatDates($aData);
 
     # Create avatars
@@ -403,7 +385,8 @@ abstract class Main {
             $aData,
             $aData['id'],
             isset($aData['email']) ? $aData['email'] : WEBSITE_MAIL,
-            isset($aData['use_gravatar']) ? (bool) $aData['use_gravatar'] : false);
+            isset($aData['use_gravatar']) ? (bool) $aData['use_gravatar'] : false
+    );
 
     # Build full user name
     $aData['name']      = isset($aData['name']) ? (string) $aData['name'] : '';
@@ -417,6 +400,16 @@ abstract class Main {
     $aData['url_encoded'] = urlencode($aData['url']);
     $aData['url_destroy'] = $aData['url_clean'] . '/destroy';
     $aData['url_update']  = $aData['url_clean'] . '/update';
+
+    # Destroy sensitive data
+    $aData['verification_code'] = isset($aData['verification_code']) && empty($aData['verification_code']) ?
+            0 :
+            1;
+
+    unset(  $aData['api_token'],
+            $aData['registration_ip'],
+            $aData['password'],
+            $aData['password_temporary']);
 
     return $aData;
   }
@@ -457,7 +450,7 @@ abstract class Main {
 
       $aEntries = array();
       foreach ($aResult as $aRow) {
-        if ($bSplit === true) {
+        if ($bSplit) {
           $aItems = array_filter(array_map('trim', explode(',', $aRow[$sColumn])));
 
           foreach ($aItems as $sItem)
@@ -474,7 +467,7 @@ abstract class Main {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
 
       try {
-        parent::$_oDbStatic->rollBack();
+        self::$_oDbStatic->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
@@ -536,16 +529,18 @@ abstract class Main {
    * @access public
    * @param integer $iId ID to destroy
    * @param string $sController controller to use
-   * @return boolean status of query
+   * @return array|boolean array on success, boolean on false
    *
    */
   public function destroy($iId, $sController = '') {
-    # This is needed for testing the media model
-    if ($iId == '0')
+    if (empty($iId) || $iId < 1)
       return false;
 
     else {
       $sController = $sController ? (string) $sController : (string) $this->_sController;
+
+      if (empty($sController))
+        return false;
 
       try {
         $oQuery = $this->_oDb->prepare("DELETE FROM
@@ -579,6 +574,7 @@ abstract class Main {
    * @param string $sController controller to use
    * @param string $sOrderBy how to order search
    * @return array $this->_aData search data
+   * @todo test
    *
    */
   public function search($sSearch, $sController = '', $sOrderBy = 't.date DESC') {

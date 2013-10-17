@@ -34,7 +34,7 @@ class Blogs extends Main {
             "WHERE published = '1' AND (language = '" . WEBSITE_LANGUAGE . "' OR language = '')";
 
     try {
-      $oQuery  = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "blogs " . $sWhere);
+      $oQuery = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "blogs " . $sWhere);
       return (int) $oQuery->fetchColumn();
     }
     catch (\PDOException $p) {
@@ -57,7 +57,7 @@ class Blogs extends Main {
             "WHERE published = '1' AND (language = '" . WEBSITE_LANGUAGE . "' OR language = '')";
 
     try {
-      $oQuery  = $this->_oDb->prepare("SELECT
+      $oQuery = $this->_oDb->prepare("SELECT
                                         COUNT(*)
                                       FROM
                                         " . SQL_PREFIX . "blogs
@@ -97,10 +97,10 @@ class Blogs extends Main {
    */
   public function getOverviewByTag($iLimit = LIMIT_BLOG, $sTagname = '') {
     if (empty($sTagname)) {
-      $sTagname = str_replace('%20', ' ', Helper::formatInput($this->_aRequest['search'], false));
-
       # Remove all characters that might harm us, only allow digits, normal letters and whitespaces
-      $sTagname = trim( preg_replace('/[^\d\s\w]/', '', $sTagname) );
+      $sTagname = trim(preg_replace('/[^\d\s\w]/', '',
+              str_replace('%20', ' ', Helper::formatInput($this->_aRequest['search'], false))
+      ));
     }
 
     $iResult = $this->getCountForTag($sTagname);
@@ -143,8 +143,7 @@ class Blogs extends Main {
                                       GROUP BY
                                         b.id
                                       ORDER BY
-                                        b.date DESC"
-                                      . $sLimit);
+                                        b.date DESC" . $sLimit);
 
       $oQuery->bindValue(':commaTagnameComma', '%,' . $sTagname . ',%', PDO::PARAM_STR);
       $oQuery->bindValue(':commaTagname', '%,' . $sTagname, PDO::PARAM_STR);
@@ -166,10 +165,12 @@ class Blogs extends Main {
       $iDate = $aRow['date'];
 
       # We need to specify 'blogs' because this might also be called for rss
-      $this->_aData[$iDate] = $this->_formatForOutput($aRow,
+      $this->_aData[$iDate] = $this->_formatForOutput(
+              $aRow,
               array('id', 'uid', 'author_id'),
               array('published', 'use_gravatar'),
-              'blogs');
+              'blogs'
+      );
 
       # Bugfix: Make tags compatible to candyCMS Version 1.x
       $this->_aData[$iDate]['tags_raw'] = $aRow['tags'];
@@ -207,7 +208,6 @@ class Blogs extends Main {
       # Show unpublished items and entries with diffent languages to moderators or administrators only
       elseif (isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3)
         $sWhere = '';
-
       else
         $sWhere = "WHERE published = '1' AND (language = '" . WEBSITE_LANGUAGE . "' OR language = '')";
 
@@ -235,7 +235,7 @@ class Blogs extends Main {
                                         b.id
                                       ORDER BY
                                         b.date DESC"
-                                      . $sLimit);
+              . $sLimit);
 
       $oQuery->execute();
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
@@ -249,10 +249,9 @@ class Blogs extends Main {
       $iDate = $aRow['date'];
 
       # We need to specify 'blogs' because this might also be called for rss
-      $this->_aData[$iDate] = $this->_formatForOutput($aRow,
-              array('id', 'uid', 'author_id'),
-              array('published', 'use_gravatar'),
-              'blogs');
+      $this->_aData[$iDate] = $this->_formatForOutput(
+              $aRow, array('id', 'uid', 'author_id'), array('published', 'use_gravatar'), 'blogs'
+      );
 
       # Bugfix: Make tags compatible to candyCMS Version 1.x
       $this->_aData[$iDate]['tags_raw'] = $aRow['tags'];
@@ -263,19 +262,21 @@ class Blogs extends Main {
     }
 
     return $this->_aData;
- }
-
+  }
 
   /**
    * Get blog entry data.
    *
    * @access public
-   * @param integer $iId ID to load data from
-   * @param boolean $bUpdate prepare data for update
-   * @return array data from _setData
+   * @param integer $iId Id to work with
+   * @param boolean $bUpdate prepare data for update?
+   * @return array|boolean array on success, boolean on false
    *
    */
   public function getId($iId, $bUpdate = false) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     # Show unpublished items to moderators or administrators only
     $iPublished = $this->_aSession['user']['role'] >= 3 ? 0 : 1;
 
@@ -303,7 +304,7 @@ class Blogs extends Main {
 
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
-      $oQuery->execute();
+      $bReturn = $oQuery->execute();
 
       $aRow = $oQuery->fetch(PDO::FETCH_ASSOC);
     }
@@ -311,15 +312,16 @@ class Blogs extends Main {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
     }
 
-    if ($bUpdate === true)
+    if (!$bReturn)
+      return false;
+
+    elseif ($bUpdate)
       $this->_aData = $this->_formatForUpdate($aRow);
 
     else {
-      $this->_aData[1] = $this->_formatForOutput($aRow,
-              array('id', 'uid', 'author_id'),
-              array('published', 'use_gravatar'));
-      $this->_aData[1]['tags_raw']      = $aRow['tags'];
-      $this->_aData[1]['tags']          = array_filter( array_map('trim', explode(',', $aRow['tags'])) );
+      $this->_aData[1] = $this->_formatForOutput($aRow, array('id', 'uid', 'author_id'), array('published', 'use_gravatar'));
+      $this->_aData[1]['tags_raw']  = $aRow['tags'];
+      $this->_aData[1]['tags']      = array_filter(array_map('trim', explode(',', $aRow['tags'])));
       $this->_formatDates($this->_aData[1], 'date_modified');
     }
 
@@ -372,9 +374,7 @@ class Blogs extends Main {
       foreach (array('title', 'teaser', 'content') as $sInput) {
         $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
         $oQuery->bindParam(
-                $sInput,
-                $sValue,
-                PDO::PARAM_STR);
+                $sInput, $sValue, PDO::PARAM_STR);
 
         unset($sValue);
       }
@@ -382,9 +382,7 @@ class Blogs extends Main {
       foreach (array('keywords', 'language') as $sInput) {
         $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput]);
         $oQuery->bindParam(
-                $sInput,
-                $sValue,
-                PDO::PARAM_STR);
+                $sInput, $sValue, PDO::PARAM_STR);
 
         unset($sValue);
       }
@@ -415,6 +413,9 @@ class Blogs extends Main {
    *
    */
   public function update($iId) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     $sDateModified = isset($this->_aRequest[$this->_sController]['show_update']) &&
             $this->_aRequest[$this->_sController]['show_update'] == true ?
             date('Y-m-d H:i:s') :
@@ -437,7 +438,7 @@ class Blogs extends Main {
 
     $sDate = date('Y-m-d H:i:s', $iDate);
 
-    $sTags = Helper::formatInput(implode(',', array_filter( array_map('trim', explode(',', $this->_aRequest[$this->_sController]['tags'])))));
+    $sTags = Helper::formatInput(implode(',', array_filter(array_map('trim', explode(',', $this->_aRequest[$this->_sController]['tags'])))));
 
     try {
       $oQuery = $this->_oDb->prepare("UPDATE
@@ -466,9 +467,7 @@ class Blogs extends Main {
       foreach (array('title', 'teaser', 'content') as $sInput) {
         $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
         $oQuery->bindParam(
-                $sInput,
-                $sValue,
-                PDO::PARAM_STR);
+                $sInput, $sValue, PDO::PARAM_STR);
 
         unset($sValue);
       }
@@ -476,9 +475,7 @@ class Blogs extends Main {
       foreach (array('keywords', 'language') as $sInput) {
         $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput]);
         $oQuery->bindParam(
-                $sInput,
-                $sValue,
-                PDO::PARAM_STR);
+                $sInput, $sValue, PDO::PARAM_STR);
 
         unset($sValue);
       }
@@ -559,8 +556,7 @@ class Blogs extends Main {
       $iDate = $aRow['date'];
 
       # We need to specify 'blogs' because this might also be called for rss
-      $this->_aData[$iDate] = $this->_formatForOutput($aRow, array('id', 'uid', 'author_id'),
-              array('published', 'use_gravatar'), 'blogs');
+      $this->_aData[$iDate] = $this->_formatForOutput($aRow, array('id', 'uid', 'author_id'), array('published', 'use_gravatar'), 'blogs');
     }
 
     return $this->_aData;

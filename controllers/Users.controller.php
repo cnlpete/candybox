@@ -17,7 +17,6 @@ use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\Upload;
 use candyCMS\Core\Helpers\PluginManager;
-use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Users extends Main {
 

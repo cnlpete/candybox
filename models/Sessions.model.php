@@ -155,8 +155,8 @@ class Sessions extends Main {
    *
    */
   public function destroy($iId, $sController = '') {
-    if (empty(parent::$_oDbStatic))
-      parent::connectToDatabase();
+    if (empty($iId) || $iId < 1)
+      return false;
 
     try {
       $oQuery = parent::$_oDbStatic->prepare("UPDATE

@@ -93,12 +93,15 @@ class Contents extends Main {
    * Get content entry data.
    *
    * @access public
-   * @param integer $iId ID to load data from.
-   * @param boolean $bUpdate prepare data for update
-   * @return array $this->_aData
+   * @param integer $iId Id to work with
+   * @param boolean $bUpdate prepare data for update?
+   * @return array|boolean array on success, boolean on false
    *
    */
-  public function getId($iId, $bUpdate = false) {
+  public function getId($iId = '', $bUpdate = false) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     $iPublished = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ? 0 : 1;
 
     try {
@@ -228,6 +231,9 @@ class Contents extends Main {
    *
    */
   public function update($iId) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     $iPublished = isset($this->_aRequest[$this->_sController]['published']) &&
             $this->_aRequest[$this->_sController]['published'] == true ?
             1 :

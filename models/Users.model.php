@@ -208,8 +208,10 @@ class Users extends Main {
                                             " . SQL_PREFIX . "sessions as s
                                           WHERE
                                             s.user_id = u.id
-                                          ORDER BY s.date DESC
-                                          LIMIT 1
+                                          ORDER BY
+                                            s.date DESC
+                                          LIMIT
+                                            1
                                         ) AS last_login
                                       FROM
                                         " . SQL_PREFIX . "users as u
@@ -217,6 +219,7 @@ class Users extends Main {
                                         date ASC
                                       LIMIT
                                         :offset, :limit");
+
       $oQuery->bindValue('limit', $this->oPagination->getLimit(), PDO::PARAM_INT);
       $oQuery->bindValue('offset', $this->oPagination->getOffset(), PDO::PARAM_INT);
       $oQuery->execute();
@@ -225,7 +228,6 @@ class Users extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     foreach ($aResult as $aRow) {
@@ -233,7 +235,7 @@ class Users extends Main {
 
       $this->_aData[$iId] = $this->_formatForUserOutput(
               $aRow,
-              array('id', 'role'),
+              array('id', 'date', 'role'),
               array('use_gravatar'));
 
       $this->_formatDates($this->_aData[$iId], 'last_login');
@@ -246,28 +248,42 @@ class Users extends Main {
    * Get user entry data.
    *
    * @access public
-   * @param integer $iId ID to load data from. If empty, show overview.
-   * @param boolean $bUpdate prepare data for update
-   * @return array data from _setData
+   * @param integer $iId Id to work with
+   * @param boolean $bUpdate prepare data for update?
+   * @return array|boolean array on success, boolean on false
    *
    */
-  public function getId($iId, $bUpdate = false) {
+  public function getId($iId = '', $bUpdate = false) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     try {
       $oQuery = $this->_oDb->prepare("SELECT
-                                        u.*,
+                                        u.id,
+                                        u.name,
+                                        u.email,
+                                        u.surname,
                                         UNIX_TIMESTAMP(u.date) as date,
-                                        UNIX_TIMESTAMP(s.date) as last_login
+                                        u.use_gravatar,
+                                        u.role,
+                                        (
+                                          SELECT
+                                            UNIX_TIMESTAMP(s.date) as last_login
+                                          FROM
+                                            " . SQL_PREFIX . "sessions as s
+                                          WHERE
+                                            s.user_id = u.id
+                                          ORDER BY
+                                            s.date DESC
+                                          LIMIT
+                                            1
+                                        ) AS last_login
                                       FROM
                                         " . SQL_PREFIX . "users as u
-                                      LEFT JOIN
-                                        " . SQL_PREFIX . "sessions as s
-                                      ON
-                                        s.user_id = u.id
                                       WHERE
                                         u.id = :id
-                                      ORDER BY
-                                        s.date DESC
-                                      LIMIT 1");
+                                      LIMIT
+                                        1");
 
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
       $oQuery->execute();
@@ -276,21 +292,15 @@ class Users extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
-    if ($bUpdate === true)
+    if ($bUpdate)
       $this->_aData = $this->_formatForUpdate($aRow);
 
     else {
-      # strip sensitive information
-      if ($this->_aSession['user']['role'] === 0 ||
-            ($this->_aSession['user']['id'] !== $aRow['id'] && $this->_aSession['user']['role'] < 4))
-        unset($aRow['api_token'], $aRow['verification_code'], $aRow['verification_date'], $aRow['registration_ip'], $aRow['password'], $aRow['password_temporary'], $aRow['role']);
-
       $this->_aData = $this->_formatForUserOutput(
               $aRow,
-              array('id', 'role'),
+              array('id', 'role'. 'date'),
               array('use_gravatar'));
 
       $oPluginManager = PluginManager::getInstance();
@@ -377,12 +387,15 @@ class Users extends Main {
    * Update a user.
    *
    * @access public
-   * @param integer $iId ID to update
+   * @param integer $iId user ID to update
    * @return boolean status of query
    *
    */
   public function update($iId) {
-    $iUseGravatar       = isset($this->_aRequest[$this->_sController]['use_gravatar']) ? 1 : 0;
+    if (empty($iId) || $iId < 1)
+      return false;
+
+    $iUseGravatar = isset($this->_aRequest[$this->_sController]['use_gravatar']) ? 1 : 0;
 
     # Set other peoples user roles
     if ($iId !== $this->_aSession['user']['id'] && $this->_aSession['user']['role'] == 4)
@@ -441,6 +454,9 @@ class Users extends Main {
    *
    */
   public function updatePassword($iId) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     try {
       $oQuery = $this->_oDb->prepare("UPDATE
                                         " . SQL_PREFIX . "users
@@ -482,8 +498,8 @@ class Users extends Main {
    *
    */
   public static function updateGravatar($iId, $iUseGravatar = 0) {
-    if (empty(parent::$_oDbStatic))
-      parent::connectToDatabase();
+    if (empty($iId) || $iId < 1)
+      return false;
 
     try {
       $oQuery = parent::$_oDbStatic->prepare("UPDATE
@@ -519,6 +535,7 @@ class Users extends Main {
    *
    */
   public function verifyEmail($sVerificationCode) {
+
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         *

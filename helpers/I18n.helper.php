@@ -79,7 +79,7 @@ class I18n {
       return true;
     }
 
-    # try to read from cache file
+    # Try to read from cache file
     if (Cache::isCachedAndLoad('translation' . $sLanguage, self::$_aLang[$sLanguage])) {
       self::$_sLanguage = $sLanguage;
       SmartySingleton::getInstance()->setDefaultLanguage(self::$_aLang[$sLanguage], $sLanguage);
@@ -121,8 +121,9 @@ class I18n {
     }
 
     # Merge all that with the users custom language file
-    Helper::recursiveOnewayArrayReplace(self::$_aLang[$sLanguage],
-            \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sCustomLanguageFile)));
+    $aTarget  = self::$_aLang[$sLanguage];
+    $aReplace = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sCustomLanguageFile));
+    Helper::recursiveOnewayArrayReplace($aTarget, $aReplace);
 
     Cache::save('translation' . $sLanguage, self::$_aLang[$sLanguage]);
 
@@ -200,6 +201,7 @@ class I18n {
    * @static
    * @return array all language strings that can be loaded
    * @access public
+   * @todo test
    *
    */
   public static function getPossibleLanguages() {
@@ -215,10 +217,12 @@ class I18n {
         $sLang = substr($sFile, 0, -4);
         $aLangs[] = $sLang;
       }
-      closedir($sLanguagesPath);
+
+      closedir($oDir);
 
       Cache::save('translation.all', $aLangs);
     }
+
     return $aLangs;
   }
 
@@ -228,6 +232,7 @@ class I18n {
    * @static
    * @param string $sLanguage language part we want to unload. Unload all if not set
    * @access public
+   * @todo test
    *
    */
   public static function unsetLanguage($sLanguage = '') {

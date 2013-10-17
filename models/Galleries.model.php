@@ -17,7 +17,6 @@ use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\Pagination;
-use candyCMS\Core\Helpers\Upload;
 use PDO;
 
 class Galleries extends Main {
@@ -34,13 +33,16 @@ class Galleries extends Main {
    * Get gallery album files.
    *
    * @access public
-   * @param integer $iId Album-ID to load data from.
-   * @param boolean $bUpdate prepare data for update
-   * @param boolean $bAdvancedImageInformation provide image with advanced information (MIME_TYPE etc.)
-   * @return array data from _setData
+   * @param integer $iId album ID to load data from.
+   * @param boolean $bUpdate prepare data for update?
+   * @param boolean $bAdvancedImageInformation provide image with advanced information (MIME_TYPE etc.)?
+   * @return array|boolean array on success, boolean on false
    *
    */
   public function getId($iId, $bUpdate = false, $bAdvancedImageInformation = false) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     try {
       $sWhere = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ?
               'WHERE 1' :
@@ -86,7 +88,7 @@ class Galleries extends Main {
     }
 
     # Update a single entry.
-    if ($bUpdate === true)
+    if ($bUpdate)
       $this->_aData = $this->_formatForUpdate($aRow);
 
     else {
@@ -198,10 +200,13 @@ class Galleries extends Main {
    * @access protected
    * @param integer $iId album id to fetch images from
    * @param boolean $bAdvancedImageInformation fetch additional information like width, height etc.
-   * @return array $this->_aThumbs processed array with image information
+   * @return array|boolean array on success, boolean on false
    *
    */
   protected function _getThumbnails($iId, $bAdvancedImageInformation = false) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     # Clear existing array (fix, when we got no images at a gallery)
     if (!empty($this->_aThumbs))
       unset($this->_aThumbs);
@@ -265,7 +270,7 @@ class Galleries extends Main {
 
       # We want to get the image dimension of the original image.
       # This function is not set to default due its long processing time.
-      if ($bAdvancedImageInformation === true) {
+      if ($bAdvancedImageInformation) {
         $aPopupSize = getimagesize(Helper::removeSlash($this->_aThumbs[$iId]['url_popup']));
         $aThumbSize = getimagesize(Helper::removeSlash($this->_aThumbs[$iId]['url_thumb']));
         $iImageSize = filesize(Helper::removeSlash($this->_aThumbs[$iId]['url_popup']));
@@ -329,7 +334,7 @@ class Galleries extends Main {
    * @return boolean status of query
    *
    */
-  public function create($aOptions) {
+  public function create($aOptions = '') {
     $iPublished = isset($this->_aRequest[$this->_sController]['published']) &&
             $this->_aRequest[$this->_sController]['published'] == true ?
             1 :
@@ -385,10 +390,13 @@ class Galleries extends Main {
    *
    * @access public
    * @param integer $iId
-   * @return boolean status of query
+   * @return array|boolean array on success, boolean on false
    *
    */
   public function update($iId) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     $iPublished = isset($this->_aRequest[$this->_sController]['published']) &&
             $this->_aRequest[$this->_sController]['published'] == true ?
             1 :
@@ -437,10 +445,13 @@ class Galleries extends Main {
    * @access public
    * @param integer $iId album ID
    * @param string $sController controller to use, obsolete and only for not giving E_STRICT warnings
-   * @return boolean status of query
+   * @return array|boolean array on success, boolean on false
    *
    */
   public function destroy($iId, $sController = '') {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . (int) $iId);
 
     # Fetch all images
@@ -603,10 +614,13 @@ class Galleries extends Main {
    *
    * @access public
    * @param integer $iId file ID
-   * @return boolean status of query
+   * @return array|boolean array on success, boolean on false
    *
    */
   public function updateFile($iId) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     try {
       $oQuery = $this->_oDb->prepare("UPDATE
                                         " . SQL_PREFIX . "gallery_files
@@ -669,7 +683,7 @@ class Galleries extends Main {
       exit('SQL error.');
     }
 
-    if ($bReturn === true) {
+    if ($bReturn) {
       try {
         $oQuery = $this->_oDb->prepare("DELETE FROM
                                           " . SQL_PREFIX . "gallery_files
@@ -708,12 +722,14 @@ class Galleries extends Main {
    * Update filepositions.
    *
    * @access public
-   * @param integer $iAlbumId album ID
-   * @return boolean status of query
+   * @param integer $iId album ID
+   * @return array|boolean array on success, boolean on false
    *
    */
-  public function updateOrder($iAlbumId) {
-    $iAlbumId = (int) $iAlbumId;
+  public function updateOrder($iId) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     $sSQL     = '';
 
     foreach ($this->_aRequest['file'] as $iKey => $iValue) {
@@ -723,12 +739,13 @@ class Galleries extends Main {
       $sSQL .= "UPDATE
                   " . SQL_PREFIX . "gallery_files
                 SET
-                  position = '".$iKey."'
+                  position = '" . $iKey . "'
                 WHERE
-                  id = '".$iValue."'
+                  id = '" . $iValue . "'
                 AND
-                  album_id = '".$iAlbumId."'
-                LIMIT 1;";
+                  album_id = '" . $iId . "'
+                LIMIT
+                  1;";
     }
 
     try {
@@ -741,7 +758,7 @@ class Galleries extends Main {
   }
 
   /**
-   * Get search information.
+   * Get search information. We must overwrite the Main.model function to to different table syntax.
    *
    * @access public
    * @param string $sSearch query string to search
@@ -752,8 +769,10 @@ class Galleries extends Main {
    */
   public function search($sSearch, $sController = '', $sOrderBy = 't.date DESC') {
     $this->_aData = parent::search($sSearch, 'gallery_albums', $sOrderBy);
+
     $this->_aData['controller'] = $sController;
     $this->_aData['title'] = I18n::get('global.' . strtolower($sController));
+
     return $this->_aData;
   }
 }
