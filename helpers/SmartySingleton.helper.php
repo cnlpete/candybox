@@ -164,8 +164,7 @@ class SmartySingleton extends Smarty {
    *
    * @access public
    * @return array $aPath path information
-   * @todo update PATH and description
-   * @todo, does smarty need to know about less?
+   * @todo test
    *
    */
   public function getPaths() {
@@ -174,26 +173,30 @@ class SmartySingleton extends Smarty {
       'app' => '/app/assets/javascripts',
       'bootstrap' => '/vendor/twitter/bootstrap/js'
     );
+
     $aPaths['img'] = array(
       'core' => '/vendor/candycms/core/assets/images',
       'app' => '/app/assets/images',
       'bootstrap' => '/vendor/twitter/bootstrap/img'
     );
+
     if (WEBSITE_CDN !== '') {
       foreach ($aPaths['js'] as $sKey => $sValue)
-        $aPaths['js'][key] = WEBSITE_CDN . '/' . key;
+        $aPaths['js'][$sKey] = WEBSITE_CDN . '/' . Helper::removeSlash ($sValue);
+
       foreach ($aPaths['img'] as $sKey => $sValue)
-        $aPaths['img'][key] = WEBSITE_CDN . '/' . key;
+        $aPaths['img'][$sKey] = WEBSITE_CDN . '/' . Helper::removeSlash ($sValue);
     }
-    $aPaths['core']     = '/vendor/candycms/core'; # @todo check if needed
+    $aPaths['core']     = '/vendor/candycms/core';
     $aPaths['public']   = WEBSITE_CDN !== '' ? WEBSITE_CDN : '/public';
     $aPaths['css']      = $aPaths['public'] . '/stylesheets';
+    $aPaths['public']   = WEBSITE_CDN !== '' ? WEBSITE_CDN : '/public';
     $aPaths['plugins']  = (WEBSITE_CDN !== '' ? WEBSITE_CDN : '/vendor/candycms') . '/plugins';
     $aPaths['upload']   = Helper::removeSlash(PATH_UPLOAD);
 
-    # Compile CSS only when in development mode
-    if (WEBSITE_MODE == 'development' && ALLOW_INTERNAL_LESS) {
-      if (MOBILE === true) {
+    # Compile CSS only when in development mode and not doing tests
+    if (WEBSITE_MODE == 'development' && ALLOW_INTERNAL_LESS && !ACTIVE_TEST) {
+      if (MOBILE) {
         Helper::compileStylesheet(
                 Helper::removeSlash('/app/assets/stylesheets/mobile/application.less'),
                 Helper::removeSlash($aPaths['css'] . '/mobile.css'),
@@ -225,6 +228,7 @@ class SmartySingleton extends Smarty {
    *
    * @access public
    * @param string $sController
+   * @todo test
    *
    */
   public function clearControllerCache($sController) {
@@ -232,16 +236,21 @@ class SmartySingleton extends Smarty {
   }
 
   // @todo documentation
+  // @todo test
   public function isCached($oTemplate = NULL, $cache_id = NULL, $compile_id = NULL, $parent = NULL) {
     return parent::isCached($oTemplate['file']);
   }
 
   // @todo documentation
+  // @todo test
   public function setTemplateDir($oTemplate) {
-    return parent::setTemplateDir($oTemplate['dir']);
+    return parent::setTemplateDir(
+            isset($oTemplate['dir']) ? $oTemplate['dir'] : ''
+    );
   }
 
   // @todo documentation
+  // @todo test
   public function fetch($oTemplate = NULL, $sUniqueId = NULL, $compile_id = NULL, $parent = NULL, $display = false, $merge_tpl_vars = true, $no_output_filter = false) {
     return parent::fetch($oTemplate['file'], $sUniqueId);
   }
@@ -254,10 +263,11 @@ class SmartySingleton extends Smarty {
    * @param string $sFile file name of the template
    * @param boolean $bPlugin whether to check core or plugins folder for original template
    * @return array dir of the chosen template and file: filename of template
+   * @todo test
    *
    */
   public function getTemplate($sFolder, $sFile, $bPlugin = false) {
-    $sLowerFolder = strtolower($sFolder);
+    $sLowerFolder   = strtolower($sFolder);
     $sUCFirstFolder = ucfirst($sFolder);
 
     $sCacheId = $sLowerFolder . '.' . $sFile . '.' . (MOBILE === true ? 'mob' : 'tpl');
@@ -285,9 +295,9 @@ class SmartySingleton extends Smarty {
       else {
         if (!file_exists(PATH_STANDARD . '/vendor/candycms/core/views/' . $sLowerFolder . '/' . $sFile . '.tpl')) {
           # This action might be disabled due to missing form templates.
-          # @todo why is this check necessary?
           if (substr($sFile, 0, 5) == '_form')
             return Helper::redirectTo('/errors/403');
+
           else
             throw new AdvancedException('This template does not exist: ' . $sLowerFolder . '/' . $sFile . '.tpl');
         }
@@ -301,19 +311,15 @@ class SmartySingleton extends Smarty {
     }
 
     try {
-      # Mobile template.
-      if (MOBILE === true && file_exists($aReturn['dir'] . '/' . $sFile . '.mob'))
-        $aReturn['file'] = $sFile . '.mob';
-      # Standard template
-      else
-        $aReturn['file'] = $sFile . '.tpl';
+      $aReturn['file'] = MOBILE && file_exists($aReturn['dir'] . '/' . $sFile . '.mob') ?
+            $sFile . '.mob' :
+            $sFile . '.tpl';
     }
     catch (AdvancedException $e) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
-      exit($e->getMessage());
     }
 
-    # save to cache
+    # Save to cache
     $this->_aPathCache[$sCacheId] = $aReturn;
     Cache::save('tpl-path-cache', $this->_aPathCache);
 
@@ -324,6 +330,7 @@ class SmartySingleton extends Smarty {
    * Clear the precompiled template paths
    *
    * @access public
+   * @todo test
    *
    */
   public function clearCompiledTemplatePaths() {

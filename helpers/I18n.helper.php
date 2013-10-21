@@ -125,7 +125,9 @@ class I18n {
     $aReplace = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sCustomLanguageFile));
     Helper::recursiveOnewayArrayReplace($aTarget, $aReplace);
 
-    Cache::save('translation' . $sLanguage, self::$_aLang[$sLanguage]);
+    # Bugfix: Disable errors duing tests
+    if (!ACTIVE_TEST)
+      Cache::save('translation' . $sLanguage, self::$_aLang[$sLanguage]);
 
     self::$_sLanguage = $sLanguage;
     SmartySingleton::getInstance()->setDefaultLanguage(self::$_aLang[$sLanguage], $sLanguage);

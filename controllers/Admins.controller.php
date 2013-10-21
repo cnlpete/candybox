@@ -16,7 +16,6 @@ namespace candyCMS\Core\Controllers;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\Cache;
 use candyCMS\Core\Helpers\I18n;
-use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Admins extends Main {
 
@@ -25,6 +24,7 @@ class Admins extends Main {
    *
    * @access protected
    * @return string HTML content
+   * @todo test
    *
    */
   protected function _overview() {
@@ -41,7 +41,7 @@ class Admins extends Main {
    *
    * @access public
    * @return
-   * @todo test and doc 
+   * @todo test and doc
    *
    */
   public function clearCache() {
