@@ -38,15 +38,15 @@
   "require": {
     "php": ">=5.3.0",
 
-    "candycms/core": "3.1.*@dev",
-    "candycms/plugins": "3.1.*@dev",
+    "candycms/core": "4.0.*@dev",
+    "candycms/plugins": "4.0.*@dev",
 
     "smushit/smushit": "1.0.*",
     "recaptcha/recaptcha": "1.*"
   },
 
   "require-dev": {
-    "candycms/tests": "3.0.*",
-    "candycms/documentation": "3.0.*"
+    "candycms/tests": "4.0.*",
+    "candycms/documentation": "4.0.*"
   }
 }
