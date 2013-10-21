@@ -23,7 +23,7 @@ class Downloads extends Main {
    * Get all download data.
    *
    * @access public
-   * @return array $this->_aData
+   * @return array $aData
    *
    */
   public function getOverview() {
@@ -60,15 +60,15 @@ class Downloads extends Main {
 
       if ($iSize != -1 || ACTIVE_TEST) {
         # Name category for overview
-        $this->_aData[$sCategory]['category'] = $sCategory;
+        $aData[$sCategory]['category'] = $sCategory;
 
         # Files
-        $this->_aData[$sCategory]['files'][$iId] = $this->_formatForOutput($aRow, array('id', 'author_id', 'downloads', 'uid'));
-        $this->_aData[$sCategory]['files'][$iId]['size'] = Helper::fileSizeToString($iSize);
+        $aData[$sCategory]['files'][$iId] = $this->_formatForOutput($aRow, array('id', 'author_id', 'downloads', 'uid'));
+        $aData[$sCategory]['files'][$iId]['size'] = Helper::fileSizeToString($iSize);
       }
     }
 
-    return $this->_aData;
+    return $aData;
   }
 
   /**
@@ -108,8 +108,8 @@ class Downloads extends Main {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
     }
 
-    $this->_aData = $bUpdate ? $this->_formatForUpdate($aRow) : $aRow;
-    return $this->_aData;
+    $aData = $bUpdate ? $this->_formatForUpdate($aRow) : $aRow;
+    return $aData;
   }
 
   /**

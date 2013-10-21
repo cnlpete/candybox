@@ -40,15 +40,6 @@ abstract class Main {
   protected $_aSession = array();
 
   /**
-   * Returned data from models.
-   *
-   * @var array
-   * @access protected
-   *
-   */
-  protected $_aData = array();
-
-  /**
    * ID to process.
    *
    * @var integer
@@ -130,9 +121,6 @@ abstract class Main {
    *
    */
   public function __destruct() {
-    # We must reset saved data due to wrong output
-    $this->_aData = array();
-
     # Close all DB connections
     #$this->_oDb = null;
   }
@@ -569,7 +557,7 @@ abstract class Main {
    * @param string $sSearch query string to search
    * @param string $sController controller to use
    * @param string $sOrderBy how to order search
-   * @return array $this->_aData search data
+   * @return array $aData search data
    *
    */
   public function search($sSearch, $sController = '', $sOrderBy = 't.date DESC') {
@@ -601,8 +589,8 @@ abstract class Main {
       $aResult = $this->oQuery->fetchAll(PDO::FETCH_ASSOC);
 
       # Build table names and order them
-      $this->_aData['controller'] = $sController;
-      $this->_aData['title'] = I18n::get('global.' . strtolower($sController));
+      $aData['controller'] = $sController;
+      $aData['title'] = I18n::get('global.' . strtolower($sController));
 
       $iEntries = 0;
       foreach ($aResult as $aRow) {
@@ -610,7 +598,7 @@ abstract class Main {
           continue;
 
         $iDate = $aRow['date'];
-        $this->_aData[$iDate] = $this->_formatForOutput(
+        $aData[$iDate] = $this->_formatForOutput(
                 $aRow,
                 array('id', 'author_id'),
                 null,
@@ -619,12 +607,12 @@ abstract class Main {
         ++$iEntries;
       }
 
-      $this->_aData['entries'] = $iEntries;
+      $aData['entries'] = $iEntries;
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
     }
 
-    return $this->_aData;
+    return isset($aData) ? $aData : array();
   }
 }

@@ -96,8 +96,9 @@ class Blogs extends Main {
    *
    */
   public function getOverviewByTag($iLimit = LIMIT_BLOG, $sTagname = '') {
-    # Set limit to 2 to make sure we have some pages to test in test mode
-    if (ACTIVE_TEST && $iLimit != 0)
+    # Set limit to 2 to make sure we have some pages to test in test mode.
+    # Since we test the limit function we also set limit to 1.
+    if (ACTIVE_TEST && $iLimit != 1)
       $iLimit = 2;
 
     if (empty($sTagname)) {
@@ -169,7 +170,7 @@ class Blogs extends Main {
       $iDate = $aRow['date'];
 
       # We need to specify 'blogs' because this might also be called for rss
-      $this->_aData[$iDate] = $this->_formatForOutput(
+      $aData[$iDate] = $this->_formatForOutput(
               $aRow,
               array('id', 'uid', 'author_id', 'date', 'date_modified'),
               array('published', 'use_gravatar'),
@@ -177,14 +178,14 @@ class Blogs extends Main {
       );
 
       # Bugfix: Make tags compatible to candyCMS Version 1.x
-      $this->_aData[$iDate]['tags_raw'] = $aRow['tags'];
+      $aData[$iDate]['tags_raw'] = $aRow['tags'];
 
       # Explode using ',' and filter empty items (since explode always gives at least one item)
-      $this->_aData[$iDate]['tags'] = array_filter(array_map('trim', explode(',', $aRow['tags'])));
-      $this->_formatDates($this->_aData[$iDate], 'date_modified');
+      $aData[$iDate]['tags'] = array_filter(array_map('trim', explode(',', $aRow['tags'])));
+      $this->_formatDates($aData[$iDate], 'date_modified');
     }
 
-    return $this->_aData;
+    return $aData;
   }
 
   /**
@@ -198,7 +199,8 @@ class Blogs extends Main {
    */
   public function getOverview($iLimit = LIMIT_BLOG, $bMultilang = false) {
     # Set limit to 2 to make sure we have some pages to test in test mode
-    if (ACTIVE_TEST && $iLimit != 0)
+    # Since we test the limit function we also set limit to 1.
+    if (ACTIVE_TEST && $iLimit != 1)
       $iLimit = 2;
 
     $iResult = $this->getCount();
@@ -253,7 +255,7 @@ class Blogs extends Main {
       $iDate = $aRow['date'];
 
       # We need to specify 'blogs' because this might also be called for RSS
-      $this->_aData[$iDate] = $this->_formatForOutput(
+      $aData[$iDate] = $this->_formatForOutput(
               $aRow,
               array('id', 'uid', 'author_id', 'date', 'date_modified'),
               array('published', 'use_gravatar'),
@@ -261,16 +263,17 @@ class Blogs extends Main {
       );
 
       # Bugfix: Make tags compatible to candyCMS Version 1.x
-      $this->_aData[$iDate]['tags_raw'] = $aRow['tags'];
+      $aData[$iDate]['tags_raw'] = $aRow['tags'];
 
       # Explode using ',' and filter empty items (since explode always gives at least one item)
-      $this->_aData[$iDate]['tags'] = array_filter(
+      $aData[$iDate]['tags'] = array_filter(
               array_map('trim', explode(',', $aRow['tags']))
       );
-      $this->_formatDates($this->_aData[$iDate], 'date_modified');
+
+      $this->_formatDates($aData[$iDate], 'date_modified');
     }
 
-    return $this->_aData;
+    return $aData;
   }
 
   /**
@@ -325,24 +328,24 @@ class Blogs extends Main {
       return false;
 
     elseif ($bUpdate)
-      $this->_aData = $this->_formatForUpdate($aRow);
+      $aData = $this->_formatForUpdate($aRow);
 
     else {
-      $this->_aData[1] = $this->_formatForOutput(
+      $aData[1] = $this->_formatForOutput(
               $aRow,
               array('id', 'uid', 'author_id', 'date', 'date_modified'),
               array('published', 'use_gravatar')
       );
 
-      $this->_aData[1]['tags_raw']  = $aRow['tags'];
-      $this->_aData[1]['tags']      = array_filter(
+      $aData[1]['tags_raw']  = $aRow['tags'];
+      $aData[1]['tags']      = array_filter(
               array_map('trim', explode(',', $aRow['tags']))
       );
 
-      $this->_formatDates($this->_aData[1], 'date_modified');
+      $this->_formatDates($aData[1], 'date_modified');
     }
 
-    return $this->_aData;
+    return $aData;
   }
 
   /**
@@ -577,7 +580,7 @@ class Blogs extends Main {
       $iDate = $aRow['date'];
 
       # We need to specify 'blogs' because this might also be called for rss
-      $this->_aData[$iDate] = $this->_formatForOutput(
+      $aData[$iDate] = $this->_formatForOutput(
               $aRow,
               array('id', 'uid', 'author_id', 'date'),
               array('published', 'use_gravatar'),
@@ -585,6 +588,6 @@ class Blogs extends Main {
       );
     }
 
-    return $this->_aData;
+    return isset($aData) ? $aData : array();
   }
 }

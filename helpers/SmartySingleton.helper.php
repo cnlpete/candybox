@@ -187,6 +187,7 @@ class SmartySingleton extends Smarty {
       foreach ($aPaths['img'] as $sKey => $sValue)
         $aPaths['img'][$sKey] = WEBSITE_CDN . '/' . Helper::removeSlash ($sValue);
     }
+
     $aPaths['core']     = '/vendor/candycms/core';
     $aPaths['public']   = WEBSITE_CDN !== '' ? WEBSITE_CDN : '/public';
     $aPaths['css']      = $aPaths['public'] . '/stylesheets';

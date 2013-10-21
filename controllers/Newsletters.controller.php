@@ -13,10 +13,8 @@
 
 namespace candyCMS\Core\Controllers;
 
-use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
-use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Newsletters extends Main {
 
@@ -94,13 +92,13 @@ class Newsletters extends Main {
    * Subscribe to newsletter list.
    *
    * @static
-   * @access protected
+   * @access public
    * @param array $aData user data
    * @param boolean $bDoubleOptIn decide if we have to use double opt-in
    * @return boolean status of subscription
    *
    */
-  protected static function _subscribeToNewsletter($aData, $bDoubleOptIn = false) {
+  public static function subscribeToNewsletter($aData, $bDoubleOptIn = false) {
     $oMailchimp = new \Mailchimp(MAILCHIMP_API_KEY);
 
     $aMailChimp = $oMailchimp->call('lists/subscribe', array(

@@ -89,25 +89,25 @@ class Galleries extends Main {
 
     # Update a single entry.
     if ($bUpdate)
-      $this->_aData = $this->_formatForUpdate($aRow);
+      $aData = $this->_formatForUpdate($aRow);
 
     else {
       # Need to specify 'galleries' because this might be called for RSS feed generation
-      $this->_aData = $this->_formatForOutput(
+      $aData = $this->_formatForOutput(
               $aRow,
               array('id', 'user_id', 'files_sum'),
               array('published'),
               'galleries');
 
-      $this->_aData['files'] = $aRow['files_sum'] > 0 ?
+      $aData['files'] = $aRow['files_sum'] > 0 ?
               $this->_getThumbnails($aRow['id'], $bAdvancedImageInformation) :
               '';
 
       if ($this->_aSession['user']['role'] >= 3)
-        $this->_aData['url_createfile'] = $this->_aData['url_clean'] . '/createfile';
+        $aData['url_createfile'] = $aData['url_clean'] . '/createfile';
     }
 
-    return $this->_aData;
+    return $aData;
   }
 
   /**
@@ -178,20 +178,20 @@ class Galleries extends Main {
       $iId = $aRow['id'];
 
       # need to specify 'galleries' because this might be called for rss feed generation
-      $this->_aData[$iId] = $this->_formatForOutput(
+      $aData[$iId] = $this->_formatForOutput(
               $aRow,
               array('id', 'user_id', 'files_sum'),
               array('published'),
               'galleries');
 
-      $this->_aData[$iId]['files'] = $aRow['files_sum'] > 0 ?
+      $aData[$iId]['files'] = $aRow['files_sum'] > 0 ?
               $this->_getThumbnails($aRow['id'], $bAdvancedImageInformation) :
               '';
 
-      $this->_aData[$iId]['url_createfile'] = $this->_aData[$iId]['url_clean'] . '/createfile';
+      $aData[$iId]['url_createfile'] = $aData[$iId]['url_clean'] . '/createfile';
     }
 
-    return $this->_aData;
+    return $aData;
   }
 
   /**
@@ -765,15 +765,15 @@ class Galleries extends Main {
    * @param string $sSearch query string to search
    * @param string $sController controller to use
    * @param string $sOrderBy how to order search
-   * @return array $this->_aData search data
+   * @return array $aData search data
    *
    */
   public function search($sSearch, $sController = '', $sOrderBy = 't.date DESC') {
-    $this->_aData = parent::search($sSearch, 'gallery_albums', $sOrderBy);
+    $aData = parent::search($sSearch, 'gallery_albums', $sOrderBy);
 
-    $this->_aData['controller'] = $sController;
-    $this->_aData['title'] = I18n::get('global.' . strtolower($sController));
+    $aData['controller'] = $sController;
+    $aData['title'] = I18n::get('global.' . strtolower($sController));
 
-    return $this->_aData;
+    return $aData;
   }
 }

@@ -25,7 +25,7 @@ class Contents extends Main {
    *
    * @access public
    * @param integer $iLimit blog post limit
-   * @return array $this->_aData
+   * @return array $aData
    *
    */
   public function getOverview($iLimit = 50) {
@@ -79,14 +79,14 @@ class Contents extends Main {
     foreach ($aResult as $aRow) {
       $iId = $aRow['id'];
 
-      $this->_aData[$iId] = $this->_formatForOutput(
+      $aData[$iId] = $this->_formatForOutput(
               $aRow,
               array('id', 'uid', 'author_id', 'date'),
               array('published'),
               'contents');
     }
 
-    return $this->_aData;
+    return $aData;
   }
 
   /**
@@ -136,17 +136,17 @@ class Contents extends Main {
     }
 
     if ($bUpdate)
-      $this->_aData = $this->_formatForUpdate($aRow);
+      $aData = $this->_formatForUpdate($aRow);
 
     else {
-      $this->_aData = $this->_formatForOutput(
+      $aData = $this->_formatForOutput(
               $aRow,
               array('id', 'uid', 'author_id'),
               array('published'),
               'contents');
     }
 
-    return $this->_aData;
+    return $aData;
   }
 
   /**

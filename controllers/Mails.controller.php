@@ -118,7 +118,7 @@ class Mails extends Main {
     $this->oSmarty->setTemplateDir($oTemplate);
 
     $sUser = $this->__autoload('Users', true);
-    $aUser = $sUser::getUserNamesAndEmail($this->_iId);
+    $aUser = $sUser::getUserNameAndEmail($this->_iId);
 
     if (!$aUser && $this->_iId)
       return Helper::redirectTo('/errors/404');
@@ -173,7 +173,7 @@ class Mails extends Main {
       # Select user name and surname
       $sModel = $this->__autoload('Users', true);
       $oClass = new $sModel($this->_aRequest, $this->_aSession);
-      $aRow   = $oClass::getUserNamesAndEmail($this->_iId);
+      $aRow   = $oClass::getUserNameAndEmail($this->_iId);
 
       # If ID is specified and user not found => 404
       if (!$aRow && $this->_iId)

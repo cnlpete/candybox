@@ -30,10 +30,7 @@ class Users extends Main {
    * @return array data with user information
    *
    */
-  public static function getUserNamesAndEmail($iId) {
-    if (empty(parent::$_oDbStatic))
-      parent::connectToDatabase();
-
+  public static function getUserNameAndEmail($iId) {
     try {
       $oQuery = parent::$_oDbStatic->prepare("SELECT
                                                 name, surname, email
@@ -219,15 +216,15 @@ class Users extends Main {
     foreach ($aResult as $aRow) {
       $iId = $aRow['id'];
 
-      $this->_aData[$iId] = $this->_formatForUserOutput(
+      $aData[$iId] = $this->_formatForUserOutput(
               $aRow,
               array('id', 'date', 'role'),
               array('use_gravatar'));
 
-      $this->_formatDates($this->_aData[$iId], 'last_login');
+      $this->_formatDates($aData[$iId], 'last_login');
     }
 
-    return $this->_aData;
+    return $aData;
  }
 
   /**
@@ -281,21 +278,21 @@ class Users extends Main {
     }
 
     if ($bUpdate)
-      $this->_aData = $this->_formatForUpdate($aRow);
+      $aData = $this->_formatForUpdate($aRow);
 
     else {
-      $this->_aData = $this->_formatForUserOutput(
+      $aData = $this->_formatForUserOutput(
               $aRow,
               array('id', 'role'. 'date'),
               array('use_gravatar'));
 
       $oPluginManager = PluginManager::getInstance();
-      $this->_aData['content'] = $oPluginManager->runContentDisplayPlugins($this->_aData['content']);
+      $aData['content'] = $oPluginManager->runContentDisplayPlugins($aData['content']);
 
-      $this->_formatDates($this->_aData, 'last_login');
+      $this->_formatDates($aData, 'last_login');
     }
 
-    return $this->_aData;
+    return $aData;
   }
 
   /**
@@ -535,13 +532,13 @@ class Users extends Main {
       $oQuery->bindParam('verification_code', $sVerificationCode, PDO::PARAM_STR);
       $oQuery->execute();
 
-      $this->_aData = $oQuery->fetch(PDO::FETCH_ASSOC);
+      $aData = $oQuery->fetch(PDO::FETCH_ASSOC);
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
     }
 
-    if ($this->_aData['id']) {
+    if ($aData['id']) {
       try {
         $oQuery = $this->_oDb->prepare("UPDATE
                                           " . SQL_PREFIX . "users
@@ -551,14 +548,14 @@ class Users extends Main {
                                         WHERE
                                           id = :id");
 
-        $oQuery->bindParam('id', $this->_aData['id'], PDO::PARAM_INT);
+        $oQuery->bindParam('id', $aData['id'], PDO::PARAM_INT);
 
         # Prepare for first login
-        $this->_aData['verification_code'] = '';
+        $aData['verification_code'] = '';
 
         $sModel = $this->__autoload('Sessions');
         $oModel = new $sModel($this->_aRequest, $this->_aSession);
-        $oModel->create($this->_aData);
+        $oModel->create($aData);
 
         return $oQuery->execute();
       }
@@ -575,16 +572,6 @@ class Users extends Main {
     }
     else
       return false;
-  }
-
-  /**
-   * Return data from verification / activation.
-   *
-   * @access public
-   * @return array $this->_aData
-   */
-  public function getActivationData() {
-    return $this->_aData;
   }
 
   /**

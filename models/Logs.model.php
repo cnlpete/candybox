@@ -24,7 +24,7 @@ class Logs extends Main {
    *
    * @access public
    * @param integer $iLimit page limit
-   * @return array $this->_aData
+   * @return array $aData
    *
    */
   public function getOverview($iLimit = 50) {
@@ -72,16 +72,16 @@ class Logs extends Main {
     foreach ($aResult as $aRow) {
       $iId = $aRow['id'];
 
-      $this->_aData[$iId] = $this->_formatForOutput(
+      $aData[$iId] = $this->_formatForOutput(
               $aRow,
               array('id', 'uid', 'user_id', 'action_id'),
               array('result'));
 
-      $this->_formatDates($this->_aData[$iId], 'time_start');
-      $this->_formatDates($this->_aData[$iId], 'time_end');
+      $this->_formatDates($aData[$iId], 'time_start');
+      $this->_formatDates($aData[$iId], 'time_end');
     }
 
-    return $this->_aData;
+    return $aData;
   }
 
   /**

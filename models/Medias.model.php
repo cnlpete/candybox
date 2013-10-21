@@ -22,7 +22,7 @@ class Medias extends Main {
    * Get all uploaded media files.
    *
    * @access public
-   * @return array $this->_aData
+   * @return array $aData
    *
    */
   public function getOverview() {

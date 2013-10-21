@@ -409,12 +409,14 @@ class Index {
     else {
       if (EXTENSION_CHECK && file_exists(PATH_STANDARD . '/app/models/Sessions.model.php')) {
         require_once PATH_STANDARD . '/app/models/Sessions.model.php';
-        $aUser = \candyCMS\Models\Sessions::getUserBySession();
+        $oModel = new \candyCMS\Models\Sessions();
       }
       else {
         require_once PATH_STANDARD . '/vendor/candycms/core/models/Sessions.model.php';
-        $aUser = \candyCMS\Core\Models\Sessions::getUserBySession();
+        $oModel = new \candyCMS\Core\Models\Sessions();
       }
+
+      $aUser = $oModel->getUserBySession();
     }
 
     if (is_array($aUser))

@@ -13,12 +13,10 @@
 
 namespace candyCMS\Core\Controllers;
 
-use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Controllers\Main;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
-use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Sessions extends Main {
 
@@ -250,8 +248,10 @@ class Sessions extends Main {
     if ($this->_aSession['user']['role'] > 0) {
       $oPluginManager = PluginManager::getInstance();
       $sRedirectUrl = '/';
+
       if ($oPluginManager->hasSessionPlugin() && $this->_aSession['user']['role'] == 2)
-        $sRedirectUrl = $oPluginManager->getSessionPlugin()->logoutUrl(WEBSITE_URL);
+          $sRedirectUrl = $oPluginManager->getSessionPlugin()->logoutUrl(WEBSITE_URL);
+
       else
         $this->_oModel->destroy(session_id());
 

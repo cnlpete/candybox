@@ -149,26 +149,26 @@ class Calendars extends Main {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
     }
 
-    $this->_aData = array();
+    $aData = array();
     foreach ($aResult as $aRow) {
-      $iId = $aRow['id'];
+      $iId    = $aRow['id'];
       $sMonth = I18n::get('global.months.' . $aRow['start_month']);
-      $sYear = $aRow['start_year'];
-      $sDate = $sMonth . $sYear;
+      $sYear  = $aRow['start_year'];
+      $sDate  = $sMonth . $sYear;
 
-      $this->_aData[$sDate]['month']  = $sMonth;
-      $this->_aData[$sDate]['year']   = $sYear;
+      $aData[$sDate]['month']  = $sMonth;
+      $aData[$sDate]['year']   = $sYear;
 
-      $this->_aData[$sDate]['dates'][$iId] = $this->_formatForOutput(
+      $aData[$sDate]['dates'][$iId] = $this->_formatForOutput(
               $aRow,
               array('id', 'author_id')
       );
 
-      $this->_formatDates($this->_aData[$sDate]['dates'][$iId], 'start_date');
-      $this->_formatDates($this->_aData[$sDate]['dates'][$iId], 'end_date');
+      $this->_formatDates($aData[$sDate]['dates'][$iId], 'start_date');
+      $this->_formatDates($aData[$sDate]['dates'][$iId], 'end_date');
     }
 
-    return $this->_aData;
+    return $aData;
   }
 
   /**
@@ -213,23 +213,23 @@ class Calendars extends Main {
     }
 
     if ($bUpdate) {
-      $this->_aData = $this->_formatForUpdate($aRow);
-      $this->_aData['start_date'] = date('Y-m-d', $this->_aData['start_date']);
+      $aData = $this->_formatForUpdate($aRow);
+      $aData['start_date'] = date('Y-m-d', $aData['start_date']);
 
-      if ($this->_aData['end_date'])
-        $this->_aData['end_date'] = date('Y-m-d', $this->_aData['end_date']);
+      if ($aData['end_date'])
+        $aData['end_date'] = date('Y-m-d', $aData['end_date']);
     }
     else {
-      $this->_aData = $this->_formatForOutput(
+      $aData = $this->_formatForOutput(
               $aRow,
               array('id', 'author_id', 'start_date', 'end_date')
       );
 
-      $this->_formatDates($this->_aData, 'start_date');
-      $this->_formatDates($this->_aData, 'end_date');
+      $this->_formatDates($aData, 'start_date');
+      $this->_formatDates($aData, 'end_date');
     }
 
-    return $this->_aData;
+    return $aData;
   }
 
   /**

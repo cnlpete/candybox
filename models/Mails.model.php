@@ -23,7 +23,7 @@ class Mails extends Main {
    * Get the current mail queue.
    *
    * @access public
-   * @return array $this->_aData
+   * @return array $aData
    *
    */
   public function getOverview() {
@@ -53,13 +53,13 @@ class Mails extends Main {
     foreach ($aResult as $aRow) {
       $iId = $aRow['id'];
 
-      $this->_aData[$iId] = $this->_formatForOutput(
+      $aData[$iId] = $this->_formatForOutput(
               $aRow,
               array('id', 'user_id'),
               array('result'));
     }
 
-    return $this->_aData;
+    return $aData;
   }
 
   /**

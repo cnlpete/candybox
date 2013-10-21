@@ -21,39 +21,35 @@ class Sessions extends Main {
   /**
    * Fetch all user data of active session.
    *
-   * @static
    * @access public
    * @return array | boolean $aData with user data or false
    * @see vendor/candycms/core/controllers/Index.controller.php
    *
    */
-  public static function getUserBySession() {
-    if (empty(parent::$_oDbStatic))
-      parent::connectToDatabase();
-
+  public function getUserBySession() {
     try {
-      $oQuery = parent::$_oDbStatic->prepare("SELECT
-                                                u.*,
-                                                UNIX_TIMESTAMP(u.date) as date
-                                              FROM
-                                                " . SQL_PREFIX . "users AS u
-                                              LEFT JOIN
-                                                " . SQL_PREFIX . "sessions AS s
-                                              ON
-                                                u.id = s.user_id
-                                              WHERE
-                                                s.session = :session_id
-                                              AND
-                                                s.ip = :ip
-                                              LIMIT
-                                                1");
+      $oQuery = $this->_oDb->prepare("SELECT
+                                        u.*,
+                                        UNIX_TIMESTAMP(u.date) as date
+                                      FROM
+                                        " . SQL_PREFIX . "users AS u
+                                      LEFT JOIN
+                                        " . SQL_PREFIX . "sessions AS s
+                                      ON
+                                        u.id = s.user_id
+                                      WHERE
+                                        s.session = :session_id
+                                      AND
+                                        s.ip = :ip
+                                      LIMIT
+                                        1");
 
       $oQuery->bindValue('session_id', session_id(), PDO::PARAM_STR);
       $oQuery->bindParam('ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
       $bReturn = $oQuery->execute();
 
-      if ($bReturn === false)
-        self::destroy();
+      if ($bReturn)
+        $this->destroy(session_id());
 
       $aData = $oQuery->fetch(PDO::FETCH_ASSOC);
       return $aData ? parent::_formatForUserOutput($aData) : false;
@@ -147,31 +143,31 @@ class Sessions extends Main {
    * Destroy a user session and logout.
    *
    * @access public
-   * @param integer $iId the session id
+   * @param integer $sId the session id
    * @param string $sController controller to use, obsolete and only for not giving E_STRICT warnings
    * @return boolean status of query
    *
    */
-  public function destroy($iId, $sController = '') {
-    if (empty($iId) || $iId < 1)
+  public function destroy($sId, $sController = '') {
+    if (empty($sId))
       return false;
 
     try {
-      $oQuery = parent::$_oDbStatic->prepare("UPDATE
-                                                " . SQL_PREFIX . "sessions
-                                              SET
-                                                session = NULL
-                                              WHERE
-                                                session = :session_id");
+      $oQuery = $this->_oDb->prepare("UPDATE
+                                        " . SQL_PREFIX . "sessions
+                                      SET
+                                        session = NULL
+                                      WHERE
+                                        session = :session_id");
 
-      $oQuery->bindParam('session_id', $iId, PDO::PARAM_STR);
+      $oQuery->bindParam('session_id', $sId, PDO::PARAM_STR);
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
 
       try {
-        parent::$_oDbStatic->rollBack();
+        $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());

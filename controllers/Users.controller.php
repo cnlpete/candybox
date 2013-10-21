@@ -490,7 +490,7 @@ class Users extends Main {
    */
   protected function _destroy() {
     require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Upload.helper.php';
-    $aUser = $this->_oModel->getUserNamesAndEmail($this->_iId);
+    $aUser = $this->_oModel->getUserNameAndEmail($this->_iId);
 
     # Do IDs match?
     if (isset($this->_aRequest[$this->_sController]) && $this->_aSession['user']['id'] == $this->_iId) {
@@ -541,7 +541,9 @@ class Users extends Main {
    * Verify email address.
    *
    * @access public
-   * @return boolean status of message
+   * @return string message
+   * @todo remove bug: When a user is registered to the list BEFORE registering
+   * to the CMS an exception is thrown
    *
    */
   public function verification() {
@@ -550,10 +552,17 @@ class Users extends Main {
 
     elseif ($this->_oModel->verifyEmail($this->_aRequest['code']) === true) {
       # Subscribe to MailChimp after email address is confirmed
-      $this->_subscribeToNewsletter($this->_oModel->getActivationData());
+      # We need to fetch user data by SESSION since we don't grab that from cache
+      # any longer.
+      #
+      # THIS FUNCTION IS DISABLED TO TO BUG DESCRIBED AVOBE
+      #$sModel   = $this->__autoload('Sessions', true);
+      #$oSession = new $sModel($this->_aRequest, $this->_aSession);
+
+      #$this->__autoload('Newsletters');
+      #Newsletters::subscribeToNewsletter($oSession->getUserBySession());
 
       $this->oSmarty->clearControllerCache($this->_sController);
-
       return Helper::successMessage(I18n::get('success.user.verification'), '/');
     }
 
@@ -563,6 +572,8 @@ class Users extends Main {
 
   /**
    * Get the API token of a user.
+   *
+   * USE THAT METHOD WITH SSL ONLY!
    *
    * @access public
    * @return string JSON token or null
