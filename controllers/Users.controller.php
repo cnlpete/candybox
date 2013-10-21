@@ -185,9 +185,9 @@ class Users extends Main {
 
         $this->_aRequest['fileData'] = array(
             'popup'     => 'data:' . $sFileMime . ';base64,' .
-            base64_encode(file_get_contents(PATH_UPLOAD . '/users/popup/' . $aFileName[0])),
+            base64_encode(file_get_contents(Helper::removeSlash(PATH_UPLOAD) . '/users/popup/' . $aFileName[0])),
             'thumbnail' => 'data:' . $sFileMime . ';base64,' .
-            base64_encode(file_get_contents(PATH_UPLOAD . '/users/64/' . $aFileName[0]))
+            base64_encode(file_get_contents(Helper::removeSlash(PATH_UPLOAD) . '/users/64/' . $aFileName[0]))
         );
 
         return Helper::successMessage(I18n::get('success.upload'),
