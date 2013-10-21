@@ -46,7 +46,7 @@
   },
 
   "require-dev": {
-    "candycms/tests": "4.0.*",
-    "candycms/documentation": "4.0.*"
+    "candycms/tests": "4.0.*@dev",
+    "candycms/documentation": "4.0.*@dev"
   }
 }
