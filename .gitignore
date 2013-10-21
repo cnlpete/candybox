@@ -4,6 +4,7 @@
 
 .DS_Store
 .project
+.idea
 nbproject/*
 codekit-config.json
 

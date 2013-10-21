@@ -1,9 +1,48 @@
 {
+  "repositories":
+    [
+      {
+        "type": "package",
+        "package": {
+          "name": "recaptcha/recaptcha",
+          "version": "1.11",
+          "dist": {
+            "url": "http://recaptcha.googlecode.com/files/recaptcha-php-1.11.zip",
+            "type": "zip"
+          },
+          "source": {
+            "url": "http://recaptcha.googlecode.com/svn/",
+            "type": "svn",
+            "reference": "trunk/recaptcha-plugins/php/"
+          }
+        }
+      },
+      {
+        "type": "package",
+        "package": {
+          "name": "smushit/smushit",
+          "version": "1.0",
+          "dist": {
+            "url": "https://github.com/marcoraddatz/smushit-php/zipball/master",
+            "type": "zip"
+          },
+          "source": {
+            "url": "https://github.com/marcoraddatz/smushit-php",
+            "type": "git",
+            "reference": "master"
+          }
+        }
+      }
+    ],
+
   "require": {
     "php": ">=5.3.0",
 
     "candycms/core": "3.1.*@dev",
-    "candycms/plugins": "3.1.*@dev"
+    "candycms/plugins": "3.1.*@dev",
+
+    "smushit/smushit": "1.0.*",
+    "recaptcha/recaptcha": "1.*"
   },
 
   "require-dev": {

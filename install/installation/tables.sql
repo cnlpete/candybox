@@ -165,7 +165,6 @@ CREATE TABLE `%SQL_PREFIX%users` (
   `password_temporary` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `email` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `content` varchar(1000) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `receive_newsletter` tinyint(1) NOT NULL DEFAULT '1',
   `use_gravatar` tinyint(1) DEFAULT '0',
   `role` tinyint(1) NOT NULL DEFAULT '1',
   `date` datetime NOT NULL,
