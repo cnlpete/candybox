@@ -280,7 +280,7 @@ class Users extends Main {
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  public function create() {
+  public function create( $iUserRole = 3 ) {
     if($this->_aSession['user']['role'] > 0 && $this->_aSession['user']['role'] < 4)
       return Helper::redirectTo('/errors/401');
 

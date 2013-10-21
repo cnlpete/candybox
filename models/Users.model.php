@@ -665,6 +665,10 @@ class Users extends Main {
    *
    */
   public static function getUserByToken($sApiToken) {
+    # This is needed for all api token use cases
+    if (empty(parent::$_oDbStatic))
+      parent::connectToDatabase();
+
     try {
       $oQuery = parent::$_oDbStatic->prepare("SELECT
                                                 *,

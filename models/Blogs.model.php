@@ -96,6 +96,10 @@ class Blogs extends Main {
    *
    */
   public function getOverviewByTag($iLimit = LIMIT_BLOG, $sTagname = '') {
+    # Set limit to 2 to make sure we have some pages to test in test mode
+    if (ACTIVE_TEST && $iLimit != 0)
+      $iLimit = 2;
+
     if (empty($sTagname)) {
       # Remove all characters that might harm us, only allow digits, normal letters and whitespaces
       $sTagname = trim(preg_replace('/[^\d\s\w]/', '',

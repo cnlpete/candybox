@@ -15,7 +15,6 @@ namespace candyCMS\Core\Controllers;
 
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
-use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Blogs extends Main {
 
@@ -30,10 +29,6 @@ class Blogs extends Main {
     $oTemplate =  $this->oSmarty->getTemplate($this->_sController, 'show');
     $this->oSmarty->setTemplateDir($oTemplate);
 
-    $this->setDescription($this->_setBlogsDescription());
-    $this->setKeywords($this->_setBlogsKeywords());
-    $this->setTitle($this->_setBlogsTitle());
-
     if ($this->_iId) {
       $this->_aData = $this->_oModel->getId($this->_iId);
 
@@ -41,9 +36,6 @@ class Blogs extends Main {
         return Helper::redirectTo('/errors/404');
 
       $this->oSmarty->assign('blogs', $this->_aData);
-
-      # Bugfix: This is necessary, because comments also do a setDir on the singleton object.
-      $this->oSmarty->setTemplateDir($oTemplate);
     }
 
     else {
@@ -55,9 +47,8 @@ class Blogs extends Main {
 
         if (isset($this->_aRequest['search']) && $this->_aRequest['search'])
           # add rss info
-          $this->_aRSSInfo[] = array(
-                                  'url' => WEBSITE_URL . '/blogs/' . $this->_aRequest['search'] . '.rss',
-                                  'title' => $this->_aRequest['search'] . ' - ' . I18n::get('global.blogs'));
+          $this->_aRSSInfo[] = array( 'url' => WEBSITE_URL . '/blogs/' . $this->_aRequest['search'] . '.rss',
+                                      'title' => $this->_aRequest['search'] . ' - ' . I18n::get('global.blogs'));
 
 
         # Limit to maximum pages
@@ -70,6 +61,10 @@ class Blogs extends Main {
         }
       }
     }
+
+    $this->setDescription($this->_setBlogsDescription());
+    $this->setKeywords($this->_setBlogsKeywords());
+    $this->setTitle($this->_setBlogsTitle());
 
     # Add RSS info
     $this->_aRSSInfo[] = array( 'url'   => WEBSITE_URL . '/blogs.rss',
