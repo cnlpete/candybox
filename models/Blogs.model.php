@@ -43,7 +43,7 @@ class Blogs extends Main {
   }
 
   /**
-   * Get count of visible blog tag entries.
+   * Get count of visible blog entries by tags.
    *
    * @access public
    * @param string $sTagname the tagname
@@ -65,7 +65,7 @@ class Blogs extends Main {
                                       AND (tags LIKE :commaTagnameComma
                                         OR tags LIKE :commaTagname
                                         OR tags LIKE :tagnameComma
-                                        OR tags   =  :tagname
+                                        OR tags    = :tagname
                                         OR tags LIKE :commaSpaceTagname
                                         OR tags LIKE :commaSpaceTagnameComma)");
 
@@ -167,7 +167,7 @@ class Blogs extends Main {
       # We need to specify 'blogs' because this might also be called for rss
       $this->_aData[$iDate] = $this->_formatForOutput(
               $aRow,
-              array('id', 'uid', 'author_id'),
+              array('id', 'uid', 'author_id', 'date', 'date_modified'),
               array('published', 'use_gravatar'),
               'blogs'
       );
@@ -193,21 +193,22 @@ class Blogs extends Main {
    *
    */
   public function getOverview($iLimit = LIMIT_BLOG, $bMultilang = false) {
+    # Set limit to 2 to make sure we have some pages to test in test mode
     if (ACTIVE_TEST && $iLimit != 0)
       $iLimit = 2;
 
     $iResult = $this->getCount();
-
     require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Pagination.helper.php';
     $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit != 0 ? $iLimit : $iResult);
 
     try {
-      if ($bMultilang === true)
+      if ($bMultilang)
         $sWhere = "WHERE published = '1'";
 
       # Show unpublished items and entries with diffent languages to moderators or administrators only
       elseif (isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3)
         $sWhere = '';
+
       else
         $sWhere = "WHERE published = '1' AND (language = '" . WEBSITE_LANGUAGE . "' OR language = '')";
 
@@ -234,8 +235,7 @@ class Blogs extends Main {
                                       GROUP BY
                                         b.id
                                       ORDER BY
-                                        b.date DESC"
-              . $sLimit);
+                                        b.date DESC" . $sLimit);
 
       $oQuery->execute();
       $aResult = $oQuery->fetchAll(PDO::FETCH_ASSOC);
@@ -248,16 +248,21 @@ class Blogs extends Main {
       # We use the date as identifier to give plugins the possibility to patch into the system.
       $iDate = $aRow['date'];
 
-      # We need to specify 'blogs' because this might also be called for rss
+      # We need to specify 'blogs' because this might also be called for RSS
       $this->_aData[$iDate] = $this->_formatForOutput(
-              $aRow, array('id', 'uid', 'author_id'), array('published', 'use_gravatar'), 'blogs'
+              $aRow,
+              array('id', 'uid', 'author_id', 'date', 'date_modified'),
+              array('published', 'use_gravatar'),
+              'blogs'
       );
 
       # Bugfix: Make tags compatible to candyCMS Version 1.x
       $this->_aData[$iDate]['tags_raw'] = $aRow['tags'];
 
       # Explode using ',' and filter empty items (since explode always gives at least one item)
-      $this->_aData[$iDate]['tags'] = array_filter(array_map('trim', explode(',', $aRow['tags'])));
+      $this->_aData[$iDate]['tags'] = array_filter(
+              array_map('trim', explode(',', $aRow['tags']))
+      );
       $this->_formatDates($this->_aData[$iDate], 'date_modified');
     }
 
@@ -319,9 +324,17 @@ class Blogs extends Main {
       $this->_aData = $this->_formatForUpdate($aRow);
 
     else {
-      $this->_aData[1] = $this->_formatForOutput($aRow, array('id', 'uid', 'author_id'), array('published', 'use_gravatar'));
+      $this->_aData[1] = $this->_formatForOutput(
+              $aRow,
+              array('id', 'uid', 'author_id', 'date', 'date_modified'),
+              array('published', 'use_gravatar')
+      );
+
       $this->_aData[1]['tags_raw']  = $aRow['tags'];
-      $this->_aData[1]['tags']      = array_filter(array_map('trim', explode(',', $aRow['tags'])));
+      $this->_aData[1]['tags']      = array_filter(
+              array_map('trim', explode(',', $aRow['tags']))
+      );
+
       $this->_formatDates($this->_aData[1], 'date_modified');
     }
 
@@ -365,8 +378,10 @@ class Blogs extends Main {
                                           NOW(),
                                           :published )");
 
-      $sTags = $this->_aRequest[$this->_sController]['tags'];
-      $sTags = Helper::formatInput(implode(',', array_filter(array_map('trim', explode(',', $sTags)))));
+      $sTags = Helper::formatInput(
+              implode(',', array_filter(array_map('trim', explode(',', $this->_aRequest[$this->_sController]['tags']))))
+      );
+
       $oQuery->bindParam('tags', $sTags, PDO::PARAM_STR);
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
@@ -438,7 +453,9 @@ class Blogs extends Main {
 
     $sDate = date('Y-m-d H:i:s', $iDate);
 
-    $sTags = Helper::formatInput(implode(',', array_filter(array_map('trim', explode(',', $this->_aRequest[$this->_sController]['tags'])))));
+    $sTags = Helper::formatInput(
+            implode(',', array_filter(array_map('trim', explode(',', $this->_aRequest[$this->_sController]['tags']))))
+    );
 
     try {
       $oQuery = $this->_oDb->prepare("UPDATE
@@ -556,7 +573,12 @@ class Blogs extends Main {
       $iDate = $aRow['date'];
 
       # We need to specify 'blogs' because this might also be called for rss
-      $this->_aData[$iDate] = $this->_formatForOutput($aRow, array('id', 'uid', 'author_id'), array('published', 'use_gravatar'), 'blogs');
+      $this->_aData[$iDate] = $this->_formatForOutput(
+              $aRow,
+              array('id', 'uid', 'author_id', 'date'),
+              array('published', 'use_gravatar'),
+              'blogs'
+      );
     }
 
     return $this->_aData;

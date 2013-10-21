@@ -132,6 +132,9 @@ abstract class Main {
   public function __destruct() {
     # We must reset saved data due to wrong output
     $this->_aData = array();
+
+    # Close all DB connections
+    #$this->_oDb = null;
   }
 
   /**
@@ -140,7 +143,6 @@ abstract class Main {
    * @static
    * @access public
    * @return object PDO
-   * @todo test Postgre connection
    *
    */
   public static function connectToDatabase() {
@@ -151,16 +153,10 @@ abstract class Main {
                 SQL_DB :
                 SQL_DB . '_' . WEBSITE_MODE;
 
-        # Postgre
-        #if($sSQLType == 'pgsql')
-        #  self::$_oDbStatic = new PDO($sSQLType . ':host=' . SQL_HOST . ';port=' . SQL_PORT . ';dbname=' . $sDatabase . ';user=' . SQL_USER . ';password=' . SQL_PASSWORD);
-
-        # MySQL
-        #else
-          self::$_oDbStatic = new PDO($sSQLType . ':host=' . SQL_HOST . ';port=' . SQL_PORT . ';dbname=' . $sDatabase,
-                          SQL_USER,
-                          SQL_PASSWORD,
-                          array(PDO::ATTR_PERSISTENT => true));
+        self::$_oDbStatic = new PDO($sSQLType . ':host=' . SQL_HOST . ';port=' . SQL_PORT . ';dbname=' . $sDatabase,
+                        SQL_USER,
+                        SQL_PASSWORD,
+                        array(PDO::ATTR_PERSISTENT => true));
 
         self::$_oDbStatic->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       }
@@ -574,7 +570,6 @@ abstract class Main {
    * @param string $sController controller to use
    * @param string $sOrderBy how to order search
    * @return array $this->_aData search data
-   * @todo test
    *
    */
   public function search($sSearch, $sController = '', $sOrderBy = 't.date DESC') {

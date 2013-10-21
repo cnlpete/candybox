@@ -14,8 +14,6 @@
 namespace candyCMS\Core\Models;
 
 use candyCMS\Core\Helpers\AdvancedException;
-use candyCMS\Core\Helpers\Helper;
-use candyCMS\Core\Helpers\Pagination;
 use PDO;
 
 class Sessions extends Main {
@@ -54,7 +52,7 @@ class Sessions extends Main {
       $oQuery->bindParam('ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
       $bReturn = $oQuery->execute();
 
-      if ($bReturn == false)
+      if ($bReturn === false)
         self::destroy();
 
       $aData = $oQuery->fetch(PDO::FETCH_ASSOC);

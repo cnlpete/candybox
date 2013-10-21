@@ -207,7 +207,8 @@ class Galleries extends Main {
     if (empty($iId) || $iId < 1)
       return false;
 
-    # Clear existing array (fix, when we got no images at a gallery)
+    # Clear existing array
+    # Bugfix when we got no images at a gallery
     if (!empty($this->_aThumbs))
       unset($this->_aThumbs);
 
@@ -295,12 +296,12 @@ class Galleries extends Main {
    * @static
    * @access public
    * @param integer $iId album ID
-   * @return array file data
+   * @return boolean|array false if we got no ID, file data if query was successful
    *
    */
   public static function getFileData($iId) {
-    if (empty(parent::$_oDbStatic))
-      parent::connectToDatabase();
+    if (empty($iId) || $iId < 1)
+      return false;
 
     try {
       $oQuery = parent::$_oDbStatic->prepare("SELECT

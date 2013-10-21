@@ -24,7 +24,7 @@ class Calendars extends Main {
    * Build the PDO-Statement for getting entries for the specified year
    *
    * @access protected
-   * @return PDOStatement the PDOStatement to execute
+   * @return object PDOStatement the PDOStatement to execute
    *
    */
   protected function _getPreparedArchiveStatement() {
@@ -63,7 +63,7 @@ class Calendars extends Main {
    * Build the PDO-Statement for getting all future entries
    *
    * @access protected
-   * @return PDOStatement the PDOStatement to execute
+   * @return object PDOStatement the PDOStatement to execute
    *
    */
   protected function _getPreparedOverviewStatement() {
@@ -97,7 +97,7 @@ class Calendars extends Main {
    * Build the PDO-Statement for getting all entries
    *
    * @access protected
-   * @return PDOStatement the PDOStatement to execute
+   * @return object PDOStatement the PDOStatement to execute
    *
    */
   protected function _getPreparedIcalFeedStatement() {
@@ -159,7 +159,11 @@ class Calendars extends Main {
       $this->_aData[$sDate]['month']  = $sMonth;
       $this->_aData[$sDate]['year']   = $sYear;
 
-      $this->_aData[$sDate]['dates'][$iId] = $this->_formatForOutput($aRow, array('id', 'author_id'));
+      $this->_aData[$sDate]['dates'][$iId] = $this->_formatForOutput(
+              $aRow,
+              array('id', 'author_id')
+      );
+
       $this->_formatDates($this->_aData[$sDate]['dates'][$iId], 'start_date');
       $this->_formatDates($this->_aData[$sDate]['dates'][$iId], 'end_date');
     }
@@ -208,7 +212,7 @@ class Calendars extends Main {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
     }
 
-    if ($bUpdate === true) {
+    if ($bUpdate) {
       $this->_aData = $this->_formatForUpdate($aRow);
       $this->_aData['start_date'] = date('Y-m-d', $this->_aData['start_date']);
 
@@ -216,7 +220,11 @@ class Calendars extends Main {
         $this->_aData['end_date'] = date('Y-m-d', $this->_aData['end_date']);
     }
     else {
-      $this->_aData = $this->_formatForOutput($aRow, array('id', 'author_id'));
+      $this->_aData = $this->_formatForOutput(
+              $aRow,
+              array('id', 'author_id', 'start_date', 'end_date')
+      );
+
       $this->_formatDates($this->_aData, 'start_date');
       $this->_formatDates($this->_aData, 'end_date');
     }

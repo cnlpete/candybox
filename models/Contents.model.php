@@ -81,7 +81,7 @@ class Contents extends Main {
 
       $this->_aData[$iId] = $this->_formatForOutput(
               $aRow,
-              array('id', 'uid', 'author_id'),
+              array('id', 'uid', 'author_id', 'date'),
               array('published'),
               'contents');
     }
@@ -98,7 +98,7 @@ class Contents extends Main {
    * @return array|boolean array on success, boolean on false
    *
    */
-  public function getId($iId = '', $bUpdate = false) {
+  public function getId($iId, $bUpdate = false) {
     if (empty($iId) || $iId < 1)
       return false;
 

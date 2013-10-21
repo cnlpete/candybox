@@ -50,7 +50,6 @@ class Users extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -64,9 +63,6 @@ class Users extends Main {
    *
    */
   public static function getExistingUser($sEmail) {
-    if (empty(parent::$_oDbStatic))
-      parent::connectToDatabase();
-
     try {
       $oQuery = parent::$_oDbStatic->prepare("SELECT
                                                 email
@@ -84,7 +80,6 @@ class Users extends Main {
     }
     catch (AdvancedException $e) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -99,9 +94,6 @@ class Users extends Main {
    *
    */
   public static function getVerificationData($sEmail) {
-    if (empty(parent::$_oDbStatic))
-      parent::connectToDatabase();
-
     try {
       $oQuery = parent::$_oDbStatic->prepare("SELECT
                                                 name,
@@ -122,7 +114,6 @@ class Users extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -138,9 +129,6 @@ class Users extends Main {
    *
    */
   public static function setPassword($sEmail, $sPassword, $bEncrypt = false) {
-    if (empty(parent::$_oDbStatic))
-      parent::connectToDatabase();
-
     $sPassword = $bEncrypt == true ? md5(RANDOM_HASH . $sPassword) : $sPassword;
 
     try {
@@ -158,15 +146,14 @@ class Users extends Main {
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         parent::$_oDbStatic->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -185,7 +172,6 @@ class Users extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Pagination.helper.php';
@@ -571,7 +557,7 @@ class Users extends Main {
         $this->_aData['verification_code'] = '';
 
         $sModel = $this->__autoload('Sessions');
-        $oModel = new $sModel($aRequest, $aSession);
+        $oModel = new $sModel($this->_aRequest, $this->_aSession);
         $oModel->create($this->_aData);
 
         return $oQuery->execute();
@@ -679,9 +665,6 @@ class Users extends Main {
    *
    */
   public static function getUserByToken($sApiToken) {
-    if (empty(parent::$_oDbStatic))
-      parent::connectToDatabase();
-
     try {
       $oQuery = parent::$_oDbStatic->prepare("SELECT
                                                 *,

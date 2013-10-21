@@ -23,7 +23,7 @@ class Downloads extends Main {
    * Get all download data.
    *
    * @access public
-   * @return array data
+   * @return array $this->_aData
    *
    */
   public function getOverview() {
@@ -80,7 +80,7 @@ class Downloads extends Main {
    * @return array data
    *
    */
-  public function getId($iId = '', $bUpdate = false) {
+  public function getId($iId, $bUpdate = false) {
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         d.*,
@@ -108,7 +108,7 @@ class Downloads extends Main {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
     }
 
-    $this->_aData = $bUpdate === true ? $this->_formatForUpdate($aRow) : $aRow;
+    $this->_aData = $bUpdate ? $this->_formatForUpdate($aRow) : $aRow;
     return $this->_aData;
   }
 
@@ -129,7 +129,8 @@ class Downloads extends Main {
                                                 " . SQL_PREFIX . "downloads
                                               WHERE
                                                 id = :id
-                                              LIMIT 1");
+                                              LIMIT
+                                                1");
 
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
       $oQuery->execute();
@@ -284,10 +285,12 @@ class Downloads extends Main {
    *
    */
   public function destroy($iId, $sController = '') {
-    # Get file name
-    $sFile = $this->getFileName($iId);
+    if (empty($iId) || $iId < 1)
+      return false;
 
-    $bReturn = parent::destroy($iId);
+    # Get file name
+    $sFile    = $this->getFileName($iId);
+    $bReturn  = parent::destroy($iId);
 
     if (is_file(Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sFile)))
       unlink(Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sFile));

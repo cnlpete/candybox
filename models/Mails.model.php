@@ -138,6 +138,9 @@ class Mails extends Main {
    *
    */
   public function resend($iId) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         *
