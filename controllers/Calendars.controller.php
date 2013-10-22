@@ -15,7 +15,6 @@ namespace candyCMS\Core\Controllers;
 
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
-use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Calendars extends Main {
 
@@ -66,8 +65,10 @@ class Calendars extends Main {
         return Helper::redirectTo('/errors/404');
     }
 
-    header('Content-type: text/calendar; charset=utf-8');
-    header('Content-Disposition: inline; filename=' . $aData['title_encoded'] . '.ics');
+    if (!ACTIVE_TEST) {
+      header('Content-type: text/calendar; charset=utf-8');
+      header('Content-Disposition: inline; filename=' . $aData['title_encoded'] . '.ics');
+    }
 
     exit($this->oSmarty->fetch($oTemplate, UNIQUE_ID));
   }
@@ -109,8 +110,10 @@ class Calendars extends Main {
     if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID))
       $this->oSmarty->assign('calendar', $this->_oModel->getOverview());
 
-    header('Content-type: text/calendar; charset=utf-8');
-    header('Content-Disposition: inline; filename=' . WEBSITE_NAME . '.ics');
+    if (!ACTIVE_TEST) {
+      header('Content-type: text/calendar; charset=utf-8');
+      header('Content-Disposition: inline; filename=' . WEBSITE_NAME . '.ics');
+    }
 
     exit($this->oSmarty->fetch($oTemplate, UNIQUE_ID));
   }
