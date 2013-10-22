@@ -15,7 +15,6 @@ namespace candyCMS\Core\Controllers;
 
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
-use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Contents extends Main {
 
@@ -32,6 +31,7 @@ class Contents extends Main {
 
     $aData = $this->_oModel->getId($this->_iId);
 
+    # Entry does not exist or is unpublished
     if (!isset($aData) || !$aData['id'])
       return Helper::redirectTo('/errors/404');
 

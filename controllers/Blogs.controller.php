@@ -32,6 +32,7 @@ class Blogs extends Main {
     if ($this->_iId) {
       $this->_aData = $this->_oModel->getId($this->_iId);
 
+      # Entry does not exist or is unpublished
       if (!$this->_aData[1]['id'])
         return Helper::redirectTo('/errors/404');
 
@@ -47,9 +48,8 @@ class Blogs extends Main {
 
         if (isset($this->_aRequest['search']) && $this->_aRequest['search'])
           # add rss info
-          $this->_aRSSInfo[] = array( 'url' => WEBSITE_URL . '/blogs/' . $this->_aRequest['search'] . '.rss',
+          $this->_aRSSInfo[] = array( 'url'   => WEBSITE_URL . '/blogs/' . $this->_aRequest['search'] . '.rss',
                                       'title' => $this->_aRequest['search'] . ' - ' . I18n::get('global.blogs'));
-
 
         # Limit to maximum pages
         if (isset($this->_aRequest['page']) && (int) $this->_aRequest['page'] > $this->_oModel->oPagination->getPages())
