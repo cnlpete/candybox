@@ -48,7 +48,7 @@ class Sessions extends Main {
       $oQuery->bindParam('ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
       $bReturn = $oQuery->execute();
 
-      if ($bReturn)
+      if (!$bReturn)
         $this->destroy(session_id());
 
       $aData = $oQuery->fetch(PDO::FETCH_ASSOC);
