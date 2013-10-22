@@ -17,7 +17,8 @@
     "cnlpete/image-metadata-parser" : "0.0.*",
     "imagine/imagine": "0.5.*",
     "phpmailer/phpmailer": "5.2.*",
-    "mailchimp/mailchimp": "2.0.*"
+    "mailchimp/mailchimp": "2.0.*",
+    "tylerhall/smushit-php": "1.*"
   },
 
   "authors": [ {
