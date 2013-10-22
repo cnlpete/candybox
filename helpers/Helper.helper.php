@@ -17,8 +17,6 @@ use candyCMS\Core\Controllers\Main;
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\Cache;
-use PDO;
-use lessc;
 
 class Helper {
 
@@ -300,9 +298,8 @@ class Helper {
    *
    */
   public static function getFileSize($sPath) {
-    $iSize = @filesize( ACTIVE_TEST ? $sPath : Helper::removeSlash($sPath) );
-
-    return $iSize === false ? -1 : $iSize;
+    $sPath = is_file($sPath) ? $sPath : Helper::removeSlash($sPath);
+    return is_file($sPath) ? filesize($sPath) : -1;
   }
 
   /**

@@ -17,7 +17,6 @@ namespace candyCMS\Core\Controllers;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\Upload;
-use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Downloads extends Main {
 
@@ -38,14 +37,17 @@ class Downloads extends Main {
     # Update download count
     $this->_oModel->updateDownloadCount($this->_iId);
 
-    # Get mime type
-    if (function_exists('finfo_open'))
-      header('Content-type: ' . finfo_file(
-              finfo_open(FILEINFO_MIME_TYPE),
-              Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sFile)));
+    if (!ACTIVE_TEST) {
+      # Get mime type
+      if (function_exists('finfo_open'))
+        header('Content-type: ' . finfo_file(
+                finfo_open(FILEINFO_MIME_TYPE),
+                Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sFile)));
 
-    # Send file directly
-    header('Content-Disposition: attachment; filename="' . $sFile . '"');
+      # Send file directly
+      header('Content-Disposition: attachment; filename="' . $sFile . '"');
+    }
+
     exit(readfile(Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sFile)));
   }
 

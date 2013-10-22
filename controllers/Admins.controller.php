@@ -24,7 +24,6 @@ class Admins extends Main {
    *
    * @access protected
    * @return string HTML content
-   * @todo test
    *
    */
   protected function _overview() {
@@ -41,7 +40,6 @@ class Admins extends Main {
    *
    * @access public
    * @return
-   * @todo test and doc
    *
    */
   public function clearCache() {
@@ -53,12 +51,11 @@ class Admins extends Main {
     $this->oSmarty->clearCache(null, WEBSITE_MODE);
     $this->oSmarty->clearCompiledTemplatePaths();
 
-    # clear all the translation directories
-    # but save the success message first
+    # Clear all the translation directories but save the success message first
     $sSuccessMessage = I18n::get('success.update');
     I18n::unsetLanguage();
 
-    return Helper::successMessage($sSuccessMessage, '/admins/');
+    return Helper::successMessage($sSuccessMessage, '/' . $this->_sController);
   }
 
   /**
@@ -66,7 +63,6 @@ class Admins extends Main {
    *
    * @access public
    * @return
-   * @todo test and doc
    *
    */
   public function recompilestylesheets() {
@@ -98,6 +94,6 @@ class Admins extends Main {
           Helper::removeSlash('/app/assets/stylesheets/core/application.less'),
           Helper::removeSlash($sStylesheetPath . '/core.min.css'));
 
-    return Helper::successMessage(I18n::get('success.update'), '/admins/');
+    return Helper::successMessage(I18n::get('success.update'), '/' . $this->_sController);
   }
 }
