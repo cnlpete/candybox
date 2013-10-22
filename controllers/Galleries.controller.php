@@ -17,7 +17,6 @@ use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\Upload;
-use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Galleries extends Main {
 
@@ -76,14 +75,17 @@ class Galleries extends Main {
     # Collect data array
     $aData = $this->_oModel->getId($this->_iId, false, true);
 
+    # Entry does not exist or is unpublished
+    if (!$aData['id'])
+      return Helper::redirectTo('/errors/404');
+
     $sTitle = $this->_removeHighlight($aData['title']) . ' - ' . I18n::get('global.gallery');
     $this->setTitle($sTitle);
     $this->setDescription($this->_removeHighlight($aData['content']));
 
-    # add rss info
-    $this->_aRSSInfo[] = array(
-                            'url' => WEBSITE_URL . '/galleries/' . $this->_aRequest['id'] . '.rss',
-                            'title' => $sTitle);
+    # Add RSS info
+    $this->_aRSSInfo[] = array( 'url'   => WEBSITE_URL . '/galleries/' . $this->_aRequest['id'] . '.rss',
+                                'title' => $sTitle);
 
     if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID))
       $this->oSmarty->assign('album', $aData);
@@ -357,6 +359,7 @@ class Galleries extends Main {
    */
   public function updateOrder() {
     header('Content-Type: application/json');
+
     return $this->_aSession['user']['role'] < 3 ?
             json_encode(array(
                 'success' => false,

@@ -88,6 +88,9 @@ class Logs extends Main {
    *
    */
   public static function updateEndTime($iLogsId, $iEndTime = null) {
+    if (!$iLogsId)
+      return Helper::redirectTo('/errors/403');
+
     if ($iEndTime == null)
       $iEndTime = time();
 
@@ -111,6 +114,9 @@ class Logs extends Main {
    *
    */
   public static function updateResultFlag($iLogsId, $bResultFlag) {
+    if (!$iLogsId)
+      return Helper::redirectTo('/errors/403');
+
     require_once PATH_STANDARD . '/vendor/candycms/core/models/Logs.model.php';
 
     $sModel  = Main::__autoload('Logs', true);
@@ -131,7 +137,7 @@ class Logs extends Main {
    *
    */
   public static function write($sMessage) {
-    if(!$sMessage)
+    if (!$sMessage)
       return Helper::redirectTo('/errors/403');
 
     return \candyCMS\Core\Helpers\AdvancedException::writeLog($sMessage);
