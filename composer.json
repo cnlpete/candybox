@@ -16,22 +16,6 @@
             "reference": "trunk/recaptcha-plugins/php/"
           }
         }
-      },
-      {
-        "type": "package",
-        "package": {
-          "name": "smushit/smushit",
-          "version": "1.0",
-          "dist": {
-            "url": "https://github.com/marcoraddatz/smushit-php/zipball/master",
-            "type": "zip"
-          },
-          "source": {
-            "url": "https://github.com/marcoraddatz/smushit-php",
-            "type": "git",
-            "reference": "master"
-          }
-        }
       }
     ],
 
@@ -41,7 +25,6 @@
     "candycms/core": "4.0.*@dev",
     "candycms/plugins": "4.0.*@dev",
 
-    "smushit/smushit": "1.0.*",
     "recaptcha/recaptcha": "1.*"
   },
 
