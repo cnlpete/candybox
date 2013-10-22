@@ -13,10 +13,6 @@
 
 namespace candyCMS\Core\Controllers;
 
-use candyCMS\Core\Helpers\AdvancedException;
-use candyCMS\Core\Helpers\Helper;
-use candyCMS\Core\Helpers\SmartySingleton as Smarty;
-
 class Sitemaps extends Main {
 
   /**
@@ -35,7 +31,7 @@ class Sitemaps extends Main {
       $this->_getSitemapData();
     }
 
-    return $this->oSmarty->display($oTemplate, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -67,7 +63,7 @@ class Sitemaps extends Main {
     foreach ($aSitemapModels as $sSitemapModel) {
       $sModel = $this->__autoload($sSitemapModel, true);
       $oModel = new $sModel($this->_aRequest, $this->_aSession);
-      
+
       // @todo set second parameter to true at blogs to show multilanguage entries
       $this->oSmarty->assign(strtolower($sSitemapModel), $oModel->getOverview(1000));
     }
