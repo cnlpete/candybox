@@ -13,7 +13,6 @@
 
 namespace candyCMS\Core\Controllers;
 
-use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
@@ -139,7 +138,7 @@ class Mails extends Main {
     $this->oSmarty->assign('editorinfo', $oPluginManager->getEditorInfo());
 
     $sFullname = trim($aUser['name'] . ' ' . $aUser['surname']);
-		$sFullname = empty($sFullname) ? WEBSITE_NAME : $sFullname;
+    $sFullname = empty($sFullname) ? WEBSITE_NAME : $sFullname;
 
     $this->setTitle($sFullname . ' - ' . I18n::get('global.contact'));
     $this->setDescription(I18n::get('mails.description.show', $sFullname));
@@ -202,7 +201,7 @@ class Mails extends Main {
                     $this->_aSession['user']['id'],
                     '', '', $bStatus);
 
-      return $bStatus === true ?
+      return $bStatus ?
               $this->_showSuccessPage() :
               Helper::errorMessage(I18n::get('error.mail.create'), '/users/' . $this->_iId);
     }

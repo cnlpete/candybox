@@ -6,7 +6,7 @@
  * Usefull for data that has to be compiled from various sources otherwise, e.g. translations, ...
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
  * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 3.1

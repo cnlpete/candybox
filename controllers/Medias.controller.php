@@ -13,7 +13,6 @@
 
 namespace candyCMS\Core\Controllers;
 
-use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\SmartySingleton as Smarty;
@@ -106,14 +105,6 @@ class Medias extends Main {
    *
    */
   protected function _showFormTemplate($sTemplateName = '_form', $sTitle = '') {
-    # We don't support JSON
-    # @todo put this into a seperated method
-    if (isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'])
-      return json_encode(array(
-                  'success' => false,
-                  'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
-              ));
-
     $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'create');
     $this->oSmarty->setTemplateDir($oTemplate);
 
@@ -123,19 +114,32 @@ class Medias extends Main {
   }
 
   /**
-   * Show an Overview of all Files
-   * Needs to be custom since we want a different user right
+   * Show overview. We must overwrite the main function due to different
+   * user rights.
    *
    * @access public
-   * @return type
+   * @return string HTML
+   *
    *
    */
   public function show() {
+    return $this->overview();
+  }
+
+  /**
+   * Show an overview of all files.
+   * Needs to be custom since we want a different user right.
+   *
+   * @access public
+   * @return string HTML
+   *
+   */
+  public function overview() {
     $this->oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
     return $this->_aSession['user']['role'] < 3 ?
             Helper::redirectTo('/errors/401') :
-            $this->_show();
+            $this->_overview();
   }
 
   /**
@@ -145,7 +149,7 @@ class Medias extends Main {
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _show() {
+  protected function _overview() {
     $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'show');
     $this->oSmarty->setTemplateDir($oTemplate);
 

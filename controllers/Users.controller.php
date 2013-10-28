@@ -559,8 +559,8 @@ class Users extends Main {
       #$sModel   = $this->__autoload('Sessions', true);
       #$oSession = new $sModel($this->_aRequest, $this->_aSession);
 
-      #$this->__autoload('Newsletters');
-      #Newsletters::subscribeToNewsletter($oSession->getUserBySession());
+      #$this->__autoload('Newsletters', true);
+      #Newsletters::_subscribeToNewsletter($oSession->getUserBySession());
 
       $this->oSmarty->clearControllerCache($this->_sController);
       return Helper::successMessage(I18n::get('success.user.verification'), '/');

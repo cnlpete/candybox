@@ -92,13 +92,13 @@ class Newsletters extends Main {
    * Subscribe to newsletter list.
    *
    * @static
-   * @access public
+   * @access private
    * @param array $aData user data
    * @param boolean $bDoubleOptIn decide if we have to use double opt-in
    * @return boolean status of subscription
    *
    */
-  public static function subscribeToNewsletter($aData, $bDoubleOptIn = false) {
+  private static function _subscribeToNewsletter($aData, $bDoubleOptIn = false) {
     $oMailchimp = new \Mailchimp(MAILCHIMP_API_KEY);
 
     $aMailChimp = $oMailchimp->call('lists/subscribe', array(

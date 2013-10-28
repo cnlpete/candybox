@@ -240,11 +240,10 @@ class Sessions extends Main {
    *
    * @access public
    * @param integer $iUserRole required user right (only for E_STRICT)
-   * @return boolean status of model action
+   * @return string HTML message
    *
    */
   public function destroy($iUserRole = 0) {
-
     if ($this->_aSession['user']['role'] > 0) {
       $oPluginManager = PluginManager::getInstance();
       $sRedirectUrl = '/';
@@ -259,6 +258,6 @@ class Sessions extends Main {
       return Helper::successMessage(I18n::get('success.session.destroy'), $sRedirectUrl);
     }
     else
-      return Helper::redirectTo('/');
+      return Helper::redirectTo('/errors/401');
   }
 }
