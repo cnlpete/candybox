@@ -263,6 +263,7 @@ class Mails extends Main {
       }
     }
 
+    $this->__autoload('Logs');
     Logs::insert( $this->_sController,
                   'resend',
                   0,
