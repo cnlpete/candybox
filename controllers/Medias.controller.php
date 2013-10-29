@@ -36,6 +36,7 @@ class Medias extends Main {
   public function __construct(&$aRequest, &$aSession, &$aFile = '', &$aCookie = '') {
     parent::__construct($aRequest, $aSession, $aFile, $aCookie);
 
+    # Variable is needed for Helpers
     $this->_iId = isset($this->_aRequest['file']) ? $this->_aRequest['file'] : '';
   }
 
