@@ -16,23 +16,6 @@ CREATE TABLE `%SQL_PREFIX%blogs` (
   KEY `tags` (`tags`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-
-DROP TABLE IF EXISTS `%SQL_PREFIX%comments`;
-
-CREATE TABLE `%SQL_PREFIX%comments` (
-  `id` int(9) NOT NULL AUTO_INCREMENT,
-  `parent_id` int(9) NOT NULL,
-  `author_id` int(11) NOT NULL,
-  `author_facebook_id` int(15) DEFAULT NULL,
-  `author_name` varchar(32) DEFAULT '',
-  `author_email` varchar(64) DEFAULT '',
-  `author_ip` varchar(15) DEFAULT '',
-  `content` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `date` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `parent_id` (`parent_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
-
 DROP TABLE IF EXISTS `%SQL_PREFIX%contents`;
 
 CREATE TABLE `%SQL_PREFIX%contents` (
@@ -176,4 +159,4 @@ CREATE TABLE `%SQL_PREFIX%users` (
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `api_token` (`api_token`),
   KEY `name` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

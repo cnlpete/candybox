@@ -1,10 +1,11 @@
 <?php
 
 /**
- * Website entry.
+ * Installation script.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @version 2.0
  * @since 1.0
  *
@@ -58,8 +59,7 @@ class Install extends Index {
     if (!$aFolderChecks['/'.Helper::removeSlash(PATH_SMARTY).'/cache'] ||
         !$aFolderChecks['/'.Helper::removeSlash(PATH_SMARTY).'/compile']) {
       # @todo print a nice error message
-      echo "please make sure the folders '" . '/'.Helper::removeSlash(PATH_SMARTY).'/compile' . "' and '" . '/'.Helper::removeSlash(PATH_SMARTY).'/compile' ."' are writable.";
-      die();
+      exit("Please make sure the folders '" . '/'.Helper::removeSlash(PATH_SMARTY).'/compile' . "' and '" . '/'.Helper::removeSlash(PATH_SMARTY).'/compile' ."' are writable.");
     }
 
     $this->oSmarty = SmartySingleton::getInstance();
@@ -172,7 +172,7 @@ class Install extends Index {
 
       # check single Folder
       else {
-        $aReturn[$sPrefix . $mFolder] = substr(decoct(fileperms(PATH_STANDARD . $sPrefix . $mFolder)), 2) == decoct($iPermissions);
+        $aReturn[$sPrefix . $mFolder] = (bool) substr(decoct(fileperms(PATH_STANDARD . $sPrefix . $mFolder)), 2) == decoct($iPermissions);
         $bReturn = $bReturn && $aReturn[$sPrefix . $mFolder];
       }
     }
@@ -288,7 +288,7 @@ class Install extends Index {
             $sUsers = \candyCMS\Core\Models\Main::__autoload('Users');
             $oUsers = new $sUsers($this->_aRequest, $this->_aSession);
 
-            $bResult = $oUsers->create('', 4);
+            $bResult = $oUsers->create(array('verification_code' => '', 'role' => 4));
             Helper::redirectTo('/install/?action=install&step=5&result=' . ($bResult ? '1' : '0'));
           }
         }
@@ -314,7 +314,7 @@ class Install extends Index {
    */
   private function _showMigrations() {
     $sFolder = isset($this->_aRequest['show']) && 'version' == $this->_aRequest['show'] ? 'current' : 'previous';
-     
+
     $sDir = PATH_STANDARD . '/install/migrations/' . $sFolder;
     $oDir = opendir($sDir);
 
@@ -328,7 +328,6 @@ class Install extends Index {
         $aResults = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     }
     catch (\AdvancedException $e) {
-      $oDb->rollBack();
       die($e->getMessage());
     }
 
@@ -336,7 +335,7 @@ class Install extends Index {
     foreach ($aResults as $aResult) {
       $aAlreadyMigrated[$aResult['file']] = $aResult['date'];
     }
-    
+
     $iI = 0;
     $aFiles = array();
     while ($sFile = readdir($oDir)) {

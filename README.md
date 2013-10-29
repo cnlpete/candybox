@@ -1,4 +1,4 @@
-candyCMS Version 3.1
+candyCMS Version 4.0
 ========================================================================================================================
 
 What is candyCMS?
@@ -78,6 +78,9 @@ migrate your application to the newest version. Delete the install folder afterw
 
 For version 3.1 and later it's important that you make sure, you also update `vendor/tiny_mce` to newest `vendor/tinymce`
 (included in this download). Paths within templates are not compatible to version 3.0!
+
+In version 4.0 comments have been removed. You can simply include the Disqus plugin to provide them again. Backup your
+database before upgrading!
 
 
 Credits

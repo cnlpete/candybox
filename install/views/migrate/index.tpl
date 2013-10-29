@@ -1,7 +1,7 @@
 {if !$files}
   <div class='alert alert-danger'>
     <h4 class='alert-heading'>
-      There are no required migrations!
+      Good job! There are no required migrations.
     </h4>
   </div>
 {else}

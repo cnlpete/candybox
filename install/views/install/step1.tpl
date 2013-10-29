@@ -85,7 +85,7 @@
   <hr class="clearfix" />
 
   <h2>
-    4. If you want to use the Facebook plugin, register your domain.
+    4. OPTIONAL: If you want to use the Facebook plugin, register your domain.
   </h2>
   <p>
     With <a href="http://www.facebook.com/developers/createapp.php">Facebook</a> you
@@ -100,7 +100,7 @@
   <hr />
 
   <h2>
-    5. Register at MailChimp to send newsletters.
+    5. OPTIONAL: Register at MailChimp to send newsletters.
   </h2>
   <p>
     <a href="http://mailchimp.com/">MailChimp</a> helps you design email newsletters,
