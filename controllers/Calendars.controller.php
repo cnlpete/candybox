@@ -50,7 +50,6 @@ class Calendars extends Main {
    * @access protected
    * @param integer $iId ID to show
    * @return string ICS-File
-   * @todo remove exit
    *
    */
   protected function _ics($iId) {
@@ -100,7 +99,6 @@ class Calendars extends Main {
    *
    * @access public
    * @return string HTML content
-   * @todo remove exit
    *
    */
   public function iCalFeed() {

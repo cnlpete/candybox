@@ -123,19 +123,20 @@ class Sessions extends Main {
     $this->_setError('email');
 
     # Do the captchaCheck for for not logged in users
+    # This should be obsolete
     if ($this->_aSession['user']['role'] == 0) {
       $oPluginManager = PluginManager::getInstance();
       $oPluginManager->checkCaptcha($this->_aError);
     }
 
     if (isset($this->_aError))
-      return $this->_showCreateResendActionsTemplate($bShowCaptcha);
+      return $this->_showCreateResendActionsTemplate();
 
     $sNewPasswordClean = Helper::createRandomChar(16, true);
-    $bReturn = $this->_oModel->password(md5(RANDOM_HASH . $sNewPasswordClean));
-    $sRedirect = '/' . $this->_sController . '/create';
+    $bReturn    = $this->_oModel->password(md5(RANDOM_HASH . $sNewPasswordClean));
+    $sRedirect  = '/' . $this->_sController . '/create';
 
-    if ($bReturn == true) {
+    if ($bReturn) {
       $sModel = $this->__autoload('Mails', true);
       $oMails = new $sModel($this->_aRequest, $this->_aSession);
 
@@ -144,7 +145,7 @@ class Sessions extends Main {
       $aMail['message']     = I18n::get('sessions.password.mail.body', $sNewPasswordClean);
 
       return $oMails->create($aMail) === true ?
-              Helper::successMessage(I18n::get('success.mail.create'), $sRedirect) :
+              Helper::successMessage(I18n::get('success.password.create'), $sRedirect) :
               Helper::errorMessage(I18n::get('error.mail.create'), $sRedirect);
     }
     else
@@ -186,6 +187,7 @@ class Sessions extends Main {
     $this->_setError('email');
 
     # Do the captchaCheck for for not logged in users
+    # This should be obsolete
     if ($this->_aSession['user']['role'] == 0) {
       $oPluginManager = PluginManager::getInstance();
       $oPluginManager->checkCaptcha($this->_aError);
@@ -194,8 +196,8 @@ class Sessions extends Main {
     if (isset($this->_aError))
       return $this->_showCreateResendActionsTemplate($bShowCaptcha);
 
-    $mData = $this->_oModel->verification();
-    $sRedirect = '/' . $this->_sController . '/create';
+    $mData      = $this->_oModel->verification();
+    $sRedirect  = '/' . $this->_sController . '/create';
 
     if (is_array($mData) && !empty($mData)) {
       $sModel = $this->__autoload('Mails', true);

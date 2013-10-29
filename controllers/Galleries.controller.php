@@ -354,7 +354,6 @@ class Galleries extends Main {
    *
    * @access public
    * @return boolean returned status of model action (boolean).
-   * @todo test
    *
    */
   public function updateOrder() {

@@ -86,10 +86,11 @@ class Mails extends Main {
    * We must override the main method due to a diffent required user role and a captcha.
    *
    * @access public
+   * @param integer $iUserRole required user right (only for E_STRICT)
    * @return string HTML content
    *
    */
-  public function create() {
+  public function create($iUserRole = 3) {
     return isset($this->_aRequest[$this->_sController]) ?
             $this->_create() :
             $this->_showCreateTemplate();
@@ -153,7 +154,6 @@ class Mails extends Main {
    * @access protected
    * @param boolean $bShowCaptcha Show the captcha?
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
-   * @todo make E_STRICT compilant
    *
    */
   protected function _create($bShowCaptcha = true) {

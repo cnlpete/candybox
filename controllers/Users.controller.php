@@ -91,12 +91,14 @@ class Users extends Main {
    * Build form template to create or update a user.
    *
    * @access protected
-   * @param boolean $bUseRequest whether the displayed data should be overwritten by query result
+   * @param boolean $bUseRequest whether the displayed data should be overwritten by query result.
+   * This is also not the same type as in parents method (boolean vs string), but since it's
+   * overwritten, it doesn't matter.
+   * @param string $sTitle title to show (only for E_STRICT)
    * @return string HTML content
-   * @todo remove E_STRICT warning, e.g. make this comaptible to al lother showFormTemplates
    *
    */
-  protected function _showFormTemplate($bUseRequest = false) {
+  protected function _showFormTemplate($bUseRequest = false, $sTitle = '') {
     $oTemplate = $this->oSmarty->getTemplate($this->_sController, '_form');
     $this->oSmarty->setTemplateDir($oTemplate);
 
@@ -116,7 +118,7 @@ class Users extends Main {
     Helper::createAvatarURLs($aData, $aData['id'], $aData['email'], false, 'standard_');
 
     # Override if we want to use request
-    if ($bUseRequest === true) {
+    if ($bUseRequest) {
       foreach ($aData as $sColumn => $sData)
         $aData[$sColumn] = isset($this->_aRequest[$this->_sController][$sColumn]) ?
                 $this->_aRequest[$this->_sController][$sColumn] :
@@ -142,7 +144,6 @@ class Users extends Main {
    *
    * @access public
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
-   * @todo test
    *
    */
   public function avatar() {
@@ -543,6 +544,7 @@ class Users extends Main {
    * @access public
    * @return string message
    * @todo remove bug: When a user is registered to the list BEFORE registering
+   * (only if newsletter is re-enabled)
    * to the CMS an exception is thrown
    *
    */

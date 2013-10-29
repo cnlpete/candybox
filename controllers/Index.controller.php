@@ -334,7 +334,6 @@ class Index {
    *
    * @access private
    * @return string string with info message and link to download.
-   * @todo return should be in if-clauses
    *
    */
   private function _checkForNewVersion() {
