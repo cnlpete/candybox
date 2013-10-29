@@ -13,10 +13,7 @@
 
 namespace candyCMS\Core\Controllers;
 
-use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
-use candyCMS\Core\Helpers\I18n;
-use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Sites extends Main {
 
