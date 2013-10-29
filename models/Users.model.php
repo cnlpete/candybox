@@ -128,6 +128,11 @@ class Users extends Main {
   public static function setPassword($sEmail, $sPassword, $bEncrypt = false) {
     $sPassword = $bEncrypt == true ? md5(RANDOM_HASH . $sPassword) : $sPassword;
 
+    # Count user first and exit if user is not found
+    $aUser = self::getExistingUser($sEmail);
+    if (empty($aUser))
+      return false;
+
     try {
       $oQuery = parent::$_oDbStatic->prepare("UPDATE
                                                 " . SQL_PREFIX . "users
