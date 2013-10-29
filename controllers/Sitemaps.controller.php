@@ -58,14 +58,17 @@ class Sitemaps extends Main {
    *
    */
   protected function _getSitemapData() {
-    $aSitemapModels = array_filter( array_map('trim', explode(',', DATA_SITEMAPS)));
+    $aSitemapModels = array_filter( array_map('trim', explode(',', DATA_SITEMAPS)) );
 
     foreach ($aSitemapModels as $sSitemapModel) {
       $sModel = $this->__autoload($sSitemapModel, true);
       $oModel = new $sModel($this->_aRequest, $this->_aSession);
 
-      // @todo set second parameter to true at blogs to show multilanguage entries
-      $this->oSmarty->assign(strtolower($sSitemapModel), $oModel->getOverview(1000));
+      $this->oSmarty->assign(strtolower($sSitemapModel),
+              preg_match('/Blogs/', $sModel) ?
+              $oModel->getOverview(1000, true) :
+              $oModel->getOverview(1000)
+      );
     }
   }
 }
