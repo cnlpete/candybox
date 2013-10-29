@@ -370,13 +370,9 @@ class Users extends Main {
    *
    */
   protected function _showCreateUserTemplate() {
-    # We don't support JSON
-    # @todo put this into a seperated method
+    # We don't support JSON for this template
     if (isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'])
-      return json_encode(array(
-                  'success' => false,
-                  'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
-              ));
+      return $this->_showFormTemplateJSON();
 
     $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'create');
     $this->oSmarty->setTemplateDir($oTemplate);

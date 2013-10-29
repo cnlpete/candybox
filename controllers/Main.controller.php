@@ -9,6 +9,7 @@
  * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 1.0
+ * @todo tests
  *
  */
 
@@ -183,14 +184,6 @@ abstract class Main {
     $this->_aFile     = & $aFile;
     $this->_aCookie   = & $aCookie;
 
-    # Load config files if not already done (important for unit testing)
-    # @todo this should be done in the testing scenarios instead, i.e. the respective initialization should be included
-    if (!defined('WEBSITE_URL'))
-      require PATH_STANDARD . '/config/Candy.inc.php';
-
-    if (!defined('WEBSITE_LOCALE'))
-      define('WEBSITE_LOCALE', 'en_US');
-
     $this->_iId = isset($this->_aRequest['id']) ? (int) $this->_aRequest['id'] : '';
     $this->_sController = $this->_aRequest['controller'];
 
@@ -236,10 +229,11 @@ abstract class Main {
    * Method to include the model files.
    *
    * @access public
+   * @param string optional controller name
    * @return object $this->_oModel
    *
    */
-  public function __init() {
+  public function __init($sController = '') {
     $sModel = $this->__autoload($sController ? $sController : $this->_sController, true);
 
     if ($sModel)
@@ -413,7 +407,6 @@ abstract class Main {
    * @param string $sMessage error to be displayed
    * @return object $this due to method chaining
    * @todo extend tests for JSON requests
-   * @todo remove exit() function from JSON
    *
    */
   protected function _setError($sField, $sMessage = '') {
@@ -537,7 +530,7 @@ abstract class Main {
    * Just a backup method to show an entry as JSON.
    *
    * @access protected
-   * @return string json
+   * @return string JSON
    *
    */
   protected function _showJSON() {
@@ -563,7 +556,7 @@ abstract class Main {
    * Just a backup method to show an overview as JSON.
    *
    * @access protected
-   * @return string json
+   * @return string JSON
    *
    */
   protected function _overviewJSON() {
@@ -587,7 +580,7 @@ abstract class Main {
    * Just a backup method to show an entry as RSS.
    *
    * @access protected
-   * @return string json
+   * @return string JSON
    *
    */
   protected function _showRSS() {
@@ -600,7 +593,7 @@ abstract class Main {
    * Just a backup method to show an overview as RSS.
    *
    * @access protected
-   * @return string json
+   * @return string JSON
    *
    */
   protected function _overviewRSS() {
@@ -690,13 +683,9 @@ abstract class Main {
    *
    */
   protected function _showFormTemplate($sTemplateName = '_form', $sTitle = '') {
-    # We don't support JSON
-    # @todo put this into a seperated method
+    # We don't support JSON for this template
     if (isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'])
-      return json_encode(array(
-                  'success' => false,
-                  'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
-              ));
+      return $this->_showFormTemplateJSON();
 
     $oTemplate = $this->oSmarty->getTemplate($this->_sController, $sTemplateName);
 
@@ -731,6 +720,21 @@ abstract class Main {
 
     $this->oSmarty->setTemplateDir($oTemplate);
     return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
+  }
+
+  /**
+   *
+   * Return an error message that this method doesn't allow JSON.
+   *
+   * @access proteced
+   * @return string JSON
+   *
+   */
+  protected function _showFormTemplateJSON() {
+    return json_encode(array(
+                'success' => false,
+                'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
+            ));
   }
 
   /**
