@@ -59,7 +59,7 @@ class Install extends Index {
     if (!$aFolderChecks['/'.Helper::removeSlash(PATH_SMARTY).'/cache'] ||
         !$aFolderChecks['/'.Helper::removeSlash(PATH_SMARTY).'/compile']) {
       # @todo print a nice error message
-      exit("Please make sure the folders '" . '/'.Helper::removeSlash(PATH_SMARTY).'/compile' . "' and '" . '/'.Helper::removeSlash(PATH_SMARTY).'/compile' ."' are writable.");
+      exit("Please make sure the folder '" . '/'.Helper::removeSlash(PATH_SMARTY).'/compile' . "' exists and is writable. If you're on console type `mkdir -m 0777 app/smarty` from candyCMS root if it doesn't exist.");
     }
 
     $this->oSmarty = SmartySingleton::getInstance();
@@ -128,7 +128,7 @@ class Install extends Index {
    * @param string $sPrefix prefix for folder creations, default: '/'
    *
    */
-  private function _createFoldersIfNotExistent($aFolders, $iPermissions = 0775, $sPrefix = '/') {
+  private function _createFoldersIfNotExistent($aFolders, $iPermissions = 0777, $sPrefix = '/') {
     foreach ($aFolders as $sKey => $mFolder) {
       # create multiple folders
       if (is_array($mFolder))
@@ -137,7 +137,7 @@ class Install extends Index {
       # create single Folder
       elseif (!is_dir(PATH_STANDARD . $sPrefix . $mFolder)) {
         $oldUMask = umask(0);
-        @mkdir(PATH_STANDARD . $sPrefix . $mFolder, $iPermissions, true);
+        mkdir(PATH_STANDARD . $sPrefix . $mFolder, $iPermissions, true);
         umask($oldUMask);
       }
     }
@@ -219,7 +219,6 @@ class Install extends Index {
         $aFolders = array(
             'app/backup',
             'app/logs',
-            Helper::removeSlash(CACHE_DIR),
             $sUpload => array(
                 'downloads',
                 'galleries',

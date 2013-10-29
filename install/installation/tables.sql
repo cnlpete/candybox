@@ -10,7 +10,7 @@ CREATE TABLE `%SQL_PREFIX%blogs` (
   `content` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `language` varchar(2)  NULL  DEFAULT 'en',
   `date` datetime NOT NULL,
-  `date_modified` datetime NOT NULL,
+  `date_modified` datetime NULL ,
   `published` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `tags` (`tags`)

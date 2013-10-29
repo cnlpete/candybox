@@ -1,0 +1,1 @@
+DROP TABLE `%SQL_PREFIX%comments`;
