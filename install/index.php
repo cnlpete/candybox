@@ -59,7 +59,8 @@ class Install extends Index {
     if (!$aFolderChecks['/'.Helper::removeSlash(PATH_SMARTY).'/cache'] ||
         !$aFolderChecks['/'.Helper::removeSlash(PATH_SMARTY).'/compile']) {
       # @todo print a nice error message
-      exit("Please make sure the folder '" . '/'.Helper::removeSlash(PATH_SMARTY).'/compile' . "' exists and is writable. If you're on console type `mkdir -m 0777 app/smarty` from candyCMS root if it doesn't exist.");
+      exit("Please make sure the folder '" . '/'.Helper::removeSlash(PATH_SMARTY).'/compile' . "' exists and is writable. "
+              . "If you're on console type `mkdir -m 0777 app/smarty` from candyCMS root if it doesn't exist and reload page.");
     }
 
     $this->oSmarty = SmartySingleton::getInstance();

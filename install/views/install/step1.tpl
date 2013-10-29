@@ -6,6 +6,7 @@
     Copy <code>Candy.inc.php</code> and <code>Plugins.inc.php</code>
     from <code>app/config/samples/</code> to <code>app/config/</code>,
     read each description carefully and modify the software to your needs.
+    Some options must be uncommented before they become effective!
   </p>
   <div class='alert alert-danger'>
     <h3 class='alert-heading'>
