@@ -1,7 +1,8 @@
-<script type='text/javascript' src='/vendor/tinymce/jquery.tinymce.min.js'></script>
+<script type='text/javascript' src='/vendor/tinymce/tinymce/js/tinymce/tinymce.min.js'></script>
 <script type='text/javascript'>
   $(document).ready(function(){
-    $('textarea.js-editor').tinymce({
+    tinymce.init({
+      selector: 'textarea.js-editor',
       script_url : '/vendor/tinymce/tinymce.min.js',
       theme : 'modern',
       plugins: [
