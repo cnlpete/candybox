@@ -95,7 +95,34 @@ class Medias extends Main {
     if (ACTIVE_TEST)
       return true;
 
-    elseif (is_file($sPath))
+    elseif (is_file($sPath)) {
+      $this->_deleteTempFiles('medias');
+      $this->_deleteTempFiles('bbcode');
+
       return unlink($sPath);
+    }
+  }
+
+  /**
+   * Delete temp files
+   *
+   * @access private
+   * @param string $sFolder folder where files should be deleted from
+   * @todo test
+   *
+   */
+  private function _deleteTempFiles($sFolder) {
+    $sPath = Helper::removeSlash(PATH_UPLOAD . '/temp/' . $sFolder);
+
+    $oDir = opendir($sPath);
+
+    while ($sFile = readdir($oDir)) {
+      if (substr($sFile, 0, 1) == '.')
+        continue;
+
+      unlink($sPath . '/' . $sFile);
+    }
+
+    closedir($oDir);
   }
 }
