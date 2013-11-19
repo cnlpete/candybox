@@ -11,9 +11,9 @@
       "type": "package",
       "package": {
         "name": "tinymce/tinymce",
-        "version": "master",
+        "version": "3.3",
         "dist": {
-          "url": "https://github.com/tinymce/tinymce/archive/master.zip",
+          "url": "https://github.com/tinymce/tinymce/archive/3.3.x.zip",
           "type": "zip"
         },
         "source": {
@@ -31,7 +31,7 @@
     "candycms/core": ">=3.0.0",
     "facebook/php-sdk": "3.2.*",
     "dflydev/markdown" : "1.0.*",
-    "tinymce/tinymce" : "master"
+    "tinymce/tinymce" : "3.3"
   },
 
   "authors": [
