@@ -12,6 +12,10 @@
       "package": {
         "name": "tinymce/tinymce",
         "version": "master",
+        "dist": {
+          "url": "https://github.com/tinymce/tinymce/archive/master.zip",
+          "type": "zip"
+        },
         "source": {
           "url": "https://github.com/tinymce/tinymce.git",
           "type": "git",
@@ -30,13 +34,15 @@
     "tinymce/tinymce" : "master"
   },
 
-  "authors": [ {
-    "name": "Marco Raddatz",
-    "homepage": "http://www.marcoraddatz.com"
-  }, {
-    "name": "Hauke Schade",
-    "homepage": "http://www.hauke-schade.de/"
-  }],
+  "authors": [
+    {
+      "name": "Marco Raddatz",
+      "homepage": "http://www.marcoraddatz.com"
+    }, {
+      "name": "Hauke Schade",
+      "homepage": "http://www.hauke-schade.de/"
+    }
+  ],
 
   "autoload": {
     "psr-0": {
