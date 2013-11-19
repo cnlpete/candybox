@@ -1,4 +1,11 @@
 {
+  "name": "candycms/main",
+  "type": "library",
+  "description": "candyCMS main package",
+  "keywords": ["php", "candy", "cms"],
+  "homepage": "http://www.candycms.com",
+  "license": "MIT",
+
   "repositories":
     [
       {
