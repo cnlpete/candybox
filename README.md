@@ -63,11 +63,10 @@ Setup
 1. Download the newest version of this package.
 2. Download and install Composer via Terminal ( http://getcomposer.org ): `curl -s http://getcomposer.org/installer | php`
 into the root of your candyCMS.
-3. Install the vendor packages afterwards: `php composer.phar install` or `php composer.phar install --dev` if you would
-like to have the possibility to run tests.
+3. Install the vendor packages afterwards: `php composer.phar install`.
 4. Copy files from "app/config/samples/" to "app/config" and configure your website settings at "app/config/Candy.inc.php".
 5. Execute the "/install/index.php" file via the browser of your choice.
-If an error occurs, you might have to give CHMOD 777 to `app/cache` and `app/compile` first.
+If an error occurs, you might have to give CHMOD 777 to `app/smarty` first or create this folder.
 6. Follow the instructions (also on CHMODs) and make sure, you delete the install folder after installation.
 
 
