@@ -51,16 +51,18 @@ class Install extends Index {
     $this->getLanguage();
 
     # do the initial creation of smarty/cache and smarty/compile folders
-    $aFolders = array( Helper::removeSlash(PATH_SMARTY) => array( 'cache', 'compile' ) );
-    $aFolderChecks = array();
-    $this->_createFoldersIfNotExistent($aFolders, 0777, '/');
-    $this->_checkFoldersAndAssign($aFolders, $aFolderChecks, 0777, '/');
+    if (!ACTIVE_TEST) {
+      $aFolders      = array(Helper::removeSlash(PATH_SMARTY) => array('cache', 'compile'));
+      $aFolderChecks = array();
+      $this->_createFoldersIfNotExistent($aFolders, 0777, '/');
+      $this->_checkFoldersAndAssign($aFolders, $aFolderChecks, 0777, '/');
 
-    if (!$aFolderChecks['/'.Helper::removeSlash(PATH_SMARTY).'/cache'] ||
-        !$aFolderChecks['/'.Helper::removeSlash(PATH_SMARTY).'/compile']) {
-      # @todo print a nice error message
-      exit("Please make sure the folder '" . '/'.Helper::removeSlash(PATH_SMARTY).'/compile' . "' exists and is writable. "
-              . "If you're on console type `mkdir -m 0777 app/smarty` from candyCMS root if it doesn't exist and reload page.");
+      if (!$aFolderChecks['/' . Helper::removeSlash(PATH_SMARTY) . '/cache'] ||
+              !$aFolderChecks['/' . Helper::removeSlash(PATH_SMARTY) . '/compile']) {
+        # @todo print a nice error message
+        exit("Please make sure the folder '" . '/' . Helper::removeSlash(PATH_SMARTY) . '/compile' . "' exists and is writable. "
+                . "If you're on console type `mkdir -m 0777 app/smarty` from candyCMS root if it doesn't exist and reload page.");
+      }
     }
 
     $this->oSmarty = SmartySingleton::getInstance();
@@ -112,6 +114,9 @@ class Install extends Index {
 
     if (!defined('WEBSITE_MODE'))
       define('WEBSITE_MODE', 'development');
+
+    if (!defined('ACTIVE_TEST'))
+      define('ACTIVE_TEST', false);
 
     define('CURRENT_URL', isset($_SERVER['REQUEST_URI']) ? WEBSITE_URL . $_SERVER['REQUEST_URI'] : WEBSITE_URL);
     define('EXTENSION_CHECK', false);
@@ -449,6 +454,7 @@ class Install extends Index {
 
         // clear all caches
         $this->oSmarty->clearCache(null, WEBSITE_MODE);
+        $this->oSmarty->clearCompiledTemplate();
       }
       catch (\AdvancedException $e) {
         die($e->getMessage());
@@ -465,6 +471,8 @@ class Install extends Index {
    *
    */
   public function showMigration() {
+    $this->oSmarty->clearCompiledTemplatePaths();
+
     return isset($this->_aRequest['file']) ?
             $this->_doMigration($this->_aRequest['file']) :
             $this->_showMigrations();
@@ -498,6 +506,4 @@ ini_set('display_errors', 1);
 ini_set('error_reporting', 1);
 ini_set('log_errors', 1);
 
-$oInstall = new Install(array_merge($_GET, $_POST));
-
-?>
+$oInstall = new Install(array_merge($_GET, $_POST), $_SESSION);

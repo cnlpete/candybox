@@ -10,7 +10,7 @@
     </p>
     <p>
       To finish the migration you can delete the install folder now and
-      <a href='/sessions/create'>login</a>.
+      <a href='/sessions/create' class='session-login'>login</a>.
     </p>
   </div>
 {else}
