@@ -304,8 +304,7 @@ class Users extends Main {
    * Create a user.
    *
    * @access public
-   * @param integer $iVerificationCode verification code that was sent to the user.
-   * @param integer $iRole role of new User
+   * @param array $aOptions array with options (verification_code; role)
    * @return boolean status of query
    *
    */

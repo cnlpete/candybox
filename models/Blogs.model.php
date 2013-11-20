@@ -197,7 +197,7 @@ class Blogs extends Main {
    * @return array data from _setData
    *
    */
-  public function getOverview($iLimit = LIMIT_BLOG, $bMultilang = false) {
+  public function getOverview($iLimit = LIMIT_BLOG, $bMultiLang = false) {
     # Set limit to 2 to make sure we have some pages to test in test mode
     # Since we test the limit function we also set limit to 1.
     if (ACTIVE_TEST && $iLimit != 1)
@@ -208,7 +208,7 @@ class Blogs extends Main {
     $this->oPagination = new Pagination($this->_aRequest, (int) $iResult, $iLimit != 0 ? $iLimit : $iResult);
 
     try {
-      if ($bMultilang)
+      if ($bMultiLang)
         $sWhere = "WHERE published = '1'";
 
       # Show unpublished items and entries with diffent languages to moderators or administrators only
