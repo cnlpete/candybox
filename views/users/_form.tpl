@@ -133,18 +133,6 @@
             <span class='help-inline'></span>
           </div>
         </div>
-        <div class='control-group'>
-          <label for='input-receive_newsletter' class='control-label'>
-            {$lang.users.label.newsletter}
-          </label>
-          <div class='controls'>
-            <input name='{$_REQUEST.controller}[receive_newsletter]'
-                    id='input-receive_newsletter'
-                    value='1'
-                    type='checkbox'
-                    class='checkbox' {if $receive_newsletter == 1}checked{/if} />
-          </div>
-        </div>
         {if $_SESSION.user.role == 4 && $_SESSION.user.id !== $uid}
           <div class='control-group'>
             <label for='input-role' class='control-label'>
@@ -367,8 +355,8 @@
       </div>
     {/if}
   </div>
-  <script src='{$_PATH.core}/assets/javascripts/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
-  <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.bootstrap.tabs{$_SYSTEM.compress_files_suffix}.js'></script>
+  <script src='{$_PATH.js.core}/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
+  <script src='{$_PATH.js.bootstrap}/bootstrap-tab{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
   <script type='text/javascript'>
     $('#input-use_gravatar').change(function() {
       var avatarIsChecked = $(this).is(':checked');

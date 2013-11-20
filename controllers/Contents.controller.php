@@ -4,7 +4,8 @@
  * CRUD action of content entries.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 1.0
  *
@@ -25,12 +26,12 @@ class Contents extends Main {
    *
    */
   protected function _show() {
-    $sTemplateDir  = Helper::getTemplateDir($this->_sController, 'show');
-    $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'show');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate =  $this->oSmarty->getTemplate($this->_sController, 'show');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     $aData = $this->_oModel->getId($this->_iId);
 
+    # Entry does not exist or is unpublished
     if (!isset($aData) || !$aData['id'])
       return Helper::redirectTo('/errors/404');
 
@@ -40,7 +41,7 @@ class Contents extends Main {
 
     $this->oSmarty->assign('contents', $aData);
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -51,19 +52,18 @@ class Contents extends Main {
    *
    */
   protected function _overview() {
-    $sTemplateDir  = Helper::getTemplateDir($this->_sController, 'overview');
-    $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'overview');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate =  $this->oSmarty->getTemplate($this->_sController, 'overview');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     $this->setTitle(I18n::get('global.manager.content'));
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
       $this->oSmarty->assign('contents', $this->_oModel->getOverview());
       $this->oSmarty->assign('_pagination_',
                 $this->_oModel->oPagination->showPages('/' . $this->_sController));
     }
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**

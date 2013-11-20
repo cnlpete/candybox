@@ -4,7 +4,8 @@
  * Upload and show media files.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 1.0
  *
@@ -12,10 +13,9 @@
 
 namespace candyCMS\Core\Controllers;
 
-use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
-use candyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 use candyCMS\Core\Helpers\Upload;
 
 class Medias extends Main {
@@ -36,6 +36,7 @@ class Medias extends Main {
   public function __construct(&$aRequest, &$aSession, &$aFile = '', &$aCookie = '') {
     parent::__construct($aRequest, $aSession, $aFile, $aCookie);
 
+    # Variable is needed for Helpers
     $this->_iId = isset($this->_aRequest['file']) ? $this->_aRequest['file'] : '';
   }
 
@@ -105,37 +106,41 @@ class Medias extends Main {
    *
    */
   protected function _showFormTemplate($sTemplateName = '_form', $sTitle = '') {
-    # We don't support JSON
-    # @todo put this into a seperated method
-    if (isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'])
-      return json_encode(array(
-                  'success' => false,
-                  'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
-              ));
-    
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'create');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'create');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'create');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     $this->setTitle(I18n::get('medias.title.create'));
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
-   * Show an Overview of all Files
-   * Needs to be custom since we want a different user right
+   * Show overview. We must overwrite the main function due to different
+   * user rights.
    *
    * @access public
-   * @return type
+   * @return string HTML
+   *
    *
    */
   public function show() {
-    $this->oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
+    return $this->overview();
+  }
+
+  /**
+   * Show an overview of all files.
+   * Needs to be custom since we want a different user right.
+   *
+   * @access public
+   * @return string HTML
+   *
+   */
+  public function overview() {
+    $this->oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
     return $this->_aSession['user']['role'] < 3 ?
             Helper::redirectTo('/errors/401') :
-            $this->_show();
+            $this->_overview();
   }
 
   /**
@@ -145,16 +150,15 @@ class Medias extends Main {
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  protected function _show() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+  protected function _overview() {
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'show');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     $this->setTitle(I18n::get('global.manager.media'));
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID))
       $this->oSmarty->assign('files', $this->_oModel->getOverview());
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 }

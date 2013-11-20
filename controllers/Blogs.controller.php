@@ -4,7 +4,8 @@
  * CRUD action of blog entries.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 1.0
  *
@@ -25,39 +26,30 @@ class Blogs extends Main {
    *
    */
   protected function _show() {
-    $sTemplateDir  = Helper::getTemplateDir($this->_sController, 'show');
-    $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'show');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate =  $this->oSmarty->getTemplate($this->_sController, 'show');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     if ($this->_iId) {
       $this->_aData = $this->_oModel->getId($this->_iId);
 
+      # Entry does not exist or is unpublished
       if (!$this->_aData[1]['id'])
         return Helper::redirectTo('/errors/404');
 
-      # If comments are allowed
-      if (!DISABLE_COMMENTS) {
-        $sClass     = $this->__autoload('Comments');
-        $oComments  = new $sClass($this->_aRequest, $this->_aSession);
-
-        $oComments->__init();
-        $oComments->_setParentData($this->_aData);
-
-        $this->oSmarty->assign('_comments_', $oComments->show());
-      }
-
       $this->oSmarty->assign('blogs', $this->_aData);
-
-      # Bugfix: This is necessary, because comments also do a setDir on the singleton object.
-      $this->oSmarty->setTemplateDir($sTemplateDir);
     }
 
     else {
       # Get tags
-      if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+      if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
         $this->_aData = isset($this->_aRequest['search']) && $this->_aRequest['search'] ?
                 $this->_oModel->getOverviewByTag() :
                 $this->_oModel->getOverview();
+
+        if (isset($this->_aRequest['search']) && $this->_aRequest['search'])
+          # add rss info
+          $this->_aRSSInfo[] = array( 'url'   => WEBSITE_URL . '/blogs/' . $this->_aRequest['search'] . '.rss',
+                                      'title' => $this->_aRequest['search'] . ' - ' . I18n::get('global.blogs'));
 
         # Limit to maximum pages
         if (isset($this->_aRequest['page']) && (int) $this->_aRequest['page'] > $this->_oModel->oPagination->getPages())
@@ -74,7 +66,11 @@ class Blogs extends Main {
     $this->setKeywords($this->_setBlogsKeywords());
     $this->setTitle($this->_setBlogsTitle());
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    # Add RSS info
+    $this->_aRSSInfo[] = array( 'url'   => WEBSITE_URL . '/blogs.rss',
+                                'title' => I18n::get('global.blogs') );
+
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -85,11 +81,10 @@ class Blogs extends Main {
    *
    */
   protected function _overviewRSS() {
-    $sTemplateDir  = Helper::getTemplateDir($this->_sController, 'overviewRSS');
-    $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'overviewRSS');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate =  $this->oSmarty->getTemplate($this->_sController, 'overviewRSS');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
       $this->_aData = isset($this->_aRequest['search']) && $this->_aRequest['search'] ?
           $this->_oModel->getOverviewByTag() :
           $this->_oModel->getOverview();
@@ -104,7 +99,7 @@ class Blogs extends Main {
     $this->setTitle($this->_setBlogsTitle());
 
     header('Content-Type: application/rss+xml');
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -182,7 +177,6 @@ class Blogs extends Main {
   protected function _showFormTemplate($sTemplateName = '_form', $sTitle = '') {
     # Get available languages.
     $this->oSmarty->assign('languages', Helper::getLanguages());
-    $this->oSmarty->assign('_tags_', $this->_oModel->getTypeaheadData($this->_sController, 'tags', true));
 
     return parent::_showFormTemplate();
   }

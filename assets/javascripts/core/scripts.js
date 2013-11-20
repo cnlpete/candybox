@@ -1,13 +1,3 @@
-/* Quote comment */
-function quote(sName, sDivId) {
-  var oTextField  = $('#js-create_commment_text');
-  var sQuote      = $('#' + sDivId).html();
-  var sNewMessage = "[quote=" + sName + "]" + sQuote + "[/quote]\n";
-  oTextField.val(oTextField.val() + sNewMessage);
-
-  return false;
-}
-
 /**
  *
  *
@@ -145,6 +135,33 @@ function enableInfiniteScroll(selector, itemselector, repeatTimes, pathImages) {
 
 /**
  *
+ * @param string sStatus status type (alert, success or warning)
+ * @param string sMessage message to display
+ *
+ */
+function showFlashMessage(sStatus, sMessage) {
+  $('#js-flash_message').show().children().attr('id', 'js-flash_' + sStatus).attr('class', 'alert alert-' + sStatus);
+  $('#js-flash_' + sStatus + ' a').remove();
+  $('#js-flash_' + sStatus + ' p').html(sMessage);
+  $('#js-flash_message').delay('10000').slideUp();
+}
+
+/* Hide div */
+function hide(sDivId, iDelay) {
+  $(sDivId).delay(iDelay).slideUp();
+}
+
+function show(sDivId) {
+  $(sDivId).show();
+
+  if($('#js-flash_success') || $('#js-flash_error')) {
+    hide(sDivId, 10000);
+  }
+}
+
+
+/**
+ *
  * Reset all upload information.
  *
  */
@@ -194,7 +211,7 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
   xhr.onload = function() {
     $('#js-progress').toggle();
 
-    var aJson = JSON.parse(this.response);
+    var aJson = JSON.parse(xhr.response);
 
     if(aJson.success === true) {
       var message = lang.upload_successful;
@@ -213,7 +230,7 @@ function upload(e, url, controller, inputId, dependencyId, reloadUrl) {
 
       // Reload to easily show images
       if(reloadUrl === true) {
-        setTimeout(function() {location.reload()}, 3000);
+        setTimeout(function() {location.reload();}, 3000);
       }
     }
     else {
@@ -251,32 +268,6 @@ function showAjaxUpload(sDivId, sController, sActionAndIdInformation) {
   });
 }
 
-/**
- *
- * @param string sStatus status type (alert, success or warning)
- * @param string sMessage message to display
- *
- */
-function showFlashMessage(sStatus, sMessage) {
-  $('#js-flash_message').show().children().attr('id', 'js-flash_' + sStatus).attr('class', 'alert alert-' + sStatus);
-  $('#js-flash_' + sStatus + ' a').remove();
-  $('#js-flash_' + sStatus + ' p').html(sMessage);
-  $('#js-flash_message').delay('10000').slideUp();
-}
-
-/* Hide div */
-function hide(sDivId, iDelay) {
-  $(sDivId).delay(iDelay).slideUp();
-}
-
-function show(sDivId) {
-  $(sDivId).show();
-
-  if($('#js-flash_success') || $('#js-flash_error')) {
-    hide(sDivId, 10000);
-  }
-}
-
 /* ToggleOpacity */
 $.fn.toggleOpacity = function (t) {
   if(t) {
@@ -288,7 +279,7 @@ $.fn.toggleOpacity = function (t) {
     this.stop(true,true).animate({
       opacity:0.25
     });
-  } 
+  }
 };
 
 /* Show success and error messages */

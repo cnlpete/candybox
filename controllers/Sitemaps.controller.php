@@ -4,16 +4,14 @@
  * Print out sitemap as HTML or XML.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 2.0
  *
  */
 
 namespace candyCMS\Core\Controllers;
-
-use candyCMS\Core\Helpers\AdvancedException;
-use candyCMS\Core\Helpers\Helper;
 
 class Sitemaps extends Main {
 
@@ -25,18 +23,15 @@ class Sitemaps extends Main {
    *
    */
   protected function _overviewXML() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overviewXML');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overviewXML');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'overviewXML');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
-    Header('Content-Type: text/xml');
-
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
       $this->oSmarty->assign('_website_landing_page_', WEBSITE_URL . '/' . WEBSITE_LANDING_PAGE);
       $this->_getSitemapData();
     }
 
-    return $this->oSmarty->display($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -47,14 +42,13 @@ class Sitemaps extends Main {
    *
    */
   protected function _overview() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'overview');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID))
       $this->_getSitemapData();
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -64,17 +58,17 @@ class Sitemaps extends Main {
    *
    */
   protected function _getSitemapData() {
-    $sModel     = $this->__autoload('Blogs', true);
-    $oBlogs     = new $sModel($this->_aRequest, $this->_aSession);
+    $aSitemapModels = array_filter( array_map('trim', explode(',', DATA_SITEMAPS)) );
 
-    $sModel     = $this->__autoload('Contents', true);
-    $oContents  = new $sModel($this->_aRequest, $this->_aSession);
+    foreach ($aSitemapModels as $sSitemapModel) {
+      $sModel = $this->__autoload($sSitemapModel, true);
+      $oModel = new $sModel($this->_aRequest, $this->_aSession);
 
-    $sModel     = $this->__autoload('Galleries', true);
-    $oGalleries = new $sModel($this->_aRequest, $this->_aSession);
-
-    $this->oSmarty->assign('blogs', $oBlogs->getOverview(1000, true));
-    $this->oSmarty->assign('contents', $oContents->getOverview(1000));
-    $this->oSmarty->assign('galleries', $oGalleries->getOverview(false, 1000));
+      $this->oSmarty->assign(strtolower($sSitemapModel),
+              preg_match('/Blogs/', $sModel) ?
+              $oModel->getOverview(1000, true) :
+              $oModel->getOverview(1000)
+      );
+    }
   }
 }

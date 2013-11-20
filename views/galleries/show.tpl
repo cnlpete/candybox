@@ -16,6 +16,9 @@
     <article itemscope itemtype='http://schema.org/ImageGallery'>
       <header class='page-header'>
         <h1 itemprop='name'>
+          {if !$album.published}
+            {$lang.global.not_published}:&nbsp;
+          {/if}
           {$album.title}
           {if $_SESSION.user.role >= 3}
             <a href='/{$_REQUEST.controller}/{$_REQUEST.id}/update'>
@@ -82,7 +85,7 @@
     </article>
   {/if}
   {if $_SESSION.user.role >= 3}
-    <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
+    <script type='text/javascript' src='{$_PATH.js.core}/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
     <script type='text/javascript'>
       $(document).ready(function(){
         $('.thumbnails').sortable({
@@ -104,7 +107,7 @@
       });
     </script>
   {else}
-    <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.masonry{$_SYSTEM.compress_files_suffix}.js'></script>
+    <script type='text/javascript' src='{$_PATH.js.core}/jquery.masonry{$_SYSTEM.compress_files_suffix}.js'></script>
     <script type='text/javascript'>
       $(document).ready(function(){
         $('.thumbnails').masonry({
@@ -113,8 +116,8 @@
       });
     </script>
   {/if}
-  <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js'></script>
-  <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.fancybox-thumbs{$_SYSTEM.compress_files_suffix}.js'></script>
+  <script type='text/javascript' src='{$_PATH.js.core}/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js'></script>
+  <script type='text/javascript' src='{$_PATH.js.core}/jquery.fancybox-thumbs{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript'>
     $(document).ready(function(){
       $('.js-fancybox').fancybox({

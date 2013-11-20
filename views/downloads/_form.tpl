@@ -56,7 +56,6 @@
         <input type='text'
                name='{$_REQUEST.controller}[category]'
                id='input-category'
-               placeholder=''
                data-provide='typeahead'
                value="{$category}"
                data-source='{$_categories_}'
@@ -138,7 +137,7 @@
       {/if}
     </div>
   </form>
-  <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.bootstrap.typeahead{$_SYSTEM.compress_files_suffix}.js'></script>
+  <script type='text/javascript' src='{$_PATH.js.bootstrap}/bootstrap-typeahead{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript'>
     {* @todo add countCharLength again *}
     $(document).ready(function(){

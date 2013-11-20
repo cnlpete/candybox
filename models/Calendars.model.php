@@ -4,7 +4,8 @@
  * Handle all calendar SQL requests.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 2.0
  *
@@ -23,7 +24,7 @@ class Calendars extends Main {
    * Build the PDO-Statement for getting entries for the specified year
    *
    * @access protected
-   * @return PDOStatement the PDOStatement to execute
+   * @return object PDOStatement the PDOStatement to execute
    *
    */
   protected function _getPreparedArchiveStatement() {
@@ -62,7 +63,7 @@ class Calendars extends Main {
    * Build the PDO-Statement for getting all future entries
    *
    * @access protected
-   * @return PDOStatement the PDOStatement to execute
+   * @return object PDOStatement the PDOStatement to execute
    *
    */
   protected function _getPreparedOverviewStatement() {
@@ -96,7 +97,7 @@ class Calendars extends Main {
    * Build the PDO-Statement for getting all entries
    *
    * @access protected
-   * @return PDOStatement the PDOStatement to execute
+   * @return object PDOStatement the PDOStatement to execute
    *
    */
   protected function _getPreparedIcalFeedStatement() {
@@ -146,25 +147,28 @@ class Calendars extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
-    $this->_aData = array();
+    $aData = array();
     foreach ($aResult as $aRow) {
-      $iId = $aRow['id'];
+      $iId    = $aRow['id'];
       $sMonth = I18n::get('global.months.' . $aRow['start_month']);
-      $sYear = $aRow['start_year'];
-      $sDate = $sMonth . $sYear;
+      $sYear  = $aRow['start_year'];
+      $sDate  = $sMonth . $sYear;
 
-      $this->_aData[$sDate]['month']  = $sMonth;
-      $this->_aData[$sDate]['year']   = $sYear;
+      $aData[$sDate]['month']  = $sMonth;
+      $aData[$sDate]['year']   = $sYear;
 
-      $this->_aData[$sDate]['dates'][$iId] = $this->_formatForOutput($aRow, array('id', 'author_id'));
-      $this->_formatDates($this->_aData[$sDate]['dates'][$iId], 'start_date');
-      $this->_formatDates($this->_aData[$sDate]['dates'][$iId], 'end_date');
+      $aData[$sDate]['dates'][$iId] = $this->_formatForOutput(
+              $aRow,
+              array('id', 'author_id')
+      );
+
+      $this->_formatDates($aData[$sDate]['dates'][$iId], 'start_date');
+      $this->_formatDates($aData[$sDate]['dates'][$iId], 'end_date');
     }
 
-    return $this->_aData;
+    return $aData;
   }
 
   /**
@@ -172,11 +176,14 @@ class Calendars extends Main {
    *
    * @access public
    * @param integer $iId Id to work with
-   * @param boolean $bUpdate prepare data for update
-   * @return array data
+   * @param boolean $bUpdate prepare data for update?
+   * @return array|boolean array on success, boolean on false
    *
    */
   public function getId($iId = '', $bUpdate = false) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         c.*,
@@ -203,33 +210,37 @@ class Calendars extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
-    if ($bUpdate === true) {
-      $this->_aData = $this->_formatForUpdate($aRow);
-      $this->_aData['start_date'] = date('Y-m-d', $this->_aData['start_date']);
+    if ($bUpdate) {
+      $aData = $this->_formatForUpdate($aRow);
+      $aData['start_date'] = date('Y-m-d', $aData['start_date']);
 
-      if ($this->_aData['end_date'])
-        $this->_aData['end_date'] = date('Y-m-d', $this->_aData['end_date']);
+      if ($aData['end_date'])
+        $aData['end_date'] = date('Y-m-d', $aData['end_date']);
     }
     else {
-      $this->_aData = $this->_formatForOutput($aRow, array('id', 'author_id'));
-      $this->_formatDates($this->_aData, 'start_date');
-      $this->_formatDates($this->_aData, 'end_date');
+      $aData = $this->_formatForOutput(
+              $aRow,
+              array('id', 'author_id', 'start_date', 'end_date')
+      );
+
+      $this->_formatDates($aData, 'start_date');
+      $this->_formatDates($aData, 'end_date');
     }
 
-    return $this->_aData;
+    return $aData;
   }
 
   /**
    * Create new calendar entry.
    *
    * @access public
+   * @param array $aOptions (only for E_STRICT)
    * @return boolean status of query
    *
    */
-  public function create() {
+  public function create($aOptions = array()) {
     try {
       $oQuery = $this->_oDb->prepare("INSERT INTO
                                         " . SQL_PREFIX . "calendars
@@ -249,17 +260,23 @@ class Calendars extends Main {
 
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
 
-      foreach (array('title', 'content') as $sInput)
+      foreach (array('title', 'content') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                $sValue,
                 PDO::PARAM_STR);
 
-      foreach (array('start_date', 'end_date') as $sInput)
+        unset($sValue);
+      }
+
+      foreach (array('start_date', 'end_date') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput]);
         $oQuery->bindParam(
-                $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
-                PDO::PARAM_INT);
+                $sInput, $sValue, PDO::PARAM_INT);
+
+        unset($sValue);
+      }
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
@@ -267,15 +284,14 @@ class Calendars extends Main {
       return $bReturn;
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -288,6 +304,9 @@ class Calendars extends Main {
    *
    */
   public function update($iId) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     try {
       $oQuery = $this->_oDb->prepare("UPDATE
                                         " . SQL_PREFIX . "calendars
@@ -303,30 +322,37 @@ class Calendars extends Main {
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
 
-      foreach (array('title', 'content') as $sInput)
+      foreach (array('title', 'content') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                $sValue,
                 PDO::PARAM_STR);
 
-      foreach (array('start_date', 'end_date') as $sInput)
+        unset($sValue);
+      }
+
+      foreach (array('start_date', 'end_date') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput]);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
-                PDO::PARAM_STR);
+                $sValue,
+                PDO::PARAM_INT);
+
+        unset($sValue);
+      }
 
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 }

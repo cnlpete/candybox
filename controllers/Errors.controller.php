@@ -4,7 +4,8 @@
  * Show customized error message when page is not found.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 2.0
  *
@@ -12,7 +13,6 @@
 
 namespace candyCMS\Core\Controllers;
 
-use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
 
 class Errors extends Main {
@@ -25,29 +25,29 @@ class Errors extends Main {
    *
    */
   protected function _show() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, $this->_iId);
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, $this->_iId);
-
     if ($this->_iId == '401') {
       header('HTTP/1.0 401 Authorization Required');
     }
+
     elseif ($this->_iId == '403') {
       header('HTTP/1.0 403 Forbidden');
     }
+
     elseif ($this->_iId == '404') {
       header('Status: 404 Not Found');
       header('HTTP/1.0 404 Not Found');
     }
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    $oTemplate =  $this->oSmarty->getTemplate($this->_sController, $this->_iId);
+    $this->oSmarty->setTemplateDir($oTemplate);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
-   * There is no overview avaiable
+   * There is no overview available
    *
    * @access protected
-   * @return HTML 404
+   * @return string HTML 403
    *
    */
   protected function _overview() {

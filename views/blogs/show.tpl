@@ -33,8 +33,8 @@
               {/if}
             </h2>
             <p>
-              {if $_SESSION.user.role >= 3}
-                <img src='{$_PATH.core}/assets/images/candy.flags/{$b.language}.png'
+              {if $_SESSION.user.role >= 3 && $b.language}
+                <img src='{$_PATH.img.core}/candy.flags/{$b.language}.png'
                     alt='{$b.language}'
                     title='{$b.language}' />
                 &nbsp;
@@ -84,19 +84,8 @@
                 &nbsp;
               {/if}
             </div>
-            {if !$DISABLE_COMMENTS && !preg_match('/Disqus/', $ALLOW_PLUGINS)}
-              <div class='span4 comments'>
-                <a href='{$b.url}#comments'
-                   class='pull-right'
-                   itemprop='discussionUrl'>
-                    {$b.comment_count} {$lang.global.comments}
-                </a>
-              </div>
-              <meta itemprop='interactionCount' content='Comments:{$b.comment_count}' />
-            {/if}
             {if isset($_REQUEST.id)}
               <div class='span8'>
-                <hr />
                 <!-- plugin:addthis -->
                 <!-- plugin:socialshareprivacy -->
               </div>
@@ -109,11 +98,9 @@
       {/if}
       {if isset($_REQUEST.id) && preg_match('/Disqus/', $ALLOW_PLUGINS)}
         <!-- plugin:disqus -->
-      {elseif isset($_REQUEST.id) && !$DISABLE_COMMENTS}
-        {$_comments_}
       {/if}
     {/if}
-    <script src='{$_PATH.core}/assets/javascripts/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
+    <script src='{$_PATH.js.core}/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
     <script type='text/javascript'>
       $(document).ready(function(){
         $('.js-fancybox').fancybox({
@@ -121,10 +108,10 @@
           prevEffect : 'fade'
         });
 
-        $('.js-media').each(function(e) {
+        $('.js-media').each(function() {
           var $this = $(this);
           $.getJSON(this.title, function(data) {
-            $this.html(data['html']);
+            $this.html(data.html);
           });
         });
       });

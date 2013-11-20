@@ -4,7 +4,8 @@
  * Handle all content SQL requests.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 1.0
  *
@@ -24,7 +25,7 @@ class Contents extends Main {
    *
    * @access public
    * @param integer $iLimit blog post limit
-   * @return array $this->_aData
+   * @return array $aData
    *
    */
   public function getOverview($iLimit = 50) {
@@ -38,7 +39,6 @@ class Contents extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Pagination.helper.php';
@@ -74,32 +74,34 @@ class Contents extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     foreach ($aResult as $aRow) {
       $iId = $aRow['id'];
 
-      $this->_aData[$iId] = $this->_formatForOutput(
+      $aData[$iId] = $this->_formatForOutput(
               $aRow,
-              array('id', 'uid', 'author_id'),
+              array('id', 'uid', 'author_id', 'date'),
               array('published'),
               'contents');
     }
 
-    return $this->_aData;
+    return $aData;
   }
 
   /**
    * Get content entry data.
    *
    * @access public
-   * @param integer $iId ID to load data from.
-   * @param boolean $bUpdate prepare data for update
-   * @return array $this->_aData
+   * @param integer $iId Id to work with
+   * @param boolean $bUpdate prepare data for update?
+   * @return array|boolean array on success, boolean on false
    *
    */
   public function getId($iId, $bUpdate = false) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     $iPublished = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ? 0 : 1;
 
     try {
@@ -131,31 +133,31 @@ class Contents extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
-    if ($bUpdate === true)
-      $this->_aData = $this->_formatForUpdate($aRow);
+    if ($bUpdate)
+      $aData = $this->_formatForUpdate($aRow);
 
     else {
-      $this->_aData = $this->_formatForOutput(
+      $aData = $this->_formatForOutput(
               $aRow,
               array('id', 'uid', 'author_id'),
               array('published'),
               'contents');
     }
 
-    return $this->_aData;
+    return $aData;
   }
 
   /**
    * Create a content entry.
    *
    * @access public
+   * @param array $aOptions (only for E_STRICT)
    * @return boolean status of query
    *
    */
-  public function create() {
+  public function create($aOptions) {
     $iPublished = isset($this->_aRequest[$this->_sController]['published']) &&
             $this->_aRequest[$this->_sController]['published'] == true ?
             1 :
@@ -183,17 +185,25 @@ class Contents extends Main {
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
 
-      foreach (array('title', 'teaser', 'content') as $sInput)
+      foreach (array('title', 'teaser', 'content') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                $sValue,
                 PDO::PARAM_STR);
 
-      foreach (array('keywords') as $sInput)
+        unset($sValue);
+      }
+
+      foreach (array('keywords') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput]);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                $sValue,
                 PDO::PARAM_STR);
+
+        unset($sValue);
+      }
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
@@ -201,15 +211,14 @@ class Contents extends Main {
       return $bReturn;
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -222,6 +231,9 @@ class Contents extends Main {
    *
    */
   public function update($iId) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     $iPublished = isset($this->_aRequest[$this->_sController]['published']) &&
             $this->_aRequest[$this->_sController]['published'] == true ?
             1 :
@@ -245,30 +257,37 @@ class Contents extends Main {
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
 
-      foreach (array('title', 'teaser', 'content') as $sInput)
+      foreach (array('title', 'teaser', 'content') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                $sValue,
                 PDO::PARAM_STR);
 
-      foreach (array('keywords') as $sInput)
+        unset($sValue);
+      }
+
+      foreach (array('keywords') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput]);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                $sValue,
                 PDO::PARAM_STR);
+
+        unset($sValue);
+      }
 
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 }

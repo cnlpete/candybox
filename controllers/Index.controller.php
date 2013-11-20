@@ -4,7 +4,8 @@
  * Manage configs and route incoming request.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 1.0
  *
@@ -17,26 +18,21 @@ use candyCMS\Core\Helpers\Dispatcher;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
-use candyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 use Routes;
 
-$aFiles = array(
-    'models/Main.model.php',
-    'controllers/Main.controller.php',
-    'controllers/Sessions.controller.php',
-    'controllers/Logs.controller.php',
-    'helpers/Helper.helper.php',
-    'helpers/AdvancedException.helper.php',
-    'helpers/Dispatcher.helper.php',
-    'helpers/I18n.helper.php',
-    'helpers/SmartySingleton.helper.php',
-    'helpers/PluginManager.helper.php'
-);
-
-require_once PATH_STANDARD . '/vendor/autoload.php';
-
-foreach ($aFiles as $sFile)
-  require PATH_STANDARD . '/vendor/candycms/core/' . $sFile;
+require PATH_STANDARD . '/vendor/autoload.php';
+require PATH_STANDARD . '/vendor/candycms/core/models/Main.model.php';
+require PATH_STANDARD . '/vendor/candycms/core/controllers/Main.controller.php';
+require PATH_STANDARD . '/vendor/candycms/core/controllers/Sessions.controller.php';
+require PATH_STANDARD . '/vendor/candycms/core/controllers/Logs.controller.php';
+require PATH_STANDARD . '/vendor/candycms/core/helpers/Helper.helper.php';
+require PATH_STANDARD . '/vendor/candycms/core/helpers/AdvancedException.helper.php';
+require PATH_STANDARD . '/vendor/candycms/core/helpers/Dispatcher.helper.php';
+require PATH_STANDARD . '/vendor/candycms/core/helpers/Cache.helper.php';
+require PATH_STANDARD . '/vendor/candycms/core/helpers/I18n.helper.php';
+require PATH_STANDARD . '/vendor/candycms/core/helpers/SmartySingleton.helper.php';
+require PATH_STANDARD . '/vendor/candycms/core/helpers/PluginManager.helper.php';
 
 class Index {
 
@@ -106,6 +102,7 @@ class Index {
 
     # Always initialize the plugin manager, since we want to call the events later.
     $this->_oPlugins = PluginManager::getInstance();
+
     if (strlen(ALLOW_PLUGINS) > 0) {
       $this->_oPlugins->setRequestAndSession($this->_aRequest, $this->_aSession);
       $this->_oPlugins->load(ALLOW_PLUGINS);
@@ -113,8 +110,12 @@ class Index {
       # Run repetitive plugins (such as cronjob).
       $this->_oPlugins->runRepetitivePlugins();
     }
+
     $this->getLanguage();
     $this->setUser();
+
+    if (!defined('UNIQUE_PREFIX'))
+      define('UNIQUE_PREFIX', WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|');
   }
 
   /**
@@ -180,7 +181,7 @@ class Index {
       define('WEBSITE_LANDING_PAGE', Routes::route('/'));
 
     $sURI = isset($_SERVER['REQUEST_URI']) ?
-            Helper::removeSlash($_SERVER['REQUEST_URI']) :
+            Helper::removeSlash(urldecode($_SERVER['REQUEST_URI'])) :
             '';
 
     # Disable slashes at the end of the domain
@@ -333,7 +334,6 @@ class Index {
    *
    * @access private
    * @return string string with info message and link to download.
-   * @todo return should be in if-clauses
    *
    */
   private function _checkForNewVersion() {
@@ -408,12 +408,14 @@ class Index {
     else {
       if (EXTENSION_CHECK && file_exists(PATH_STANDARD . '/app/models/Sessions.model.php')) {
         require_once PATH_STANDARD . '/app/models/Sessions.model.php';
-        $aUser = \candyCMS\Models\Sessions::getUserBySession();
+        $oModel = new \candyCMS\Models\Sessions();
       }
       else {
         require_once PATH_STANDARD . '/vendor/candycms/core/models/Sessions.model.php';
-        $aUser = \candyCMS\Core\Models\Sessions::getUserBySession();
+        $oModel = new \candyCMS\Core\Models\Sessions();
       }
+
+      $aUser = $oModel->getUserBySession();
     }
 
     if (is_array($aUser))
@@ -444,17 +446,14 @@ class Index {
   public function show() {
     # Set a caching / compile ID
     # Ask if defined because of unit tests.
-    if (!defined('UNIQUE_PREFIX'))
-      define('UNIQUE_PREFIX', WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|' . $this->_aRequest['controller']);
-
     if (!defined('UNIQUE_ID')) {
-      define('UNIQUE_ID', UNIQUE_PREFIX . '|' . $this->_aSession['user']['role'] .
+      define('UNIQUE_ID', UNIQUE_PREFIX . $this->_aRequest['controller'] . '|' . $this->_aSession['user']['role'] .
               (MOBILE ? 'mob|' : 'tpl|') . '|' .
               substr(md5(CURRENT_URL), 0, 10));
     }
 
     # Start the dispatcher and grab the controller.
-    $oSmarty = SmartySingleton::getInstance();
+    $oSmarty = Smarty::getInstance();
     $oSmarty->setRequestAndSession($this->_aRequest, $this->_aSession);
 
     $oDispatcher = new Dispatcher($this->_aRequest, $this->_aSession, $this->_aFile, $this->_aCookie);
@@ -471,8 +470,7 @@ class Index {
 
     # HTML with template
     else {
-      $sTemplateDir   = Helper::getTemplateDir('layouts', 'application');
-      $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'application');
+      $oTemplate = $oSmarty->getTemplate('layouts', 'application');
 
       # Get flash messages (success and error)
       $oSmarty->assign('_FLASH', $this->_getFlashMessage());
@@ -486,6 +484,7 @@ class Index {
           'description' => $oDispatcher->oController->getDescription(),
           'expires'     => gmdate('D, d M Y H:i:s', time() + 60) . ' GMT',
           'keywords'    => $oDispatcher->oController->getKeywords(),
+          'rss'         => $oDispatcher->oController->rssInfo(),
           'og'          => array(
               'description' => $oDispatcher->oController->getDescription(),
               'site_name'   => WEBSITE_NAME,
@@ -495,9 +494,9 @@ class Index {
 
       $oSmarty->assign('_WEBSITE', $aWebsite);
 
-      $oSmarty->setTemplateDir($sTemplateDir);
-      $oSmarty->setCaching(\candyCMS\Core\Helpers\SmartySingleton::CACHING_OFF);
-      $sCachedHTML = $oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+      $oSmarty->setTemplateDir($oTemplate);
+      $oSmarty->setCaching(Smarty::CACHING_OFF);
+      $sCachedHTML = $oSmarty->fetch($oTemplate, UNIQUE_ID);
     }
 
 

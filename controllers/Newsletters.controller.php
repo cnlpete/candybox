@@ -4,7 +4,8 @@
  * Send newsletter to receipients or users.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 1.0
  *
@@ -12,7 +13,6 @@
 
 namespace candyCMS\Core\Controllers;
 
-use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
 
@@ -72,9 +72,8 @@ class Newsletters extends Main {
    *
    */
   protected function _showFormTemplate($sTemplateName = '_form', $sTitle = '') {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, $sTemplateName);
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, $sTemplateName);
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, $sTemplateName);
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     $this->oSmarty->assign('name', isset($this->_aRequest['name']) ? (string) $this->_aRequest['name'] : '');
     $this->oSmarty->assign('surname', isset($this->_aRequest['surname']) ? (string) $this->_aRequest['surname'] : '');
@@ -86,6 +85,30 @@ class Newsletters extends Main {
     $this->setTitle(I18n::get('newsletters.title.subscribe'));
     $this->setDescription(I18n::get('newsletters.description.subscribe'));
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
+  }
+
+  /**
+   * Subscribe to newsletter list.
+   *
+   * @static
+   * @access private
+   * @param array $aData user data
+   * @param boolean $bDoubleOptIn decide if we have to use double opt-in
+   * @return boolean status of subscription
+   *
+   */
+  private static function _subscribeToNewsletter($aData, $bDoubleOptIn = false) {
+    $oMailchimp = new \Mailchimp(MAILCHIMP_API_KEY);
+
+    $aMailChimp = $oMailchimp->call('lists/subscribe', array(
+            'id'            => MAILCHIMP_LIST_ID,
+            'email'         => array('email' => $aData['email']),
+            'merge_vars'    => array('FNAME' => $aData['name'], 'LNAME' => $aData['surname']),
+            'double_optin'  => $bDoubleOptIn,
+            'send_welcome'  => true)
+          );
+
+    return isset($aMailChimp['leid']) && !empty($aMailChimp['leid']);
   }
 }

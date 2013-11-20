@@ -4,7 +4,8 @@
  * Provide many helper methods.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 1.0
  *
@@ -15,8 +16,7 @@ namespace candyCMS\Core\Helpers;
 use candyCMS\Core\Controllers\Main;
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\PluginManager;
-use PDO;
-use lessc;
+use candyCMS\Core\Helpers\Cache;
 
 class Helper {
 
@@ -36,14 +36,17 @@ class Helper {
   public static function successMessage($sMessage, $sRedirectTo = '', $aData = '') {
     # This is supposed to be an AJAX request, so we will return JSON
     if (!empty($aData) && (isset($aData['type']) && 'json' == $aData['type'] || isset($aData['file']))) {
-      header('Content-Type: application/json');
-      exit(json_encode(array(
+      return json_encode(array(
                 'success'     => true,
                 'data'        => WEBSITE_MODE == 'development' ? $aData : '',
                 'redirectURL' => $sRedirectTo,
-                'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
-            )));
-    } else {
+                'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : '',
+                'message'     => $sMessage,
+                'type'        => 'success'
+            ));
+    }
+
+    else {
       $_SESSION['flash_message'] = array(
           'type'      => 'success',
           'message'   => $sMessage,
@@ -69,15 +72,17 @@ class Helper {
   public static function warningMessage($sMessage, $sRedirectTo = '', $aData = '') {
     # This is supposed to be an AJAX request, so we will return JSON
     if (!empty($aData) && (isset($aData['type']) && 'json' == $aData['type'] || isset($aData['file']))) {
-      header('Content-Type: application/json');
-      exit(json_encode(array(
-
+      return json_encode(array(
                 'success'     => false,
                 'data'        => WEBSITE_MODE == 'development' ? $aData : '',
                 'redirectURL' => $sRedirectTo,
-                'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
-              )));
-    } else {
+                'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : '',
+                'message'     => $sMessage,
+                'type'        => 'warning'
+              ));
+    }
+
+    else {
       $_SESSION['flash_message'] = array(
           'type'    => 'warning',
           'message' => $sMessage,
@@ -101,15 +106,17 @@ class Helper {
    */
   public static function errorMessage($sMessage, $sRedirectTo = '', $aData = '') {
     if (!empty($aData) && (isset($aData['type']) && 'json' == $aData['type'] || isset($aData['file']))) {
-      header('Content-Type: application/json');
-      exit(json_encode(array(
+      return json_encode(array(
+                'success'     => false,
+                'data'        => WEBSITE_MODE == 'development' ? $aData : '',
+                'redirectURL' => $sRedirectTo,
+                'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : '',
+                'message'     => $sMessage,
+                'type'        => 'error'
+              ));
+    }
 
-                  'success'     => false,
-                  'data'        => WEBSITE_MODE == 'development' ? $aData : '',
-                  'redirectURL' => $sRedirectTo,
-                  'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : ''
-              )));
-    } else {
+    else {
       $_SESSION['flash_message'] = array(
           'type'    => 'error',
           'message' => $sMessage,
@@ -214,7 +221,7 @@ class Helper {
    *
    */
   public static function createLinkTo($sUrl, $bExternal = false) {
-    return  $bExternal === true ?
+    return  $bExternal ?
             '<a href="' . $sUrl . '" rel="external">' . $sUrl . '</a>' :
             '<a href="' . WEBSITE_URL . '/' . $sUrl . '">' . WEBSITE_URL . '/' . $sUrl . '</a>';
   }
@@ -234,13 +241,13 @@ class Helper {
   public static function getAvatar($mSize, $iUserId, $sEmail, $bUseGravatar = false) {
     $sFilePath = Helper::removeSlash(PATH_UPLOAD . '/users/' . $mSize . '/' . $iUserId);
 
-    if ($bUseGravatar === false && file_exists($sFilePath . '.jpg'))
+    if (!$bUseGravatar && file_exists($sFilePath . '.jpg'))
       return '/' . $sFilePath . '.jpg';
 
-    elseif ($bUseGravatar === false && file_exists($sFilePath . '.png'))
+    elseif (!$bUseGravatar && file_exists($sFilePath . '.png'))
       return '/' . $sFilePath . '.png';
 
-    elseif ($bUseGravatar === false && file_exists($sFilePath . '.gif'))
+    elseif (!$bUseGravatar && file_exists($sFilePath . '.gif'))
       return '/' . $sFilePath . '.gif';
 
     else {
@@ -252,9 +259,8 @@ class Helper {
           $mSize = THUMB_DEFAULT_X;
       }
 
-      # @todo check if Gravatar always gets an integer size
       # Bugfix: Make sure, that user wants to show his Gravatar and system url does not match with user ones.
-      $sEmail = $bUseGravatar === true ? $sEmail : md5(WEBSITE_MAIL_NOREPLY);
+      $sEmail = $bUseGravatar ? $sEmail : md5(WEBSITE_MAIL_NOREPLY);
       return 'http://www.gravatar.com/avatar/' . md5($sEmail) . '.jpg?s=' . $mSize . '&d=mm';
     }
   }
@@ -289,13 +295,11 @@ class Helper {
    * @access public
    * @param string $sPath path of the file
    * @return int size of the file in byte
-   * @todo write test
    *
    */
   public static function getFileSize($sPath) {
-    $iSize = @filesize( ACTIVE_TEST ? $sPath : Helper::removeSlash($sPath) );
-
-    return $iSize === false ? -1 : $iSize;
+    $sPath = is_file($sPath) ? $sPath : Helper::removeSlash($sPath);
+    return is_file($sPath) ? filesize($sPath) : -1;
   }
 
   /**
@@ -305,7 +309,6 @@ class Helper {
    * @access public
    * @param int $iSize size of file in byte
    * @return string size of the file plus hardcoded ending
-   * @todo write test
    *
    */
   public static function fileSizeToString($iSize) {
@@ -320,98 +323,6 @@ class Helper {
 
     else
       return round($iSize, 2) . ' Byte';
-  }
-
-  /**
-   * Get the template dir. Check if there are extension files and use them if available.
-   *
-   * @static
-   * @access public
-   * @param string $sFolder dir of the templates
-   * @param string $sFile file name of the template
-   * @return string path of the chosen template
-   *
-   */
-  public static function getTemplateDir($sFolder, $sFile) {
-    try {
-      # Extensions
-      if (file_exists(PATH_STANDARD . '/app/views/' . $sFolder . '/' . $sFile . '.tpl'))
-        return PATH_STANDARD . '/app/views/' . $sFolder;
-
-      # Standard views
-      else {
-        if (!file_exists(PATH_STANDARD . '/vendor/candycms/core/views/' . $sFolder . '/' . $sFile . '.tpl')) {
-          # This action might be disabled due to missing form templates.
-          if (substr($sFile, 0, 5) == '_form')
-            return Helper::redirectTo('/errors/403');
-
-          else
-            throw new AdvancedException('This template does not exist: ' . $sFolder . '/' . $sFile . '.tpl');
-        }
-
-        else
-          return PATH_STANDARD . '/vendor/candycms/core/views/' . $sFolder;
-      }
-    }
-    catch (AdvancedException $e) {
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
-    }
-  }
-
-  /**
-   * Get the template type. Check if mobile template is available and return standard if not.
-   *
-   * @static
-   * @access public
-   * @param string $sDir dir of the templates
-   * @param string $sFile file name of the template
-   * @return string path of the chosen template
-   *
-   */
-  public static function getTemplateType($sDir, $sFile) {
-    try {
-      # Mobile device.
-      if (file_exists($sDir . '/' . $sFile . '.mob') && MOBILE === true)
-        return $sFile . '.mob';
-
-      # Standard template
-      else
-        return $sFile . '.tpl';
-    }
-    catch (AdvancedException $e) {
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
-      exit($e->getMessage());
-    }
-  }
-
-  /**
-   * Get the template file. Check if there is a mobile device.
-   *
-   * @static
-   * @access public
-   * @param string $sFolder dir of the templates
-   * @param string $sFile file name of the template
-   * @return string path of the chosen template
-   *
-   */
-  public static function getPluginTemplateDir($sFolder, $sFile) {
-    try {
-      # Template
-      if (file_exists(PATH_STANDARD . '/app/views/' . strtolower($sFolder) . '/' . $sFile . '.tpl'))
-        return PATH_STANDARD . '/app/views/' . strtolower($sFolder);
-
-      # Standard views
-      else {
-        if (!file_exists(PATH_STANDARD . '/vendor/candycms/plugins/' . ucfirst($sFolder) . '/views/' . $sFile . '.tpl'))
-          throw new AdvancedException('This plugin template does not exist: ' . ucfirst($sFolder) . '/views/' . $sFile . '.tpl');
-
-        else
-          return PATH_STANDARD . '/vendor/candycms/plugins/' . ucfirst($sFolder) . '/views';
-      }
-    }
-    catch (AdvancedException $e) {
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
-    }
   }
 
   /**
@@ -460,10 +371,9 @@ class Helper {
    * @param boolean $bFormat format this field using ContentDisplayPlugins?
    * @return string $sStr formatted string
    * @see vendor/candycms/core/Bbcode/Bbcode.controller.php
-   * @todo fix test; this one fails
    *
    */
-  public static function formatOutput(&$sStr, $sHighlight = '', $bFormat = false) {
+  public static function formatOutput($sStr, $sHighlight = '', $bFormat = false) {
     if ($sHighlight)
       $sStr = str_ireplace(urldecode($sHighlight), '<mark>' . urldecode($sHighlight) . '</mark>', $sStr);
 
@@ -496,7 +406,6 @@ class Helper {
     }
     catch (AdvancedException $e) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -638,7 +547,6 @@ class Helper {
    * @static
    * @access public
    * @return array $aLanguages array with our languages
-   * @todo test cases
    *
    */
   public static function getLanguages() {
@@ -665,23 +573,26 @@ class Helper {
    * @access public
    * @param string $sSource the less file
    * @param string $sOutput the target output file
-   * @param bool $bCompressed whether to use the compressed output mode
-   * @todo test cases
+   * @param boolean $bCompressed whether to use the compressed output mode
+   * @return boolean true|false
    *
    */
   public static function compileStylesheet($sSource, $sOutput, $bCompressed = true) {
     if (file_exists($sSource)) {
-      $sCacheFile = PATH_SMARTY . '/cache/' . WEBSITE_MODE . '/' . md5($sOutput) . '.cache';
-      $mCache     = file_exists($sCacheFile) ? unserialize(file_get_contents($sCacheFile)) : $sSource;
+      $mCache = $sSource;
+      Cache::isCachedAndLoad($sOutput, $mCache);
 
-      $oLessc = new lessc();
+      $oLessc = new \lessc();
       $bCompressed ? $oLessc->setFormatter('compressed') : $oLessc->setFormatter('classic');
-
       $aNewCache = $oLessc->cachedCompile($mCache);
 
+      if (ACTIVE_TEST && isset($mCache['updated']))
+        $mCache['updated'] = '';
+
       if (!is_array($mCache) || $aNewCache['updated'] > $mCache['updated']) {
-        file_put_contents($sCacheFile, serialize($aNewCache));
-        file_put_contents($sOutput, $aNewCache['compiled']);
+        # Save the compiled css
+        if (file_put_contents($sOutput, $aNewCache['compiled']))
+          return Cache::save($sOutput, $aNewCache);
       }
     }
   }

@@ -5,9 +5,11 @@
  *
  * @abstract
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 1.0
+ * @todo tests
  *
  */
 
@@ -17,9 +19,7 @@ use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
-use candyCMS\Core\Helpers\SmartySingleton;
-use candyCMS\plugins\Bbcode;
-use MCAPI;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 abstract class Main {
 
@@ -150,7 +150,7 @@ abstract class Main {
    * @var array
    * @access protected
    */
-  protected $_aDependentCaches = array('searches', 'sitemap');
+  protected $_aDependentCaches = array('searches', 'sitemaps');
 
   /**
    * the current redirect URL, if set, the controller 'should' redirect there after completion of _create, _update or _destroy
@@ -159,6 +159,14 @@ abstract class Main {
    * @access protected
    */
   protected $_sRedirectURL = '';
+
+  /**
+   * Store RSS Information Links
+   *
+   * @var array , title, url
+   * @access protected
+   */
+  protected $_aRSSInfo = array();
 
   /**
    * Initialize the controller by adding input params, set default id and start template engine.
@@ -175,14 +183,6 @@ abstract class Main {
     $this->_aSession  = & $aSession;
     $this->_aFile     = & $aFile;
     $this->_aCookie   = & $aCookie;
-
-    # Load config files if not already done (important for unit testing)
-    # @todo this should be done in the testing scenarios instead, i.e. the respective initialization should be included
-    if (!defined('WEBSITE_URL'))
-      require PATH_STANDARD . '/config/Candy.inc.php';
-
-    if (!defined('WEBSITE_LOCALE'))
-      define('WEBSITE_LOCALE', 'en_US');
 
     $this->_iId = isset($this->_aRequest['id']) ? (int) $this->_aRequest['id'] : '';
     $this->_sController = $this->_aRequest['controller'];
@@ -229,10 +229,11 @@ abstract class Main {
    * Method to include the model files.
    *
    * @access public
+   * @param string optional controller name
    * @return object $this->_oModel
    *
    */
-  public function __init() {
+  public function __init($sController = '') {
     $sModel = $this->__autoload($sController ? $sController : $this->_sController, true);
 
     if ($sModel)
@@ -250,7 +251,7 @@ abstract class Main {
    */
   protected function _setSmarty() {
     # Initialize smarty
-    $this->oSmarty = SmartySingleton::getInstance();
+    $this->oSmarty = Smarty::getInstance();
 
     # Clear cache on development mode or when we force it via a request.
     if (isset($this->_aRequest['clearcache']) || WEBSITE_MODE == 'development' || ACTIVE_TEST) {
@@ -259,6 +260,10 @@ abstract class Main {
     }
 
     return $this->oSmarty;
+  }
+
+  public function rssInfo() {
+    return $this->_aRSSInfo;
   }
 
   /**
@@ -402,7 +407,6 @@ abstract class Main {
    * @param string $sMessage error to be displayed
    * @return object $this due to method chaining
    * @todo extend tests for JSON requests
-   * @todo remove exit() function from JSON
    *
    */
   protected function _setError($sField, $sMessage = '') {
@@ -460,7 +464,7 @@ abstract class Main {
    *
    */
   public function show() {
-    $this->oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
+    $this->oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
     $sType = isset($this->_aRequest['type']) && 'ajax' !== $this->_aRequest['type'] ?
             strtoupper($this->_aRequest['type']) :
@@ -526,7 +530,7 @@ abstract class Main {
    * Just a backup method to show an entry as JSON.
    *
    * @access protected
-   * @return string json
+   * @return string JSON
    *
    */
   protected function _showJSON() {
@@ -552,7 +556,7 @@ abstract class Main {
    * Just a backup method to show an overview as JSON.
    *
    * @access protected
-   * @return string json
+   * @return string JSON
    *
    */
   protected function _overviewJSON() {
@@ -576,7 +580,7 @@ abstract class Main {
    * Just a backup method to show an entry as RSS.
    *
    * @access protected
-   * @return string json
+   * @return string JSON
    *
    */
   protected function _showRSS() {
@@ -589,7 +593,7 @@ abstract class Main {
    * Just a backup method to show an overview as RSS.
    *
    * @access protected
-   * @return string json
+   * @return string JSON
    *
    */
   protected function _overviewRSS() {
@@ -615,7 +619,7 @@ abstract class Main {
       return Helper::redirectTo('/errors/403');
 
     elseif (isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'])
-      $this->_create();
+      return $this->_create();
 
     else
       return isset($this->_aRequest[$this->_sController]) ?
@@ -679,16 +683,11 @@ abstract class Main {
    *
    */
   protected function _showFormTemplate($sTemplateName = '_form', $sTitle = '') {
-    # We don't support JSON
-    # @todo put this into a seperated method
+    # We don't support JSON for this template
     if (isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'])
-      return json_encode(array(
-                  'success' => false,
-                  'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
-              ));
-    
-    $sTemplateDir  = Helper::getTemplateDir($this->_sController, $sTemplateName);
-    $sTemplateFile = Helper::getTemplateType($sTemplateDir, $sTemplateName);
+      return $this->_showFormTemplateJSON();
+
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, $sTemplateName);
 
     if ($this->_iId) {
       $aData = $this->_oModel->getId($this->_iId, true);
@@ -719,8 +718,23 @@ abstract class Main {
     $oPluginManager = PluginManager::getInstance();
     $this->oSmarty->assign('editorinfo', $oPluginManager->getEditorInfo());
 
-    $this->oSmarty->setTemplateDir($sTemplateDir);
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    $this->oSmarty->setTemplateDir($oTemplate);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
+  }
+
+  /**
+   *
+   * Return an error message that this method doesn't allow JSON.
+   *
+   * @access proteced
+   * @return string JSON
+   *
+   */
+  protected function _showFormTemplateJSON() {
+    return json_encode(array(
+                'success' => false,
+                'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
+            ));
   }
 
   /**
@@ -874,41 +888,5 @@ abstract class Main {
               I18n::get('error.sql'),
               $sRedirectURL,
               isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'] ? $this->_aRequest : '');
-  }
-
-  /**
-   * Subscribe to newsletter list.
-   *
-   * @static
-   * @access protected
-   * @param array $aData user data
-   * @return boolean status of subscription
-   *
-   */
-  protected static function _subscribeToNewsletter($aData, $bDoubleOptIn = false) {
-    require_once PATH_STANDARD . '/vendor/mailchimp/mcapi/MCAPI.class.php';
-
-    $oMCAPI = new MCAPI(MAILCHIMP_API_KEY);
-    return $oMCAPI->listSubscribe(MAILCHIMP_LIST_ID,
-            $aData['email'],
-            array('FNAME' => $aData['name'], 'LNAME' => $aData['surname']),
-            '',
-            $bDoubleOptIn);
-  }
-
-  /**
-   * Remove from newsletter list
-   *
-   * @static
-   * @access private
-   * @param string $sEmail
-   * @return boolean status of action
-   *
-   */
-  protected static function _unsubscribeFromNewsletter($sEmail) {
-    require_once PATH_STANDARD . '/vendor/mailchimp/mcapi/MCAPI.class.php';
-
-    $oMCAPI = new MCAPI(MAILCHIMP_API_KEY);
-    return $oMCAPI->listUnsubscribe(MAILCHIMP_LIST_ID, $sEmail, '', '', false, false);
   }
 }

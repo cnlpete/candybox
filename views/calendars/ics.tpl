@@ -2,7 +2,9 @@ BEGIN:VCALENDAR
 VERSION:2.0
 X-WR-CALNAME:{$calendar.title}
 METHOD:PUBLISH
+{if !$ACTIVE_TEST}
 PRODID:{$WEBSITE_URL}
+{/if}
 BEGIN:VEVENT
 UID:{$calendar.id}
 CREATED:{$calendar.date.raw|date_format:"%Y%m%dT%H%M%SZ"}

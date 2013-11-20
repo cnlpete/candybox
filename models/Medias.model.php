@@ -4,7 +4,8 @@
  * Handle all medias model requests.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Hauke Schade
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 2.1
  *
@@ -12,17 +13,16 @@
 
 namespace candyCMS\Core\Models;
 
-use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\Image;
 
 class Medias extends Main {
 
   /**
-   * Get log overview data.
+   * Get all uploaded media files.
    *
    * @access public
-   * @return array $this->_aData
+   * @return array $aData
    *
    */
   public function getOverview() {
@@ -49,9 +49,9 @@ class Medias extends Main {
       if ($sFileType == 'jpg' || $sFileType == 'jpeg' || $sFileType == 'png' || $sFileType == 'gif') {
         $aImgDim = getImageSize($sPath);
 
-        if (!file_exists(Helper::removeSlash(PATH_UPLOAD . '/temp/' . $this->_sController . '/' . $sFile))) {
+        if (!file_exists(Helper::removeSlash(PATH_UPLOAD . '/temp/' . $this->_sController . '/' . $sFile)) || WEBSITE_MODE == 'development' && !ACTIVE_TEST) {
           $oImage = new Image($sFileName, 'temp', $sPath, $sFileType);
-          $oImage->resizeAndCut('32', $this->_sController);
+          $oImage->resizeAndCut(32, $this->_sController);
         }
       }
 
@@ -86,13 +86,43 @@ class Medias extends Main {
    *
    */
   public function destroy($sId, $sController = '') {
+    if (empty($sId))
+      return false;
+
     # We get the image information via GET
     $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sId);
 
     if (ACTIVE_TEST)
       return true;
 
-    elseif (is_file($sPath))
+    elseif (is_file($sPath)) {
+      $this->_deleteTempFiles('medias');
+      $this->_deleteTempFiles('bbcode');
+
       return unlink($sPath);
+    }
+  }
+
+  /**
+   * Delete temp files
+   *
+   * @access private
+   * @param string $sFolder folder where files should be deleted from
+   * @todo test
+   *
+   */
+  private function _deleteTempFiles($sFolder) {
+    $sPath = Helper::removeSlash(PATH_UPLOAD . '/temp/' . $sFolder);
+
+    $oDir = opendir($sPath);
+
+    while ($sFile = readdir($oDir)) {
+      if (substr($sFile, 0, 1) == '.')
+        continue;
+
+      unlink($sPath . '/' . $sFile);
+    }
+
+    closedir($oDir);
   }
 }

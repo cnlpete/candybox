@@ -6,6 +6,7 @@ website:
 global:
   about: About
   action: Action
+  admins: Administration
   album: Album
   albums: Albums
   api_token: API-Token
@@ -75,6 +76,7 @@ global:
     content: Contents
     media: Files
     user: Users
+  multilingual: Multilingual
   months:
     1: January
     2: February
@@ -215,6 +217,7 @@ error:
     missing:
       category: Please select a category.
       content: Please enter content.
+      cut: Please select how to handle image resizing.
       email: Please enter your email.
       file: Please select file.
       name: Please enter your name.

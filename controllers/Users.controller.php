@@ -4,7 +4,8 @@
  * CRUD action of users.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 1.0
  *
@@ -27,11 +28,10 @@ class Users extends Main {
    *
    */
   protected function _show() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'show');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
       $aData = $this->_oModel->getId($this->_iId);
 
       if (!isset($aData) || !$aData['id'])
@@ -43,7 +43,7 @@ class Users extends Main {
       $this->setDescription(I18n::get('users.description.show', $aData['full_name']));
     }
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -58,11 +58,10 @@ class Users extends Main {
       return Helper::redirectTo('/errors/401');
 
     else {
-      $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
-      $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
-      $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'overview');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
-      if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+      if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
         $this->oSmarty->assign('user', $this->_oModel->getOverview());
 
         $this->oSmarty->assign('_pagination_',
@@ -70,23 +69,38 @@ class Users extends Main {
       }
 
       $this->setTitle(I18n::get('users.title.overview'));
-      return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+      return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
     }
+  }
+
+  /**
+   * Adjust the rights, only administrators and moderators should be able to see the list
+   *
+   * @access protected
+   * @return string json
+   *
+   */
+  protected function _overviewJSON() {
+    if ($this->_aSession['user']['role'] < 3)
+      return Helper::errorMessage(I18n::get('error.401.info'), '/errors/401', array('type' => 'json'));
+
+    return parent::_overviewJSON();
   }
 
   /**
    * Build form template to create or update a user.
    *
    * @access protected
-   * @param boolean $bUseRequest whether the displayed data should be overwritten by query result
+   * @param boolean $bUseRequest whether the displayed data should be overwritten by query result.
+   * This is also not the same type as in parents method (boolean vs string), but since it's
+   * overwritten, it doesn't matter.
+   * @param string $sTitle title to show (only for E_STRICT)
    * @return string HTML content
-   * @todo remove E_STRICT warning, e.g. make this comaptible to al lother showFormTemplates
    *
    */
-  protected function _showFormTemplate($bUseRequest = false) {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, '_form');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+  protected function _showFormTemplate($bUseRequest = false, $sTitle = '') {
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, '_form');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     # Set user id of person to update
     $iId =  $this->_iId !== $this->_aSession['user']['id'] && $this->_aSession['user']['role'] == 4 ?
@@ -104,7 +118,7 @@ class Users extends Main {
     Helper::createAvatarURLs($aData, $aData['id'], $aData['email'], false, 'standard_');
 
     # Override if we want to use request
-    if ($bUseRequest === true) {
+    if ($bUseRequest) {
       foreach ($aData as $sColumn => $sData)
         $aData[$sColumn] = isset($this->_aRequest[$this->_sController][$sColumn]) ?
                 $this->_aRequest[$this->_sController][$sColumn] :
@@ -122,7 +136,7 @@ class Users extends Main {
 
     $this->oSmarty->assign('uid', $iId);
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -130,7 +144,6 @@ class Users extends Main {
    *
    * @access public
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
-   * @todo test
    *
    */
   public function avatar() {
@@ -173,9 +186,9 @@ class Users extends Main {
 
         $this->_aRequest['fileData'] = array(
             'popup'     => 'data:' . $sFileMime . ';base64,' .
-            base64_encode(file_get_contents(PATH_UPLOAD . '/users/popup/' . $aFileName[0])),
+            base64_encode(file_get_contents(Helper::removeSlash(PATH_UPLOAD) . '/users/popup/' . $aFileName[0])),
             'thumbnail' => 'data:' . $sFileMime . ';base64,' .
-            base64_encode(file_get_contents(PATH_UPLOAD . '/users/64/' . $aFileName[0]))
+            base64_encode(file_get_contents(Helper::removeSlash(PATH_UPLOAD) . '/users/64/' . $aFileName[0]))
         );
 
         return Helper::successMessage(I18n::get('success.upload'),
@@ -188,7 +201,7 @@ class Users extends Main {
                 '/' . $this->_sController . '/' . $this->_iId . '/update',
                 $this->_aRequest);
     }
-    catch (\Exception $e) {
+    catch (\AdvancedException $e) {
       return Helper::errorMessage($e->getMessage(),
               '/' . $this->_sController . '/' . $this->_iId . '/update',
                 $this->_aRequest);
@@ -268,7 +281,7 @@ class Users extends Main {
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
    *
    */
-  public function create() {
+  public function create( $iUserRole = 3 ) {
     if($this->_aSession['user']['role'] > 0 && $this->_aSession['user']['role'] < 4)
       return Helper::redirectTo('/errors/401');
 
@@ -308,13 +321,13 @@ class Users extends Main {
     }
 
     # Generate verification code for users (double-opt-in) when not created by admin.
-    $iVerificationCode = $this->_aSession['user']['role'] < 4 ? Helper::createRandomChar(16) : '';
+    $aOptions['verification_code'] = $this->_aSession['user']['role'] < 4 ? Helper::createRandomChar(16) : '';
 
     if (isset($this->_aError))
       return $this->_showCreateUserTemplate();
 
     else {
-      $bReturn = $this->_oModel->create($iVerificationCode) === true;
+      $bReturn = $this->_oModel->create( $aOptions ) === true;
 
       Logs::insert( $this->_sController,
                     $this->_aRequest['action'],
@@ -357,17 +370,12 @@ class Users extends Main {
    *
    */
   protected function _showCreateUserTemplate() {
-    # We don't support JSON
-    # @todo put this into a seperated method
+    # We don't support JSON for this template
     if (isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'])
-      return json_encode(array(
-                  'success' => false,
-                  'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
-              ));
-    
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'create');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'create');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+      return $this->_showFormTemplateJSON();
+
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'create');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     if ($this->_aSession['user']['role'] == 4) {
       $this->setTitle(I18n::get('users.title.create'));
@@ -388,7 +396,7 @@ class Users extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -441,13 +449,6 @@ class Users extends Main {
       if ($bReturn) {
         $this->oSmarty->clearControllerCache($this->_sController);
 
-        # Check if user wants to unsubscribe from mailchimp
-        if (!isset($this->_aRequest[$this->_sController]['receive_newsletter']))
-          $this->_unsubscribeFromNewsletter(Helper::formatInput(($this->_aRequest[$this->_sController]['email'])));
-
-        else
-          $this->_subscribeToNewsletter($this->_aRequest);
-
         return Helper::successMessage(I18n::get('success.update'), '/' . $this->_sController . '/' . $this->_iId);
       }
       else
@@ -486,7 +487,7 @@ class Users extends Main {
    */
   protected function _destroy() {
     require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Upload.helper.php';
-    $aUser = $this->_oModel->getUserNamesAndEmail($this->_iId);
+    $aUser = $this->_oModel->getUserNameAndEmail($this->_iId);
 
     # Do IDs match?
     if (isset($this->_aRequest[$this->_sController]) && $this->_aSession['user']['id'] == $this->_iId) {
@@ -537,7 +538,10 @@ class Users extends Main {
    * Verify email address.
    *
    * @access public
-   * @return boolean status of message
+   * @return string message
+   * @todo remove bug: When a user is registered to the list BEFORE registering
+   * (only if newsletter is re-enabled)
+   * to the CMS an exception is thrown
    *
    */
   public function verification() {
@@ -546,10 +550,17 @@ class Users extends Main {
 
     elseif ($this->_oModel->verifyEmail($this->_aRequest['code']) === true) {
       # Subscribe to MailChimp after email address is confirmed
-      $this->_subscribeToNewsletter($this->_oModel->getActivationData());
+      # We need to fetch user data by SESSION since we don't grab that from cache
+      # any longer.
+      #
+      # THIS FUNCTION IS DISABLED TO TO BUG DESCRIBED AVOBE
+      #$sModel   = $this->__autoload('Sessions', true);
+      #$oSession = new $sModel($this->_aRequest, $this->_aSession);
+
+      #$this->__autoload('Newsletters', true);
+      #Newsletters::_subscribeToNewsletter($oSession->getUserBySession());
 
       $this->oSmarty->clearControllerCache($this->_sController);
-
       return Helper::successMessage(I18n::get('success.user.verification'), '/');
     }
 
@@ -559,6 +570,8 @@ class Users extends Main {
 
   /**
    * Get the API token of a user.
+   *
+   * USE THAT METHOD WITH SSL ONLY!
    *
    * @access public
    * @return string JSON token or null

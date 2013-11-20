@@ -4,7 +4,8 @@
  * Handle all gallery SQL requests.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 1.0
  *
@@ -14,8 +15,8 @@ namespace candyCMS\Core\Models;
 
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
+use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\Pagination;
-use candyCMS\Core\Helpers\Upload;
 use PDO;
 
 class Galleries extends Main {
@@ -32,14 +33,21 @@ class Galleries extends Main {
    * Get gallery album files.
    *
    * @access public
-   * @param integer $iId Album-ID to load data from.
-   * @param boolean $bUpdate prepare data for update
-   * @param boolean $bAdvancedImageInformation provide image with advanced information (MIME_TYPE etc.)
-   * @return array data from _setData
+   * @param integer $iId album ID to load data from.
+   * @param boolean $bUpdate prepare data for update?
+   * @param boolean $bAdvancedImageInformation provide image with advanced information (MIME_TYPE etc.)?
+   * @return array|boolean array on success, boolean on false
    *
    */
   public function getId($iId, $bUpdate = false, $bAdvancedImageInformation = false) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     try {
+      $sWhere = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ?
+              'WHERE 1' :
+              "WHERE published = '1'";
+
       $sOrder = (SORTING_GALLERY_FILES == 'ASC' || SORTING_GALLERY_FILES == 'DESC') ?
               SORTING_GALLERY_FILES :
               'ASC';
@@ -62,7 +70,8 @@ class Galleries extends Main {
                                       " . SQL_PREFIX . "gallery_files f
                                     ON
                                       f.album_id=a.id
-                                    WHERE
+                                    " . $sWhere . "
+                                    AND
                                       a.id = :id
                                     GROUP BY
                                       a.id
@@ -76,43 +85,46 @@ class Galleries extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     # Update a single entry.
-    if ($bUpdate === true)
-      $this->_aData = $this->_formatForUpdate($aRow);
+    if ($bUpdate)
+      $aData = $this->_formatForUpdate($aRow);
 
     else {
       # Need to specify 'galleries' because this might be called for RSS feed generation
-      $this->_aData = $this->_formatForOutput(
+      $aData = $this->_formatForOutput(
               $aRow,
               array('id', 'user_id', 'files_sum'),
-              null,
+              array('published'),
               'galleries');
 
-      $this->_aData['files'] = $aRow['files_sum'] > 0 ?
+      $aData['files'] = $aRow['files_sum'] > 0 ?
               $this->_getThumbnails($aRow['id'], $bAdvancedImageInformation) :
               '';
 
       if ($this->_aSession['user']['role'] >= 3)
-        $this->_aData['url_createfile'] = $this->_aData['url_clean'] . '/createfile';
+        $aData['url_createfile'] = $aData['url_clean'] . '/createfile';
     }
 
-    return $this->_aData;
+    return $aData;
   }
 
   /**
    * Get album overview
    *
    * @access public
-   * @param boolean $bAdvancedImageInformation provide image with advanced information (MIME_TYPE etc.)
    * @param integer $iLimit blog post limit
+   * @param boolean $bAdvancedImageInformation provide image with advanced information (MIME_TYPE etc.)
    * @return array data from _setData
    *
    */
-  public function getOverview($bAdvancedImageInformation = false, $iLimit = LIMIT_ALBUMS) {
+  public function getOverview($iLimit = LIMIT_ALBUMS, $bAdvancedImageInformation = false) {
     $iResult = 0;
+
+    $sWhere = isset($this->_aSession['user']['role']) && $this->_aSession['user']['role'] >= 3 ?
+            'WHERE 1' :
+            "WHERE published = '1'";
 
     try {
       $oQuery   = $this->_oDb->query("SELECT COUNT(*) FROM " . SQL_PREFIX . "gallery_albums");
@@ -120,7 +132,6 @@ class Galleries extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Pagination.helper.php';
@@ -145,6 +156,7 @@ class Galleries extends Main {
                                       " . SQL_PREFIX . "gallery_files f
                                     ON
                                       f.album_id=a.id
+                                    " . $sWhere . "
                                     GROUP BY
                                       a.id
                                     ORDER BY
@@ -160,27 +172,26 @@ class Galleries extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     foreach ($aResult as $aRow) {
       $iId = $aRow['id'];
 
       # need to specify 'galleries' because this might be called for rss feed generation
-      $this->_aData[$iId] = $this->_formatForOutput(
+      $aData[$iId] = $this->_formatForOutput(
               $aRow,
               array('id', 'user_id', 'files_sum'),
-              null,
+              array('published'),
               'galleries');
 
-      $this->_aData[$iId]['files'] = $aRow['files_sum'] > 0 ?
+      $aData[$iId]['files'] = $aRow['files_sum'] > 0 ?
               $this->_getThumbnails($aRow['id'], $bAdvancedImageInformation) :
               '';
 
-      $this->_aData[$iId]['url_createfile'] = $this->_aData[$iId]['url_clean'] . '/createfile';
+      $aData[$iId]['url_createfile'] = $aData[$iId]['url_clean'] . '/createfile';
     }
 
-    return $this->_aData;
+    return $aData;
   }
 
   /**
@@ -189,11 +200,15 @@ class Galleries extends Main {
    * @access protected
    * @param integer $iId album id to fetch images from
    * @param boolean $bAdvancedImageInformation fetch additional information like width, height etc.
-   * @return array $this->_aThumbs processed array with image information
+   * @return array|boolean array on success, boolean on false
    *
    */
   protected function _getThumbnails($iId, $bAdvancedImageInformation = false) {
-    # Clear existing array (fix, when we got no images at a gallery)
+    if (empty($iId) || $iId < 1)
+      return false;
+
+    # Clear existing array
+    # Bugfix when we got no images at a gallery
     if (!empty($this->_aThumbs))
       unset($this->_aThumbs);
 
@@ -228,7 +243,6 @@ class Galleries extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     $iLoop = 0;
@@ -257,7 +271,7 @@ class Galleries extends Main {
 
       # We want to get the image dimension of the original image.
       # This function is not set to default due its long processing time.
-      if ($bAdvancedImageInformation === true) {
+      if ($bAdvancedImageInformation) {
         $aPopupSize = getimagesize(Helper::removeSlash($this->_aThumbs[$iId]['url_popup']));
         $aThumbSize = getimagesize(Helper::removeSlash($this->_aThumbs[$iId]['url_thumb']));
         $iImageSize = filesize(Helper::removeSlash($this->_aThumbs[$iId]['url_popup']));
@@ -282,12 +296,12 @@ class Galleries extends Main {
    * @static
    * @access public
    * @param integer $iId album ID
-   * @return array file data
+   * @return boolean|array false if we got no ID, file data if query was successful
    *
    */
   public static function getFileData($iId) {
-    if (empty(parent::$_oDbStatic))
-      parent::connectToDatabase();
+    if (empty($iId) || $iId < 1)
+      return false;
 
     try {
       $oQuery = parent::$_oDbStatic->prepare("SELECT
@@ -310,7 +324,6 @@ class Galleries extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -318,30 +331,43 @@ class Galleries extends Main {
    * Create a new album.
    *
    * @access public
+   * @param array $aOptions (only for E_STRICT)
    * @return boolean status of query
    *
    */
-  public function create() {
+  public function create($aOptions = '') {
+    $iPublished = isset($this->_aRequest[$this->_sController]['published']) &&
+            $this->_aRequest[$this->_sController]['published'] == true ?
+            1 :
+            0;
+
     try {
       $oQuery = $this->_oDb->prepare("INSERT INTO
                                         " . SQL_PREFIX . "gallery_albums
                                         ( author_id,
                                           title,
                                           content,
+                                          published,
                                           date)
                                       VALUES
                                         ( :author_id,
                                           :title,
                                           :content,
+                                          :published,
                                           NOW() )");
 
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
+      $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
 
-      foreach (array('title', 'content') as $sInput)
+      foreach (array('title', 'content') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                $sValue,
                 PDO::PARAM_STR);
+
+        unset($sValue);
+      }
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
@@ -349,15 +375,14 @@ class Galleries extends Main {
       return $bReturn;
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -366,39 +391,52 @@ class Galleries extends Main {
    *
    * @access public
    * @param integer $iId
-   * @return boolean status of query
+   * @return array|boolean array on success, boolean on false
    *
    */
   public function update($iId) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
+    $iPublished = isset($this->_aRequest[$this->_sController]['published']) &&
+            $this->_aRequest[$this->_sController]['published'] == true ?
+            1 :
+            0;
+
     try {
       $oQuery = $this->_oDb->prepare("UPDATE
                                         " . SQL_PREFIX . "gallery_albums
                                       SET
                                         title = :title,
-                                        content = :content
+                                        content = :content,
+                                        published = :published
                                       WHERE
                                         id = :id");
 
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
+      $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
 
-      foreach (array('title', 'content') as $sInput)
+      foreach (array('title', 'content') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                $sValue,
                 PDO::PARAM_STR);
+
+        unset($sValue);
+      }
 
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -408,10 +446,13 @@ class Galleries extends Main {
    * @access public
    * @param integer $iId album ID
    * @param string $sController controller to use, obsolete and only for not giving E_STRICT warnings
-   * @return boolean status of query
+   * @return array|boolean array on success, boolean on false
    *
    */
   public function destroy($iId, $sController = '') {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . (int) $iId);
 
     # Fetch all images
@@ -430,7 +471,6 @@ class Galleries extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     if ($bReturn === true) {
@@ -454,15 +494,14 @@ class Galleries extends Main {
         }
       }
       catch (\PDOException $p) {
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
         try {
           $this->_oDb->rollBack();
         }
         catch (\Exception $e) {
           AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
         }
-
-        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-        exit('SQL error.');
       }
 
       # Destroy albums from database
@@ -482,15 +521,14 @@ class Galleries extends Main {
         return $bReturn;
       }
       catch (\PDOException $p) {
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
         try {
           $this->_oDb->rollBack();
         }
         catch (\Exception $e) {
           AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
         }
-
-        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-        exit('SQL error.');
       }
     }
   }
@@ -532,10 +570,11 @@ class Galleries extends Main {
       $oQuery->bindParam('position', $iPosition, PDO::PARAM_INT);
 
       $sContent = trim($this->_aRequest[$this->_sController]['content']);
-      $iDate = time();
+      $iDate    = time();
 
-      if (class_exists('\ImageMetadataParser') && \ImageMetadataParser::exifAvailable()) {
+      if (!ACTIVE_TEST && class_exists('\ImageMetadataParser') && \ImageMetadataParser::exifAvailable()) {
         $sLongFilename = PATH_UPLOAD . '/galleries/' . $this->_aRequest['id'] . '/original/' . $sFile;
+
         $oImageMetadataParser = new \ImageMetadataParser($sLongFilename);
         $oImageMetadataParser->parseExif();
         $oImageMetadataParser->parseIPTC();
@@ -549,8 +588,10 @@ class Galleries extends Main {
           $iDate = $oImageMetadataParser->getDateTime();
       }
 
-      $oQuery->bindParam('content', Helper::formatInput($sContent, false), PDO::PARAM_STR);
-      $oQuery->bindParam('date', date('Y-m-d H:i:s', $iDate), PDO::PARAM_STR);
+      $sContent = Helper::formatInput($sContent, false);
+      $sDate    = date('Y-m-d H:i:s', $iDate);
+      $oQuery->bindParam('content', $sContent, PDO::PARAM_STR);
+      $oQuery->bindParam('date', $sDate, PDO::PARAM_STR);
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
@@ -558,15 +599,14 @@ class Galleries extends Main {
       return $bReturn;
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -575,10 +615,13 @@ class Galleries extends Main {
    *
    * @access public
    * @param integer $iId file ID
-   * @return boolean status of query
+   * @return array|boolean array on success, boolean on false
    *
    */
   public function updateFile($iId) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     try {
       $oQuery = $this->_oDb->prepare("UPDATE
                                         " . SQL_PREFIX . "gallery_files
@@ -589,24 +632,27 @@ class Galleries extends Main {
 
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
 
-      foreach (array('content') as $sInput)
+      foreach (array('content') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                $sValue,
                 PDO::PARAM_STR);
+
+        unset($sValue);
+      }
 
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -638,7 +684,7 @@ class Galleries extends Main {
       exit('SQL error.');
     }
 
-    if ($bReturn === true) {
+    if ($bReturn) {
       try {
         $oQuery = $this->_oDb->prepare("DELETE FROM
                                           " . SQL_PREFIX . "gallery_files
@@ -661,15 +707,14 @@ class Galleries extends Main {
         return $bReturn;
       }
       catch (\PDOException $p) {
+        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
         try {
           $this->_oDb->rollBack();
         }
         catch (\Exception $e) {
           AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
         }
-
-        AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-        exit('SQL error.');
       }
     }
   }
@@ -678,12 +723,14 @@ class Galleries extends Main {
    * Update filepositions.
    *
    * @access public
-   * @param integer $iAlbumId album ID
-   * @return boolean status of query
+   * @param integer $iId album ID
+   * @return array|boolean array on success, boolean on false
    *
    */
-  public function updateOrder($iAlbumId) {
-    $iAlbumId = (int) $iAlbumId;
+  public function updateOrder($iId) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     $sSQL     = '';
 
     foreach ($this->_aRequest['file'] as $iKey => $iValue) {
@@ -693,12 +740,13 @@ class Galleries extends Main {
       $sSQL .= "UPDATE
                   " . SQL_PREFIX . "gallery_files
                 SET
-                  position = '".$iKey."'
+                  position = '" . $iKey . "'
                 WHERE
-                  id = '".$iValue."'
+                  id = '" . $iValue . "'
                 AND
-                  album_id = '".$iAlbumId."'
-                LIMIT 1;";
+                  album_id = '" . $iId . "'
+                LIMIT
+                  1;";
     }
 
     try {
@@ -707,7 +755,25 @@ class Galleries extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
+  }
+
+  /**
+   * Get search information. We must overwrite the Main.model function to to different table syntax.
+   *
+   * @access public
+   * @param string $sSearch query string to search
+   * @param string $sController controller to use
+   * @param string $sOrderBy how to order search
+   * @return array $aData search data
+   *
+   */
+  public function search($sSearch, $sController = '', $sOrderBy = 't.date DESC') {
+    $aData = parent::search($sSearch, 'gallery_albums', $sOrderBy);
+
+    $aData['controller'] = $sController;
+    $aData['title'] = I18n::get('global.' . strtolower($sController));
+
+    return $aData;
   }
 }

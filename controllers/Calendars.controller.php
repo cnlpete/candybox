@@ -4,7 +4,8 @@
  * CRUD action of simple calendar.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 2.0
  *
@@ -49,15 +50,13 @@ class Calendars extends Main {
    * @access protected
    * @param integer $iId ID to show
    * @return string ICS-File
-   * @todo remove exit
    *
    */
   protected function _ics($iId) {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'ics');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'ics');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate =  $this->oSmarty->getTemplate($this->_sController, 'ics');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
       $aData = $this->_oModel->getId($iId);
       $this->oSmarty->assign('calendar', $aData);
 
@@ -65,10 +64,12 @@ class Calendars extends Main {
         return Helper::redirectTo('/errors/404');
     }
 
-    header('Content-type: text/calendar; charset=utf-8');
-    header('Content-Disposition: inline; filename=' . $aData['title_encoded'] . '.ics');
+    if (!ACTIVE_TEST) {
+      header('Content-type: text/calendar; charset=utf-8');
+      header('Content-Disposition: inline; filename=' . $aData['title_encoded'] . '.ics');
+    }
 
-    exit($this->oSmarty->fetch($sTemplateFile, UNIQUE_ID));
+    exit($this->oSmarty->fetch($oTemplate, UNIQUE_ID));
   }
 
   /**
@@ -79,19 +80,18 @@ class Calendars extends Main {
    *
    */
   protected function _overview() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate =  $this->oSmarty->getTemplate($this->_sController, 'overview');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     if ($this->_iId) {
       $this->setTitle(I18n::get('global.calendar') . ' - ' . I18n::get('global.archive') . ' ' . $this->_iId);
       $this->setDescription(I18n::get('global.calendar') . ' - ' . I18n::get('global.archive') . ' ' . $this->_iId);
     }
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID))
       $this->oSmarty->assign('calendar', $this->_oModel->getOverview());
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -99,21 +99,21 @@ class Calendars extends Main {
    *
    * @access public
    * @return string HTML content
-   * @todo remove exit
    *
    */
   public function iCalFeed() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'icalfeed');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'icalfeed');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate =  $this->oSmarty->getTemplate($this->_sController, 'icalfeed');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID))
       $this->oSmarty->assign('calendar', $this->_oModel->getOverview());
 
-    header('Content-type: text/calendar; charset=utf-8');
-    header('Content-Disposition: inline; filename=' . WEBSITE_NAME . '.ics');
+    if (!ACTIVE_TEST) {
+      header('Content-type: text/calendar; charset=utf-8');
+      header('Content-Disposition: inline; filename=' . WEBSITE_NAME . '.ics');
+    }
 
-    exit($this->oSmarty->fetch($sTemplateFile, UNIQUE_ID));
+    exit($this->oSmarty->fetch($oTemplate, UNIQUE_ID));
   }
 
   /**

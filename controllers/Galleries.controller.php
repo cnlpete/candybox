@@ -4,7 +4,8 @@
  * CRUD actions for gallery overview and gallery albums.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 1.0
  *
@@ -16,7 +17,6 @@ use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\Upload;
-use candyCMS\Core\Helpers\SmartySingleton;
 
 class Galleries extends Main {
 
@@ -44,11 +44,10 @@ class Galleries extends Main {
    *
    */
   protected function _overview() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'overview');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
       $this->oSmarty->assign('albums', $this->_oModel->getOverview());
 
       # Limit to maximum pages
@@ -59,7 +58,7 @@ class Galleries extends Main {
         $this->oSmarty->assign('_pagination_', $this->_oModel->oPagination->showPages('/' . $this->_sController));
     }
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -70,20 +69,28 @@ class Galleries extends Main {
    *
    */
   protected function _show() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'show');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'show');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     # Collect data array
     $aData = $this->_oModel->getId($this->_iId, false, true);
 
-    $this->setTitle($this->_removeHighlight($aData['title']) . ' - ' . I18n::get('global.gallery'));
+    # Entry does not exist or is unpublished
+    if (!$aData['id'])
+      return Helper::redirectTo('/errors/404');
+
+    $sTitle = $this->_removeHighlight($aData['title']) . ' - ' . I18n::get('global.gallery');
+    $this->setTitle($sTitle);
     $this->setDescription($this->_removeHighlight($aData['content']));
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
+    # Add RSS info
+    $this->_aRSSInfo[] = array( 'url'   => WEBSITE_URL . '/galleries/' . $this->_aRequest['id'] . '.rss',
+                                'title' => $sTitle);
+
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID))
       $this->oSmarty->assign('album', $aData);
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -97,16 +104,15 @@ class Galleries extends Main {
     if (!$this->_iId)
       Helper::redirectTo('/errors/404');
 
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'showRSS');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'showRSS');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'showRSS');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
       $aData = $this->_oModel->getId($this->_iId, false, true);
       $this->oSmarty->assign('data', $aData);
     }
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -175,9 +181,8 @@ class Galleries extends Main {
    *
    */
   protected function _showFormFileTemplate() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, '_form_show');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form_show');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, '_form_show');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     if ($this->_iId && $this->_aRequest['action'] == 'updatefile') {
       $aData = $this->_oModel->getFileData($this->_iId);
@@ -198,7 +203,7 @@ class Galleries extends Main {
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -349,11 +354,11 @@ class Galleries extends Main {
    *
    * @access public
    * @return boolean returned status of model action (boolean).
-   * @todo test
    *
    */
   public function updateOrder() {
     header('Content-Type: application/json');
+
     return $this->_aSession['user']['role'] < 3 ?
             json_encode(array(
                 'success' => false,

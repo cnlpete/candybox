@@ -4,7 +4,8 @@
  * Start a search.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 1.5
  *
@@ -14,6 +15,7 @@ namespace candyCMS\Core\Controllers;
 
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Searches extends Main {
 
@@ -42,22 +44,27 @@ class Searches extends Main {
       return $this->_create();
 
     else {
-      $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
-      $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
-      $this->oSmarty->setTemplateDir($sTemplateDir);
+      $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'overview');
+      $this->oSmarty->setTemplateDir($oTemplate);
 
       $sString = Helper::formatInput(urldecode($this->_aRequest[$this->_sController]['search']));
+      $this->oSmarty->assign('string', urlencode($sString));
 
-      if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
-        $this->oSmarty->assign('string', urlencode($sString));
-        $this->oSmarty->assign('tables', $this->_oModel->getOverview($sString,
-                    array('blogs', 'contents', 'downloads', 'gallery_albums')));
+      if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
+        $aSitemapModels = array_filter( array_map('trim', explode(',', DATA_SEARCHES)));
+        $aResults = array();
+        foreach ($aSitemapModels as $sSitemapModel) {
+          $sModel = $this->__autoload($sSitemapModel, true);
+          $oModel = new $sModel($this->_aRequest, $this->_aSession);
+          $aResults[strtolower($sSitemapModel)] = $oModel->search($sString, strtolower($sSitemapModel));
+        }
+        $this->oSmarty->assign('tables', $aResults);
 
         $this->setTitle(I18n::get('searches.title.show', $sString));
         $this->setDescription(I18n::get('searches.description.show', $sString));
       }
 
-      return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+      return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
     }
   }
 
@@ -69,7 +76,7 @@ class Searches extends Main {
    *
    */
   protected function _create() {
-    $this->oSmarty->setCaching(\candyCMS\Core\Helpers\SmartySingleton::CACHING_LIFETIME_SAVED);
+    $this->oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
     return $this->_formTemplate();
   }
 
@@ -81,12 +88,11 @@ class Searches extends Main {
    *
    */
   protected function _formTemplate() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, '_form');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, '_form');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, '_form');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     $this->setTitle(I18n::get('global.search'));
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 }

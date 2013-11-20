@@ -30,11 +30,9 @@
       <!-- pluginmanager:sessionplugin::meta -->
 
       {* Basic stuff *}
-      {if isset($_REQUEST.search)}
-        <link href='/blogs/{$_REQUEST.search}.rss' rel='alternate' type='application/rss+xml' title='{$_REQUEST.search} RSS'/>
-      {else}
-        <link href='/blogs.rss' rel='alternate' type='application/rss+xml' title='RSS'/>
-      {/if}
+      {foreach $_WEBSITE.meta.rss as $rss}
+        <link href='{$rss.url}' rel='alternate' type='application/rss+xml' title='{$rss.title}'/>
+      {/foreach}
       <link href='{$_PATH.public}/favicon.ico' rel='shortcut icon' type='image/x-icon'/>
 
       {* Include jQuery and its components *}
@@ -45,7 +43,7 @@
         var lang = {$_SYSTEM.json_language};
 
         if (typeof jQuery == 'undefined')
-          document.write(unescape("%3Cscript src='{$_PATH.core}/assets/javascripts/core/jquery{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'%3E%3C/script%3E"));
+          document.write(unescape("%3Cscript src='{$_PATH.js.core}/jquery{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'%3E%3C/script%3E"));
       </script>
 
       <title>{$_WEBSITE.title} - {$WEBSITE_NAME}</title>
@@ -141,6 +139,11 @@
                               {$lang.global.mails}
                             </a>
                           </li>
+                          <li>
+                            <a href='/admins' title='{$lang.global.admins}'>
+                              {$lang.global.admins}
+                            </a>
+                          </li>
                         {/if}
                       {/if}
                     </ul>
@@ -203,11 +206,11 @@
       </div>
 
       {* Add bootstrap support *}
-      <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.bootstrap.dropdown{$_SYSTEM.compress_files_suffix}.js'></script>
-      <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.bootstrap.tooltip{$_SYSTEM.compress_files_suffix}.js'></script>
+      <script type='text/javascript' src='{$_PATH.js.bootstrap}/bootstrap-dropdown{$_SYSTEM.compress_files_suffix}.js'></script>
+      <script type='text/javascript' src='{$_PATH.js.bootstrap}/bootstrap-tooltip{$_SYSTEM.compress_files_suffix}.js'></script>
 
       {* Own JS and plugins *}
-      <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/scripts{$_SYSTEM.compress_files_suffix}.js'></script>
+      <script type='text/javascript' src='{$_PATH.js.core}/scripts{$_SYSTEM.compress_files_suffix}.js'></script>
       <!-- pluginmanager:sessionplugin::javascript -->
       <!-- plugin:analytics -->
       <!-- plugin:piwik -->

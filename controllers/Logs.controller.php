@@ -4,7 +4,8 @@
  * CRUD actions of logs.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 2.0
  *
@@ -14,6 +15,7 @@ namespace candyCMS\Core\Controllers;
 
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Logs extends Main {
 
@@ -29,18 +31,17 @@ class Logs extends Main {
       return Helper::redirectTo('/errors/401');
 
     else {
-      $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
-      $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
-      $this->oSmarty->setTemplateDir($sTemplateDir);
+      $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'overview');
+      $this->oSmarty->setTemplateDir($oTemplate);
 
-      if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+      if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
         $this->oSmarty->assign('logs', $this->_oModel->getOverview());
         $this->oSmarty->assign('_pagination_',
                 $this->_oModel->oPagination->showPages('/' . $this->_sController));
       }
 
       $this->setTitle(I18n::get('global.logs'));
-      return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+      return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
     }
   }
 
@@ -71,7 +72,7 @@ class Logs extends Main {
             (bool) $bResultFlag);
 
     if ($bReturn)
-      \candyCMS\Core\Helpers\SmartySingleton::getInstance()->clearControllerCache('logs');
+      Smarty::getInstance()->clearControllerCache('logs');
 
     return $bReturn;
   }
@@ -87,6 +88,9 @@ class Logs extends Main {
    *
    */
   public static function updateEndTime($iLogsId, $iEndTime = null) {
+    if (!$iLogsId)
+      return Helper::redirectTo('/errors/403');
+
     if ($iEndTime == null)
       $iEndTime = time();
 
@@ -94,7 +98,7 @@ class Logs extends Main {
     $bReturn = $sModel::setEndTime($iLogsId, $iEndTime);
 
     if ($bReturn)
-      \candyCMS\Core\Helpers\SmartySingleton::getInstance()->clearControllerCache('logs');
+      Smarty::getInstance()->clearControllerCache('logs');
 
     return $bReturn;
   }
@@ -110,13 +114,16 @@ class Logs extends Main {
    *
    */
   public static function updateResultFlag($iLogsId, $bResultFlag) {
+    if (!$iLogsId)
+      return Helper::redirectTo('/errors/403');
+
     require_once PATH_STANDARD . '/vendor/candycms/core/models/Logs.model.php';
 
     $sModel  = Main::__autoload('Logs', true);
     $bReturn = $sModel::setResultFlag($iLogsId, $bResultFlag);
 
     if ($bReturn)
-      \candyCMS\Core\Helpers\SmartySingleton::getInstance()->clearControllerCache('logs');
+      Smarty::getInstance()->clearControllerCache('logs');
 
     return $bReturn;
   }
@@ -130,7 +137,7 @@ class Logs extends Main {
    *
    */
   public static function write($sMessage) {
-    if(!$sMessage)
+    if (!$sMessage)
       return Helper::redirectTo('/errors/403');
 
     return \candyCMS\Core\Helpers\AdvancedException::writeLog($sMessage);

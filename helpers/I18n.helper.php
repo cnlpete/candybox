@@ -4,7 +4,8 @@
  * Translate a string.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 2.0
  *
@@ -13,6 +14,7 @@
 namespace candyCMS\Core\Helpers;
 
 use candyCMS\Core\Helpers\AdvancedException;
+use candyCMS\Core\Helpers\Cache;
 
 class I18n {
 
@@ -47,32 +49,17 @@ class I18n {
   private static $_sLanguage = null;
 
   /**
-   * Read the language yaml and save information into session due to fast access.
+   * Build a Translation-Helper with a specified language.
+   * Will use cache file for faster access.
    *
    * @access public
    * @param string $sLanguage language to load
-   * @param array $aSession the session object, if given save the translations in $_SESSION['lang']
-   * @param array $aPlugins plugins to load
    *
    */
-  public function __construct($sLanguage = 'en', &$aSession = null) {
-    if ($aSession)
-      $this->_aSession = $aSession;
-
+  public function __construct($sLanguage = 'en') {
     self::$_oObject = $this;
-
-    if (!isset(I18n::$_aLang) || WEBSITE_MODE == 'development' || ACTIVE_TEST) {
-      if (!isset($aSession['lang'])) {
-        self::$_aLang = array();
-
-        if ($aSession != null)
-          $aSession['lang'] = & I18n::$_aLang;
-      }
-      else
-        self::$_aLang = & $aSession['lang'];
-
-      self::load($sLanguage);
-    }
+    self::$_aLang = array();
+    self::load($sLanguage);
   }
 
   /**
@@ -92,7 +79,15 @@ class I18n {
       return true;
     }
 
-    # Have to load from YML files
+    # Try to read from cache file
+    if (Cache::isCachedAndLoad('translation' . $sLanguage, self::$_aLang[$sLanguage])) {
+      self::$_sLanguage = $sLanguage;
+      SmartySingleton::getInstance()->setDefaultLanguage(self::$_aLang[$sLanguage], $sLanguage);
+      return true;
+    }
+
+    # no cache file found, load it up and generate cache file
+    # Have to parse all the different YML files
     $sLanguageFile        = $sLanguage . '.yml';
     $sCustomLanguageFile  = PATH_STANDARD . '/app/languages/' . $sLanguageFile;
     $sCoreLanguageFile    = PATH_STANDARD . '/vendor/candycms/core/languages/' . $sLanguageFile;
@@ -126,12 +121,16 @@ class I18n {
     }
 
     # Merge all that with the users custom language file
-    Helper::recursiveOnewayArrayReplace(self::$_aLang[$sLanguage],
-            \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sCustomLanguageFile)));
+    $aTarget  = self::$_aLang[$sLanguage];
+    $aReplace = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sCustomLanguageFile));
+    Helper::recursiveOnewayArrayReplace($aTarget, $aReplace);
+
+    # Bugfix: Disable errors duing tests
+    if (!ACTIVE_TEST)
+      Cache::save('translation' . $sLanguage, self::$_aLang[$sLanguage]);
 
     self::$_sLanguage = $sLanguage;
     SmartySingleton::getInstance()->setDefaultLanguage(self::$_aLang[$sLanguage], $sLanguage);
-
     return true;
   }
 
@@ -199,28 +198,60 @@ class I18n {
   }
 
   /**
+   * Get all possible Languages
+   *
+   * @static
+   * @return array all language strings that can be loaded
+   * @access public
+   * @todo test
+   *
+   */
+  public static function getPossibleLanguages() {
+    $aLangs = array();
+    if (!Cache::isCachedAndLoad('translation.all', $aLangs)) {
+      $sLanguagesPath = PATH_STANDARD . '/app/languages/';
+      $oDir = opendir($sLanguagesPath);
+
+      while ($sFile = readdir($oDir)) {
+        if (substr($sFile, -4) != '.yml')
+          continue;
+
+        $sLang = substr($sFile, 0, -4);
+        $aLangs[] = $sLang;
+      }
+
+      closedir($oDir);
+
+      Cache::save('translation.all', $aLangs);
+    }
+
+    return $aLangs;
+  }
+
+  /**
    * Unset the language saved in the session.
    *
    * @static
    * @param string $sLanguage language part we want to unload. Unload all if not set
    * @access public
-   * @return NULL
+   * @todo test
    *
    */
   public static function unsetLanguage($sLanguage = '') {
     if ($sLanguage == '') {
-      self::$_aLang = null;
-      if (self::$_oObject != null)
-        unset(self::$_oObject->_aSession['lang']);
+      self::$_aLang = array();
 
-      return self::$_oObject->_aSession['lang'];
+      # clear the possible languages cache
+      Cache::clear('translation.all');
+
+      # clear all possible languages
+      $aLangs = self::getPossibleLanguages();
+      foreach ($aLangs as $sLang)
+        Cache::clear('translation' . $sLang);
     }
     else {
       self::$_aLang[$sLanguage] = null;
-      if (self::$_oObject != null)
-        unset(self::$_oObject->_aSession['lang'][$sLanguage]);
-
-      return self::$_oObject->_aSession['lang'][$sLanguage];
+      Cache::clear('translation' . $sLanguage);
     }
   }
 }

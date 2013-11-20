@@ -53,12 +53,8 @@
         <input type='text'
                name='{$_REQUEST.controller}[tags]'
                id='input-tags'
-               data-provide='typeahead'
                value="{$tags}"
-               data-source='{$_tags_}'
-               data-items='8'
-               class='span4'
-               autocomplete='off' />
+               class='span4' />
         <p class='help-block'>
           {$lang.blogs.info.tag}
         </p>
@@ -114,6 +110,7 @@
         <select name='{$_REQUEST.controller}[language]'
                 class='span4'
                 id='input-language'>
+          <option value=''>{$lang.global.multilingual}</option>
           {foreach $languages as $l}
             {if $_REQUEST.action == 'create'}
               <option value='{$l}' {if $l == $WEBSITE_LANGUAGE}selected='selected'{/if}>{$l}</option>
@@ -196,7 +193,6 @@
       {/if}
     </div>
   </form>
-  <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.bootstrap.typeahead{$_SYSTEM.compress_files_suffix}.js'></script>
   {if !$MOBILE}
     <!-- pluginmanager:editor -->
   {/if}

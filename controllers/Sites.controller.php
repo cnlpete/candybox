@@ -4,7 +4,8 @@
  * Show a static page.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 2.0
  *
@@ -12,9 +13,7 @@
 
 namespace candyCMS\Core\Controllers;
 
-use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
-use candyCMS\Core\Helpers\I18n;
 
 class Sites extends Main {
 
@@ -37,7 +36,8 @@ class Sites extends Main {
       return Helper::redirectTo('/errors/404');
 
     $this->setTitle(ucfirst($sSite));
-    return $this->oSmarty->fetch(PATH_STANDARD . '/app/sites/' . $sSite . '.tpl');
+    $this->oSmarty->setTemplateDir(array('dir' => PATH_STANDARD . '/app/sites'));
+    return $this->oSmarty->fetch(array('file' => $sSite . '.tpl'));
   }
 
   /**
@@ -51,11 +51,10 @@ class Sites extends Main {
     # Set caching false for now
     $this->oSmarty->setCaching(false);
 
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'overview');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID)) {
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
       $aSites = array();
       $oPathDir = opendir(PATH_STANDARD . '/app/sites');
 
@@ -72,6 +71,6 @@ class Sites extends Main {
       $this->oSmarty->assign('sites', $aSites);
     }
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 }

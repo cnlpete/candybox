@@ -2,7 +2,9 @@ BEGIN:VCALENDAR
 VERSION:2.0
 X-WR-CALNAME:{$calendar.title}
 METHOD:PUBLISH
+{if !ACTIVE_TEST}
 PRODID:{$WEBSITE_URL}
+{/if}
 {foreach $calendar as $c}
 {foreach $c.dates as $d}
 BEGIN:VEVENT

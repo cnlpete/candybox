@@ -5,7 +5,8 @@
  * administrators and moderators the option to upload and manage files.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 2.0
  *
@@ -36,14 +37,17 @@ class Downloads extends Main {
     # Update download count
     $this->_oModel->updateDownloadCount($this->_iId);
 
-    # Get mime type
-    if (function_exists('finfo_open'))
-      header('Content-type: ' . finfo_file(
-              finfo_open(FILEINFO_MIME_TYPE),
-              Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sFile)));
+    if (!ACTIVE_TEST) {
+      # Get mime type
+      if (function_exists('finfo_open'))
+        header('Content-type: ' . finfo_file(
+                finfo_open(FILEINFO_MIME_TYPE),
+                Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sFile)));
 
-    # Send file directly
-    header('Content-Disposition: attachment; filename="' . $sFile . '"');
+      # Send file directly
+      header('Content-Disposition: attachment; filename="' . $sFile . '"');
+    }
+
     exit(readfile(Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sFile)));
   }
 
@@ -55,14 +59,13 @@ class Downloads extends Main {
    *
    */
   protected function _overview() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate =  $this->oSmarty->getTemplate($this->_sController, 'overview');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID))
       $this->oSmarty->assign('downloads', $this->_oModel->getOverview());
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -129,7 +132,8 @@ class Downloads extends Main {
         $aExts  = $oUploadFile->getExtensions();
 
         # File is up so insert data into database
-        if ($this->_oModel->create($aIds[0] . '.' . $aExts[0], $aExts[0]) === true) {
+        $aOptions = array('file' => $aIds[0] . '.' . $aExts[0], 'extension' => $aExts[0]);
+        if ($this->_oModel->create($aOptions) === true) {
           Logs::insert( $this->_sController,
                         $this->_aRequest['action'],
                         $this->_oModel->getLastInsertId($this->_sController),

@@ -4,7 +4,8 @@
  * Handle all uploads.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 1.0
  *
@@ -190,6 +191,7 @@ class Upload {
    * Upload files into an album. Resize and / or cut the files.
    *
    * @access public
+   * @param string $sFolder folder that we want to use
    * @param string $sResize cut or resize the images?!
    * @return array boolean status of each upload
    * @see vendor/candycms/core/controllers/Galleries.controller.php

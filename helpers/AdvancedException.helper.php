@@ -4,15 +4,14 @@
  * Show modified exceptions.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 1.0
  *
  */
 
 namespace candyCMS\Core\Helpers;
-
-use candyCMS\Core\Controllers\Mails;
 
 class AdvancedException extends \Exception {
 
@@ -21,14 +20,18 @@ class AdvancedException extends \Exception {
    *
    * @static
    * @access public
-   * @param type $sMessage
+   * @param string $sMessage
+   * @param boolean $bExit
    *
    */
-  public static function reportBoth($sMessage) {
-    !ACTIVE_TEST ? AdvancedException::writeLog($sMessage) : printf("\n" . $sMessage);
+  public static function reportBoth($sMessage, $bExit = true) {
+    !ACTIVE_TEST ? AdvancedException::writeLog($sMessage) : '';
 
     if (WEBSITE_MODE == 'production' || WEBSITE_MODE == 'staging')
       AdvancedException::sendAdminMail($sMessage);
+
+    if ($bExit && !ACTIVE_TEST)
+      exit(I18n::get('error.standard'));
   }
 
   /**

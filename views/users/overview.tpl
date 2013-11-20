@@ -19,7 +19,6 @@
         <th class='column-name'>{$lang.global.name}</th>
         <th class='column-registered_since center'>{$lang.users.label.registered_since}</th>
         <th class='column-last_login center'>{$lang.users.label.last_login}</th>
-        <th class='column-newsletter center'>{$lang.global.newsletter}</th>
         {if $_SESSION.user.role == 4}
           <th class='column-actions'></th>
         {/if}
@@ -69,10 +68,6 @@
             -
           {/if}
         </td>
-        <td class='center'>
-          <i class='icon-{if $u.receive_newsletter == 1}ok{/if} js-tooltip'
-             title='{if $u.receive_newsletter == 1}✔{/if}'></i>
-        </td>
         {if $_SESSION.user.role == 4}
           <td class='center'>
             <a href='{$u.url_update}'>
@@ -89,14 +84,14 @@
     {/foreach}
   </table>
   {$_pagination_}
-  <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
-  <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js'></script>
-  <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.tablesorter{$_SYSTEM.compress_files_suffix}.js'></script>
-  <script type='text/javascript' src='{$_PATH.core}/assets/javascripts/core/jquery.infiniteScroll{$_SYSTEM.compress_files_suffix}.js'></script>
+  <script type='text/javascript' src='{$_PATH.js.core}/jquery.ui{$_SYSTEM.compress_files_suffix}.js'></script>
+  <script type='text/javascript' src='{$_PATH.js.core}/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js'></script>
+  <script type='text/javascript' src='{$_PATH.js.core}/jquery.tablesorter{$_SYSTEM.compress_files_suffix}.js'></script>
+  <script type='text/javascript' src='{$_PATH.js.core}/jquery.infiniteScroll{$_SYSTEM.compress_files_suffix}.js'></script>
   <script type='text/javascript'>
     {if $_AUTOLOAD.enabled}
       $(document).ready(function(){
-        enableInfiniteScroll('table', 'table tbody tr', {$_AUTOLOAD.times}, '{$_PATH.core}/assets/images');
+        enableInfiniteScroll('table', 'table tbody tr', {$_AUTOLOAD.times}, '{$_PATH.img.core}');
       });
     {/if}
 

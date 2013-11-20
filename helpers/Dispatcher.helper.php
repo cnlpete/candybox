@@ -4,7 +4,8 @@
  * Route the application to the given controller and action.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 2.0
  *
@@ -51,7 +52,7 @@ class Dispatcher {
 
     try {
       # Are extensions for existing controllers available? If yes, use them.
-      if (EXTENSION_CHECK && file_exists(PATH_STANDARD . '/app/controllers/' . $sController . '.controller.php')) {
+      if (EXTENSION_CHECK && file_exists(PATH_STANDARD . '/app/controllers/' . $sController . '.controller.php') && !ACTIVE_TEST) {
         require_once PATH_STANDARD . '/app/controllers/' . $sController . '.controller.php';
 
         $sClassName = '\candyCMS\Controllers\\' . $sController;
@@ -78,11 +79,11 @@ class Dispatcher {
               Helper::pluralize($sController) !== $sController &&
               file_exists(PATH_STANDARD . '/vendor/candycms/core/controllers/' . Helper::pluralize($sController) . '.controller.php')) {
         $sUrl = str_replace(strtolower($sController), strtolower(Helper::pluralize($sController)), $_SERVER['REQUEST_URI']);
-        
+
         AdvancedException::writeLog(__METHOD__ . ' - ' . $e->getMessage());
         return Helper::warningMessage(I18n::get('error.302.info', $sUrl), $sUrl);
       }
-      
+
       # Redirect RSS
       elseif (defined('CHECK_DEPRECATED_LINKS') && CHECK_DEPRECATED_LINKS === true && 'Rss' == $sController) {
         AdvancedException::writeLog(__METHOD__ . ' - ' . $e->getMessage());

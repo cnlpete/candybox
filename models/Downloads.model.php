@@ -4,7 +4,8 @@
  * Handle all download SQL requests.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 2.0
  *
@@ -14,7 +15,6 @@ namespace candyCMS\Core\Models;
 
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
-use candyCMS\Core\Helpers\Upload;
 use PDO;
 
 class Downloads extends Main {
@@ -23,7 +23,7 @@ class Downloads extends Main {
    * Get all download data.
    *
    * @access public
-   * @return array data
+   * @return array $aData
    *
    */
   public function getOverview() {
@@ -50,7 +50,6 @@ class Downloads extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     foreach ($aResult as $aRow) {
@@ -61,15 +60,15 @@ class Downloads extends Main {
 
       if ($iSize != -1 || ACTIVE_TEST) {
         # Name category for overview
-        $this->_aData[$sCategory]['category'] = $sCategory;
+        $aData[$sCategory]['category'] = $sCategory;
 
         # Files
-        $this->_aData[$sCategory]['files'][$iId] = $this->_formatForOutput($aRow, array('id', 'author_id', 'downloads', 'uid'));
-        $this->_aData[$sCategory]['files'][$iId]['size'] = Helper::fileSizeToString($iSize);
+        $aData[$sCategory]['files'][$iId] = $this->_formatForOutput($aRow, array('id', 'author_id', 'downloads', 'uid'));
+        $aData[$sCategory]['files'][$iId]['size'] = Helper::fileSizeToString($iSize);
       }
     }
 
-    return $this->_aData;
+    return $aData;
   }
 
   /**
@@ -81,7 +80,7 @@ class Downloads extends Main {
    * @return array data
    *
    */
-  public function getId($iId = '', $bUpdate = false) {
+  public function getId($iId, $bUpdate = false) {
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         d.*,
@@ -107,11 +106,10 @@ class Downloads extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
-    $this->_aData = $bUpdate === true ? $this->_formatForUpdate($aRow) : $aRow;
-    return $this->_aData;
+    $aData = $bUpdate ? $this->_formatForUpdate($aRow) : $aRow;
+    return $aData;
   }
 
   /**
@@ -124,9 +122,6 @@ class Downloads extends Main {
    *
    */
   public static function getFileName($iId) {
-    if (empty(parent::$_oDbStatic))
-      parent::connectToDatabase();
-
     try {
       $oQuery = parent::$_oDbStatic->prepare("SELECT
                                                 file
@@ -134,7 +129,8 @@ class Downloads extends Main {
                                                 " . SQL_PREFIX . "downloads
                                               WHERE
                                                 id = :id
-                                              LIMIT 1");
+                                              LIMIT
+                                                1");
 
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
       $oQuery->execute();
@@ -144,7 +140,6 @@ class Downloads extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -152,13 +147,11 @@ class Downloads extends Main {
    * Create new download.
    *
    * @access public
-   * @param string $sFile file name
-   * @param string $sExtension file extension
+   * @param array $aOptions
    * @return boolean status of query
-   * @todo make the model::create() action compilant with the main::create() action
    *
    */
-  public function create($sFile, $sExtension) {
+  public function create($aOptions) {
     try {
       $oQuery = $this->_oDb->prepare("INSERT INTO
                                         " . SQL_PREFIX . "downloads
@@ -181,20 +174,28 @@ class Downloads extends Main {
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
 
       # Preset
-      $oQuery->bindParam('file', $sFile, PDO::PARAM_STR);
-      $oQuery->bindParam('extension', $sExtension, PDO::PARAM_STR);
+      $oQuery->bindParam('file', $aOptions['file'], PDO::PARAM_STR);
+      $oQuery->bindParam('extension', $aOptions['extension'], PDO::PARAM_STR);
 
-      foreach (array('title', 'content') as $sInput)
+      foreach (array('title', 'content') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                $sValue,
                 PDO::PARAM_STR);
 
-      foreach (array('category') as $sInput)
+        unset($sValue);
+      }
+
+      foreach (array('category') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput]);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                $sValue,
                 PDO::PARAM_STR);
+
+        unset($sValue);
+      }
 
       $bReturn = $oQuery->execute();
       parent::$iLastInsertId = parent::$_oDbStatic->lastInsertId();
@@ -202,15 +203,14 @@ class Downloads extends Main {
       return $bReturn;
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -223,6 +223,9 @@ class Downloads extends Main {
    *
    */
   public function update($iId) {
+    if (empty($iId) || $iId < 1)
+      return false;
+
     try {
       $oQuery = $this->_oDb->prepare("UPDATE
                                         " . SQL_PREFIX . "downloads
@@ -238,30 +241,37 @@ class Downloads extends Main {
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
 
-      foreach (array('title', 'content') as $sInput)
+      foreach (array('title', 'content') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false),
+                $sValue,
                 PDO::PARAM_STR);
 
-      foreach (array('category', 'downloads') as $sInput)
+        unset($sValue);
+      }
+
+      foreach (array('category', 'downloads') as $sInput) {
+        $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput]);
         $oQuery->bindParam(
                 $sInput,
-                Helper::formatInput($this->_aRequest[$this->_sController][$sInput]),
+                $sValue,
                 PDO::PARAM_STR);
+
+        unset($sValue);
+      }
 
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         $this->_oDb->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -275,10 +285,12 @@ class Downloads extends Main {
    *
    */
   public function destroy($iId, $sController = '') {
-    # Get file name
-    $sFile = $this->getFileName($iId);
+    if (empty($iId) || $iId < 1)
+      return false;
 
-    $bReturn = parent::destroy($iId);
+    # Get file name
+    $sFile    = $this->getFileName($iId);
+    $bReturn  = parent::destroy($iId);
 
     if (is_file(Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sFile)))
       unlink(Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sController . '/' . $sFile));
@@ -311,15 +323,14 @@ class Downloads extends Main {
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         parent::$_oDbStatic->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 }

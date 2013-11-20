@@ -4,7 +4,8 @@
  * Create or destroy a session.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 1.0
  *
@@ -12,7 +13,6 @@
 
 namespace candyCMS\Core\Controllers;
 
-use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Controllers\Main;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\PluginManager;
@@ -74,9 +74,8 @@ class Sessions extends Main {
    *
    */
   public function _showFormTemplate($sTemplateName = '_form', $sTitle = 'global') {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, $sTemplateName);
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, $sTemplateName);
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, $sTemplateName);
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
@@ -86,7 +85,7 @@ class Sessions extends Main {
                     '');
 
     $this->setTitle(I18n::get($sTitle . '.login'));
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -124,19 +123,20 @@ class Sessions extends Main {
     $this->_setError('email');
 
     # Do the captchaCheck for for not logged in users
+    # This should be obsolete
     if ($this->_aSession['user']['role'] == 0) {
       $oPluginManager = PluginManager::getInstance();
       $oPluginManager->checkCaptcha($this->_aError);
     }
 
     if (isset($this->_aError))
-      return $this->_showCreateResendActionsTemplate($bShowCaptcha);
+      return $this->_showCreateResendActionsTemplate();
 
     $sNewPasswordClean = Helper::createRandomChar(16, true);
-    $bReturn = $this->_oModel->password(md5(RANDOM_HASH . $sNewPasswordClean));
-    $sRedirect = '/' . $this->_sController . '/create';
+    $bReturn    = $this->_oModel->password(md5(RANDOM_HASH . $sNewPasswordClean));
+    $sRedirect  = '/' . $this->_sController . '/create';
 
-    if ($bReturn == true) {
+    if ($bReturn) {
       $sModel = $this->__autoload('Mails', true);
       $oMails = new $sModel($this->_aRequest, $this->_aSession);
 
@@ -145,7 +145,7 @@ class Sessions extends Main {
       $aMail['message']     = I18n::get('sessions.password.mail.body', $sNewPasswordClean);
 
       return $oMails->create($aMail) === true ?
-              Helper::successMessage(I18n::get('success.mail.create'), $sRedirect) :
+              Helper::successMessage(I18n::get('success.password.create'), $sRedirect) :
               Helper::errorMessage(I18n::get('error.mail.create'), $sRedirect);
     }
     else
@@ -187,6 +187,7 @@ class Sessions extends Main {
     $this->_setError('email');
 
     # Do the captchaCheck for for not logged in users
+    # This should be obsolete
     if ($this->_aSession['user']['role'] == 0) {
       $oPluginManager = PluginManager::getInstance();
       $oPluginManager->checkCaptcha($this->_aError);
@@ -195,8 +196,8 @@ class Sessions extends Main {
     if (isset($this->_aError))
       return $this->_showCreateResendActionsTemplate($bShowCaptcha);
 
-    $mData = $this->_oModel->verification();
-    $sRedirect = '/' . $this->_sController . '/create';
+    $mData      = $this->_oModel->verification();
+    $sRedirect  = '/' . $this->_sController . '/create';
 
     if (is_array($mData) && !empty($mData)) {
       $sModel = $this->__autoload('Mails', true);
@@ -224,9 +225,8 @@ class Sessions extends Main {
    *
    */
   protected function _showCreateResendActionsTemplate() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'resend');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'resend');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'resend');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
@@ -234,7 +234,7 @@ class Sessions extends Main {
     foreach ($this->_aRequest[$this->_sController] as $sInput => $sData)
       $this->oSmarty->assign($sInput, $sData);
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -242,16 +242,17 @@ class Sessions extends Main {
    *
    * @access public
    * @param integer $iUserRole required user right (only for E_STRICT)
-   * @return boolean status of model action
+   * @return string HTML message
    *
    */
   public function destroy($iUserRole = 0) {
-
     if ($this->_aSession['user']['role'] > 0) {
       $oPluginManager = PluginManager::getInstance();
       $sRedirectUrl = '/';
+
       if ($oPluginManager->hasSessionPlugin() && $this->_aSession['user']['role'] == 2)
-        $sRedirectUrl = $oPluginManager->getSessionPlugin()->logoutUrl(WEBSITE_URL);
+          $sRedirectUrl = $oPluginManager->getSessionPlugin()->logoutUrl(WEBSITE_URL);
+
       else
         $this->_oModel->destroy(session_id());
 
@@ -259,6 +260,6 @@ class Sessions extends Main {
       return Helper::successMessage(I18n::get('success.session.destroy'), $sRedirectUrl);
     }
     else
-      return Helper::redirectTo('/');
+      return Helper::redirectTo('/errors/401');
   }
 }

@@ -21,6 +21,9 @@
         <article class='gallery_albums' itemscope itemtype='http://schema.org/ImageGallery'>
           <header>
             <h2 itemprop='headline'>
+              {if !$a.published}
+                {$lang.global.not_published}:&nbsp;
+              {/if}
               <a href='{$a.url}'>{$a.title}</a>
               {if $_SESSION.user.role >= 3}
                 <a href='{$a.url_update}'>

@@ -4,7 +4,8 @@
  * Handle all mail stuff.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 2.0
  *
@@ -12,11 +13,10 @@
 
 namespace candyCMS\Core\Controllers;
 
-use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
-use candyCMS\Plugins\Recaptcha;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 class Mails extends Main {
 
@@ -45,15 +45,14 @@ class Mails extends Main {
    *
    */
   protected function _overview() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'overview');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'overview');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'overview');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
-    if (!$this->oSmarty->isCached($sTemplateFile, UNIQUE_ID))
+    if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID))
       $this->oSmarty->assign('mails', $this->_oModel->getOverview());
 
     $this->setTitle(I18n::get('global.mails'));
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -65,10 +64,18 @@ class Mails extends Main {
    */
   public function resend() {
     header('Content-Type: application/json');
-    return json_encode(array(
-                'success' => $this->_oModel->resend($this->_iId),
-                'errors'  => ''
-            ));
+
+    if ($this->_aSession['user']['role'] == 4)
+      return json_encode(array(
+                  'success' => $this->_oModel->resend($this->_iId),
+                  'errors'  => ''
+              ));
+
+    else
+      return json_encode(array(
+                  'success' => false,
+                  'errors'  => I18n::get('error.401.title')
+              ));
   }
 
   /**
@@ -79,10 +86,11 @@ class Mails extends Main {
    * We must override the main method due to a diffent required user role and a captcha.
    *
    * @access public
+   * @param integer $iUserRole required user right (only for E_STRICT)
    * @return string HTML content
    *
    */
-  public function create() {
+  public function create($iUserRole = 3) {
     return isset($this->_aRequest[$this->_sController]) ?
             $this->_create() :
             $this->_showCreateTemplate();
@@ -98,20 +106,15 @@ class Mails extends Main {
    *
    */
   protected function _showCreateTemplate() {
-    # We don't support JSON
-    # @todo put this into a seperated method
+    # We don't support JSON for this template
     if (isset($this->_aRequest['type']) && 'json' == $this->_aRequest['type'])
-      return json_encode(array(
-                  'success' => false,
-                  'error'   => 'There is no JSON handling method called ' . __FUNCTION__ . ' for this controller.'
-              ));
-    
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'create');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'create');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+      return $this->_showFormTemplateJSON();
+
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'create');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     $sUser = $this->__autoload('Users', true);
-    $aUser = $sUser::getUserNamesAndEmail($this->_iId);
+    $aUser = $sUser::getUserNameAndEmail($this->_iId);
 
     if (!$aUser && $this->_iId)
       return Helper::redirectTo('/errors/404');
@@ -132,12 +135,12 @@ class Mails extends Main {
     $this->oSmarty->assign('editorinfo', $oPluginManager->getEditorInfo());
 
     $sFullname = trim($aUser['name'] . ' ' . $aUser['surname']);
-		$sFullname = empty($sFullname) ? WEBSITE_NAME : $sFullname;
+    $sFullname = empty($sFullname) ? WEBSITE_NAME : $sFullname;
 
     $this->setTitle($sFullname . ' - ' . I18n::get('global.contact'));
     $this->setDescription(I18n::get('mails.description.show', $sFullname));
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
@@ -147,7 +150,6 @@ class Mails extends Main {
    * @access protected
    * @param boolean $bShowCaptcha Show the captcha?
    * @return string|boolean HTML content (string) or returned status of model action (boolean).
-   * @todo make E_STRICT compilant
    *
    */
   protected function _create($bShowCaptcha = true) {
@@ -166,7 +168,7 @@ class Mails extends Main {
       # Select user name and surname
       $sModel = $this->__autoload('Users', true);
       $oClass = new $sModel($this->_aRequest, $this->_aSession);
-      $aRow   = $oClass::getUserNamesAndEmail($this->_iId);
+      $aRow   = $oClass::getUserNameAndEmail($this->_iId);
 
       # If ID is specified and user not found => 404
       if (!$aRow && $this->_iId)
@@ -195,7 +197,7 @@ class Mails extends Main {
                     $this->_aSession['user']['id'],
                     '', '', $bStatus);
 
-      return $bStatus === true ?
+      return $bStatus ?
               $this->_showSuccessPage() :
               Helper::errorMessage(I18n::get('error.mail.create'), '/users/' . $this->_iId);
     }
@@ -209,13 +211,12 @@ class Mails extends Main {
    *
    */
   protected function _showSuccessPage() {
-    $sTemplateDir   = Helper::getTemplateDir($this->_sController, 'success');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'success');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate = $this->oSmarty->getTemplate($this->_sController, 'success');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     $this->setTitle(I18n::get('mails.success_page.title'));
 
-    $this->oSmarty->setCaching(\candyCMS\Core\Helpers\SmartySingleton::CACHING_LIFETIME_SAVED);
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    $this->oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 }

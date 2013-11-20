@@ -5,8 +5,9 @@
  * Also set entries that have valid default entries and are not specified by the user
  *
  * @link http://github.com/marcoraddatz/candyCMS
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
  * @author Hauke Schade <http://hauke-schade.de>
- * @version 3.0
+ * @license MIT
  * @since 3.0
  *
  */
@@ -56,7 +57,7 @@ if (!defined('WEBSITE_MODE'))
   define('WEBSITE_MODE', 'staging');
 
 if (!defined('WEBSITE_CDN'))
-  define('WEBSITE_CDN', '/public');
+  define('WEBSITE_CDN', '');
 
 if (!defined('WEBSITE_COMPRESS_FILES'))
   define('WEBSITE_COMPRESS_FILES', false);
@@ -99,13 +100,13 @@ if (!defined('POPUP_DEFAULT_Y'))
 
 # Path values
 if (!defined('PATH_SMARTY'))
-  define('PATH_SMARTY', 'app');
+  define('PATH_SMARTY', 'app/smarty');
 
 if (!defined('PATH_UPLOAD'))
   define('PATH_UPLOAD', 'upload');
 
 if (!defined('PATH_CACHE'))
-  define('PATH_CACHE', 'app');
+  define('PATH_CACHE', 'app/cache');
 
 if (!defined('AUTOLOAD'))
   define('AUTOLOAD', true);
@@ -113,23 +114,17 @@ if (!defined('AUTOLOAD'))
 if (!defined('AUTOLOAD_TIMES'))
   define('AUTOLOAD_TIMES', 3);
 
-if (!defined('DISABLE_COMMENTS'))
-  define('DISABLE_COMMENTS', false);
-
 if (!defined('LIMIT_ALBUMS'))
   define('LIMIT_ALBUMS', 10);
 
 if (!defined('LIMIT_BLOG'))
   define('LIMIT_BLOG', 8);
 
-if (!defined('LIMIT_COMMENTS'))
-  define('LIMIT_COMMENTS', 10);
-
 if (!defined('SORTING_COMMENTS'))
   define('SORTING_COMMENTS', 'ASC');
 
 if (!defined('SORTING_GALLERY_FILES'))
-  define('SORTING_GALLERY_FILES', 'DESC');
+  define('SORTING_GALLERY_FILES', 'ASC');
 
 if (!defined('CRAWLERS'))
   define('CRAWLERS', 'Google|msnbot|Rambler|Yahoo|AbachoBOT|accoona|AcioRobot|' .
@@ -147,6 +142,12 @@ if (!defined('MAILCHIMP_LIST_ID'))
 
 if (!defined('USE_MAIL_QUEUE'))
   define('USE_MAIL_QUEUE', true);
+
+if (!defined('DATA_SITEMAPS'))
+  define('DATA_SITEMAPS', 'Blogs,Contents,Galleries');
+
+if (!defined('DATA_SEARCHES'))
+  define('DATA_SEARCHES', 'Blogs,Contents,Galleries,Downloads');
 
 # do we have a valid config?
 define('VALID_CONFIG', (defined('ERROR_MISSING_CONFIG_VALUES_SQL') || defined('ERROR_MISSING_CONFIG_VALUES_SMTP') || defined('ERROR_MISSING_CONFIG_VALUES_WEBSITE')));

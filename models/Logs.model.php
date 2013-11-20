@@ -4,7 +4,8 @@
  * Handle all log SQL requests.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @license MIT
  * @since 2.0
  *
@@ -13,7 +14,6 @@
 namespace candyCMS\Core\Models;
 
 use candyCMS\Core\Helpers\AdvancedException;
-use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\Pagination;
 use PDO;
 
@@ -24,7 +24,7 @@ class Logs extends Main {
    *
    * @access public
    * @param integer $iLimit page limit
-   * @return array $this->_aData
+   * @return array $aData
    *
    */
   public function getOverview($iLimit = 50) {
@@ -34,7 +34,6 @@ class Logs extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Pagination.helper.php';
@@ -68,22 +67,21 @@ class Logs extends Main {
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
 
     foreach ($aResult as $aRow) {
       $iId = $aRow['id'];
 
-      $this->_aData[$iId] = $this->_formatForOutput(
+      $aData[$iId] = $this->_formatForOutput(
               $aRow,
               array('id', 'uid', 'user_id', 'action_id'),
               array('result'));
 
-      $this->_formatDates($this->_aData[$iId], 'time_start');
-      $this->_formatDates($this->_aData[$iId], 'time_end');
+      $this->_formatDates($aData[$iId], 'time_start');
+      $this->_formatDates($aData[$iId], 'time_end');
     }
 
-    return $this->_aData;
+    return $aData;
   }
 
   /**
@@ -102,9 +100,6 @@ class Logs extends Main {
    *
    */
   public static function insert($sControllerName, $sActionName, $iActionId, $iUserId, $iTimeStart = '', $iTimeEnd = '', $bResultFlag = true) {
-    if (empty(parent::$_oDbStatic))
-      parent::connectToDatabase();
-
     $iTimeStart = empty($iTimeStart) ? time() : $iTimeStart;
     $iTimeEnd   = empty($iTimeEnd) ? time() : $iTimeEnd;
 
@@ -141,15 +136,14 @@ class Logs extends Main {
       return $bReturn;
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         parent::$_oDbStatic->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -164,9 +158,6 @@ class Logs extends Main {
    *
    */
   public static function setEndTime($iId, $iEndTime = null) {
-    if (empty(parent::$_oDbStatic))
-      parent::connectToDatabase();
-
     $iEndTime = empty($iEndTime) ? time() : $iEndTime;
 
     try {
@@ -179,21 +170,21 @@ class Logs extends Main {
                                               LIMIT
                                                 1");
 
+      $sDate = date('Y-m-d H:i:s', $iEndTime);
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
-      $oQuery->bindParam('time_end', date('Y-m-d H:i:s', $iEndTime), PDO::PARAM_INT);
+      $oQuery->bindParam('time_end', $sDate, PDO::PARAM_INT);
 
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         parent::$_oDbStatic->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 
@@ -208,9 +199,6 @@ class Logs extends Main {
    *
    */
   public static function setResultFlag($iId, $bResultFlag = false) {
-    if (empty(parent::$_oDbStatic))
-      parent::connectToDatabase();
-
     try {
       $oQuery = parent::$_oDbStatic->prepare("UPDATE
                                                 " . SQL_PREFIX . "logs
@@ -227,15 +215,14 @@ class Logs extends Main {
       return $oQuery->execute();
     }
     catch (\PDOException $p) {
+      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage(), false);
+
       try {
         parent::$_oDbStatic->rollBack();
       }
       catch (\Exception $e) {
         AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
       }
-
-      AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());
-      exit('SQL error.');
     }
   }
 }
