@@ -66,9 +66,10 @@ define('WEBSITE_URL', 'http://domain.tld');
 # ------------------------------------------------------------------------------
 
 # Define the url to your cdn.
+# Note that all javascripts, images and css files have to be accessible.
 # EXAMPLE: http://www.google.com
-# DEFAULT: '/public'
-define('WEBSITE_CDN', '/public');
+# DEFAULT: ''
+define('WEBSITE_CDN', '');
 
 # ------------------------------------------------------------------------------
 
@@ -187,12 +188,16 @@ define('POPUP_DEFAULT_Y', '640');
 # ------------------------------------------------------------------------------
 
 # Set Smarty folder for compiling and caching
-# DEFAULT: app
-define('PATH_SMARTY', 'app');
+# DEFAULT: app/smarty
+define('PATH_SMARTY', 'app/smarty');
 
 # Define, where files are uploaded to
 # DEFAULT: upload
 define('PATH_UPLOAD', 'upload');
+
+# Define, where cached files are stored
+# DEFAULT: app/cache
+define('PATH_CACHE', 'app/cache');
 
 # ------------------------------------------------------------------------------
 

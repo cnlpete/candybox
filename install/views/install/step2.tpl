@@ -5,10 +5,10 @@
   <p>
     If the folders were not created by the system, you have to create
     them manually by using a FTP programm (like <a href='http://cyberduck.ch/'>Cyberduck</a>)
-    for that.
+    for that. Red colors indicate either wrong permissions or not existing folders.
   </p>
   <ul>
-    {foreach $folders as $folder=>$check}
+    {foreach $folders as $folder => $check}
       <li style='color:{if $check}green{else}red{/if}'>
         {if !$check}<strong>{/if}
           {$folder}

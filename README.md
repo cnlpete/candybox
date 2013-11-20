@@ -1,4 +1,4 @@
-candyCMS Version 3.0
+candyCMS Version 4.0
 ========================================================================================================================
 
 What is candyCMS?
@@ -10,7 +10,7 @@ only barely.
 
 It provides...
 
-- a blog that supports tags, comments, RSS and full social media integration (via plugin)
+- a blog that supports tags, RSS and full social media integration (via plugin)
 - basic content pages
 - a gallery with multiple file upload (based on HTML5) and Media RSS
 - a calendar with the option to download iCalendar events
@@ -61,11 +61,12 @@ Requirements
 Setup
 ------------------------------------------------------------------------------------------------------------------------
 1. Download the newest version of this package.
-2. Download and install Composer ( http://getcomposer.org ): `curl -s http://getcomposer.org/installer | php`.
-3. Install the vendor packages afterwards: `php composer.phar install` or `php composer.phar install --dev` if you would
-like to have the possibility to run tests.
+2. Download and install Composer via Terminal ( http://getcomposer.org ): `curl -s http://getcomposer.org/installer | php`
+into the root of your candyCMS.
+3. Install the vendor packages afterwards: `php composer.phar install`.
 4. Copy files from "app/config/samples/" to "app/config" and configure your website settings at "app/config/Candy.inc.php".
-5. Execute the "/install/index.php" file. If an error occurs, you might have to give CHMOD 777 to `app/cache` and `app/compile` first.
+5. Execute the "/install/index.php" file via the browser of your choice.
+If an error occurs, you might have to give CHMOD 777 to `app/smarty` first or create this folder.
 6. Follow the instructions (also on CHMODs) and make sure, you delete the install folder after installation.
 
 
@@ -75,6 +76,12 @@ To upgrade candyCMS, read the release notes (if provided) first. If no specific 
 upload following folders and files and start the Composer  afterwards (`php composer.phar update`):
 "index.php", "composer.json" and "install". After Composer has loaded all requirements, go to "install/index.php" and
 migrate your application to the newest version. Delete the install folder afterwards.
+
+For version 3.1 and later it's important that you make sure, you also update `vendor/tiny_mce` to newest `vendor/tinymce`
+(included in this download). Paths within templates are not compatible to version 3.0!
+
+In version 4.0 comments have been removed. You can simply include the Disqus plugin to provide them again. Backup your
+database before upgrading!
 
 
 Credits

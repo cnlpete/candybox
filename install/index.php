@@ -1,10 +1,11 @@
 <?php
 
 /**
- * Website entry.
+ * Installation script.
  *
  * @link http://github.com/marcoraddatz/candyCMS
- * @author Marco Raddatz <http://marcoraddatz.com>
+ * @author Marco Raddatz <http://www.marcoraddatz.com>
+ * @author Hauke Schade <http://hauke-schade.de>
  * @version 2.0
  * @since 1.0
  *
@@ -50,20 +51,22 @@ class Install extends Index {
     $this->getLanguage();
 
     # do the initial creation of smarty/cache and smarty/compile folders
-    $aFolders = array( Helper::removeSlash(PATH_SMARTY) => array( 'cache', 'compile' ) );
-    $aFolderChecks = array();
-    $this->_createFoldersIfNotExistent($aFolders, 0777, '/');
-    $this->_checkFoldersAndAssign($aFolders, $aFolderChecks, 0777, '/');
+    if (!ACTIVE_TEST) {
+      $aFolders      = array(Helper::removeSlash(PATH_SMARTY) => array('cache', 'compile'));
+      $aFolderChecks = array();
+      $this->_createFoldersIfNotExistent($aFolders, 0777, '/');
+      $this->_checkFoldersAndAssign($aFolders, $aFolderChecks, 0777, '/');
 
-    if (!$aFolderChecks['/'.Helper::removeSlash(PATH_SMARTY).'/cache'] ||
-        !$aFolderChecks['/'.Helper::removeSlash(PATH_SMARTY).'/compile']) {
-      # @todo print a nice error message
-      echo "please make sure the folders '" . '/'.Helper::removeSlash(PATH_SMARTY).'/compile' . "' and '" . '/'.Helper::removeSlash(PATH_SMARTY).'/compile' ."' are writable.";
-      die();
+      if (!$aFolderChecks['/' . Helper::removeSlash(PATH_SMARTY) . '/cache'] ||
+              !$aFolderChecks['/' . Helper::removeSlash(PATH_SMARTY) . '/compile']) {
+        # @todo print a nice error message
+        exit("Please make sure the folder '" . '/' . Helper::removeSlash(PATH_SMARTY) . '/compile' . "' exists and is writable. "
+                . "If you're on console type `mkdir -m 0777 app/smarty` from candyCMS root if it doesn't exist and reload page.");
+      }
     }
 
     $this->oSmarty = SmartySingleton::getInstance();
-    $this->oSmarty->setTemplateDir(PATH_STANDARD . '/install/views');
+    $this->oSmarty->setTemplateDir(array('dir' => PATH_STANDARD . '/install/views'));
     $this->oSmarty->setCaching(SmartySingleton::CACHING_OFF);
     $this->oSmarty->setCompileCheck(true);
 
@@ -85,12 +88,12 @@ class Install extends Index {
       case 'standard':
 
         $this->oSmarty->assign('title', 'Welcome!');
-        $this->oSmarty->assign('content', $this->oSmarty->fetch('index.tpl'));
+        $this->oSmarty->assign('content', $this->oSmarty->fetch(array('file' => 'index.tpl')));
 
         break;
     }
 
-    $this->oSmarty->display('layout.tpl');
+    echo $this->oSmarty->fetch(array('file' => 'layout.tpl'));
   }
 
   /**
@@ -112,6 +115,9 @@ class Install extends Index {
     if (!defined('WEBSITE_MODE'))
       define('WEBSITE_MODE', 'development');
 
+    if (!defined('ACTIVE_TEST'))
+      define('ACTIVE_TEST', false);
+
     define('CURRENT_URL', isset($_SERVER['REQUEST_URI']) ? WEBSITE_URL . $_SERVER['REQUEST_URI'] : WEBSITE_URL);
     define('EXTENSION_CHECK', false);
     define('MOBILE', false);
@@ -128,7 +134,7 @@ class Install extends Index {
    * @param string $sPrefix prefix for folder creations, default: '/'
    *
    */
-  private function _createFoldersIfNotExistent($aFolders, $iPermissions = 0775, $sPrefix = '/') {
+  private function _createFoldersIfNotExistent($aFolders, $iPermissions = 0777, $sPrefix = '/') {
     foreach ($aFolders as $sKey => $mFolder) {
       # create multiple folders
       if (is_array($mFolder))
@@ -137,7 +143,7 @@ class Install extends Index {
       # create single Folder
       elseif (!is_dir(PATH_STANDARD . $sPrefix . $mFolder)) {
         $oldUMask = umask(0);
-        @mkdir(PATH_STANDARD . $sPrefix . $mFolder, $iPermissions, true);
+        mkdir(PATH_STANDARD . $sPrefix . $mFolder, $iPermissions, true);
         umask($oldUMask);
       }
     }
@@ -172,7 +178,7 @@ class Install extends Index {
 
       # check single Folder
       else {
-        $aReturn[$sPrefix . $mFolder] = substr(decoct(fileperms(PATH_STANDARD . $sPrefix . $mFolder)), 2) == decoct($iPermissions);
+        $aReturn[$sPrefix . $mFolder] = (bool) substr(decoct(fileperms(PATH_STANDARD . $sPrefix . $mFolder)), 2) == decoct($iPermissions);
         $bReturn = $bReturn && $aReturn[$sPrefix . $mFolder];
       }
     }
@@ -208,7 +214,7 @@ class Install extends Index {
         $this->oSmarty->assign('_has_errors_', !$bHasNoErrors);
 
         $this->oSmarty->assign('title', 'Installation - Step 1 - Preparation');
-        $this->oSmarty->assign('content', $this->oSmarty->fetch('install/step1.tpl'));
+        $this->oSmarty->assign('content', $this->oSmarty->fetch(array('file' => 'install/step1.tpl')));
 
         break;
 
@@ -219,7 +225,6 @@ class Install extends Index {
         $aFolders = array(
             'app/backup',
             'app/logs',
-            Helper::removeSlash(CACHE_DIR),
             $sUpload => array(
                 'downloads',
                 'galleries',
@@ -238,7 +243,7 @@ class Install extends Index {
 
         $this->oSmarty->assign('folders', $aFolderChecks);
         $this->oSmarty->assign('title', 'Installation - Step 2 - Folder rights');
-        $this->oSmarty->assign('content', $this->oSmarty->fetch('install/step2.tpl'));
+        $this->oSmarty->assign('content', $this->oSmarty->fetch(array('file' => 'install/step2.tpl')));
 
         break;
 
@@ -265,7 +270,7 @@ class Install extends Index {
 
         $this->oSmarty->assign('_has_errors_', $bHasErrors);
         $this->oSmarty->assign('title', 'Installation - Step 3 - Create database');
-        $this->oSmarty->assign('content', $this->oSmarty->fetch('install/step3.tpl'));
+        $this->oSmarty->assign('content', $this->oSmarty->fetch(array('file' => 'install/step3.tpl')));
 
         break;
 
@@ -288,13 +293,13 @@ class Install extends Index {
             $sUsers = \candyCMS\Core\Models\Main::__autoload('Users');
             $oUsers = new $sUsers($this->_aRequest, $this->_aSession);
 
-            $bResult = $oUsers->create('', 4);
+            $bResult = $oUsers->create(array('verification_code' => '', 'role' => 4));
             Helper::redirectTo('/install/?action=install&step=5&result=' . ($bResult ? '1' : '0'));
           }
         }
 
         $this->oSmarty->assign('title', 'Installation - Step 4 - Create admin');
-        $this->oSmarty->assign('content', $this->oSmarty->fetch('install/step4.tpl'));
+        $this->oSmarty->assign('content', $this->oSmarty->fetch(array('file' => 'install/step4.tpl')));
 
         break;
 
@@ -302,7 +307,7 @@ class Install extends Index {
 
         $this->oSmarty->assign('_result_', $this->_aRequest['result'] ? true : false);
         $this->oSmarty->assign('title', 'Installation finished');
-        $this->oSmarty->assign('content', $this->oSmarty->fetch('install/step5.tpl'));
+        $this->oSmarty->assign('content', $this->oSmarty->fetch(array('file' => 'install/step5.tpl')));
 
         break;
     }
@@ -314,7 +319,7 @@ class Install extends Index {
    */
   private function _showMigrations() {
     $sFolder = isset($this->_aRequest['show']) && 'version' == $this->_aRequest['show'] ? 'current' : 'previous';
-     
+
     $sDir = PATH_STANDARD . '/install/migrations/' . $sFolder;
     $oDir = opendir($sDir);
 
@@ -328,7 +333,6 @@ class Install extends Index {
         $aResults = $oQuery->fetchAll(PDO::FETCH_ASSOC);
     }
     catch (\AdvancedException $e) {
-      $oDb->rollBack();
       die($e->getMessage());
     }
 
@@ -336,7 +340,7 @@ class Install extends Index {
     foreach ($aResults as $aResult) {
       $aAlreadyMigrated[$aResult['file']] = $aResult['date'];
     }
-    
+
     $iI = 0;
     $aFiles = array();
     while ($sFile = readdir($oDir)) {
@@ -372,7 +376,7 @@ class Install extends Index {
     else
       $this->oSmarty->assign('title', 'Migrations for this version');
 
-    $this->oSmarty->assign('content', $this->oSmarty->fetch('migrate/index.tpl'));
+    $this->oSmarty->assign('content', $this->oSmarty->fetch(array('file' => 'migrate/index.tpl')));
   }
 
   /**
@@ -450,6 +454,7 @@ class Install extends Index {
 
         // clear all caches
         $this->oSmarty->clearCache(null, WEBSITE_MODE);
+        $this->oSmarty->clearCompiledTemplate();
       }
       catch (\AdvancedException $e) {
         die($e->getMessage());
@@ -466,6 +471,8 @@ class Install extends Index {
    *
    */
   public function showMigration() {
+    $this->oSmarty->clearCompiledTemplatePaths();
+
     return isset($this->_aRequest['file']) ?
             $this->_doMigration($this->_aRequest['file']) :
             $this->_showMigrations();
@@ -499,6 +506,4 @@ ini_set('display_errors', 1);
 ini_set('error_reporting', 1);
 ini_set('log_errors', 1);
 
-$oInstall = new Install(array_merge($_GET, $_POST));
-
-?>
+$oInstall = new Install(array_merge($_GET, $_POST), $_SESSION);

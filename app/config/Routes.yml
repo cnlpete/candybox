@@ -1,17 +1,16 @@
 # Define the landing page
 "/": blogs
 
-# Special behaviour (Second blog RegEx is a temporary bugfix)
-#"auth/(:alpha)/(:any)" : controller=oauth&action=$1&response=$2
+# Special behaviour
 "blogs/(:num)/page/(:num)": controller=blogs&id=$1&page=$2
 "blogs/(:any)/page/(:num)": controller=blogs&search=$1&page=$2
 "blogs/(:num)(.(xml|json|rss|ajax))?": controller=blogs&id=$1&type=$3&page=1
-"blogs/(:alnum(?<!create|update|destroy))(.(xml|json|rss|ajax))?": controller=blogs&search=$1&type=$3
+"blogs/([A-Za-z0-9 ]+(?<!create|update|destroy))(.(xml|json|rss|ajax))?": controller=blogs&search=$1&type=$3
 "language/(:alpha)": language=$1
 "medias/(:any)/destroy.(xml|json)": controller=medias&action=destroy&file=$1&type=$2
 "sessions/auth/(:alpha)": controller=sessions&action=auth&type=$1
 "searches/(:any)": controller=searches&search=$1
-"sites/(:alnum)": controller=sites&site=$1
+"sites/(:any)": controller=sites&site=$1
 "sitemap.xml": controller=sitemaps&type=xml
 "users/(:num)/token": controller=users&action=token&id=$1
 "users/(:alnum)/verification": controller=users&action=verification&code=$1

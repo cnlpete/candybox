@@ -10,27 +10,10 @@ CREATE TABLE `%SQL_PREFIX%blogs` (
   `content` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `language` varchar(2)  NULL  DEFAULT 'en',
   `date` datetime NOT NULL,
-  `date_modified` datetime NOT NULL,
+  `date_modified` datetime NULL ,
   `published` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `tags` (`tags`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
-
-
-DROP TABLE IF EXISTS `%SQL_PREFIX%comments`;
-
-CREATE TABLE `%SQL_PREFIX%comments` (
-  `id` int(9) NOT NULL AUTO_INCREMENT,
-  `parent_id` int(9) NOT NULL,
-  `author_id` int(11) NOT NULL,
-  `author_facebook_id` int(15) DEFAULT NULL,
-  `author_name` varchar(32) DEFAULT '',
-  `author_email` varchar(64) DEFAULT '',
-  `author_ip` varchar(15) DEFAULT '',
-  `content` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `date` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `parent_id` (`parent_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `%SQL_PREFIX%contents`;
@@ -83,6 +66,7 @@ CREATE TABLE `%SQL_PREFIX%gallery_albums` (
   `title` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `date` datetime NOT NULL,
   `content` varchar(160) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `published` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -161,17 +145,16 @@ CREATE TABLE `%SQL_PREFIX%users` (
   `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `surname` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `password` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `password_temporary` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `password_temporary` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `email` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `content` varchar(1000) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `receive_newsletter` tinyint(1) NOT NULL DEFAULT '1',
   `use_gravatar` tinyint(1) DEFAULT '0',
   `role` tinyint(1) NOT NULL DEFAULT '1',
   `date` datetime NOT NULL,
-  `registration_ip` varchar(15) COLLATE utf8_unicode_ci DEFAULT '',
-  `verification_code` varchar(16) COLLATE utf8_unicode_ci NOT NULL,
-  `verification_date` datetime NOT NULL,
-  `api_token` varchar(32)  NOT NULL  DEFAULT '',
+  `registration_ip` varchar(15) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT '',
+  `verification_code` varchar(16) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `verification_date` datetime DEFAULT NULL,
+  `api_token` varchar(32) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `api_token` (`api_token`),

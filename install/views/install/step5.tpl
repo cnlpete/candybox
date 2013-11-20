@@ -1,12 +1,14 @@
-<form action='/sessions/create' method='post' class='form-horizontal'>
+<form action='/install/?action=migrate&show=version' method='post'>
   {if $_result_ == 'success'}
     <div class='alert alert-success'>
       <h4 class='alert-heading'>
         Congratulations!
       </h4>
       <p>
-        Your installation was successful. You can now delete the install folder and
-        <a href='/sessions/create'>login</a>!
+        Your installation was successful. Please
+        <a href="/install/?action=migrate&show=version">
+          migrate the database to the latest version
+        </a> and delete the install folder afterwards!
       </p>
     </div>
   {else}
@@ -20,6 +22,6 @@
     </div>
   {/if}
   <div class='form-actions'>
-    <input type='submit' class='btn pull-right' value='Login &rarr;' />
+    <input type='submit' class='btn pull-right' value='Migrate now &rarr;' />
   </div>
 </form>
