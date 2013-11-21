@@ -12,8 +12,7 @@
 
 namespace candyCMS\Plugins;
 
-use candyCMS\Core\Helpers\Helper;
-use candyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 final class Piwik {
 
@@ -65,20 +64,18 @@ final class Piwik {
    *
    */
   public final function show() {
-    $sTemplateDir   = Helper::getPluginTemplateDir(self::IDENTIFIER, 'show');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+    $oSmarty = Smarty::getInstance();
+    $oTemplate = $oSmarty->getTemplate(self::IDENTIFIER, 'show', true);
+    $oSmarty->setTemplateDir($oTemplate);
+    $oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
-    $oSmarty = SmartySingleton::getInstance();
-    $oSmarty->setTemplateDir($sTemplateDir);
-    $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
-
-    $sCacheId = WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|plugins|' . self::IDENTIFIER;
-    if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
+    $sCacheId = UNIQUE_PREFIX . '|plugins|' . self::IDENTIFIER;
+    if (!$oSmarty->isCached($oTemplate, $sCacheId)) {
       $oSmarty->assign('WEBSITE_MODE', WEBSITE_MODE);
       $oSmarty->assign('PLUGIN_PIWIK_ID', PLUGIN_PIWIK_ID);
       $oSmarty->assign('PLUGIN_PIWIK_URL', PLUGIN_PIWIK_URL);
     }
 
-    return $oSmarty->fetch($sTemplateFile, $sCacheId);
+    return $oSmarty->fetch($oTemplate, $sCacheId);
   }
 }

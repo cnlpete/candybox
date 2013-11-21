@@ -16,8 +16,7 @@
 namespace candyCMS\Plugins;
 
 use candyCMS\Core\Helpers\AdvancedException;
-use candyCMS\Core\Helpers\Helper;
-use candyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 use Facebook;
 
 final class FacebookCMS extends Facebook {
@@ -267,20 +266,18 @@ final class FacebookCMS extends Facebook {
    *
    */
   public final function showJavascript() {
-    $sTemplateDir   = Helper::getPluginTemplateDir(self::IDENTIFIER, 'show');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+    $oSmarty = Smarty::getInstance();
+    $oTemplate = $oSmarty->getTemplate(self::IDENTIFIER, 'show', true);
+    $oSmarty->setTemplateDir($oTemplate);
+    $oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
-    $oSmarty = SmartySingleton::getInstance();
-    $oSmarty->setTemplateDir($sTemplateDir);
-    $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
-
-    $sCacheId = WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|plugins|' . self::IDENTIFIER . '|' . $this->_sAppId;
-    if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
+    $sCacheId = UNIQUE_PREFIX . '|plugins|' . self::IDENTIFIER . '|' . $this->_sAppId;
+    if (!$oSmarty->isCached($oTemplate, $sCacheId)) {
       $oSmarty->assign('PLUGIN_FACEBOOK_APP_ID', $this->_sAppId);
       $oSmarty->assign('WEBSITE_LOCALE', WEBSITE_LOCALE);
     }
 
-    return $oSmarty->fetch($sTemplateFile, $sCacheId);
+    return $oSmarty->fetch($oTemplate, $sCacheId);
   }
 
   /**

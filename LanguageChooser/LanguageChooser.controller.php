@@ -12,9 +12,8 @@
 
 namespace candyCMS\Plugins;
 
-use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
-use candyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 final class LanguageChooser {
 
@@ -66,33 +65,23 @@ final class LanguageChooser {
    *
    */
   public final function show() {
-    $sTemplateDir   = Helper::getPluginTemplateDir(self::IDENTIFIER, 'show');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+    $oSmarty = Smarty::getInstance();
+    $oTemplate = $oSmarty->getTemplate(self::IDENTIFIER, 'show', true);
+    $oSmarty->setTemplateDir($oTemplate);
+    $oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
-    $oSmarty = SmartySingleton::getInstance();
-    $oSmarty->setTemplateDir($sTemplateDir);
-    $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
-
-    $sCacheId = WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|plugins|' . self::IDENTIFIER . '|' . substr(md5($this->_aSession['user']['role']), 0 , 10);
-    if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
+    $sCacheId = UNIQUE_PREFIX . '|plugins|' . self::IDENTIFIER . '|' . substr(md5($this->_aSession['user']['role']), 0 , 10);
+    if (!$oSmarty->isCached($oTemplate, $sCacheId)) {
       $aLangs = array();
-      $sLanguagesPath = PATH_STANDARD . '/app/languages/';
-      $oDir = opendir($sLanguagesPath);
-
-      while ($sFile = readdir($oDir)) {
-        if (substr($sFile, -4) != '.yml')
-          continue;
-
-        $sLang = substr($sFile, 0, -4);
+      foreach (I18n::getPossibleLanguages() as $sLang) {
         $aLangs[] = array(
             'lang'      => $sLang,
             'selected'  => WEBSITE_LANGUAGE == substr($sLang, 0, 2),
             'title'     => I18n::get('languagechooser.' . $sLang));
       }
-      closedir($sLanguagesPath);
       $oSmarty->assign('languages', $aLangs);
     }
 
-    return $oSmarty->fetch($sTemplateFile, $sCacheId);
+    return $oSmarty->fetch($oTemplate, $sCacheId);
   }
 }

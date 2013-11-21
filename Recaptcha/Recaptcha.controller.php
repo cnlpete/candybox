@@ -12,8 +12,7 @@
 
 namespace candyCMS\Plugins;
 
-use candyCMS\Core\Helpers\Helper;
-use candyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 use candyCMS\Core\Helpers\I18n;
 
 if (!defined('SHOW_CAPTCHA'))
@@ -118,14 +117,12 @@ final class Recaptcha {
    */
   public final function show() {
     if ($this->_aSession['user']['role'] == 0) {
-      $sTemplateDir   = Helper::getPluginTemplateDir(self::IDENTIFIER, 'recaptcha');
-      $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'recaptcha');
-
-      $oSmarty = SmartySingleton::getInstance();
-      $oSmarty->setTemplateDir($sTemplateDir);
+      $oSmarty = Smarty::getInstance();
+      $oTemplate = $oSmarty->getTemplate(self::IDENTIFIER, 'recaptcha', true);
+      $oSmarty->setTemplateDir($oTemplate);
 
       # No caching for this very dynamic form
-      $oSmarty->setCaching(SmartySingleton::CACHING_OFF);
+      $oSmarty->setCaching(Smarty::CACHING_OFF);
 
       $oSmarty->assign('WEBSITE_MODE', WEBSITE_MODE);
       $oSmarty->assign('MOBILE', MOBILE);
@@ -134,7 +131,7 @@ final class Recaptcha {
       if ($this->_sErrorMessage)
         $oSmarty->assign('_error_', $this->_sErrorMessage);
 
-      return $oSmarty->fetch($sTemplateFile);
+      return $oSmarty->fetch($oTemplate);
     }
   }
 

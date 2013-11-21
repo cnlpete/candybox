@@ -87,7 +87,6 @@ final class Bbcode {
     $sStr = preg_replace('=\[i\](.*)\[\/i\]=Uis', '<em>\1</em>', $sStr);
     $sStr = preg_replace('=\[u\](.*)\[\/u\]=Uis', '<span style="text-decoration:underline">\1</span>', $sStr);
     $sStr = preg_replace('=\[del\](.*)\[\/del\]=Uis', '<span style="text-decoration:line-through">\1</span>', $sStr);
-    $sStr = preg_replace('=\[code](.*)\[\/code]=Uis', '<pre>\1</pre>', $sStr);
     $sStr = preg_replace('#\[abbr=(.*)\](.*)\[\/abbr\]#Uis', '<abbr title="\1">\2</abbr>', $sStr);
     $sStr = preg_replace('#\[acronym=(.*)\](.*)\[\/acronym\]#Uis', '<acronym title="\1">\2</acronym>', $sStr);
     $sStr = preg_replace('#\[color=(.*)\](.*)\[\/color\]#Uis', '<span style="color:\1">\2</span>', $sStr);
@@ -153,7 +152,8 @@ final class Bbcode {
       $sUrl = 'http://url2vid.com/?url=' . $aMatch[1] . '&w=' . MEDIA_DEFAULT_X . '&h=30&callback=?';
       $sStr = preg_replace('#\[audio\](.*)\[\/audio\]#Uis',
               '<div class="js-media" title="' . $sUrl . '"><a href="' . $sUrl . '">' . $aMatch[1] . '</a></div>',
-              $sStr);
+              $sStr,
+              1);
     }
 
     # [video]file[/video]
@@ -190,11 +190,15 @@ final class Bbcode {
       $sStr = preg_replace("/\[quote\=(.+)\](.*)\[\/quote]/isU", "<blockquote><h4>" . I18n::get('global.quote.by') . " \\1</h4>\\2</blockquote>", $sStr);
     }
 
-    while (preg_match("/\[toggle\=/isU", $sStr) && preg_match("/\[\/toggle]/isU", $sStr)) {
-      $sStr = preg_replace("/\[toggle\=(.+)\](.*)\[\/toggle]/isU", "<span class='js-toggle-headline'>\\1</span><div class=\"js-toggle-element\">\\2</div>", $sStr);
+    # Code
+    while (preg_match('#\[code\](.*)\[\/code\]#Uis', $sStr, $aMatch)) {
+      $sStr = preg_replace('#\[code\](.*)\[\/code\]#Uis',
+              '<pre>' . htmlentities($aMatch[1]) . '</pre>',
+              $sStr,
+              1);
     }
 
-    # Bugfix: Fix quote and allow these tags
+    # Bugfix: Fix quote and allow these tags for comment quoting
     $sStr = str_replace("&lt;blockquote&gt;", "<blockquote>", $sStr);
     $sStr = str_replace("&lt;/blockquote&gt;", "</blockquote>", $sStr);
     $sStr = str_replace("&lt;h4&gt;", "<h4>", $sStr);

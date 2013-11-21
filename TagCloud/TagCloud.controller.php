@@ -12,8 +12,7 @@
 
 namespace candyCMS\Plugins;
 
-use candyCMS\Core\Helpers\Helper;
-use candyCMS\Core\Helpers\SmartySingleton;
+use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
 final class TagCloud {
 
@@ -67,15 +66,13 @@ final class TagCloud {
    *
    */
   public final function show() {
-    $sTemplateDir   = Helper::getPluginTemplateDir(self::IDENTIFIER, 'show');
-    $sTemplateFile  = Helper::getTemplateType($sTemplateDir, 'show');
+    $oSmarty = Smarty::getInstance();
+    $oTemplate = $oSmarty->getTemplate(self::IDENTIFIER, 'show', true);
+    $oSmarty->setTemplateDir($oTemplate);
+    $oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
-    $oSmarty = SmartySingleton::getInstance();
-    $oSmarty->setTemplateDir($sTemplateDir);
-    $oSmarty->setCaching(SmartySingleton::CACHING_LIFETIME_SAVED);
-
-    $sCacheId = WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|blogs|' . self::IDENTIFIER . '|' . substr(md5($this->_aSession['user']['role']), 0 , 10);
-    if (!$oSmarty->isCached($sTemplateFile, $sCacheId)) {
+    $sCacheId = UNIQUE_PREFIX . '|blogs|' . self::IDENTIFIER . '|' . substr(md5($this->_aSession['user']['role']), 0 , 10);
+    if (!$oSmarty->isCached($oTemplate, $sCacheId)) {
 
       $sBlogsModel = \candyCMS\Core\Models\Main::__autoload('Blogs');
       $oModel = new $sBlogsModel($this->_aRequest, $this->_aSession);
@@ -130,6 +127,6 @@ final class TagCloud {
       $oSmarty->assign('data', $aData);
     }
 
-    return $oSmarty->fetch($sTemplateFile, $sCacheId);
+    return $oSmarty->fetch($oTemplate, $sCacheId);
   }
 }
