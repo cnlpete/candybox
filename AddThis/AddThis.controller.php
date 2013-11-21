@@ -70,7 +70,7 @@ final class AddThis {
   public final function show() {
     $oSmarty = Smarty::getInstance();
     $oTemplate = $oSmarty->getTemplate(self::IDENTIFIER, 'show', true);
-    $this->oSmarty->setTemplateDir($oTemplate);
+    $oSmarty->setTemplateDir($oTemplate);
     $oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
     $sCacheId = UNIQUE_PREFIX . '|plugins|' . self::IDENTIFIER;
