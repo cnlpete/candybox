@@ -574,7 +574,7 @@ class Helper {
    * @param string $sSource the less file
    * @param string $sOutput the target output file
    * @param boolean $bCompressed whether to use the compressed output mode
-   * @return boolean true|false
+   * @return boolean|null true|false
    *
    */
   public static function compileStylesheet($sSource, $sOutput, $bCompressed = true) {
