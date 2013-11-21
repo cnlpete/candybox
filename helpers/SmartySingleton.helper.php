@@ -169,14 +169,14 @@ class SmartySingleton extends Smarty {
    */
   public function getPaths() {
     $aPaths['js'] = array(
-      'core' => '/vendor/candycms/core/assets/javascripts/core',
-      'app' => '/app/assets/javascripts',
+      'core'      => '/vendor/candycms/core/assets/javascripts/core',
+      'app'       => '/app/assets/javascripts',
       'bootstrap' => '/vendor/twitter/bootstrap/js'
     );
 
     $aPaths['img'] = array(
-      'core' => '/vendor/candycms/core/assets/images',
-      'app' => '/app/assets/images',
+      'core'      => '/vendor/candycms/core/assets/images',
+      'app'       => '/app/assets/images',
       'bootstrap' => '/vendor/twitter/bootstrap/img'
     );
 

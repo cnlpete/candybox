@@ -116,5 +116,3 @@ $oIndex = new \candyCMS\Core\Controllers\Index($_aRequest, $_SESSION, $_FILES, $
 
 # Print out HTML
 echo $oIndex->show();
-
-?>
