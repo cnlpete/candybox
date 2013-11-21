@@ -13,5 +13,3 @@
 define('PATH_STANDARD', dirname(__FILE__));
 
 require PATH_STANDARD . '/vendor/candycms/core/initialize.inc.php';
-
-?>
