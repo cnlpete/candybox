@@ -36,13 +36,13 @@
       <link href='{$_PATH.public}/favicon.ico' rel='shortcut icon' type='image/x-icon'/>
 
       {* Include jQuery and its components *}
-      <script type='text/javascript' src='http://code.jquery.com/jquery-1.8.2{$_SYSTEM.compress_files_suffix}.js'></script>
+      <script type='text/javascript' src='http://code.jquery.com/jquery-2.0.3{$_SYSTEM.compress_files_suffix}.js'></script>
 
       {* Fallback if CDN is not available. Also include language parts. *}
       <script type='text/javascript'>
         var lang = {$_SYSTEM.json_language};
 
-        if (typeof jQuery == 'undefined')
+        if (typeof jQuery === 'undefined')
           document.write(unescape("%3Cscript src='{$_PATH.js.core}/jquery{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'%3E%3C/script%3E"));
       </script>
 
