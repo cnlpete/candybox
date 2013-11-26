@@ -190,7 +190,7 @@
             <h3>{$lang.global.tagcloud}</h3>
             <!-- plugin:tagcloud -->
             <p>
-              <a href='https://ac.empuxa.com/tasks/submit/candycms'
+              <a href='https://github.com/marcoraddatz/candyCMS/issues'
                  target='_blank'
                  class='btn btn-danger'>
                 Report Bug
