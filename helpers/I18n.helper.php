@@ -121,9 +121,10 @@ class I18n {
     }
 
     # Merge all that with the users custom language file
+    $aReplace = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sCustomLanguageFile));
     Helper::recursiveOnewayArrayReplace(
             self::$_aLang[$sLanguage],
-            \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sCustomLanguageFile)));
+            $aReplace);
 
     # Bugfix: Disable errors duing tests
     if (!ACTIVE_TEST)
