@@ -12,20 +12,9 @@
 
 namespace candyCMS\Controllers;
 
-use candyCMS\Core\Helpers\Helper;
+//use candyCMS\Core\Helpers\Helper;
 
 class Sample extends \candyCMS\core\Controllers\Main {
-
-  /**
-   * Method to include the model files and start action beside the constructor.
-   *
-   * @access public
-   *
-   */
-  public function __init() {
-    require_once PATH_STANDARD . '/app/models/Sample.model.php';
-    $this->_oModel = new \candyCMS\Models\Sample($this->_aRequest, $this->_aSession, $this->_aFile);
-  }
 
   /**
    * Return the content.
@@ -35,22 +24,22 @@ class Sample extends \candyCMS\core\Controllers\Main {
    *
    */
   protected function _show() {
-    $sTemplateDir  = Helper::getTemplateDir('samples', 'show');
-    $sTemplateFile = Helper::getTemplateType($sTemplateDir, 'show');
-    $this->oSmarty->setTemplateDir($sTemplateDir);
+    $oTemplate =  $this->oSmarty->getTemplate($this->_sController, 'show');
+    $this->oSmarty->setTemplateDir($oTemplate);
 
     $this->setTitle('Sample extension');
 
-    return $this->oSmarty->fetch($sTemplateFile, UNIQUE_ID);
+    return $this->oSmarty->fetch($oTemplate, UNIQUE_ID);
   }
 
   /**
    *
    * @access protected
-   * @param boolean $bUpdate
+   * @param string $sTemplateName name of form template
+   * @param string $sTitle title to show
    *
    */
-  protected function _showFormTemplate($bUpdate = true) {
+  protected function _showFormTemplate($sTemplateName = '_form', $sTitle = '') {
 
   }
 
