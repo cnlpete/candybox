@@ -24,7 +24,7 @@ class Contents extends Main {
    * Get content overview data.
    *
    * @access public
-   * @param integer $iLimit blog post limit
+   * @param integer $iLimit limit
    * @return array $aData
    *
    */
