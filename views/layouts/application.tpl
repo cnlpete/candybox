@@ -177,7 +177,7 @@
                 </div>
               {/if}
             {/nocache}
-            <section id='{$_REQUEST.controller}' itemprop='mainContentOfPage'>
+            <section id='{$_REQUEST.controller}' class='{$_REQUEST.action}' itemprop='mainContentOfPage'>
               {$_WEBSITE.content}
             </section>
           </div>
