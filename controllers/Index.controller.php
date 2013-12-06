@@ -34,6 +34,11 @@ require PATH_STANDARD . '/vendor/candycms/core/helpers/I18n.helper.php';
 require PATH_STANDARD . '/vendor/candycms/core/helpers/SmartySingleton.helper.php';
 require PATH_STANDARD . '/vendor/candycms/core/helpers/PluginManager.helper.php';
 
+/**
+ * Class Index
+ * @package candyCMS\Core\Controllers
+ *
+ */
 class Index {
 
   /**

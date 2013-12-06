@@ -18,6 +18,11 @@ use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
+/**
+ * Class Mails
+ * @package candyCMS\Core\Controllers
+ *
+ */
 class Mails extends Main {
 
   /**

@@ -17,6 +17,11 @@ use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
+/**
+ * Class Logs
+ * @package candyCMS\Core\Controllers
+ *
+ */
 class Logs extends Main {
 
   /**
@@ -62,14 +67,13 @@ class Logs extends Main {
    */
   public static function insert($sControllerName, $sActionName, $iActionId = 0, $iUserId = 0, $iTimeStart = '', $iTimeEnd = '', $bResultFlag = true) {
     $sModel  = Main::__autoload('Logs', true);
-    $bReturn = $sModel::insert(
-            (string) $sControllerName,
-            (string) $sActionName,
-            (int) $iActionId,
-            (int) $iUserId,
-            (int) $iTimeStart,
-            (int) $iTimeEnd,
-            (bool) $bResultFlag);
+    $bReturn = $sModel::insert( (string) $sControllerName,
+                                (string) $sActionName,
+                                (int) $iActionId,
+                                (int) $iUserId,
+                                (int) $iTimeStart,
+                                (int) $iTimeEnd,
+                                (bool) $bResultFlag);
 
     if ($bReturn)
       Smarty::getInstance()->clearControllerCache('logs');

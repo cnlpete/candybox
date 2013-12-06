@@ -15,6 +15,11 @@ namespace candyCMS\Core\Helpers;
 
 use Smarty;
 
+/**
+ * Class SmartySingleton
+ * @package candyCMS\Core\Helpers
+ *
+ */
 class SmartySingleton extends Smarty {
 
   /**
@@ -193,7 +198,7 @@ class SmartySingleton extends Smarty {
     $aPaths['css']      = $aPaths['public'] . '/stylesheets';
     $aPaths['public']   = WEBSITE_CDN !== '' ? WEBSITE_CDN : '/public';
     $aPaths['plugins']  = (WEBSITE_CDN !== '' ? WEBSITE_CDN : '/vendor/candycms') . '/plugins';
-    $aPaths['upload']   = Helper::removeSlash(PATH_UPLOAD);
+    $aPaths['upload']   = Helper::addSlash(PATH_UPLOAD);
 
     # Compile CSS only when in development mode and not doing tests
     if (WEBSITE_MODE == 'development' && ALLOW_INTERNAL_LESS && !ACTIVE_TEST) {

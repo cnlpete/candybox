@@ -17,6 +17,11 @@ use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
+/**
+ * Class Searches
+ * @package candyCMS\Core\Controllers
+ *
+ */
 class Searches extends Main {
 
   /**
@@ -53,11 +58,13 @@ class Searches extends Main {
       if (!$this->oSmarty->isCached($oTemplate, UNIQUE_ID)) {
         $aSitemapModels = array_filter( array_map('trim', explode(',', DATA_SEARCHES)));
         $aResults = array();
+
         foreach ($aSitemapModels as $sSitemapModel) {
           $sModel = $this->__autoload($sSitemapModel, true);
           $oModel = new $sModel($this->_aRequest, $this->_aSession);
           $aResults[strtolower($sSitemapModel)] = $oModel->search($sString, strtolower($sSitemapModel));
         }
+
         $this->oSmarty->assign('tables', $aResults);
 
         $this->setTitle(I18n::get('searches.title.show', $sString));

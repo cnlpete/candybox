@@ -16,6 +16,11 @@ namespace candyCMS\Core\Models;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\Image;
 
+/**
+ * Class Medias
+ * @package candyCMS\Core\Models
+ *
+ */
 class Medias extends Main {
 
   /**

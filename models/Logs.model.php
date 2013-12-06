@@ -17,6 +17,11 @@ use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Pagination;
 use PDO;
 
+/**
+ * Class Logs
+ * @package candyCMS\Core\Models
+ *
+ */
 class Logs extends Main {
 
   /**

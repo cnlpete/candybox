@@ -18,6 +18,11 @@ use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
 
+/**
+ * Class Sessions
+ * @package candyCMS\Core\Controllers
+ *
+ */
 class Sessions extends Main {
 
   /**

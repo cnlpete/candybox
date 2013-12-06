@@ -18,6 +18,11 @@ use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\Pagination;
 use PDO;
 
+/**
+ * Class Blogs
+ * @package candyCMS\Core\Models
+ *
+ */
 class Blogs extends Main {
 
   /**

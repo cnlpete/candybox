@@ -18,6 +18,11 @@ use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
 use PDO;
 
+/**
+ * Class Calendars
+ * @package candyCMS\Core\Models
+ *
+ */
 class Calendars extends Main {
 
   /**

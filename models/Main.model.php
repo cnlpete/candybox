@@ -19,6 +19,11 @@ use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\AdvancedException;
 use PDO;
 
+/**
+ * Class Main
+ * @package candyCMS\Core\Models
+ *
+ */
 abstract class Main {
 
   /**

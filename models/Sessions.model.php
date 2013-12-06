@@ -16,6 +16,11 @@ namespace candyCMS\Core\Models;
 use candyCMS\Core\Helpers\AdvancedException;
 use PDO;
 
+/**
+ * Class Sessions
+ * @package candyCMS\Core\Models
+ *
+ */
 class Sessions extends Main {
 
   /**

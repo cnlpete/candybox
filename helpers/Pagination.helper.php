@@ -15,6 +15,11 @@ namespace candyCMS\Core\Helpers;
 
 use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
+/**
+ * Class Pagination
+ * @package candyCMS\Core\Helpers
+ *
+ */
 class Pagination {
 
   /**

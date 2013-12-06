@@ -13,6 +13,11 @@
 
 namespace candyCMS\Core\Helpers;
 
+/**
+ * Class AdvancedException
+ * @package candyCMS\Core\Helpers
+ *
+ */
 class AdvancedException extends \Exception {
 
   /**
@@ -22,6 +27,7 @@ class AdvancedException extends \Exception {
    * @access public
    * @param string $sMessage
    * @param boolean $bExit
+   * return null
    *
    */
   public static function reportBoth($sMessage, $bExit = true) {
@@ -48,10 +54,9 @@ class AdvancedException extends \Exception {
     $sModel = \candyCMS\Core\Controllers\Main::__autoload('Mails', true);
     $oMails = new $sModel();
 
-    return $oMails->create(array(
-        'to_address'  => WEBSITE_MAIL_EXCEPTION,
-        'subject'     => 'Exception',
-        'message'     => $sMessage), false);
+    return $oMails->create(array( 'to_address'  => WEBSITE_MAIL_EXCEPTION,
+                                  'subject'     => 'Exception',
+                                  'message'     => $sMessage), false);
   }
 
   /**

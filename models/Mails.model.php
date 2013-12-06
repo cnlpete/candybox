@@ -17,6 +17,11 @@ use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\I18n;
 use PDO;
 
+/**
+ * Class Mails
+ * @package candyCMS\Core\Models
+ *
+ */
 class Mails extends Main {
 
   /**

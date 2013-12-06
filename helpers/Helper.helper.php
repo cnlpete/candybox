@@ -18,6 +18,11 @@ use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\Cache;
 
+/**
+ * Class Helper
+ * @package candyCMS\Core\Helpers
+ *
+ */
 class Helper {
 
   /**

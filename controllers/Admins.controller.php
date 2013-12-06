@@ -17,6 +17,11 @@ use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\Cache;
 use candyCMS\Core\Helpers\I18n;
 
+/**
+ * Class Admins
+ * @package candyCMS\Core\Controllers
+ *
+ */
 class Admins extends Main {
 
   /**

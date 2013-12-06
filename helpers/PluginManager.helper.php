@@ -18,6 +18,11 @@ namespace candyCMS\Core\Helpers;
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
 
+/**
+ * Class PluginManager
+ * @package candyCMS\Core\Helpers
+ *
+ */
 class PluginManager {
 
   /**
@@ -331,7 +336,7 @@ class PluginManager {
   public function runRepetitivePlugins($bForceExecution = false) {
     foreach ($this->_aRepetitivePluginNames as $sPluginName) {
       $oPlugin = $this->_aPlugins[$sPluginName];
-      
+
       if ($oPlugin->needsExecution($bForceExecution))
         $oPlugin->execute();
     }

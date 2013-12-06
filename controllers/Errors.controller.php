@@ -15,6 +15,11 @@ namespace candyCMS\Core\Controllers;
 
 use candyCMS\Core\Helpers\Helper;
 
+/**
+ * Class Errors
+ * @package candyCMS\Core\Controllers
+ *
+ */
 class Errors extends Main {
 
   /**
@@ -25,13 +30,11 @@ class Errors extends Main {
    *
    */
   protected function _show() {
-    if ($this->_iId == '401') {
+    if ($this->_iId == '401')
       header('HTTP/1.0 401 Authorization Required');
-    }
 
-    elseif ($this->_iId == '403') {
+    elseif ($this->_iId == '403')
       header('HTTP/1.0 403 Forbidden');
-    }
 
     elseif ($this->_iId == '404') {
       header('Status: 404 Not Found');

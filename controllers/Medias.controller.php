@@ -18,6 +18,11 @@ use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 use candyCMS\Core\Helpers\Upload;
 
+/**
+ * Class Medias
+ * @package candyCMS\Core\Controllers
+ *
+ */
 class Medias extends Main {
 
   /**

@@ -15,6 +15,11 @@ namespace candyCMS\Core\Helpers;
 
 use candyCMS\Core\Helpers\Helper;
 
+/**
+ * Class Upload
+ * @package candyCMS\Core\Helpers
+ *
+ */
 class Upload {
 
   /**

@@ -17,6 +17,11 @@ use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Helper;
 use PDO;
 
+/**
+ * Class Downloads
+ * @package candyCMS\Core\Models
+ *
+ */
 class Downloads extends Main {
 
   /**
@@ -179,20 +184,18 @@ class Downloads extends Main {
 
       foreach (array('title', 'content') as $sInput) {
         $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
-        $oQuery->bindParam(
-                $sInput,
-                $sValue,
-                PDO::PARAM_STR);
+        $oQuery->bindParam( $sInput,
+                            $sValue,
+                            PDO::PARAM_STR);
 
         unset($sValue);
       }
 
       foreach (array('category') as $sInput) {
         $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput]);
-        $oQuery->bindParam(
-                $sInput,
-                $sValue,
-                PDO::PARAM_STR);
+        $oQuery->bindParam( $sInput,
+                            $sValue,
+                            PDO::PARAM_STR);
 
         unset($sValue);
       }
@@ -243,20 +246,18 @@ class Downloads extends Main {
 
       foreach (array('title', 'content') as $sInput) {
         $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
-        $oQuery->bindParam(
-                $sInput,
-                $sValue,
-                PDO::PARAM_STR);
+        $oQuery->bindParam( $sInput,
+                            $sValue,
+                            PDO::PARAM_STR);
 
         unset($sValue);
       }
 
       foreach (array('category', 'downloads') as $sInput) {
         $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput]);
-        $oQuery->bindParam(
-                $sInput,
-                $sValue,
-                PDO::PARAM_STR);
+        $oQuery->bindParam( $sInput,
+                            $sValue,
+                            PDO::PARAM_STR);
 
         unset($sValue);
       }

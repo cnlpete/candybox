@@ -18,6 +18,11 @@ use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\Upload;
 
+/**
+ * Class Downloads
+ * @package candyCMS\Core\Controllers
+ *
+ */
 class Downloads extends Main {
 
   /**
@@ -107,11 +112,10 @@ class Downloads extends Main {
     else {
       require_once PATH_STANDARD . '/vendor/candycms/core/helpers/Upload.helper.php';
 
-      # Set up upload helper and rename file to title
+      # Set up upload helper
       $oUploadFile = new Upload($this->_aRequest,
                                 $this->_aSession,
-                                $this->_aFile,
-                                Helper::formatInput($this->_aRequest[$this->_sController]['title']));
+                                $this->_aFile);
 
       try {
         $aReturnValues = $oUploadFile->uploadFiles('downloads');
@@ -133,25 +137,26 @@ class Downloads extends Main {
 
         # File is up so insert data into database
         $aOptions = array('file' => $aIds[0] . '.' . $aExts[0], 'extension' => $aExts[0]);
+
         if ($this->_oModel->create($aOptions) === true) {
           Logs::insert( $this->_sController,
                         $this->_aRequest['action'],
                         $this->_oModel->getLastInsertId($this->_sController),
                         $this->_aSession['user']['id']);
 
-          return Helper::successMessage(I18n::get('success.create'),
-                  $this->_sRedirectURL,
-                  $this->_aFile);
+          return Helper::successMessage( I18n::get('success.create'),
+                                         $this->_sRedirectURL,
+                                         $this->_aFile);
         }
         else
-          return Helper::errorMessage(I18n::get('error.sql'),
-                  $this->_sRedirectURL,
-                  $this->_aFile);
+          return Helper::errorMessage( I18n::get('error.sql'),
+                                       $this->_sRedirectURL,
+                                       $this->_aFile);
       }
       else
-        return Helper::errorMessage(I18n::get('error.missing.file'),
-                $this->_sRedirectURL,
-                $this->_aFile);
+        return Helper::errorMessage( I18n::get('error.missing.file'),
+                                     $this->_sRedirectURL,
+                                     $this->_aFile);
     }
   }
 

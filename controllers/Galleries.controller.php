@@ -18,6 +18,11 @@ use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\Upload;
 
+/**
+ * Class Galleries
+ * @package candyCMS\Core\Controllers
+ *
+ */
 class Galleries extends Main {
 
   /**

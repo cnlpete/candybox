@@ -13,6 +13,11 @@
 
 namespace candyCMS\Core\Controllers;
 
+/**
+ * Class Sitemaps
+ * @package candyCMS\Core\Controllers
+ *
+ */
 class Sitemaps extends Main {
 
   /**
@@ -65,9 +70,9 @@ class Sitemaps extends Main {
       $oModel = new $sModel($this->_aRequest, $this->_aSession);
 
       $this->oSmarty->assign(strtolower($sSitemapModel),
-              preg_match('/Blogs/', $sModel) ?
-              $oModel->getOverview(1000, true) :
-              $oModel->getOverview(1000)
+                             preg_match('/Blogs/', $sModel) ?
+                               $oModel->getOverview(1000, true) :
+                               $oModel->getOverview(1000)
       );
     }
   }

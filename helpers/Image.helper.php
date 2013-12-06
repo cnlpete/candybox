@@ -17,6 +17,11 @@ use candyCMS\Core\Helpers\Helper;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
 
+/**
+ * Class Image
+ * @package candyCMS\Core\Helpers
+ *
+ */
 class Image {
 
   /**
