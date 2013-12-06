@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This is an example how to create a single extension.
+ * This is an example how to extend a core controller.
  *
  * @link http://github.com/marcoraddatz/candyCMS
  * @author Marco Raddatz <http://marcoraddatz.com>
@@ -14,7 +14,12 @@ namespace candyCMS\Controllers;
 
 //use candyCMS\Core\Helpers\Helper;
 
-class Sample extends \candyCMS\core\Controllers\Main {
+/**
+ * Class Samples
+ * @package candyCMS\Controllers
+ *
+ */
+class Samples extends \candyCMS\core\Controllers\Main {
 
   /**
    * Return the content.
@@ -37,6 +42,7 @@ class Sample extends \candyCMS\core\Controllers\Main {
    * @access protected
    * @param string $sTemplateName name of form template
    * @param string $sTitle title to show
+   * @return null
    *
    */
   protected function _showFormTemplate($sTemplateName = '_form', $sTitle = '') {

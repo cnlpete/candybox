@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This is an example how to create a single extension.
+ * This is an example how to extend a code model.
  *
  * @link http://github.com/marcoraddatz/candyCMS
  * @author Marco Raddatz <http://marcoraddatz.com>
@@ -17,6 +17,11 @@ namespace candyCMS\Models;
 //use candyCMS\core\Helpers\Page;
 //use PDO;
 
-class Sample extends \candyCMS\core\Models\Main {
+/**
+ * Class Samples
+ * @package candyCMS\Models
+ *
+ */
+class Samples extends \candyCMS\core\Models\Main {
 
 }

@@ -13,12 +13,14 @@
 namespace candyCMS\Controllers;
 
 require_once dirname(__FILE__) . '/../../../vendor/candycms/tests/CandyControllerTestCase.php';
-require_once dirname(__FILE__) . '/../../extensions/controllers/Sample.controller.php';
+require_once dirname(__FILE__) . '/../../controllers/Samples.controller.php';
 
 /**
- * Test class for Helper.
+ * Class SamplesTest
+ * @package candyCMS\Controllers
+ *
  */
-class SampleTest extends \candyCMS\Core\Controllers\CandyControllerTestCase {
+class SamplesTest extends \candyCMS\Core\Controllers\CandyControllerTestCase {
 
   /**
    * Sets up the fixture, for example, opens a network connection.
@@ -41,8 +43,8 @@ class SampleTest extends \candyCMS\Core\Controllers\CandyControllerTestCase {
         'full_name'   => ''
     );
 
-    $this->aRequest	= array('controller' => 'sample');
-    $this->oObject  = new Sample($this->aRequest, $this->aSession);
+    $this->aRequest = array('controller' => 'sample');
+    $this->oObject  = new Samples($this->aRequest, $this->aSession);
   }
 
   /**
@@ -62,8 +64,8 @@ class SampleTest extends \candyCMS\Core\Controllers\CandyControllerTestCase {
    * @access public
    *
    */
-	public function testShow() {
+  public function testShow() {
     $this->open(WEBSITE_URL . '/' . $this->aRequest['controller']);
     $this->verifyTextPresent('This is a sample extension.');
-	}
+  }
 }
