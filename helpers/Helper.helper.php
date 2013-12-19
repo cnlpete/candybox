@@ -137,6 +137,7 @@ class Helper {
    * @static
    * @access public
    * @param string $sUrl URL to redirect the user to
+   * @return void
    *
    */
   public static function redirectTo($sUrl) {
