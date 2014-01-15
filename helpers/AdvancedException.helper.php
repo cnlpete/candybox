@@ -27,7 +27,7 @@ class AdvancedException extends \Exception {
    * @access public
    * @param string $sMessage
    * @param boolean $bExit
-   * return null
+   * return void
    *
    */
   public static function reportBoth($sMessage, $bExit = true) {
