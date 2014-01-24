@@ -746,6 +746,7 @@ abstract class Main {
    * Clear all caches for given controllers.
    *
    * @access protected
+   * @return void
    *
    */
   protected function _clearAdditionalCaches() {
