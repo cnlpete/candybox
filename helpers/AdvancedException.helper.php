@@ -36,8 +36,8 @@ class AdvancedException extends \Exception {
     if (WEBSITE_MODE == 'production' || WEBSITE_MODE == 'staging')
       AdvancedException::sendAdminMail($sMessage);
 
-    if ($bExit && !ACTIVE_TEST)
-      exit(I18n::get('error.standard'));
+    if ($bExit && !ACTIVE_TEST && !WEBSITE_MODE == 'development')
+      exit('<h3>' . I18n::get('error.standard') . '</h3><br>' . $sMessage);
   }
 
   /**
