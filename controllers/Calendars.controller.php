@@ -16,6 +16,11 @@ namespace candyCMS\Core\Controllers;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
 
+/**
+ * Class Calendars
+ * @package candyCMS\Core\Controllers
+ *
+ */
 class Calendars extends Main {
 
   /**
@@ -49,7 +54,7 @@ class Calendars extends Main {
    *
    * @access protected
    * @param integer $iId ID to show
-   * @return string ICS-File
+   * @return string ICS file
    *
    */
   protected function _ics($iId) {

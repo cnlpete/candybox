@@ -15,6 +15,11 @@ namespace candyCMS\Core\Controllers;
 
 use candyCMS\Core\Helpers\Helper;
 
+/**
+ * Class Sites
+ * @package candyCMS\Core\Controllers
+ *
+ */
 class Sites extends Main {
 
   /**

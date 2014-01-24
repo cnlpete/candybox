@@ -16,6 +16,11 @@ namespace candyCMS\Core\Controllers;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
 
+/**
+ * Class Blogs
+ * @package candyCMS\Core\Controllers
+ *
+ */
 class Blogs extends Main {
 
   /**
@@ -47,7 +52,7 @@ class Blogs extends Main {
                 $this->_oModel->getOverview();
 
         if (isset($this->_aRequest['search']) && $this->_aRequest['search'])
-          # add rss info
+          # Add RSS info
           $this->_aRSSInfo[] = array( 'url'   => WEBSITE_URL . '/blogs/' . $this->_aRequest['search'] . '.rss',
                                       'title' => $this->_aRequest['search'] . ' - ' . I18n::get('global.blogs'));
 

@@ -18,6 +18,11 @@ use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\Upload;
 use candyCMS\Core\Helpers\PluginManager;
 
+/**
+ * Class Users
+ * @package candyCMS\Core\Controllers
+ *
+ */
 class Users extends Main {
 
   /**

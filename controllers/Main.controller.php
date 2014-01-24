@@ -21,6 +21,11 @@ use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\I18n;
 use candyCMS\Core\Helpers\SmartySingleton as Smarty;
 
+/**
+ * Class Main
+ * @package candyCMS\Core\Controllers
+ *
+ */
 abstract class Main {
 
   /**
@@ -741,6 +746,7 @@ abstract class Main {
    * Clear all caches for given controllers.
    *
    * @access protected
+   * @return void
    *
    */
   protected function _clearAdditionalCaches() {
@@ -765,9 +771,8 @@ abstract class Main {
       return $this->_showFormTemplate();
 
     else {
-      $bResult = $this->_oModel->create() === true;
-
-      $iId = $this->_oModel->getLastInsertId($this->_sController);
+      $bResult  = $this->_oModel->create() === true;
+      $iId      = $this->_oModel->getLastInsertId($this->_sController);
 
       Logs::insert( $this->_sController,
                     $this->_aRequest['action'],
@@ -810,21 +815,23 @@ abstract class Main {
    *
    */
   protected function _update() {
+    $iId = (int) $this->_aRequest['id'];
+
     $this->_setError('title');
 
     $sRedirectURL = empty($this->_sRedirectURL) ?
-            '/' . $this->_aRequest['controller'] . '/' . (int) $this->_aRequest['id'] :
+            '/' . $this->_aRequest['controller'] . '/' . $iId :
             $this->_sRedirectURL;
 
     if ($this->_aError)
       return $this->_showFormTemplate();
 
     else {
-      $bReturn = $this->_oModel->update((int) $this->_aRequest['id']) === true;
+      $bReturn = $this->_oModel->update($iId) === true;
 
       Logs::insert( $this->_sController,
                     $this->_aRequest['action'],
-                    (int) $this->_aRequest['id'],
+                    $iId,
                     $this->_aSession['user']['id'],
                     '', '', $bReturn);
 

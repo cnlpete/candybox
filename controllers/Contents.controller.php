@@ -16,6 +16,11 @@ namespace candyCMS\Core\Controllers;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
 
+/**
+ * Class Contents
+ * @package candyCMS\Core\Controllers
+ *
+ */
 class Contents extends Main {
 
   /**

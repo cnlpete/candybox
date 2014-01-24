@@ -18,13 +18,18 @@ use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\Pagination;
 use PDO;
 
+/**
+ * Class Contents
+ * @package candyCMS\Core\Models
+ *
+ */
 class Contents extends Main {
 
   /**
    * Get content overview data.
    *
    * @access public
-   * @param integer $iLimit blog post limit
+   * @param integer $iLimit limit
    * @return array $aData
    *
    */

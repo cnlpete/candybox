@@ -16,6 +16,11 @@ namespace candyCMS\Core\Controllers;
 use candyCMS\Core\Helpers\Helper;
 use candyCMS\Core\Helpers\I18n;
 
+/**
+ * Class Newsletters
+ * @package candyCMS\Core\Controllers
+ *
+ */
 class Newsletters extends Main {
 
   /**
@@ -75,9 +80,34 @@ class Newsletters extends Main {
     $oTemplate = $this->oSmarty->getTemplate($this->_sController, $sTemplateName);
     $this->oSmarty->setTemplateDir($oTemplate);
 
-    $this->oSmarty->assign('name', isset($this->_aRequest['name']) ? (string) $this->_aRequest['name'] : '');
-    $this->oSmarty->assign('surname', isset($this->_aRequest['surname']) ? (string) $this->_aRequest['surname'] : '');
-    $this->oSmarty->assign('email', isset($this->_aRequest['email']) ? (string) $this->_aRequest['email'] : '');
+    # User might have used FB connect, so we might already have some information
+    if (isset($this->_aSession['user']['facebook_id'])) {
+      $this->oSmarty->assign('name', isset($this->_aSession['user']['name']) ?
+        (string) $this->_aSession['user']['name'] :
+        '');
+
+      $this->oSmarty->assign('surname', isset($this->_aSession['user']['surname']) ?
+        (string) $this->_aSession['user']['surname'] :
+        '');
+
+      $this->oSmarty->assign('email', isset($this->_aSession['user']['email']) ?
+        (string) $this->_aSession['user']['email'] :
+        '');
+    }
+
+    else {
+      $this->oSmarty->assign('name', isset($this->_aRequest['name']) ?
+        (string) $this->_aRequest['name'] :
+        '');
+
+      $this->oSmarty->assign('surname', isset($this->_aRequest['surname']) ?
+        (string) $this->_aRequest['surname'] :
+        '');
+
+      $this->oSmarty->assign('email', isset($this->_aRequest['email']) ?
+        (string) $this->_aRequest['email'] :
+        '');
+    }
 
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);

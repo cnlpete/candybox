@@ -19,6 +19,11 @@ use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\Pagination;
 use PDO;
 
+/**
+ * Class Users
+ * @package candyCMS\Core\Models
+ *
+ */
 class Users extends Main {
 
   /**
@@ -286,10 +291,9 @@ class Users extends Main {
       $aData = $this->_formatForUpdate($aRow);
 
     else {
-      $aData = $this->_formatForUserOutput(
-              $aRow,
-              array('id', 'role'. 'date'),
-              array('use_gravatar'));
+      $aData = $this->_formatForUserOutput( $aRow,
+                                            array('id', 'role'. 'date'),
+                                            array('use_gravatar'));
 
       $oPluginManager = PluginManager::getInstance();
       $aData['content'] = $oPluginManager->runContentDisplayPlugins($aData['content']);
@@ -345,10 +349,9 @@ class Users extends Main {
 
       foreach (array('name', 'surname', 'email') as $sInput) {
         $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput]);
-        $oQuery->bindParam(
-                $sInput,
-                $sValue,
-                PDO::PARAM_STR);
+        $oQuery->bindParam( $sInput,
+                            $sValue,
+                            PDO::PARAM_STR);
 
         unset($sValue);
       }
@@ -410,10 +413,9 @@ class Users extends Main {
 
       foreach (array('name', 'surname', 'content') as $sInput) {
         $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput]);
-        $oQuery->bindParam(
-                $sInput,
-                $sValue,
-                PDO::PARAM_STR);
+        $oQuery->bindParam( $sInput,
+                            $sValue,
+                            PDO::PARAM_STR);
 
         unset($sValue);
       }

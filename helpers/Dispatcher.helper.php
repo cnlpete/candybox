@@ -13,6 +13,11 @@
 
 namespace candyCMS\Core\Helpers;
 
+/**
+ * Class Dispatcher
+ * @package candyCMS\Core\Helpers
+ *
+ */
 class Dispatcher {
 
   /**

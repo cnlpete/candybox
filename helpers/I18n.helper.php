@@ -16,6 +16,11 @@ namespace candyCMS\Core\Helpers;
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Cache;
 
+/**
+ * Class I18n
+ * @package candyCMS\Core\Helpers
+ *
+ */
 class I18n {
 
   /**
@@ -121,9 +126,10 @@ class I18n {
     }
 
     # Merge all that with the users custom language file
-    $aTarget  = self::$_aLang[$sLanguage];
     $aReplace = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sCustomLanguageFile));
-    Helper::recursiveOnewayArrayReplace($aTarget, $aReplace);
+    Helper::recursiveOnewayArrayReplace(
+            self::$_aLang[$sLanguage],
+            $aReplace);
 
     # Bugfix: Disable errors duing tests
     if (!ACTIVE_TEST)

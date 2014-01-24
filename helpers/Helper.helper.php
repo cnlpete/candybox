@@ -18,6 +18,11 @@ use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\PluginManager;
 use candyCMS\Core\Helpers\Cache;
 
+/**
+ * Class Helper
+ * @package candyCMS\Core\Helpers
+ *
+ */
 class Helper {
 
   /**
@@ -132,6 +137,7 @@ class Helper {
    * @static
    * @access public
    * @param string $sUrl URL to redirect the user to
+   * @return void
    *
    */
   public static function redirectTo($sUrl) {

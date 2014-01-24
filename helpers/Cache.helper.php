@@ -15,10 +15,15 @@
 
 namespace candyCMS\Core\Helpers;
 
+/**
+ * Class Cache
+ * @package candyCMS\Core\Helpers
+ *
+ */
 class Cache {
 
   /**
-   * determine whether there is cached data
+   * Determine whether there is cached data
    *
    * @static
    * @access public
@@ -40,7 +45,7 @@ class Cache {
   }
 
   /**
-   * save some array with data to a cache file
+   * Save some array with data to a cache file
    *
    * @static
    * @access public
@@ -51,11 +56,12 @@ class Cache {
    */
   public static function save($sIdent, &$aData) {
     $sCacheFile = PATH_CACHE . '/' . WEBSITE_MODE . '/' . WEBSITE_LOCALE . '/' . md5($sIdent) . '.cache';
+
     return (bool) file_put_contents($sCacheFile, json_encode($aData));
   }
 
   /**
-   * clear a cache file
+   * Clear a cache file
    *
    * @static
    * @access public
