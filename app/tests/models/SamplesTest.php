@@ -53,10 +53,10 @@ class SamplesTest extends CandyModelTestCase {
     $this->aRequest = array(
       'controller' => 'samples',
       'Samples'  => array(
-        'author_id'         => 1,
-        'title'                 => 'Title',
-        'content'               => 'Content',
-        'date'                  => date('Y-m-d H:i:s', time())
+        'author_id' => 1,
+        'title'     => 'Title',
+        'content'   => 'Content',
+        'date'      => date('Y-m-d H:i:s', time())
       )
     );
 
