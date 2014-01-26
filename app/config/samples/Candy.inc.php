@@ -119,7 +119,7 @@ define('ALLOW_EXTENSIONS', false);
 # Tell the allowed plugins seperated by comma.
 # If you disable TinyMCE, Markdown is used.
 # DEFAULT: 'Bbcode,FormatTimestamp,Headlines,Archive,TinyMCE'
-# OTHER OFFICIALLY SUPPORTED PLUGINS: Facebook, Cronjob, Piwik, Analytics,
+# OTHER OFFICIALLY SUPPORTED PLUGINS: FacebookCMS, Cronjob, Piwik, Analytics,
 # TagCloud, AddThis, SocialSharePrivacy, LanguageChooser, Replace, Markdown, Disqus
 define('ALLOW_PLUGINS', 'Bbcode,FormatTimestamp,Headlines,Archive,TinyMCE,LanguageChooser');
 
@@ -197,7 +197,7 @@ define('PATH_UPLOAD', 'upload');
 
 # Define, where cached files are stored
 # DEFAULT: app/cache
-define('PATH_CACHE', 'app/cache');
+define('PATH_CACHE', PATH_SMARTY . '/cache');
 
 # ------------------------------------------------------------------------------
 
@@ -210,10 +210,6 @@ define('AUTOLOAD', true);
 # DEFAULT: 3
 define('AUTOLOAD_TIMES', 3);
 
-# Should comments be disabled?
-# DEFAULT: false
-define('DISABLE_COMMENTS', false);
-
 # Limit of gallery albums per page
 # DEFAULT: 10
 define('LIMIT_ALBUMS', 10);
@@ -221,15 +217,6 @@ define('LIMIT_ALBUMS', 10);
 # Limit of blog entries per page
 # DEFAULT: 8
 define('LIMIT_BLOG', 8);
-
-# Limit of comments per page
-# DEFAULT: 10
-define('LIMIT_COMMENTS', 10);
-
-# Sorting order of comments.
-# OPTIONS: ASC,DESC
-# DEFAULT: ASC (oldest last)
-define('SORTING_COMMENTS', 'ASC');
 
 # Sorting order of album images.
 # OPTIONS: ASC,DESC
@@ -261,5 +248,3 @@ define('MAILCHIMP_LIST_ID', '');
 # Note that those mails can be seen and must be sent by admins.
 # DEFAULT: true
 define('USE_MAIL_QUEUE', true);
-
-?>
