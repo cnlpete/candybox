@@ -52,6 +52,7 @@ class Samples extends \candyCMS\core\Controllers\Main {
   /**
    *
    * @access protected
+   * @return void
    *
    */
   protected function _create() {
@@ -61,6 +62,7 @@ class Samples extends \candyCMS\core\Controllers\Main {
   /**
    *
    * @access protected
+   * @return void
    *
    */
   protected function _update() {
@@ -70,6 +72,7 @@ class Samples extends \candyCMS\core\Controllers\Main {
   /**
    *
    * @access protected
+   * @return void
    *
    */
   protected function _destroy() {

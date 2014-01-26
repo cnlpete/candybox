@@ -28,8 +28,6 @@ class SamplesTest extends CandyModelTestCase {
    * Insert our SQL data from the fixtures we entered below.
    * Make sure that this data is saved as CSV!
    *
-   * NOTE: This test will fail right now because of missing samples.csv!
-   *
    * @access public
    * @return PHPUnit_Extensions_Database_DataSet_IDataSet
    *
@@ -52,7 +50,7 @@ class SamplesTest extends CandyModelTestCase {
 
     $this->aRequest = array(
       'controller' => 'samples',
-      'Samples'  => array(
+      'samples'  => array(
         'author_id' => 1,
         'title'     => 'Title',
         'content'   => 'Content',

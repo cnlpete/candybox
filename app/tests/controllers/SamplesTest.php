@@ -2,6 +2,7 @@
 
 /**
  * This is an example how to create an extension test.
+ * Note that you need Selenium for testing!
  *
  * @link http://github.com/marcoraddatz/candyCMS
  * @author Marco Raddatz <http://marcoraddatz.com>
@@ -25,6 +26,8 @@ class SamplesTest extends \candyCMS\Core\Controllers\CandyControllerTestCase {
   /**
    * Sets up the fixture, for example, opens a network connection.
    * This method is called before a test is executed.
+   *
+   * Here you can also set up some extension specific variables or user/request data.
    *
    * @access protected
    *
