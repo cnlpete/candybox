@@ -62,6 +62,9 @@ if (!defined('WEBSITE_CDN'))
 if (!defined('WEBSITE_COMPRESS_FILES'))
   define('WEBSITE_COMPRESS_FILES', false);
 
+if (!defined('ALLOW_API_TOKENS'))
+  define('ALLOW_API_TOKENS', false);
+
 if (!defined('ALLOW_EXTENSIONS'))
   define('ALLOW_EXTENSIONS', false);
 

@@ -398,7 +398,7 @@ class Index {
     $this->_aSession['user'] = self::_resetUser();
 
     # Get user by token
-    if (isset($this->_aRequest['api_token']) && !empty($this->_aRequest['api_token'])) {
+    if (defined('ALLOW_API_TOKENS') && ALLOW_API_TOKENS && isset($this->_aRequest['api_token']) && !empty($this->_aRequest['api_token'])) {
       if (EXTENSION_CHECK && file_exists(PATH_STANDARD . '/app/models/Users.model.php')) {
         require_once PATH_STANDARD . '/app/models/Users.model.php';
         $aUser = \candyCMS\Models\Users::getUserByToken(Helper::formatInput($this->_aRequest['api_token']));
