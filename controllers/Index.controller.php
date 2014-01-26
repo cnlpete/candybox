@@ -137,6 +137,9 @@ class Index {
     # Close database connection
     $sModel = Main::__autoload('Main', true);
     $sModel::disconnectFromDatabase();
+
+    # Overwrite current $_SESSION with updated information.
+    $_SESSION = $this->_aSession;
   }
 
   /**
