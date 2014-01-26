@@ -358,10 +358,11 @@ abstract class Main {
    *
    * @access protected
    * @param array $aData array of given userdata, required fields are 'email', 'id', 'name', 'surname' and 'use_gravatar'
+   * @param boolean $bDestroySensitiveData should we provide sensitve data or not?
    * @return array $aData returns reference of $aData
    *
    */
-  protected static function _formatForUserOutput(&$aData) {
+  protected static function _formatForUserOutput(&$aData, $bDestroySensitiveData = true) {
     # Set up ints first
     $aData['id']    = (int) $aData['id'];
     $aData['role']  = (int) isset($aData['role']) ? $aData['role'] : 0;
@@ -391,14 +392,16 @@ abstract class Main {
     $aData['url_update']  = $aData['url_clean'] . '/update';
 
     # Destroy sensitive data
-    $aData['verification_code'] = isset($aData['verification_code']) && empty($aData['verification_code']) ?
-            0 :
-            1;
+    if ($bDestroySensitiveData === true) {
+      $aData['verification_code'] = isset($aData['verification_code']) && empty($aData['verification_code']) ?
+              0 :
+              1;
 
-    unset(  $aData['api_token'],
-            $aData['registration_ip'],
-            $aData['password'],
-            $aData['password_temporary']);
+      unset(  $aData['api_token'],
+              $aData['registration_ip'],
+              $aData['password'],
+              $aData['password_temporary']);
+    }
 
     return $aData;
   }

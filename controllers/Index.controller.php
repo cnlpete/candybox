@@ -420,7 +420,7 @@ class Index {
         $oModel = new \candyCMS\Core\Models\Sessions();
       }
 
-      $aUser = $oModel->getUserBySession();
+      $aUser = $oModel->getUserBySession(false);
     }
 
     if (is_array($aUser))

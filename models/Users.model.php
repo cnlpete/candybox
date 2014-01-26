@@ -126,13 +126,10 @@ class Users extends Main {
    * @access public
    * @param string $sEmail
    * @param string $sPassword
-   * @param boolean $bEncrypt
    * @return boolean status of query
    *
    */
-  public static function setPassword($sEmail, $sPassword, $bEncrypt = false) {
-    $sPassword = $bEncrypt == true ? md5(RANDOM_HASH . $sPassword) : $sPassword;
-
+  public static function setPassword($sEmail, $sPassword) {
     # Count user first and exit if user is not found
     $aUser = self::getExistingUser($sEmail);
     if (empty($aUser))
@@ -146,7 +143,9 @@ class Users extends Main {
                                               WHERE
                                                 `email` = :email");
 
-      $sEmail = Helper::formatInput($sEmail);
+      $sEmail     = Helper::formatInput($sEmail);
+      $sPassword  = Helper::hashPassword($sEmail, $sPassword);
+
       $oQuery->bindParam(':password', $sPassword, PDO::PARAM_STR);
       $oQuery->bindParam(':email', $sEmail, PDO::PARAM_STR);
 
@@ -340,7 +339,9 @@ class Users extends Main {
                                           :registration_ip)");
 
       $sApiToken = md5(RANDOM_HASH . $this->_aRequest[$this->_sController]['email']);
-      $sPassword = md5(RANDOM_HASH . $this->_aRequest[$this->_sController]['password']);
+      $sPassword = Helper::hashPassword(  Helper::formatInput($this->_aRequest[$this->_sController]['email']),
+                                          Helper::formatInput($this->_aRequest[$this->_sController]['password']));
+
       $oQuery->bindParam('api_token', $sApiToken, PDO::PARAM_STR);
       $oQuery->bindParam('password', $sPassword, PDO::PARAM_STR);
       $oQuery->bindParam('role', $aOptions['role'], PDO::PARAM_INT);
@@ -454,7 +455,9 @@ class Users extends Main {
                                       WHERE
                                         id = :id");
 
-      $sPassword = md5(RANDOM_HASH . $this->_aRequest[$this->_sController]['password_new']);
+      $sPassword = Helper::hashPassword($this->_aSession['user']['email'],
+                                        Helper::formatInput($this->_aRequest[$this->_sController]['password_new']));
+
       $oQuery->bindParam('password', $sPassword, PDO::PARAM_STR);
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
 
@@ -594,16 +597,19 @@ class Users extends Main {
                                       FROM
                                         " . SQL_PREFIX . "users
                                       WHERE
-                                        email = :email
-                                      AND
-                                        password = :password
+                                        ( email = :email && password = :password_md5 )
+                                      OR
+                                        ( email = :email && password = :password_sha512 )
                                       LIMIT
                                         1");
 
-      $sEmail     = Helper::formatInput($this->_aRequest[$this->_sController]['email']);
-      $sPassword  = md5(RANDOM_HASH . Helper::formatInput($this->_aRequest[$this->_sController]['password']));
+      $sEmail           = Helper::formatInput($this->_aRequest[$this->_sController]['email']);
+      $sPasswordMD5     = md5(RANDOM_HASH . Helper::formatInput($this->_aRequest[$this->_sController]['password']));
+      $sPasswordSHA512  = Helper::hashPassword($sEmail, Helper::formatInput($this->_aRequest[$this->_sController]['password']));
+
       $oQuery->bindParam('email', $sEmail, PDO::PARAM_STR);
-      $oQuery->bindParam('password', $sPassword, PDO::PARAM_STR);
+      $oQuery->bindParam('password_md5', $sPasswordMD5, PDO::PARAM_STR);
+      $oQuery->bindParam('password_sha512', $sPasswordSHA512, PDO::PARAM_STR);
       $oQuery->execute();
 
       return $oQuery->fetch(PDO::FETCH_ASSOC);
@@ -627,17 +633,19 @@ class Users extends Main {
                                       FROM
                                         " . SQL_PREFIX . "users
                                       WHERE
-                                        email = :email
-                                      AND
-                                        password = :password
+                                        ( email = :email && password = :password_md5 )
+                                      OR
+                                        ( email = :email && password = :password_sha512 )
                                       LIMIT
                                         1");
 
-      $sEmail = Helper::formatInput($this->_aRequest['email']);
-      $sPassword = md5(RANDOM_HASH . Helper::formatInput($this->_aRequest['password']));
+      $sEmail           = Helper::formatInput($this->_aRequest[$this->_sController]['email']);
+      $sPasswordMD5     = md5(RANDOM_HASH . Helper::formatInput($this->_aRequest[$this->_sController]['password']));
+      $sPasswordSHA512  = Helper::hashPassword($sEmail, Helper::formatInput($this->_aRequest[$this->_sController]['password']));
+
       $oQuery->bindParam('email', $sEmail, PDO::PARAM_STR);
-      $oQuery->bindParam('password', $sPassword, PDO::PARAM_STR);
-      $oQuery->execute();
+      $oQuery->bindParam('password_md5', $sPasswordMD5, PDO::PARAM_STR);
+      $oQuery->bindParam('password_sha512', $sPasswordSHA512, PDO::PARAM_STR);
       $aData = $oQuery->fetch(PDO::FETCH_ASSOC);
 
       return !empty($aData['api_token']) ? $aData['api_token'] : '';

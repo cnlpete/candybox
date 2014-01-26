@@ -252,8 +252,15 @@ class Users extends Main {
     $this->_setError('password_new2', I18n::get('error.user.update.password.new.empty'));
 
     # Check if old password is correct, emptyness is checked by _setError
-    if (md5(RANDOM_HASH . $this->_aRequest[$this->_sController]['password_old']) !== $this->_aSession['user']['password'])
-      $this->_aError['password_old'] = I18n::get('error.user.update.password.old.wrong');
+    if (strlen($this->_aSession['user']['password']) == 32) {
+      if (md5(RANDOM_HASH . $this->_aRequest[$this->_sController]['password_old']) !== $this->_aSession['user']['password'])
+        $this->_aError['password_old'] = I18n::get('error.user.update.password.old.wrong');
+    }
+
+    else {
+      if (Helper::hashPassword($this->_aSession['user']['email'], Helper::formatInput($this->_aRequest[$this->_sController]['password_old'])) !== $this->_aSession['user']['password'])
+        $this->_aError['password_old'] = I18n::get('error.user.update.password.old.wrong');
+    }
 
     # Check if new password fields match
     if ($this->_aRequest[$this->_sController]['password_new'] !== $this->_aRequest[$this->_sController]['password_new2'])

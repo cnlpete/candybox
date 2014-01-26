@@ -137,9 +137,9 @@ class Sessions extends Main {
     if (isset($this->_aError))
       return $this->_showCreateResendActionsTemplate();
 
-    $sNewPasswordClean = Helper::createRandomChar(16, true);
-    $bReturn    = $this->_oModel->password(md5(RANDOM_HASH . $sNewPasswordClean));
-    $sRedirect  = '/' . $this->_sController . '/create';
+    $sNewPasswordClean  = Helper::createRandomChar(16, true);
+    $bReturn            = $this->_oModel->password($sNewPasswordClean);
+    $sRedirect          = '/' . $this->_sController . '/create';
 
     if ($bReturn) {
       $sModel = $this->__autoload('Mails', true);

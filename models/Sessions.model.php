@@ -27,11 +27,12 @@ class Sessions extends Main {
    * Fetch all user data of active session.
    *
    * @access public
-   * @return array | boolean $aData with user data or false
+   * @param boolean $bDestroySensitiveData should we provide sensitve data or not?
+   * @return array|boolean $aData with user data or false
    * @see vendor/candycms/core/controllers/Index.controller.php
    *
    */
-  public function getUserBySession() {
+  public function getUserBySession($bDestroySensitiveData = true) {
     try {
       $oQuery = $this->_oDb->prepare("SELECT
                                         u.*,
@@ -57,7 +58,7 @@ class Sessions extends Main {
         $this->destroy(session_id());
 
       $aData = $oQuery->fetch(PDO::FETCH_ASSOC);
-      return $aData ? parent::_formatForUserOutput($aData) : false;
+      return $aData ? parent::_formatForUserOutput($aData, $bDestroySensitiveData) : false;
     }
     catch (\PDOException $p) {
       AdvancedException::reportBoth(__METHOD__ . ' - ' . $p->getMessage());

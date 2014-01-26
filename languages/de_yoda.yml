@@ -193,7 +193,7 @@ success:
   password:
     create: Dein neues Passwort erfolgreich per E-Mail zugeschickt, dir wurde!
   user:
-    create: "Erfolgreich registriert du wurdest und eine E-Mail erhalten haben du solltest, über die die Echtheit deiner E-Mail-Adresse bestätigten du kannst. Ebenfalls automatisch für den Newsletter eingetragen du wurdest. Um abzumelden dich, auf auf 'Einstellungen', 'Persönliche Daten' gehen du musst und auf 'Newsletter kündigen' klicken du kannst."
+    create: Du wurdest erfolgreich registriert und solltest eine E-Mail erhalten haben, über die du die Echtheit deiner E-Mail-Adresse bestätigten kannst.
     verification: Vielen Dank für die Bestätigung deiner E-Mail-Adresse.
 
 error:

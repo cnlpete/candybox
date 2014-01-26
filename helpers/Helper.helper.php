@@ -602,4 +602,19 @@ class Helper {
       }
     }
   }
+
+  /**
+   * Return hashed password string
+   *
+   * @static
+   * @access public
+   * @param string $sEmail
+   * @param string $sPassword
+   * @return string
+   * @todo test
+   *
+   */
+  public static function hashPassword($sEmail, $sPassword) {
+    return hash('sha512', $sEmail . RANDOM_HASH . $sPassword);
+  }
 }
