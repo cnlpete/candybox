@@ -37,7 +37,7 @@ class AdvancedException extends \Exception {
       AdvancedException::sendAdminMail($sMessage);
 
     if ($bExit && !ACTIVE_TEST && !WEBSITE_MODE == 'development')
-      exit('<h3>' . I18n::get('error.standard') . '</h3><br>' . $sMessage);
+      exit('<h3>' . I18n::get('error.standard') . '</h3><p>' . $sMessage . '</p>');
   }
 
   /**
@@ -49,7 +49,7 @@ class AdvancedException extends \Exception {
    *
    */
   public static function sendAdminMail($sMessage) {
-    $sMessage = date('Y-m-d Hi', time()) . ' - ' . $sMessage;
+    $sMessage = date('Y-m-d Hi', time()) . '<br />' . $sMessage . '<br />' . WEBSITE_URL;
 
     $sModel = \candyCMS\Core\Controllers\Main::__autoload('Mails', true);
     $oMails = new $sModel();

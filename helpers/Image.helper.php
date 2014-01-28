@@ -92,13 +92,16 @@ class Image {
    * @access private
    * @param integer $iSrcX x-coordinate of source point
    * @param integer $iSrcY y-coordinate of source point
-   * @param integer $iDim dimension to cut
+   * @param integer $iWidth width to cut
+   * @param integer $iHeight height to cut
    * @return string $sPath path of the new image
    *
    */
-  private function _createImage($iSrcX, $iSrcY, $iDim) {
+  private function _createImage($iSrcX, $iSrcY, $iWidth, $iHeight = '') {
     $sPath = Helper::removeSlash(PATH_UPLOAD . '/' . $this->_sUploadDir . '/' .
                     $this->_sFolder . '/' . $this->_sId . '.' . $this->_sImgType);
+
+    $iHeight = !empty($iHeight) ? $iHeight : $this->_iImageHeight;
 
     # Create image using Imagine
     $oImagine = new \Imagine\Gd\Imagine();
@@ -106,7 +109,7 @@ class Image {
     # Cut image
     if ($this->_iImageWidth == $this->_iImageHeight) {
       $oImage   = $oImagine->open($this->_sOriginalPath)
-                            ->crop(new Point($iSrcX, $iSrcY), new Box($iDim, $iDim))
+                            ->crop(new Point($iSrcX, $iSrcY), new Box($iWidth, $iWidth))
                             ->resize(new Box($this->_iImageWidth, $this->_iImageHeight))
                             ->save($sPath);
     }
@@ -114,7 +117,8 @@ class Image {
     # Resize only
     else
       $oImage   = $oImagine->open($this->_sOriginalPath)
-                            ->resize(new Box($this->_iImageWidth, $this->_iImageHeight))
+                            ->resize(new Box($iWidth, $iHeight))
+                            ->crop(new Point($iSrcX, $iSrcY), new Box($this->_iImageWidth, $this->_iImageHeight))
                             ->save($sPath);
 
     # Reduce image size via Smush.it
@@ -143,60 +147,72 @@ class Image {
    * Proportional resizing.
    *
    * @access public
-   * @param integer $iDim width of the new image
+   * @param integer $iWidth width of the new image
    * @param integer $iMaxHeight maximum height of the new image
    * @param string $sFolder folder of the new image
    * @return string $sPath path of the new image
    *
    */
-  public function resizeDefault($iDim, $iMaxHeight = '', $sFolder = '') {
-    $this->_sFolder = empty($sFolder) ? $iDim : $sFolder;
+  public function resizeDefault($iWidth, $iMaxHeight = '', $sFolder = '') {
+    $this->_sFolder = empty($sFolder) ? $iWidth : $sFolder;
+    $iSrcX = 0;
+    $iSrcY = 0;
 
     # Y bigger than X and max height
-    if ($this->_aInfo[1] > $this->_aInfo[0] && $iMaxHeight) {
+    if ( ($this->_aInfo[1] > $this->_aInfo[0]) && $iMaxHeight) {
       $this->_iImageWidth   = round($this->_aInfo[0] * ($iMaxHeight / $this->_aInfo[1]));
       $this->_iImageHeight  = $iMaxHeight;
+
+      $iWidth = $this->_iImageWidth;
     }
 
     # X bigger than Y
     else {
-      $this->_iImageWidth   = $iDim;
-      $this->_iImageHeight  = round($this->_aInfo[1] * ($iDim / $this->_aInfo[0]));
+      $iHeight = round($this->_aInfo[1] * ($iWidth / $this->_aInfo[0]));
+
+      $this->_iImageWidth   = $iWidth;
+      $this->_iImageHeight  = $iHeight;
+
+      if (!empty($iMaxHeight) && $iMaxHeight < $iHeight) {
+        $this->_iImageHeight = $iMaxHeight;
+        $iSrcY = ($iHeight - $iMaxHeight) / 2;
+      }
     }
 
-    return $this->_createImage(0, 0, $iDim);
+    return $this->_createImage($iSrcX, $iSrcY, $iWidth, isset($iHeight) ? $iHeight : '');
   }
 
   /**
    * Cut resizing.
    *
    * @access public
-   * @param integer $iDim width and height of the new image
+   * @param integer $iWidth width and height of the new image
    * @param string $sFolder folder of the new image
    * @return string $sPath path of the new image
    *
    */
-  public function resizeAndCut($iDim, $sFolder = '') {
-    $this->_sFolder = empty($sFolder) ? $iDim : $sFolder;
+  public function resizeAndCut($iWidth, $sFolder = '') {
+    $this->_sFolder = empty($sFolder) ? $iWidth : $sFolder;
 
-    $this->_iImageWidth   = $iDim;
-    $this->_iImageHeight  = $iDim;
+    $this->_iImageWidth   = $iWidth;
+    $this->_iImageHeight  = $iWidth;
 
     # Y bigger than X
     if ($this->_aInfo[1] > $this->_aInfo[0]) {
       $iSrcX = 0;
       $iSrcY = ($this->_aInfo[1] - $this->_aInfo[0]) / 2;
-      $iDim = $this->_aInfo[0];
+      $iWidth = $this->_aInfo[0];
     }
 
     # X bigger than Y
     else {
       $iSrcX = ($this->_aInfo[0] - $this->_aInfo[1]) / 2;
       $iSrcY = 0;
-      $iDim = $this->_aInfo[1];
+      $iWidth = $this->_aInfo[1];
     }
 
-    # Attention: $iDim is overwritten!
-    return $this->_createImage($iSrcX, $iSrcY, $iDim);
+    # Attention: $iWidth is overwritten!
+    # Since we cut the image, we also use width for height
+    return $this->_createImage($iSrcX, $iSrcY, $iWidth);
   }
 }
