@@ -173,7 +173,7 @@ class Image {
       $this->_iImageWidth   = $iWidth;
       $this->_iImageHeight  = $iHeight;
 
-      if (!empty($iMaxHeight) && $iMaxHeight < $iHeight) {
+      if (!empty($iMaxHeight) && $iMaxHeight <= $iHeight) {
         $this->_iImageHeight = $iMaxHeight;
         $iSrcY = ($iHeight - $iMaxHeight) / 2;
       }
