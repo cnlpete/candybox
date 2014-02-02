@@ -12,7 +12,8 @@
 
 namespace candyCMS\Core\Models;
 
-define ('PATH_STANDARD', dirname(__FILE__) . '/../../..');
+if (!defined('PATH_STANDARD'))
+  define ('PATH_STANDARD', dirname(__FILE__) . '/../../..');
 
 require_once PATH_STANDARD . '/vendor/candycms/tests/CandyModelTestCase.php';
 require_once PATH_STANDARD . '/app/models/Samples.model.php';
