@@ -91,6 +91,9 @@ class SmartySingleton extends Smarty {
     $this->setPluginsDir(SMARTY_DIR . '/plugins');
     $this->setTemplateDir(PATH_STANDARD . '/vendor/candycms/core/views');
 
+    if (file_exists(SMARTY_DIR . '/plugins/outputfilter.trimwhitespace.php') && WEBSITE_MODE !== 'development')
+      $this->loadFilter('output', 'trimwhitespace');
+
     # See http://www.smarty.net/docs/en/variable.merge.compiled.includes.tpl
     $this->merge_compiled_includes = true;
 

@@ -1,188 +1,186 @@
 <!DOCTYPE html>
-{strip}
-  <html>
-    <head>
-      {* Production mode: Use compiled CSS *}
-      <link href='{$_PATH.css}/mobile{$_SYSTEM.compress_files_suffix}.css'
-            rel='stylesheet' type='text/css' media='screen, projection'/>
+<html>
+  <head>
+    {* Production mode: Use compiled CSS *}
+    <link href='{$_PATH.css}/mobile{$_SYSTEM.compress_files_suffix}.css'
+          rel='stylesheet' type='text/css' media='screen, projection'/>
 
-      {* Responsive support *}
-      <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-      <link href='{$_PATH.css}/bootstrap.responsive{$_SYSTEM.compress_files_suffix}.css'
-            rel='stylesheet'>
+    {* Responsive support *}
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link href='{$_PATH.css}/bootstrap.responsive{$_SYSTEM.compress_files_suffix}.css'
+          rel='stylesheet'>
 
-      <meta http-equiv='content-type' content='text/html;charset=utf-8'/>
-      <meta name='description' content="{$_WEBSITE.meta.description}"/>
-      <meta name='dc.title' content="{$_WEBSITE.title}"/>
-      <meta itemprop='name' content="{$_WEBSITE.meta.og.title}"/>
-      <meta itemprop='description' content="{$_WEBSITE.meta.og.description}"/>
-      {if $_WEBSITE.meta.keywords}
-        <meta name='keywords' content="{$_WEBSITE.meta.keywords}"/>
-      {/if}
+    <meta http-equiv='content-type' content='text/html;charset=utf-8'/>
+    <meta name='description' content="{$_WEBSITE.meta.description}"/>
+    <meta name='dc.title' content="{$_WEBSITE.title}"/>
+    <meta itemprop='name' content="{$_WEBSITE.meta.og.title}"/>
+    <meta itemprop='description' content="{$_WEBSITE.meta.og.description}"/>
+    {if $_WEBSITE.meta.keywords}
+      <meta name='keywords' content="{$_WEBSITE.meta.keywords}"/>
+    {/if}
 
-      {* Provide more details for specific entry. *}
-      {if isset($_REQUEST.id)}
-        <meta property='og:description' content="{$_WEBSITE.meta.og.description}"/>
-        <meta property='og:site_name' content="{$_WEBSITE.meta.og.site_name}"/>
-        <meta property='og:title' content="{$_WEBSITE.meta.og.title}"/>
-        <meta property='og:url' content="{$_WEBSITE.meta.og.url}"/>
-      {/if}
+    {* Provide more details for specific entry. *}
+    {if isset($_REQUEST.id)}
+      <meta property='og:description' content="{$_WEBSITE.meta.og.description}"/>
+      <meta property='og:site_name' content="{$_WEBSITE.meta.og.site_name}"/>
+      <meta property='og:title' content="{$_WEBSITE.meta.og.title}"/>
+      <meta property='og:url' content="{$_WEBSITE.meta.og.url}"/>
+    {/if}
 
-      {* Include additional meta data from PluginManager *}
-      <!-- pluginmanager:sessionplugin::meta -->
+    {* Include additional meta data from PluginManager *}
+    <!-- pluginmanager:sessionplugin::meta -->
 
-      {* Basic stuff *}
-      {foreach $_WEBSITE.meta.rss as $rss}
-        <link href='{$rss.url}' rel='alternate' type='application/rss+xml' title='{$rss.title}'/>
-      {/foreach}
-      <link href='{$_PATH.public}/favicon.ico' rel='shortcut icon' type='image/x-icon'/>
+    {* Basic stuff *}
+    {foreach $_WEBSITE.meta.rss as $rss}
+      <link href='{$rss.url}' rel='alternate' type='application/rss+xml' title='{$rss.title}'/>
+    {/foreach}
+    <link href='{$_PATH.public}/favicon.ico' rel='shortcut icon' type='image/x-icon'/>
 
-      {* Include jQuery and its components *}
-      <script type='text/javascript' src='http://code.jquery.com/jquery-1.8.2{$_SYSTEM.compress_files_suffix}.js'></script>
+    {* Include jQuery and its components *}
+    <script type='text/javascript' src='http://code.jquery.com/jquery-1.8.2{$_SYSTEM.compress_files_suffix}.js'></script>
 
-      {* Fallback if CDN is not available. Also include language parts. *}
-      <script type='text/javascript'>
-        var lang = {$_SYSTEM.json_language};
+    {* Fallback if CDN is not available. Also include language parts. *}
+    <script type='text/javascript'>
+      var lang = {$_SYSTEM.json_language};
 
-        if (typeof jQuery == 'undefined')
-          document.write(unescape("%3Cscript src='{$_PATH.js.core}/jquery{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'%3E%3C/script%3E"));
-      </script>
+      if (typeof jQuery == 'undefined')
+        document.write(unescape("%3Cscript src='{$_PATH.js.core}/jquery{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
 
-      <title>{$_WEBSITE.title} - {$WEBSITE_NAME}</title>
-    </head>
-    <body>
-      {* Top navigation *}
-      <nav class='navbar navbar-inverse navbar-fixed-top'>
-        <div class='navbar-inner'>
-          <div class='container'>
-            <a class='btn btn-navbar' data-toggle='collapse' data-target='.nav-collapse'>
-              <span class='icon-bar'></span>
-              <span class='icon-bar'></span>
-              <span class='icon-bar'></span>
-            </a>
-            <a href='/' class='brand' title='{$WEBSITE_NAME}'>
-              {$WEBSITE_NAME}
-              {if $WEBSITE_MODE !== 'production'}
-                &nbsp;- {$WEBSITE_MODE|upper}
-              {/if}
-            </a>
+    <title>{$_WEBSITE.title} - {$WEBSITE_NAME}</title>
+  </head>
+  <body>
+    {* Top navigation *}
+    <nav class='navbar navbar-inverse navbar-fixed-top'>
+      <div class='navbar-inner'>
+        <div class='container'>
+          <a class='btn btn-navbar' data-toggle='collapse' data-target='.nav-collapse'>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+          </a>
+          <a href='/' class='brand' title='{$WEBSITE_NAME}'>
+            {$WEBSITE_NAME}
+            {if $WEBSITE_MODE !== 'production'}
+              - {$WEBSITE_MODE|upper}
+            {/if}
+          </a>
 
-            <div class='nav-collapse collapse'>
-              <ul class='nav'>
-                <li{if $_REQUEST.controller == 'blogs'} class='active'{/if}>
-                  <a href='/blogs'>{$lang.global.blog}</a>
+          <div class='nav-collapse collapse'>
+            <ul class='nav'>
+              <li{if $_REQUEST.controller == 'blogs'} class='active'{/if}>
+                <a href='/blogs'>{$lang.global.blog}</a>
+              </li>
+              <li{if $_REQUEST.controller == 'galleries'} class='active'{/if}>
+                <a href='/galleries'>{$lang.global.gallery}</a>
+              </li>
+              <li{if $_REQUEST.controller == 'calendars'} class='active'{/if}>
+                <a href='/calendars'>{$lang.global.calendar}</a>
+              </li>
+              <li{if $_REQUEST.controller == 'downloads'} class='active'{/if}>
+                <a href='/downloads'>{$lang.global.download}</a>
+              </li>
+              <li{if $_REQUEST.controller == 'searches'} class='active'{/if}>
+                <a href='/searches'>{$lang.global.search}</a>
+              </li>
+            </ul>
+            <ul class='nav pull-right'>
+              {if $_SESSION.user.role == 0}
+                <li{if $_REQUEST.controller == 'users' && isset($_REQUEST.action) && $_REQUEST.action == 'create'} class='active'{/if}>
+                  <a href='/users/create'>
+                    {$lang.global.register}
+                  </a>
                 </li>
-                <li{if $_REQUEST.controller == 'galleries'} class='active'{/if}>
-                  <a href='/galleries'>{$lang.global.gallery}</a>
+                <li class='divider-vertical'/>
+                <li{if $_REQUEST.controller == 'sessions'} class='active'{/if}>
+                  <a href='/sessions/create'>
+                    {$lang.global.login}
+                  </a>
                 </li>
-                <li{if $_REQUEST.controller == 'calendars'} class='active'{/if}>
-                  <a href='/calendars'>{$lang.global.calendar}</a>
-                </li>
-                <li{if $_REQUEST.controller == 'downloads'} class='active'{/if}>
-                  <a href='/downloads'>{$lang.global.download}</a>
-                </li>
-                <li{if $_REQUEST.controller == 'searches'} class='active'{/if}>
-                  <a href='/searches'>{$lang.global.search}</a>
-                </li>
-              </ul>
-              <ul class='nav pull-right'>
-                {if $_SESSION.user.role == 0}
-                  <li{if $_REQUEST.controller == 'users' && isset($_REQUEST.action) && $_REQUEST.action == 'create'} class='active'{/if}>
-                    <a href='/users/create'>
-                      {$lang.global.register}
-                    </a>
-                  </li>
-                  <li class='divider-vertical'/>
-                  <li{if $_REQUEST.controller == 'sessions'} class='active'{/if}>
-                    <a href='/sessions/create'>
-                      {$lang.global.login}
-                    </a>
-                  </li>
-                {else}
-                  <li class='dropdown'>
-                    <a href='#' class='dropdown-toggle' data-toggle='dropdown'>
-                      <strong>{$lang.global.welcome} {$_SESSION.user.name}!</strong>
-                      <b class='caret'></b>
-                    </a>
-                    <ul class='dropdown-menu'>
-                      {if $_SESSION.user.id > 0}
-                        <li>
-                          <a href='/users/{$_SESSION.user.id}/update'>
-                            {$lang.global.settings}
-                          </a>
-                        </li>
-                      {/if}
+              {else}
+                <li class='dropdown'>
+                  <a href='#' class='dropdown-toggle' data-toggle='dropdown'>
+                    <strong>{$lang.global.welcome} {$_SESSION.user.name}!</strong>
+                    <b class='caret'></b>
+                  </a>
+                  <ul class='dropdown-menu'>
+                    {if $_SESSION.user.id > 0}
                       <li>
-                        <a href='/sessions/destroy'>{$lang.global.logout}</a>
+                        <a href='/users/{$_SESSION.user.id}/update'>
+                          {$lang.global.settings}
+                        </a>
                       </li>
-                      {if $_SESSION.user.role >= 3}
-                        <li class='divider'></li>
+                    {/if}
+                    <li>
+                      <a href='/sessions/destroy'>{$lang.global.logout}</a>
+                    </li>
+                    {if $_SESSION.user.role >= 3}
+                      <li class='divider'></li>
+                      <li>
+                        <a href='/medias' title='{$lang.global.manager.media}'>
+                          {$lang.global.manager.media}
+                        </a>
+                      </li>
+                      <li>
+                        <a href='/contents' title='{$lang.global.manager.content}'>
+                          {$lang.global.manager.content}
+                        </a>
+                      </li>
+                      {if $_SESSION.user.role == 4}
                         <li>
-                          <a href='/medias' title='{$lang.global.manager.media}'>
-                            {$lang.global.manager.media}
+                          <a href='/logs' title='{$lang.global.logs}'>
+                            {$lang.global.logs}
                           </a>
                         </li>
                         <li>
-                          <a href='/contents' title='{$lang.global.manager.content}'>
-                            {$lang.global.manager.content}
+                          <a href='/users' title='{$lang.global.manager.user}'>
+                            {$lang.global.manager.user}
                           </a>
                         </li>
-                        {if $_SESSION.user.role == 4}
-                          <li>
-                            <a href='/logs' title='{$lang.global.logs}'>
-                              {$lang.global.logs}
-                            </a>
-                          </li>
-                          <li>
-                            <a href='/users' title='{$lang.global.manager.user}'>
-                              {$lang.global.manager.user}
-                            </a>
-                          </li>
-                          <li>
-                            <a href='/mails' title='{$lang.global.mails}'>
-                              {$lang.global.mails}
-                            </a>
-                          </li>
-                        {/if}
+                        <li>
+                          <a href='/mails' title='{$lang.global.mails}'>
+                            {$lang.global.mails}
+                          </a>
+                        </li>
                       {/if}
-                    </ul>
-                  </li>
-                {/if}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      {* Main container *}
-      <div class='container-fluid'>
-        <div class='row-fluid'>
-          <div class='span12'>
-            <div id='js-flash_message'>
-              <div class='alert alert-{$_FLASH.type}' id='js-flash_{$_FLASH.type}'>
-                <a class='close' href='#'>×</a>
-                <h4 class='alert-heading'>{$_FLASH.headline}</h4>
-                <p>
-                  {$_FLASH.message}
-                </p>
-              </div>
-            </div>
-            <section id='{$_REQUEST.controller}' itemprop='mainContentOfPage'>
-              {$_WEBSITE.content}
-            </section>
+                    {/if}
+                  </ul>
+                </li>
+              {/if}
+            </ul>
           </div>
         </div>
       </div>
+    </nav>
 
-      {* Add bootstrap support *}
-      <script type='text/javascript' src='{$_PATH.js.bootstrap}/bootstrap-collapse.js'></script>
+    {* Main container *}
+    <div class='container-fluid'>
+      <div class='row-fluid'>
+        <div class='span12'>
+          <div id='js-flash_message'>
+            <div class='alert alert-{$_FLASH.type}' id='js-flash_{$_FLASH.type}'>
+              <a class='close' href='#'>×</a>
+              <h4 class='alert-heading'>{$_FLASH.headline}</h4>
+              <p>
+                {$_FLASH.message}
+              </p>
+            </div>
+          </div>
+          <section id='{$_REQUEST.controller}' itemprop='mainContentOfPage'>
+            {$_WEBSITE.content}
+          </section>
+        </div>
+      </div>
+    </div>
 
-      {* Own JS and plugins *}
-      <script type='text/javascript' src='{$_PATH.js.core}/scripts{$_SYSTEM.compress_files_suffix}.js'></script>
-      <!-- pluginmanager:sessionplugin::javascript -->
-      <!-- plugin:analytics -->
-      <!-- plugin:piwik -->
-      <!-- plugin:formattimestamp -->
-    </body>
-  </html>
-{/strip}
+    {* Add bootstrap support *}
+    <script type='text/javascript' src='{$_PATH.js.bootstrap}/bootstrap-collapse.js'></script>
+
+    {* Own JS and plugins *}
+    <script type='text/javascript' src='{$_PATH.js.core}/scripts{$_SYSTEM.compress_files_suffix}.js'></script>
+    <!-- pluginmanager:sessionplugin::javascript -->
+    <!-- plugin:analytics -->
+    <!-- plugin:piwik -->
+    <!-- plugin:formattimestamp -->
+  </body>
+</html>
