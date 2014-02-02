@@ -51,7 +51,7 @@ Additional reasons, why candyCMS might be interesting for you
 
 Requirements
 ------------------------------------------------------------------------------------------------------------------------
-- at least PHP 5.3 & MySQL database (PHP 5.4 recommended)
+- at least PHP 5.3 & MySQL database (PHP 5.5 recommended - with Propel you need at least PHP 5.4)
 - Imagemagick, GD2 and mod_rewrite
 - an account at http://recaptcha.org to use captchas
 - an account at http://mailchimp.com to use the newsletter management
