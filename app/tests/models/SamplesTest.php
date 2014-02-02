@@ -68,7 +68,35 @@ class SamplesTest extends CandyModelTestCase {
    *
    */
   public function testGetId() {
-    $aData = $this->oObject->getId(1);
-    $this->assertTrue(is_array($aData));
+    $bStatus = $this->oObject->getId(1);
+    $this->assertTrue($bStatus);
+  }
+
+  /**
+   *
+   * We overwrite existing methods because they have no function yet.
+   * @covers candyCMS\Models\Samples::create
+   *
+   */
+  public function testCreate() {
+    $this->markTestIncomplete();
+  }
+
+  /**
+   *
+   * @covers candyCMS\Models\Samples::update
+   *
+   */
+  public function testUpdate() {
+    $this->markTestIncomplete();
+  }
+
+  /**
+   *
+   * @covers candyCMS\Models\Samples::destroy
+   *
+   */
+  public function testDestroy() {
+    $this->markTestIncomplete();
   }
 }

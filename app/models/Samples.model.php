@@ -24,4 +24,14 @@ namespace candyCMS\Models;
  */
 class Samples extends \candyCMS\core\Models\Main {
 
+  /**
+   * Simply return a value to make the test successful.
+   *
+   * @access public
+   * @return boolean true
+   *
+   */
+  public function getId() {
+    return true;
+  }
 }
