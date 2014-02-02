@@ -149,6 +149,7 @@ class Dispatcher {
         break;
     }
 
+    $this->_aRequest['action'] = $sAction;
     return method_exists($this->oController, $sAction) ?
             $this->oController->setContent($this->oController->$sAction()) :
             $this->oController->setContent($this->oController->show());
