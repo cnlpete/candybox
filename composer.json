@@ -19,7 +19,7 @@
     "phpmailer/phpmailer": "5.2.*",
     "mailchimp/mailchimp": "2.0.*",
     "tylerhall/smushit-php": "1.*",
-    "propel/propel": ">= 2.0"
+    "propel/propel": "2.0.*@dev"
   },
 
   "authors": [ {
