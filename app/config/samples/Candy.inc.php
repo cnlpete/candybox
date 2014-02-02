@@ -109,8 +109,19 @@ define('WEBSITE_MODE', 'development');
 
 # ------------------------------------------------------------------------------
 
+# If set to true, users can access pages where they normally must have a valid
+# session for without entering credentials, but with their API token.
+# By enabling you might lower the security of candyCMS because API tokens might
+# be fetched easier than a password and email combination.
+# OPTIONS: true|false
+# DEFAULT: false
+define('ALLOW_API_TOKENS', false)
+
+# ------------------------------------------------------------------------------
+
 # Set true, if you want to build your own app. Also, this is always set to true
 # in development or testing mode. Setting to false will speed the page up.
+# OPTIONS: true|false
 # DEFAULT: false
 define('ALLOW_EXTENSIONS', false);
 
@@ -126,7 +137,7 @@ define('ALLOW_PLUGINS', 'Bbcode,FormatTimestamp,Headlines,Archive,TinyMCE,Langua
 # ------------------------------------------------------------------------------
 
 # Allow this software to connect to the candyCMS website to check for an update.
-# OPTIONS: true / false
+# OPTIONS: true|false
 # DEFAULT: true
 define('ALLOW_VERSION_CHECK', true);
 
@@ -134,7 +145,7 @@ define('ALLOW_VERSION_CHECK', true);
 
 # Smush.it can reduce your image size. Do not allow if you want maximum quality
 # for your images or uploading causes timeouts.
-# OPTIONS: true / false
+# OPTIONS: true|false
 # DEFAULT: true
 define('ALLOW_SMUSHIT', true);
 
@@ -142,7 +153,7 @@ define('ALLOW_SMUSHIT', true);
 
 # Decide whether candyCMS shall use the internal less compiler or an external
 # one like codeKit etc.
-# OPTIONS: true / false
+# OPTIONS: true|false
 # DEFAULT: true
 define('ALLOW_INTERNAL_LESS', true);
 
@@ -162,6 +173,7 @@ define('DEFAULT_LANGUAGE', 'en');
 # DEFAULT: None. Create one before you install this software
 # NOTE: AVOID THE CHANGE OF THIS HASH AFTER USERS HAVE REGISTERED OR YOU WILL
 # DESTROY THEIR LOGINS!
+# SET THIS AS UNIQUE AND RANDOM AS POSSIBLE!
 define('RANDOM_HASH', '');
 
 # ------------------------------------------------------------------------------
@@ -202,7 +214,7 @@ define('PATH_CACHE', PATH_SMARTY . '/cache');
 # ------------------------------------------------------------------------------
 
 # Automatically load next page when scrolling down.
-# OPTIONS: true,false
+# OPTIONS: true|false
 # DEFAULT: true
 define('AUTOLOAD', true);
 
@@ -219,7 +231,7 @@ define('LIMIT_ALBUMS', 10);
 define('LIMIT_BLOG', 8);
 
 # Sorting order of album images.
-# OPTIONS: ASC,DESC
+# OPTIONS: ASC|DESC
 # DEFAULT: ASC (oldest last)
 define('SORTING_GALLERY_FILES', 'DESC');
 
