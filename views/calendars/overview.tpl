@@ -7,6 +7,7 @@
     </a>
   </p>
 {/if}
+
 <div class='page-header'>
   <h1>
     {$lang.global.calendar}
@@ -21,6 +22,7 @@
     {/if}
   </h1>
 </div>
+
 {if isset($_REQUEST.id)}
   <p class='center'>
     <a href='/{$_REQUEST.controller}/{$_REQUEST.id - 1}/archive' rel='prev'>
@@ -32,9 +34,10 @@
     </a>
   </p>
 {/if}
+
 {if !$calendar}
   <div class='alert alert-warning'>
-    <h4>{$lang.error.missing.entries}</h4>
+    <p>{$lang.error.missing.entries}</p>
   </div>
 {else}
   {foreach $calendar as $c}

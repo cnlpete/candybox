@@ -7,12 +7,14 @@
     </a>
   </p>
 {/if}
+
 <div class='page-header'>
   <h1>{$lang.global.downloads}</h1>
 </div>
+
 {if !$downloads}
   <div class='alert alert-warning'>
-    <h4>{$lang.error.missing.entries}</h4>
+    <p>{$lang.error.missing.entries}</p>
   </div>
 {else}
   {foreach $downloads as $d}

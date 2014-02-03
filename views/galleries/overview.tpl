@@ -8,12 +8,14 @@
       </a>
     </p>
   {/if}
+
   <div class='page-header'>
     <h1>{$lang.global.gallery}</h1>
   </div>
+
   {if !$albums}
     <div class='alert alert-warning'>
-      <h4>{$lang.error.missing.entries}</h4>
+      <p>{$lang.error.missing.entries}</p>
     </div>
   {else}
     {foreach $albums as $a}
@@ -53,9 +55,9 @@
           </ul>
         {else}
           <div class='alert alert-warning'>
-            <h4 class='alert-heading'>
+            <p>
               {$lang.error.missing.files}
-            </h4>
+            </p>
           </div>
         {/if}
       </article>

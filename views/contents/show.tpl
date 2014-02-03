@@ -44,6 +44,7 @@
     {/if}
   </footer>
 </article>
+
 <script src='{$_PATH.js.core}/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
 <script type="text/javascript">
   $(document).ready(function(){

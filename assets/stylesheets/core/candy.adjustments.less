@@ -27,7 +27,7 @@ figure.image {
 /* ---------------------- Own styles ---------------------- */
 // Avoid conflicts with navbar
 body {
-  padding-top:60px;
+  padding-top: 70px;
 }
 
 // Remove outlines on Firefox and Opera
@@ -37,7 +37,7 @@ a:active, a:link {
 
 // Mark active tablesorter th
 th.headerSortUp, th.headerSortDown {
-  background-color: @grayLighter;
+  background-color: @gray-lighter;
 }
 
 // Display the columns as clickable
@@ -47,15 +47,12 @@ th:hover, th:hover, i.icon-trash:hover {
 
 // Fix whitespaces
 .tags a:first-child,
-h1 small,
-h1 img,
-h2 img,
+h1 small
 #searches .btn {
   margin-left:5px;
 }
 
-p.center i,
-.btn {
+p.center i {
   margin-right:5px;
 }
 
@@ -144,24 +141,14 @@ form label small {
 table {
   tr {
     &.result-error {
-      #gradient > .vertical(#FF878F, #FF525D);
-      .background-size(40px 40px);
+      // @todo
+//      #gradient > .vertical(#FF878F, #FF525D);
+//      .background-size(40px 40px);
     }
   }
 
   td.right {
     text-align:right;
-  }
-}
-
-// Alert fix
-.alert {
-  h4 {
-    font-size: 100%;
-  }
-
-  p {
-    margin-bottom:0px;
   }
 }
 

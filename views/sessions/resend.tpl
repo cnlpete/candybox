@@ -1,6 +1,7 @@
 <form method='post'
       action='/{$_REQUEST.controller}/{$_REQUEST.action}'
-      class='form-horizontal'>
+      class='form-horizontal'
+      role='form'>
   {if !$MOBILE}
     <div class='page-header'>
       <h1>
@@ -19,12 +20,13 @@
       </p>
     </div>
   {/if}
-  <div class='control-group{if isset($error.email)} alert alert-error{/if}'>
-    <label for='input-email' class='control-label'>
+
+  <div class='form-group{if isset($error.email)} alert alert-error{/if}'>
+    <label for='input-email' class='control-label col-md-4'>
       {$lang.global.email.email} <span title='{$lang.global.required}'>*</span>
     </label>
-    <div class='controls'>
-      <input class='required span4 focused'
+    <div class='col-sm-6'>
+      <input class='form-control required focused'
              name='{$_REQUEST.controller}[email]'
              type='email'
              title=''
@@ -38,11 +40,13 @@
       {/if}
     </div>
   </div>
+
   <!-- pluginmanager:captcha -->
-  <div class='form-actions'>
-    <input type='submit'
-           class='btn btn-primary'
-           value='{$lang.global.submit}'
-           data-theme='b' />
+  <div class='form-group'>
+    <div class='col-sm-offset-4 col-sm-8'>
+      <input type='submit'
+             class='btn btn-primary'
+             value='{$lang.global.submit}' />
+    </div>
   </div>
 </form>

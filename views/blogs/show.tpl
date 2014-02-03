@@ -11,7 +11,7 @@
 
   {if !$blogs}
     <div class='alert alert-warning'>
-      <h4>{$lang.error.missing.entries}</h4>
+      <p>{$lang.error.missing.entries}</p>
     </div>
   {else}
     {foreach $blogs as $b}

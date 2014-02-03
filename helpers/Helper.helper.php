@@ -117,7 +117,7 @@ class Helper {
                 'redirectURL' => $sRedirectTo,
                 'fileData'    => isset($aData['fileData']) ? $aData['fileData'] : '',
                 'message'     => $sMessage,
-                'type'        => 'error'
+                'type'        => 'danger'
               ));
     }
 
