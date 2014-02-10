@@ -191,8 +191,8 @@ class PluginManager {
    */
   public function runSimplePlugins(&$sHtml) {
     foreach ($this->_aSimplePluginNames as $sPluginName) {
-      $oPlugin = $this->_aPlugins[$sPluginName];
-      $sHtml = str_replace('<!-- plugin:' . strtolower($oPlugin::IDENTIFIER) . ' -->', $oPlugin->show(), $sHtml);
+      $oPlugin  = $this->_aPlugins[$sPluginName];
+      $sHtml    = str_replace('<!-- plugin:' . strtolower($oPlugin::IDENTIFIER) . ' -->', $oPlugin->show(), $sHtml);
     }
 
     $sHtml = $this->runCaptchaPlugins($sHtml);
