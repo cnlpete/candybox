@@ -1,0 +1,78 @@
+/**
+ * This file generates all the CSS code that we need. Change all the variables
+ * at "bootstrap/variables.less" or override them below.
+ *
+ * Use this for development only. For production use please compile this file
+ * for performance reasons as a CSS file. Here is some information about
+ * compiling LESS: http://twitter.github.com/bootstrap/less.html#compiling
+ *
+ * @link http://github.com/marcoraddatz/candyCMS
+ * @author Marco Raddatz <http://marcoraddatz.com>
+ * @license MIT
+ * @since 2.0
+ *
+ */
+
+/* If you want to include all bootstrap modules simply uncomment following lines
+ * and replace with: @import "../../../vendor/twitter/bootstrap/less/bootstrap.less";
+ *
+ * I chose to include only the plugins I need and delete all the other ones */
+@pathBootstrap: '../../../vendor/twitter/bootstrap/less';
+@pathCandyCMS: '../../../vendor/candycms/core/assets/stylesheets/core';
+
+// Core variables and mixins
+@import "@{pathBootstrap}/variables.less";
+@import "@{pathBootstrap}/mixins.less";
+
+// Reset
+@import "@{pathBootstrap}/normalize.less";
+@import "@{pathBootstrap}/print.less";
+
+// Core CSS
+@import "@{pathBootstrap}/scaffolding.less";
+@import "@{pathBootstrap}/type.less";
+@import "@{pathBootstrap}/code.less";
+@import "@{pathBootstrap}/grid.less";
+@import "@{pathBootstrap}/tables.less";
+@import "@{pathBootstrap}/forms.less";
+@import "@{pathBootstrap}/buttons.less";
+
+// Components
+@import "@{pathBootstrap}/component-animations.less";
+@import "@{pathBootstrap}/glyphicons.less";
+@import "@{pathBootstrap}/dropdowns.less";
+@import "@{pathBootstrap}/button-groups.less";
+@import "@{pathBootstrap}/input-groups.less";
+@import "@{pathBootstrap}/navs.less";
+@import "@{pathBootstrap}/navbar.less";
+@import "@{pathBootstrap}/breadcrumbs.less";
+@import "@{pathBootstrap}/pagination.less";
+@import "@{pathBootstrap}/pager.less";
+@import "@{pathBootstrap}/labels.less";
+@import "@{pathBootstrap}/badges.less";
+@import "@{pathBootstrap}/jumbotron.less";
+@import "@{pathBootstrap}/thumbnails.less";
+@import "@{pathBootstrap}/alerts.less";
+@import "@{pathBootstrap}/progress-bars.less";
+@import "@{pathBootstrap}/media.less";
+@import "@{pathBootstrap}/list-group.less";
+@import "@{pathBootstrap}/panels.less";
+@import "@{pathBootstrap}/wells.less";
+@import "@{pathBootstrap}/close.less";
+
+// Components w/ JavaScript
+@import "@{pathBootstrap}/modals.less";
+@import "@{pathBootstrap}/tooltip.less";
+@import "@{pathBootstrap}/popovers.less";
+@import "@{pathBootstrap}/carousel.less";
+
+// Utility classes
+@import "@{pathBootstrap}/utilities.less";
+@import "@{pathBootstrap}/responsive-utilities.less";
+
+/* candyCMS requirements - Do not modify them */
+/* ------------------------------------------------------- */
+@import "@{pathCandyCMS}/jquery.fancybox.less";
+@import "@{pathCandyCMS}/candy.less";
+@import "@{pathCandyCMS}/candy.icons.less"; // Include this icons as alternative to Twitters icons
+@import "@{pathCandyCMS}/candy.adjustments.less";
