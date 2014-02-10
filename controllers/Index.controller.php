@@ -371,12 +371,12 @@ class Index {
    */
   protected static function _resetUser() {
     return array(
-        'email' => '',
-        'id' => 0,
-        'name' => '',
-        'surname' => '',
-        'password' => '',
-        'role' => 0,
+        'email'     => '',
+        'id'        => 0,
+        'name'      => '',
+        'surname'   => '',
+        'password'  => '',
+        'role'      => 0,
         'full_name' => ''
     );
   }
@@ -432,6 +432,7 @@ class Index {
     # Try to get session plugin data from Facebook or similar.
     if ($this->_aSession['user']['role'] == 0) {
       $oPluginManager = PluginManager::getInstance();
+
       if ($oPluginManager->hasSessionPlugin()) {
         if ($oPluginManager->getSessionPlugin()->setUserData($this->_aSession['user']))
           $this->_aSession['user']['role'] = 2;

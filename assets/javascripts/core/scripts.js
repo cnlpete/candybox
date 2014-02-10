@@ -108,7 +108,8 @@ function enableInfiniteScroll(selector, itemselector, repeatTimes, pathImages) {
     navSelector   : 'div.pagination',
     nextSelector  : 'div.pagination a:first',
     itemSelector  : itemselector,
-    loading       : {msgText : '',
+    loading       : {
+      msgText : '',
       img         : pathImages + '/candy.global/loading.gif',
       finishedMsg : '',
       selector    : 'div.js-pagination',
