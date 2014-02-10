@@ -120,7 +120,7 @@ class Index {
     $this->setUser();
 
     if (!defined('UNIQUE_PREFIX'))
-      define('UNIQUE_PREFIX', WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|');
+      define('UNIQUE_PREFIX', WEBSITE_MODE . '|' . WEBSITE_LOCALE);
   }
 
   /**
@@ -456,7 +456,7 @@ class Index {
     # Set a caching / compile ID
     # Ask if defined because of unit tests.
     if (!defined('UNIQUE_ID')) {
-      define('UNIQUE_ID', UNIQUE_PREFIX . $this->_aRequest['controller'] . '|' . $this->_aSession['user']['role'] .
+      define('UNIQUE_ID', UNIQUE_PREFIX . '|' . $this->_aRequest['controller'] . '|' . $this->_aSession['user']['role'] .
               (MOBILE ? 'mob|' : 'tpl|') . '|' .
               substr(md5(CURRENT_URL), 0, 10));
     }
