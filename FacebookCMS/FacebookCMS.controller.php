@@ -104,20 +104,21 @@ final class FacebookCMS extends Facebook {
    */
   public function __construct(&$aRequest, &$aSession, &$oPlugins) {
     parent::__construct(array(
-        'appId'   => $this->_sAppId,
-        'secret'  => $this->_sPrivateKey,
-        'cookie'  => true
-        ));
+                                'appId'   => $this->_sAppId,
+                                'secret'  => $this->_sPrivateKey,
+                                'cookie'  => true
+                        ));
 
     if (!defined('PLUGIN_FACEBOOK_APP_ID') || PLUGIN_FACEBOOK_APP_ID == '')
       throw new AdvancedException('Missing config entry: PLUGIN_FACEBOOK_APP_ID');
+
     if (!defined('PLUGIN_FACEBOOK_SECRET') || PLUGIN_FACEBOOK_SECRET == '')
       throw new AdvancedException('Missing config entry: PLUGIN_FACEBOOK_SECRET');
 
     $this->_aRequest  = & $aRequest;
     $this->_aSession  = & $aSession;
 
-    # now register some events with the pluginmanager
+    # Now register some events with the pluginmanager
     $oPlugins->registerSessionPlugin($this);
 
     self::$_oInstance = $this;
@@ -144,8 +145,8 @@ final class FacebookCMS extends Facebook {
       return !empty($sKey) ? $aData[$sKey] : $aData;
     }
     catch (AdvancedException $e) {
-      AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
-      exit('Error: Cannot use Facebook API.');
+      # Don't exit here, because exception is not critical
+      AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage(), false);
     }
   }
 
@@ -155,7 +156,7 @@ final class FacebookCMS extends Facebook {
    * @final
    * @access public
    * @param array $aUserData insert userdata here
-   * @return array
+   * @return boolean true if we received user data
    *
    */
   public final function setUserData(&$aUserData) {
@@ -163,16 +164,18 @@ final class FacebookCMS extends Facebook {
 
     # Override empty data with facebook data
     if (isset($aFacebookData) && isset($aFacebookData[0]['uid'])) {
-      $aUserData['facebook_id'] =  (int) $aFacebookData[0]['uid'];
-      $aUserData['email'] = isset($aFacebookData[0]['email']) ?
-              $aFacebookData[0]['email'] :
-              $aUserData['email'];
-      $aUserData['name'] = isset($aFacebookData[0]['first_name']) ?
-              $aFacebookData[0]['first_name'] :
-              $aUserData['name'];
-      $aUserData['surname'] = isset($aFacebookData[0]['last_name']) ?
-              $aFacebookData[0]['last_name'] :
-              $aUserData['surname'];
+      $aUserData = array(
+              'facebook_id' => (int) $aFacebookData[0]['uid'],
+              'email'       => isset($aFacebookData[0]['email']) ?
+                              $aFacebookData[0]['email'] :
+                              $aUserData['email'],
+              'name'        => isset($aFacebookData[0]['first_name']) ?
+                              $aFacebookData[0]['first_name'] :
+                              $aUserData['name'],
+              'surname'     => isset($aFacebookData[0]['last_name']) ?
+                              $aFacebookData[0]['last_name'] :
+                              $aUserData['surname']
+      );
 
       unset($aFacebookData);
       return true;
@@ -195,21 +198,21 @@ final class FacebookCMS extends Facebook {
     try {
       $aFacebookAvatarCache = &$this->_aSession['facebookavatars'];
 
-      # only query for ids we don't know
+      # Only query for IDs we don't know
       $sUids = '';
       foreach ($aUids as $sUid)
         if (!isset($aFacebookAvatarCache[$sUid]))
           $sUids .= $sUid . ',';
 
-      # do the facebook call with all new $sUids
+      # Do the facebook call with all new $sUids
       if (strlen($sUids) > 1) {
         $aApiCall = array(
-            'method' => 'users.getinfo',
-            'uids' => substr($sUids, 0, -1),
-            'fields' => 'pic_square_with_logo, profile_url'
+            'method'  => 'users.getinfo',
+            'uids'    => substr($sUids, 0, -1),
+            'fields'  => 'pic_square_with_logo, profile_url'
         );
 
-        # we read the response and add to the cache
+        # We read the response and add to the cache
         foreach ($this->api($aApiCall) as $aFacebookAvatar) {
           $sUid = $aFacebookAvatar['uid'];
 
@@ -221,8 +224,8 @@ final class FacebookCMS extends Facebook {
       return $aFacebookAvatarCache;
     }
     catch (AdvancedException $e) {
-      AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage());
-      exit('Error: Cannot create Facebook avatar images.');
+      # Don't exit here, because exception is not critical
+      AdvancedException::reportBoth(__METHOD__ . ':' . $e->getMessage(), false);
     }
   }
 
@@ -250,7 +253,9 @@ final class FacebookCMS extends Facebook {
   /**
    * Get the FB logout url
    *
+   * @access public
    * @param string $sTargetUrl the url to redirect to afterwards
+   * @return string HTML
    *
    */
   public function logoutUrl($sTargetUrl) {
@@ -268,6 +273,7 @@ final class FacebookCMS extends Facebook {
   public final function showJavascript() {
     $oSmarty = Smarty::getInstance();
     $oTemplate = $oSmarty->getTemplate(self::IDENTIFIER, 'show', true);
+
     $oSmarty->setTemplateDir($oTemplate);
     $oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
