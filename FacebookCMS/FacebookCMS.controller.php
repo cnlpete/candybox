@@ -100,6 +100,7 @@ final class FacebookCMS extends Facebook {
    * @param array $aRequest alias for the combination of $_GET and $_POST
    * @param array $aSession alias for $_SESSION
    * @param object $oPlugins the PluginManager
+   * @return void
    *
    */
   public function __construct(&$aRequest, &$aSession, &$oPlugins) {
@@ -140,6 +141,9 @@ final class FacebookCMS extends Facebook {
           'uids'    => $this->getUser(),
           'fields'  => 'uid, first_name, last_name, profile_url, pic, pic_square_with_logo, locale, email, website'
       );
+
+      # Create a longer session
+      $this->setExtendedAccessToken();
 
       $aData = $this->api($aApiCall);
       return !empty($sKey) ? $aData[$sKey] : $aData;
@@ -278,6 +282,7 @@ final class FacebookCMS extends Facebook {
     $oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
 
     $sCacheId = UNIQUE_PREFIX . '|plugins|' . self::IDENTIFIER . '|' . $this->_sAppId;
+
     if (!$oSmarty->isCached($oTemplate, $sCacheId)) {
       $oSmarty->assign('PLUGIN_FACEBOOK_APP_ID', $this->_sAppId);
       $oSmarty->assign('WEBSITE_LOCALE', WEBSITE_LOCALE);
