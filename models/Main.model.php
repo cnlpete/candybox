@@ -113,7 +113,9 @@ abstract class Main {
 
     $this->_iId = isset($this->_aRequest['id']) && !isset($this->_iId) ? (int) $this->_aRequest['id'] : '';
     $this->_oDb = $this->connectToDatabase();
-    $this->_sController = $this->_aRequest['controller'];
+    $this->_sController = isset($this->_aRequest['controller']) ?
+            (string) $this->_aRequest['controller'] :
+            '';
   }
 
   /**
