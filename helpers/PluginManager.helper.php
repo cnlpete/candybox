@@ -98,6 +98,7 @@ class PluginManager {
   protected $_aRepetitivePluginNames = array();
   protected $_aCaptchaPluginNames = array();
   protected $_aEditorPluginNames = array();
+  protected $_aImageCreationPluginNames = array();
   protected $_sSessionPluginName = ''; # @todo doc
 
   /**
@@ -339,6 +340,33 @@ class PluginManager {
 
       if ($oPlugin->needsExecution($bForceExecution))
         $oPlugin->execute();
+    }
+  }
+
+  /**
+   * Register as image creation plugin.
+   *
+   * Plugin MUST provide an alterImage function.
+   *
+   * @access public
+   * @param object $oPlugin the plugin to be added to this event
+   *
+   */
+  public function registerImageCreationPlugin(&$oPlugin) {
+    $this->_aImageCreationPluginNames[] = strtolower($oPlugin::IDENTIFIER);
+  }
+
+  /**
+   * Run all image creation plugins.
+   *
+   * @access public
+   * @param string $sPath path of created image
+   *
+   */
+  public function runImageCreationPlugins($sPath) {
+    foreach ($this->_aImageCreationPluginNames as $sPluginName) {
+      $oPlugin = $this->_aPlugins[$sPluginName];
+      $oPlugin->alterImage($sPath);
     }
   }
 
