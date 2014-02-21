@@ -81,33 +81,36 @@ class Newsletters extends Main {
     $this->oSmarty->setTemplateDir($oTemplate);
 
     # User might have used FB connect, so we might already have some information
-    if (isset($this->_aSession['user']['facebook_id'])) {
-      $this->oSmarty->assign('name', isset($this->_aSession['user']['name']) ?
-        (string) $this->_aSession['user']['name'] :
-        '');
+    if ($this->_aSession['user']['role'] === 2) {
+      $sName = isset($this->_aSession['user']['name']) ?
+          (string) $this->_aSession['user']['name'] :
+          '';
 
-      $this->oSmarty->assign('surname', isset($this->_aSession['user']['surname']) ?
-        (string) $this->_aSession['user']['surname'] :
-        '');
+      $sSurname = isset($this->_aSession['user']['surname']) ?
+          (string) $this->_aSession['user']['surname'] :
+          '';
 
-      $this->oSmarty->assign('email', isset($this->_aSession['user']['email']) ?
-        (string) $this->_aSession['user']['email'] :
-        '');
+      $sEmail = isset($this->_aSession['user']['email']) ?
+          (string) $this->_aSession['user']['email'] :
+          '';
     }
 
-    else {
-      $this->oSmarty->assign('name', isset($this->_aRequest['name']) ?
-        (string) $this->_aRequest['name'] :
-        '');
+    # if there is a request, overwrite session data with request data
+    $sName = isset($this->_aRequest['newsletters']['name']) ?
+        (string) $this->_aRequest['newsletters']['name'] :
+        $sName;
 
-      $this->oSmarty->assign('surname', isset($this->_aRequest['surname']) ?
-        (string) $this->_aRequest['surname'] :
-        '');
+    $sSurname = isset($this->_aRequest['newsletters']['surname']) ?
+        (string) $this->_aRequest['newsletters']['surname'] :
+        $sSurname;
 
-      $this->oSmarty->assign('email', isset($this->_aRequest['email']) ?
-        (string) $this->_aRequest['email'] :
-        '');
-    }
+    $sEmail = isset($this->_aRequest['newsletters']['email']) ?
+        (string) $this->_aRequest['newsletters']['email'] :
+        $sEmail;
+
+    $this->oSmarty->assign('name', $sName);
+    $this->oSmarty->assign('surname', $sSurname);
+    $this->oSmarty->assign('email', $sEmail);
 
     if ($this->_aError)
       $this->oSmarty->assign('error', $this->_aError);
