@@ -74,9 +74,6 @@ if (!defined('ALLOW_PLUGINS'))
 if (!defined('ALLOW_VERSION_CHECK'))
   define('ALLOW_VERSION_CHECK', true);
 
-if (!defined('ALLOW_SMUSHIT'))
-  define('ALLOW_SMUSHIT', true);
-
 if (!defined('ALLOW_INTERNAL_LESS'))
   define('ALLOW_INTERNAL_LESS', true);
 

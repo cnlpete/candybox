@@ -16,6 +16,7 @@ namespace candyCMS\Core\Helpers;
 use candyCMS\Core\Helpers\Helper;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
+use candyCMS\Core\Helpers\PluginManager;
 
 /**
  * Class Image
@@ -121,24 +122,9 @@ class Image {
                             ->crop(new Point($iSrcX, $iSrcY), new Box($this->_iImageWidth, $this->_iImageHeight))
                             ->save($sPath);
 
-    # Reduce image size via Smush.it
-    if (ALLOW_SMUSHIT) {
-      try {
-        require_once PATH_STANDARD . '/vendor/tylerhall/smushit-php/class.smushit.php';
-      }
-      catch (AdvancedException $e) {
-        AdvancedException::reportBoth(__METHOD__ . ' - ' . $e->getMessage());
-      }
-
-      # Send information of our created image to the server.
-      $oSmushIt = new \SmushIt(WEBSITE_URL . '/' . $sPath);
-
-      # Download new image from Smush.it
-      if (empty($oSmushIt->error)) {
-        unlink($sPath);
-        file_put_contents($sPath, file_get_contents($oSmushIt->compressedUrl));
-      }
-    }
+    # run image plugins, that alter created images (eg smushit)
+    $oPluginManager = PluginManager::getInstance();
+    $oPluginManager->runImageCreationPlugins($sPath);
 
     return $sPath;
   }
