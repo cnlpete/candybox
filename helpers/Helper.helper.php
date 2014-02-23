@@ -368,7 +368,7 @@ class Helper {
   /**
    * Format HTML output .
    *
-   * If the "Bbcode" plugin is enabled, load plugin do some advanced work.
+   * If the "ContentDisplayPlugins" plugins are enabled, load plugins to do some advanced work.
    *
    * @static
    * @access public
@@ -376,7 +376,6 @@ class Helper {
    * @param string $sHighlight string to highlight
    * @param boolean $bFormat format this field using ContentDisplayPlugins?
    * @return string $sStr formatted string
-   * @see vendor/candycms/core/Bbcode/Bbcode.controller.php
    *
    */
   public static function formatOutput($sStr, $sHighlight = '', $bFormat = false) {
@@ -553,21 +552,26 @@ class Helper {
    * @static
    * @access public
    * @return array $aLanguages array with our languages
+   * @todo merge with/to I18n::getPossibleLanguages
    *
    */
   public static function getLanguages() {
     $aLanguages = array();
-    $oPathDir = opendir(PATH_STANDARD . '/app/languages');
+    if (!Cache::isCachedAndLoad('translation.all.helper', $aLanguages)) {
+      $oPathDir = opendir(PATH_STANDARD . '/app/languages');
 
-    while ($sFile = readdir($oPathDir)) {
-      # Skip extra german languages.
-      if (substr($sFile, 0, 1) == '.' || substr($sFile, 0, 3) == 'de_')
-        continue;
+      while ($sFile = readdir($oPathDir)) {
+        # Skip extra german languages.
+        if (substr($sFile, 0, 1) == '.' || substr($sFile, 0, 3) == 'de_')
+          continue;
 
-      array_push($aLanguages, substr($sFile, 0, 2));
+        array_push($aLanguages, substr($sFile, 0, 2));
+      }
+
+      closedir($oPathDir);
+
+      Cache::save('translation.all.helper', $aLangs);
     }
-
-    closedir($oPathDir);
 
     return $aLanguages;
   }
