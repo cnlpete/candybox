@@ -208,6 +208,7 @@ abstract class Main {
    * @param array $aData array with the timestamp stored in '$sKey'
    * @param string $sKey the key, where the date is stored in $aData
    * @return array reference to $aData
+   * @todo move to helper
    *
    */
   protected static function _formatDates(&$aData, $sKey = 'date') {
@@ -264,46 +265,9 @@ abstract class Main {
     # Format data
     self::_formatDates($aData);
 
-    # Set sitemaps.xml data
-    if (isset($aData['date']['raw']) && !empty($aData['date']['raw'])) {
-      $iTimestampNow = time();
-
-      # Entry is less than a day old
-      if($iTimestampNow - $aData['date']['raw'] < 86400) {
-        $aData['changefreq']  = 'hourly';
-        $aData['priority']    = '1.0';
-      }
-      # Entry is younger than a week
-      elseif($iTimestampNow - $aData['date']['raw'] < 604800 /*86400 * 7*/) {
-        $aData['changefreq']  = 'daily';
-        $aData['priority']    = '0.9';
-      }
-      # Entry is younger than a month
-      elseif($iTimestampNow - $aData['date']['raw'] < 2678400 /*86400 * 31*/) {
-        $aData['changefreq']  = 'weekly';
-        $aData['priority']    = '0.75';
-      }
-      # Entry is younger than three month
-      elseif($iTimestampNow - $aData['date']['raw'] < 7776000 /*86400 * 90*/) {
-        $aData['changefreq']  = 'monthly';
-        $aData['priority']    = '0.6';
-      }
-      # Entry is younger than half a year
-      elseif($iTimestampNow - $aData['date']['raw'] < 15552000 /*86400 * 180*/) {
-        $aData['changefreq']  = 'monthly';
-        $aData['priority']    = '0.4';
-      }
-      # Entry is younger than a year
-      elseif($iTimestampNow - $aData['date']['raw'] < 31104000 /*86400 * 360*/) {
-        $aData['changefreq']  = 'monthly';
-        $aData['priority']    = '0.25';
-      }
-      # Entry older than half year
-      else {
-        $aData['changefreq']  = 'yearly';
-        $aData['priority']    = '0.1';
-      }
-    }
+    # Generate sitemap data
+    # TODO check whether this needs to be done on every page, proposal: only do this in SiteMapController
+    Helper::generateSitemapData($aData);
 
     # Normal user
     if (isset($aData['user_id']) && $aData['user_id'] != 0) {

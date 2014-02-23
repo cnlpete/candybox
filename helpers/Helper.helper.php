@@ -391,6 +391,58 @@ class Helper {
   }
 
   /**
+   * generate data for sitemaps
+   *
+   * @static
+   * @access public
+   * @param array $aData the data where the generated keywords are to be placed
+   * @todo Test
+   *
+   */
+  public static function generateSitemapData(&$aData) {
+    # Set sitemaps.xml data
+    if (isset($aData[$sKey]['raw']) && !empty($aData[$sKey]['raw'])) {
+      $iTimestampNow = time();
+
+      # Entry is less than a day old
+      if($iTimestampNow - $aData['date']['raw'] < 86400) {
+        $aData['changefreq']  = 'hourly';
+        $aData['priority']    = '1.0';
+      }
+      # Entry is younger than a week
+      elseif($iTimestampNow - $aData['date']['raw'] < 604800 /*86400 * 7*/) {
+        $aData['changefreq']  = 'daily';
+        $aData['priority']    = '0.9';
+      }
+      # Entry is younger than a month
+      elseif($iTimestampNow - $aData['date']['raw'] < 2678400 /*86400 * 31*/) {
+        $aData['changefreq']  = 'weekly';
+        $aData['priority']    = '0.75';
+      }
+      # Entry is younger than three month
+      elseif($iTimestampNow - $aData['date']['raw'] < 7776000 /*86400 * 90*/) {
+        $aData['changefreq']  = 'monthly';
+        $aData['priority']    = '0.6';
+      }
+      # Entry is younger than half a year
+      elseif($iTimestampNow - $aData['date']['raw'] < 15552000 /*86400 * 180*/) {
+        $aData['changefreq']  = 'monthly';
+        $aData['priority']    = '0.4';
+      }
+      # Entry is younger than a year
+      elseif($iTimestampNow - $aData['date']['raw'] < 31104000 /*86400 * 360*/) {
+        $aData['changefreq']  = 'monthly';
+        $aData['priority']    = '0.25';
+      }
+      # Entry older than half year
+      else {
+        $aData['changefreq']  = 'yearly';
+        $aData['priority']    = '0.1';
+      }
+    }
+  }
+
+  /**
    * Fetch the last entry from database.
    *
    * @static
