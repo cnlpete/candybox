@@ -448,7 +448,8 @@ abstract class Main {
           $aItems = array_filter(array_map('trim', explode(',', $aRow[$sColumn])));
 
           foreach ($aItems as $sItem)
-            $aEntries[] = $sItem;
+            if (!in_array($sItem, $aEntries))
+              $aEntries[] = $sItem;
         }
 
         else
