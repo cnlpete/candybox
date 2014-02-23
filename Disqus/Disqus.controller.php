@@ -52,7 +52,7 @@ final class Disqus {
     $this->_aSession  = & $aSession;
 
     # Now register some events with the pluginmanager
-    $oPlugins->registerSimplePlugin($this);
+    $oPlugins->registerCommentPlugin($this);
   }
 
   /**
@@ -69,7 +69,7 @@ final class Disqus {
     $oTemplate = $oSmarty->getTemplate(self::IDENTIFIER, 'show', true);
     $oSmarty->setTemplateDir($oTemplate);
     $oSmarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
-    
+
     if (isset($this->_aRequest['id']))
       $oSmarty->assign('disqus_url', WEBSITE_URL . '/' . $this->_aRequest['controller'] . '/' . $this->_aRequest['id']);
 
