@@ -86,7 +86,7 @@ class PluginManager {
   protected $_aPlugins = array();
 
   /**
-   * Saves simple Plugins
+   * saves the respective identifiers of loaded plugins
    *
    * @var array
    * @access protected
@@ -196,6 +196,7 @@ class PluginManager {
       $sHtml    = str_replace('<!-- plugin:' . strtolower($oPlugin::IDENTIFIER) . ' -->', $oPlugin->show(), $sHtml);
     }
 
+    # also do the 'simple replacement part' of other plugins
     $sHtml = $this->runCaptchaPlugins($sHtml);
     $sHtml = $this->runEditorPlugins($sHtml);
 
@@ -203,7 +204,7 @@ class PluginManager {
   }
 
   /**
-   * Register as oldschool plugin (simple <!--Name--> replacement).
+   * Register as editor plugin.
    *
    * Plugin MUST provide a show() function for additional content to load,
    * a prepareContent() function for displaying content and a getInfo()
@@ -270,7 +271,7 @@ class PluginManager {
   }
 
   /**
-   * Run all content display plugins (that wil lalter given content).
+   * Run all content display plugins (that will alter given content).
    *
    * @access public
    * @param string $sHtml the content, the plugins want to change
@@ -433,9 +434,10 @@ class PluginManager {
   }
 
   /**
+   * Check wether the user has enabled a session plugin
    *
-   * @return type
-   * @todo documentation
+   * @access public
+   * @return boolean wether a session plugin was loaded
    *
    */
   public function hasSessionPlugin() {
@@ -443,9 +445,10 @@ class PluginManager {
   }
 
   /**
+   * Get the session plugin that is loaded
    *
-   * @return type
-   * @todo documentation
+   * @access public
+   * @return object the currently loaded session plugin
    *
    */
   public function getSessionPlugin() {
