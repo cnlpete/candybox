@@ -246,10 +246,8 @@ abstract class Main {
     $sHighlight = isset($this->_aRequest['highlight']) ? $this->_aRequest['highlight'] : '';
 
     foreach (array('content', 'teaser', 'title') as $sColumn)
-      if (isset($aData[$sColumn])) {
-        $aData[$sColumn + "_raw"] = $aData[$sColumn];
+      if (isset($aData[$sColumn]))
         $aData[$sColumn] = Helper::formatOutput($aData[$sColumn], $sHighlight, $sColumn == 'content');
-      }
 
     # Bugfix: Set types
     if ($aInts)
