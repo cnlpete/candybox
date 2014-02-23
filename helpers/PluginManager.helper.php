@@ -98,6 +98,7 @@ class PluginManager {
   protected $_aRepetitivePluginNames = array();
   protected $_aCaptchaPluginNames = array();
   protected $_aEditorPluginNames = array();
+  protected $_aCommentPluginNames = array();
   protected $_aImageCreationPluginNames = array();
   protected $_sSessionPluginName = ''; # @todo doc
 
@@ -199,6 +200,36 @@ class PluginManager {
     # also do the 'simple replacement part' of other plugins
     $sHtml = $this->runCaptchaPlugins($sHtml);
     $sHtml = $this->runEditorPlugins($sHtml);
+    $sHtml = $this->runCommentPlugins($sHtml);
+
+    return $sHtml;
+  }
+
+  /**
+   * Register as comment plugin (simple <!-- pluginmanager:comment --> replacement).
+   *
+   * Plugin MUST provide a show() function.
+   *
+   * @access public
+   * @param object $oPlugin the plugin to be added to this event
+   *
+   */
+  public function registerCommentPlugin(&$oPlugin) {
+    $this->_aCommentPluginNames[] = strtolower($oPlugin::IDENTIFIER);
+  }
+
+  /**
+   * Run all comment plugins (simple <!-- pluginmanager:comment --> replacement).
+   *
+   * @access public
+   * @param string $sHtml the content, the plugins want to change
+   *
+   */
+  public function runCommentPlugins(&$sHtml) {
+    foreach ($this->_aCommentPluginNames as $sPluginName) {
+      $oPlugin  = $this->_aPlugins[$sPluginName];
+      $sHtml    = str_replace('<!-- pluginmanager:comment -->', $oPlugin->show() . '<!-- pluginmanager:comment -->', $sHtml);
+    }
 
     return $sHtml;
   }

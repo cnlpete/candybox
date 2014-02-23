@@ -91,8 +91,8 @@
     {if !isset($_REQUEST.id)}
       {$_pagination_}
     {/if}
-    {if isset($_REQUEST.id) && preg_match('/Disqus/', $ALLOW_PLUGINS)}
-      <!-- plugin:disqus -->
+    {if isset($_REQUEST.id)}
+      <!-- pluginmanager:comment -->
     {/if}
   {/if}
   <script src='{$_PATH.js.core}/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>
