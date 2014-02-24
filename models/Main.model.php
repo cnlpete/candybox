@@ -184,9 +184,7 @@ abstract class Main {
    * @return array $aData data witout slashes
    *
    */
-  protected static function _formatForUpdate($aRow) {
-    $aData = array();
-
+  protected static function _formatForUpdate(&$aRow) {
     foreach ($aRow as $sColumn => $sData) {
       # Bugfix: Avoid TinyMCE problems.
       # @todo Still in use?
@@ -196,10 +194,10 @@ abstract class Main {
       if (empty($sData))
         continue;
 
-      $aData[$sColumn] = htmlentities($sData);
+      $aRow[$sColumn] = htmlentities($sData);
     }
 
-    return $aData;
+    return $aRow;
   }
 
   /**
@@ -210,6 +208,7 @@ abstract class Main {
    * @param array $aData array with the timestamp stored in '$sKey'
    * @param string $sKey the key, where the date is stored in $aData
    * @return array reference to $aData
+   * @todo move to helper
    *
    */
   protected static function _formatDates(&$aData, $sKey = 'date') {
@@ -243,10 +242,12 @@ abstract class Main {
   protected function _formatForOutput(&$aData, $aInts = array('id'), $aBools = null, $sController = '') {
     $sController = !$sController ? $this->_sController : $sController;
 
+    # Do we need to highlight text?
+    $sHighlight = isset($this->_aRequest['highlight']) ? $this->_aRequest['highlight'] : '';
+
     foreach (array('content', 'teaser', 'title') as $sColumn)
-      $aData[$sColumn] = isset($aData[$sColumn]) ?
-              Helper::formatOutput($aData[$sColumn], '', $sColumn == 'content') :
-              '';
+      if (isset($aData[$sColumn]))
+        $aData[$sColumn] = Helper::formatOutput($aData[$sColumn], $sHighlight, $sColumn == 'content');
 
     # Bugfix: Set types
     if ($aInts)
@@ -262,46 +263,9 @@ abstract class Main {
     # Format data
     self::_formatDates($aData);
 
-    # Set sitemaps.xml data
-    if (isset($aData['date']['raw']) && !empty($aData['date']['raw'])) {
-      $iTimestampNow = time();
-
-      # Entry is less than a day old
-      if($iTimestampNow - $aData['date']['raw'] < 86400) {
-        $aData['changefreq']  = 'hourly';
-        $aData['priority']    = '1.0';
-      }
-      # Entry is younger than a week
-      elseif($iTimestampNow - $aData['date']['raw'] < 86400 * 7) {
-        $aData['changefreq']  = 'daily';
-        $aData['priority']    = '0.9';
-      }
-      # Entry is younger than a month
-      elseif($iTimestampNow - $aData['date']['raw'] < 86400 * 31) {
-        $aData['changefreq']  = 'weekly';
-        $aData['priority']    = '0.75';
-      }
-      # Entry is younger than three month
-      elseif($iTimestampNow - $aData['date']['raw'] < 86400 * 90) {
-        $aData['changefreq']  = 'monthly';
-        $aData['priority']    = '0.6';
-      }
-      # Entry is younger than half a year
-      elseif($iTimestampNow - $aData['date']['raw'] < 86400 * 180) {
-        $aData['changefreq']  = 'monthly';
-        $aData['priority']    = '0.4';
-      }
-      # Entry is younger than a year
-      elseif($iTimestampNow - $aData['date']['raw'] < 86400 * 360) {
-        $aData['changefreq']  = 'monthly';
-        $aData['priority']    = '0.25';
-      }
-      # Entry older than half year
-      else {
-        $aData['changefreq']  = 'yearly';
-        $aData['priority']    = '0.1';
-      }
-    }
+    # Generate sitemap data
+    # TODO check whether this needs to be done on every page, proposal: only do this in SiteMapController
+    Helper::generateSitemapData($aData);
 
     # Normal user
     if (isset($aData['user_id']) && $aData['user_id'] != 0) {
@@ -328,16 +292,6 @@ abstract class Main {
     $aData['url_clean']   = WEBSITE_URL . '/' . $sController . '/' . $aData['id'];
     $aData['url']         = $aData['url_clean'] . '/' . str_replace("%2F", '+', $aData['title_encoded']);
     $aData['url_encoded'] = urlencode($aData['url']); #SEO
-
-    # Do we need to highlight text?
-    $sHighlight = isset($this->_aRequest['highlight']) ? $this->_aRequest['highlight'] : '';
-
-    # Highlight text for search results
-    if(!empty($sHighlight)) {
-      $aData['title']   = isset($aData['title']) ? Helper::formatOutput($aData['title'], $sHighlight) : '';
-      $aData['teaser']  = isset($aData['teaser']) ? Helper::formatOutput($aData['teaser'], $sHighlight) : '';
-      $aData['content'] = Helper::formatOutput($aData['content'], $sHighlight);
-    }
 
     $aData['url_destroy']       = $aData['url_clean'] . '/destroy';
     $aData['url_update']        = $aData['url_clean'] . '/update';
@@ -448,7 +402,8 @@ abstract class Main {
           $aItems = array_filter(array_map('trim', explode(',', $aRow[$sColumn])));
 
           foreach ($aItems as $sItem)
-            $aEntries[] = $sItem;
+            if (!in_array($sItem, $aEntries))
+              $aEntries[] = $sItem;
         }
 
         else

@@ -52,7 +52,11 @@
       <input type='text'
              name='{$_REQUEST.controller}[tags]'
              id='input-tags'
+             data-provide='typeahead'
              value="{$tags}"
+             data-source='{$_tags_}'
+             data-items='8'
+             autocomplete='off'
              class='span4' />
       <p class='help-block'>
         {$lang.blogs.info.tag}
@@ -191,6 +195,7 @@
     {/if}
   </div>
 </form>
+<script type='text/javascript' src='{$_PATH.js.bootstrap}/bootstrap-typeahead{$_SYSTEM.compress_files_suffix}.js'></script>
 {if !$MOBILE}
   <!-- pluginmanager:editor -->
 {/if}
