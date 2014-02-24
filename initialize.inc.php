@@ -50,10 +50,6 @@ if('http://' . $_SERVER['HTTP_HOST'] !== WEBSITE_URL && 'https://' . $_SERVER['H
 if (WEBSITE_MODE == 'production' && is_dir('install'))
   exit('Please install software via <strong>install/</strong> and delete the folder afterwards.');
 
-# Disable tests on productive system.
-if (WEBSITE_MODE == 'production' && is_dir('tests'))
-  exit('Please delete the tests enviroment (/tests).');
-
 # Disable the use of composer.
 if (WEBSITE_MODE == 'production' && is_file('composer.phar'))
   exit('Please delete the composer.phar.');
