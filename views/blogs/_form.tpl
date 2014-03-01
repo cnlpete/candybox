@@ -28,6 +28,19 @@
     </div>
   </div>
   <div class='control-group'>
+    <label for='input-priority' class='control-label'>
+      {$lang.global.priority}
+    </label>
+    <div class='controls'>
+      <input name='{$_REQUEST.controller}[priority]'
+             value='1'
+             type='checkbox'
+             class='checkbox'
+             id='input-priority'
+             {if $priority == true}checked{/if} />
+    </div>
+  </div>
+  <div class='control-group'>
     <label for='input-teaser' class='control-label'>
       {$lang.global.teaser}
     </label>
