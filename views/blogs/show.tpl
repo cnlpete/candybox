@@ -19,7 +19,7 @@
         <header class='page-header'>
           <h2 itemprop='headline'>
             {if $b.priority}
-              {$lang.global.priority}:
+              <i class='icon-pin' title='{$lang.global.priority}'></i>
             {/if}
             {if !$b.published}
               {$lang.global.not_published}:
