@@ -103,6 +103,7 @@ class Blogs extends Main {
   public function getOverviewByTag($iLimit = LIMIT_BLOG, $sTagname = '') {
     # Set limit to 2 to make sure we have some pages to test in test mode.
     # Since we test the limit function we also set limit to 1.
+    # todo: set LIMIT_BLOGS to 2 in TestBlogs instead
     if (ACTIVE_TEST && $iLimit != 1)
       $iLimit = 2;
 
