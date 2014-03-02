@@ -61,6 +61,17 @@ class Cache {
 
     $sData = "<?php\n\$aData = " . var_export($aData, true) . ";\n";
     $bResult = (bool) file_put_contents($sCacheFile, $sData);
+
+    # if it failed, maybe the folder structure did not exist
+    if (!$bResult) {
+      if (!file_exists($sCacheDir))
+        # if creation of folder structure is successfull, try again
+        if (mkdir($sCacheDir, 0777, true))
+          $bResult = (bool) file_put_contents($sCacheFile, $sData);
+        else
+          # make a log entry and send a mail to admin
+          AdvancedException::writeLog('the cache dir \'' . $sCacheDir . '\' did not exist and could not be created');
+    }
     return $bResult;
   }
 
