@@ -255,6 +255,7 @@ class Users extends Main {
                                         u.name,
                                         u.email,
                                         u.surname,
+                                        u.content,
                                         UNIX_TIMESTAMP(u.date) as date,
                                         u.use_gravatar,
                                         u.role,
