@@ -33,10 +33,11 @@ class Cache {
    *
    */
   public static function isCachedAndLoad($sIdent, &$aData) {
-    $sCacheFile = PATH_CACHE . '/' . WEBSITE_MODE . '/' . WEBSITE_LOCALE . '/' . md5($sIdent) . '.cache';
+    $sCacheFile = PATH_CACHE . '/' . WEBSITE_MODE . '/' . WEBSITE_LOCALE . '/' . md5($sIdent) . '.php.cache';
 
     if (file_exists($sCacheFile)) {
-      $aData = json_decode(file_get_contents($sCacheFile), true);
+      $aData = false;
+      require $sCacheFile;
       return $aData !== false;
     }
 
@@ -55,9 +56,23 @@ class Cache {
    *
    */
   public static function save($sIdent, &$aData) {
-    $sCacheFile = PATH_CACHE . '/' . WEBSITE_MODE . '/' . WEBSITE_LOCALE . '/' . md5($sIdent) . '.cache';
+    $sCacheDir = PATH_CACHE . '/' . WEBSITE_MODE . '/' . WEBSITE_LOCALE . '/';
+    $sCacheFile = $sCacheDir . md5($sIdent) . '.php.cache';
 
-    return (bool) file_put_contents($sCacheFile, json_encode($aData));
+    $sData = "<?php\n\$aData = " . var_export($aData, true) . ";\n";
+    $bResult = (bool) file_put_contents($sCacheFile, $sData);
+
+    # if it failed, maybe the folder structure did not exist
+    if (!$bResult) {
+      if (!file_exists($sCacheDir))
+        # if creation of folder structure is successfull, try again
+        if (mkdir($sCacheDir, 0777, true))
+          $bResult = (bool) file_put_contents($sCacheFile, $sData);
+        else
+          # make a log entry and send a mail to admin
+          AdvancedException::writeLog('the cache dir \'' . $sCacheDir . '\' did not exist and could not be created');
+    }
+    return $bResult;
   }
 
   /**
@@ -70,7 +85,7 @@ class Cache {
    *
    */
   public static function clear($sIdent) {
-    $sCacheFile = PATH_CACHE . '/' . WEBSITE_MODE . '/' . WEBSITE_LOCALE . '/' . md5($sIdent) . '.cache';
+    $sCacheFile = PATH_CACHE . '/' . WEBSITE_MODE . '/' . WEBSITE_LOCALE . '/' . md5($sIdent) . '.php.cache';
 
     return file_exists($sCacheFile) ? unlink($sCacheFile) : true;
   }

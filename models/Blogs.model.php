@@ -103,6 +103,7 @@ class Blogs extends Main {
   public function getOverviewByTag($iLimit = LIMIT_BLOG, $sTagname = '') {
     # Set limit to 2 to make sure we have some pages to test in test mode.
     # Since we test the limit function we also set limit to 1.
+    # todo: set LIMIT_BLOGS to 2 in TestBlogs instead
     if (ACTIVE_TEST && $iLimit != 1)
       $iLimit = 2;
 
@@ -153,6 +154,7 @@ class Blogs extends Main {
                                       GROUP BY
                                         b.id
                                       ORDER BY
+                                        b.priority DESC,
                                         b.date DESC" . $sLimit);
 
       $oQuery->bindValue(':commaTagnameComma', '%,' . $sTagname . ',%', PDO::PARAM_STR);
@@ -178,7 +180,7 @@ class Blogs extends Main {
       $aData[$iDate] = $this->_formatForOutput(
               $aRow,
               array('id', 'uid', 'author_id', 'date', 'date_modified'),
-              array('published', 'use_gravatar'),
+              array('priority', 'published', 'use_gravatar'),
               'blogs'
       );
 
@@ -246,6 +248,7 @@ class Blogs extends Main {
                                       GROUP BY
                                         b.id
                                       ORDER BY
+                                        b.priority DESC,
                                         b.date DESC" . $sLimit);
 
       $oQuery->execute();
@@ -263,7 +266,7 @@ class Blogs extends Main {
       $aData[$iDate] = $this->_formatForOutput(
               $aRow,
               array('id', 'uid', 'author_id', 'date', 'date_modified'),
-              array('published', 'use_gravatar'),
+              array('priority', 'published', 'use_gravatar'),
               'blogs'
       );
 
@@ -339,7 +342,7 @@ class Blogs extends Main {
       $aData[1] = $this->_formatForOutput(
               $aRow,
               array('id', 'uid', 'author_id', 'date', 'date_modified'),
-              array('published', 'use_gravatar')
+              array('priority', 'published', 'use_gravatar')
       );
 
       $aData[1]['tags_raw']  = $aRow['tags'];
@@ -367,6 +370,11 @@ class Blogs extends Main {
             1 :
             0;
 
+    $iPriority = isset($this->_aRequest[$this->_sController]['priority']) &&
+            $this->_aRequest[$this->_sController]['priority'] == true ?
+            1 :
+            0;
+
     try {
       $oQuery = $this->_oDb->prepare("INSERT INTO
                                         " . SQL_PREFIX . "blogs
@@ -378,6 +386,7 @@ class Blogs extends Main {
                                           content,
                                           language,
                                           date,
+                                          priority,
                                           published)
                                       VALUES
                                         ( :author_id,
@@ -388,6 +397,7 @@ class Blogs extends Main {
                                           :content,
                                           :language,
                                           NOW(),
+                                          :priority,
                                           :published )");
 
       $sTags = Helper::formatInput(
@@ -397,6 +407,7 @@ class Blogs extends Main {
       $oQuery->bindParam('tags', $sTags, PDO::PARAM_STR);
       $oQuery->bindParam('author_id', $this->_aSession['user']['id'], PDO::PARAM_INT);
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
+      $oQuery->bindParam('priority', $iPriority, PDO::PARAM_INT);
 
       foreach (array('title', 'teaser', 'content') as $sInput) {
         $sValue = Helper::formatInput($this->_aRequest[$this->_sController][$sInput], false);
@@ -458,6 +469,11 @@ class Blogs extends Main {
             1 :
             0;
 
+    $iPriority = isset($this->_aRequest[$this->_sController]['priority']) &&
+            $this->_aRequest[$this->_sController]['priority'] == true ?
+            1 :
+            0;
+
     $iDate = isset($this->_aRequest[$this->_sController]['update_date']) &&
             $this->_aRequest[$this->_sController]['update_date'] == true ?
             time() :
@@ -482,6 +498,7 @@ class Blogs extends Main {
                                         language = :language,
                                         date = :date,
                                         date_modified = :date_modified,
+                                        priority = :priority,
                                         published = :published
                                       WHERE
                                         id = :id");
@@ -491,6 +508,7 @@ class Blogs extends Main {
       $oQuery->bindParam('date', $sDate, PDO::PARAM_STR);
       $oQuery->bindParam('date_modified', $sDateModified, PDO::PARAM_STR);
       $oQuery->bindParam('published', $iPublished, PDO::PARAM_INT);
+      $oQuery->bindParam('priority', $iPriority, PDO::PARAM_INT);
       $oQuery->bindParam('id', $iId, PDO::PARAM_INT);
 
       foreach (array('title', 'teaser', 'content') as $sInput) {
@@ -588,7 +606,7 @@ class Blogs extends Main {
       $aData[$iDate] = $this->_formatForOutput(
               $aRow,
               array('id', 'uid', 'author_id', 'date'),
-              array('published', 'use_gravatar'),
+              array('priority', 'published', 'use_gravatar'),
               'blogs'
       );
     }

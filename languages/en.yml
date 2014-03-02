@@ -99,6 +99,7 @@ global:
   password:
     password: Password
     repeat: Repeat Password
+  priority: Sticked
   published: Published?
   quote:
     by: Quote by

@@ -99,6 +99,7 @@ global:
   password:
     password: Passwort
     repeat: Passwort wiederholen
+  priority: Angeheftet
   published: Veröffentlicht?
   quote:
     by: Zitat von
