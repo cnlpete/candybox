@@ -2,7 +2,9 @@
 
 /**
  * The cronjob keeps your software backuped, fast and clean. Set up the execution
- * intervals in the "app/config/Candy.inc.php" and lean back.
+ * intervals in the "app/config/Plugins.inc.php" and lean back.
+ *
+ * use this plugin when the 'Cronjob' plugin fails to work
  *
  * @link http://github.com/marcoraddatz/candyCMS
  * @author Marco Raddatz <http://marcoraddatz.com>
