@@ -15,10 +15,10 @@
     </div>
   {else}
     {foreach $blogs as $b}
-      <article class='blogs {if $b.priority}sticky{/if}' itemscope itemtype='http://schema.org/BlogPosting'>
+      <article class='blogs {if $b.sticky}sticky{/if}' itemscope itemtype='http://schema.org/BlogPosting'>
         <header class='page-header'>
           <h2 itemprop='headline'>
-            {if $b.priority}
+            {if $b.sticky}
               <i class='icon-pin' title='{$lang.global.priority}'></i>
             {/if}
             {if !$b.published}

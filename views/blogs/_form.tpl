@@ -32,12 +32,12 @@
       {$lang.global.priority}
     </label>
     <div class='controls'>
-      <input name='{$_REQUEST.controller}[priority]'
+      <input name='{$_REQUEST.controller}[sticky]'
              value='1'
              type='checkbox'
              class='checkbox'
-             id='input-priority'
-             {if $priority == true}checked{/if} />
+             id='input-sticky'
+             {if $sticky == true}checked{/if} />
     </div>
   </div>
   <div class='control-group'>
