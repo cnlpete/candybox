@@ -401,7 +401,7 @@ class Helper {
    */
   public static function generateSitemapData(&$aData) {
     # Set sitemaps.xml data
-    if (isset($aData[$sKey]['raw']) && !empty($aData[$sKey]['raw'])) {
+    if (isset($aData['date']['raw']) && !empty($aData['date']['raw'])) {
       $iTimestampNow = time();
 
       # Entry is less than a day old
