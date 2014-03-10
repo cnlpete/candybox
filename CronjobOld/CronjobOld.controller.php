@@ -75,7 +75,7 @@ final class CronjobOld {
     $this->_aSession  = & $aSession;
 
     // check for the file and read its timestamp
-    $sBackupFile = PATH_STANDARD . '/app/backup/lastrun.timestamp';
+    $sBackupFile = PATH_STANDARD . '/app/backup/lastrun.CronjobOld.timestamp';
     if (file_exists($sBackupFile)) {
       $oFile    = @fopen($sBackupFile, 'r');
       $sContent = @fgets($oFile);
@@ -131,7 +131,7 @@ final class CronjobOld {
    */
   private function _writeTimestamp($iTimestamp = 0) {
     // check for the file and read its timestamp
-    $sBackupFile = PATH_STANDARD . '/app/backup/lastrun.timestamp';
+    $sBackupFile = PATH_STANDARD . '/app/backup/lastrun.CronjobOld.timestamp';
 
     $oFile = @fopen($sBackupFile, 'w');
     if ($oFile) {
