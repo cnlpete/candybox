@@ -1,0 +1,6 @@
+composer.phar
+.DS_Store
+*~
+nbproject/*
+.project
+.idea

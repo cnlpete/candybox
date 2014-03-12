@@ -1,0 +1,173 @@
+/* ------------------- Bootstrap fixes ------------------- */
+// No margin at BBCode images
+figure.image {
+  margin:0px;
+}
+
+// Make sure that help is really displayed as a block
+#user-image .help-block, #medias .help-block {
+  display:block;
+}
+
+// No center tooltips if they are large
+.tooltip-inner {
+  text-align:left;
+  max-width:300px;
+}
+
+/* -------------------- TinyMCE fixes -------------------- */
+.mceEditor {
+  body, td, pre {
+    color:#000;
+    font: 13px "Trebuchet MS", Arial, Sans-serif;
+    margin:6px;
+  }
+}
+
+/* ---------------------- Own styles ---------------------- */
+// Avoid conflicts with navbar
+body {
+  padding-top: 70px;
+}
+
+// Remove outlines on Firefox and Opera
+a:active, a:link {
+  outline:none;
+}
+
+// Mark active tablesorter th
+th.headerSortUp, th.headerSortDown {
+  background-color: @gray-lighter;
+}
+
+// Display the columns as clickable
+th:hover, th:hover, i.icon-trash:hover {
+  cursor:pointer;
+}
+
+// Fix whitespaces
+.tags a:first-child,
+h1 small
+#searches .btn {
+  margin-left:5px;
+}
+
+p.center i {
+  margin-right:5px;
+}
+
+.summary {
+  font-weight:bold;
+}
+
+// Margin to bottom due to other posts
+#blogs .blogs {
+  margin-bottom:50px;
+
+  .page-header {
+    padding-bottom:0px;
+  }
+}
+
+#calendars {
+  .column-date {
+    width:30%;
+  }
+
+  .column-description {
+    width:55%;
+  }
+
+  .column-actions {
+    width:15%;
+  }
+}
+
+
+// Fix column width at download tables
+#downloads {
+  .column-file, .column-actions {
+    width:10%;
+  }
+
+  .column-title {
+    width:50%;
+  }
+
+  .column-date, .column-size {
+    width:15%;
+  }
+}
+
+// Action icon get a margin to top
+#galleries .thumbnails .center {
+  margin-top:10px;
+}
+
+// inputs for copy use
+#medias {
+  .copybox {
+    display:block;
+    width:98%;
+    padding:0px 4px;
+    font-size:80%;
+    margin:3px 0px 0px;
+  }
+
+  .thumbnail {
+    display:inline;
+  }
+}
+
+#users {
+  // Remove border at user details view
+  table.table.unstyled th,
+  table.table.unstyled td {
+    border:none;
+  }
+
+  // Mark first field at user details table
+  table td:first-child {
+    font-weight:bold;
+  }
+}
+
+// Make small tags in forms smaller
+form label small {
+  font-size: 80%;
+}
+
+// generate red background for table-entries that have result set to false
+table {
+  tr {
+    &.result-error {
+      // @todo
+//      #gradient > .vertical(#FF878F, #FF525D);
+//      .background-size(40px 40px);
+    }
+  }
+
+  td.right {
+    text-align:right;
+  }
+}
+
+// Align addthis to right side
+.addthis_default_style {
+  float: right;
+}
+
+// Boostrap icon fixes
+h1 [class^="icon-"],
+h2 [class^="icon-"],
+h1 [class*=" icon-"],
+h2 [class*=" icon-"] {
+  vertical-align: middle;
+  margin-left:5px;
+}
+
+// Upload bar
+.progress {
+  height: 25px;
+  margin: 0px;
+}
