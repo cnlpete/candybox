@@ -15,9 +15,12 @@
     </div>
   {else}
     {foreach $blogs as $b}
-      <article class='blogs' itemscope itemtype='http://schema.org/BlogPosting'>
+      <article class='blogs {if $b.sticky}sticky{/if}' itemscope itemtype='http://schema.org/BlogPosting'>
         <header class='page-header'>
           <h2 itemprop='headline'>
+            {if $b.sticky}
+              <i class='icon-pin' title='{$lang.global.priority}'></i>
+            {/if}
             {if !$b.published}
               {$lang.global.not_published}:
             {/if}
@@ -91,8 +94,8 @@
     {if !isset($_REQUEST.id)}
       {$_pagination_}
     {/if}
-    {if isset($_REQUEST.id) && preg_match('/Disqus/', $ALLOW_PLUGINS)}
-      <!-- plugin:disqus -->
+    {if isset($_REQUEST.id)}
+      <!-- pluginmanager:comment -->
     {/if}
   {/if}
   <script src='{$_PATH.js.core}/jquery.fancybox{$_SYSTEM.compress_files_suffix}.js' type='text/javascript'></script>

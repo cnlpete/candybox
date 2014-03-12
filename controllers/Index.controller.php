@@ -120,7 +120,7 @@ class Index {
     $this->setUser();
 
     if (!defined('UNIQUE_PREFIX'))
-      define('UNIQUE_PREFIX', WEBSITE_MODE . '|' . WEBSITE_LOCALE . '|');
+      define('UNIQUE_PREFIX', WEBSITE_MODE . '|' . WEBSITE_LOCALE);
   }
 
   /**
@@ -371,12 +371,12 @@ class Index {
    */
   protected static function _resetUser() {
     return array(
-        'email' => '',
-        'id' => 0,
-        'name' => '',
-        'surname' => '',
-        'password' => '',
-        'role' => 0,
+        'email'     => '',
+        'id'        => 0,
+        'name'      => '',
+        'surname'   => '',
+        'password'  => '',
+        'role'      => 0,
         'full_name' => ''
     );
   }
@@ -401,7 +401,7 @@ class Index {
     $this->_aSession['user'] = self::_resetUser();
 
     # Get user by token
-    if (defined('ALLOW_API_TOKENS') && ALLOW_API_TOKENS && isset($this->_aRequest['api_token']) && !empty($this->_aRequest['api_token'])) {
+    if (ALLOW_API_TOKENS && isset($this->_aRequest['api_token']) && !empty($this->_aRequest['api_token'])) {
       if (EXTENSION_CHECK && file_exists(PATH_STANDARD . '/app/models/Users.model.php')) {
         require_once PATH_STANDARD . '/app/models/Users.model.php';
         $aUser = \candyCMS\Models\Users::getUserByToken(Helper::formatInput($this->_aRequest['api_token']));
@@ -432,6 +432,7 @@ class Index {
     # Try to get session plugin data from Facebook or similar.
     if ($this->_aSession['user']['role'] == 0) {
       $oPluginManager = PluginManager::getInstance();
+
       if ($oPluginManager->hasSessionPlugin()) {
         if ($oPluginManager->getSessionPlugin()->setUserData($this->_aSession['user']))
           $this->_aSession['user']['role'] = 2;
@@ -455,7 +456,7 @@ class Index {
     # Set a caching / compile ID
     # Ask if defined because of unit tests.
     if (!defined('UNIQUE_ID')) {
-      define('UNIQUE_ID', UNIQUE_PREFIX . $this->_aRequest['controller'] . '|' . $this->_aSession['user']['role'] .
+      define('UNIQUE_ID', UNIQUE_PREFIX . '|' . $this->_aRequest['controller'] . '|' . $this->_aSession['user']['role'] .
               (MOBILE ? 'mob|' : 'tpl|') . '|' .
               substr(md5(CURRENT_URL), 0, 10));
     }
@@ -504,9 +505,9 @@ class Index {
 
       $oSmarty->setTemplateDir($oTemplate);
       $oSmarty->setCaching(Smarty::CACHING_OFF);
+
       $sCachedHTML = $oSmarty->fetch($oTemplate, UNIQUE_ID);
     }
-
 
     $sCachedHTML = $this->_oPlugins->runGlobalDisplayPlugins($sCachedHTML);
     $sCachedHTML = $this->_oPlugins->runSimplePlugins($sCachedHTML);

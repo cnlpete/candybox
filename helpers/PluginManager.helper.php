@@ -86,7 +86,7 @@ class PluginManager {
   protected $_aPlugins = array();
 
   /**
-   * Saves simple Plugins
+   * saves the respective identifiers of loaded plugins
    *
    * @var array
    * @access protected
@@ -98,6 +98,8 @@ class PluginManager {
   protected $_aRepetitivePluginNames = array();
   protected $_aCaptchaPluginNames = array();
   protected $_aEditorPluginNames = array();
+  protected $_aCommentPluginNames = array();
+  protected $_aImageCreationPluginNames = array();
   protected $_sSessionPluginName = ''; # @todo doc
 
   /**
@@ -191,18 +193,49 @@ class PluginManager {
    */
   public function runSimplePlugins(&$sHtml) {
     foreach ($this->_aSimplePluginNames as $sPluginName) {
-      $oPlugin = $this->_aPlugins[$sPluginName];
-      $sHtml = str_replace('<!-- plugin:' . strtolower($oPlugin::IDENTIFIER) . ' -->', $oPlugin->show(), $sHtml);
+      $oPlugin  = $this->_aPlugins[$sPluginName];
+      $sHtml    = str_replace('<!-- plugin:' . strtolower($oPlugin::IDENTIFIER) . ' -->', $oPlugin->show(), $sHtml);
     }
 
+    # also do the 'simple replacement part' of other plugins
     $sHtml = $this->runCaptchaPlugins($sHtml);
     $sHtml = $this->runEditorPlugins($sHtml);
+    $sHtml = $this->runCommentPlugins($sHtml);
 
     return $sHtml;
   }
 
   /**
-   * Register as oldschool plugin (simple <!--Name--> replacement).
+   * Register as comment plugin (simple <!-- pluginmanager:comment --> replacement).
+   *
+   * Plugin MUST provide a show() function.
+   *
+   * @access public
+   * @param object $oPlugin the plugin to be added to this event
+   *
+   */
+  public function registerCommentPlugin(&$oPlugin) {
+    $this->_aCommentPluginNames[] = strtolower($oPlugin::IDENTIFIER);
+  }
+
+  /**
+   * Run all comment plugins (simple <!-- pluginmanager:comment --> replacement).
+   *
+   * @access public
+   * @param string $sHtml the content, the plugins want to change
+   *
+   */
+  public function runCommentPlugins(&$sHtml) {
+    foreach ($this->_aCommentPluginNames as $sPluginName) {
+      $oPlugin  = $this->_aPlugins[$sPluginName];
+      $sHtml    = str_replace('<!-- pluginmanager:comment -->', $oPlugin->show() . '<!-- pluginmanager:comment -->', $sHtml);
+    }
+
+    return $sHtml;
+  }
+
+  /**
+   * Register as editor plugin.
    *
    * Plugin MUST provide a show() function for additional content to load,
    * a prepareContent() function for displaying content and a getInfo()
@@ -269,7 +302,7 @@ class PluginManager {
   }
 
   /**
-   * Run all content display plugins (that wil lalter given content).
+   * Run all content display plugins (that will alter given content).
    *
    * @access public
    * @param string $sHtml the content, the plugins want to change
@@ -343,6 +376,33 @@ class PluginManager {
   }
 
   /**
+   * Register as image creation plugin.
+   *
+   * Plugin MUST provide an alterImage function.
+   *
+   * @access public
+   * @param object $oPlugin the plugin to be added to this event
+   *
+   */
+  public function registerImageCreationPlugin(&$oPlugin) {
+    $this->_aImageCreationPluginNames[] = strtolower($oPlugin::IDENTIFIER);
+  }
+
+  /**
+   * Run all image creation plugins.
+   *
+   * @access public
+   * @param string $sPath path of created image
+   *
+   */
+  public function runImageCreationPlugins($sPath) {
+    foreach ($this->_aImageCreationPluginNames as $sPluginName) {
+      $oPlugin = $this->_aPlugins[$sPluginName];
+      $oPlugin->alterImage($sPath);
+    }
+  }
+
+  /**
    * Register as Captcha plugin.
    *
    * Plugin MUST provide a show() and a check() function.
@@ -405,9 +465,10 @@ class PluginManager {
   }
 
   /**
+   * Check wether the user has enabled a session plugin
    *
-   * @return type
-   * @todo documentation
+   * @access public
+   * @return boolean wether a session plugin was loaded
    *
    */
   public function hasSessionPlugin() {
@@ -415,9 +476,10 @@ class PluginManager {
   }
 
   /**
+   * Get the session plugin that is loaded
    *
-   * @return type
-   * @todo documentation
+   * @access public
+   * @return object the currently loaded session plugin
    *
    */
   public function getSessionPlugin() {
