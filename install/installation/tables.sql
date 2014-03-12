@@ -11,6 +11,7 @@ CREATE TABLE `%SQL_PREFIX%blogs` (
   `language` char(2)  NULL  DEFAULT 'en',
   `date` datetime NOT NULL,
   `date_modified` datetime NULL ,
+  `priority` tinyint(1) NOT NULL DEFAULT '0',
   `published` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
