@@ -1,0 +1,30 @@
+{
+  "name": "candybox/plugin-analytics",
+  "type": "candybox-plugin",
+  "description": "Plugins for candybox.",
+  "keywords": ["php", "candy", "cms"],
+  "homepage": "http://www.candycms.com",
+  "license": "MIT",
+
+
+  "require": {
+    "php": ">=5.3.0",
+    "candybox/installers": "~1.0",
+    "candybox/core": ">=5.0.0"
+  },
+
+  "authors": [
+    {
+      "name": "Marco Raddatz",
+      "homepage": "http://www.marcoraddatz.com"
+    }
+  ],
+
+  "autoload": {
+    "psr-0": {
+      "candybox\\Plugins\\Index": ""
+    }
+  },
+
+  "target-dir": ""
+}

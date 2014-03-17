@@ -1,0 +1,35 @@
+{
+  "name": "candybox/plugin-facebook",
+  "type": "candybox-plugin",
+  "description": "Plugins for candybox.",
+  "keywords": ["php", "candy", "cms"],
+  "homepage": "http://www.candycms.com",
+  "license": "MIT",
+
+
+  "require": {
+    "php": ">=5.3.0",
+    "candybox/installers": "~1.0",
+    "candybox/core": ">=5.0.0",
+
+    "facebook/php-sdk": "3.2.*"
+  },
+
+  "authors": [
+    {
+      "name": "Marco Raddatz",
+      "homepage": "http://www.marcoraddatz.com"
+    }, {
+      "name": "Hauke Schade",
+      "homepage": "http://www.hauke-schade.de/"
+    }
+  ],
+
+  "autoload": {
+    "psr-0": {
+      "candybox\\Plugins\\Index": ""
+    }
+  },
+
+  "target-dir": ""
+}
