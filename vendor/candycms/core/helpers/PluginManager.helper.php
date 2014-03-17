@@ -137,14 +137,14 @@ class PluginManager {
    */
   private function _load($sPlugin) {
     $sPlugin = (string) ucfirst($sPlugin);
-    $sPluginNamespace = '\candyCMS\Plugins\\' . $sPlugin;
+    $sPluginNamespace = '\candybox\Plugins\\' . $sPlugin;
 
     try {
-      if (!file_exists(PATH_STANDARD . '/vendor/candycms/plugins/' . $sPlugin . '/' . $sPlugin . '.controller.php'))
+      if (!file_exists(PATH_STANDARD . '/plugins/' . $sPlugin . '/' . $sPlugin . '.controller.php'))
         throw new AdvancedException('Missing plugin: ' . ucfirst($sPlugin));
 
       else {
-        require_once PATH_STANDARD . '/vendor/candycms/plugins/' . $sPlugin . '/' . $sPlugin . '.controller.php';
+        require_once PATH_STANDARD . '/plugins/' . $sPlugin . '/' . $sPlugin . '.controller.php';
         return new $sPluginNamespace($this->_aRequest, $this->_aSession, $this);
       }
     }

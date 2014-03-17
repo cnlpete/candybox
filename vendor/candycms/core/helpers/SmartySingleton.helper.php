@@ -197,7 +197,7 @@ class SmartySingleton extends Smarty {
     $aPaths['public']   = WEBSITE_CDN !== '' ? WEBSITE_CDN : '/public';
     $aPaths['css']      = $aPaths['public'] . '/stylesheets';
     $aPaths['public']   = WEBSITE_CDN !== '' ? WEBSITE_CDN : '/public';
-    $aPaths['plugins']  = (WEBSITE_CDN !== '' ? WEBSITE_CDN : '/vendor/candycms') . '/plugins';
+    $aPaths['plugins']  = (WEBSITE_CDN !== '' ? WEBSITE_CDN : '') . '/plugins';
     $aPaths['upload']   = Helper::addSlash(PATH_UPLOAD);
 
     # Compile CSS only when in development mode and not doing tests
@@ -291,10 +291,10 @@ class SmartySingleton extends Smarty {
 
       # Standard Plugin views
       else if ($bPlugin) {
-        if (!file_exists(PATH_STANDARD . '/vendor/candycms/plugins/' . $sUCFirstFolder . '/views/' . $sFile . '.tpl'))
+        if (!file_exists(PATH_STANDARD . '/plugins/' . $sUCFirstFolder . '/views/' . $sFile . '.tpl'))
           throw new AdvancedException('This plugin template does not exist: ' . $sUCFirstFolder . '/views/' . $sFile . '.tpl');
         else
-          $aReturn['dir'] = PATH_STANDARD . '/vendor/candycms/plugins/' . $sUCFirstFolder . '/views';
+          $aReturn['dir'] = PATH_STANDARD . '/plugins/' . $sUCFirstFolder . '/views';
       }
 
       # Standard Core views
