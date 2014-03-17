@@ -40,15 +40,22 @@
   "require": {
     "php": ">=5.3.0",
 
-    "candycms/core": "5.0.*@dev",
-    "candycms/plugins": "5.0.*@dev",
+
+    "smarty/smarty": "3.1.*",
+    "symfony/yaml": "2.4.*",
+    "twitter/bootstrap" : "3.1.*",
+    "leafo/lessphp": "0.3.*",
+    "simonhamp/routes": "1.*",
+    "cnlpete/image-metadata-parser" : "0.0.*",
+    "imagine/imagine": "0.5.*",
+    "phpmailer/phpmailer": "5.2.*",
+    "mailchimp/mailchimp": "2.0.*",
+
+    "facebook/php-sdk": "3.2.*",
+    "dflydev/markdown" : "1.0.*",
+    "tylerhall/smushit-php": "1.*",
 
     "recaptcha/recaptcha": "1.*",
     "tinymce/tinymce": "4.0.10"
-  },
-
-  "require-dev": {
-    "candycms/tests": "5.0.*@dev",
-    "candycms/documentation": "4.0.*@dev"
   }
 }
