@@ -11,6 +11,7 @@ SRC_REPO=$1
 SRC_DIR=$2
 OUTPUT_REPO=$3
 TMP_DIR=$(mktemp -d)
+BRANCH=$(git branch | grep '*' | sed 's/\* //')
 
 REPO_BASE=$TMP_DIR/repo_base;
 REPO_TMP=$TMP_DIR/repo_tmp;
@@ -87,10 +88,10 @@ fi
 cd $REPO_BASE
 
 # turn this repo into just the changes for the oldPath
-git filter-branch --prune-empty --subdirectory-filter $SRC_DIR master
+git filter-branch --prune-empty --subdirectory-filter $SRC_DIR $BRANCH
 
 # push those changes to the new repo
-git push $OUTPUT_REPO master
+git push $OUTPUT_REPO $BRANCH
 
 # cleanup temp files before exit
 cleanup
