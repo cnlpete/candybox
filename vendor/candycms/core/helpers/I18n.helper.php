@@ -15,6 +15,7 @@ namespace candyCMS\Core\Helpers;
 
 use candyCMS\Core\Helpers\AdvancedException;
 use candyCMS\Core\Helpers\Cache;
+use \Symfony\Component\Yaml\Yaml;
 
 /**
  * Class I18n
@@ -95,43 +96,66 @@ class I18n {
     # Have to parse all the different YML files
     $sLanguageFile        = $sLanguage . '.yml';
     $sCustomLanguageFile  = PATH_STANDARD . '/app/languages/' . $sLanguageFile;
-    $sCoreLanguageFile    = PATH_STANDARD . '/vendor/candycms/core/languages/' . $sLanguageFile;
+    $sCoreLanguageDir     = PATH_STANDARD . '/vendor/candycms/core/languages/';
+    $sCoreLanguageFile    = $sCoreLanguageDir . $sLanguageFile;
 
-    # Language does not exist
+    # only load languages that the user specified
     if (!file_exists($sCustomLanguageFile))
       return false;
 
     # Load the core language file
     if (file_exists($sCoreLanguageFile))
-      self::$_aLang[$sLanguage] = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sCoreLanguageFile));
+      self::$_aLang[$sLanguage] = Yaml::parse(file_get_contents($sCoreLanguageFile));
 
     # We also allow the user to create custom languages, everything he does not overwrite, will be english
     else
-      self::$_aLang[$sLanguage] = \Symfony\Component\Yaml\Yaml::parse(
-                      file_get_contents(PATH_STANDARD . '/vendor/candycms/core/languages/en.yml'));
+      self::$_aLang[$sLanguage] = Yaml::parse(
+                      file_get_contents($sCoreLanguageDir + 'en.yml'));
+
+    # Load the module language files and merge them
+    $sModulePath    = PATH_STANDARD . '/modules/';
+    $aModuleNames   = array('Blog', 'Calendar', 'Contents'); //.. TODO FIXME
+
+    foreach ($aModuleNames as $sModule) {
+      $sModuleLanguagesPath = $sModulePath . strtolower($sModule) . '/languages/';
+      $aModuleLang = array();
+      $sLowerModuleName = strtolower($sModule);
+      if (file_exists($sModuleLanguagesPath . $sLanguageFile))
+        $aModuleLang[$sLowerModuleName] = 
+            Yaml::parse(file_get_contents($sModuleLanguagesPath . $sLanguageFile));
+      else if (file_exists($sModuleLanguagesPath . 'en.yml'))
+        $aModuleLang[$sLowerModuleName] = 
+            Yaml::parse(file_get_contents($sModuleLanguagesPath . 'en.yml'));
+
+      Helper::recursiveOnewayArrayReplace(self::$_aLang[$sLanguage], $aModuleLang);
+    }
 
     # Load the plugin language files and merge them
-    $sPluginPath    = PATH_STANDARD . '/vendor/candycms/plugins/';
+    $sPluginPath    = PATH_STANDARD . '/plugins/';
     $oPluginManager = PluginManager::getInstance();
     $aPluginNames   = $oPluginManager->getLoadedPluginNames();
 
     foreach ($aPluginNames as $sPlugin) {
-      if (file_exists($sPluginPath . $sPlugin . '/languages')) {
-        $aPluginLang = file_exists($sPluginPath . $sPlugin . '/languages/' . $sLanguageFile) ?
-                \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sPluginPath . $sPlugin . '/languages/' . $sLanguageFile)) :
-                \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sPluginPath . $sPlugin . '/languages/en.yml'));
+      $sPluginLanguagesPath = $sPluginPath . $sPlugin . '/languages/';
+      $aPluginLang = array();
+      $sLowerPluginName = strtolower($sPlugin);
+      if (file_exists($sPluginLanguagesPath . $sLanguageFile))
+        $aPluginLang[$sLowerPluginName] = 
+            Yaml::parse(file_get_contents($sPluginLanguagesPath . $sLanguageFile));
+      else if (file_exists($sPluginLanguagesPath . 'en.yml'))
+        $aPluginLang[$sLowerPluginName] = 
+            Yaml::parse(file_get_contents($sPluginLanguagesPath . 'en.yml'));
 
-        Helper::recursiveOnewayArrayReplace(self::$_aLang[$sLanguage], $aPluginLang);
-      }
+      Helper::recursiveOnewayArrayReplace(self::$_aLang[$sLanguage], $aPluginLang);
     }
 
     # Merge all that with the users custom language file
-    $aReplace = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($sCustomLanguageFile));
+    $aReplace = Yaml::parse(file_get_contents($sCustomLanguageFile));
     Helper::recursiveOnewayArrayReplace(
             self::$_aLang[$sLanguage],
             $aReplace);
 
-    # Bugfix: Disable errors duing tests
+    # Bugfix: Disable errors during tests
     if (!ACTIVE_TEST)
       Cache::save('translation' . $sLanguage, self::$_aLang[$sLanguage]);
 
