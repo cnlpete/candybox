@@ -1,0 +1,39 @@
+contact_via_email: "Click to send %s an email!"
+description:
+  create: Create a new user profile.
+  show: User profile of %s.
+info:
+  destroy_account: Please enter your current password. After you click on "Delete Account", all your data will be permanently destroyed.
+  gravatar:  "If you don't want to upload a profile image, you can use <a href='http://gravatar.com' target='_blank'>Gravatar.com</a> instead. The displayed image is shown above."
+  image: You are only allowed to upload images less than %s.
+label:
+  account:
+    destroy: Delete account
+  content:
+    show: About %s
+    update: About you
+  gravatar: Use Gravatar?
+  image:
+    choose: Choose Image
+    terms: I am allowed to upload this image and will not conflict with others copyright.
+    update: Change Image?
+  last_login: Last login
+  newsletter: Subscribe to newsletter?
+  password:
+    create: Change password
+    new: New password
+    old: Old password
+  registered_since: Registered since
+  update: Update profile
+mail:
+  body: "Hello %s!\r\n\r\nThank you for your registration at %%WEBSITE_NAME. Before you can login, you must verify your email address via this link: %s %%SIGNATURE %%NOREPLY"
+  subject: Your registration at %%WEBSITE_NAME.
+title:
+  account: Delete account
+  create: Create User
+  image: Change Avatar
+  overview: User Overview
+  password: Change Password
+  personal_data: Personal data
+  profile: My Profile
+  update: Update profile

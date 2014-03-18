@@ -1,0 +1,39 @@
+contact_via_email: "Klicken Sie hier, um %s eine E-Mail zu schicken!"
+description:
+  create: Erstellen Sie ein Nutzerkonto.
+  show: Nutzerprofil von %s.
+info:
+  destroy_account: Bitte geben Sie zur eigenen Sicherheit Ihr aktuelles Passwort ein. Sobald Sie auf "Account löschen" klicken wird Ihr Zugang gelöscht und ist nicht wiederherstellbar!
+  gravatar: Aktivieren Sie dieses Kästchen, wird automatisch nach einem von Ihnen auf <a href="http://gravatar.com" target="_blank">Gravatar.com</a> hinterlegten Profilbild (s.o.) gesucht. Alternativ können Sie aber auch direkt ein Bild hochladen.
+  image: Bitte nur Bilder mit einer Größe von bis zu %s hochladen!
+label:
+  account:
+    destroy: Account löschen
+  content:
+    show: Über %s
+    update: Über Ihre Person
+  gravatar: Gravatar verwenden?
+  image:
+    choose: Bild auswählen
+    terms: Ich darf das Bild hochladen und verletze keine Rechte Dritter.
+    update: Userbild ändern?
+  last_login: Letzter Login
+  newsletter: Newsletter abonnieren?
+  password:
+    create: Passwort ändern
+    new: Neues Passwort
+    old: Altes Passwort
+  registered_since: Registriert seit
+  update: Profil aktualisieren
+mail:
+  body: "Hallo %s!\r\n\r\nDanke für Ihre Registrierung auf %%WEBSITE_NAME. Um sich einzuloggen müssen Sie noch die Echtheit Ihrer E-Mail-Adresse über diesen Link bestätigen: %s %%SIGNATURE %%NOREPLY"
+  subject: Ihre Registrierung auf %%WEBSITE_NAME.
+title:
+  account: Account löschen
+  create: Benutzer hinzufügen
+  image: Profilbild ändern
+  overview: Benutzerübersicht
+  password: Passwort ändern
+  personal_data: Persönliche Daten
+  profile: Mein Profil
+  update: Einstellungen bearbeiten

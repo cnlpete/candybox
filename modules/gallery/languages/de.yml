@@ -1,0 +1,21 @@
+albums:
+  description:
+    show: Albenübersicht
+  title:
+    create: Album erstellen
+    destroy: Album löschen
+    update: 'Album "%s" bearbeiten'
+files:
+  description:
+    show: Galerie-Bilder.
+  label:
+    choose: Datei(en) auswählen
+    cut: Bild quadratisch zuschneiden
+    resize: Bild proportional verkleinern
+  title:
+    create: Bild(er) hochladen
+    destroy: Bild löschen
+    update: Bild bearbeiten
+  update:
+    order: Reihenfolge speichern
+

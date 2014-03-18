@@ -1,0 +1,9 @@
+description:
+  show: Downloads
+label:
+  choose: Datei auswählen
+title:
+  create: Download erstellen
+  destroy: Download löschen
+  update: Download bearbeiten
+

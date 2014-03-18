@@ -264,32 +264,6 @@ error:
           wrong: Ihr altes Passwort stimmt leider nicht!
     verification: Sie konnten nicht freigeschaltet werden, da kein Account mit einem solchen Code vorhanden ist!
 
-blogs:
-  description:
-    show: Blog
-  info:
-    keywords: Geben Sie die wichtigsten Schlagworte dieses Eintrags an.
-    tag: Trennen Sie die Kategorien durch Komma u. Leerzeichen ("Tag, Tag2").
-    teaser: Schreiben Sie einen Teaser um den Blogeintrag interessanter zu machen!
-  label:
-    date: Datum aktualisieren?
-  title:
-    create: Blogeintrag hinzufügen
-    destroy: Blogeintrag löschen
-    update: '"%s" bearbeiten'
-
-calendars:
-  description:
-    show: Kalender
-  info:
-    date_format: 'Datumsformat: "YYYY-MM-DD"'
-    ics: 'Speichern Sie diesen Termin und fügen Sie ihn Ihrer Kalender-Anwendung hinzu.'
-    icsfeed: Fügen Sie den Kalender zu Ihrer Kalender-Anwendung hinzu.
-  title:
-    create: Termin hinzufügen
-    update: Termin bearbeiten
-    destroy: Termin löschen
-
 comments:
   info:
     email: Die E-Mail-Adresse wird nicht veröffentlicht.
@@ -297,53 +271,10 @@ comments:
     create: Kommentar erstellen
     destroy: Kommentar löschen
 
-contents:
-  description:
-    show: Seitenübersicht
-  info:
-    keywords: Geben Sie die wichtigsten Schlagworte dieser Seite an.
-    teaser: Schreiben Sie eine Zusammenfassung für die Suchmaschinen.
-  title:
-    create: Seite erstellen
-    destroy: Seite löschen
-    update: Bearbeiten
-
 cronjob:
   mail:
     body: Ihre Sicherungskopie wurde erfolreich erstellt und befindet sich im Anhang.\r\n
     subject: '[%%WEBSITE_NAME] Sicherungskopie vom %d'
-
-downloads:
-  description:
-    show: Downloads
-  label:
-    choose: Datei auswählen
-  title:
-    create: Download erstellen
-    destroy: Download löschen
-    update: Download bearbeiten
-
-galleries:
-  albums:
-    description:
-      show: Albenübersicht
-    title:
-      create: Album erstellen
-      destroy: Album löschen
-      update: 'Album "%s" bearbeiten'
-  files:
-    description:
-      show: Galerie-Bilder.
-    label:
-      choose: Datei(en) auswählen
-      cut: Bild quadratisch zuschneiden
-      resize: Bild proportional verkleinern
-    title:
-      create: Bild(er) hochladen
-      destroy: Bild löschen
-      update: Bild bearbeiten
-    update:
-      order: Reihenfolge speichern
 
 mails:
   body:
@@ -367,87 +298,7 @@ medias:
     create: Datei hochladen
     destroy: Datei löschen
 
-newsletters:
-  description:
-    subscribe: Abonnieren Sie unseren Newsletter um über Neuigkeiten informiert zu werden.
-  info:
-    subscribe: Tragen Sie hier Ihre E-Mail-Adresse ein. Nach dem Absenden erhalten Sie umgehend eine E-Mail mit einem Link, durch den Sie die Echtheit Ihrer E-Mail-Adresse bestätigen können. Möchten Sie den Newsletter abbestellen, so tragen Sie sich bitte am Ende eines Newsletters aus.
-  title:
-    subscribe: Newsletter abonnieren
-
 pages:
   next: Ältere Beiträge
   previous: Neuere Beiträge
   more: Mehr
-
-searches:
-  description:
-    show: Suchergebnisse für "%s"
-  label:
-    terms: Suchbegriffe
-  title:
-    create: Suche
-    show: Suchergebnisse für "%s"
-  info:
-    fail: "Es wurden keine Einträge zu dem Begriff: '<strong>%s</strong>' gefunden."
-    research: Erneut suchen.
-
-sessions:
-  password:
-    description: Auf dieser Seite können Sie ein neues Passwort anfordern.
-    info: Tragen Sie hier Ihre registrierte E-Mail Adresse ein und wir schicken Ihnen ein neues Passwort innerhalb der nächsten Minuten zu.
-    label: Passwort anfordern
-    mail:
-      body: "Hallo!\r\n\r\nSie können sich ab sofort mit folgendem Passwort einloggen: <em>%s</em>. Bitte ändern Sie dieses nach dem Login. %%SIGNATURE %%NOREPLY"
-      subject: Ihr neues Passwort
-    title: Passwort vergessen?
-  verification:
-    description: Falls Sie keine E-Mail zur Bestätigung Ihrer Daten erhalten haben, senden Sie sie sich hier erneut zu.
-    info: Lassen Sie sich jetzt erneut eine E-Mail mit Bestätigungslink an Ihre Adresse zuschicken.
-    label:
-      create: Bestätigungslink zuschicken
-    mail:
-      body: "Hallo %s!\r\n\r\nBitte klicken Sie auf diesen Link, um Ihre E-Mail-Adresse zu bestätigen: %s %%SIGNATURE %%NOREPLY"
-      subject: Ihre E-Mail-Bestätigung für %%WEBSITE_NAME
-    title: E-Mail-Bestätigung erneut zusenden
-
-users:
-  contact_via_email: "Klicken Sie hier, um %s eine E-Mail zu schicken!"
-  description:
-    create: Erstellen Sie ein Nutzerkonto.
-    show: Nutzerprofil von %s.
-  info:
-    destroy_account: Bitte geben Sie zur eigenen Sicherheit Ihr aktuelles Passwort ein. Sobald Sie auf "Account löschen" klicken wird Ihr Zugang gelöscht und ist nicht wiederherstellbar!
-    gravatar: Aktivieren Sie dieses Kästchen, wird automatisch nach einem von Ihnen auf <a href="http://gravatar.com" target="_blank">Gravatar.com</a> hinterlegten Profilbild (s.o.) gesucht. Alternativ können Sie aber auch direkt ein Bild hochladen.
-    image: Bitte nur Bilder mit einer Größe von bis zu %s hochladen!
-  label:
-    account:
-      destroy: Account löschen
-    content:
-      show: Über %s
-      update: Über Ihre Person
-    gravatar: Gravatar verwenden?
-    image:
-      choose: Bild auswählen
-      terms: Ich darf das Bild hochladen und verletze keine Rechte Dritter.
-      update: Userbild ändern?
-    last_login: Letzter Login
-    newsletter: Newsletter abonnieren?
-    password:
-      create: Passwort ändern
-      new: Neues Passwort
-      old: Altes Passwort
-    registered_since: Registriert seit
-    update: Profil aktualisieren
-  mail:
-    body: "Hallo %s!\r\n\r\nDanke für Ihre Registrierung auf %%WEBSITE_NAME. Um sich einzuloggen müssen Sie noch die Echtheit Ihrer E-Mail-Adresse über diesen Link bestätigen: %s %%SIGNATURE %%NOREPLY"
-    subject: Ihre Registrierung auf %%WEBSITE_NAME.
-  title:
-    account: Account löschen
-    create: Benutzer hinzufügen
-    image: Profilbild ändern
-    overview: Benutzerübersicht
-    password: Passwort ändern
-    personal_data: Persönliche Daten
-    profile: Mein Profil
-    update: Einstellungen bearbeiten

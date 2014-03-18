@@ -1,0 +1,11 @@
+description:
+  show: Calendar
+info:
+  date_format: 'Date format: "YYYY-MM-DD"'
+  ics: 'Download this event and add it to your calendar application.'
+  icsfeed: Download this calendar to your calendar application to directly subscribe for new events.
+title:
+  create: Add appointment
+  update: Update appointment
+  destroy: Delete appointment
+

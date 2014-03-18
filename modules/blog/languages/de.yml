@@ -1,0 +1,13 @@
+description:
+  show: Blog
+info:
+  keywords: Geben Sie die wichtigsten Schlagworte dieses Eintrags an.
+  tag: Trennen Sie die Kategorien durch Komma u. Leerzeichen ("Tag, Tag2").
+  teaser: Schreiben Sie einen Teaser um den Blogeintrag interessanter zu machen!
+label:
+  date: Datum aktualisieren?
+title:
+  create: Blogeintrag hinzufügen
+  destroy: Blogeintrag löschen
+  update: '"%s" bearbeiten'
+

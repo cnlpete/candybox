@@ -1,0 +1,10 @@
+description:
+  show: Seitenübersicht
+info:
+  keywords: Geben Sie die wichtigsten Schlagworte dieser Seite an.
+  teaser: Schreiben Sie eine Zusammenfassung für die Suchmaschinen.
+title:
+  create: Seite erstellen
+  destroy: Seite löschen
+  update: Bearbeiten
+

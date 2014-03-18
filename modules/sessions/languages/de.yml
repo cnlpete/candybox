@@ -1,0 +1,18 @@
+password:
+  description: Auf dieser Seite können Sie ein neues Passwort anfordern.
+  info: Tragen Sie hier Ihre registrierte E-Mail Adresse ein und wir schicken Ihnen ein neues Passwort innerhalb der nächsten Minuten zu.
+  label: Passwort anfordern
+  mail:
+    body: "Hallo!\r\n\r\nSie können sich ab sofort mit folgendem Passwort einloggen: <em>%s</em>. Bitte ändern Sie dieses nach dem Login. %%SIGNATURE %%NOREPLY"
+    subject: Ihr neues Passwort
+  title: Passwort vergessen?
+verification:
+  description: Falls Sie keine E-Mail zur Bestätigung Ihrer Daten erhalten haben, senden Sie sie sich hier erneut zu.
+  info: Lassen Sie sich jetzt erneut eine E-Mail mit Bestätigungslink an Ihre Adresse zuschicken.
+  label:
+    create: Bestätigungslink zuschicken
+  mail:
+    body: "Hallo %s!\r\n\r\nBitte klicken Sie auf diesen Link, um Ihre E-Mail-Adresse zu bestätigen: %s %%SIGNATURE %%NOREPLY"
+    subject: Ihre E-Mail-Bestätigung für %%WEBSITE_NAME
+  title: E-Mail-Bestätigung erneut zusenden
+

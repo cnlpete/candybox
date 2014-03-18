@@ -1,0 +1,21 @@
+albums:
+  description:
+    show: Albums
+  title:
+    create: Create album
+    destroy: Destroy album
+    update: "Update: '%s'"
+files:
+  description:
+    show: Gallery Images
+  label:
+    choose: Choose file(s)
+    cut: Cut and resize
+    resize: Resize only
+  title:
+    create: Add file
+    destroy: Delete file
+    update: Edit file
+  update:
+    order: Save order
+

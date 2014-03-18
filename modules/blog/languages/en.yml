@@ -1,0 +1,13 @@
+description:
+  show: Blog
+info:
+  keywords: Please enter the most relevant keywords.
+  tag: Seperate tags by comma and space, i.e. "tag1, tag2"
+  teaser: Write a short teaser!
+label:
+  date: Update date?
+title:
+  create: Create blog entry
+  destroy: Delete blog entry
+  update: "Update: '%s'"
+

@@ -264,32 +264,6 @@ error:
     verification: Could not verify your account. This code does not exist!
   warning: Warning!
 
-blogs:
-  description:
-    show: Blog
-  info:
-    keywords: Please enter the most relevant keywords.
-    tag: Seperate tags by comma and space, i.e. "tag1, tag2"
-    teaser: Write a short teaser!
-  label:
-    date: Update date?
-  title:
-    create: Create blog entry
-    destroy: Delete blog entry
-    update: "Update: '%s'"
-
-calendars:
-  description:
-    show: Calendar
-  info:
-    date_format: 'Date format: "YYYY-MM-DD"'
-    ics: 'Download this event and add it to your calendar application.'
-    icsfeed: Download this calendar to your calendar application to directly subscribe for new events.
-  title:
-    create: Add appointment
-    update: Update appointment
-    destroy: Delete appointment
-
 comments:
   info:
     email: Your email will not be published.
@@ -297,53 +271,10 @@ comments:
     create: Create comment
     destroy: Delete comment
 
-contents:
-  description:
-    show: Contents
-  info:
-    keywords: Enter the most important keywords.
-    teaser: Write a teaser for SEO.
-  title:
-    create: Create content
-    destroy: Delete content
-    update: Update
-
 cronjob:
   mail:
     body: Your backup has successfully been created and is available as attachment.\r\n
     subject: '[%%WEBSITE_NAME] Backup from %s'
-
-downloads:
-  description:
-    show: Downloads
-  label:
-    choose: Select file
-  title:
-    create: Add download
-    destroy: Delete download
-    update: Update download
-
-galleries:
-  albums:
-    description:
-      show: Albums
-    title:
-      create: Create album
-      destroy: Destroy album
-      update: "Update: '%s'"
-  files:
-    description:
-      show: Gallery Images
-    label:
-      choose: Choose file(s)
-      cut: Cut and resize
-      resize: Resize only
-    title:
-      create: Add file
-      destroy: Delete file
-      update: Edit file
-    update:
-      order: Save order
 
 mails:
   body:
@@ -367,87 +298,8 @@ medias:
     create: Upload file
     destroy: Delete file
 
-newsletters:
-  description:
-    subscribe: Sign in to our newsletter to stay up to date.
-  info:
-    subscribe: Please enter your information to subscribe to our newsletter. You can unsubscribe to this newsletter at the end of each mail.
-  title:
-    subscribe: Subscribe to our newsletter
-
 pages:
   next: Next entries
   previous: Previous entries
   more: Show more
 
-searches:
-  description:
-    show: "Search results for '%s'."
-  label:
-    terms: Terms
-  title:
-    create: Search
-    show: "Search results for '%s'"
-  info:
-    fail: "There are no results for the term: '<strong>%s</strong>'."
-    research: "Search again."
-
-sessions:
-  password:
-    description: Here you can get a new password.
-    info: Enter your email and we will send you a new password within a few minutes.
-    label: Send password
-    mail:
-      body: "Hello!\r\n\r\nYou can login via following password: <em>%s</em> %%SIGNATURE %%NOREPLY"
-      subject: Your new password
-    title: Lost password?
-  verification:
-    description: "If you didn't get a registration mail, get a new one here."
-    info: Resend the verification code.
-    label:
-      create: Send email
-    mail:
-      body: "Hello %s!\r\n\r\nPlease click this link to verifiy your email: %s %%SIGNATURE %%NOREPLY"
-      subject: Your email verification for %%WEBSITE_NAME
-    title: Resend email verification
-
-users:
-  contact_via_email: "Click to send %s an email!"
-  description:
-    create: Create a new user profile.
-    show: User profile of %s.
-  info:
-    destroy_account: Please enter your current password. After you click on "Delete Account", all your data will be permanently destroyed.
-    gravatar:  "If you don't want to upload a profile image, you can use <a href='http://gravatar.com' target='_blank'>Gravatar.com</a> instead. The displayed image is shown above."
-    image: You are only allowed to upload images less than %s.
-  label:
-    account:
-      destroy: Delete account
-    content:
-      show: About %s
-      update: About you
-    gravatar: Use Gravatar?
-    image:
-      choose: Choose Image
-      terms: I am allowed to upload this image and will not conflict with others copyright.
-      update: Change Image?
-    last_login: Last login
-    newsletter: Subscribe to newsletter?
-    password:
-      create: Change password
-      new: New password
-      old: Old password
-    registered_since: Registered since
-    update: Update profile
-  mail:
-    body: "Hello %s!\r\n\r\nThank you for your registration at %%WEBSITE_NAME. Before you can login, you must verify your email address via this link: %s %%SIGNATURE %%NOREPLY"
-    subject: Your registration at %%WEBSITE_NAME.
-  title:
-    account: Delete account
-    create: Create User
-    image: Change Avatar
-    overview: User Overview
-    password: Change Password
-    personal_data: Personal data
-    profile: My Profile
-    update: Update profile
